@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
-// @version      1.51.0
-// @description  v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。ボードビュー: リレーションで分けたボードの列（本 1 冊ごと）を、シリーズ（グループ）ごとに隣どうしへ並べ替え（見た目だけ）、シリーズの最初の列の上に名前とアイコン、境目に縦線。名前のクリックで題名とアイコン・右クリックでサブグループ。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
+// @version      1.52.0
+// @description  v1.52.0: 本物の Notion で確かめて修正 — 旧 API（syncRecordValues）が 403 になる所では今の syncRecordValuesMain を使う。閲覧だけのボード（列の見出しに掴む所が無い）でも列を見分ける。v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。ボードビュー: リレーションで分けたボードの列（本 1 冊ごと）を、シリーズ（グループ）ごとに隣どうしへ並べ替え（見た目だけ）、シリーズの最初の列の上に名前とアイコン、境目に縦線。名前のクリックで題名とアイコン・右クリックでサブグループ。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
 // @run-at       document-idle
@@ -669,7 +669,7 @@ PIPE_SHOW_HEADERS: true,   // v0.37.0: パイプ表示でもセクション見�
     DEBUG: false,
   };
 
-const VERSION = '1.51.0';
+const VERSION = '1.52.0';
   const STYLE_ID = 'cordi13-style-v044';
   const TAG = '[C13 v' + VERSION + ']';
 
@@ -1296,15 +1296,27 @@ const VERSION = '1.51.0';
   }
 
   // ---------- API（経路B） ----------
+  /* v-API: 旧 /api/v3/syncRecordValues が通らない環境（公開ページなど・HTTP 403）では、今の Notion が使う
+     syncRecordValuesMain（pointer 形式）に切り替える。一度通った方を覚える */
+  let API_EP = null;
+  async function apiPostRV(requests) {
+    const send = (ep, reqs) => fetch(location.origin + '/api/v3/' + ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ requests: reqs }) });
+    const asPointer = requests.map((r) => (r.pointer ? r : { pointer: { table: r.table, id: r.id }, version: r.version == null ? -1 : r.version }));
+    const order = API_EP === 'main' ? ['main', 'legacy'] : ['legacy', 'main'];
+    let last = null;
+    for (const k of order) {
+      try {
+        const res = k === 'main' ? await send('syncRecordValuesMain', asPointer) : await send('syncRecordValues', requests);
+        if (res.ok) { API_EP = k; return res.json(); }
+        last = res;
+      } catch (e) { last = e; }
+    }
+    return { __fail: last && last.status ? last.status : String(last) };
+  }
   async function apiFetch(requests) {
-    const res = await fetch(location.origin + '/api/v3/syncRecordValues', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ requests }),
-    });
-    if (!res.ok) { log('API HTTP ' + res.status); return null; }
-    return res.json();
+    const j = await apiPostRV(requests);
+    if (j && j.__fail) { log('API HTTP ' + j.__fail); return null; }
+    return j;
   }
   function extractNode(j, table, id) {
     const node = j && j.recordMap && j.recordMap[table] && j.recordMap[table][id];
@@ -2876,8 +2888,20 @@ const VERSION = '1.51.0';
     return m ? uuidOf(m[1].toLowerCase()) : '';
   }
   function boardCols(bv) {
-    const heads = Array.from(bv.querySelectorAll('div[style*="cursor: grab"]')).filter((h) => h.querySelector('[aria-label="More group options"]'));
+    let heads = Array.from(bv.querySelectorAll('div[style*="cursor: grab"]')).filter((h) => h.querySelector('[aria-label="More group options"]'));
     const groups = Array.from(bv.querySelectorAll('.notion-board-group'));
+    /* v1.52: 閲覧だけのボード（公開ページ・編集権限なし）は、列の見出しに掴む所も「…」も無い →
+       見出しのリンク（?p=…）がある段の、flex の子を列の見出しとみなす（「No ○○」の列も数に入れて、本体の列と順番をそろえる） */
+    if (heads.length < 2) {
+      const a = Array.from(bv.querySelectorAll('a[href*="p="]')).find((x) => !x.closest('.notion-board-group'));
+      let h = a;
+      while (h && h.parentElement && h.parentElement !== bv && Array.from(h.parentElement.children).filter((c) => c.style && c.style.display === 'flex').length < 2) h = h.parentElement;
+      const row = h && h.parentElement;
+      if (row) {
+        const hs = Array.from(row.children).filter((c) => c.style && c.style.display === 'flex');
+        if (hs.length === groups.length || hs.length >= 2) heads = hs;
+      }
+    }
     return { heads, groups };
   }
   function capIcon(icon) {

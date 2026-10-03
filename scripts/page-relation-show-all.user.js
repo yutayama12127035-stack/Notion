@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²³ _ Page Relation Show All
 // @namespace    https://cordivestium.local/page-relation-show-all
-// @version      2.9.0
+// @version      2.10.0
 // @description  v2.9.0: サブグループ — グループの中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前と入れる本。本を右クリックでもサブグループへ。題名とアイコンは ✎（サブグループは見出しのクリック）。¹⁴ と共通の設定。v2.8.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しにカーソルを乗せると右に ✎（または見出しを右クリック）で編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。見出しのクリックは従来どおり畳む／開く。シリーズの無い本の「単行」にも既定のアイコン（本）と見出しを付け、題名・アイコンを変えられる。本を右クリックで好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ¹⁴ Relation Show All と共通。v1.8.0: 誤作動の防止 — ほかの画面（²⁶ のテキストパネル・Notion のメニューやダイアログ・入力欄など）が上に重なっている所を押した時は、その下の見出し・本を拾わない（パネル越しに畳んだり本を開いたりしていた）。v1.7.0: ①1列になったグループ（長い題名のグループ）が見出しクリックで畳めなかった不具合を修正（1列の指定が畳む指定より強かった）。②既定値を運用中の値へ（文字 11px・行の高さ 3.25・アイコン 20px・アイコンと文字 10px・見出しの文字 13px・アイコンと見出し 10px）。行の高さは 4 まで、アイコンと文字は 24px まで広げた。v1.6.0: シリーズ見出しのアイコン（例: ガリレオのフラスコ）の大きさと、アイコンと文字の間を編集パネルで変えられるように（見出しのアイコン 8〜40px・0 = 見出しの文字に合わせる自動）。v1.5.0: 長い題名のグループは1列 — グループの中で一番長い題名が「1列にする長さ」（既定 16字・全角1／半角0.5で数える）以上なら、そのグループだけ1列で題名を省略せずに出す（例:「お隣の天使様にいつの間にか駄目人間にされていた件 − 1」）。0 で無効。編集パネルに項目を追加。v1.4.0: ①グループ（シリーズ）とグループの間隔を編集パネルの上の方に「グループの間」として置き、0〜80px で変えられるように（Notion 側の余白指定に負けない書き方に変更） ②見出しの下の線は点線に固定し、線の編集項目はパネルから外した（コンソールの __c23.set では引き続き変更可）。v1.3.0: 見出しの下の区切り線を編集できるように — 長さ（区画の幅に対する %）・太さ（0 で消す）・濃さ・線と本の間、をパネルとコンソールで。v1.2.0: 見出しクリックで畳めなかった件を作り直し — ①開閉の状態を区画の要素の属性ではなく <head> の専用 <style> に持つ（Notion の編集領域の中は一切書き換えない＝戻されない・描き直しに影響されない） ②押した位置の真下を elementsFromPoint で調べて見出しを見つける（Notion の透明な重なりに押しが吸われても拾う） ③pointerdown / mousedown / pointerup / mouseup / click のうち最初に届いたもので1回だけ開閉。▾（トグル記号）は廃止。v1.1.0: シリーズ見出し（文字・アイコン・件数・▾ のどこでも）をクリックすると畳む／開く。押した瞬間に Notion がブロック選択で区画を描き直し、クリックが見出しに届かず畳めないことがあったのを修正（押した瞬間を ²³ が受け止め、Notion へは渡さない）。Alt（⌥）＋クリックで全見出しをまとめて畳む／開く。▾ の向きで状態を表示。ページを開いた時の「リレーションの区画」（例: 東野圭吾 → Tactus の作品一覧。Notion は10件＋「17 more…」しか出さない）を、¹⁴ Relation Show All と同じ考え方で「全件・シリーズごとの見出し付き」に並べ直す。狭い幅（サイドピーク）向けに、列数は幅から自動（格子）／1列／流し込みを選べる。文字・アイコン・列幅・行間・見出し・題名の省略などを、区画の右上の ⚙ から専用の編集パネルで変えられる（localStorage に保存）。一度表示した区画は記憶し、Notion が描き直した瞬間（描画前）に同じ中身で出す。Notion の元の一覧は消さずに隠すだけ（「リンク」「新規」はそのまま使える）。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -54,7 +54,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.9.0';
+  const VERSION = '2.10.0';
   const API = '__c23';
   const TAG = '[²³ v' + VERSION + ']';
   if (window[API] && window[API].version) return;
@@ -491,15 +491,27 @@
   /* ============================================================
    *  API（¹⁴ と同じ経路）
    * ============================================================ */
+  /* v-API: 旧 /api/v3/syncRecordValues が通らない環境（公開ページなど・HTTP 403）では、今の Notion が使う
+     syncRecordValuesMain（pointer 形式）に切り替える。一度通った方を覚える */
+  let API_EP = null;
+  async function apiPostRV(requests) {
+    const send = (ep, reqs) => fetch(location.origin + '/api/v3/' + ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ requests: reqs }) });
+    const asPointer = requests.map((r) => (r.pointer ? r : { pointer: { table: r.table, id: r.id }, version: r.version == null ? -1 : r.version }));
+    const order = API_EP === 'main' ? ['main', 'legacy'] : ['legacy', 'main'];
+    let last = null;
+    for (const k of order) {
+      try {
+        const res = k === 'main' ? await send('syncRecordValuesMain', asPointer) : await send('syncRecordValues', requests);
+        if (res.ok) { API_EP = k; return res.json(); }
+        last = res;
+      } catch (e) { last = e; }
+    }
+    return { __fail: last && last.status ? last.status : String(last) };
+  }
   async function apiFetch(requests) {
-    const res = await fetch(location.origin + '/api/v3/syncRecordValues', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ requests })
-    });
-    if (!res.ok) throw new Error('API HTTP ' + res.status);
-    return res.json();
+    const j = await apiPostRV(requests);
+    if (j && j.__fail) throw new Error('API HTTP ' + j.__fail);
+    return j;
   }
   function extractNode(j, table, id) {
     const node = j && j.recordMap && j.recordMap[table] && j.recordMap[table][id];

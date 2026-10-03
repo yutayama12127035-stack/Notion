@@ -1,18 +1,23 @@
 // ==UserScript==
 // @name         « No »　³⁶ _ Sub Groups
 // @namespace    https://cordivestium.local/sub-groups
-// @version      1.1.0
+// @version      2.0.0
 // @description  データベースの「グループ」（Group by）を、ボードビュー以外（表・リスト・ギャラリー）でもサブグループに分ける。Notion の標準ではサブグループはボードだけ。グループの中を、もう 1 つのプロパティ（セレクト・ステータス・マルチセレクト・チェックボックス・日付・人・リレーション・テキスト・数値など）の値ごとに見出しを付けて並べ分け、見出しのクリックで畳む。ビューごとに覚える。グループ分けしていないビューでも使える（ビュー全体をサブグループに分ける）。見た目だけで、Notion のデータや並び順は変えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
 // @match        https://*.notion.com/*
-// @run-at       document-idle
+// @run-at       document-start
 // @grant        none
 // @noframes
 // ==/UserScript==
 
 /*
+ * v2.0.0（2026-10-03）
+ *   ・本物の Notion で確かめた結果、表のグループの中身は「見えている行だけ描く」作り（行は絶対位置・translateY）で、
+ *     v1 の並べ替え（CSS の order）が効かなかった → 行の位置を CSS（!important）で上書きし、見出しを絶対位置で差し込む。
+ *     並べ替えた先で行が描かれず空かないよう、サブグループを使っている間だけ Notion に行を広く描かせる（document-start で動く）。
+ *   ・今の Notion の API（syncRecordValuesMain）にも対応（旧 syncRecordValues が 403 の所）。
  * v1.1.0（2026-10-03）
  *   ・リレーション（Series・Synopsis など）で分けた時、関係先が 1 つなら、そのページのアイコンを見出しに出す。
  * v1.0.0（2026-10-03）
@@ -34,9 +39,49 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.1.0';
+  const VERSION = '2.0.0';
   const TAG = '[³⁶ v' + VERSION + ']';
   if (window.__c36 && window.__c36.version) { console.warn(TAG, '旧版が動いています'); return; }
+
+  /* v2.0.0: 本物の Notion の表は「見えている行だけ描く」（TanStack Virtual・行は絶対位置）。
+     並べ替えると、Notion が描いていない行の場所が空く → サブグループを使っている間だけ、行を描く範囲を広げる
+     （スクロールの入れ物の高さを ResizeObserver に大きめに伝える）。document-start で ResizeObserver を包む。 */
+  const INF = { on: false, extra: 6000, regs: new Set() };
+  try {
+    const RO0 = window.ResizeObserver;
+    if (RO0 && !RO0.__c36) {
+      const isScroller = (t) => t && t.classList && t.classList.contains('notion-scroller');
+      const fake = (t, e) => {
+        const r = e ? null : t.getBoundingClientRect();
+        const b = e && e.borderBoxSize && e.borderBoxSize[0];
+        const w = b ? b.inlineSize : e ? e.contentRect.width : r.width;
+        const h = b ? b.blockSize : e ? e.contentRect.height : r.height;
+        const box = [{ inlineSize: w, blockSize: h + INF.extra }];
+        return { target: t, contentRect: e ? e.contentRect : r, borderBoxSize: box, contentBoxSize: box, devicePixelContentBoxSize: e ? e.devicePixelContentBoxSize : box };
+      };
+      const RO = class extends RO0 {
+        constructor(cb) {
+          const wrap = (entries, obs) => cb(INF.on ? entries.map((e) => (isScroller(e.target) ? fake(e.target, e) : e)) : entries, obs);
+          super(wrap);
+          this.__c36cb = wrap; this.__c36cb0 = cb; this.__c36t = new Set();
+        }
+        observe(t, o) { if (isScroller(t)) { this.__c36t.add(t); INF.regs.add(this); } return super.observe(t, o); }
+        unobserve(t) { this.__c36t.delete(t); return super.unobserve(t); }
+        disconnect() { this.__c36t.clear(); INF.regs.delete(this); return super.disconnect(); }
+      };
+      RO.__c36 = true;
+      window.ResizeObserver = RO;
+    }
+  } catch (e) { /* noop */ }
+  /* 範囲を広げる／戻す（Notion の仮想スクロールに測り直させる） */
+  function inflate(on) {
+    if (INF.on === on) return;
+    INF.on = on;
+    for (const o of INF.regs) for (const t of o.__c36t) {
+      if (!t.isConnected) continue;
+      try { o.__c36cb0([on ? (() => { const r = t.getBoundingClientRect(); const box = [{ inlineSize: r.width, blockSize: r.height + INF.extra }]; return { target: t, contentRect: r, borderBoxSize: box, contentBoxSize: box }; })() : (() => { const r = t.getBoundingClientRect(); const box = [{ inlineSize: r.width, blockSize: r.height }]; return { target: t, contentRect: r, borderBoxSize: box, contentBoxSize: box }; })()], o); } catch (e) { /* noop */ }
+    }
+  }
 
   const LS_P = 'c36.prefs.v1';
   const LS_V = 'c36.views.v1';
@@ -56,14 +101,26 @@
   /* ============================================================
    *  API（syncRecordValues）
    * ============================================================ */
+  /* v-API: 旧 /api/v3/syncRecordValues が通らない環境（公開ページなど・HTTP 403）では、今の Notion が使う
+     syncRecordValuesMain（pointer 形式）に切り替える。一度通った方を覚える */
+  let API_EP = null;
+  async function apiPostRV(requests) {
+    const send = (ep, reqs) => fetch(location.origin + '/api/v3/' + ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ requests: reqs }) });
+    const asPointer = requests.map((r) => (r.pointer ? r : { pointer: { table: r.table, id: r.id }, version: r.version == null ? -1 : r.version }));
+    const order = API_EP === 'main' ? ['main', 'legacy'] : ['legacy', 'main'];
+    let last = null;
+    for (const k of order) {
+      try {
+        const res = k === 'main' ? await send('syncRecordValuesMain', asPointer) : await send('syncRecordValues', requests);
+        if (res.ok) { API_EP = k; return res.json(); }
+        last = res;
+      } catch (e) { last = e; }
+    }
+    return { __fail: last && last.status ? last.status : String(last) };
+  }
   async function api(reqs) {
     ST.api++;
-    const post = (requests) => fetch(location.origin + '/api/v3/syncRecordValues', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ requests })
-    }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    let j = await post(reqs.map((r) => ({ table: r.table, id: r.id, version: -1 })));
-    const got = (jj) => jj && jj.recordMap && reqs.some((r) => jj.recordMap[r.table] && jj.recordMap[r.table][r.id]);
-    if (!got(j)) j = await post(reqs.map((r) => ({ pointer: { table: r.table, id: r.id }, version: -1 })));
+    const j = await apiPostRV(reqs.map((r) => ({ table: r.table, id: r.id, version: -1 })));
     const out = new Map();
     for (const r of reqs) {
       const n = j && j.recordMap && j.recordMap[r.table] && j.recordMap[r.table][r.id];
@@ -332,6 +389,7 @@
       const closed = cfg.closed || {};
       const sig = key + '#' + cfg.prop + '#' + (cfg.rev ? 1 : 0) + '#' + order.map((k) => k + ':' + (icons.get(k) ? String(icons.get(k).v).slice(0, 40) : '') + ':' + (closed[k] ? 'c' : 'o') + ':' + groups.get(k).map((x) => x.id).join(',')).join('|');
       const units0 = new Set(units.map((x) => x.unit));
+      if (units[0].unit.classList.contains('notion-collection-result-wrapper')) { layoutVirtual(view, kind, cfg, def, body, order, groups, icons, closed, sig); continue; }
       /* 入れ物の作り（flex／grid）をそろえる */
       const cs = getComputedStyle(body);
       if (!/grid/.test(cs.display)) {
@@ -373,7 +431,57 @@
     /* もう無い入れ物の後始末 */
     for (const b of view.querySelectorAll('[data-c36-body]')) if (!live.has(b)) clearBody(b);
   }
+  /* v2.0.0: 仮想スクロールの入れ物（行は position:absolute + translateY）。
+     行の位置は Notion が style に毎回書くので、CSS（!important）で上書きする。見出しは入れ物の中に絶対位置で置く */
+  const VB = new WeakMap(); let VBN = 0;
+  const VCSS = new Map();   // 番号 → CSS
+  const HEAD_H = 36;
+  function vcssFlush() {
+    let st = document.getElementById('c36-vcss');
+    if (!st) { st = document.createElement('style'); st.id = 'c36-vcss'; (document.head || document.documentElement).appendChild(st); }
+    const t = [...VCSS.values()].join('\n');
+    if (st.textContent !== t) st.textContent = t;
+  }
+  const RSO = typeof ResizeObserver === 'function' ? new ResizeObserver(() => soon()) : null;
+  function layoutVirtual(view, kind, cfg, def, body, order, groups, icons, closed, sig) {
+    let n = VB.get(body);
+    if (!n) { n = ++VBN; VB.set(body, n); }
+    body.setAttribute('data-c36-body', 'virt');
+    body.setAttribute('data-c36-b', String(n));
+    const hs = [];
+    for (const k of order) for (const x of groups.get(k)) { hs.push(x.unit.offsetHeight); if (RSO && !x.unit.__c36ro) { x.unit.__c36ro = 1; RSO.observe(x.unit); } }
+    const fsig = sig + '#' + hs.join(',');
+    if (SIG.get(body) === fsig && body.querySelector(':scope > .c36-sh') && VCSS.has(n)) return;
+    SIG.set(body, fsig);
+    for (const old of body.querySelectorAll(':scope > .c36-sh')) old.remove();
+    const sel = '[data-c36-b="' + n + '"]';
+    const rules = [];
+    let y = 0;
+    for (const k of order) {
+      const list = groups.get(k);
+      const isClosed = !!closed[k];
+      const h = makeHead(view, kind, cfg, def, k, list.length, isClosed, icons.get(k));
+      h.classList.add('c36-vh');
+      h.style.transform = 'translateY(' + y + 'px)';
+      body.appendChild(h);
+      ST.heads++;
+      y += HEAD_H;
+      for (const x of list) {
+        const i = x.unit.getAttribute('data-index');
+        const one = sel + ' > .notion-collection-result-wrapper[data-index="' + i + '"]';
+        if (isClosed) { rules.push(one + '{display:none !important;}'); continue; }
+        rules.push(one + '{transform:translateY(' + y + 'px) !important;}');
+        y += x.unit.offsetHeight;
+      }
+    }
+    rules.push(sel + '{height:' + Math.max(y, 0) + 'px !important;}');
+    VCSS.set(n, rules.join('\n'));
+    vcssFlush();
+  }
   function clearBody(b) {
+    const n = VB.get(b);
+    if (n && VCSS.has(n)) { VCSS.delete(n); vcssFlush(); }
+    b.removeAttribute('data-c36-b');
     b.removeAttribute('data-c36-body');
     SIG.delete(b);
     for (const h of b.querySelectorAll(':scope > .c36-sh')) h.remove();
@@ -523,6 +631,7 @@
 }
 .c36-sh:hover { background: var(--c-bacHov, rgba(55,53,47,.06)); }
 [data-c36-body="tcol"] > .c36-sh { position: sticky; inset-inline-start: 0; width: max-content; min-width: min(100%, 320px); border-bottom: 0; box-shadow: inset 0 -1px 0 var(--c36-line); }
+[data-c36-body="virt"] > .c36-sh.c36-vh { position: absolute; top: 0; inset-inline-start: 0; width: 100%; height: ${HEAD_H}px; margin: 0; padding-top: 10px; padding-bottom: 2px; padding-inline-start: calc(8px + var(--c36-indent)); z-index: 2; background: transparent; }
 [data-c36-body="grid"] > .c36-sh { grid-column: 1 / -1; margin-bottom: 0; }
 .c36-sh .c36-tg { width: 12px; font-size: 10px; opacity: .7; flex: none; }
 .c36-sh .c36-ic { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; flex: none; font-size: 14px; line-height: 1; }
@@ -550,7 +659,7 @@
 #c36-menu .c36-sep { height: 1px; margin: 4px 6px; background: rgba(55,53,47,.1); }
 @media (prefers-color-scheme: dark) { #c36-menu { background: #252525; color: #e6e6e6; } #c36-menu .c36-mi:hover { background: rgba(255,255,255,.08); } }
 `;
-    document.head.appendChild(st);
+    (document.head || document.documentElement).appendChild(st);
   }
 
   /* ============================================================
@@ -564,6 +673,10 @@
     try {
       css();
       ST.scans++; ST.views = 0; ST.bodies = 0; ST.rows = 0; ST.heads = 0;
+      /* サブグループを使っているビューがこの画面にあれば、Notion に行を広く描かせる */
+      let need = false;
+      for (const v of document.querySelectorAll(VIEW_SEL)) { const bid = blockOf(v); const c = bid && VIEWS[keyOf(v, bid)]; if (c && c.prop) { need = true; break; } }
+      if (need !== INF.on) { inflate(need); ST.inflated = need; }
       for (const v of document.querySelectorAll(VIEW_SEL)) {
         if (v.closest('#c36-menu')) continue;
         try { await applyView(v); } catch (e) { ST.lastError = String(e && e.stack || e); }
@@ -575,7 +688,8 @@
   }
   let t = 0;
   const soon = () => { if (!t) t = setTimeout(() => { t = 0; run(); }, 250); };
-  const ours = (n) => n.nodeType === 1 && (n.classList.contains('c36-sh') || n.classList.contains('c36-bar') || n.id === 'c36-menu' || n.id === 'c36-css');
+  const ours = (n) => n.nodeType === 1 && (n.classList.contains('c36-sh') || n.classList.contains('c36-bar') || n.id === 'c36-menu' || n.id === 'c36-css' || n.id === 'c36-vcss');
+  function boot() {
   new MutationObserver((ms) => {
     for (const m of ms) {
       if (m.type === 'childList') {
@@ -591,6 +705,8 @@
   }, 600);
   setInterval(() => { if (Object.keys(VIEWS).length && document.visibilityState === 'visible') run(); }, Math.max(5000, P.refresh));
   setTimeout(run, 600);
+  }
+  if (document.body) boot(); else document.addEventListener('DOMContentLoaded', boot, { once: true });
 
   window.__c36 = {
     version: VERSION,

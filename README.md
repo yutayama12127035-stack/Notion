@@ -7,17 +7,17 @@
 
 | # | ご依頼 | ファイル | スクリプト名 | 版 |
 |---|---|---|---|---|
-| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → 36.0.0 → 37.0.0 → **37.1.0** |
+| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → 36.0.0 → 37.0.0 → 37.1.0 → **37.2.0** |
 | 2 | タイトルの改行（テーブルビュー） | `scripts/table-title-linebreak.user.js` | « No »　³⁰ _ Table Title Line Break | 新規 1.0.0 → **1.1.0** |
 | 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → 6.2.0 → 6.3.0 → **6.4.0** |
-| 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → 1.48.0 → 1.49.0 → 1.50.0 → **1.51.0** |
-| 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → 2.8.0 → **2.9.0** |
+| 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → 1.48.0 → 1.49.0 → 1.50.0 → 1.51.0 → **1.52.0** |
+| 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → 2.8.0 → 2.9.0 → **2.10.0** |
 | 5 | 新規ビュー → 表の画像 | `scripts/image-cells.user.js` | « No »　³⁴ _ Image Cells（³¹ Atlas Views は廃止） | 新規 **1.0.0** |
 | 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → 1.1.0 → 1.2.0 → **1.3.0** |
 | 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → 15.7.0 → 15.8.0 → **15.9.0** |
 | 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 **1.0.0** |
 | 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → **3.2.0** |
-| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 1.0.0 → **1.1.0** |
+| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 1.0.0 → 1.1.0 → **2.0.0** |
 
 ## 第2便（2026-10-03）の修正
 
@@ -30,6 +30,16 @@
 | 5 Atlas | メニューに出なかったのを修正。シアター・レコード・ポラロイド・星図を追加（v2.0.0） |
 | 6 ドラッグ | ■が逃げる・Notion が押下を先に取る・離した時にセルが開く、を修正（v1.1.0） |
 | 7 リレーション内グルーピングの線 | 項目の少ないセルでも端まで引くように（v1.48.0） |
+
+## 第8便（2026-10-03）の修正 — 公開ページ（本物の Notion）で確かめて
+
+| 確かめたこと | 対応 |
+|---|---|
+| 表のグループの中は「見えている行だけ描く」作り（行は絶対位置）だった | ³⁶ のサブグループが CSS の order では効かなかった → 行の位置を CSS で上書きし、見出しを絶対位置で差し込む。並べ替えた先で行が欠けないよう、サブグループを使っている間だけ Notion に行を広く描かせる（document-start で動く）。Index ビューを Series で分けて、ガリレオ 11・マスカレード 5・加賀恭一郎 11…（シリーズのアイコン付き）、スクロール・畳む／開くまで確認（³⁶ v2.0.0） |
+| 旧 API（/api/v3/syncRecordValues）が 403 になる所がある | 今の Notion が使う syncRecordValuesMain に自動で切り替える（¹⁴ v1.52.0・²³ v2.10.0・³⁶ v2.0.0） |
+| 題字の列が先頭でない表（Index は Creators が先頭） | 題字のセルを「その他」と見ていた → アイコン＋文字の段で見分ける。中央寄せの時に題名の右の余白（5px）で左にずれるのも直した。本物の表で、題字・人・シリーズ・あらすじの列が横・縦の中央に来ることを確認（²⁶ v37.2.0） |
+| ギャラリーの文字 | 本物のギャラリーで、題名に書体・大きさ・色が効き、アイコンは大きさだけ変わる・題名はアイコンのすぐ右、を確認（²⁶ v37.1.0 のまま） |
+| 閲覧だけのボード（列の見出しに掴む所が無い） | 列を見分けられず並べ替えが動かなかった → 見出しのリンクの段から列を見分ける。シリーズの見出し・境目の線が出ることを確認（¹⁴ v1.52.0） |
 
 ## 第7便（2026-10-03）の修正
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      37.1.0
+// @version      37.2.0
 // @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -21,6 +21,9 @@
 // ==/UserScript==
 
 /*
+ * v37.2.0（2026-10-03）
+ *   ・本物の Notion（公開ページ）で確かめて修正: 題字の列が先頭でない表（Medias の Index など）で、題字のセルを「その他」と見ていた
+ *     （題名はただの span で、編集用の印も a も無い）→ アイコン（role=button）＋文字の段で見分ける。
  * v37.1.0（2026-10-03）
  *   ・「カードと一覧」（ギャラリー・ボード・リスト）の文字の設定が題名に効かず、アイコンに当たっていた。
  *     原因: カードの中で notranslate が付いているのはアイコン（.notion-record-icon）だけで、題名は [data-content-editable-leaf]。
@@ -347,7 +350,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '37.1.0';
+  const VERSION = '37.2.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -7780,6 +7783,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       css += cvIn(col + ' > *').split(',\n').map((x) => x + BOOST).join(',\n') + D({ 'max-width': '100%', 'justify-content': POS_H[ah], 'text-align': POS_T[ah] });
       css += cv(row) + D({ 'justify-content': POS_H[ah], 'text-align': POS_T[ah] });
       if (ah !== 'start') css += cvIn(row + ' > :not(:has(.notion-record-icon)):not(.notion-record-icon)').split(',\n').map((x) => x + BOOST).join(',\n') + D({ 'flex-grow': '0', 'flex-basis': 'auto', width: 'auto', 'min-width': '0', 'text-align': POS_T[ah] });
+      /* 題名の span の右の余白（Notion の margin-inline-end: 5px）で中央が少し左にずれる → 寄せる時は消す */
+      if (ah !== 'start') css += cvIn(row + ' > :not(:has(.notion-record-icon)):not(.notion-record-icon) span').split(',\n').map((x) => x + BOOST).join(',\n') + D({ 'margin-inline-end': '0' });
     }
     if (av) {
       const has = cells.map((c) => c + ':has([data-at-cv]' + kf + ')' + BOOST).join(',\n');
@@ -7814,11 +7819,14 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (el === cell) return;
     const cs = getComputedStyle(el);
     const flowRow = /flex/.test(cs.display) && !/column/.test(cs.flexDirection) && cs.flexWrap !== 'wrap' && atVisKids(el).length >= 2;
-    const kind = cell.matches('[data-c12-primary]') || cell.querySelector('.notion-record-icon[role="button"], .cordivestium-v1121-title-value') && !cell.querySelector('[data-cordi13-on]') && cell.querySelector('[data-content-editable-leaf], a[href^="/"]') && !cell.querySelector('[data-c34-img]') ? 'title'
-      : cell.querySelector('[data-cordi13-on], [data-c13-on]') ? 'rel'
-      : cell.querySelector('[data-c34-img], img[src*="/image/"]') ? 'img' : 'x';
-    /* 題字の判定は列の先頭（data-col-index=0）も見る */
-    const ck = kind === 'title' || (kind === 'x' && cell.querySelector('.notion-record-icon') && cell.querySelector('[data-content-editable-leaf]')) ? 'title' : kind;
+    /* v37.2: 本物の Notion で確かめた題字のセル: property-value > div(flex) > [div > .notion-record-icon[role=button]] + [div > … > span]。
+       題字が先頭の列とは限らない（Index ビューは Creators が先頭）。文字は contenteditable でも a でもなく、ただの span */
+    const isRel = !!cell.querySelector('[data-cordi13-on], [data-c13-on]');
+    const isImg = !!cell.querySelector('[data-c34-img], img[src*="/image/"]');
+    const isTitle = !isRel && !isImg && (cell.matches('[data-c12-primary]') || !!cell.querySelector('.cordivestium-v1121-title-value')
+      || !!cell.querySelector('[data-testid="property-value"] > div:not([style*="flex-wrap"]) > div > .notion-record-icon[role="button"]')
+      || (!!cell.querySelector('.notion-record-icon') && !!cell.querySelector('[data-content-editable-leaf]')));
+    const ck = isTitle ? 'title' : isRel ? 'rel' : isImg ? 'img' : 'x';
     el.setAttribute('data-at-cv', '1');
     el.setAttribute('data-at-ck', ck);
     if (flowRow) el.setAttribute('data-at-cflow', 'row'); else el.removeAttribute('data-at-cflow');
