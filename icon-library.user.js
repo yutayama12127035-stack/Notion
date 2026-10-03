@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      5.1.0
+// @version      6.1.0
 // @description  Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
@@ -21,6 +21,14 @@
 // ==/UserScript==
 
 /*
+ * v6.1.0（2026-10-03）
+ *   ・グループを 4 つ追加（24 → 28）: ミリタリー・スポーツ・季節・行事・道具・工具。
+ *     ミリタリー 16: ヘルメット・勲章・盾・双剣・戦車・戦闘機・錨・階級章・認識票・双眼鏡・パラシュート・照準・軍旗・軍艦・レーダー・ヘリコプター
+ *     スポーツ 8: サッカー・野球・バスケットボール・テニス・ゴルフ・ストップウォッチ・表彰台・水泳（運動・ランニング・ボールもここへ）
+ *     季節・行事 7: クリスマスツリー・雪だるま・かぼちゃ・花火・うちわ・紅葉・鯉のぼり
+ *     道具・工具 6: ハンマー・レンチ・ドライバー・工具箱・ローラー・ナット
+ *   ・色・見た目のパネル: 色のタブ（基本〜グラデ）が横に見切れていた → タブを折り返して全部見えるように。パネルを少し広く（312 → 336px）。
+ *
  * v5.1.0
  *   ・色・見た目のパネルが、色を選ぶ・色にカーソルを乗せる時に少し動いていたのを止めた。
  *     原因: ①グラデの色に乗せた時だけ「向き」の行を出し入れしていた（パネルの高さが 30px 変わる）
@@ -107,7 +115,7 @@
 
 (function () {
   'use strict';
-  const VERSION = '5.1.0';
+  const VERSION = '6.1.0';
   const SIG_VER = '5.0.0';   // v5.1.0: 形の指紋のキャッシュの版（形の計算を変えた時だけ上げる）
   const UW = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const SVGNS = 'http://www.w3.org/2000/svg';
@@ -774,6 +782,52 @@
     ['f-bird', '鳥（塗り）', 'とり ことり すずめ はと bird sparrow dove', 'U:M18.6 3a4.8 4.8 0 0 1 4.6 3.4l-2.4 1.6v2.1A10.5 10.5 0 0 1 10.3 20.6H3.3a1.2 1.2 0 0 1-.9-2l8.1-9.1V7.9A4.9 4.9 0 0 1 18.6 3z;C1.5:M15.6 10.6 8.4 19;H:O(17.8,7.3,1.2)'],
     ['f-telescope', '望遠鏡（塗り）', 'ぼうえんきょう てんたい ほし telescope astronomy', 'U:M2.6 12.3 14.4 7l1.9 4.2L4.5 16.5a1 1 0 0 1-1.3-.5L2.1 13.6a1 1 0 0 1 .5-1.3z;U:M15.5 6.3l3.6-1.6a1 1 0 0 1 1.3.5l2 4.4a1 1 0 0 1-.5 1.3l-3.6 1.6z;C1.4:M10.5 13.6 7 21M10.5 13.6 14 21;S1.6:M10.5 13.6 7 21M10.5 13.6 14 21;U:O(10.5,13.4,1.5);U:SP(5,4.6,2.2);D:O(8.6,3,0.7)']
   ]);
+  /* v6.1.0: ミリタリー・スポーツ・季節・行事・道具・工具 */
+  add('military', 'ミリタリー', [
+    ['m-helmet', 'ヘルメット', 'へるめっと ぐんたい へいたい helmet army soldier', 'U:M3.5 15.2a8.5 8.5 0 0 1 17 0v1.3h-17z;U:R(2,16.5,20,2.4,1.2);C1:M6.5 12.2c1.6-.9 3.5-1.4 5.5-1.4s3.9.5 5.5 1.4'],
+    ['m-medal', '勲章', 'くんしょう めだる ほまれ medal honor decoration', 'U:M7.2 2.5h3.4l2 6.2-2.8 1.2zM16.8 2.5h-3.4l-2 6.2 2.8 1.2z;U:O(12,15.2,5.8);H:M12 11.6l1.1 2.2 2.4.3-1.8 1.7.5 2.4-2.2-1.2-2.2 1.2.5-2.4-1.8-1.7 2.4-.3z'],
+    ['m-shield', '盾', 'たて しーるど ぼうぎょ shield defense guard', 'U:M12 2.5 19.6 5.4v5.9c0 4.8-3.2 8.7-7.6 10.2-4.4-1.5-7.6-5.4-7.6-10.2V5.4z;C1.5:M12 6.4v11.4M7.6 10.8h8.8'],
+    ['m-swords', '双剣', 'そうけん けん つるぎ たたかい swords sword battle', 'S2:M5 3.5l11 11M19 3.5l-11 11;S2:M13.6 17.6l4-4M10.4 17.6l-4-4;D:O(18.8,18.8,1.6);D:O(5.2,18.8,1.6)'],
+    ['m-tank', '戦車', 'せんしゃ たんく ぐんたい tank army', 'U:R(6.5,8.5,8.5,4.2,1.6);S2:M14.5 10.4h7;U:M2.5 13.2h19l-1.6 5.6a1.6 1.6 0 0 1-1.5 1.2H5.6a1.6 1.6 0 0 1-1.5-1.2z;H:O(7,16.6,1.1);H:O(12,16.6,1.1);H:O(17,16.6,1.1)'],
+    ['m-jet', '戦闘機', 'せんとうき じぇっと ひこうき くうぐん fighter jet air force', 'U:M12 1.8l1.5 5.6 7.6 5.1v1.9l-7.4-2.2-.4 4.6 2.7 2.1v1.5L12 19.6l-4 .8v-1.5l2.7-2.1-.4-4.6L2.9 14.4v-1.9l7.6-5.1z'],
+    ['m-anchor', '錨', 'いかり かいぐん ふね anchor navy', 'U:O(12,4.6,2.3);H:O(12,4.6,1);S2:M12 6.9v14.3M8.4 10h7.2;S2:M4.6 13.2a7.4 7.4 0 0 0 14.8 0;S1.8:M3 13.2h3.4M17.6 13.2H21'],
+    ['m-rank', '階級章', 'かいきゅう しょう たいちょう rank chevron insignia', 'S2.4:M5 13l7-4 7 4M5 18l7-4 7 4;U:M12 2.4l1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z'],
+    ['m-dogtag', '認識票', 'にんしきひょう どっぐたぐ dog tag id', 'U:R(7,7,10,14.5,3.4);H:O(12,10,1.1);C1.1:M9.6 14.4h4.8M9.6 17.2h4.8;S1.2:M12 8.9C11.2 5.8 9.4 3.9 6.6 3.2'],
+    ['m-binoculars', '双眼鏡', 'そうがんきょう ていさつ binoculars scout', 'U:R(4.6,5.5,4.6,8.5,1.6);U:R(14.8,5.5,4.6,8.5,1.6);U:R(9.8,8.6,4.4,4.2,1);U:O(6.9,15.6,4.1);U:O(17.1,15.6,4.1);H:O(6.9,15.6,2);H:O(17.1,15.6,2)'],
+    ['m-parachute', 'パラシュート', 'ぱらしゅーと くうてい parachute airborne', 'U:M2.5 11a9.5 8 0 0 1 19 0c-1.6-.9-3.1-.9-4.7 0-1.6-.9-3.2-.9-4.8 0-1.6-.9-3.2-.9-4.8 0-1.6-.9-3.1-.9-4.7 0z;S1.2:M3 11l8 8M21 11l-8 8M7.4 11l3.8 8M16.6 11l-3.8 8;U:R(10.4,18.4,3.2,3.2,0.9)'],
+    ['m-crosshair', '照準', 'しょうじゅん ねらい たーげっと crosshair aim target scope', 'S:M12 2.5v5M12 16.5v5M2.5 12h5M16.5 12h5;S:M19.2 12a7.2 7.2 0 1 1-14.4 0 7.2 7.2 0 0 1 14.4 0z;D:O(12,12,1.5)'],
+    ['m-flag', '軍旗', 'ぐんき はた れんたい military flag banner', 'S2:M5 21.5V2.5;U:M5 3.5h13.5l-3 4.5 3 4.5H5z;H:M10.5 5.9l.7 1.4 1.5.2-1.1 1.1.3 1.5-1.4-.7-1.4.7.3-1.5-1.1-1.1 1.5-.2z'],
+    ['m-warship', '軍艦', 'ぐんかん せんかん かいぐん warship battleship navy', 'U:M1.8 14.6h20.4l-2.6 5.4H4.4z;U:R(6.6,10.6,9.4,4,0.6);U:R(9.4,7,4.4,3.6,0.6);S1.4:M11.6 7V2.8;S1.6:M16 12.6h5.4'],
+    ['m-radar', 'レーダー', 'れーだー たんち radar sonar detect', 'S:M12 12l6.4-6.4;S:M20.5 12A8.5 8.5 0 1 1 12 3.5;S:M16.2 12A4.2 4.2 0 1 1 12 7.8;D:O(12,12,1.5);D:O(16.6,15.4,1)'],
+    ['m-heli', 'ヘリコプター', 'へりこぷたー へり helicopter', 'S:M3 5.8h18M12 5.8v2.4;U:M4 12.6A5 4 0 0 1 9 8.6h4a4.6 4.6 0 0 1 4.6 4.6v.4a2.6 2.6 0 0 1-2.6 2.6H9a5 3.5 0 0 1-5-3.6z;H:M12.6 10.2h2.2a2 2 0 0 1 1.6 1.8h-3.8z;S1.6:M17.4 11.6h4.6M21.6 9.6v4;S1.4:M8 19h8.4M10 16.4V19M14.4 16.4V19']
+  ]);
+  add('sport', 'スポーツ', [
+    ['sp-soccer', 'サッカーボール', 'さっかー ふっとぼーる soccer football', 'U:O(12,12,9);H:M12 7.2l3.2 2.3-1.2 3.8h-4l-1.2-3.8z;C1.1:M12 3v4.2M15.2 9.5l4-1.6M14 13.3l2.6 3.6M10 13.3l-2.6 3.6M8.8 9.5l-4-1.6'],
+    ['sp-baseball', '野球ボール', 'やきゅう べーすぼーる baseball', 'U:O(12,12,9);C1.2:M6.3 5.2c2.2 2 3.4 4.3 3.4 6.8s-1.2 4.8-3.4 6.8M17.7 5.2c-2.2 2-3.4 4.3-3.4 6.8s1.2 4.8 3.4 6.8'],
+    ['sp-basket', 'バスケットボール', 'ばすけっとぼーる ばすけ basketball', 'U:O(12,12,9);C1.2:M3 12h18M12 3v18M5.6 5.6c3.6 3.6 3.6 9.2 0 12.8M18.4 5.6c-3.6 3.6-3.6 9.2 0 12.8'],
+    ['sp-tennis', 'テニス', 'てにす らけっと tennis racket', 'U:O(14.6,8.4,6);H:O(14.6,8.4,4.4);S1:M11.6 6.2h6M10.8 8.4h7.6M11.6 10.6h6M12.4 4.6v7.6M14.6 4v8.8M16.8 4.6v7.6;S2.6:M10.4 12.6 3.4 19.6;D:O(18.8,18.6,2)'],
+    ['sp-golf', 'ゴルフ', 'ごるふ ふらっぐ golf flag', 'S2:M7 20.5V3;U:M7 3.4l10.5 3.6L7 10.6z;U:M2.8 20.6c0-1.5 3.6-2.6 8.2-2.6s8.2 1.1 8.2 2.6z;D:O(17.2,16.4,1.4)'],
+    ['sp-stopwatch', 'ストップウォッチ', 'すとっぷうぉっち たいむ けいそく stopwatch timer', 'U:R(10,1.8,4,2.4,0.8);U:O(12,13.6,8.2);H:O(12,13.6,6.4);S1.8:M12 13.6V9.4;S1.6:M18.6 6.6l1.6-1.6'],
+    ['sp-podium', '表彰台', 'ひょうしょうだい ゆうしょう いちい podium winner', 'U:R(9,10,6,11.5,0.6);U:R(2.5,14,6.5,7.5,0.6);U:R(15,16,6.5,5.5,0.6);U:SP(12,5,2.6)'],
+    ['sp-swim', '水泳', 'すいえい およぐ ぷーる swim pool', 'D:O(16.6,6.4,2.2);S2:M5.6 12.6l4.6-4 3.6 3 2.6-1.6;S1.8:M2.5 16.2c1.6 1.2 3.2 1.2 4.8 0s3.2-1.2 4.8 0 3.2 1.2 4.8 0 3.2-1.2 4.8 0M2.5 20.2c1.6 1.2 3.2 1.2 4.8 0s3.2-1.2 4.8 0 3.2 1.2 4.8 0 3.2-1.2 4.8 0']
+  ]);
+  add('season', '季節・行事', [
+    ['se-xmas', 'クリスマスツリー', 'くりすます つりー もみのき christmas tree', 'U:M12 2.5 17 9h-2.5l4 5h-3l4 5H4.5l4-5h-3l4-5H7z;U:R(10.8,19,2.4,2.6,0.4);H:O(10,12.6,.8);H:O(14,15.6,.8)'],
+    ['se-snowman', '雪だるま', 'ゆきだるま ふゆ ゆき snowman winter', 'U:O(12,7,3.6);U:O(12,15.6,5.6);H:O(10.7,6.4,.6);H:O(13.3,6.4,.6);H:O(12,13.8,.7);H:O(12,16.8,.7)'],
+    ['se-pumpkin', 'かぼちゃ', 'かぼちゃ はろうぃん あき pumpkin halloween', 'U:M12 6.5c-1.6-.9-3.6-1-5.3-.2C3.5 7.8 2.5 11 3 14.2c.5 3.3 2.7 6.1 5.4 6.3 1.4.1 2.5-.6 3.6-.6s2.2.7 3.6.6c2.7-.2 4.9-3 5.4-6.3.5-3.2-.5-6.4-3.7-7.9-1.7-.8-3.7-.7-5.3.2z;C1.1:M12 7v13M8.2 7.5c-1.2 3.5-1.2 8.7 0 12M15.8 7.5c1.2 3.5 1.2 8.7 0 12;S1.8:M12 6.5c0-2 .8-3.3 2.5-4'],
+    ['se-fireworks', '花火', 'はなび なつ まつり fireworks festival summer', 'S1.6:M12 9.5V3.5M14.5 9.5l4.2-4.2M15 12h6M14.5 14.5l4.2 4.2M12 15v6M9.5 14.5l-4.2 4.2M9 12H3M9.5 9.5 5.3 5.3;D:O(12,12,1.7)'],
+    ['se-uchiwa', 'うちわ', 'うちわ なつ ぱたぱた uchiwa fan summer', 'U:O(12,9,7);S2.2:M12 16v5.5;C1:M12 3.4v11.2M8 5l4 9.6M16 5l-4 9.6'],
+    ['se-maple', '紅葉', 'もみじ こうよう あき かえで maple autumn leaf', 'U:M12 2.5l1.7 3.8 3-1.6-.6 3.6 3.7-.4-2.4 3 3.1 1.7-4.2 1.3.6 3.1-3.4-1.6L12 18.6l-1.5-3.2-3.4 1.6.6-3.1-4.2-1.3 3.1-1.7-2.4-3 3.7.4-.6-3.6 3 1.6z;S1.5:M12 13v8.5'],
+    ['se-koinobori', '鯉のぼり', 'こいのぼり こどものひ ごがつ carp streamer', 'S2:M4 21.5V2.5;U:M4 3.6h13l3.4 2.8L17 9.2H4z;H:O(15.8,6.4,.9);U:M4 11h11l3.4 2.8L15 16.6H4z;H:O(13.8,13.8,.9)']
+  ]);
+  add('tools', '道具・工具', [
+    ['tl-hammer', 'ハンマー', 'はんまー かなづち こうぐ hammer tool', 'U:R(5,3,12.5,5,1.2);U:R(9.9,8,3.2,13.5,1.2);T:-35'],
+    ['tl-wrench', 'レンチ', 'れんち すぱな こうぐ wrench spanner tool', 'U:O(16,8,5.2);H:M16 4.4l2 1.6v2.6l-2 1.6-2-1.6V6z;S3:M12.4 11.6 4.4 19.6'],
+    ['tl-screwdriver', 'ドライバー', 'どらいばー ねじまわし こうぐ screwdriver tool', 'U:R(9.4,1.8,5.2,8.6,2.2);C1:M10.9 4v4.4M13.1 4v4.4;U:R(10.9,10.4,2.2,8.4,0.5);U:M10.9 18.6h2.2L12 22.2z;T:45'],
+    ['tl-toolbox', '工具箱', 'こうぐばこ どうぐばこ toolbox', 'U:R(2.5,8.5,19,12,2);S1.8:M8.5 8.5V6A1.5 1.5 0 0 1 10 4.5h4A1.5 1.5 0 0 1 15.5 6v2.5;C1.2:M2.5 13h19;H:R(10.5,12,3,2.6,0.6)'],
+    ['tl-roller', 'ローラー', 'ろーらー ぺんき ぬる paint roller', 'U:R(3,3,15,5.5,1.6);S1.8:M18 5.8h2.5V11H12v3;U:R(10.6,13.8,2.8,7.7,1)'],
+    ['tl-nut', 'ナット', 'なっと ぼると ねじ nut bolt', 'U:M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4z;H:O(12,12,3.3)']
+  ]);
   /* Astrarium の席（ユウさんのオリジナル。¹⁸ の CSS の絵をそのまま。V: は SVG をそのまま使う印） */
   add('astra', 'Astrarium', [
     ['astra-charter', 'アストラリウム（憲章）', 'astrarium charter あすとらりうむ けんしょう けんぽう', 'V:<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.09 22.91"><g fill="none" stroke="black" stroke-miterlimit="10" stroke-width="1.5"><path d="m9.545 9.545.6 1.26 1.35.2-.98.98.23 1.38-1.2-.65-1.2.65.23-1.38-.98-.98 1.35-.2Z" data-name="Path 38"/><path d="M5.725 18.135h7.64" data-name="Line 19"/><path d="M.955.955h17.18v21H.955z" data-name="Rectangle 5"/><path d="M5.725 5.725a8.7 8.7 0 0 1 3.82-.95 8.7 8.7 0 0 1 3.82.95" data-name="Path 39"/></g></svg>'],
@@ -826,16 +880,21 @@
     ['nature', '自然・天気', 'しぜん てんき はれ くもり あめ ゆき かみなり かぜ にじ かさ おんど しずく ほのお やま うみ なみ かざん nature weather sun cloud rain snow thunder wind rainbow umbrella temperature drop water fire flame mountain sea wave volcano'],
     ['creature', '生き物・植物', 'いきもの どうぶつ しょくぶつ ねこ いぬ とり さかな ちょう むし あしあと はね かい き は はな さくら め くろーばー さぼてん きのこ animal pet cat dog bird fish butterfly bug paw feather wing shell plant tree leaf flower sakura sprout clover cactus mushroom'],
     ['sky', '天体・宇宙', 'てんたい うちゅう ほし つき たいよう わくせい ぎんが せいざ ほしうらない ぼうえんきょう ろけっと すいせい ながれぼし sky space star moon sun planet galaxy constellation zodiac horoscope telescope rocket comet orbit astronomy night'],
+    ['sport', 'スポーツ', 'すぽーつ うんどう きょうぎ さっかー やきゅう ばすけ てにす ごるふ すいえい ひょうしょうだい sports soccer baseball basketball tennis golf swim podium stopwatch athlete'],
+    ['season', '季節・行事', 'きせつ ぎょうじ はる なつ あき ふゆ くりすます はろうぃん はなび まつり もみじ ゆき こいのぼり season event christmas halloween fireworks festival autumn winter summer spring holiday'],
+    ['tools', '道具・工具', 'どうぐ こうぐ はんまー れんち どらいばー ねじ ぺんき diy tools hammer wrench screwdriver toolbox repair build'],
+    ['military', 'ミリタリー', 'みりたりー ぐんたい へいたい せんしゃ せんとうき ぐんかん へるめっと くんしょう たて けん いかり ぱらしゅーと しょうじゅん れーだー military army navy soldier tank jet fighter warship helmet medal shield sword anchor parachute target radar badge rank'],
     ['orig', 'オリジナル', '']
   ];
   const FX = new Map(FIXED.map((g, i) => [g[0], { id: g[0], ja: g[1], kw: g[2], i }]));
   /* 標準アイコンの所属（元の 15 グループ → 24 グループ。個別に動かすものは下の表で） */
-  const STD_BASE = { basic: 'basic', note: 'note', shape: 'shape', arrow: 'arrow', number: 'shape', sky: 'sky', zodiac: 'sky', const: 'sky', nature: 'nature', work: 'work', tech: 'tech', life: 'home', face: 'people', status: 'status', orig: 'orig', filled: 'home', astra: 'orig' };
+  const STD_BASE = { basic: 'basic', note: 'note', shape: 'shape', arrow: 'arrow', number: 'shape', sky: 'sky', zodiac: 'sky', const: 'sky', nature: 'nature', work: 'work', tech: 'tech', life: 'home', face: 'people', status: 'status', orig: 'orig', filled: 'home', astra: 'orig', military: 'military', sport: 'sport', season: 'season', tools: 'tools' };
   const STD_MOVE = {
     book: 'book-open book books journal glasses f-library',
     study: 'grad-cap backpack abc math flask atom dna globe-book brain bulb',
     media: 'music-note camera image video film mic headphones speaker play pause stop record f-lyre f-piano f-notes f-camera',
-    hobby: 'palette puzzle dumbbell run ball game dice brush f-dice f-yarn f-palette',
+    hobby: 'palette puzzle game dice brush f-dice f-yarn f-palette',
+    sport: 'dumbbell run ball',
     creature: 'paw cat bird butterfly fish shell feather leaf tree pine flower sakura sprout clover cactus mushroom f-wings',
     money: 'coin yen wallet card receipt cart bag gift',
     building: 'building store f-building f-store f-bank f-school f-hospital f-castle f-factory f-lighthouse f-torii',
@@ -2052,7 +2111,7 @@
     }
     function placePk(anchor) {
       const rr = root.getBoundingClientRect(), W = root.clientWidth, H = root.clientHeight;
-      const w = Math.min(W - 12, 312); pk.style.width = w + 'px'; pk.style.maxHeight = (H - 12) + 'px';
+      const w = Math.min(W - 12, 336); pk.style.width = w + 'px'; pk.style.maxHeight = (H - 12) + 'px';
       const ph = pk.offsetHeight;
       let left = 6, top = 6;
       if (anchor) {
@@ -2837,7 +2896,7 @@
 .c29-pkbg img { width:62%; height:62%; }
 .c29-pksty button:hover, .c29-pkbg button:hover { background:var(--hov); }
 .c29-pksty button.on, .c29-pkbg button.on { box-shadow:inset 0 0 0 1.5px var(--acc2); background:color-mix(in srgb, var(--acc2) 8%, transparent); color:var(--fg); }
-.c29-ctabs { display:flex; gap:1px; overflow-x:auto; scrollbar-width:none; }
+.c29-ctabs { display:flex; flex-wrap:wrap; gap:2px 1px; min-width:0; }
 .c29-ctabs button { all:unset; cursor:pointer; font-size:11px; font-weight:500; padding:2px 6px; border-radius:5px; color:var(--mut); white-space:nowrap; }
 .c29-ctabs button:hover { color:var(--fg); }
 .c29-ctabs button.on { color:var(--fg); background:var(--hov); }
