@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁶ _ Sidebar Workspace Grouper
 // @namespace    https://cordivestium.local/sidebar-workspace-grouper
-// @version      15.6.0
-// @description  v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
+// @version      15.7.0
+// @description  v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
 // @match        https://app.notion.com/*
 // @match        https://www.notion.com/*
 // @match        https://www.notion.so/*
@@ -56,7 +56,7 @@
   'use strict';
   if (window.top !== window.self) return;
 
-  const VERSION = '15.6.0';
+  const VERSION = '15.7.0';
   const TAG = '[¹⁶ v' + VERSION + ']';
 
   if (window.__c16 && window.__c16.version) {
@@ -893,8 +893,10 @@
     const st = document.createElement('style');
     st.id = EDIT_STYLE_ID;
     st.textContent = `
-#c16-root .c16-lbl{flex:0 1 auto !important;cursor:text;border-radius:4px;text-decoration:underline dotted transparent;text-underline-offset:4px;transition:text-decoration-color .12s}
-#c16-root .c16-head:hover .c16-lbl{text-decoration-color:color-mix(in srgb,currentColor 35%,transparent)}
+#c16-root .c16-lbl{flex:0 1 auto !important;cursor:text;text-decoration:none !important}
+/* v15.7.0: ★見出しの灰色の箱（乗せた時・開いている時）と下線を出さない。文字のクリックで編集はそのまま */
+#c16-root .c16-sec .c16-head:not(#c16x):not(#c16y),#c16-root .c16-sec .c16-head:not(#c16x):not(#c16y):is(:hover,:focus,:focus-visible,:active,[aria-expanded]){background:transparent !important;box-shadow:none !important;outline:none !important}
+#c16-root .c16-sec:not(#c16x):not(#c16y){background:transparent !important;box-shadow:none !important}
 #c16-root .c16-ico[data-c16-txt]{-webkit-mask:none !important;mask:none !important;background:none !important;display:flex;align-items:center;justify-content:center;font-size:calc(var(--c16-ico-size) * .78);line-height:1;color:var(--c16-ico-tint,currentColor)}
 #c16-root .c16-ico[data-c16-txt]::before{content:attr(data-c16-txt)}
 #c16-menu .c16-m-add{margin-top:4px;border-top:1px solid var(--c-borPri,rgba(55,53,47,.12)) !important;border-radius:0 0 4px 4px !important;opacity:.75}

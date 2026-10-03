@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      2.2.0
-// @description  v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
+// @version      3.0.0
+// @description  v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -14,6 +14,12 @@
 // ==/UserScript==
 
 /*
+ * v3.0.0（2026-10-03）
+ *   ・階層を段々に: ★グループ ＞ ■チームスペース ＞ ●フルDB・ページ ＞ ▲ビュー（v1 の「DB をチームスペースと同じ段」はやめた）。
+ *     ■ のアイコンは ★ の名前の 1 文字目、● のアイコンは ■ の名前の 1 文字目（子ページは親の名前の 1 文字目）、▲ は ● の名前の 1 文字目。
+ *     ずらしは --c33-team-shift／--c33-db-shift／--c33-view-shift（²⁶ Atelier「サイドバー」）。前の並べ方は __c33.set({ tree: false })。
+ *   ・チームスペースの行の灰色の箱（選択中・乗せた時）も出さない。
+ *
  * v2.2.0（2026-10-03）
  *   ・選択中の行の灰色の箱が残っていた: Notion は背景を行そのものではなく、行を包む入れ物や行の中の帯に付けることがあり、
  *     前の版は行の style 属性（bacIntTra）しか見ていなかった → 行・包む入れ物・中の帯・疑似要素の背景と影を全部消す。
@@ -58,13 +64,13 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '2.2.0';
+  const VERSION = '3.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
   const LS = 'c33.prefs.v1';
   const LS_DB = 'c33.db.v1';     // DB だと分かった行の名前（閉じていても DB の印を付ける）
-  const P = { flat: true, scale: 0.8, viewIndent: 18, on: true, alignViews: true, viewShift: 0, noBg: true };
+  const P = { flat: true, scale: 0.8, viewIndent: 18, on: true, alignViews: true, viewShift: 0, noBg: true, tree: true };
   try { Object.assign(P, JSON.parse(localStorage.getItem(LS) || '{}')); } catch (e) { /* noop */ }
   const saveP = () => { try { localStorage.setItem(LS, JSON.stringify(P)); } catch (e) { /* noop */ } };
   let KNOWN_DB = {};
@@ -295,7 +301,7 @@
       }
       const name = nameOf(r);
       const level = Math.max(0, x.pad - minPad);
-      x.newPad = P.flat ? teamPad + level * P.scale : x.pad;
+      x.newPad = P.tree ? x.pad + (r.__c33dx || 0) : P.flat ? teamPad + level * P.scale : x.pad;
       setVar(r, '--c33-pad', x.newPad.toFixed(1) + 'px');
       setAttr(r, 'data-c33-pad', '1');
       x.id = idOf(r);
@@ -308,7 +314,54 @@
       ST.rows++;
       if (isDb) ST.dbs++;
     }
-    if (P.alignViews) alignViews(info);
+    if (P.tree) alignTree(team, btn, info); else if (P.alignViews) alignViews(info);
+  }
+  /* v3.0.0: 段々（★グループ ＞ ■チームスペース ＞ ●DB・ページ ＞ ▲ビュー）。
+     どの段も「アイコンの左端 ＝ 一つ上の段の名前の 1 文字目」になるよう、実測して字下げを決める。
+     ずらしは --c33-team-shift／--c33-db-shift／--c33-view-shift（Atelier「サイドバー」）。 */
+  const cssPx = (n) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(n)) || 0;
+  function iconLeft(row, slot) {
+    const el = slot || row.firstElementChild || row;
+    return el.getBoundingClientRect().left;
+  }
+  function nudge(el, varName, d, key, host) {
+    if (Math.abs(d) < 0.5) return;
+    const cur = parseFloat(getComputedStyle(el).paddingInlineStart) || 0;
+    el[key] = (el[key] || 0) + d;
+    setVar(host || el, varName, Math.max(0, cur + d).toFixed(1) + 'px');
+  }
+  function alignTree(team, btn, info) {
+    requestAnimationFrame(() => {
+      if (!btn.isConnected) return;
+      /* ■ チームスペース: アイコン → ★グループ見出しの文字の 1 文字目 */
+      const g = team.getAttribute('data-c16-g');
+      const lbl = g ? document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(g) + '"] .c16-lbl') : null;
+      if (lbl) {
+        setAttr(team, 'data-c33-tpad', '1');
+        nudge(btn, '--c33-tpad', textLeft(lbl) + cssPx('--c33-team-shift') - iconLeft(btn), '__c33tdx', team);
+      }
+      const teamText = btn.querySelector('.notranslate') || [...btn.querySelectorAll('span, div')].find((e) => !e.querySelector('svg, img') && norm(e.textContent)) || btn;
+      const tTeam = textLeft(teamText);
+      /* ● 行・▲ ビュー: 上から順に、親の名前の 1 文字目へ */
+      const stack = [];
+      for (const x of info) {
+        if (!x.r.isConnected) continue;
+        let target;
+        if (x.slot) {
+          const t = x.dbRow && x.dbRow.r.querySelector('.notranslate');
+          if (!t) continue;
+          target = textLeft(t) + P.viewShift + cssPx('--c33-view-shift');
+          nudge(x.r, '--c33-pad', target - iconLeft(x.r, x.slot), '__c33dx');
+          continue;
+        }
+        while (stack.length && stack[stack.length - 1].pad >= x.pad) stack.pop();
+        const parent = stack[stack.length - 1];
+        const pt = parent ? parent.r.querySelector('.notranslate') : null;
+        target = (pt ? textLeft(pt) : tTeam) + cssPx('--c33-db-shift');
+        nudge(x.r, '--c33-pad', target - iconLeft(x.r), '__c33dx');
+        stack.push(x);
+      }
+    });
   }
   function scan() {
     if (!P.on) return;
@@ -392,6 +445,13 @@ html[data-c33] ${SEL_TEAM}[data-c33-team]${B} { margin-top: var(--c33-team-gap) 
 html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B} { margin-bottom: var(--c33-team-after) !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B},
 html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} :is(div, span):not(:has(svg, img))${B} { font-family: var(--c33-team-font) !important; font-size: var(--c33-team-size) !important; font-weight: var(--c33-team-weight) !important; letter-spacing: var(--c33-team-track) !important; text-transform: uppercase !important; color: var(--c33-team-color) !important; }
+/* v3.0.0: ■ チームスペースの字下げ（★グループの文字の下へ）・灰色の箱を出さない */
+html[data-c33] ${SEL_TEAM}[data-c33-team][data-c33-tpad] ${SEL_TEAM_BTN}${B} { padding-inline-start: var(--c33-tpad) !important; }
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B}:is(:hover, :focus, :focus-visible, [aria-selected="true"], [aria-current]),
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} > div${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] .notion-outliner-team-header${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] .notion-outliner-team-header-container${B} { background: transparent !important; background-color: transparent !important; box-shadow: none !important; }
 /* ● DB・ページ ／ ▲ ビュー: 字下げ */
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-pad]${B} { padding-inline-start: var(--c33-pad) !important; }
 /* ● 行: 書体は 1 つの変数にそろえる（文字の入れ物の中まで） */
