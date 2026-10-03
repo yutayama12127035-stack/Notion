@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁰ _ Table Title Line Break
 // @namespace    https://cordivestium.local/table-title-linebreak
-// @version      1.0.0
-// @description  テーブルビューでもタイトルを改行できるように（本来はギャラリービューでしかできない裏ワザ）。題字のセルを編集中に ⇧Enter または ⌥Enter（Excel と同じ）で改行。改行を含むタイトルは、テーブル・リストでも折り返して表示する。編集欄へ直接入れられない時は Notion の API でタイトルに改行を書き込む。
+// @version      1.1.0
+// @description  v1.1.0: ギャラリー・ボード・リストのカードが崩れる不具合を修正（カードにまで表のセル用の「高さを中身に・はみ出し表示」を当てていた。カードは改行の折り返しだけに）。テーブルビューでもタイトルを改行できるように（本来はギャラリービューでしかできない裏ワザ）。題字のセルを編集中に ⇧Enter または ⌥Enter（Excel と同じ）で改行。改行を含むタイトルは、テーブル・リストでも折り返して表示する。編集欄へ直接入れられない時は Notion の API でタイトルに改行を書き込む。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -30,7 +30,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const TAG = '[³⁰ v' + VERSION + ']';
   if (window.__c30 && window.__c30.version) { console.warn(TAG, '旧版 ' + window.__c30.version + ' が動いています'); return; }
 
@@ -73,7 +73,10 @@ html [data-c30-row="1"]:not(#c30a) { height: auto !important; min-height: 0 !imp
     if (!cell) return;
     if (el.isContentEditable && el.closest('[role="dialog"]')) return;
     setAttr(el, 'data-c30-nl', '1');
-    const tcell = el.closest('.notion-table-view-cell') || cell;
+    /* v1.1.0: 高さ・はみ出しを変えるのは表のセルだけ。ギャラリー・ボード・リストのカードは折り返しだけ
+       （カードにも印を付けていたため、カードの高さと切り抜きが外れて見た目が崩れていた） */
+    const tcell = el.closest('.notion-table-view-cell');
+    if (!tcell) return;
     setAttr(tcell, 'data-c30-cell', '1');
     for (let p = el.parentElement; p && p !== tcell; p = p.parentElement) setAttr(p, 'data-c30-up', '1');
     const row = tcell.closest('.notion-collection-item, .notion-table-view-row');
@@ -84,6 +87,7 @@ html [data-c30-row="1"]:not(#c30a) { height: auto !important; min-height: 0 !imp
   }
   function scan(root) {
     if (!root || root.nodeType !== 1) return;
+    root.querySelectorAll('[data-c30-cell]:not(.notion-table-view-cell), [data-c30-up]:not(.notion-table-view-cell *), [data-c30-row]:not(:has(.notion-table-view-cell))').forEach((el) => ['data-c30-cell', 'data-c30-up', 'data-c30-row'].forEach((a) => el.removeAttribute(a)));
     if (!root.closest(CELL) && !root.querySelector(CELL)) return;
     const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let n;
