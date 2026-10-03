@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      3.0.0
-// @description  v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
+// @version      3.1.0
+// @description  v3.1.0: 段々が実物の Notion で効いていなかったのを作り直し — 本物のアイコンの位置を測り、アイコンの入れ物を直接ずらす（¹⁶・Stylus の字下げと取り合わない・毎回差を測るので必ず目標で止まる）。■のアイコン＝★の名前の 1 文字目、●＝■の名前の 1 文字目、▲＝●の名前の 1 文字目。v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -14,6 +14,14 @@
 // ==/UserScript==
 
 /*
+ * v3.1.0（2026-10-03）
+ *   ・実物の Notion で段々にならなかった原因: ①■チームスペースの「アイコンの位置」を行の最初の子（行いっぱいの包み）で測っていた
+ *     ②字下げを padding で付けていたが、¹⁶ Sidebar Workspace Grouper と Stylus も padding を !important で付けていて取り合い、
+ *     効かないまま「ずらした量」だけが毎回足されていた。
+ *   ・新しいやり方: 本物のアイコン（img・svg・.notion-record-icon）の左端を測り、目標（一つ上の段の名前の 1 文字目）との差を、
+ *     アイコンの入れ物の margin-inline-start に足す（style に直接・!important）。毎回いまの位置から測るので、ほかの字下げが
+ *     何であっても最後は目標で止まる。¹⁶ は html[data-c33-tree] の間、チームスペースと行の字下げの調整をしない。
+ *
  * v3.0.0（2026-10-03）
  *   ・階層を段々に: ★グループ ＞ ■チームスペース ＞ ●フルDB・ページ ＞ ▲ビュー（v1 の「DB をチームスペースと同じ段」はやめた）。
  *     ■ のアイコンは ★ の名前の 1 文字目、● のアイコンは ■ の名前の 1 文字目（子ページは親の名前の 1 文字目）、▲ は ● の名前の 1 文字目。
@@ -64,7 +72,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '3.0.0';
+  const VERSION = '3.1.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -273,7 +281,7 @@
       if (x.slot) {
         const db = x.dbRow;
         const base = db ? db.newPad : teamPad;
-        const pad = base + P.viewIndent + (P.alignViews ? (r.__c33dx || 0) : 0);
+        const pad = P.tree ? x.pad : base + P.viewIndent + (P.alignViews ? (r.__c33dx || 0) : 0);
         setAttr(r, 'data-c33-kind', 'view');
         setVar(r, '--c33-pad', pad.toFixed(1) + 'px');
         setAttr(r, 'data-c33-pad', '1');
@@ -301,7 +309,7 @@
       }
       const name = nameOf(r);
       const level = Math.max(0, x.pad - minPad);
-      x.newPad = P.tree ? x.pad + (r.__c33dx || 0) : P.flat ? teamPad + level * P.scale : x.pad;
+      x.newPad = P.tree ? x.pad : P.flat ? teamPad + level * P.scale : x.pad;
       setVar(r, '--c33-pad', x.newPad.toFixed(1) + 'px');
       setAttr(r, 'data-c33-pad', '1');
       x.id = idOf(r);
@@ -320,15 +328,44 @@
      どの段も「アイコンの左端 ＝ 一つ上の段の名前の 1 文字目」になるよう、実測して字下げを決める。
      ずらしは --c33-team-shift／--c33-db-shift／--c33-view-shift（Atelier「サイドバー」）。 */
   const cssPx = (n) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(n)) || 0;
-  function iconLeft(row, slot) {
-    const el = slot || row.firstElementChild || row;
-    return el.getBoundingClientRect().left;
+  /* v3.1.0: 実物の Notion で段々にならなかった（v3.0 は ①チームスペースの「アイコン」を行の最初の子（行いっぱいの包み）で測っていた
+     ②字下げを padding で付けていたが、¹⁶ や Stylus の padding と取り合って効かず、ずれの記憶だけが増えていた）。
+     → 本物のアイコン（img・svg・.notion-record-icon）の位置を測り、アイコンの入れ物（アイコンと文字を並べる段の、アイコン側の子）に
+        margin-inline-start を直接（style・!important）付ける。毎回「今の位置 → 目標」の差を測ってから足すので、
+        ほかのスクリプト・CSS がどんな字下げを付けていても、最後は必ず目標の位置に止まる（増え続けない）。 */
+  function realIcon(el) {
+    if (!el) return null;
+    for (const nd of el.querySelectorAll('[data-c33-vslot], .notion-record-icon, [role="img"], img, svg')) {
+      if (nd.closest('[class*="arrowChevron"]') || String(nd.getAttribute('class') || '').includes('arrowChevron')) continue;
+      const r = nd.getBoundingClientRect();
+      if (r.width >= 8 && r.width <= 34 && r.height >= 8) return nd;
+    }
+    return null;
   }
-  function nudge(el, varName, d, key, host) {
-    if (Math.abs(d) < 0.5) return;
-    const cur = parseFloat(getComputedStyle(el).paddingInlineStart) || 0;
-    el[key] = (el[key] || 0) + d;
-    setVar(host || el, varName, Math.max(0, cur + d).toFixed(1) + 'px');
+  function textEl(el) {
+    return el.querySelector('.notranslate') || [...el.querySelectorAll('span, div')].find((e) => !e.querySelector('svg, img, [data-c33-vslot]') && !e.matches('[data-c33-vslot]') && norm(e.textContent)) || null;
+  }
+  /* アイコンを含み、文字を含まない、いちばん外側の入れ物（container の子孫） */
+  function moverOf(container, icon, text) {
+    let m = icon;
+    while (m.parentElement && m.parentElement !== container && !(text && m.parentElement.contains(text))) m = m.parentElement;
+    return m;
+  }
+  const MV = new WeakMap();
+  function place(container, target) {
+    const icon = container.matches && container.matches('[data-c33-vslot]') ? container : realIcon(container);
+    if (!icon) return null;
+    const text = textEl(container);
+    const m = icon === container ? container : moverOf(container, icon, text);
+    const il = icon.getBoundingClientRect().left;
+    const d = target - il;
+    if (Math.abs(d) < 0.5) return 0;
+    const cur = parseFloat(getComputedStyle(m).marginInlineStart) || 0;
+    const nv = Math.max(-240, Math.min(320, cur + d));
+    m.style.setProperty('margin-inline-start', nv.toFixed(1) + 'px', 'important');
+    m.setAttribute('data-c33-mv', '1');
+    MV.set(m, nv);
+    return d;
   }
   function alignTree(team, btn, info) {
     requestAnimationFrame(() => {
@@ -336,31 +373,26 @@
       /* ■ チームスペース: アイコン → ★グループ見出しの文字の 1 文字目 */
       const g = team.getAttribute('data-c16-g');
       const lbl = g ? document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(g) + '"] .c16-lbl') : null;
-      if (lbl) {
-        setAttr(team, 'data-c33-tpad', '1');
-        nudge(btn, '--c33-tpad', textLeft(lbl) + cssPx('--c33-team-shift') - iconLeft(btn), '__c33tdx', team);
-      }
-      const teamText = btn.querySelector('.notranslate') || [...btn.querySelectorAll('span, div')].find((e) => !e.querySelector('svg, img') && norm(e.textContent)) || btn;
+      if (lbl && lbl.getBoundingClientRect().width) place(btn, textLeft(lbl) + cssPx('--c33-team-shift'));
+      const teamText = textEl(btn) || btn;
       const tTeam = textLeft(teamText);
-      /* ● 行・▲ ビュー: 上から順に、親の名前の 1 文字目へ */
+      /* ● 行・▲ ビュー: 上から順に、親の名前の 1 文字目へ（親を先に動かしてから子を測る） */
       const stack = [];
       for (const x of info) {
-        if (!x.r.isConnected) continue;
-        let target;
+        if (!x.r.isConnected || !x.r.getBoundingClientRect().height) continue;
         if (x.slot) {
-          const t = x.dbRow && x.dbRow.r.querySelector('.notranslate');
+          const t = x.dbRow && textEl(x.dbRow.r);
           if (!t) continue;
-          target = textLeft(t) + P.viewShift + cssPx('--c33-view-shift');
-          nudge(x.r, '--c33-pad', target - iconLeft(x.r, x.slot), '__c33dx');
+          place(x.slot, textLeft(t) + P.viewShift + cssPx('--c33-view-shift'));
           continue;
         }
         while (stack.length && stack[stack.length - 1].pad >= x.pad) stack.pop();
         const parent = stack[stack.length - 1];
-        const pt = parent ? parent.r.querySelector('.notranslate') : null;
-        target = (pt ? textLeft(pt) : tTeam) + cssPx('--c33-db-shift');
-        nudge(x.r, '--c33-pad', target - iconLeft(x.r), '__c33dx');
+        const pt = parent ? textEl(parent.r) : null;
+        place(x.r, (pt ? textLeft(pt) : tTeam) + cssPx('--c33-db-shift') + cssPx('--c33-icon-dx'));
         stack.push(x);
       }
+      ST.aligned = (ST.aligned || 0) + 1;
     });
   }
   function scan() {
@@ -368,6 +400,7 @@
     ST.scans++; ST.rows = 0; ST.views = 0; ST.dbs = 0;
     document.documentElement.setAttribute('data-c33', P.flat ? 'flat' : 'nest');
     document.documentElement.toggleAttribute('data-c33-nobg', P.noBg !== false);
+    document.documentElement.toggleAttribute('data-c33-tree', P.tree !== false);   // ¹⁶ はこの印がある間、チームスペース・行の字下げを測らない（取り合わない）
     installCss();
     const scope = document.querySelector('nav.notion-sidebar-container, .notion-sidebar-container, .notion-sidebar');
     if (!scope) return;
@@ -512,6 +545,7 @@ ${icons}
     off() {
       P.on = false; saveP(); mo.disconnect();
       document.documentElement.removeAttribute('data-c33');
+      document.querySelectorAll('[data-c33-mv]').forEach((el) => { el.style.removeProperty('margin-inline-start'); el.removeAttribute('data-c33-mv'); });
       document.querySelectorAll('[data-c33-kind],[data-c33-team],[data-c33-vslot]').forEach((el) => { ['data-c33-kind', 'data-c33-team', 'data-c33-vslot', 'data-c33-vt', 'data-c33-lvl'].forEach((a) => el.removeAttribute(a)); ['--c33-pad', '--c33-guide', '--c33-tint'].forEach((v) => el.style.removeProperty(v)); });
       const s = document.getElementById('c33-css'); if (s) s.remove();
       return 'stopped（__c33.set({ on: true }) と再読み込みで戻ります）';

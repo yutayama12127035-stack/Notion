@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁶ _ Sidebar Workspace Grouper
 // @namespace    https://cordivestium.local/sidebar-workspace-grouper
-// @version      15.7.0
-// @description  v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
+// @version      15.8.0
+// @description  v15.8.0: ³³ Sidebar Constellation の段々が動いている間は、チームスペースと行の字下げの調整を ³³ に任せる（両方で測って取り合い、どちらも効かなかった）。v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
 // @match        https://app.notion.com/*
 // @match        https://www.notion.com/*
 // @match        https://www.notion.so/*
@@ -56,7 +56,7 @@
   'use strict';
   if (window.top !== window.self) return;
 
-  const VERSION = '15.7.0';
+  const VERSION = '15.8.0';
   const TAG = '[¹⁶ v' + VERSION + ']';
 
   if (window.__c16 && window.__c16.version) {
@@ -738,7 +738,9 @@
       lblL += dHead;
     }
 
-    /* ▲ チームスペースのアイコン → 見出しの文字（v15.3: 潰れた行では測らない） */
+    /* ▲ チームスペースのアイコン → 見出しの文字（v15.3: 潰れた行では測らない）
+       v15.8: ³³ Sidebar Constellation の段々（html[data-c33-tree]）が動いている間は ³³ に任せる（取り合うと止まらない） */
+    const c33tree = document.documentElement.hasAttribute('data-c33-tree');
     let dTeam = 0, tBtn = null, newPad = null;
     const listW = list.getBoundingClientRect().width;
     for (const t of L.teams) {
@@ -746,7 +748,7 @@
       const br = b.getBoundingClientRect();
       if (br.height && br.width > listW * 0.6) { tBtn = b; break; }
     }
-    if (tBtn && lblL != null) {
+    if (tBtn && lblL != null && !c33tree) {
       const il = iconLeft(tBtn);
       if (il != null) {
         const curPad = parseFloat(getComputedStyle(tBtn).paddingInlineStart) || 0;
@@ -758,7 +760,7 @@
 
     /* ■ アイテムのアイコン → チームスペースの文字 */
     let newD = null, dPage = 0;
-    for (const row of list.querySelectorAll(SEL_PAGE + '[data-c16-pb]')) {
+    for (const row of c33tree ? [] : list.querySelectorAll(SEL_PAGE + '[data-c16-pb]')) {
       if (!row.getBoundingClientRect().height) continue;
       const t = row.closest(SEL_TEAM);
       const tl = t ? textLeft(teamBtn(t)) : null;
