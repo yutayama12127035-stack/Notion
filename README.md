@@ -1,22 +1,23 @@
 # Cordivestium — Notion 改修（2026-10-03 納品）
 
-ご依頼の 9 点について、機能ごとに 1 本ずつ（全文の JavaScript）でお渡しします。
+ご依頼の 9 点（と追加のご依頼）について、機能ごとに 1 本ずつ（全文の JavaScript）でお渡しします。
 各ファイルを ScriptCat に「全文貼り付け」で入れてください。
 
 ## 納品物
 
 | # | ご依頼 | ファイル | スクリプト名 | 版 |
 |---|---|---|---|---|
-| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → 36.0.0 → **37.0.0** |
+| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → 36.0.0 → 37.0.0 → **37.1.0** |
 | 2 | タイトルの改行（テーブルビュー） | `scripts/table-title-linebreak.user.js` | « No »　³⁰ _ Table Title Line Break | 新規 1.0.0 → **1.1.0** |
 | 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → 6.2.0 → 6.3.0 → **6.4.0** |
 | 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → 1.48.0 → 1.49.0 → 1.50.0 → **1.51.0** |
 | 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → 2.8.0 → **2.9.0** |
 | 5 | 新規ビュー → 表の画像 | `scripts/image-cells.user.js` | « No »　³⁴ _ Image Cells（³¹ Atlas Views は廃止） | 新規 **1.0.0** |
 | 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → 1.1.0 → 1.2.0 → **1.3.0** |
-| 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → 15.7.0 → **15.8.0** |
+| 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → 15.7.0 → 15.8.0 → **15.9.0** |
 | 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 **1.0.0** |
-| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → **3.1.0** |
+| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → **3.2.0** |
+| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 **1.0.0** |
 
 ## 第2便（2026-10-03）の修正
 
@@ -29,6 +30,14 @@
 | 5 Atlas | メニューに出なかったのを修正。シアター・レコード・ポラロイド・星図を追加（v2.0.0） |
 | 6 ドラッグ | ■が逃げる・Notion が押下を先に取る・離した時にセルが開く、を修正（v1.1.0） |
 | 7 リレーション内グルーピングの線 | 項目の少ないセルでも端まで引くように（v1.48.0） |
+
+## 第7便（2026-10-03）の修正
+
+| ご指摘 | 対応 |
+|---|---|
+| サイドバーが崩れている（DB の名前がアイコンの下に潜る） | Notion のアイコン（.notion-record-icon）にも名前と同じ notranslate の印が付いていて、アイコンを名前と取り違え、アイコンだけを動かしていた → 名前はアイコンの外の notranslate で測る。動かして名前とアイコンが重なるなら元に戻す安全弁。サイドバーの書体の設定もアイコンに当てない（³³ v3.2.0・¹⁶ v15.9.0） |
+| ギャラリービューのフォントが変わらない（アイコンに当たっている） | 同じ取り違え。カードの中で notranslate はアイコンだけで、題名は data-content-editable-leaf → 「カードと一覧」（ギャラリー・ボード・リスト）の文字は題名へ。ページへのリンク・上の帯・メニュー・サイドバーの文字も直した（²⁶ v37.1.0） |
+| サブグループ（誤解の訂正） | ³⁶ Sub Groups（新規）— DB の標準の「グループ」（Group by）に、ボード以外（表・リスト・ギャラリー）でもサブグループ。ビューの左上の「⊞ サブグループ」でプロパティを選ぶと、各グループの中が値ごとの見出し（▾ 値 · 件数）で分かれる。見出しのクリックで畳む、右クリックでメニュー（逆順・すべて畳む／開く・やめる）。グループ分けしていないビューは ⌃⌥G。ビューごとに覚える。見た目だけで Notion のデータ・並び順は変えない。前便のリレーションのサブグループはそのまま |
 
 ## 第6便（2026-10-03）の修正
 

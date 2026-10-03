@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      37.0.0
+// @version      37.1.0
 // @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -21,6 +21,10 @@
 // ==/UserScript==
 
 /*
+ * v37.1.0（2026-10-03）
+ *   ・「カードと一覧」（ギャラリー・ボード・リスト）の文字の設定が題名に効かず、アイコンに当たっていた。
+ *     原因: カードの中で notranslate が付いているのはアイコン（.notion-record-icon）だけで、題名は [data-content-editable-leaf]。
+ *     → 文字は題名（と notranslate のうちアイコン以外）へ。ページへのリンク・上の帯・メニュー・サイドバーの文字も同じ取り違えを直した。
  * v37.0.0（2026-10-03）
  *   ・セルの中の位置: v36 は property-value に flex を当てていたが、実物では中身が幅 100% の入れ物に入っていて動かなかった。
  *     → 各セルの「中身の箱」を JS で見つけて印（data-at-cv・題字／リレーション／画像／文字の種類・横並びの段か）を付け、
@@ -343,7 +347,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '37.0.0';
+  const VERSION = '37.1.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -7345,7 +7349,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('stbl', { text: PC + ' .notion-table-block :is(td, th)' }, 'ff fs lh pt pb', { g: '表ブロック', tg: { pt: 'text', pb: 'text' }, prop: { pt: 'padding-top:$px', pb: 'padding-bottom:$px' }, l: { pt: 'セルの内側の上', pb: 'セルの内側の下' } })
     ] },
     { id: 'links', sec: 'all', label: 'リンクとメンション', hl: PC + ' :is(.notion-page-block, .notion-page-mention-token)', note: '本文の中の「ページへのリンク」ブロックと、@ メンション。', ctl: [
-      ...kit('plink', { row: PC + ' .notion-page-block', text: PC + ' .notion-page-block .notranslate', icon: PC + ' .notion-page-block .notion-record-icon' }, 'ff fs fw col isz igap idy tdy mt mb', { g: 'ページへのリンク' }),
+      ...kit('plink', { row: PC + ' .notion-page-block', text: PC + ' .notion-page-block .notranslate:not(.notion-record-icon)', icon: PC + ' .notion-page-block .notion-record-icon' }, 'ff fs fw col isz igap idy tdy mt mb', { g: 'ページへのリンク' }),
       ...kit('ment', { text: PC + ' .notion-page-mention-token', icon: PC + ' .notion-page-mention-token .notion-record-icon' }, 'fw col isz igap idy', { g: 'メンション' })
     ] },
     /* ───── ページ ───── */
@@ -7490,9 +7494,9 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--c12g-pad', t: 'px', l: '左の余白', d: 6.4, min: 0, max: 32, s: 0.2, g: '間隔' }
     ] },
     { id: 'cards', sec: 'db', label: 'カードと一覧', hl: '.notion-frame :is(.notion-gallery-view, .notion-board-view, .notion-list-view) .notion-collection-item', note: 'ギャラリー・ボードのカードと、リストビューの行。', ctl: [
-      ...kit('gal', { row: '.notion-frame .notion-gallery-view .notion-collection-item', text: '.notion-frame .notion-gallery-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-gallery-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col rad isz igap', { g: 'ギャラリーのカード' }),
-      ...kit('brd', { row: '.notion-frame .notion-board-view .notion-collection-item', text: '.notion-frame .notion-board-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-board-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col rad isz igap', { g: 'ボードのカード' }),
-      ...kit('lst', { row: '.notion-frame .notion-list-view .notion-collection-item', text: '.notion-frame .notion-list-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-list-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col isz igap h', { g: 'リストビューの行', prop: { h: 'min-height:$px' } })
+      ...kit('gal', { row: '.notion-frame .notion-gallery-view .notion-collection-item', text: '.notion-frame .notion-gallery-view .notion-collection-item :is([data-content-editable-leaf], .notranslate:not(.notion-record-icon)):not(.notion-record-icon *)', icon: '.notion-frame .notion-gallery-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col rad isz igap', { g: 'ギャラリーのカード' }),
+      ...kit('brd', { row: '.notion-frame .notion-board-view .notion-collection-item', text: '.notion-frame .notion-board-view .notion-collection-item :is([data-content-editable-leaf], .notranslate:not(.notion-record-icon)):not(.notion-record-icon *)', icon: '.notion-frame .notion-board-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col rad isz igap', { g: 'ボードのカード' }),
+      ...kit('lst', { row: '.notion-frame .notion-list-view .notion-collection-item', text: '.notion-frame .notion-list-view .notion-collection-item :is([data-content-editable-leaf], .notranslate:not(.notion-record-icon)):not(.notion-record-icon *)', icon: '.notion-frame .notion-list-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col isz igap h', { g: 'リストビューの行', prop: { h: 'min-height:$px' } })
     ] },
     /* ───── サイドバー ───── */
     { id: 'sidebar', sec: 'side', label: 'サイドバー', fig: 'side', hl: '.notion-sidebar-container', note: '★グループ見出し（¹⁶）と ³³ Sidebar Constellation の行・ビュー・ワークスペース。アイコンの大きさ・文字との間・位置まで。ビューのアイコンは、上の DB の題名の 1 文字目にそろいます（ずらしたい時は「開始位置」）。', ctl: [
@@ -7529,12 +7533,12 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--c33-view-shift', t: 'px', l: '開始位置のずらし', d: 0, min: -24, max: 24, s: 0.5, g: '▲ ビューの行' },
       { v: '--c33-cur-weight', t: 'weight', l: '太さ', d: 700, g: '今開いている所' },
       { v: '--c33-cur-color', t: 'color', l: '色', d: '', g: '今開いている所' },
-      ...kit('sbsw', { text: '.notion-sidebar-switcher :is(.notranslate, div:not(:has(*)))', icon: '.notion-sidebar-switcher .notion-record-icon' }, 'ff fs fw isz igap', { g: '一番上のワークスペース名' })
+      ...kit('sbsw', { text: '.notion-sidebar-switcher :is(.notranslate:not(.notion-record-icon), div:not(:has(*))):not(.notion-record-icon *)', icon: '.notion-sidebar-switcher .notion-record-icon' }, 'ff fs fw isz igap', { g: '一番上のワークスペース名' })
     ] },
     /* ───── 画面 ───── */
     { id: 'chrome', sec: 'chrome', label: '上の帯とメニュー', hl: '.notion-topbar', note: '上の帯（パンくず）・メニューと候補の一覧・サイドピーク・スクロールバー。', ctl: [
-      ...kit('top', { text: '.notion-topbar :is(.notranslate, [role="button"] div:not(:has(*)))', icon: '.notion-topbar .notion-record-icon' }, 'ff fs fw col isz igap', { g: '上の帯（パンくず）' }),
-      ...kit('menu', { text: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(.notranslate, div:not(:has(*)))', icon: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(svg, .notion-record-icon)' }, 'ff fs fw isz igap', { g: 'メニュー・候補' }),
+      ...kit('top', { text: '.notion-topbar :is(.notranslate:not(.notion-record-icon), [role="button"] div:not(:has(*))):not(.notion-record-icon *)', icon: '.notion-topbar .notion-record-icon' }, 'ff fs fw col isz igap', { g: '上の帯（パンくず）' }),
+      ...kit('menu', { text: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(.notranslate:not(.notion-record-icon), div:not(:has(*))):not(.notion-record-icon *)', icon: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(svg, .notion-record-icon)' }, 'ff fs fw isz igap', { g: 'メニュー・候補' }),
       ...kit('peek', { row: '.notion-peek-renderer' }, 'w rad', { g: 'サイドピーク', prop: { w: 'width:$px;max-width:calc(100vw - 80px)' }, l: { w: 'ピークの幅' } }),
       { p: 'scrollW', t: 'px', l: 'スクロールバーの太さ', d: 10, min: 0, max: 16, s: 1, g: 'スクロールバー' }
     ] }
@@ -7560,8 +7564,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   const SB_ROW = '.notion-sidebar-container [data-c33-kind]:is([data-c33-kind="db"], [data-c33-kind="page"])';
   const SB_VIEW = '.notion-sidebar-container [data-c33-kind="view"]';
   const HLS = [
-    [/^--c33-team-(gap|after)$/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team'], [/^--c33-team/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team :is(.notranslate, span)'],
-    [/^--c33-db-shift$/, SB_ROW + ' > :first-child'], [/^--c33-(item-h)$/, SB_ROW], [/^--c33-(item|text)/, SB_ROW + ' .notranslate'], [/^--c33-icon/, SB_ROW + ' > :first-child'],
+    [/^--c33-team-(gap|after)$/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team'], [/^--c33-team/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team :is(.notranslate:not(.notion-record-icon), span):not(.notion-record-icon *)'],
+    [/^--c33-db-shift$/, SB_ROW + ' > :first-child'], [/^--c33-(item-h)$/, SB_ROW], [/^--c33-(item|text)/, SB_ROW + ' .notranslate:not(.notion-record-icon)'], [/^--c33-icon/, SB_ROW + ' > :first-child'],
     [/^--c33-view-h$/, SB_VIEW], [/^--c33-(view|vtext)/, SB_VIEW + ' > :not([data-c33-vslot])'], [/^--c33-(vicon|view-shift)/, SB_VIEW + ' [data-c33-vslot]'], [/^--c33-cur/, '.notion-sidebar-container [data-c33-cur]'],
     [/^--c13-head-(icon|gap)/, '.cordi13-sec-head :is(.cordi13-sec-icon, img)'], [/^--c13-(head|first|line)/, '.cordi13-sec-head'], [/^--c13-(row-gap|col-pad)$/, '.cordi13-item'], [/^--c13-vline/, '.cordi13-item-sep'], [/^--c13-div/, '.cordi13-sec-div'],
     [/^--cordi-relation-icon/, '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)'], [/^--cordi-relation/, '.cordi13-item .cordi13-title'], [/^rel(Head)?Font$/, '.cordi13-item .cordi13-title, .cordi13-sec-head > span:last-child'],
@@ -9013,7 +9017,7 @@ html.dark #atl-reader, .notion-dark-theme #atl-reader { --atl-paper: #1d1c1a; co
     /* サイドバーのページ */
     const seen = new Set();
     for (const row of document.querySelectorAll('.notion-sidebar-container [data-inp-target="sidebar-page-item"], .notion-sidebar-container [data-c33-kind]')) {
-      const t = atNorm((row.querySelector('.notranslate') || row).textContent).slice(0, 80);
+      const t = atNorm((row.querySelector('.notranslate:not(.notion-record-icon)') || row).textContent).slice(0, 80);
       if (!t || seen.has(t)) continue;
       seen.add(t);
       const team = row.closest('.notion-outliner-team-container');
@@ -9135,7 +9139,7 @@ html.dark #atl-reader, .notion-dark-theme #atl-reader { --atl-paper: #1d1c1a; co
       let id = holder.getAttribute('data-block-id') || '';
       if (!id) for (const at of row.attributes) { const m = HEX32.exec(at.value.replace(/-/g, '')); if (m) { id = m[1]; break; } }
       if (!id) { const inner = row.querySelector('a[href]'); if (inner) { const m = HEX32.exec(inner.getAttribute('href').replace(/-/g, '')); if (m) id = m[1]; } }
-      if (id) return { url: location.origin + '/' + id.replace(/-/g, ''), title: atNorm((row.querySelector('.notranslate') || row).textContent).slice(0, 80) };
+      if (id) return { url: location.origin + '/' + id.replace(/-/g, ''), title: atNorm((row.querySelector('.notranslate:not(.notion-record-icon)') || row).textContent).slice(0, 80) };
     }
     return null;
   }

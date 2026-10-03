@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      3.1.0
+// @version      3.2.0
 // @description  v3.1.0: 段々が実物の Notion で効いていなかったのを作り直し — 本物のアイコンの位置を測り、アイコンの入れ物を直接ずらす（¹⁶・Stylus の字下げと取り合わない・毎回差を測るので必ず目標で止まる）。■のアイコン＝★の名前の 1 文字目、●＝■の名前の 1 文字目、▲＝●の名前の 1 文字目。v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -14,6 +14,10 @@
 // ==/UserScript==
 
 /*
+ * v3.2.0（2026-10-03）
+ *   ・実物で DB の行の名前がアイコンの下に潜り込んでいた。原因: Notion のアイコン（.notion-record-icon）にも notranslate が付いていて、
+ *     アイコンを「名前」と取り違え、アイコンだけを動かしていた（名前は動かず、親の名前の位置もアイコンで測っていた）。
+ *     → 名前はアイコンの外の notranslate。動かした結果、名前がアイコンに重なるなら元に戻す安全弁。書体の CSS もアイコンに当てない。
  * v3.1.0（2026-10-03）
  *   ・実物の Notion で段々にならなかった原因: ①■チームスペースの「アイコンの位置」を行の最初の子（行いっぱいの包み）で測っていた
  *     ②字下げを padding で付けていたが、¹⁶ Sidebar Workspace Grouper と Stylus も padding を !important で付けていて取り合い、
@@ -72,7 +76,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '3.1.0';
+  const VERSION = '3.2.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -217,7 +221,9 @@
     }
     return '';
   }
-  const nameOf = (row) => norm((row.querySelector('.notranslate') || row).textContent).slice(0, 120);
+  /* v3.2.0: Notion のアイコン（.notion-record-icon）にも notranslate が付いている → 名前の箱はアイコンの外の notranslate */
+  const nameEl = (row) => [...row.querySelectorAll('.notranslate')].find((e) => !e.closest('.notion-record-icon, [role="img"]') && !e.querySelector('.notion-record-icon, img, svg') && norm(e.textContent)) || null;
+  const nameOf = (row) => norm((nameEl(row) || row).textContent).slice(0, 120);
 
   /* ============================================================
    *  印を付ける
@@ -229,7 +235,7 @@
     requestAnimationFrame(() => {
       for (const x of info) {
         if (!x.view || !x.dbRow) continue;
-        const t = x.dbRow.r.querySelector('.notranslate');
+        const t = nameEl(x.dbRow.r);
         if (!t || !x.slot.isConnected) continue;
         const tl = textLeft(t);
         const sl = x.slot.getBoundingClientRect().left + (parseFloat(getComputedStyle(x.slot).paddingLeft) || 0);
@@ -343,7 +349,7 @@
     return null;
   }
   function textEl(el) {
-    return el.querySelector('.notranslate') || [...el.querySelectorAll('span, div')].find((e) => !e.querySelector('svg, img, [data-c33-vslot]') && !e.matches('[data-c33-vslot]') && norm(e.textContent)) || null;
+    return nameEl(el) || [...el.querySelectorAll('span, div')].find((e) => !e.closest('.notion-record-icon, [role="img"]') && !e.querySelector('svg, img, [data-c33-vslot], .notion-record-icon') && !e.matches('[data-c33-vslot]') && norm(e.textContent)) || null;
   }
   /* アイコンを含み、文字を含まない、いちばん外側の入れ物（container の子孫） */
   function moverOf(container, icon, text) {
@@ -362,7 +368,17 @@
     if (Math.abs(d) < 0.5) return 0;
     const cur = parseFloat(getComputedStyle(m).marginInlineStart) || 0;
     const nv = Math.max(-240, Math.min(320, cur + d));
+    const prev = m.style.getPropertyValue('margin-inline-start'), prevP = m.style.getPropertyPriority('margin-inline-start');
     m.style.setProperty('margin-inline-start', nv.toFixed(1) + 'px', 'important');
+    /* 安全弁: 動かした結果、名前がアイコンに重なる（＝名前がいっしょに動かない入れ物だった）なら元に戻す */
+    if (text && text !== icon && !icon.contains(text) && !text.contains(icon)) {
+      const ir = icon.getBoundingClientRect();
+      if (textLeft(text) < ir.right - 1) {
+        if (prev) m.style.setProperty('margin-inline-start', prev, prevP); else m.style.removeProperty('margin-inline-start');
+        ST.reverted = (ST.reverted || 0) + 1;
+        return null;
+      }
+    }
     m.setAttribute('data-c33-mv', '1');
     MV.set(m, nv);
     return d;
@@ -427,6 +443,7 @@
    *  CSS
    * ============================================================ */
   const B = ':not(#c33a):not(#c33b):not(#c33c)';
+  const NT = '.notranslate:not(.notion-record-icon)';   // 名前の箱（アイコンの notranslate は除く）
   function installCss() {
     if (document.getElementById('c33-css')) return;
     const st = document.createElement('style');
@@ -489,8 +506,8 @@ html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] .notion-outliner-team-h
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-pad]${B} { padding-inline-start: var(--c33-pad) !important; }
 /* ● 行: 書体は 1 つの変数にそろえる（文字の入れ物の中まで） */
 html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"])${B} { height: var(--c33-item-h) !important; min-height: var(--c33-item-h) !important; border-radius: var(--c33-radius) !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) :is(.notranslate, .notranslate *)${B} { font-family: var(--c33-item-font) !important; font-size: var(--c33-item-size) !important; font-weight: var(--c33-item-weight) !important; letter-spacing: var(--c33-item-track) !important; color: var(--c33-item-color) !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) .notranslate${B} { transform: translateY(var(--c33-text-dy)); }
+html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) :is(${NT}, ${NT} *):not(.notion-record-icon *)${B} { font-family: var(--c33-item-font) !important; font-size: var(--c33-item-size) !important; font-weight: var(--c33-item-weight) !important; letter-spacing: var(--c33-item-track) !important; color: var(--c33-item-color) !important; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) ${NT}${B} { transform: translateY(var(--c33-text-dy)); }
 /* ● 行のアイコン: 大きさ・文字との間・位置 */
 html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) > :first-child${B} { min-width: var(--c33-icon-size) !important; margin-inline-end: var(--c33-icon-gap) !important; transform: translate(var(--c33-icon-dx), var(--c33-icon-dy)); }
 html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) > :first-child .notion-record-icon${B} { width: var(--c33-icon-size) !important; height: var(--c33-icon-size) !important; font-size: calc(var(--c33-icon-size) * .86) !important; }
@@ -510,7 +527,7 @@ html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] div:has(> [data-c33-kin
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] div:has(> [data-c33-kind]):not(:has(> [data-c33-kind] ~ [data-c33-kind])):hover${B},
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B}::before,
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B}::after { background: transparent !important; background-color: transparent !important; box-shadow: none !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur] :is(.notranslate, .notranslate *, div:not(:has(*)), span:not(:has(*)))${B} { font-weight: var(--c33-cur-weight) !important; color: var(--c33-cur-color) !important; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur] :is(${NT}, ${NT} *, div:not(:has(*)), span:not(:has(*))):not(.notion-record-icon *)${B} { font-weight: var(--c33-cur-weight) !important; color: var(--c33-cur-color) !important; }
 /* ▲ ビューのアイコン（「•」の代わり）: 種類のアイコン、またはビューに付けたアイコン */
 html[data-c33] [data-c33-vslot]${B} { position: relative; width: var(--c33-vicon-size) !important; min-width: var(--c33-vicon-size) !important; margin-inline-end: var(--c33-vicon-gap) !important; padding: 0 !important; }
 html[data-c33] [data-c33-vslot]${B} > * { opacity: 0 !important; }
