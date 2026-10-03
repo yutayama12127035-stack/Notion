@@ -5536,7 +5536,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 
     display: flex !important;
     flex-direction: row !important;
-    align-items: center !important;
+    align-items: safe center !important;
 
     column-gap:
       var(--constellucentia-full-db-icon-title-gap) !important;
@@ -5581,8 +5581,8 @@ html:not([data-c26-content]) #c26-fab { display: none; }
     box-sizing: border-box !important;
 
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    align-items: safe center !important;
+    justify-content: safe center !important;
 
     flex:
       0 0 var(--constellucentia-full-db-icon-size) !important;
@@ -5750,7 +5750,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
     min-width: 0 !important;
 
     display: flex !important;
-    align-items: center !important;
+    align-items: safe center !important;
 
     color: var(--c-texPri) !important;
 
@@ -6143,7 +6143,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 /* 実DOM限定: relation 実体を含む property-value だけをセル内縦中央へ */
 [data-testid="property-value"]:has(> div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"] > .notion-record-icon + span.notranslate:not([data-token-index])) {
   display: flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
 }
 
 [data-testid="property-value"]:has(> div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"] > .notion-record-icon + span.notranslate:not([data-token-index])) > div {
@@ -6188,8 +6188,8 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 [data-testid="property-value"] > div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"]:has(> .notion-record-icon + span.notranslate:not([data-token-index])) > .notion-record-icon {
   box-sizing: border-box !important;
   display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
   flex: 0 0 var(--cordi-relation-icon-size) !important;
   width: var(--cordi-relation-icon-size) !important;
   height: var(--cordi-relation-icon-size) !important;
@@ -6276,7 +6276,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 
 [data-testid="property-value"]:has(> div > div > div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"] > .notion-record-icon + span.notranslate:not([data-token-index])) {
   display: flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
 }
 
 [data-testid="property-value"]:has(> div > div > div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"] > .notion-record-icon + span.notranslate:not([data-token-index])) > div {
@@ -6316,8 +6316,8 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 [data-testid="property-value"] > div > div > div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"]:has(> .notion-record-icon + span.notranslate:not([data-token-index])) > .notion-record-icon {
   box-sizing: border-box !important;
   display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
   flex: 0 0 var(--cordi-relation-icon-size) !important;
   width: var(--cordi-relation-icon-size) !important;
   height: var(--cordi-relation-icon-size) !important;
@@ -6513,7 +6513,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 .cordivestium-v1121-title-value {
   box-sizing: border-box !important;
   display: flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
   min-height: 47px !important;
   padding-top: var(--cordivestium-title-padding-top) !important;
   padding-bottom: var(--cordivestium-title-padding-bottom) !important;
@@ -6551,8 +6551,8 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 
 .cordivestium-v1121-title-icon-root {
   display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
   flex: 0 0 var(--cordivestium-title-icon-size) !important;
   width: var(--cordivestium-title-icon-size) !important;
   min-width: var(--cordivestium-title-icon-size) !important;
@@ -6677,7 +6677,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 .notion-table-view-cell[data-c12-primary] [data-testid="property-value"]:not(.cordivestium-v1121-title-value) {
   box-sizing: border-box !important;
   display: flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
   min-height: 47px !important;
   padding-top: var(--cordivestium-title-padding-top) !important;
   padding-bottom: var(--cordivestium-title-padding-bottom) !important;
@@ -6724,8 +6724,8 @@ html:not([data-c26-content]) #c26-fab { display: none; }
         inline の -2px のままにすると、アイコンと文字の間隔が 4px 広くなります。 */
 .notion-table-view-cell[data-c12-primary] [data-testid="property-value"]:not(.cordivestium-v1121-title-value) > div:not([style*="absolute"]) > div[style*="flex-shrink"] > .notion-record-icon {
   display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
   flex: 0 0 var(--cordivestium-title-icon-size) !important;
   width: var(--cordivestium-title-icon-size) !important;
   min-width: var(--cordivestium-title-icon-size) !important;
@@ -6861,7 +6861,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 /* 区切り線（本線）：¹⁹ の目印で描く。0番目のタブには付けない */
 [role="tablist"] [data-c19-tab] {
     display: flex !important;
-    align-items: center !important;
+    align-items: safe center !important;
 }
 [role="tablist"] [data-c19-tab]:not([data-c19-tab="0"])::before {
     content: "";
@@ -6876,7 +6876,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 
 /* 区切り線（予備）：目印が一つも無いタブ列だけ、従来の構造で描く */
 [role="tablist"]:not(:has([data-c19-tab])) > div > div > div:has(> div > .notion-collection-view-tab-button) {
-    align-items: center !important;
+    align-items: safe center !important;
 }
 [role="tablist"]:not(:has([data-c19-tab])) > div > div > div:has(> div > .notion-collection-view-tab-button):not(:first-child)::before {
     content: "";
@@ -6918,7 +6918,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 [role="tablist"] [role="tab"].notion-collection-view-tab {
     width: 112px !important;
     min-width: 112px !important;
-    justify-content: center !important;
+    justify-content: safe center !important;
 }
 */`,
     group: `/*
@@ -6941,7 +6941,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 /* ブロック */
 html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"][aria-expanded]):has(> a[role="link"] .notion-record-icon):not(.notion-collection_view-block *):not(.notion-peek-renderer *) {
   display: flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
   justify-content: flex-start !important;
   column-gap: 0 !important;
   height: auto !important;
@@ -6961,7 +6961,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> a[role="link"] 
 /* リンク */
 html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"][aria-expanded]):not(.notion-collection_view-block *):not(.notion-peek-renderer *) > a[role="link"]:has(.notion-record-icon) {
   display: inline-flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
   overflow: visible !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -6976,7 +6976,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 /* 見出し（アイコン＋文字の行） */
 html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"][aria-expanded]):not(.notion-collection_view-block *):not(.notion-peek-renderer *) > a[role="link"] > div:has(.notion-record-icon) {
   display: inline-flex !important;
-  align-items: center !important;
+  align-items: safe center !important;
   justify-content: flex-start !important;
   height: auto !important;
   min-height: 0 !important;
@@ -6993,8 +6993,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 /* アイコン */
 html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"][aria-expanded]):not(.notion-collection_view-block *):not(.notion-peek-renderer *) > a[role="link"] > div:has(.notion-record-icon) > :is(.notion-record-icon, :has(.notion-record-icon)) {
   display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
   width: var(--c12g-icon, 19.2px) !important; min-width: var(--c12g-icon, 19.2px) !important; max-width: var(--c12g-icon, 19.2px) !important;
   height: var(--c12g-icon, 19.2px) !important; min-height: var(--c12g-icon, 19.2px) !important; max-height: var(--c12g-icon, 19.2px) !important;
   margin: 0 !important;
@@ -7041,7 +7041,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   .layout:has([aria-label="View/hide details"]) div:has(> div > .notion-record-icon[role="button"][aria-label="Change page icon"]):has(> div > .notion-page-block > h1[aria-roledescription="page title"]) {
     display: grid !important;
     grid-template-columns: auto minmax(0, 1fr) auto !important;
-    align-items: center !important;
+    align-items: safe center !important;
     column-gap: var(--constellucentia-full-db-icon-title-gap, 12px) !important;
     row-gap: 0 !important;
     transform: translateX(var(--constellucentia-full-db-row-x, 0px)) !important;
@@ -7054,7 +7054,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   .layout:has([aria-label="View/hide details"]) div:has(> div > .notion-record-icon[role="button"][aria-label="Change page icon"]):has(> div > .notion-page-block > h1[aria-roledescription="page title"]) > div:has(> .notion-record-icon[aria-label="Change page icon"]) {
     grid-column: 1 !important;
     display: flex !important;
-    align-items: center !important;
+    align-items: safe center !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -7078,7 +7078,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   .layout:has([aria-label="View/hide details"]) .notion-page-block:has(> h1[aria-roledescription="page title"]):not(#c25a):not(#c25b):not(#c25c) {
     min-width: 0 !important;
     display: flex !important;
-    align-items: center !important;
+    align-items: safe center !important;
     color: var(--c-texPri) !important;
     font-family: var(--constellucentia-full-db-title-font-family, "Canela Deck", "Hoefler Text", "Hiragino Mincho ProN", "Yu Mincho", serif) !important;
     font-size: var(--c25-title-size, var(--constellucentia-full-db-title-size, 20px)) !important;

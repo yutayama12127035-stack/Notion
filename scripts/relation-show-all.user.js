@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
-// @version      1.49.0
-// @description  v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
+// @version      1.50.0
+// @description  v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
 // @run-at       document-idle
@@ -653,7 +653,7 @@ PIPE_SHOW_HEADERS: true,   // v0.37.0: パイプ表示でもセクション見�
     DEBUG: false,
   };
 
-const VERSION = '1.49.0';
+const VERSION = '1.50.0';
   const STYLE_ID = 'cordi13-style-v044';
   const TAG = '[C13 v' + VERSION + ']';
 
@@ -923,12 +923,12 @@ const VERSION = '1.49.0';
       '}',
       '.cordi13-item {',
       '  box-sizing: border-box !important;',
-      '  padding-right: ' + TUNING.SEPARATOR_PAD + ' !important;',
-      '  padding-bottom: ' + TUNING.ROW_GAP + ' !important;',
+      '  padding-right: var(--c13-col-pad, ' + TUNING.SEPARATOR_PAD + ') !important;',
+      '  padding-bottom: var(--c13-row-gap, ' + TUNING.ROW_GAP + ') !important;',
       '}',
       '.cordi13-item-sep {',
-      '  border-left: 1px solid ' + TUNING.SEPARATOR_COLOR + ' !important;',
-      '  padding-left: ' + TUNING.SEPARATOR_PAD + ' !important;',
+      '  border-left: var(--c13-vline-w, 1px) solid var(--c13-vline-color, ' + TUNING.SEPARATOR_COLOR + ') !important;',
+      '  padding-left: var(--c13-col-pad, ' + TUNING.SEPARATOR_PAD + ') !important;',
       '}',
       '/* セクション見出し: wrap の直子で全幅。関係行の鎖（Relation Display CSS の双子）は壊さない。 */',
       '.cordi13-sec-head {',
@@ -942,18 +942,23 @@ const VERSION = '1.49.0';
       '  display: flex !important;',
       '  align-items: center !important;',
       '  flex-wrap: nowrap !important;',
-      '  gap: ' + TUNING.SEC_HEAD_ICON_GAP + ' !important;',
-      '  padding: ' + TUNING.SEC_HEAD_GAP_TOP + ' 0 ' + TUNING.SEC_HEAD_PAD_BOTTOM + ' 0 !important;',
-      '  border-bottom: 1px solid ' + TUNING.SEPARATOR_COLOR + ' !important;',
-      '  font-family: ' + TUNING.SEC_HEAD_FONT_FAMILY + ' !important;',
-      '  font-size: ' + TUNING.SEC_HEAD_FONT_SIZE + ' !important;',
-      '  font-weight: 700 !important;',
-      '  line-height: ' + TUNING.SEC_HEAD_LINE_HEIGHT + ' !important;',
-      '  color: var(--c-texSec, rgba(55,53,47,0.65)) !important;',
+      '  gap: var(--c13-head-gap, ' + TUNING.SEC_HEAD_ICON_GAP + ') !important;',
+      '  padding: var(--c13-head-top, ' + TUNING.SEC_HEAD_GAP_TOP + ') 0 var(--c13-head-bottom, ' + TUNING.SEC_HEAD_PAD_BOTTOM + ') 0 !important;',
+      '  border-bottom: var(--c13-line-w, 1px) solid var(--c13-line-color, ' + TUNING.SEPARATOR_COLOR + ') !important;',
+      '  font-family: var(--c13-head-font, ' + TUNING.SEC_HEAD_FONT_FAMILY + ') !important;',
+      '  font-size: var(--c13-head-size, ' + TUNING.SEC_HEAD_FONT_SIZE + ') !important;',
+      '  font-weight: var(--c13-head-weight, 700) !important;',
+      '  line-height: var(--c13-head-lh, ' + TUNING.SEC_HEAD_LINE_HEIGHT + ') !important;',
+      '  color: var(--c13-head-color, var(--c-texSec, rgba(55,53,47,0.65))) !important;',
+      '  letter-spacing: var(--c13-head-ls, normal) !important;',
       '  cursor: pointer !important;',
       '}',
       '.cordi13-sec-head:hover > span:last-child { text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }',
-      '.cordi13-sec-head:first-child { padding-top: 0 !important; }',
+      '.cordi13-sec-head:first-child { padding-top: var(--c13-first-top, 0px) !important; }',
+      '/* v1.50.0: 見出しのアイコン・文字の位置と左のずらし（²⁶ Atelier「リレーション」から） */',
+      '.cordi13-sec-head { padding-inline-start: var(--c13-head-indent, 0px) !important; }',
+      '.cordi13-sec-head .cordi13-sec-icon { transform: translateY(var(--c13-head-icon-dy, 0px)); }',
+      '.cordi13-sec-head > span:last-child { transform: translateY(var(--c13-head-text-dy, 0px)); }',
       '/* 見出しの下線 -> 最初の項目 の余白（v0.17.0）: margin-bottom は効かない環境が',
       '   あったので、実体のあるスペーサ要素で高さを取る。 */',
       '.cordi13-sec-gap {',
@@ -961,8 +966,8 @@ const VERSION = '1.49.0';
       '  width: 100% !important;',
       '  min-width: 0 !important;',
       '  grid-column: 1 / -1;',
-      '  height: ' + TUNING.SEC_HEAD_BODY_GAP + ' !important;',
-      '  min-height: ' + TUNING.SEC_HEAD_BODY_GAP + ' !important;',
+      '  height: var(--c13-head-body, ' + TUNING.SEC_HEAD_BODY_GAP + ') !important;',
+      '  min-height: var(--c13-head-body, ' + TUNING.SEC_HEAD_BODY_GAP + ') !important;',
       '  margin: 0 !important;',
       '  padding: 0 !important;',
       '  border: 0 !important;',
@@ -973,11 +978,14 @@ const VERSION = '1.49.0';
       '[data-cordi13-on] { width: 100% !important; min-width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }',
       '[data-testid="property-value"] :has(> [data-cordi13-on]), [data-testid="property-value"] :has(> * > [data-cordi13-on]) { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }',
       '[data-cordi13-on] > :is(.cordi13-sec-head, .cordi13-sec-gap, .cordi13-sec-div) { grid-column: 1 / -1 !important; flex: 0 0 100% !important; width: 100% !important; justify-self: stretch !important; align-self: stretch !important; }',
+      '/* v1.50.0: 中身が行より高い時に上へはみ出して列の見出しと重ならないよう、縦中央そろえは safe（はみ出す時は上そろえ） */',
+      '.notion-table-view-cell [data-testid="property-value"]:has([data-cordi13-on]) { align-items: safe center !important; justify-content: safe center !important; overflow: hidden !important; }',
+      '.notion-table-view-cell [data-testid="property-value"]:has([data-cordi13-on]) > div { align-self: safe center !important; }',
       '/* v1.49.0: 線は ::after で描き、幅はセルの右端までの実測値（--c13-lw） */',
       '[data-cordi13-on] > .cordi13-sec-head, [data-cordi13-on] > .cordi13-sec-div { position: relative !important; border-bottom-color: transparent !important; overflow: visible !important; }',
       '[data-cordi13-on] > .cordi13-sec-head::after, [data-cordi13-on] > .cordi13-sec-div::after { content: "" !important; position: absolute !important; left: 0 !important; bottom: -1px !important; height: 0 !important; width: var(--c13-lw, 100%) !important; pointer-events: none !important; }',
-      '[data-cordi13-on] > .cordi13-sec-head::after { border-bottom: 1px solid ' + TUNING.SEPARATOR_COLOR + ' !important; }',
-      '[data-cordi13-on] > .cordi13-sec-div::after { border-bottom: 1px solid ' + TUNING.SECTION_DIVIDER_COLOR + ' !important; }',
+      '[data-cordi13-on] > .cordi13-sec-head::after { border-bottom: var(--c13-line-w, 1px) solid var(--c13-line-color, ' + TUNING.SEPARATOR_COLOR + ') !important; }',
+      '[data-cordi13-on] > .cordi13-sec-div::after { border-bottom: var(--c13-div-w, 1px) solid var(--c13-div-color, ' + TUNING.SECTION_DIVIDER_COLOR + ') !important; }',
       '.cordi13-sec-div {',
       '  flex: 0 0 100% !important;',
       '  width: 100% !important;',
@@ -986,8 +994,8 @@ const VERSION = '1.49.0';
       '  grid-column: 1 / -1;',
       '  height: 0 !important;',
       '  margin: 0 !important;',
-      '  padding: ' + TUNING.SEC_DIV_PAD_TOP + ' 0 ' + TUNING.SEC_DIV_PAD_BOTTOM + ' 0 !important;',
-      '  border-bottom: 1px solid ' + TUNING.SECTION_DIVIDER_COLOR + ' !important;',
+      '  padding: var(--c13-div-top, ' + TUNING.SEC_DIV_PAD_TOP + ') 0 var(--c13-div-bottom, ' + TUNING.SEC_DIV_PAD_BOTTOM + ') 0 !important;',
+      '  border-bottom: 1px solid var(--c13-div-color, ' + TUNING.SECTION_DIVIDER_COLOR + ') !important;',
       '}',
       ...(TUNING.HIDE_RELATION_POPUP ? [
         '/* 10超リレーションのホバーチップ（黒ポップアップ）を非表示: role=dialog かつ',
@@ -1000,8 +1008,8 @@ const VERSION = '1.49.0';
       ] : []),
       '/* セクション見出しのアイコン（シリーズページのアイコン・画像 or 絵文字） */',
       'img.cordi13-sec-icon {',
-      '  width: ' + TUNING.SEC_HEAD_ICON_SIZE + ' !important;',
-      '  height: ' + TUNING.SEC_HEAD_ICON_SIZE + ' !important;',
+      '  width: var(--c13-head-icon, ' + TUNING.SEC_HEAD_ICON_SIZE + ') !important;',
+      '  height: var(--c13-head-icon, ' + TUNING.SEC_HEAD_ICON_SIZE + ') !important;',
       '  border-radius: 3px !important;',
       '  object-fit: cover !important;',
       '  display: block !important;',
@@ -1009,7 +1017,7 @@ const VERSION = '1.49.0';
       '}',
       'span.cordi13-sec-icon {',
       '  flex: 0 0 auto !important;',
-      '  font-size: ' + TUNING.SEC_HEAD_ICON_SIZE + ' !important;',
+      '  font-size: var(--c13-head-icon, ' + TUNING.SEC_HEAD_ICON_SIZE + ') !important;',
       '  line-height: 1 !important;',
       '}',
       '/* v0.28.0: リレーション編集の入口（セルにホバーすると右上に出る＋ボタン） */',
@@ -1874,7 +1882,7 @@ const VERSION = '1.49.0';
   function makeItem(template, it, withSep, nativeNode, label) {
     const node = template.cloneNode(true);
     const iconEl = node.querySelector('.notion-record-icon');
-    const img = node.querySelector('.notion-record-icon img');
+    let img = node.querySelector('.notion-record-icon img');
     const span = node.querySelector('span.notranslate');
     if (span) {
       span.textContent = label || it.title || TUNING.FALLBACK_TITLE;
@@ -1912,6 +1920,15 @@ const VERSION = '1.49.0';
       } else {
         /* v0.47.0: 雛形（先頭チップ）の画像は使わない。この項目自身のデータ → 題名一致の実物チップ */
         iconSrc = ri.kind === 'url' ? ri.src : nativeIconSrc;
+        /* v1.50.0: 雛形のチップが「アイコン無しのページ」（img ではなく文書の絵の svg）だと、img が無いので
+           この項目のアイコンを入れられず、雛形の文書の絵がそのまま残っていた（再読み込み時に起きやすい）→ img を作って入れる */
+        if (!img && iconSrc) {
+          iconEl.textContent = '';
+          img = document.createElement('img');
+          img.setAttribute('alt', '');
+          img.style.cssText = 'display:block;object-fit:cover;border-radius:3px;width:100%;height:100%';
+          iconEl.appendChild(img);
+        }
         if (img && iconSrc) {
           const cur = (img.getAttribute('src') || '').split('?')[0];
           const next = iconSrc.split('?')[0];
@@ -1921,6 +1938,9 @@ const VERSION = '1.49.0';
           img.style.setProperty('opacity', '1', 'important');
           img.style.setProperty('transition', 'none', 'important');
           img.style.setProperty('visibility', 'visible', 'important');
+        } else if (!img && iconEl.querySelector('svg') && !nativeExact) {
+          /* 雛形の文書の絵（別のページのもの）を残さない。アイコンが本当に無いページなら Notion と同じ文書の絵のまま */
+          if (!(it.recOk && ri.kind === 'none')) iconEl.querySelector('svg').style.setProperty('visibility', 'hidden', 'important');
         } else if (img) {
           img.removeAttribute('src');                                     // 雛形の画像を残さない
           img.removeAttribute('srcset');
@@ -1989,6 +2009,13 @@ const VERSION = '1.49.0';
   const LINE_RO = typeof ResizeObserver === 'function' ? new ResizeObserver((ents) => {
     for (const en of ents) { const w = en.target.querySelector && en.target.querySelector('[data-cordi13-on]'); if (w) fitLines(w); }
   }) : null;
+  /* v1.50.0: セルの中身を描き直して高さが変わった後、Notion に行の高さを測り直させる。
+     測り直す前は、中身が縦中央そろえのまま上へはみ出し、列の見出しと重なることがあった */
+  let nudgeT = 0;
+  function nudgeRows() {
+    clearTimeout(nudgeT);
+    nudgeT = setTimeout(() => { try { window.dispatchEvent(new Event('resize')); } catch (e) { /* noop */ } }, 180);
+  }
   function cellOfWrap(wrap) { return wrap.closest('.notion-table-view-cell, [data-col-index], td') || wrap.parentElement; }
   function fitLines(wrap) {
     try {
@@ -2082,7 +2109,7 @@ const VERSION = '1.49.0';
     '  width: 1px !important;',
     '  height: 14px !important;',        /* v0.36.0: stretch をやめて高さ固定 */
     '  align-self: center !important;',
-    '  background: ' + TUNING.SECTION_DIVIDER_COLOR + ' !important;',
+    '  background: var(--c13-div-color, ' + TUNING.SECTION_DIVIDER_COLOR + ') !important;',
     '  margin: 0 ' + TUNING.PIPE_GAP_PX + 'px !important;',
     '}',
     '.cordi13-pipe-sep-text {',
@@ -2486,6 +2513,12 @@ const VERSION = '1.49.0';
     frag.appendChild(makeEditBtn());
     wrap.appendChild(frag);
     fitLines(wrap);                                                 // v1.49.0: 線をセルの右端まで（実測）
+    /* v1.50.0: 再読み込み直後はページの記録（題名・アイコン）がまだ届いていないことがある → 少し後に描き直す（最大 3 回） */
+    if (items.some((x) => !x.recOk) && (wrap.__c13retry || 0) < 3) {
+      wrap.__c13retry = (wrap.__c13retry || 0) + 1;
+      setTimeout(() => { if (wrap.isConnected) Promise.resolve(rebuildWrap(wrap, hasChip)).catch(() => {}); }, 1200 * wrap.__c13retry);
+    }
+    nudgeRows();                                                    // v1.50.0: 行の高さを Notion に測り直させる（見出しと重なる不具合）
     /* v0.44.0: アイコンの自己修復を仕込む（初回描画で出ない競合への対策） */
     if (TUNING.ICON_REPAIR) {
       const runIcon = () => { try { repairIcons(wrap); } catch (e) { /* noop */ } };
