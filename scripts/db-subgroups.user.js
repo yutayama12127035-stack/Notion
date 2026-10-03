@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁶ _ Sub Groups
 // @namespace    https://cordivestium.local/sub-groups
-// @version      2.0.0
+// @version      12.0.0
 // @description  データベースの「グループ」（Group by）を、ボードビュー以外（表・リスト・ギャラリー）でもサブグループに分ける。Notion の標準ではサブグループはボードだけ。グループの中を、もう 1 つのプロパティ（セレクト・ステータス・マルチセレクト・チェックボックス・日付・人・リレーション・テキスト・数値など）の値ごとに見出しを付けて並べ分け、見出しのクリックで畳む。ビューごとに覚える。グループ分けしていないビューでも使える（ビュー全体をサブグループに分ける）。見た目だけで、Notion のデータや並び順は変えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -39,7 +39,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '2.0.0';
+  const VERSION = '12.0.0';
   const TAG = '[³⁶ v' + VERSION + ']';
   if (window.__c36 && window.__c36.version) { console.warn(TAG, '旧版が動いています'); return; }
 

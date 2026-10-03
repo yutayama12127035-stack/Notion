@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      3.2.0
+// @version      13.2.0
 // @description  v3.1.0: 段々が実物の Notion で効いていなかったのを作り直し — 本物のアイコンの位置を測り、アイコンの入れ物を直接ずらす（¹⁶・Stylus の字下げと取り合わない・毎回差を測るので必ず目標で止まる）。■のアイコン＝★の名前の 1 文字目、●＝■の名前の 1 文字目、▲＝●の名前の 1 文字目。v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -14,6 +14,10 @@
 // ==/UserScript==
 
 /*
+ * v13.2.0（2026-10-03）
+ *   ・輪（Orbit）と横の窓: サイドバーの左に、★グループ（12 の大分類）を回す細い輪。スクロールで上へ上へと回り（終わりが無い）、
+ *     選んだ大分類が一番上に来て、右の Notion のサイドバーにはその中のチームスペース・ページだけが出る（横の窓）。
+ *     ¹⁶ の★見出しの文字クリック・⋯ › 横に開く でもここで開く。⌃⌥O で入切、⌃⌥↑↓ で前後へ。
  * v3.2.0（2026-10-03）
  *   ・実物で DB の行の名前がアイコンの下に潜り込んでいた。原因: Notion のアイコン（.notion-record-icon）にも notranslate が付いていて、
  *     アイコンを「名前」と取り違え、アイコンだけを動かしていた（名前は動かず、親の名前の位置もアイコンで測っていた）。
@@ -76,7 +80,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '3.2.0';
+  const VERSION = '13.2.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -554,9 +558,165 @@ ${icons}
   schedule(300);
   setTimeout(() => schedule(0), 1500);
 
+  /* ============================================================
+   *  v13.0.0: 輪（Orbit）と横の窓
+   *    ・サイドバーの左に細い「輪」: ★グループ（12 の大分類）を縦に並べ、スクロールで上へ上へと回る（終わりが無い）。
+   *      選ぶと、その大分類が一番上に来て、右の Notion のサイドバー（＝横の窓）には、その中のチームスペース・ページだけが出る。
+   *      以降の移動はこの窓の中で完結。12 個を全部並べてもスクロールしない。
+   *    ・¹⁶ の★見出しの文字クリック・「⋯ › 横に開く」でも、ここで開く。
+   *    ・⌃⌥O で入／切。⌃⌥↑↓ で前後の大分類へ。
+   * ============================================================ */
+  const OB_KEY = 'c33.orbit.v1';
+  const OB = Object.assign({ on: true, sel: '', railW: 108, itemH: 64 }, (() => { try { return JSON.parse(localStorage.getItem(OB_KEY) || '{}'); } catch (e) { return {}; } })());
+  const obSave = () => { try { localStorage.setItem(OB_KEY, JSON.stringify(OB)); } catch (e) { /* noop */ } };
+  let obEl = null, obOff = 0, obTarget = 0, obRaf = 0, obSnapT = 0, obSig = '';
+  function obGroups() {
+    return [...document.querySelectorAll('#c16-root .c16-sec[data-c16-g]')].map((sec) => {
+      const ico = sec.querySelector('.c16-ico');
+      const cs = ico ? getComputedStyle(ico) : null;
+      return {
+        gid: sec.getAttribute('data-c16-g'),
+        label: norm((sec.querySelector('.c16-lbl') || {}).textContent),
+        cnt: norm((sec.querySelector('.c16-cnt') || {}).textContent),
+        txt: ico && ico.getAttribute('data-c16-txt'),
+        mask: cs ? (cs.webkitMaskImage || cs.maskImage || 'none') : 'none',
+        bgi: cs ? cs.backgroundImage : 'none',
+        tint: cs ? cs.backgroundColor : ''
+      };
+    }).filter((g) => g.gid && g.label);
+  }
+  function obCss() {
+    let st = document.getElementById('c33-orbit-css');
+    if (!st) { st = document.createElement('style'); st.id = 'c33-orbit-css'; document.head.appendChild(st); }
+    const sel = OB.sel ? CSS.escape(OB.sel) : '';
+    st.textContent = !OB.on ? '' : `
+html[data-c33-orbit] { --c33-rail: ${OB.railW}px; }
+html[data-c33-orbit] #notion-app { margin-left: var(--c33-rail) !important; width: calc(100vw - var(--c33-rail)) !important; }
+${sel ? `html[data-c33-orbit] .notion-sidebar-container #c16-root .c16-sec:not([data-c16-g="${sel}"]) { display: none !important; }
+html[data-c33-orbit] .notion-sidebar-container ${SEL_TEAM}[data-c16-g]:not([data-c16-g="${sel}"]) { display: none !important; }
+html[data-c33-orbit] .notion-sidebar-container #c16-root .c16-sec[data-c16-g="${sel}"] .c16-head { pointer-events: auto; }` : ''}
+#c33-orbit { position: fixed; z-index: 120; left: 0; top: 0; bottom: 0; width: var(--c33-rail); display: flex; flex-direction: column; align-items: stretch;
+  background: color-mix(in srgb, var(--c-bacSec, #f7f6f3) 82%, var(--c-texPri, #000) 4%); border-right: 1px solid var(--ca-borSecTra, rgba(0,0,0,.07));
+  font: 11px/1.3 var(--c33-serif, "Baskerville", "Hiragino Mincho ProN", serif); color: var(--c-texSec, #777); user-select: none; }
+#c33-orbit .ob-hd { height: 44px; display: flex; align-items: center; justify-content: center; letter-spacing: .22em; font-size: 9.5px; text-transform: uppercase; color: var(--c-texTer, #999); }
+#c33-orbit .ob-wheel { position: relative; flex: 1; overflow: hidden; perspective: 600px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 40px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 40px), transparent 100%); }
+#c33-orbit .ob-it { position: absolute; left: 6px; right: 6px; top: 0; height: ${OB.itemH - 6}px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; transform-origin: 50% 50%; will-change: transform, opacity; }
+#c33-orbit .ob-it:hover { background: var(--c-bacHov, rgba(0,0,0,.05)); color: var(--c-texPri, #333); }
+#c33-orbit .ob-it.top { color: var(--c-texPri, #222); }
+#c33-orbit .ob-it.sel { background: color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 14%, transparent); color: var(--c-texPri, #222); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 30%, transparent); }
+#c33-orbit .ob-ic { width: 26px; height: 26px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; }
+#c33-orbit .ob-lb { max-width: 100%; padding: 0 4px; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word; font-weight: 600; letter-spacing: .02em; }
+#c33-orbit .ob-ct { position: absolute; top: 5px; right: 8px; font: 9.5px/1 -apple-system, sans-serif; opacity: .6; }
+#c33-orbit .ob-ft { display: flex; justify-content: center; gap: 4px; padding: 8px 0 12px; }
+#c33-orbit .ob-ft button { border: 0; background: transparent; color: inherit; cursor: pointer; width: 28px; height: 28px; border-radius: 8px; font-size: 14px; }
+#c33-orbit .ob-ft button:hover { background: var(--c-bacHov, rgba(0,0,0,.06)); }
+#c33-orbit .ob-empty { padding: 18px 10px; text-align: center; line-height: 1.6; }`;
+    document.documentElement.toggleAttribute('data-c33-orbit', !!OB.on);
+  }
+  const obMod = (x, n) => ((x % n) + n) % n;
+  function obBuild() {
+    if (!OB.on) { if (obEl) { obEl.remove(); obEl = null; } obCss(); return; }
+    if (!document.body) return;
+    const gs = obGroups();
+    const sig = gs.map((g) => g.gid + g.label + g.cnt + g.mask.slice(0, 40) + g.txt).join('|') + OB.sel;
+    if (!obEl) {
+      obEl = document.createElement('div'); obEl.id = 'c33-orbit';
+      obEl.innerHTML = '<div class="ob-hd">Orbit</div><div class="ob-wheel"></div><div class="ob-ft"><button data-a="up" title="前（⌃⌥↑）">↑</button><button data-a="down" title="次（⌃⌥↓）">↓</button><button data-a="off" title="輪をしまう（⌃⌥O）">⇤</button></div>';
+      document.body.appendChild(obEl);
+      obEl.querySelector('.ob-wheel').addEventListener('wheel', (e) => { e.preventDefault(); obTarget += e.deltaY / OB.itemH * 0.55; obAnim(); clearTimeout(obSnapT); obSnapT = setTimeout(() => { obTarget = Math.round(obTarget); obAnim(); }, 170); }, { passive: false });
+      obEl.querySelector('[data-a="up"]').onclick = () => obStep(-1);
+      obEl.querySelector('[data-a="down"]').onclick = () => obStep(1);
+      obEl.querySelector('[data-a="off"]').onclick = () => obToggle(false);
+      obSig = '';
+    }
+    obCss();
+    if (sig === obSig) return;
+    obSig = sig;
+    const wheel = obEl.querySelector('.ob-wheel');
+    if (!gs.length) { wheel.innerHTML = '<div class="ob-empty">¹⁶ のグループが<br>まだ見つかりません</div>'; return; }
+    if (!OB.sel || !gs.some((g) => g.gid === OB.sel)) { OB.sel = gs[0].gid; obSave(); obCss(); }
+    wheel.innerHTML = gs.map((g, i) => '<div class="ob-it" data-i="' + i + '" data-g="' + g.gid.replace(/"/g, '') + '" title="' + g.label.replace(/"/g, '&quot;') + '"><span class="ob-ic"></span><span class="ob-lb"></span><span class="ob-ct"></span></div>').join('');
+    wheel.querySelectorAll('.ob-it').forEach((it, i) => {
+      const g = gs[i];
+      const ic = it.querySelector('.ob-ic');
+      if (g.txt) ic.textContent = g.txt;
+      else if (g.mask && g.mask !== 'none') { ic.style.webkitMaskImage = g.mask; ic.style.maskImage = g.mask; ic.style.webkitMaskSize = ic.style.maskSize = '24px 24px'; ic.style.webkitMaskRepeat = ic.style.maskRepeat = 'no-repeat'; ic.style.webkitMaskPosition = ic.style.maskPosition = 'center'; ic.style.background = g.tint || 'currentColor'; }
+      else if (g.bgi && g.bgi !== 'none') { ic.style.background = g.bgi + ' center / 24px 24px no-repeat'; }
+      it.querySelector('.ob-lb').textContent = g.label;
+      it.querySelector('.ob-ct').textContent = g.cnt;
+      it.onclick = () => obSelect(g.gid);
+    });
+    const si = gs.findIndex((g) => g.gid === OB.sel);
+    if (obRaf === 0 && Math.abs(obOff - si) > 0.01 && !obEl.__init) { obOff = obTarget = si; obEl.__init = 1; }
+    obPaint();
+  }
+  function obPaint() {
+    if (!obEl) return;
+    const its = [...obEl.querySelectorAll('.ob-it')];
+    const N = its.length; if (!N) return;
+    const H = OB.itemH;
+    its.forEach((it, i) => {
+      let d = obMod(i - obOff, N);   // 0 = 一番上
+      if (d > N - 0.6) d -= N;        // 上へ抜けていく途中
+      const depth = Math.min(Math.abs(d), 6);
+      const y = 6 + d * H;
+      const sc = 1 - depth * 0.028, op = d < 0 ? Math.max(0, 1 + d * 1.6) : Math.max(0.28, 1 - depth * 0.1);
+      const rot = d < 0 ? d * 40 : Math.min(d, 8) * 2.2;
+      it.style.transform = 'translateY(' + y.toFixed(1) + 'px) rotateX(' + (-rot).toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      it.style.opacity = op.toFixed(3);
+      it.style.zIndex = String(100 - Math.round(depth * 10));
+      it.classList.toggle('top', Math.abs(d) < 0.5);
+      it.classList.toggle('sel', it.dataset.g === OB.sel);
+    });
+  }
+  function obAnim() {
+    if (obRaf) return;
+    const step = () => {
+      const diff = obTarget - obOff;
+      if (Math.abs(diff) < 0.002) { obOff = obTarget; obRaf = 0; obPaint(); return; }
+      obOff += diff * 0.2;
+      obPaint();
+      obRaf = requestAnimationFrame(step);
+    };
+    obRaf = requestAnimationFrame(step);
+  }
+  /* 選んだ大分類を一番上へ（近い向きに回る）＋ 横の窓をその中身に */
+  function obSelect(gid) {
+    const its = obEl ? [...obEl.querySelectorAll('.ob-it')] : [];
+    const N = its.length;
+    const i = its.findIndex((x) => x.dataset.g === gid);
+    OB.sel = gid; obSave(); obCss();
+    if (i >= 0 && N) { const cur = obMod(Math.round(obTarget), N); let delta = i - cur; if (delta > N / 2) delta -= N; if (delta < -N / 2) delta += N; obTarget = Math.round(obTarget) + delta; obAnim(); }
+    /* ¹⁶ で閉じていたら開く */
+    const head = document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(gid) + '"] .c16-head');
+    if (head && head.getAttribute('aria-expanded') === 'false' && window.__c16 && window.__c16.toggle) window.__c16.toggle(gid);
+    const sc = document.querySelector('.notion-sidebar-container .notion-scroller');
+    if (sc) sc.scrollTop = 0;
+    obPaint();
+  }
+  function obStep(k) {
+    const its = obEl ? [...obEl.querySelectorAll('.ob-it')] : [];
+    if (!its.length) return;
+    const i = its.findIndex((x) => x.dataset.g === OB.sel);
+    obSelect(its[obMod(i + k, its.length)].dataset.g);
+  }
+  function obToggle(v) { OB.on = v == null ? !OB.on : !!v; obSave(); obSig = ''; obBuild(); }
+  window.addEventListener('c16-open', (e) => { if (!OB.on || !e.detail) return; e.preventDefault(); obSelect(e.detail.gid); });
+  window.addEventListener('c16-side', (e) => { if (!e.detail) return; if (!OB.on) obToggle(true); setTimeout(() => obSelect(e.detail.gid), 60); });
+  window.addEventListener('keydown', (e) => {
+    if (!(e.ctrlKey && e.altKey) || e.metaKey) return;
+    if (e.code === 'KeyO') { e.preventDefault(); obToggle(); }
+    else if (OB.on && e.code === 'ArrowUp') { e.preventDefault(); obStep(-1); }
+    else if (OB.on && e.code === 'ArrowDown') { e.preventDefault(); obStep(1); }
+  }, true);
+  setInterval(() => { if (P.on) obBuild(); }, 900);
+
   window.__c33 = {
     version: VERSION,
-    status: () => Object.assign({ prefs: Object.assign({}, P), knownDb: Object.keys(KNOWN_DB).length, viewTypes: VIEWTYPES.size }, ST),
+    status: () => Object.assign({ prefs: Object.assign({}, P), orbit: Object.assign({}, OB), knownDb: Object.keys(KNOWN_DB).length, viewTypes: VIEWTYPES.size }, ST),
+    orbit: (o) => { if (o === true || o === false) obToggle(o); else if (o && typeof o === 'object') { Object.assign(OB, o); obSave(); obSig = ''; obBuild(); } return Object.assign({}, OB); },
+    select: (gid) => obSelect(gid),
     set(o) { Object.assign(P, o || {}); saveP(); scan(); return Object.assign({}, P); },
     forgetDb() { KNOWN_DB = {}; saveDb(); scan(); return 'ok'; },
     off() {

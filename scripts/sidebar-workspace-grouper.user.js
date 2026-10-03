@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁶ _ Sidebar Workspace Grouper
 // @namespace    https://cordivestium.local/sidebar-workspace-grouper
-// @version      15.9.0
-// @description  v15.9.0: チームスペース・ページの名前を、アイコン（notranslate が付いている）と取り違えないように。v15.8.0: ³³ Sidebar Constellation の段々が動いている間は、チームスペースと行の字下げの調整を ³³ に任せる（両方で測って取り合い、どちらも効かなかった）。v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
+// @version      25.9.0
+// @description  v25.9.0: ★見出しの文字のクリックで「開く」（³³ の輪が動いていれば横の窓に開く）。乗せると右に「⋯」— 題名とアイコン・開く/閉じる・横に開く・新しいグループ・消す・すべて畳む/開く。v15.9.0: チームスペース・ページの名前を、アイコン（notranslate が付いている）と取り違えないように。v15.8.0: ³³ Sidebar Constellation の段々が動いている間は、チームスペースと行の字下げの調整を ³³ に任せる（両方で測って取り合い、どちらも効かなかった）。v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
 // @match        https://app.notion.com/*
 // @match        https://www.notion.com/*
 // @match        https://www.notion.so/*
@@ -56,7 +56,7 @@
   'use strict';
   if (window.top !== window.self) return;
 
-  const VERSION = '15.9.0';
+  const VERSION = '25.9.0';
   const TAG = '[¹⁶ v' + VERSION + ']';
 
   if (window.__c16 && window.__c16.version) {
@@ -311,7 +311,7 @@
   function headHTML(gid) {
     return '<div class="c16-sec" data-c16-sec="' + gid + '" data-c16-g="' + gid + '">' +
       '<div class="c16-head" role="button" tabindex="0" aria-expanded="true">' +
-      '<span class="c16-ico"></span><span class="c16-lbl" title="クリックで題名とアイコンを編集">' + escH(LABEL[gid]) + '</span><span class="c16-cnt"></span></div></div>';
+      '<span class="c16-ico"></span><span class="c16-lbl" title="クリックで開く・閉じる（編集は右の ⋯）">' + escH(LABEL[gid]) + '</span><span class="c16-cnt"></span><span class="c16-more" role="button" title="メニュー（題名・アイコン・グループ）">⋯</span></div></div>';
   }
   const escH = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function ensureRoot(list) {
@@ -895,7 +895,10 @@
     const st = document.createElement('style');
     st.id = EDIT_STYLE_ID;
     st.textContent = `
-#c16-root .c16-lbl{flex:0 1 auto !important;cursor:text;text-decoration:none !important}
+#c16-root .c16-lbl{flex:0 1 auto !important;cursor:pointer;text-decoration:none !important}
+#c16-root .c16-more{margin-inline-start:auto;flex:none;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;font-size:15px;line-height:1;letter-spacing:0;color:var(--c-icoSec,rgba(55,53,47,.45));opacity:0;transition:opacity .15s,background .15s;cursor:pointer}
+#c16-root .c16-head:hover .c16-more,#c16-root .c16-more:focus{opacity:1}
+#c16-root .c16-more:hover{background:var(--c-bacHov,rgba(55,53,47,.08));color:var(--c-texPri,#37352f)}
 /* v15.7.0: ★見出しの灰色の箱（乗せた時・開いている時）と下線を出さない。文字のクリックで編集はそのまま */
 #c16-root .c16-sec .c16-head:not(#c16x):not(#c16y),#c16-root .c16-sec .c16-head:not(#c16x):not(#c16y):is(:hover,:focus,:focus-visible,:active,[aria-expanded]){background:transparent !important;box-shadow:none !important;outline:none !important}
 #c16-root .c16-sec:not(#c16x):not(#c16y){background:transparent !important;box-shadow:none !important}
@@ -1237,8 +1240,11 @@
     if (!d.armed) {
       if (d.mode === 'group') {
         /* v15.6: 文字をクリック → 編集。アイコン・余白・件数 → 開閉 */
-        const lbl = e.target instanceof Element ? e.target.closest('#c16-root .c16-lbl') : null;
-        if (lbl) openEditor(d.gid, lbl); else toggleGroup(d.gid);
+        /* v25.9: 文字のクリックでも「開く」（編集は ⋯ のメニューへ移した）。
+           ³³ の輪（横に開く）が動いていれば、そちらに開かせる（c16-open を取り消す） */
+        if (e.target instanceof Element && e.target.closest('#c16-root .c16-more')) return;
+        const ev = new CustomEvent('c16-open', { detail: { gid: d.gid }, cancelable: true });
+        if (window.dispatchEvent(ev)) toggleGroup(d.gid);
       }
       else if (d.mode === 'team' && !d.soft) openMenu(d.key, e.clientX, e.clientY);
       return;
@@ -1316,12 +1322,52 @@
     menuEl.style.top = Math.max(8, Math.min(y, window.innerHeight - mh - 8)) + 'px';
   }
   function closeMenu() { if (menuEl) menuEl.removeAttribute('data-on'); }
+  /* v25.9: グループの「⋯」メニュー（題名とアイコン・新しいグループ・消す・すべて畳む／開く） */
+  function openGroupMenu(gid, x, y) {
+    if (!menuEl) openMenu('', -9999, -9999);
+    const custom = S.custom.some(c => c.id === gid);
+    menuEl.setAttribute('data-k', '');
+    menuEl.innerHTML = '<div class="c16-m-title"></div>' +
+      '<button type="button" data-ga="edit">題名とアイコンを変える</button>' +
+      '<button type="button" data-ga="open">' + (S.collapsed[gid] ? '開く' : '閉じる') + '</button>' +
+      '<button type="button" data-ga="side">横に開く（³³ の輪）</button>' +
+      '<button type="button" data-ga="add">＋ 新しいグループ</button>' +
+      (custom ? '<button type="button" data-ga="del">このグループを消す</button>' : '') +
+      '<button type="button" data-ga="fold" class="c16-m-add">すべて畳む</button>' +
+      '<button type="button" data-ga="unfold">すべて開く</button>';
+    menuEl.firstChild.textContent = LABEL[gid] || '';
+    menuEl.onclick = ev => {
+      const b = ev.target.closest('[data-ga]');
+      if (!b) return;
+      ev.stopPropagation();
+      const a = b.getAttribute('data-ga');
+      closeMenu();
+      menuEl.onclick = null;
+      if (a === 'edit') openEditor(gid, HEAD[gid] && HEAD[gid].querySelector('.c16-lbl'));
+      else if (a === 'open') toggleGroup(gid);
+      else if (a === 'side') window.dispatchEvent(new CustomEvent('c16-side', { detail: { gid } }));
+      else if (a === 'add') { const nm = prompt('新しいグループの名前', ''); if (nm && nm.trim()) { const g = addGroup(nm.trim()); setTimeout(() => openEditor(g, HEAD[g]), 60); } }
+      else if (a === 'del') { if (confirm('「' + LABEL[gid] + '」を消します（中のチームスペースは Unsorted へ）。よろしいですか？')) removeGroup(gid); }
+      else if (a === 'fold' || a === 'unfold') { GIDS.forEach(g => { if (a === 'fold') S.collapsed[g] = true; else delete S.collapsed[g]; }); save(); run(true); if (a === 'unfold') afterMove('open'); }
+    };
+    menuEl.setAttribute('data-on', '1');
+    menuEl.style.left = Math.max(8, Math.min(x - 200, window.innerWidth - 220)) + 'px';
+    menuEl.style.top = Math.max(8, Math.min(y, window.innerHeight - 260)) + 'px';
+  }
 
   function onDown(e) {
     const tg = e.target;
     if (!(tg instanceof Element)) return;
     if (menuEl && menuEl.getAttribute('data-on') === '1' && !tg.closest('#c16-menu')) closeMenu();
     if (e.button !== 0 || drag) return;
+    /* v25.9: 見出しに乗せると出る「⋯」→ グループのメニュー（掴んで動かすのとは別） */
+    const more = tg.closest('#c16-root .c16-more');
+    if (more) {
+      e.preventDefault(); e.stopPropagation();
+      const r = more.getBoundingClientRect();
+      openGroupMenu(more.closest('.c16-sec').getAttribute('data-c16-g'), r.right, r.bottom + 4);
+      return;
+    }
     const head = tg.closest('#c16-root .c16-head');
     if (head) {
       e.preventDefault();
