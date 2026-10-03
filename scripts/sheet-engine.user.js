@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³² _ Sheet Engine
 // @namespace    https://cordivestium.local/sheet-engine
-// @version      1.2.0
-// @description  v1.2.0: ドラッグしても値が画面に出なかったのを修正（書き込みを Notion 自身の経路 saveTransactionsFanout に・セルに出たか確かめ、出なければセルを開いて同じ値を打ち込む）。v1.1.0: ドラッグが効かなかったのを修正（■へ近づく途中で隣のセルに移って逃げていた・Notion が先に押下を受け取っていた・離した時に Notion がセルを開いていた）。Notion のテーブルビューに Excel の機能を。①フィルハンドル: セル右下の ■ を下（上）へドラッグすると連続データ（2026.01.01 → 2026.01.02…・1 → 2・Vol.1 → Vol.2・月 → 火・Jan → Feb）、⌥ を押しながらでコピー、■ のダブルクリックで最後の行まで ②元に戻す・「コピー／連続データ」の切り替え ③⇧クリックで範囲を選ぶと、右下に データの個数・合計・平均・最小・最大 ④⌃D で上のセル（範囲なら先頭）をコピー ⑤⌃; で今日の日付・⌃⇧; で今の時刻を入力。
+// @version      1.3.0
+// @description  v1.3.0: 「どの列か分かりませんでした（見出し: name）」を修正 — 列を見出しの名前だけでなく、値の一致・題字の列・ビューの列の並びでも決める。日付のプロパティでない「2026.01.01」のような文字も、日付の形と照らして連続データに。v1.2.0: ドラッグしても値が画面に出なかったのを修正（書き込みを Notion 自身の経路 saveTransactionsFanout に・セルに出たか確かめ、出なければセルを開いて同じ値を打ち込む）。v1.1.0: ドラッグが効かなかったのを修正（■へ近づく途中で隣のセルに移って逃げていた・Notion が先に押下を受け取っていた・離した時に Notion がセルを開いていた）。Notion のテーブルビューに Excel の機能を。①フィルハンドル: セル右下の ■ を下（上）へドラッグすると連続データ（2026.01.01 → 2026.01.02…・1 → 2・Vol.1 → Vol.2・月 → 火・Jan → Feb）、⌥ を押しながらでコピー、■ のダブルクリックで最後の行まで ②元に戻す・「コピー／連続データ」の切り替え ③⇧クリックで範囲を選ぶと、右下に データの個数・合計・平均・最小・最大 ④⌃D で上のセル（範囲なら先頭）をコピー ⑤⌃; で今日の日付・⌃⇧; で今の時刻を入力。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,13 @@
 // ==/UserScript==
 
 /*
+ * v1.3.0（2026-10-03）
+ *   ・「どの列か分かりませんでした（見出し: name）」: 見出しの文字とプロパティの名前の突き合わせだけで決めていた。
+ *     → ①選んだセルの文字が、そのページのプロパティの値と一致するもの ②題字の列（印・アイコン）③見出しの名前（空白・記号を無視、前後一致も）
+ *       ④ビューの列の並び（collection_view の table_properties と data-col-index）の順で決める。
+ *   ・日付のプロパティでなくても、文字が日付の形（2026.01.01／2026-1-1／2026年1月1日／2026.01 など）なら日付として 1 日（1 か月）ずつ進める
+ *     （v1.0 から。今回の不具合は列の判定で止まっていたため、ここまで届いていなかった）。
+ *
  * v1.2.0（2026-10-03）
  *   ・「ドラッグはできるが反映されない」を修正:
  *     ① 書き込みを saveTransactions → saveTransactionsFanout に（今の Notion が使う経路。旧経路は保存されても
@@ -53,7 +60,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.2.0';
+  const VERSION = '1.3.0';
   const TAG = '[³² v' + VERSION + ']';
   if (window.__c32 && window.__c32.version) { console.warn(TAG, '旧版 ' + window.__c32.version + ' が動いています'); return; }
 
@@ -359,20 +366,55 @@
     return pick || '';
   }
   const normName = (s) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
-  /* 列 → プロパティ（見出しの名前 → 値の一致の順で決める） */
-  async function propOf(cell, rec) {
+  /* 列 → プロパティ
+   *   v1.3.0: 見出しの名前だけでは決まらないことがあった（「どの列か分かりませんでした（見出し: name）」）。
+   *   次の順で決める: ①値の一致（選んだセルの文字 ＝ そのページのプロパティの値）②題字の列 ③見出しの名前（ゆるく）
+   *   ④ビューの列の並び（table_properties と data-col-index） */
+  const squash = (s) => String(s || '').toLowerCase().replace(/[\s,，、・|｜]+/g, '');
+  function shownOf(v, type) {
+    if (!v) return '';
+    if (type === 'date') { const a = dateAnn(v); return a ? String(a.start_date || '') : ''; }
+    if (type === 'relation' || type === 'person' || type === 'file') return '';
+    return plain(v);
+  }
+  async function viewColumns(cell) {
+    try {
+      const vid = (new URLSearchParams(location.search).get('v') || '').replace(/-/g, '');
+      if (!vid || !cell.closest('.notion-frame')) return null;
+      const id = vid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5');
+      const v = (await getRecords('collection_view', [id])).get(id);
+      const tp = v && v.format && v.format.table_properties;
+      return Array.isArray(tp) ? tp.filter((x) => x && x.visible !== false).map((x) => x.property) : null;
+    } catch (e) { return null; }
+  }
+  async function propOf(cell, rec, srcCells, recs) {
     const sc = await schemaOf(rec.parent_id);
     if (!sc) throw new Error('DB の列の情報を読み取れませんでした');
-    const h = normName(headerTextOf(cell));
-    let ids = Object.keys(sc).filter((k) => normName(sc[k].name) === h);
-    if (ids.length !== 1 && h) ids = Object.keys(sc).filter((k) => h.endsWith(normName(sc[k].name)) && normName(sc[k].name));
-    if (ids.length !== 1) {
-      const txt = cell.textContent.replace(/\s+/g, ' ').trim();
-      const byVal = Object.keys(sc).filter((k) => txt && plain(rec.properties && rec.properties[k]).replace(/\s+/g, ' ').trim() === txt);
-      if (byVal.length === 1) ids = byVal;
+    const keys = Object.keys(sc);
+    /* ① 値の一致（元のセルが全部その値で説明できるプロパティ） */
+    const samples = (srcCells || [cell]).map((c) => ({ t: squash(c.textContent), r: recs ? recs.get(rowId(c)) : rec })).filter((x) => x.t && x.r);
+    if (samples.length) {
+      const hit = keys.filter((k) => samples.every((x) => { const sv = squash(shownOf(x.r.properties && x.r.properties[k], sc[k].type)); return sv && (sv === x.t || (sv.length >= 2 && x.t.indexOf(sv) >= 0 && sv.length >= x.t.length * 0.6)); }));
+      if (hit.length === 1) return { pid: hit[0], type: sc[hit[0]].type, name: sc[hit[0]].name, how: '値' };
+      if (hit.includes('title') && (cell.hasAttribute('data-c12-primary') || cell.getAttribute('data-col-index') === '0')) return { pid: 'title', type: 'title', name: sc.title ? sc.title.name : 'title', how: '題字' };
     }
-    if (ids.length !== 1) throw new Error('どの列か分かりませんでした（見出し: ' + (h || '空') + '）');
-    return { pid: ids[0], type: sc[ids[0]].type, name: sc[ids[0]].name };
+    /* ② 題字の列 */
+    if (cell.hasAttribute('data-c12-primary') || cell.querySelector('.notion-record-icon') && squash(plain(rec.properties && rec.properties.title)) === squash(cell.textContent)) return { pid: 'title', type: 'title', name: sc.title ? sc.title.name : 'title', how: '題字' };
+    /* ③ 見出しの名前 */
+    const h = normName(headerTextOf(cell));
+    const hs = squash(h);
+    let ids = keys.filter((k) => normName(sc[k].name) === h);
+    if (ids.length !== 1 && hs) ids = keys.filter((k) => squash(sc[k].name) === hs);
+    if (ids.length !== 1 && hs) ids = keys.filter((k) => { const n = squash(sc[k].name); return n && (hs.endsWith(n) || hs.startsWith(n)); });
+    if (ids.length === 1) return { pid: ids[0], type: sc[ids[0]].type, name: sc[ids[0]].name, how: '見出し' };
+    /* ④ ビューの列の並び */
+    const ci = cell.getAttribute('data-col-index');
+    if (ci != null) {
+      const cols = await viewColumns(cell);
+      const pid = cols && cols[+ci];
+      if (pid && sc[pid]) return { pid, type: sc[pid].type, name: sc[pid].name, how: '列の並び' };
+    }
+    throw new Error('どの列か分かりませんでした（見出し: ' + (h || '空') + '）');
   }
 
   /* ============================================================
@@ -385,7 +427,7 @@
     const recs = await getRecords('block', [...new Set(srcIds.concat(dstIds))]);
     const r0 = recs.get(srcIds[0]);
     if (!r0) throw new Error('元のページを読み取れませんでした');
-    const prop = await propOf(srcCells[0], r0);
+    const prop = await propOf(srcCells[0], r0, srcCells, recs);
     if (RO.has(prop.type)) throw new Error('「' + prop.name + '」は読み取り専用の列です');
     const srcVals = srcIds.map((id) => { const r = recs.get(id); return (r && r.properties && r.properties[prop.pid]) || []; });
     const vals = seriesValues(prop.type, srcVals, dstIds.length, copy);
