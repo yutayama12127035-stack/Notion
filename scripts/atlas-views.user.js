@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³¹ _ Atlas Views
 // @namespace    https://cordivestium.local/atlas-views
-// @version      1.0.0
-// @description  Notion に無い新しいビュー「Atlas」。「Add a new view」の空いている枠に Atlas を追加。書架（背表紙が棚に並ぶ・縦書き・グループごとの棚）／年表（日付で年・月ごとの縦のタイムライン）／集計（Excel のピボット: 2 つのプロパティのクロス集計・合計・押すと一覧）を切り替えて使える。ビューのフィルター・並べ替えはそのまま効く。本・ページを押すとサイドピークで開く。既存のビューも ⌃⌥V で Atlas に切り替え／戻す。
+// @version      2.0.0
+// @description  v2.0.0: 「Add a new view」に Atlas が出なかったのを修正。見ていて楽しいビューを追加 — シアター（映画ポスターの壁）・レコード（ジャケットと盤）・ポラロイド（写真の壁）・星図（グループを星座に）。Notion に無い新しいビュー「Atlas」。「Add a new view」の空いている枠に Atlas を追加。書架（背表紙が棚に並ぶ・縦書き・グループごとの棚）／年表（日付で年・月ごとの縦のタイムライン）／集計（Excel のピボット: 2 つのプロパティのクロス集計・合計・押すと一覧）を切り替えて使える。ビューのフィルター・並べ替えはそのまま効く。本・ページを押すとサイドピークで開く。既存のビューも ⌃⌥V で Atlas に切り替え／戻す。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,17 @@
 // ==/UserScript==
 
 /*
+ * v2.0.0（2026-10-03）
+ *   ・「Add a new view」に Atlas が出なかった: メニューの中身は後から描かれるのに、足された要素の文字だけで探していた／
+ *     タイルを role 属性で探していた（Notion のタイルには role が無い）。
+ *     → 画面に出ているメニュー全体から「Table」「Form」の文字を探し、その共通の親（格子）と、Form のタイルを写して Atlas を作る。
+ *   ・ビューを 4 つ追加（全部で 7 つ）:
+ *       シアター: 映画のポスターの壁。ページのカバー画像（無ければファイルのプロパティの画像、それも無ければ色とアイコン）を
+ *                 2:3 のポスターに。乗せると浮き上がって光る。グループごとに「上映の列」。
+ *       レコード: 正方形のジャケットから盤が少しのぞく。乗せると盤が滑り出て回る。
+ *       ポラロイド: 少し傾いた写真が壁に留めてある。乗せるとまっすぐになって手前へ。
+ *       星図: 夜空にグループを星座として並べ、ページを星に（線で結ぶ）。乗せると名前、押すと開く。
+ *
  * v1.0.0（2026-10-03）
  *   ・作り方: 「Add a new view」→ Atlas。中では Notion の「Table」を作り、その表ビューを Atlas として描く
  *     （名前は「Atlas」に。Notion 側のデータ・プロパティは何も変えない。Atlas をやめれば元の表に戻る）。
@@ -33,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '2.0.0';
   const TAG = '[³¹ v' + VERSION + ']';
   if (window.__c31 && window.__c31.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -188,9 +199,10 @@
   const GROUPABLE = ['relation', 'select', 'status', 'multi_select', 'checkbox', 'text', 'title', 'date', 'number', 'url'];
   function toolbar(vid, D) {
     const c = conf(vid);
-    const seg = [['shelf', '書架'], ['chron', '年表'], ['pivot', '集計']].map(([k, l]) => '<button data-lay="' + k + '"' + (c.layout === k ? ' data-on="1"' : '') + '>' + l + '</button>').join('');
+    const seg = [['shelf', '書架'], ['theater', 'シアター'], ['vinyl', 'レコード'], ['polaroid', 'ポラロイド'], ['stars', '星図'], ['chron', '年表'], ['pivot', '集計']].map(([k, l]) => '<button data-lay="' + k + '"' + (c.layout === k ? ' data-on="1"' : '') + '>' + l + '</button>').join('');
     let opts = '';
-    if (c.layout === 'shelf') opts = '<label>棚<select data-k="group">' + propOptions(D, GROUPABLE, c.group, [['', '分けない']]) + '</select></label>';
+    if (['theater', 'vinyl', 'polaroid', 'stars'].includes(c.layout)) opts = '<label>' + (c.layout === 'stars' ? '星座' : 'グループ') + '<select data-k="group">' + propOptions(D, GROUPABLE, c.group, [['', '分けない']]) + '</select></label>';
+    else if (c.layout === 'shelf') opts = '<label>棚<select data-k="group">' + propOptions(D, GROUPABLE, c.group, [['', '分けない']]) + '</select></label>';
     else if (c.layout === 'chron') opts = '<label>日付<select data-k="date">' + propOptions(D, ['date'], c.date, [['__created', '作成日時']]) + '</select></label><label>添える<select data-k="side">' + propOptions(D, GROUPABLE, c.side, [['', 'なし']]) + '</select></label>';
     else opts = '<label>行<select data-k="rows">' + propOptions(D, GROUPABLE, c.rows, [['', '—']]) + '</select></label><label>列<select data-k="cols">' + propOptions(D, GROUPABLE, c.cols, [['', '—']]) + '</select></label><label>値<select data-k="val">' + propOptions(D, ['number'], c.val, [['', '件数']]) + '</select></label>';
     return '<div class="c31-bar"><span class="c31-brand">✦ Atlas</span><div class="c31-seg">' + seg + '</div><div class="c31-opts">' + opts + '</div><span class="c31-grow"></span><span class="c31-cnt">' + D.rows.length + ' 件</span><button class="c31-btn" data-a="refresh" title="読み直す">↻</button><button class="c31-btn" data-a="off" title="この表を元の見た目に戻す（⌃⌥V）">表に戻す</button></div>';
@@ -275,12 +287,99 @@
     h += '</tbody><tfoot><tr><th>計</th>' + cols.map((b) => '<td class="c31-tot">' + fmt(val([...new Set(colTot.get(b.key) || [])])) + '</td>').join('') + '<td class="c31-tot c31-grand">' + fmt(val([...new Set(all)])) + '</td></tr></tfoot></table></div>';
     return h;
   }
+
+  /* ============================================================
+   *  v2.0.0  シアター・レコード・ポラロイド・星図
+   * ============================================================ */
+  function imgUrl(u, id) {
+    u = String(u || '').trim();
+    if (!u) return '';
+    if (/^attachment:/i.test(u) || /secure\.notion-static\.com|prod-files-secure|amazonaws\.com/.test(u)) return '/image/' + encodeURIComponent(u) + '?table=block&id=' + encodeURIComponent(id || '') + '&cache=v2';
+    if (u.startsWith('/')) return u;
+    if (/^(https?:|data:)/.test(u)) return u;
+    return '';
+  }
+  /* その行の絵: カバー → ファイルのプロパティの最初の画像 */
+  function pictureOf(r, D) {
+    const cov = r.format && r.format.page_cover;
+    if (cov) { const u = imgUrl(cov, r.id); if (u) return { src: u, y: r.format.page_cover_position != null ? Math.round((1 - r.format.page_cover_position) * 100) : 50 }; }
+    for (const [pid, sc] of Object.entries(D.schema)) {
+      if (sc.type !== 'file') continue;
+      for (const seg of (r.properties && r.properties[pid]) || []) for (const a of (Array.isArray(seg[1]) ? seg[1] : [])) if (a[0] === 'a' && a[1]) { const u = imgUrl(a[1], r.id); if (u && /\.(png|jpe?g|gif|webp|avif|svg)(\?|$)/i.test(String(a[1]))) return { src: u, y: 50 }; }
+    }
+    return null;
+  }
+  function grouped(vid, D) {
+    const c = conf(vid);
+    const groups = new Map();
+    for (const r of D.rows) for (const g of groupsOf(r, c.group, D)) {
+      if (!groups.has(g.key)) groups.set(g.key, Object.assign({ rows: [] }, g));
+      groups.get(g.key).rows.push(r);
+    }
+    return [...groups.values()].sort((a, b) => (a.key === '' ? 1 : b.key === '' ? -1 : 0));
+  }
+  const groupHead = (vid, g) => (conf(vid).group ? '<div class="c31-gh">' + iconHtml(g.icon, 'c31-gico') + '<span class="c31-gt">' + esc(g.label || '（なし）') + '</span><span class="c31-gc">' + g.rows.length + '</span></div>' : '');
+  const linkOpen = (r, cls, style, inner) => '<a class="' + cls + '" data-id="' + esc(r.id) + '" href="/' + esc(r.id.replace(/-/g, '')) + '" title="' + esc(titleOf(r) || '（無題）') + '"' + (style ? ' style="' + style + '"' : '') + '>' + inner + '</a>';
+  const tone = (k) => SPINES[hash(k) % SPINES.length];
+  function art(r, D, key) {
+    const pic = pictureOf(r, D);
+    if (pic) return { style: '--img:url(&quot;' + esc(pic.src) + '&quot;);--iy:' + pic.y + '%', has: true };
+    const c1 = tone(key || r.id), c2 = SPINES[(hash(r.id) + 5) % SPINES.length];
+    return { style: '--g1:' + c1 + ';--g2:' + c2, has: false };
+  }
+  function renderTheater(vid, D) {
+    return grouped(vid, D).map((g) => '<section class="c31-row">' + groupHead(vid, g) + '<div class="c31-theater">' + g.rows.map((r) => {
+      const a = art(r, D, g.key), t = titleOf(r) || '（無題）';
+      return linkOpen(r, 'c31-poster' + (a.has ? ' c31-hasimg' : ''), a.style,
+        '<span class="c31-pimg">' + (a.has ? '' : iconHtml(rowIcon(r), 'c31-picon') + '<span class="c31-ptitle-in">' + esc(t) + '</span>') + '</span><span class="c31-pcap"><b>' + esc(t) + '</b>' + (g.label && conf(vid).group ? '<small>' + esc(g.label) + '</small>' : '') + '</span>');
+    }).join('') + '</div></section>').join('') || '<div class="c31-empty">ページがありません</div>';
+  }
+  function renderVinyl(vid, D) {
+    return grouped(vid, D).map((g) => '<section class="c31-row">' + groupHead(vid, g) + '<div class="c31-crate">' + g.rows.map((r) => {
+      const a = art(r, D, g.key), t = titleOf(r) || '（無題）';
+      const label = tone(r.id);
+      return linkOpen(r, 'c31-record' + (a.has ? ' c31-hasimg' : ''), a.style + ';--lab:' + label,
+        '<span class="c31-disc"><i></i></span><span class="c31-sleeve">' + (a.has ? '' : iconHtml(rowIcon(r), 'c31-picon') + '<span class="c31-stitle2">' + esc(t) + '</span>') + '</span><span class="c31-rcap">' + esc(t) + '</span>');
+    }).join('') + '</div></section>').join('') || '<div class="c31-empty">ページがありません</div>';
+  }
+  function renderPolaroid(vid, D) {
+    return grouped(vid, D).map((g) => '<section class="c31-row">' + groupHead(vid, g) + '<div class="c31-wall">' + g.rows.map((r) => {
+      const a = art(r, D, g.key), t = titleOf(r) || '（無題）';
+      const rot = ((hash(r.id) % 9) - 4) * 0.9;
+      return linkOpen(r, 'c31-polaroid' + (a.has ? ' c31-hasimg' : ''), a.style + ';--rot:' + rot.toFixed(1) + 'deg',
+        '<span class="c31-pin"></span><span class="c31-photo">' + (a.has ? '' : iconHtml(rowIcon(r), 'c31-picon')) + '</span><span class="c31-hand">' + esc(t) + '</span>');
+    }).join('') + '</div></section>').join('') || '<div class="c31-empty">ページがありません</div>';
+  }
+  function renderStars(vid, D) {
+    const gs = grouped(vid, D);
+    const W = 1000, cols = Math.max(1, Math.min(4, Math.ceil(Math.sqrt(gs.length)))), cellW = W / cols, cellH = 320;
+    const rows = Math.ceil(gs.length / cols), H = Math.max(360, rows * cellH);
+    let svg = '<svg class="c31-sky" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet">';
+    /* 背景の小さな星 */
+    for (let i = 0; i < 140; i++) { const h = hash('bg' + i); svg += '<circle cx="' + (h % W) + '" cy="' + ((h >>> 10) % H) + '" r="' + ((h % 3) * 0.35 + 0.35).toFixed(2) + '" fill="#fff" opacity="' + (0.15 + (h % 5) / 12).toFixed(2) + '"/>'; }
+    gs.forEach((g, gi) => {
+      const cx = (gi % cols) * cellW + cellW / 2, cy = Math.floor(gi / cols) * cellH + cellH / 2 + 10;
+      const pts = g.rows.map((r, i) => {
+        const h = hash(r.id + g.key), ang = (i / Math.max(1, g.rows.length)) * Math.PI * 2 + (h % 100) / 60, rad = 30 + (h % 90) * (g.rows.length > 1 ? 1 : 0);
+        return { r, x: cx + Math.cos(ang) * rad * 1.25, y: cy + Math.sin(ang) * rad * 0.85, s: 2.2 + (h % 4) * 0.8 };
+      });
+      if (pts.length > 1) svg += '<polyline class="c31-cline" points="' + pts.map((p) => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ') + (pts.length > 2 ? ' ' + pts[0].x.toFixed(1) + ',' + pts[0].y.toFixed(1) : '') + '"/>';
+      for (const p of pts) {
+        const t = titleOf(p.r) || '（無題）';
+        svg += '<a class="c31-star" data-id="' + esc(p.r.id) + '" href="/' + esc(p.r.id.replace(/-/g, '')) + '"><title>' + esc(t) + '</title><circle class="c31-glow" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (p.s * 3).toFixed(1) + '"/><circle class="c31-core" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + p.s.toFixed(1) + '"/><text x="' + (p.x + p.s + 5).toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '">' + esc(t.length > 18 ? t.slice(0, 17) + '…' : t) + '</text></a>';
+      }
+      svg += '<text class="c31-cname" x="' + cx.toFixed(1) + '" y="' + (cy + cellH / 2 - 26).toFixed(1) + '" text-anchor="middle">' + esc(g.label || (conf(vid).group ? '（なし）' : 'すべて')) + '<tspan dx="8" class="c31-ccount">' + g.rows.length + '</tspan></text>';
+    });
+    return '<div class="c31-skyw">' + svg + '</svg></div>';
+  }
+
   function draw() {
     const vid = currentViewId();
     if (!host || !data || dataFor !== vid) return;
     pickDefaults(conf(vid), data);
     const c = conf(vid);
-    const body = c.layout === 'chron' ? renderChron(vid, data) : c.layout === 'pivot' ? renderPivot(vid, data) : renderShelf(vid, data);
+    const R = { chron: renderChron, pivot: renderPivot, theater: renderTheater, vinyl: renderVinyl, polaroid: renderPolaroid, stars: renderStars };
+    const body = (R[c.layout] || renderShelf)(vid, data);
     host.innerHTML = toolbar(vid, data) + '<div class="c31-body" data-lay="' + c.layout + '">' + body + '</div>';
     ST.renders++;
   }
@@ -362,32 +461,46 @@
    * ============================================================ */
   const NATIVE = ['Table', 'Board', 'Gallery', 'List', 'Chart', 'Dashboard', 'Timeline', 'Feed', 'Map', 'Calendar', 'Form', 'テーブル', 'ボード', 'ギャラリー', 'リスト', 'グラフ', 'タイムライン', 'カレンダー', 'フォーム'];
   const ATLAS_SVG = '<svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 16.6V4.4"/><path d="M5.8 16.6V6.2"/><path d="M8.4 16.6V3.6"/><path d="M11 16.6l2.6-11.2 2.6.6-2.6 11.2"/><path d="M2.2 16.8h15.6"/><path d="M15.6 2.2l.5 1.2 1.2.5-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.5z" fill="currentColor" stroke="none"/></svg>';
-  function tileOf(root, label) {
-    for (const el of root.querySelectorAll('[role="button"], [role="menuitem"], [role="option"], button')) {
-      if (el.closest('[data-c31-tile]')) continue;
-      if (el.textContent.trim() === label) return el;
-    }
+  /* v2.0.0: 文字が label そのものの一番内側の要素 */
+  function leafOf(root, label) {
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = w.nextNode())) if (n.nodeValue.trim() === label && !(n.parentElement && n.parentElement.closest('[data-c31-tile]'))) return n.parentElement;
     return null;
   }
+  const firstLeaf = (root, labels) => { for (const l of labels) { const e = leafOf(root, l); if (e) return e; } return null; };
   function decorateMenu(root) {
-    if (root.querySelector('[data-c31-tile]')) return;
-    const txt = root.textContent || '';
-    if (!/Add a new view|新しいビュー|ビューを追加/.test(txt)) return;
-    const table = tileOf(root, 'Table') || tileOf(root, 'テーブル');
-    const last = tileOf(root, 'Form') || tileOf(root, 'フォーム') || tileOf(root, 'Calendar') || tileOf(root, 'カレンダー');
-    if (!table || !last || !last.parentElement) return;
+    if (!root || root.querySelector('[data-c31-tile]')) return false;
+    if (!/Add a new view|新しいビュー|ビューを追加/.test(root.textContent || '')) return false;
+    const lt = firstLeaf(root, ['Table', 'テーブル']);
+    const lf = firstLeaf(root, ['Form', 'フォーム']) || firstLeaf(root, ['Calendar', 'カレンダー']);
+    if (!lt || !lf) return false;
+    let grid = lf.parentElement;
+    while (grid && grid !== root && !grid.contains(lt)) grid = grid.parentElement;
+    if (!grid) return false;
+    const tileOfLeaf = (leaf) => { let el = leaf; while (el && el.parentElement !== grid) el = el.parentElement; return el; };
+    const table = tileOfLeaf(lt), last = tileOfLeaf(lf);
+    if (!table || !last || table === last) return false;
     const tile = last.cloneNode(true);
     tile.setAttribute('data-c31-tile', '1');
     tile.removeAttribute('id');
-    tile.title = 'Atlas — 書架・年表・集計（Cordivestium）';
-    /* 絵と文字を差し替え（形はそのまま＝Notion と同じ見た目） */
-    const svg = tile.querySelector('svg');
-    if (svg) { const span = document.createElement('span'); span.innerHTML = ATLAS_SVG; svg.replaceWith(span.firstChild); }
-    const walker = document.createTreeWalker(tile, NodeFilter.SHOW_TEXT);
-    let n; while ((n = walker.nextNode())) { if (n.nodeValue.trim()) { n.nodeValue = 'Atlas'; break; } }
+    tile.title = 'Atlas — 書架・シアター・レコード・ポラロイド・星図・年表・集計（Cordivestium）';
+    const svgEl = tile.querySelector('svg');
+    if (svgEl) { const span = document.createElement('span'); span.innerHTML = ATLAS_SVG; const ns = span.firstChild; ns.setAttribute('class', svgEl.getAttribute('class') || ''); ns.setAttribute('style', svgEl.getAttribute('style') || ''); svgEl.replaceWith(ns); }
+    tile.removeAttribute('data-c31-tile');
+    const lab = leafOf(tile, 'Form') || leafOf(tile, 'フォーム') || leafOf(tile, 'Calendar') || leafOf(tile, 'カレンダー');
+    if (lab) lab.textContent = 'Atlas';
+    tile.setAttribute('data-c31-tile', '1');
     tile.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); createAtlas(table); }, true);
     for (const t of ['pointerdown', 'mousedown', 'pointerup', 'mouseup']) tile.addEventListener(t, (e) => e.stopPropagation(), true);
     last.parentElement.insertBefore(tile, last.nextSibling);
+    return true;
+  }
+  function scanMenus() {
+    for (const el of document.querySelectorAll('.notion-overlay-container, [role="dialog"], [role="menu"], [data-overlay]')) {
+      if (el.closest('#c31-view')) continue;
+      try { if (decorateMenu(el)) return; } catch (e) { ST.lastError = String(e && e.message || e); }
+    }
   }
   function press(el) {
     const r = el.getBoundingClientRect();
@@ -491,6 +604,52 @@ html[data-c31-on] .notion-frame .notion-collection-view-body { display: none !im
 .c31-list .c31-lh { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 6px; font: 12px/1 -apple-system, sans-serif; color: var(--c-texSec, #787774); }
 .c31-list a { display: flex; align-items: center; gap: 8px; padding: 5px 6px; border-radius: 6px; }
 .c31-list a:hover { background: var(--c-bacHov, rgba(55,53,47,.06)); }
+.c31-seg { flex-wrap: wrap; }
+.c31-row { margin: 0 0 34px; }
+/* シアター */
+.c31-theater { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 22px 18px; }
+.c31-poster { display: flex; flex-direction: column; gap: 8px; }
+.c31-pimg { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; aspect-ratio: 2 / 3; border-radius: 6px; overflow: hidden; background: var(--img) center var(--iy, 50%) / cover no-repeat, linear-gradient(160deg, var(--g1, #5B6B7A), var(--g2, #2b2f36)); box-shadow: 0 1px 2px rgba(0,0,0,.18), 0 6px 18px -8px rgba(0,0,0,.45); transition: transform .22s cubic-bezier(.2,0,0,1), box-shadow .22s; color: #fbf8f1; }
+.c31-poster:not(.c31-hasimg) .c31-pimg { background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.18), transparent 60%), linear-gradient(160deg, var(--g1), var(--g2)); }
+.c31-pimg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.12), transparent 30%, transparent 70%, rgba(0,0,0,.25)); pointer-events: none; }
+.c31-poster:hover .c31-pimg { transform: translateY(-6px) scale(1.02); box-shadow: 0 2px 4px rgba(0,0,0,.2), 0 18px 34px -12px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08); }
+.c31-picon { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3)); }
+.c31-picon img { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1); }
+.c31-ptitle-in { padding: 0 12px; text-align: center; font-size: 14px; line-height: 1.5; letter-spacing: .08em; text-shadow: 0 1px 2px rgba(0,0,0,.3); }
+.c31-pcap { display: flex; flex-direction: column; gap: 2px; padding: 0 2px; }
+.c31-pcap b { font-size: 12.5px; font-weight: 600; letter-spacing: .03em; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.c31-pcap small { font: 11px/1.3 -apple-system, sans-serif; color: var(--c-texTer, #9b9a97); }
+/* レコード */
+.c31-crate { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 26px 30px; padding-right: 24px; }
+.c31-record { position: relative; display: block; aspect-ratio: 1; margin-bottom: 26px; }
+.c31-sleeve { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border-radius: 3px; background: var(--img) center var(--iy, 50%) / cover no-repeat, linear-gradient(135deg, var(--g1, #5B6B7A), var(--g2, #2b2f36)); box-shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 20px -10px rgba(0,0,0,.5); color: #fbf8f1; overflow: hidden; }
+.c31-record:not(.c31-hasimg) .c31-sleeve { background: repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 2px, transparent 2px 6px), linear-gradient(135deg, var(--g1), var(--g2)); }
+.c31-stitle2 { padding: 0 14px; text-align: center; font-size: 13px; letter-spacing: .1em; line-height: 1.5; }
+.c31-disc { position: absolute; z-index: 1; top: 4%; left: 4%; width: 92%; height: 92%; border-radius: 50%; background: radial-gradient(circle, var(--lab) 0 17%, #111 17.5% 19%, transparent 19.5%), repeating-radial-gradient(circle, #1a1a1a 0 1.5px, #262626 1.5px 3px); box-shadow: 0 4px 12px rgba(0,0,0,.35); transform: translateX(18%); transition: transform .45s cubic-bezier(.2,0,0,1); }
+.c31-disc i { position: absolute; left: 50%; top: 50%; width: 5%; height: 5%; margin: -2.5% 0 0 -2.5%; border-radius: 50%; background: #e9e5dc; }
+.c31-disc::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 30deg, transparent 0 10%, rgba(255,255,255,.12) 14%, transparent 20% 60%, rgba(255,255,255,.08) 64%, transparent 70%); }
+.c31-record:hover .c31-disc { transform: translateX(46%) rotate(200deg); }
+.c31-rcap { position: absolute; left: 0; right: 0; top: calc(100% + 8px); font-size: 12.5px; font-weight: 600; letter-spacing: .03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* ポラロイド */
+.c31-wall { display: flex; flex-wrap: wrap; gap: 26px 22px; padding: 10px 4px; }
+.c31-polaroid { position: relative; display: flex; flex-direction: column; width: 168px; padding: 10px 10px 0; background: #fdfcf9; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 8px 18px -10px rgba(0,0,0,.35); transform: rotate(var(--rot)); transition: transform .2s cubic-bezier(.2,0,0,1), box-shadow .2s; color: #37352f; }
+.c31-polaroid:hover { transform: rotate(0) translateY(-4px) scale(1.04); box-shadow: 0 2px 4px rgba(0,0,0,.14), 0 18px 30px -12px rgba(0,0,0,.4); z-index: 3; }
+.c31-photo { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; background: var(--img) center var(--iy, 50%) / cover no-repeat, linear-gradient(135deg, var(--g1, #5B6B7A), var(--g2, #2b2f36)); filter: saturate(.92) contrast(1.02); }
+.c31-polaroid:not(.c31-hasimg) .c31-photo { background: radial-gradient(90% 70% at 30% 20%, rgba(255,255,255,.22), transparent 60%), linear-gradient(135deg, var(--g1), var(--g2)); }
+.c31-hand { min-height: 46px; display: flex; align-items: center; justify-content: center; padding: 6px 4px 8px; text-align: center; font-family: "Klee", "Klee Medium", "Hiragino Mincho ProN", serif; font-size: 13px; line-height: 1.35; letter-spacing: .04em; }
+.c31-pin { position: absolute; z-index: 2; top: -6px; left: 50%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f4b6a8, #c4553f 60%, #8f3424); box-shadow: 0 2px 3px rgba(0,0,0,.3); }
+/* 星図 */
+.c31-skyw { border-radius: 14px; overflow: hidden; background: radial-gradient(120% 90% at 30% 10%, #1d2a4d 0%, #0c1326 55%, #070b17 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
+.c31-sky { display: block; width: 100%; height: auto; }
+.c31-sky .c31-cline { fill: none; stroke: rgba(170,190,255,.32); stroke-width: 1; }
+.c31-sky .c31-glow { fill: rgba(190,210,255,.12); transition: fill .2s; }
+.c31-sky .c31-core { fill: #f3f1ea; filter: drop-shadow(0 0 3px rgba(200,215,255,.9)); }
+.c31-sky text { fill: rgba(230,234,245,.0); font: 12px "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; letter-spacing: .06em; transition: fill .2s; pointer-events: none; }
+.c31-sky .c31-star:hover .c31-glow { fill: rgba(190,210,255,.35); }
+.c31-sky .c31-star:hover text, .c31-skyw:hover .c31-star text { fill: rgba(230,234,245,.75); }
+.c31-sky .c31-star { cursor: pointer; }
+.c31-sky .c31-cname { fill: rgba(220,226,245,.85); font-size: 15px; letter-spacing: .14em; }
+.c31-sky .c31-ccount { fill: rgba(220,226,245,.45); font-size: 11px; }
 `;
     (document.head || document.documentElement).appendChild(st);
   }
@@ -499,13 +658,9 @@ html[data-c31-on] .notion-frame .notion-collection-view-body { display: none !im
    *  起動
    * ============================================================ */
   let lastHref = location.href, tick = 0;
-  const mo = new MutationObserver((recs) => {
-    for (const r of recs) for (const nd of r.addedNodes) {
-      if (nd.nodeType !== 1) continue;
-      if (nd.closest && nd.closest('#c31-view')) continue;
-      const pop = nd.matches && (nd.matches('[role="dialog"], .notion-overlay-container, [data-overlay]') ? nd : nd.querySelector && nd.querySelector('[role="dialog"]'));
-      if (pop || /Add a new view|新しいビュー/.test(nd.textContent || '')) { try { decorateMenu(pop || nd); } catch (e) { /* noop */ } }
-    }
+  let menuT = 0;
+  const mo = new MutationObserver(() => {
+    if (!menuT) menuT = requestAnimationFrame(() => { menuT = 0; scanMenus(); });
     if (!tick) tick = requestAnimationFrame(() => {
       tick = 0;
       if (location.href !== lastHref) { lastHref = location.href; const v = currentViewId(); if (v !== dataFor) { data = null; dataFor = ''; } }
