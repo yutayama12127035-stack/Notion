@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      47.2.0
+// @version      57.2.0
 // @description  v47.2.0: 書体がきちんと当たるように — Notion の CSP は Google Fonts を通さないため、jsDelivr（Fontsource）から読み込むウェブ書体 39 種（しっぽり明朝・Zen オールド明朝・Noto Serif JP・BIZ UDP明朝・Klee One・Cormorant Garamond・EB Garamond・Playfair ほか）を追加。端末に入っていなくても当たる。表の「題字」と「リレーション」を形で見分ける（題字＝その行のページ、リレーション＝別 DB へのチップ）。題字の列の書体・大きさ・太さ・行の高さ・アイコンが ⁰⁹ の印なしでも効く。素のリレーションのチップの書式（新しい区画）。見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -21,6 +21,14 @@
 // ==/UserScript==
 
 /*
+ * v57.2.0（2026-10-03）— 三本柱を一つの UI に
+ *   ・上の帯（Share の左）に「Aa」。押すと Atelier の道具（テキストのパネル・Atelier・どこでも書式・パレット・縦書き・マーカー・目次・
+ *     フォーカス・設定）。³⁷ Lumière の ◐・³⁸ Scholar の Σ と同じ台に並ぶ。右下の丸い「Aa」は、上の帯のボタンがある間は出さない。
+ *   ・⋯ メニューに「三本柱」の段: ◐ Lumière（配色・見た目）／Σ Scholar（学び・計算・記録）／◎ Orbit（大分類の輪）。入っている柱だけ出る。
+ *     文字を選んで開いた時は、Scholar の「読み上げ・計算・書き取り」も（選んだ文字をそのまま渡す）。
+ *   ・新しい区画「UI の書体」（画面）: 三本柱のメニュー・小窓・パネル・説明の札の書体（--cordi-ui）、柱の名前の書体（--cordi-ui-display）、
+ *     Notion 自身の UI（サイドバー・上の帯・メニュー・吹き出し）の書体。Atelier の ⋯ メニュー・パネルもこの書体になる。
+ *   ・「Atelier」の文字だけ明朝で浮いていた → 柱の名前は三本柱で同じ書体（--cordi-ui-display）。説明の札もそろえた書体に。
  * v47.2.0（2026-10-03）
  *   ・ウェブ書体（jsDelivr の Fontsource）39 種。Notion の CSP は fonts.googleapis.com を通さない（パネルの書体も落ちていた）が、cdn.jsdelivr.net は通す。
  *     書体名が使われた瞬間に、その書体の CSS（太さごと）だけを読み込む。字形のファイルは使った文字の分だけ。
@@ -355,7 +363,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '47.2.0';
+  const VERSION = '57.2.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -1794,6 +1802,11 @@
         '<button class="m9-tb" data-a="attoc" title="目次">' + ICO_AT.toc + '</button>' +
         '<button class="m9-tb" data-a="atfocus" title="フォーカスモード">' + ICO_AT.focus + '</button>' +
       '</div>' +
+      '<div class="m9-pillars">' +
+        '<button class="m9-pl" data-p="lm" data-cordi="lm.pop" title="Lumière — 配色・見た目（⌃⌥V）"><b>' + ICO_PL.lm + 'Lumière</b><small>配色・見た目</small></button>' +
+        '<button class="m9-pl" data-p="s38" data-cordi="s38.pop" title="Scholar — 学び・計算・記録（⌃⌥Q）"><b>' + ICO_PL.s38 + 'Scholar</b><small>学び・記録</small></button>' +
+        '<button class="m9-pl" data-p="c33" data-cordi="c33.orbit" title="Orbit — サイドバーの大分類の輪（⌃⌥O）"><b>' + ICO_PL.c33 + 'Orbit</b><small>大分類の輪</small></button>' +
+      '</div>' +
         '<div class="m9-meta"></div></div>' +
       '<div class="m9-body m9-body-text">' +
       '<button class="m9-row m9-turn" data-n="turn" title="ブロックの種類を変える（Notion）"><span class="m9-ic">' + ICO.turn + '</span><span class="m9-lab">Text</span>' + ICO.chev + '</button>' +
@@ -1830,6 +1843,16 @@
         '<button class="m9-tb" data-a="atmarks" title="マーカー一覧（⌃⌥M）">' + ICO_AT.marks + '</button>' +
         '<button class="m9-tb" data-a="attoc" title="目次">' + ICO_AT.toc + '</button>' +
         '<button class="m9-tb" data-a="atfocus" title="フォーカスモード">' + ICO_AT.focus + '</button>' +
+      '</div>' +
+      '<div class="m9-pillars">' +
+        '<button class="m9-pl" data-p="lm" data-cordi="lm.pop" title="Lumière — 配色・見た目（⌃⌥V）"><b>' + ICO_PL.lm + 'Lumière</b><small>配色・見た目</small></button>' +
+        '<button class="m9-pl" data-p="s38" data-cordi="s38.pop" title="Scholar — 学び・計算・記録（⌃⌥Q）"><b>' + ICO_PL.s38 + 'Scholar</b><small>学び・記録</small></button>' +
+        '<button class="m9-pl" data-p="c33" data-cordi="c33.orbit" title="Orbit — サイドバーの大分類の輪（⌃⌥O）"><b>' + ICO_PL.c33 + 'Orbit</b><small>大分類の輪</small></button>' +
+      '</div>' +
+      '<div class="m9-learn">' +
+        '<button class="m9-tb" data-cordi="s38.speak" title="選んだ文字を読み上げる（⌃⌥T）">' + ICO_PL.speak + '<span>読み上げ</span></button>' +
+        '<button class="m9-tb" data-cordi="s38.calc" title="選んだ式を計算して後ろに足す（⌃⌥=）">' + ICO_PL.fx + '<span>計算</span></button>' +
+        '<button class="m9-tb" data-cordi="s38.dictation" title="選んだ文で書き取り">' + ICO_PL.pen + '<span>書き取り</span></button>' +
       '</div>' +
       '</div>' +
       '<div class="m9-div"></div>' +
@@ -2769,6 +2792,16 @@
     if (tp) { applyTemplate(tp.dataset.tp); return; }
     const sb = t.closest('[data-sub]');
     if (sb && !t.closest('input')) { openSub(sb.dataset.sub); return; }
+    const cdr = t.closest('[data-cordi]');
+    if (cdr) {
+      const sel = window.getSelection ? String(window.getSelection()).trim() : '';
+      const id = cdr.dataset.cordi;
+      if (id === 's38.calc') { hidePop(); setTimeout(() => document.dispatchEvent(new CustomEvent('cordi:run', { detail: JSON.stringify({ id }) })), 30); return; }   // 選んだままで計算（後ろに足す）
+      hidePop();
+      const r = cdr.getBoundingClientRect();
+      document.dispatchEvent(new CustomEvent('cordi:run', { detail: JSON.stringify({ id, text: sel, x: r.left, y: r.bottom }) }));
+      return;
+    }
     const n = t.closest('[data-n]');
     if (n) { native(n.dataset.n); return; }
     const b = t.closest('button[data-a]');
@@ -3710,7 +3743,7 @@ html[data-c26-sel]:not(.c26-native) [style*="--c-popBac"]:has(svg.textBold):has(
   position: fixed; z-index: 2147483000; box-sizing: border-box; display: flex; flex-direction: column;
   background: var(--m9-bg); color: var(--m9-fg); border-radius: 14px; padding: 8px;
   box-shadow: var(--c-shaOutLg, 0 0 0 1px rgba(15,15,15,.05), 0 3px 6px rgba(15,15,15,.1), 0 9px 24px rgba(15,15,15,.2));
-  font: 14px/1.2 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", Helvetica, sans-serif;
+  font: 14px/1.2 var(--cordi-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", Helvetica, sans-serif); font-feature-settings: "palt" 1;
   -webkit-font-smoothing: antialiased; user-select: none; text-align: left;
 }
 .m9[hidden], .m9 [hidden] { display: none !important; }
@@ -3774,7 +3807,18 @@ html[data-c26-bm]:not(.c26-native) [role="dialog"]:has([role="option"] svg.dupli
 .m9-attools { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px 2px; padding: 2px 4px 4px; }
 .m9-attools .m9-tb:not(.m9-atb) { width: 100%; height: 30px; }
 .m9-attools .m9-tb:not(.m9-atb) svg { width: 17px; height: 17px; }
-.m9-attools .m9-atb { grid-column: 1 / -1; width: 100%; height: 30px; padding: 0 10px 0 8px; gap: 8px; justify-content: flex-start; font-size: 13px; letter-spacing: .05em; font-family: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; color: var(--m9-fg); white-space: nowrap; }
+.m9-attools .m9-atb { grid-column: 1 / -1; width: 100%; height: 30px; padding: 0 10px 0 8px; gap: 8px; justify-content: flex-start; font-size: 13px; letter-spacing: .05em; font-family: var(--cordi-ui-display, "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif); color: var(--m9-fg); white-space: nowrap; }
+/* v57: 三本柱の段（入っている柱だけ） */
+.m9-pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 0 4px 4px; }
+.m9-pl { all: unset; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; height: 44px; border-radius: 8px; cursor: pointer; color: var(--m9-fg); text-align: center; }
+.m9-pl:hover { background: var(--m9-hov); }
+.m9-pl b { font: 500 12.5px/1.1 var(--cordi-ui-display, "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif); letter-spacing: .04em; display: flex; align-items: center; gap: 5px; }
+.m9-pl b svg { width: 14px; height: 14px; color: var(--m9-acc); }
+.m9-pl small { font-size: 10.5px; color: var(--m9-sub); }
+html:not([data-cordi-lm]) .m9-pl[data-p="lm"], html:not([data-cordi-s38]) .m9-pl[data-p="s38"], html:not([data-c33]) .m9-pl[data-p="c33"], html:not([data-cordi-s38]) .m9-learn { display: none !important; }
+.m9-learn { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 0 4px 4px; }
+.m9-learn .m9-tb { width: 100%; height: 28px; gap: 3px; padding: 0 2px; font-size: 11.5px; white-space: nowrap; color: var(--m9-fg); }
+.m9-learn .m9-tb svg { width: 14px; height: 14px; }
 .m9-attools .m9-atb::after { content: "⌃⌥A"; margin-left: auto; font: 10.5px/1 -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0; color: var(--m9-ico); opacity: .7; }
 .m9-attools .m9-atb svg { width: 16px; height: 16px; color: #2383e2; }
 .m9-attools .m9-tb[aria-pressed="true"] { background: rgba(35,131,226,.12); color: #2383e2; }
@@ -4008,7 +4052,7 @@ html.c26-painting .notion-page-content, html.c26-painting .notion-page-content *
   --c26-line: rgba(55,53,47,.09); --c26-hover: rgba(55,53,47,.08); --c26-press: rgba(55,53,47,.16);
   --c26-acc: rgb(35,131,226); --c26-acc-bg: rgba(35,131,226,.1); --c26-field: rgba(242,241,238,.6);
   --c26-shadow: rgba(15,15,15,.05) 0 0 0 1px, rgba(15,15,15,.1) 0 3px 6px, rgba(15,15,15,.2) 0 9px 24px;
-  --c26-ui: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", Helvetica, sans-serif;
+  --c26-ui: var(--cordi-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", Helvetica, sans-serif);
 }
 html.dark #c26-pop, html.dark .c26-panel, html.dark #c26-fab, html.dark .c26-toast, html.dark #c26-trigger,
 html[data-theme="dark"] #c26-pop, html[data-theme="dark"] .c26-panel, html[data-theme="dark"] #c26-fab,
@@ -4124,7 +4168,7 @@ html[data-c26-bar] #c26-fab { display: none !important; }
   animation: c26-fade .14s ease-out;
   --c26-bg: #fff; --c26-fg: rgb(55,53,47); --c26-sub: rgba(55,53,47,.55); --c26-line: rgba(55,53,47,.1); --c26-hover: rgba(55,53,47,.06);
   --c26-acc: rgb(35,131,226); --c26-acc-bg: rgba(35,131,226,.1); --c26-field: rgba(242,241,238,.7);
-  --c26-ui: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", Helvetica, sans-serif;
+  --c26-ui: var(--cordi-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", Helvetica, sans-serif);
 }
 html.dark .c26-mgr-back, html[data-theme="dark"] .c26-mgr-back, html:has(> body.dark) .c26-mgr-back {
   --c26-bg: rgb(32,32,32); --c26-fg: rgba(255,255,255,.85); --c26-sub: rgba(255,255,255,.5); --c26-line: rgba(255,255,255,.09); --c26-hover: rgba(255,255,255,.055); --c26-field: rgba(255,255,255,.06);
@@ -4703,8 +4747,91 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 
   let fabT = 0;
   function ensureFabSoon() { if (!fabT) fabT = setTimeout(() => { fabT = 0; ensureFab(); }, 400); }
+  /* v57: 上の帯の「Aa」（三本柱の台 #cordi-dock）。押すと Atelier の道具の小窓 */
+  const AT_POP_CSS = `#cordi-dock { display: inline-flex; align-items: center; gap: 1px; margin-inline: 2px 6px; flex: none; height: 28px; }
+#cordi-dock .cd-b { order: var(--cd-o, 5); width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--c-icoSec, #91918e); border: 0; background: transparent; padding: 0; position: relative; }
+#cordi-dock .cd-b:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-icoPri, #37352f); }
+#cordi-dock .cd-b[aria-expanded="true"] { background: var(--ca-bacIntTra, rgba(55,53,47,.08)); color: var(--c-texPri, #37352f); }
+#cordi-dock .cd-b svg { width: 18px; height: 18px; display: block; }
+#cordi-dock .cd-badge:empty { display: none; }
+#c26-dockpop { position: fixed; z-index: 2147483100; width: 300px; box-sizing: border-box; padding: 6px; border-radius: 12px; background: var(--c-bacEle, #fff); color: var(--c-texPri, #37352f);
+  box-shadow: var(--c-shaOutLg, 0 0 0 1px rgba(15,15,15,.05), 0 3px 6px rgba(15,15,15,.1), 0 9px 24px rgba(15,15,15,.2)); font: 13.5px/1.4 var(--cordi-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif); font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; animation: c26-in .14s ease-out; }
+#c26-dockpop .hd { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px 6px; }
+#c26-dockpop .hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif); letter-spacing: .04em; }
+#c26-dockpop .hd span { color: var(--c-texSec, #787774); font-size: 11.5px; } #c26-dockpop .hd i { margin-inline-start: auto; font-style: normal; font-size: 10.5px; color: var(--c-texTer, #a5a29a); }
+#c26-dockpop .it { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 10px; width: 100%; min-height: 30px; padding: 4px 10px; border-radius: 7px; cursor: pointer; }
+#c26-dockpop .it:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+#c26-dockpop .it .ic { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--c-icoPri, #37352f); }
+#c26-dockpop .it .ic svg { width: 17px; height: 17px; }
+#c26-dockpop .it .lb { flex: 1; } #c26-dockpop .it .lb small { display: block; font-size: 11px; color: var(--c-texSec, #787774); }
+#c26-dockpop .it .k { font-size: 11px; color: var(--c-texTer, #a5a29a); }
+#c26-dockpop .dv { height: 1px; margin: 6px 4px; background: var(--ca-borSecTra, rgba(55,53,47,.09)); }
+html[data-c26-dock] #c26-fab { display: none !important; }`;
+  let dockPop = null;
+  function dockPopClose() { if (dockPop) dockPop.remove(); dockPop = null; const b = document.getElementById('cordi-b-at'); if (b) b.setAttribute('aria-expanded', 'false'); }
+  document.addEventListener('cordi:closepops', (e) => { if (e.detail !== 'at') dockPopClose(); });
+  function ensureDock() {
+    if (!document.getElementById('c26-dock-css')) { const st = document.createElement('style'); st.id = 'c26-dock-css'; st.textContent = AT_POP_CSS; (document.head || document.documentElement).appendChild(st); }
+    const more = document.querySelector('.notion-topbar-more-button'), share = document.querySelector('.notion-topbar-share-menu');
+    const anchor = share || more;
+    const bar = document.querySelector('.notion-topbar-action-buttons') || (anchor && anchor.parentElement);
+    if (!bar) { document.documentElement.removeAttribute('data-c26-dock'); return; }
+    let d = document.getElementById('cordi-dock');
+    if (!d) { d = document.createElement('div'); d.id = 'cordi-dock'; }
+    let ref = anchor; while (ref && ref.parentElement !== bar) ref = ref.parentElement;
+    if (d.parentElement !== bar || (ref && d.nextElementSibling !== ref)) bar.insertBefore(d, ref || bar.firstChild);
+    let b = document.getElementById('cordi-b-at');
+    if (!b) {
+      b = document.createElement('button'); b.id = 'cordi-b-at'; b.className = 'cd-b'; b.type = 'button'; b.style.setProperty('--cd-o', '2');
+      b.innerHTML = ICO_PL.aa; b.title = 'Atelier — 文字・書体（右クリックで Atelier 全体）';
+      b.setAttribute('aria-expanded', 'false'); b.setAttribute('data-no-passthrough', '1');
+      b.addEventListener('mousedown', (e) => e.preventDefault());
+      b.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); dockPopClose(); openAtelier(); });
+      b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); dockPopOpen(b); });
+    }
+    if (b.parentElement !== d) d.appendChild(b);
+    document.documentElement.setAttribute('data-c26-dock', '1');
+  }
+  function dockPopOpen(b) {
+    if (dockPop) { dockPopClose(); return; }
+    document.dispatchEvent(new CustomEvent('cordi:closepops', { detail: 'at' }));
+    const snap = snapshot(true);
+    dockPop = document.createElement('div'); dockPop.id = 'c26-dockpop'; dockPop.className = 'c26-ui'; dockPop.setAttribute('data-no-passthrough', '1');
+    const it = (a, ic, l, sub, k) => '<button class="it" data-da="' + a + '"><span class="ic">' + ic + '</span><span class="lb">' + l + (sub ? '<small>' + sub + '</small>' : '') + '</span>' + (k ? '<span class="k">' + k + '</span>' : '') + '</button>';
+    dockPop.innerHTML = '<div class="hd"><b>Atelier</b><span>文字・書体</span><i>²⁶ v' + VERSION + '</i></div>' +
+      it('text', ICO_PL.aa, 'テキストのパネル', '選んだ文字・段落の書体・大きさ・飾り', '') +
+      it('atelier', ICO_AT.atelier, 'Atelier 全体', '本文・ページ・DB・サイドバー・画面の書体と寸法', '⌃⌥A') +
+      it('pick', ICO_AT.pick, 'どこでも書式', '画面の要素をクリックして書式', '') +
+      it('pal', ICO_AT.palette, 'コマンドパレット', '', '⌃⌥P') +
+      it('reader', ICO_AT.reader, '縦書きリーダー', '', '⌃⌥R') +
+      it('marks', ICO_AT.marks, 'マーカー一覧', '', '⌃⌥M') +
+      it('toc', ICO_AT.toc, '目次', '', '') + it('focus', ICO_AT.focus, 'フォーカスモード', '', '') +
+      '<div class="dv"></div>' + it('ui', ICO_PL.aa, 'UI の書体…', 'メニュー・小窓・Notion の UI の書体', '') + it('settings', ICO_AT.atelier, '本文の設定', '', '⌃⌥S');
+    document.body.appendChild(dockPop);
+    const r = b.getBoundingClientRect();
+    dockPop.style.top = (r.bottom + 6) + 'px';
+    dockPop.style.left = Math.max(8, Math.min(innerWidth - dockPop.offsetWidth - 8, r.right - dockPop.offsetWidth + 4)) + 'px';
+    b.setAttribute('aria-expanded', 'true');
+    dockPop.addEventListener('mousedown', (e) => e.preventDefault());
+    dockPop.addEventListener('click', (e) => {
+      const x = e.target.closest('[data-da]'); if (!x) return;
+      const a = x.dataset.da; dockPopClose();
+      if (a === 'text') showPop(snap || snapshot(true) || { parts: [], leaf: null, rect: null });
+      else if (a === 'atelier') openAtelier();
+      else if (a === 'pick') atPickFromMenu();
+      else if (a === 'pal') palOpen();
+      else if (a === 'reader') readerOpen();
+      else if (a === 'marks') marksOpen();
+      else if (a === 'toc' || a === 'focus') atTool(a);
+      else if (a === 'settings') openPanel();
+      else if (a === 'ui') { openAtelier(); try { atTab = 'chrome'; atRefresh(); } catch (er) { /* noop */ } }
+    });
+    setTimeout(() => document.addEventListener('pointerdown', function off(e) { if (!dockPop) { document.removeEventListener('pointerdown', off, true); return; } if (dockPop.contains(e.target) || b.contains(e.target)) return; document.removeEventListener('pointerdown', off, true); dockPopClose(); }, true), 0);
+  }
+  document.addEventListener('cordi:run', (e) => { let d = e.detail; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (x) { d = { id: d }; } } if (!d) return; if (d.id === 'at.atelier') openAtelier(); else if (d.id === 'at.pop') { const b = document.getElementById('cordi-b-at'); if (b) dockPopOpen(b); } });
   function ensureFab() {
     if (!document.body) return;
+    try { ensureDock(); } catch (e) { /* noop */ }
     try { ensureLang(); } catch (e) { /* noop */ }
     let fab = document.getElementById('c26-fab');
     if (!fab) {
@@ -7645,6 +7772,12 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('menu', { text: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(.notranslate:not(.notion-record-icon), div:not(:has(*))):not(.notion-record-icon *)', icon: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(svg, .notion-record-icon)' }, 'ff fs fw isz igap', { g: 'メニュー・候補' }),
       ...kit('peek', { row: '.notion-peek-renderer' }, 'w rad', { g: 'サイドピーク', prop: { w: 'width:$px;max-width:calc(100vw - 80px)' }, l: { w: 'ピークの幅' } }),
       { p: 'scrollW', t: 'px', l: 'スクロールバーの太さ', d: 10, min: 0, max: 16, s: 1, g: 'スクロールバー' }
+    ] },
+    { id: 'uifont', sec: 'chrome', label: 'UI の書体', hl: '#cordi-dock, .cordi-pop, #c26-menu, .notion-sidebar-container', note: '三本柱（Atelier・Lumière・Scholar）と Orbit のメニュー・小窓・パネル・説明の札の書体、柱の名前の書体、Notion 自身の UI（サイドバー・上の帯・メニュー・吹き出し）の書体。空のままなら SF＋ヒラギノ角ゴ（Mac）。', ctl: [
+      { p: 'uiFont', t: 'font', l: '三本柱の UI', d: '', g: 'UI の書体' },
+      { p: 'uiDisplay', t: 'font', l: '柱の名前（Atelier・Lumière…）', d: '', g: 'UI の書体' },
+      { p: 'uiNotion', t: 'font', l: 'Notion の UI（サイドバー以外も）', d: '', g: 'UI の書体' },
+      { p: 'uiPalt', t: 'toggle', l: '和文を詰める（palt）', d: true, g: 'UI の書体' }
     ] }
   ];
   /* v35: 変数の設定に、どこが変わるか（w）と見本図の部品（f） */
@@ -7662,7 +7795,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     '--c33-cur-weight': ['scur', '今開いているページ・ビューの名前の太さ'], '--c33-cur-color': ['scur', '今開いているページ・ビューの名前の色'],
     '--c17-divider-height': ['', 'ビューのタブとタブの間の縦の区切り線の高さ'], '--c17-divider-space': ['', 'タブの区切り線の左右の空き'],
     pageW: ['body-w', '本文の列の最大の幅（Notion の既定は 708px）'], pageSide: ['body-side', '本文の左右の、最小の余白'],
-    baseSerif: ['', 'Atelier の「既定の書体」。書体を空にした所の明朝の代わり'], selCol: ['', 'マウスで文字を選んだ時の背景の色'], caretCol: ['', '入力中の縦棒（カーソル）の色']
+    baseSerif: ['', 'Atelier の「既定の書体」。書体を空にした所の明朝の代わり'],
+    uiFont: ['', '三本柱のメニュー・小窓・パネル・説明の札の書体（--cordi-ui）'], uiDisplay: ['', '小窓の見出しの「Lumière」「Scholar」、⋯ メニューの「Atelier」の書体'], uiNotion: ['', 'Notion 自身のサイドバー・上の帯・メニュー・吹き出しの書体（本文には当てない）'], uiPalt: ['', 'UI の和文の字間を詰める（約物の空きを詰めて引き締まる）'], selCol: ['', 'マウスで文字を選んだ時の背景の色'], caretCol: ['', '入力中の縦棒（カーソル）の色']
   };
   /* v35: 変数の設定ごとの「光らせる所」（場所全体ではなく、変わる要素そのもの） */
   const SB_ROW = '.notion-sidebar-container [data-c33-kind]:is([data-c33-kind="db"], [data-c33-kind="page"])';
@@ -7838,6 +7972,11 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const fam = (k) => (T[k] ? atFamily(T[k]) : '');
     const n = (k) => atNum(T[k]);
     if (T.baseSerif) css += ':root:root:root{--atelier-serif:' + atFamily(T.baseSerif) + ';}\n';
+    /* v57: UI の書体（三本柱の UI ／ 柱の名前 ／ Notion 自身の UI） */
+    if (fam('uiFont')) css += ':root:root:root{--cordi-ui:' + fam('uiFont') + ';}\n';
+    if (fam('uiDisplay')) css += ':root:root:root{--cordi-ui-display:' + fam('uiDisplay') + ';}\n';
+    if (fam('uiNotion')) css += ':is(.notion-sidebar-container, .notion-topbar, .notion-overlay-container, [role="tooltip"], .notion-collection-view-tab-button, .notion-table-view-header-cell):not(#c26a):not(#c26b) :is(div, span, a, input, button):not(.notion-record-icon):not(.notion-record-icon *):not([class*="c33-"]):not([data-c33-kind] *):not(#c16-root *) { font-family: ' + fam('uiNotion') + ' !important; }\n';
+    if (!(T.uiPalt === false || T.uiPalt === '0')) css += ':is(.notion-sidebar-container, .notion-topbar, .notion-overlay-container, .cordi-pop, .m9, .c26-ui){font-feature-settings:"palt" 1 !important;}\n';
     if (fam('relFont')) css += ':root:root:root{--atelier-rel-font:' + fam('relFont') + ';}\n';   // ¹⁴ の項目（インライン指定）もこの変数を読む
     /* フルDBの説明: 両端揃え（旧 ⁰⁶） */
     if (T.descJustify === '1' || T.descJustify === true) {
@@ -8859,6 +8998,15 @@ ${DEMO_CSS}
    *  v24.0.0  Atelier の道具（目次・フォーカスモード・文字数）
    * ============================================================ */
   if (!AT.tools || typeof AT.tools !== 'object') AT.tools = {};
+  const ICO_PL = {
+    lm: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="10" r="6.6"/><path d="M10 3.4a6.6 6.6 0 0 1 0 13.2z" fill="currentColor" stroke="none"/></svg>',
+    s38: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5H5.5l5 5.5-5 5.5h9"/></svg>',
+    c33: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35"><ellipse cx="10" cy="10" rx="7.6" ry="3.4" transform="rotate(-28 10 10)"/><circle cx="10" cy="10" r="2.3" fill="currentColor" stroke="none"/></svg>',
+    speak: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h2.5L10 5v10l-3.5-3H4z"/><path d="M13 7.5a3.5 3.5 0 0 1 0 5"/></svg>',
+    fx: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M9 4.5c-1.6 0-2.2.9-2.5 2.6L5 15.5M4 9h5M11 9l4.5 5M15.5 9L11 14"/></svg>',
+    pen: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l1-3.5L13.5 4l2.5 2.5L7.5 15z"/></svg>',
+    aa: '<svg viewBox="0 0 20 20" fill="currentColor"><text x="10" y="14.6" text-anchor="middle" font-size="12.5" font-family="Hiragino Mincho ProN, Georgia, serif" font-weight="600">Aa</text></svg>'
+  };
   function syncToolButtons() {
     for (const b of document.querySelectorAll('#c26-menu [data-a="attoc"], #c26-menu [data-a="atfocus"], #c26-menu [data-a="atcount"], .at-panel [data-tool]')) {
       const k = b.dataset.a ? b.dataset.a.slice(2) : b.dataset.tool;
@@ -8966,7 +9114,7 @@ html[data-at-focus][data-at-has-cur] .layout .notion-page-content > [data-block-
   new MutationObserver((recs) => {
     if (!AT.tools.toc && !AT.tools.count) return;
     for (const r of recs) { const t = r.target; if (t.nodeType === 1 && t.closest && (t.closest('#at-toc, #at-count, .at-panel, #c26-menu'))) continue; toolSoon(); return; }
-  }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  }).observe(document.documentElement || document, { childList: true, subtree: true, characterData: true });
   document.addEventListener('DOMContentLoaded', () => setTimeout(atApplyTools, 800), { once: true });
   if (document.readyState !== 'loading') setTimeout(atApplyTools, 800);
 

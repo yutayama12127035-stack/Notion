@@ -2079,7 +2079,7 @@
 @keyframes cordi-pop-in { from { opacity: 0; transform: translateY(-3px) scale(.985); } to { opacity: 1; transform: none; } }
 .cordi-pop * { box-sizing: border-box; }
 .cordi-pop .cp-hd { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px 6px; }
-.cordi-pop .cp-hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cormorant Garamond", "Hoefler Text", "Hiragino Mincho ProN", Georgia, serif); letter-spacing: .03em; }
+.cordi-pop .cp-hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cordivestium Group Header", "Baskerville", "Cormorant Garamond", "Hiragino Mincho ProN", Georgia, serif); letter-spacing: .03em; }
 .cordi-pop .cp-hd span { color: var(--c-texSec, #787774); font-size: 11.5px; }
 .cordi-pop .cp-hd i { margin-inline-start: auto; font-style: normal; font-size: 10.5px; color: var(--c-texTer, #a5a29a); }
 .cordi-pop .cp-sec { padding: 10px 10px 4px; font-size: 11px; font-weight: 600; color: var(--c-texSec, #787774); letter-spacing: .02em; }
@@ -2907,6 +2907,7 @@
   setInterval(() => { if (location.href !== lastHref) { lastHref = location.href; readScroller = null; } readingWatch(); }, 1000);
   restoreCf();
   /* v11: 上の帯の Σ・用語の印・ほかの柱への知らせ */
+  try { document.documentElement.setAttribute('data-cordi-s38', VERSION); } catch (e) { /* noop */ }   // ²⁶ の ⋯ メニューが「入っている柱」を知る印
   const bootUi = () => {
     dock(); announce();
     new MutationObserver(() => { const b = document.getElementById('cordi-b-s38'); if (!b || !b.isConnected) dock(); glossSoon(); }).observe(document.body, { childList: true, subtree: true });

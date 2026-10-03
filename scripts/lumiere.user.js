@@ -1345,7 +1345,7 @@ html:hover #lm-fab { opacity: .55; }
 @keyframes cordi-pop-in { from { opacity: 0; transform: translateY(-3px) scale(.985); } to { opacity: 1; transform: none; } }
 .cordi-pop * { box-sizing: border-box; }
 .cordi-pop .cp-hd { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px 6px; }
-.cordi-pop .cp-hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cormorant Garamond", "Hoefler Text", "Hiragino Mincho ProN", Georgia, serif); letter-spacing: .03em; }
+.cordi-pop .cp-hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cordivestium Group Header", "Baskerville", "Cormorant Garamond", "Hiragino Mincho ProN", Georgia, serif); letter-spacing: .03em; }
 .cordi-pop .cp-hd span { color: var(--c-texSec, #787774); font-size: 11.5px; }
 .cordi-pop .cp-hd i { margin-inline-start: auto; font-style: normal; font-size: 10.5px; color: var(--c-texTer, #a5a29a); }
 .cordi-pop .cp-sec { padding: 10px 10px 4px; font-size: 11px; font-weight: 600; color: var(--c-texSec, #787774); letter-spacing: .02em; }
@@ -1648,8 +1648,10 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
     progressSetup();
   }
   apply();   // document-start: 最初の描画から色を当てる（白く光ってから変わるのを防ぐ）
+  try { document.documentElement.setAttribute('data-cordi-lm', VERSION); } catch (e) { /* noop */ }   // ²⁶ の ⋯ メニューが「入っている柱」を知る印
   curtainBoot();   // v11: 出来上がるまで幕
   const boot = () => {
+    document.documentElement.setAttribute('data-cordi-lm', VERSION);
     apply(); fab(); cordiCss(); tipsInstall(); lmDock(); announce();
     /* 上の帯は Notion がよく作り直す → すぐ置き直す */
     new MutationObserver(() => { if (!document.getElementById('cordi-b-lm') || !document.getElementById('cordi-b-lm').isConnected) lmDock(); }).observe(document.body, { childList: true, subtree: true });
