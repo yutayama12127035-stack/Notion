@@ -238,6 +238,7 @@
       sheetWidth: '',      // 本文の紙の幅（空 = Notion のまま）
       tableStyle: 'editorial',   // editorial（誌面）/ ledger（罫線帳）/ cards（行を浮かせる）
       colLines: 'soft',          // v12: 縦の罫線（列の境目）none / hair / soft / strong
+      lastColLine: true,         // v13: 最後の列の右の線（表の右端の縦線）
       boardCols: 0,              // v12: ボードを折り返す時の 1 段の列の数（0 = 画面の幅に合わせる）
       zebra: false,
       galleryTitle: 'below',     // below / overlay
@@ -994,6 +995,8 @@ html [data-lm-bw-v] + div[style*="clear: both"]${B} { display: none !important; 
     try {
       if (on('gallery')) css += '\n/* ── galleryStyle ── */' + CSS.galleryStyle(p) + '\n';
       css += '\n/* ── focus（⌃⌥F）── */' + CSS.focus(p) + '\n';
+      /* v13: 最後の列の右の線（「表を誌面に」を切っていても効く） */
+      if (T('lastColLine') === false) css += '\n/* ── lastColLine ── */\nhtml .notion-table-view .notion-table-view-cell:last-child' + B + ', html .notion-table-view div:last-child > .notion-table-view-header-cell' + B + ' { border-inline-end-color: transparent !important; box-shadow: none !important; }\n';
     } catch (e) { ST.lastError = 'extra: ' + (e && e.message); }
     return css;
   }
@@ -1400,6 +1403,7 @@ html:hover #lm-fab { opacity: .55; }
       h += '<div class="lm-sec">表・ギャラリー</div>';
       h += sel('tableStyle', '表の形', [['editorial', '誌面（縦線なし・細い横線）'], ['ledger', '罫線帳（細い縦線・見出しに太線）'], ['cards', '行を浮かせる（1 行ずつカード）']]);
       h += sel('colLines', '縦の罫線（列の境目）', [['soft', 'ふつう'], ['hair', 'ごく細く淡く'], ['strong', 'はっきり'], ['none', '引かない']]);
+      h += '<div class="lm-row"><div class="t"><b>最後の列の右の線</b><small>表の右端（いちばん右の列の右）の縦線</small></div><button class="lm-sw2' + (S.tune.lastColLine !== false ? ' on' : '') + '" data-tb="lastColLine"></button></div>';
       h += '<div class="lm-row"><div class="t"><b>表を縞にする</b><small>1 行おきに淡い面</small></div><button class="lm-sw2' + (S.tune.zebra ? ' on' : '') + '" data-tb="zebra"></button></div>';
       h += rng('density', '行の高さ', 0.6, 1.6, 0.05);
       h += sel('galleryStyle', 'ギャラリーの形', [['card', 'カード（浮き上がる）'], ['polaroid', 'ポラロイド（少し傾けて貼る）'], ['frame', '額装（白い余白と額縁）'], ['shelf', '本棚（乗せると表紙が開く）'], ['flat', '平ら（線だけ）']]);
@@ -1813,6 +1817,260 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
     de.setAttribute('data-lm-curtain', 'nav');
     curtainWait('nav', 900);
   }, true);
+
+  /* ============================================================
+   *  Cordivestium × Notion の「ビューの設定」（View settings）
+   *  — ³⁶ ³⁷ ³⁸ に同じ部品が入っていて、どれか 1 本だけでも動く。段は Notion の行を写して作るので、見た目は Notion のまま。
+   *    ・where: 'afterGroup' … Notion の「Group」のすぐ下（サブグループ）
+   *    ・where: 'section'    … 「Data source settings」の前に Cordivestium の段を 1 つ作り、その中へ
+   *    行の右は 値（文字＋›）か スイッチ。押すと onClick（小窓は vsSub で Notion の小メニューと同じ形に）
+   * ============================================================ */
+  function cordiVS(rows) {
+    const HEAD_RE = /^(View settings|ビューの設定|ビュー設定|表示設定)$/;
+    const GROUP_RE = /^(Group|グループ|グループ化)$/;
+    const LAYOUT_RE = /^(Layout|レイアウト)$/;
+    const DS_RE = /^(Data source settings|データソースの設定|データソース設定|データベースの設定)$/;
+    const SW_CSS_ID = 'cordi-vs-css';
+    let lastView = null;
+    const VIEW_Q = '.notion-table-view, .notion-board-view, .notion-gallery-view, .notion-list-view, .notion-calendar-view, .notion-timeline-view';
+    document.addEventListener('pointerdown', (e) => {
+      const t = e.target; if (!t || !t.closest) return;
+      if (t.closest('.notion-overlay-container')) return;
+      const blk = t.closest('.notion-collection_view-block, .notion-peek-renderer, .notion-frame');
+      if (!blk) return;
+      const inl = t.closest('.notion-collection_view-block');
+      const v = inl ? inl.querySelector(VIEW_Q) : blk.querySelector(VIEW_Q);
+      if (v) lastView = v;
+    }, true);
+    const viewNow = () => (lastView && lastView.isConnected ? lastView : document.querySelector('.notion-frame ' + VIEW_Q.split(', ').join(', .notion-frame ')));
+    const txt = (el) => String(el && el.textContent || '').replace(/\s+/g, ' ').trim();
+    function css() {
+      if (document.getElementById(SW_CSS_ID)) return;
+      const st = document.createElement('style'); st.id = SW_CSS_ID;
+      st.textContent = `
+[data-cordi-vs-row] .cvs-sw { position: relative; width: 26px; height: 14px; border-radius: 44px; background: var(--ca-graBacSecTra, rgba(135,131,120,.3)); transition: background .2s; flex: none; margin-inline-start: 6px; }
+[data-cordi-vs-row] .cvs-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15,15,15,.2); transition: transform .2s ease-out; }
+[data-cordi-vs-row][data-on] .cvs-sw { background: var(--c-intBlu, #2383e2); }
+[data-cordi-vs-row][data-on] .cvs-sw::after { transform: translateX(12px); }
+[data-cordi-vs-row] .cvs-ico { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+[data-cordi-vs-row] .cvs-ico svg { width: 18px; height: 18px; display: block; }
+#cordi-vs-sub { position: fixed; z-index: 2147483000; display: flex; flex-direction: column; overflow: hidden; background: var(--c-popBac, var(--c-bacPri, #fff)); color: var(--c-texPri, #37352f); border-radius: 10px; box-shadow: var(--c-shaOutMd, 0 0 0 1px rgba(15,15,15,.05), 0 3px 6px rgba(15,15,15,.1), 0 9px 24px rgba(15,15,15,.2)); font-size: 14px; animation: cvs-in .14s ease-out; }
+@keyframes cvs-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+#cordi-vs-sub .cvs-hd { display: flex; align-items: center; gap: 6px; height: 42px; padding: 14px 12px 6px 10px; flex: none; }
+#cordi-vs-sub .cvs-back { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; color: var(--c-icoSec, rgba(55,53,47,.45)); }
+#cordi-vs-sub .cvs-back:hover { background: var(--ca-butHovBac, rgba(55,53,47,.06)); }
+#cordi-vs-sub .cvs-ttl { color: var(--c-texSec, rgba(55,53,47,.65)); font-size: 12px; line-height: 16px; font-weight: 500; flex: 1; }
+#cordi-vs-sub .cvs-bd { overflow: auto; padding: 4px 0 8px; flex: 1; }
+#cordi-vs-sub .cvs-sec { padding: 10px 14px 4px; color: var(--c-texSec, rgba(55,53,47,.65)); font-size: 12px; font-weight: 500; }
+#cordi-vs-sub .cvs-it { display: flex; align-items: center; gap: 8px; min-height: 30px; margin: 0 4px; padding: 0 8px; border-radius: 6px; cursor: pointer; user-select: none; }
+#cordi-vs-sub .cvs-it:hover { background: var(--ca-butHovBac, rgba(55,53,47,.06)); }
+#cordi-vs-sub .cvs-it .cvs-mk { width: 20px; display: flex; align-items: center; justify-content: center; color: var(--c-icoSec, rgba(55,53,47,.45)); flex: none; font-size: 13px; }
+#cordi-vs-sub .cvs-it .cvs-lb { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#cordi-vs-sub .cvs-it .cvs-ck { color: var(--c-texPri, #37352f); flex: none; }
+#cordi-vs-sub .cvs-it select { font: inherit; font-size: 13px; color: var(--c-texSec, rgba(55,53,47,.65)); background: transparent; border: 0; max-width: 130px; cursor: pointer; }
+#cordi-vs-sub .cvs-note { padding: 4px 14px 2px; color: var(--c-texTer, rgba(55,53,47,.45)); font-size: 12px; line-height: 1.5; }
+#cordi-vs-sub .cvs-div { height: 1px; margin: 6px 0; background: var(--ca-borPriTra, rgba(55,53,47,.09)); }
+`;
+      (document.head || document.documentElement).appendChild(st);
+    }
+    function panels() {
+      const out = [];
+      for (const h of document.querySelectorAll('.notion-overlay-container div[style*="font-size: 12px"]')) {
+        if (h.children.length || !HEAD_RE.test(txt(h))) continue;
+        let p = h.parentElement;
+        while (p && p.parentElement && !p.querySelector('[role="menuitem"]')) p = p.parentElement;
+        if (p) out.push(p);
+      }
+      return out;
+    }
+    const itemLabel = (mi) => txt(mi.querySelector('[role="presentation"]'));
+    function ctxOf(panel) {
+      const items = [...panel.querySelectorAll('[role="menuitem"]')].filter((m) => !m.closest('[data-cordi-vs-row]'));
+      const lay = items.find((m) => LAYOUT_RE.test(itemLabel(m)));
+      const grp = items.find((m) => GROUP_RE.test(itemLabel(m)));
+      const layout = lay ? txt(lay.querySelector('div[style*="color: var(--c-texTer)"]')) : '';
+      return { panel, items, grp, layout, view: viewNow(), grouped: !!(grp && txt(grp.querySelector('div[style*="color: var(--c-texTer)"]')) && !/^(None|なし)$/i.test(txt(grp.querySelector('div[style*="color: var(--c-texTer)"]')))) };
+    }
+    function makeRow(tpl, r) {
+      const row = tpl.cloneNode(true);
+      row.removeAttribute('tabindex');
+      row.setAttribute('data-cordi-vs-row', r.id);
+      row.setAttribute('data-cordi-order', String(r.order || 50));
+      for (const x of row.querySelectorAll('[data-popup-origin]')) x.removeAttribute('data-popup-origin');
+      const ico = row.querySelector(':scope > div > div:first-child');
+      if (ico) ico.innerHTML = '<span class="cvs-ico">' + (r.icon || '') + '</span>';
+      const lb = row.querySelector('[role="presentation"]');
+      if (lb) lb.textContent = r.label;
+      row.addEventListener('pointerdown', (e) => { e.stopPropagation(); }, true);
+      row.addEventListener('mousedown', (e) => { e.stopPropagation(); }, true);
+      row.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const panel = panels().find((p) => p.contains(row)); if (!panel) return; try { r.onClick(ctxOf(panel), row); } catch (er) { console.warn('[cordi-vs]', er); } setTimeout(() => upd(row, r, ctxOf(panel)), 30); }, true);
+      return row;
+    }
+    function upd(row, r, ctx) {
+      const right = row.querySelector('div[style*="color: var(--c-texTer)"]');
+      if (!right) return;
+      const valBox = right.firstElementChild;
+      const chev = right.querySelector('svg');
+      if (r.toggle) {
+        const on = !!r.toggle(ctx);
+        row.toggleAttribute('data-on', on);
+        if (valBox) valBox.textContent = '';
+        if (chev) chev.style.display = 'none';
+        let sw = right.querySelector('.cvs-sw');
+        if (!sw) { sw = document.createElement('span'); sw.className = 'cvs-sw'; right.appendChild(sw); }
+      } else if (valBox) {
+        const v = r.value ? r.value(ctx) : '';
+        if (valBox.textContent !== (v || '')) valBox.textContent = v || '';
+      }
+    }
+    function section(panel, ctx) {
+      let sec = panel.querySelector('[data-cordi-vs-sec]');
+      if (sec) return sec;
+      const dsh = [...panel.querySelectorAll('div')].find((d) => !d.children.length && DS_RE.test(txt(d)));
+      const block2 = dsh && dsh.closest('div[style*="margin-top"]');
+      const block1 = ctx.grp && ctx.grp.parentElement;
+      if (!block1) return null;
+      sec = block2 ? block2.cloneNode(false) : document.createElement('div');
+      sec.setAttribute('data-cordi-vs-sec', '1');
+      if (!block2) sec.style.marginTop = '4px';
+      const dv = block2 && block2.firstElementChild && !txt(block2.firstElementChild) ? block2.firstElementChild.cloneNode(true) : null;
+      if (dv) sec.appendChild(dv); else { const d = document.createElement('div'); d.style.cssText = 'height:1px;margin:0 12px 4px;background:var(--ca-borPriTra)'; sec.appendChild(d); }
+      const hrow = dsh ? dsh.parentElement.cloneNode(false) : document.createElement('div');
+      if (!dsh) hrow.style.cssText = 'padding:4px 14px 2px';
+      const ht = dsh ? dsh.cloneNode(false) : document.createElement('div');
+      if (!dsh) ht.style.cssText = 'color:var(--c-texSec);font-size:12px;font-weight:500;line-height:16px';
+      ht.textContent = 'Cordivestium';
+      hrow.appendChild(ht);
+      sec.appendChild(hrow);
+      if (block2 && block2.parentElement) block2.parentElement.insertBefore(sec, block2);
+      else block1.parentElement.insertBefore(sec, block1.nextSibling);
+      return sec;
+    }
+    function place(parent, row, before) {
+      const o = +row.getAttribute('data-cordi-order');
+      const sibs = [...parent.querySelectorAll(':scope > [data-cordi-vs-row]')];
+      const nxt = sibs.find((s) => s !== row && +s.getAttribute('data-cordi-order') > o);
+      if (nxt) parent.insertBefore(row, nxt); else if (before) parent.insertBefore(row, before); else parent.appendChild(row);
+    }
+    function scan() {
+      /* 前の画面（小メニューに替わった時など）に残った段を片づける（自分の行と、空の段だけ） */
+      const ps = panels();
+      const mine = new Set(rows.map((r) => r.id));
+      for (const el of document.querySelectorAll('[data-cordi-vs-row]')) if (mine.has(el.getAttribute('data-cordi-vs-row')) && !ps.some((p) => p.contains(el))) el.remove();
+      for (const el of document.querySelectorAll('[data-cordi-vs-sec]')) if (!ps.some((p) => p.contains(el)) || !el.querySelector('[data-cordi-vs-row]')) el.remove();
+      if (!ps.length) { closeSub(true); return; }
+      css();
+      for (const panel of ps) {
+        const ctx = ctxOf(panel);
+        if (!ctx.grp) continue;
+        for (const r of rows) {
+          const show = r.show ? !!r.show(ctx) : true;
+          let row = panel.querySelector('[data-cordi-vs-row="' + r.id + '"]');
+          if (!show) { if (row) row.remove(); continue; }
+          if (!row) {
+            row = makeRow(ctx.grp, r);
+            if (r.where === 'afterGroup') { ctx.grp.parentElement.insertBefore(row, ctx.grp.nextSibling); }
+            else { const sec = section(panel, ctx); if (!sec) continue; place(sec, row); }
+          }
+          upd(row, r, ctx);
+        }
+      }
+    }
+    let qt = 0;
+    const soon = () => { if (!qt) qt = setTimeout(() => { qt = 0; try { scan(); } catch (e) { /* noop */ } }, 90); };
+    const start = () => {
+      new MutationObserver((ms) => {
+        for (const m of ms) { if (m.target.closest && m.target.closest('#cordi-vs-sub')) continue; if (m.target.closest && m.target.closest('.notion-overlay-container')) { soon(); return; } for (const n of m.addedNodes) if (n.nodeType === 1 && (n.classList.contains('notion-overlay-container') || n.querySelector && n.querySelector('.notion-overlay-container'))) { soon(); return; } }
+      }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    };
+    if (document.body) start(); else document.addEventListener('DOMContentLoaded', start, { once: true });
+    /* 小メニュー（Notion のビューの設定と同じ場所・同じ形。← で戻る・外を押すと閉じる） */
+    let sub = null;
+    function closeSub(all) { if (sub) { sub.remove(); sub = null; } void all; }
+    function vsSub(ctx, title, build) {
+      closeSub();
+      css();
+      const r = ctx.panel.getBoundingClientRect();
+      sub = document.createElement('div');
+      sub.id = 'cordi-vs-sub';
+      sub.setAttribute('data-no-passthrough', '1');
+      sub.style.left = r.left + 'px'; sub.style.top = r.top + 'px'; sub.style.width = r.width + 'px'; sub.style.height = r.height + 'px';
+      sub.innerHTML = '<div class="cvs-hd"><div class="cvs-back" title="戻る"><svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M9.278 3.238a.625.625 0 0 1 .884.884L6.284 8l3.878 3.878a.625.625 0 0 1-.884.884l-4.32-4.32a.625.625 0 0 1 0-.884z"/></svg></div><div class="cvs-ttl"></div></div><div class="cvs-bd"></div>';
+      sub.querySelector('.cvs-ttl').textContent = title;
+      const bd = sub.querySelector('.cvs-bd');
+      const api = {
+        sec(t) { const d = document.createElement('div'); d.className = 'cvs-sec'; d.textContent = t; bd.appendChild(d); return d; },
+        note(t) { const d = document.createElement('div'); d.className = 'cvs-note'; d.textContent = t; bd.appendChild(d); return d; },
+        div() { const d = document.createElement('div'); d.className = 'cvs-div'; bd.appendChild(d); },
+        item(label, o) {
+          o = o || {};
+          const d = document.createElement('div'); d.className = 'cvs-it';
+          d.innerHTML = '<span class="cvs-mk"></span><span class="cvs-lb"></span>';
+          d.querySelector('.cvs-mk').innerHTML = o.mark || '';
+          d.querySelector('.cvs-lb').textContent = label;
+          if (o.on) d.insertAdjacentHTML('beforeend', '<svg class="cvs-ck" viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M12.98 3.92a.625.625 0 0 1 .1.88l-6 7.5a.625.625 0 0 1-.93.05l-3-3a.625.625 0 0 1 .88-.88l2.51 2.5 5.56-6.95a.625.625 0 0 1 .88-.1"/></svg>');
+          if (o.select) {
+            const s = document.createElement('select');
+            for (const [v, l] of o.select.options) { const op = document.createElement('option'); op.value = v; op.textContent = l; if (v === o.select.value) op.selected = true; s.appendChild(op); }
+            s.addEventListener('change', () => o.select.onChange(s.value));
+            s.addEventListener('click', (e) => e.stopPropagation());
+            d.appendChild(s);
+          }
+          if (o.click) d.addEventListener('click', () => o.click());
+          bd.appendChild(d); return d;
+        },
+        clear() { bd.textContent = ''; },
+        close: closeSub,
+        body: bd
+      };
+      sub.querySelector('.cvs-back').addEventListener('click', () => closeSub());
+      for (const ev of ['pointerdown', 'mousedown', 'click', 'keydown']) sub.addEventListener(ev, (e) => e.stopPropagation());
+      document.body.appendChild(sub);
+      build(api);
+      const off = (e) => { if (!sub) { document.removeEventListener('pointerdown', off, true); return; } if (!sub.contains(e.target)) { closeSub(); document.removeEventListener('pointerdown', off, true); } };
+      setTimeout(() => document.addEventListener('pointerdown', off, true), 0);
+      const kd = (e) => { if (e.key === 'Escape' && sub) { e.stopPropagation(); closeSub(); document.removeEventListener('keydown', kd, true); } };
+      document.addEventListener('keydown', kd, true);
+      const follow = () => { if (!sub) return; if (!ctx.panel.isConnected) { closeSub(); return; } const q = ctx.panel.getBoundingClientRect(); sub.style.left = q.left + 'px'; sub.style.top = q.top + 'px'; sub.style.height = q.height + 'px'; requestAnimationFrame(follow); };
+      requestAnimationFrame(follow);
+      return api;
+    }
+    return { scan, sub: vsSub, view: viewNow, close: closeSub };
+  }
+
+  /* v13: Notion の「ビューの設定」の Cordivestium の段 — 表・ボード・ギャラリーの見た目をその場で */
+  const VSI = (d) => '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="' + d + '"/></svg>';
+  const IS_TABLE = (c) => /^(Table|表|テーブル)$/i.test(c.layout || '');
+  const IS_BOARD = (c) => /^(Board|ボード)$/i.test(c.layout || '');
+  const IS_GAL = (c) => /^(Gallery|ギャラリー)$/i.test(c.layout || '');
+  const lmPick = (ctx, title, key, opts, after) => LM_VS.sub(ctx, title, (api) => {
+    const draw = () => { api.clear(); for (const [v, l] of opts) api.item(l, { on: String(S.tune[key]) === String(v), click: () => { S.tune[key] = typeof S.tune[key] === 'number' ? +v : v; if (after) after(); save(); apply(); draw(); } }); };
+    draw();
+  });
+  const TSTY = [['editorial', '誌面（細い横線）'], ['ledger', '罫線帳（見出しに太線）'], ['cards', '行を浮かせる']];
+  const CLINES = [['none', 'なし'], ['hair', '淡く'], ['soft', 'ふつう'], ['strong', 'はっきり']];
+  const LM_VS = cordiVS([
+    { id: 'lm.tableStyle', where: 'section', order: 20, label: '表の見た目', icon: VSI('M3.5 4.5h13v11h-13zM3.5 8h13M8.5 4.5v11'), show: IS_TABLE,
+      value: () => (on('tables') ? (TSTY.find((x) => x[0] === T('tableStyle')) || ['', ''])[1].replace(/（.*/, '') : 'Notion のまま'),
+      onClick: (ctx) => lmPick(ctx, '表の見た目', 'tableStyle', TSTY, () => { S.mods.tables = true; }) },
+    { id: 'lm.colLines', where: 'section', order: 21, label: '縦の罫線', icon: VSI('M6 4v12M10 4v12M14 4v12'), show: IS_TABLE,
+      value: () => (CLINES.find((x) => x[0] === (T('colLines') || 'soft')) || ['', ''])[1],
+      onClick: (ctx) => lmPick(ctx, '縦の罫線（列の境目）', 'colLines', CLINES, () => { S.mods.tables = true; }) },
+    { id: 'lm.lastCol', where: 'section', order: 22, label: '最後の列の右の線', icon: VSI('M3.5 4.5h10M3.5 15.5h10M3.5 10h10M15.5 3.5v13'), show: IS_TABLE,
+      toggle: () => T('lastColLine') !== false, onClick: () => { S.tune.lastColLine = T('lastColLine') === false; save(); apply(); } },
+    { id: 'lm.zebra', where: 'section', order: 23, label: '縞にする（1 行おき）', icon: VSI('M3.5 5h13M3.5 10h13M3.5 15h13'), show: IS_TABLE,
+      toggle: () => !!T('zebra'), onClick: () => { S.tune.zebra = !T('zebra'); S.mods.tables = true; save(); apply(); } },
+    { id: 'lm.boardWrap', where: 'section', order: 30, label: 'ボードを折り返す', icon: VSI('M3.5 4h4v5h-4zM8.5 4h4v5h-4zM13.5 4h3v5h-3zM3.5 11h4v5h-4zM8.5 11h4v5h-4z'), show: IS_BOARD,
+      toggle: () => on('boardWrap'), onClick: () => { S.mods.boardWrap = !on('boardWrap'); save(); apply(); } },
+    { id: 'lm.boardCols', where: 'section', order: 31, label: '1 段の列の数', icon: VSI('M4 5h3v10H4zM8.5 5h3v10h-3zM13 5h3v10h-3z'), show: (c) => IS_BOARD(c) && on('boardWrap'),
+      value: () => (+T('boardCols') ? T('boardCols') + ' 列' : '画面に合わせる'),
+      onClick: (ctx) => lmPick(ctx, '1 段の列の数', 'boardCols', [[0, '画面の幅に合わせる'], [2, '2 列'], [3, '3 列'], [4, '4 列'], [5, '5 列'], [6, '6 列'], [8, '8 列']]) },
+    { id: 'lm.galleryStyle', where: 'section', order: 40, label: 'ギャラリーの形', icon: VSI('M3.5 4h5.5v5.5H3.5zM11 4h5.5v5.5H11zM3.5 11.5h5.5V17H3.5zM11 11.5h5.5V17H11z'), show: IS_GAL,
+      value: () => (on('gallery') ? (GSTYLES.find((x) => x[0] === T('galleryStyle')) || ['', ''])[1] : 'Notion のまま'),
+      onClick: (ctx) => lmPick(ctx, 'ギャラリーの形', 'galleryStyle', GSTYLES, () => { S.mods.gallery = true; }) },
+    { id: 'lm.galleryTitle', where: 'section', order: 41, label: '題名を表紙の上に', icon: VSI('M3.5 4h13v12h-13zM5.5 12.5h7'), show: IS_GAL,
+      toggle: () => T('galleryTitle') === 'overlay', onClick: () => { S.tune.galleryTitle = T('galleryTitle') === 'overlay' ? 'below' : 'overlay'; S.mods.gallery = true; save(); apply(); } }
+  ]);
 
   /* ============================================================
    *  13. 動かす

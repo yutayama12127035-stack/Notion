@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      24.2.0
+// @version      25.2.0
 // @description  v3.1.0: 段々が実物の Notion で効いていなかったのを作り直し — 本物のアイコンの位置を測り、アイコンの入れ物を直接ずらす（¹⁶・Stylus の字下げと取り合わない・毎回差を測るので必ず目標で止まる）。■のアイコン＝★の名前の 1 文字目、●＝■の名前の 1 文字目、▲＝●の名前の 1 文字目。v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -91,7 +91,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '24.2.0';
+  const VERSION = '25.2.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -591,7 +591,7 @@ ${icons}
    * ============================================================ */
   /* v24.2.0: 輪を出すのを既定に（前の版でしまっていても、この版で一度だけ出し直す。以降はしまえば覚える） */
   const OB_KEY = 'c33.orbit.v2';
-  const OB = Object.assign({ on: true, sel: '', itemH: 54, pin: false, hideEmpty: false, all: true }, (() => { try { const v2 = localStorage.getItem(OB_KEY); if (v2) return JSON.parse(v2); const v1 = JSON.parse(localStorage.getItem('c33.orbit.v1') || '{}'); v1.on = true; return v1; } catch (e) { return {}; } })());
+  const OB = Object.assign({ on: true, sel: '', itemH: 54, pin: false, hideEmpty: false, all: true, spin: false, fix: 0 }, (() => { try { const v2 = localStorage.getItem(OB_KEY); if (v2) return JSON.parse(v2); const v1 = JSON.parse(localStorage.getItem('c33.orbit.v1') || '{}'); v1.on = true; return v1; } catch (e) { return {}; } })());
   delete OB.railW;
   const obSave = () => { try { localStorage.setItem(OB_KEY, JSON.stringify(OB)); } catch (e) { /* noop */ } };
   const RAIL_W = 58, RAIL_X = 184;
@@ -630,6 +630,7 @@ ${icons}
     const sel = OB.sel && OB.sel !== ALL ? CSS.escape(OB.sel) : '';
     const de = document.documentElement;
     de.toggleAttribute('data-c33-orbit', !!OB.on);
+    if (OB.on && OB.fix && !de.style.getPropertyValue('--c33-rail-fix')) de.style.setProperty('--c33-rail-fix', OB.fix + 'px');
     /* 広い輪は、サイドバーに十分な幅がある時だけ（狭いと一覧が潰れる）。狭い時は乗せた時だけ広がる */
     const hw = obHost ? obHost.getBoundingClientRect().width : 0;
     de.toggleAttribute('data-c33-orbit-pin', !!(OB.on && OB.pin && hw >= RAIL_X + 200));
@@ -663,6 +664,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-orbit .ob-it.empty:not(.sel) { opacity: .42 !important; }
 #c33-orbit .ob-ic { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 19px; line-height: 1; }
 #c33-orbit .ob-lb { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 9.5px; font-weight: 600; letter-spacing: .01em; text-align: center; }
+/* v25: 細い輪でも名前を全部（JS が名前ごとに大きさを決める。長い名前は 2 行に・ハイフンで切る） */
+#c33-orbit:not(.exp):not(.pin) .ob-lb[data-fit] { font-size: var(--ob-fs, 9.5px); text-overflow: clip; letter-spacing: 0; }
+#c33-orbit:not(.exp):not(.pin) .ob-lb[data-fit="2"] { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.08; hyphens: manual; -webkit-hyphens: manual; overflow-wrap: anywhere; }
+#c33-orbit:not(.exp):not(.pin) .ob-it:has(.ob-lb[data-fit="2"]) { grid-template-rows: 22px auto; row-gap: 2px; }
 #c33-orbit.exp .ob-lb, html[data-c33-orbit-pin] #c33-orbit .ob-lb { font-size: 12.5px; font-weight: 500; text-align: left; letter-spacing: .005em; }
 #c33-orbit .ob-ct { position: absolute; top: 3px; left: calc(50% + 5px); min-width: 13px; height: 13px; padding: 0 3.5px; box-shadow: 0 0 0 1.5px var(--c-bacSec, #f7f6f3); border-radius: 999px; display: flex; align-items: center; justify-content: center;
   font: 600 9px/1 var(--c33-ui); font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--c-texPri, #000) 7%, transparent); color: var(--c-texSec, #777); }
@@ -729,6 +734,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       + it('pin', '名前を常に出す（サイドバーが広い時）', OB.pin)
       + it('all', '「すべて」を輪に入れる', OB.all !== false)
       + it('hideEmpty', '中身の無い大分類を隠す', OB.hideEmpty)
+      + it('spin', '選んだ大分類を一番上へ回す', !!OB.spin)
       + '<hr>' + it('size', '項目の高さ: ' + (OB.itemH >= 60 ? 'ゆったり' : OB.itemH <= 46 ? '詰める' : 'ふつう'), false)
       + it('next', '次の大分類へ', false, '⌃⌥↓') + it('prev', '前の大分類へ', false, '⌃⌥↑');
     document.body.appendChild(m);
@@ -795,14 +801,37 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       else if (g.mask && g.mask !== 'none') { ic.style.webkitMaskImage = g.mask; ic.style.maskImage = g.mask; ic.style.webkitMaskSize = ic.style.maskSize = '20px 20px'; ic.style.webkitMaskRepeat = ic.style.maskRepeat = 'no-repeat'; ic.style.webkitMaskPosition = ic.style.maskPosition = 'center'; ic.style.background = g.tint && !/rgba\(0, 0, 0, 0\)|transparent/.test(g.tint) ? g.tint : 'currentColor'; }
       else if (g.bgi && g.bgi !== 'none') { ic.style.background = g.bgi + ' center / 20px 20px no-repeat'; }
       if (g.tint && !/rgba\(0, 0, 0, 0\)|transparent/.test(g.tint)) it.style.setProperty('--ob-tint', g.tint);
-      it.querySelector('.ob-lb').textContent = g.label;
+      { const lb = it.querySelector('.ob-lb'); lb.textContent = g.label; lb.__name = g.label; }
       it.querySelector('.ob-ct').textContent = g.cnt && g.cnt !== '0' ? g.cnt : '';
       it.classList.toggle('empty', g.cnt === '0');
       it.onclick = (e) => { e.stopPropagation(); obSelect(g.gid); };
     });
     const si = gs.findIndex((g) => g.gid === OB.sel);
-    if (!obEl.__init) { obOff = obTarget = Math.max(0, si); obEl.__init = 1; }
+    if (!obEl.__init) { obOff = obTarget = OB.spin ? Math.max(0, si) : 0; obEl.__init = 1; }
+    obFit(); setTimeout(obFit, 400);
     obPaint();
+  }
+  /* v25: 名前の大きさを決める（1 行で入るなら縮めて 1 行、7.5px より小さくなるなら 2 行） */
+  let obCv = null;
+  function obFit() {
+    if (!obEl) return;
+    obCv = obCv || document.createElement('canvas').getContext('2d');
+    const it0 = obEl.querySelector('.ob-it');
+    if (!it0) return;
+    const avail = Math.max(30, RAIL_W - 10 - 4);
+    for (const lb of obEl.querySelectorAll('.ob-lb')) {
+      const name = lb.__name || (lb.__name = lb.textContent);
+      const ff = getComputedStyle(lb).fontFamily;
+      obCv.font = '600 10px ' + ff;
+      const w10 = obCv.measureText(name).width || 1;
+      const one = 10 * avail / w10;
+      let fit = '1', fs = Math.min(9.5, one);
+      if (one < 8.6) { fit = '2'; fs = Math.max(7, Math.min(9.5, 10 * avail * 2 / (w10 * 1.12))); }
+      if (fit === '2' && /^[\x20-\x7e]+$/.test(name)) { const soft = name.split('').join('\u00ad'); if (lb.textContent !== soft) lb.textContent = soft; }
+      else if (lb.textContent !== name) lb.textContent = name;
+      lb.setAttribute('data-fit', fit);
+      lb.style.setProperty('--ob-fs', fs.toFixed(2) + 'px');
+    }
   }
   function obPaint() {
     if (!obEl) return;
@@ -841,8 +870,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const i = its.findIndex((x) => x.dataset.g === gid);
     const changed = OB.sel !== gid;
     OB.sel = gid; obSave(); obCss();
-    if (changed) { obResetMv(); setTimeout(() => schedule(0), 300); }
-    if (i >= 0 && N) { const cur = obMod(Math.round(obTarget), N); let delta = i - cur; if (delta > N / 2) delta -= N; if (delta < -N / 2) delta += N; obTarget = Math.round(obTarget) + delta; obAnim(); }
+    if (changed) { obResetMv(true); setTimeout(() => schedule(0), 300); }
+    if (OB.spin && i >= 0 && N) { const cur = obMod(Math.round(obTarget), N); let delta = i - cur; if (delta > N / 2) delta -= N; if (delta < -N / 2) delta += N; obTarget = Math.round(obTarget) + delta; obAnim(); }
     /* ¹⁶ で閉じていたら開く */
     if (gid !== ALL) {
       const head = document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(gid) + '"] .c16-head');
@@ -860,9 +889,11 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     obSelect(its[obMod(i + k, its.length)].dataset.g);
   }
   /* 輪の入切・大分類の切り替えの時は、前の状態で測った寄せ（margin）を一度すべて消して、測り直す（解除後に崩れたままにならない） */
-  function obResetMv() {
+  function obResetMv(keepFix) {
     document.querySelectorAll('[data-c33-mv]').forEach((m) => { m.style.removeProperty('margin-inline-start'); m.removeAttribute('data-c33-mv'); MV.delete(m); });
-    document.documentElement.style.removeProperty('--c33-rail-fix');
+    /* v25: 大分類を替えても一覧の左端は同じ所（寄せの量は覚えておき、輪の入切の時だけ測り直す） */
+    if (!keepFix) { document.documentElement.style.removeProperty('--c33-rail-fix'); OB.fix = 0; obSave(); }
+    else if (OB.fix) document.documentElement.style.setProperty('--c33-rail-fix', OB.fix + 'px');
   }
   /* 被りの自己点検: 輪の右端より左に、一覧のアイコン・文字が潜っていたら、その分だけ一覧を右へ（最大 120px） */
   let obFixT = 0;
@@ -883,8 +914,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     if (!isFinite(min)) return;
     const cur = parseFloat(de.style.getPropertyValue('--c33-rail-fix')) || 0;
-    const want = Math.max(0, Math.min(120, cur + (railRight + 8 - min)));
-    if (Math.abs(want - cur) >= 1 && (min < railRight + 6 || cur > 0)) { de.style.setProperty('--c33-rail-fix', want.toFixed(0) + 'px'); ST.railFix = want; }
+    /* v25: 寄せは増やすだけ（大分類ごとに左端が揺れない）。覚えておいて次も同じ位置 */
+    const want = Math.round(Math.max(cur, OB.fix || 0, Math.min(120, cur + (railRight + 8 - min))));
+    if (want !== Math.round(cur)) { de.style.setProperty('--c33-rail-fix', want + 'px'); ST.railFix = want; }
+    if (want !== (OB.fix || 0)) { OB.fix = want; obSave(); }
   }
   function obToggle(v) {
     OB.on = v == null ? !OB.on : !!v; obSave(); obSig = ''; obResetMv(); obBuild(); schedule(30); setTimeout(() => schedule(0), 400);

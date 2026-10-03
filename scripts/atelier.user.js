@@ -7666,6 +7666,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('prim', { text: SEL_TITLE_TEXT, icon: SEL_TITLE_ICON }, 'col ls tdy', { g: '文字', n: { text: '題字の名前', icon: '題字のアイコン' } }),
       { v: '--cordivestium-title-icon-size', t: 'px', l: 'アイコンの大きさ', d: 20, min: 12, max: 32, s: 1, g: 'アイコン' },
       { v: '--cordivestium-title-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 1, g: 'アイコン' },
+      { p: 'primIconFirst', t: 'toggle', l: '2 行の時は 1 行目にそろえる', d: true, g: 'アイコン', w: '題字が 2 行以上になった時（長い題名・³⁰ の改行）、アイコンを 2 行のまん中ではなく 1 行目の高さにそろえる' },
       ...kit('primi', { icon: SEL_TITLE_ICON }, 'idy idx', { g: 'アイコン', n: { icon: '題字のアイコン' } })
     ] },
     /* v47: Notion の素のリレーション（¹⁴ が並べ直していないセル。1〜2 件のセルなど） */
@@ -7945,6 +7946,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     }
     if (T.selCol) css += '::selection{background:' + String(T.selCol).replace(/[;{}<>]/g, '') + ' !important}\n';
     if (T.caretCol) css += '[contenteditable="true"], input, textarea{caret-color:' + String(T.caretCol).replace(/[;{}<>]/g, '') + ' !important}\n';
+    /* v68: 題字が 2 行の時のアイコン（JS が測った差だけ動かす） */
+    css += '.notion-table-view-cell [data-at-iy]{translate:0 var(--at-iy, 0px) !important}\n';
     /* v67: 数のセル — 等幅数字・寄せ（数だけのセルは JS が data-at-num を付ける） */
     if (T.cellTnum === true || T.cellTnum === '1') css += '.notion-table-view-cell [data-testid="property-value"]{font-variant-numeric:tabular-nums !important}\n';
     if (T.cellNumAlign === 'end' || T.cellNumAlign === 'center') css += '.notion-table-view-cell[data-at-num] [data-testid="property-value"]{justify-content:' + (T.cellNumAlign === 'end' ? 'flex-end' : 'center') + ' !important;text-align:' + T.cellNumAlign + ' !important}\n.notion-table-view-cell[data-at-num] [data-testid="property-value"] > *{text-align:' + T.cellNumAlign + ' !important}\n';
@@ -8134,6 +8137,42 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (!atPosOn) return;
     for (const cell of document.querySelectorAll('.notion-table-view-cell')) { try { atMarkCell(cell); } catch (e) { /* noop */ } }
   }
+  /* v68: 題字が 2 行以上の時、アイコンを 1 行目にそろえる（セルの中で上下まん中にしていても、アイコンは 1 行目の高さ）。
+     1 行目の文字の中心とアイコンの中心の差を測って、アイコンの箱を translate で動かす（Notion の style には触らない） */
+  function atIconFirst() {
+    const T = TK();
+    const onq = !(T.primIconFirst === false || T.primIconFirst === '0');
+    for (const ic of document.querySelectorAll('.notion-table-view-cell .notion-record-icon')) {
+      if (ic.closest('[style*="flex-wrap"], .cordi13-item, .cordi13-sec-head, [data-cordi13-on]')) continue;
+      const box = ic.parentElement;
+      const row = box && box.parentElement;
+      if (!row || !row.matches('[style*="display: flex"]') || row.matches('[style*="flex-wrap"]')) continue;
+      const tx = [...row.children].find((c) => c !== box && !c.querySelector('.notion-record-icon') && (c.textContent || '').trim());
+      let dy = 0;
+      if (onq && tx) {
+        const w = document.createTreeWalker(tx, NodeFilter.SHOW_TEXT);
+        let n, first = null;
+        while ((n = w.nextNode())) if (n.nodeValue.trim()) { first = n; break; }
+        if (first) {
+          const rg = document.createRange(); rg.selectNodeContents(tx);
+          const rs = [...rg.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
+          const tops = new Set(rs.map((r) => Math.round(r.top / 4)));
+          if (tops.size > 1) {
+            const r1 = document.createRange(); r1.setStart(first, first.nodeValue.search(/\S/)); r1.setEnd(first, first.nodeValue.search(/\S/) + 1);
+            const a = r1.getBoundingClientRect();
+            const cur = parseFloat(box.style.getPropertyValue('--at-iy')) || 0;
+            const b = ic.getBoundingClientRect();
+            if (a.height) dy = Math.round(((a.top + a.height / 2) - (b.top + b.height / 2 - cur)) * 2) / 2;
+          }
+        }
+      }
+      if (Math.abs(dy) < 0.5) { if (box.hasAttribute('data-at-iy')) { box.removeAttribute('data-at-iy'); box.style.removeProperty('--at-iy'); } continue; }
+      if (box.style.getPropertyValue('--at-iy') !== dy + 'px') box.style.setProperty('--at-iy', dy + 'px');
+      if (!box.hasAttribute('data-at-iy')) box.setAttribute('data-at-iy', '1');
+    }
+  }
+  let atIfT = 0;
+  const atIconFirstSoon = () => { if (!atIfT) atIfT = setTimeout(() => { atIfT = 0; try { atIconFirst(); } catch (e) { /* noop */ } }, 160); };
   let atPosT = 0, atPosMo = null;
   function atPosSoon() {
     if (!atPosMo && document.body) {
@@ -9746,6 +9785,10 @@ html.dark #atl-reader, .notion-dark-theme #atl-reader { --atl-paper: #1d1c1a; co
     if (AT.tools.rail) railUpdate();
   }
   setInterval(labTick, 700);
+  /* v68: 題字のアイコンを 1 行目に */
+  setInterval(atIconFirstSoon, 1500);
+  { const go = () => { new MutationObserver(atIconFirstSoon).observe(document.body, { childList: true, subtree: true, characterData: true }); atIconFirstSoon(); }; if (document.body) go(); else document.addEventListener('DOMContentLoaded', go, { once: true }); }
+  document.addEventListener('atelier-change', atIconFirstSoon);
   /* v67: 数だけのセルに印（「数の列の寄せ」を選んだ時だけ動く） */
   setInterval(() => {
     const T = TK(); if (T.cellNumAlign !== 'end' && T.cellNumAlign !== 'center') return;

@@ -3223,6 +3223,237 @@
   };
   if (document.body) fxBoot(); else document.addEventListener('DOMContentLoaded', fxBoot, { once: true });
 
+  /* ============================================================
+   *  Cordivestium × Notion の「ビューの設定」（View settings）
+   *  — ³⁶ ³⁷ ³⁸ に同じ部品が入っていて、どれか 1 本だけでも動く。段は Notion の行を写して作るので、見た目は Notion のまま。
+   *    ・where: 'afterGroup' … Notion の「Group」のすぐ下（サブグループ）
+   *    ・where: 'section'    … 「Data source settings」の前に Cordivestium の段を 1 つ作り、その中へ
+   *    行の右は 値（文字＋›）か スイッチ。押すと onClick（小窓は vsSub で Notion の小メニューと同じ形に）
+   * ============================================================ */
+  function cordiVS(rows) {
+    const HEAD_RE = /^(View settings|ビューの設定|ビュー設定|表示設定)$/;
+    const GROUP_RE = /^(Group|グループ|グループ化)$/;
+    const LAYOUT_RE = /^(Layout|レイアウト)$/;
+    const DS_RE = /^(Data source settings|データソースの設定|データソース設定|データベースの設定)$/;
+    const SW_CSS_ID = 'cordi-vs-css';
+    let lastView = null;
+    const VIEW_Q = '.notion-table-view, .notion-board-view, .notion-gallery-view, .notion-list-view, .notion-calendar-view, .notion-timeline-view';
+    document.addEventListener('pointerdown', (e) => {
+      const t = e.target; if (!t || !t.closest) return;
+      if (t.closest('.notion-overlay-container')) return;
+      const blk = t.closest('.notion-collection_view-block, .notion-peek-renderer, .notion-frame');
+      if (!blk) return;
+      const inl = t.closest('.notion-collection_view-block');
+      const v = inl ? inl.querySelector(VIEW_Q) : blk.querySelector(VIEW_Q);
+      if (v) lastView = v;
+    }, true);
+    const viewNow = () => (lastView && lastView.isConnected ? lastView : document.querySelector('.notion-frame ' + VIEW_Q.split(', ').join(', .notion-frame ')));
+    const txt = (el) => String(el && el.textContent || '').replace(/\s+/g, ' ').trim();
+    function css() {
+      if (document.getElementById(SW_CSS_ID)) return;
+      const st = document.createElement('style'); st.id = SW_CSS_ID;
+      st.textContent = `
+[data-cordi-vs-row] .cvs-sw { position: relative; width: 26px; height: 14px; border-radius: 44px; background: var(--ca-graBacSecTra, rgba(135,131,120,.3)); transition: background .2s; flex: none; margin-inline-start: 6px; }
+[data-cordi-vs-row] .cvs-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15,15,15,.2); transition: transform .2s ease-out; }
+[data-cordi-vs-row][data-on] .cvs-sw { background: var(--c-intBlu, #2383e2); }
+[data-cordi-vs-row][data-on] .cvs-sw::after { transform: translateX(12px); }
+[data-cordi-vs-row] .cvs-ico { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+[data-cordi-vs-row] .cvs-ico svg { width: 18px; height: 18px; display: block; }
+#cordi-vs-sub { position: fixed; z-index: 2147483000; display: flex; flex-direction: column; overflow: hidden; background: var(--c-popBac, var(--c-bacPri, #fff)); color: var(--c-texPri, #37352f); border-radius: 10px; box-shadow: var(--c-shaOutMd, 0 0 0 1px rgba(15,15,15,.05), 0 3px 6px rgba(15,15,15,.1), 0 9px 24px rgba(15,15,15,.2)); font-size: 14px; animation: cvs-in .14s ease-out; }
+@keyframes cvs-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+#cordi-vs-sub .cvs-hd { display: flex; align-items: center; gap: 6px; height: 42px; padding: 14px 12px 6px 10px; flex: none; }
+#cordi-vs-sub .cvs-back { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; color: var(--c-icoSec, rgba(55,53,47,.45)); }
+#cordi-vs-sub .cvs-back:hover { background: var(--ca-butHovBac, rgba(55,53,47,.06)); }
+#cordi-vs-sub .cvs-ttl { color: var(--c-texSec, rgba(55,53,47,.65)); font-size: 12px; line-height: 16px; font-weight: 500; flex: 1; }
+#cordi-vs-sub .cvs-bd { overflow: auto; padding: 4px 0 8px; flex: 1; }
+#cordi-vs-sub .cvs-sec { padding: 10px 14px 4px; color: var(--c-texSec, rgba(55,53,47,.65)); font-size: 12px; font-weight: 500; }
+#cordi-vs-sub .cvs-it { display: flex; align-items: center; gap: 8px; min-height: 30px; margin: 0 4px; padding: 0 8px; border-radius: 6px; cursor: pointer; user-select: none; }
+#cordi-vs-sub .cvs-it:hover { background: var(--ca-butHovBac, rgba(55,53,47,.06)); }
+#cordi-vs-sub .cvs-it .cvs-mk { width: 20px; display: flex; align-items: center; justify-content: center; color: var(--c-icoSec, rgba(55,53,47,.45)); flex: none; font-size: 13px; }
+#cordi-vs-sub .cvs-it .cvs-lb { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#cordi-vs-sub .cvs-it .cvs-ck { color: var(--c-texPri, #37352f); flex: none; }
+#cordi-vs-sub .cvs-it select { font: inherit; font-size: 13px; color: var(--c-texSec, rgba(55,53,47,.65)); background: transparent; border: 0; max-width: 130px; cursor: pointer; }
+#cordi-vs-sub .cvs-note { padding: 4px 14px 2px; color: var(--c-texTer, rgba(55,53,47,.45)); font-size: 12px; line-height: 1.5; }
+#cordi-vs-sub .cvs-div { height: 1px; margin: 6px 0; background: var(--ca-borPriTra, rgba(55,53,47,.09)); }
+`;
+      (document.head || document.documentElement).appendChild(st);
+    }
+    function panels() {
+      const out = [];
+      for (const h of document.querySelectorAll('.notion-overlay-container div[style*="font-size: 12px"]')) {
+        if (h.children.length || !HEAD_RE.test(txt(h))) continue;
+        let p = h.parentElement;
+        while (p && p.parentElement && !p.querySelector('[role="menuitem"]')) p = p.parentElement;
+        if (p) out.push(p);
+      }
+      return out;
+    }
+    const itemLabel = (mi) => txt(mi.querySelector('[role="presentation"]'));
+    function ctxOf(panel) {
+      const items = [...panel.querySelectorAll('[role="menuitem"]')].filter((m) => !m.closest('[data-cordi-vs-row]'));
+      const lay = items.find((m) => LAYOUT_RE.test(itemLabel(m)));
+      const grp = items.find((m) => GROUP_RE.test(itemLabel(m)));
+      const layout = lay ? txt(lay.querySelector('div[style*="color: var(--c-texTer)"]')) : '';
+      return { panel, items, grp, layout, view: viewNow(), grouped: !!(grp && txt(grp.querySelector('div[style*="color: var(--c-texTer)"]')) && !/^(None|なし)$/i.test(txt(grp.querySelector('div[style*="color: var(--c-texTer)"]')))) };
+    }
+    function makeRow(tpl, r) {
+      const row = tpl.cloneNode(true);
+      row.removeAttribute('tabindex');
+      row.setAttribute('data-cordi-vs-row', r.id);
+      row.setAttribute('data-cordi-order', String(r.order || 50));
+      for (const x of row.querySelectorAll('[data-popup-origin]')) x.removeAttribute('data-popup-origin');
+      const ico = row.querySelector(':scope > div > div:first-child');
+      if (ico) ico.innerHTML = '<span class="cvs-ico">' + (r.icon || '') + '</span>';
+      const lb = row.querySelector('[role="presentation"]');
+      if (lb) lb.textContent = r.label;
+      row.addEventListener('pointerdown', (e) => { e.stopPropagation(); }, true);
+      row.addEventListener('mousedown', (e) => { e.stopPropagation(); }, true);
+      row.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const panel = panels().find((p) => p.contains(row)); if (!panel) return; try { r.onClick(ctxOf(panel), row); } catch (er) { console.warn('[cordi-vs]', er); } setTimeout(() => upd(row, r, ctxOf(panel)), 30); }, true);
+      return row;
+    }
+    function upd(row, r, ctx) {
+      const right = row.querySelector('div[style*="color: var(--c-texTer)"]');
+      if (!right) return;
+      const valBox = right.firstElementChild;
+      const chev = right.querySelector('svg');
+      if (r.toggle) {
+        const on = !!r.toggle(ctx);
+        row.toggleAttribute('data-on', on);
+        if (valBox) valBox.textContent = '';
+        if (chev) chev.style.display = 'none';
+        let sw = right.querySelector('.cvs-sw');
+        if (!sw) { sw = document.createElement('span'); sw.className = 'cvs-sw'; right.appendChild(sw); }
+      } else if (valBox) {
+        const v = r.value ? r.value(ctx) : '';
+        if (valBox.textContent !== (v || '')) valBox.textContent = v || '';
+      }
+    }
+    function section(panel, ctx) {
+      let sec = panel.querySelector('[data-cordi-vs-sec]');
+      if (sec) return sec;
+      const dsh = [...panel.querySelectorAll('div')].find((d) => !d.children.length && DS_RE.test(txt(d)));
+      const block2 = dsh && dsh.closest('div[style*="margin-top"]');
+      const block1 = ctx.grp && ctx.grp.parentElement;
+      if (!block1) return null;
+      sec = block2 ? block2.cloneNode(false) : document.createElement('div');
+      sec.setAttribute('data-cordi-vs-sec', '1');
+      if (!block2) sec.style.marginTop = '4px';
+      const dv = block2 && block2.firstElementChild && !txt(block2.firstElementChild) ? block2.firstElementChild.cloneNode(true) : null;
+      if (dv) sec.appendChild(dv); else { const d = document.createElement('div'); d.style.cssText = 'height:1px;margin:0 12px 4px;background:var(--ca-borPriTra)'; sec.appendChild(d); }
+      const hrow = dsh ? dsh.parentElement.cloneNode(false) : document.createElement('div');
+      if (!dsh) hrow.style.cssText = 'padding:4px 14px 2px';
+      const ht = dsh ? dsh.cloneNode(false) : document.createElement('div');
+      if (!dsh) ht.style.cssText = 'color:var(--c-texSec);font-size:12px;font-weight:500;line-height:16px';
+      ht.textContent = 'Cordivestium';
+      hrow.appendChild(ht);
+      sec.appendChild(hrow);
+      if (block2 && block2.parentElement) block2.parentElement.insertBefore(sec, block2);
+      else block1.parentElement.insertBefore(sec, block1.nextSibling);
+      return sec;
+    }
+    function place(parent, row, before) {
+      const o = +row.getAttribute('data-cordi-order');
+      const sibs = [...parent.querySelectorAll(':scope > [data-cordi-vs-row]')];
+      const nxt = sibs.find((s) => s !== row && +s.getAttribute('data-cordi-order') > o);
+      if (nxt) parent.insertBefore(row, nxt); else if (before) parent.insertBefore(row, before); else parent.appendChild(row);
+    }
+    function scan() {
+      /* 前の画面（小メニューに替わった時など）に残った段を片づける（自分の行と、空の段だけ） */
+      const ps = panels();
+      const mine = new Set(rows.map((r) => r.id));
+      for (const el of document.querySelectorAll('[data-cordi-vs-row]')) if (mine.has(el.getAttribute('data-cordi-vs-row')) && !ps.some((p) => p.contains(el))) el.remove();
+      for (const el of document.querySelectorAll('[data-cordi-vs-sec]')) if (!ps.some((p) => p.contains(el)) || !el.querySelector('[data-cordi-vs-row]')) el.remove();
+      if (!ps.length) { closeSub(true); return; }
+      css();
+      for (const panel of ps) {
+        const ctx = ctxOf(panel);
+        if (!ctx.grp) continue;
+        for (const r of rows) {
+          const show = r.show ? !!r.show(ctx) : true;
+          let row = panel.querySelector('[data-cordi-vs-row="' + r.id + '"]');
+          if (!show) { if (row) row.remove(); continue; }
+          if (!row) {
+            row = makeRow(ctx.grp, r);
+            if (r.where === 'afterGroup') { ctx.grp.parentElement.insertBefore(row, ctx.grp.nextSibling); }
+            else { const sec = section(panel, ctx); if (!sec) continue; place(sec, row); }
+          }
+          upd(row, r, ctx);
+        }
+      }
+    }
+    let qt = 0;
+    const soon = () => { if (!qt) qt = setTimeout(() => { qt = 0; try { scan(); } catch (e) { /* noop */ } }, 90); };
+    const start = () => {
+      new MutationObserver((ms) => {
+        for (const m of ms) { if (m.target.closest && m.target.closest('#cordi-vs-sub')) continue; if (m.target.closest && m.target.closest('.notion-overlay-container')) { soon(); return; } for (const n of m.addedNodes) if (n.nodeType === 1 && (n.classList.contains('notion-overlay-container') || n.querySelector && n.querySelector('.notion-overlay-container'))) { soon(); return; } }
+      }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    };
+    if (document.body) start(); else document.addEventListener('DOMContentLoaded', start, { once: true });
+    /* 小メニュー（Notion のビューの設定と同じ場所・同じ形。← で戻る・外を押すと閉じる） */
+    let sub = null;
+    function closeSub(all) { if (sub) { sub.remove(); sub = null; } void all; }
+    function vsSub(ctx, title, build) {
+      closeSub();
+      css();
+      const r = ctx.panel.getBoundingClientRect();
+      sub = document.createElement('div');
+      sub.id = 'cordi-vs-sub';
+      sub.setAttribute('data-no-passthrough', '1');
+      sub.style.left = r.left + 'px'; sub.style.top = r.top + 'px'; sub.style.width = r.width + 'px'; sub.style.height = r.height + 'px';
+      sub.innerHTML = '<div class="cvs-hd"><div class="cvs-back" title="戻る"><svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M9.278 3.238a.625.625 0 0 1 .884.884L6.284 8l3.878 3.878a.625.625 0 0 1-.884.884l-4.32-4.32a.625.625 0 0 1 0-.884z"/></svg></div><div class="cvs-ttl"></div></div><div class="cvs-bd"></div>';
+      sub.querySelector('.cvs-ttl').textContent = title;
+      const bd = sub.querySelector('.cvs-bd');
+      const api = {
+        sec(t) { const d = document.createElement('div'); d.className = 'cvs-sec'; d.textContent = t; bd.appendChild(d); return d; },
+        note(t) { const d = document.createElement('div'); d.className = 'cvs-note'; d.textContent = t; bd.appendChild(d); return d; },
+        div() { const d = document.createElement('div'); d.className = 'cvs-div'; bd.appendChild(d); },
+        item(label, o) {
+          o = o || {};
+          const d = document.createElement('div'); d.className = 'cvs-it';
+          d.innerHTML = '<span class="cvs-mk"></span><span class="cvs-lb"></span>';
+          d.querySelector('.cvs-mk').innerHTML = o.mark || '';
+          d.querySelector('.cvs-lb').textContent = label;
+          if (o.on) d.insertAdjacentHTML('beforeend', '<svg class="cvs-ck" viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M12.98 3.92a.625.625 0 0 1 .1.88l-6 7.5a.625.625 0 0 1-.93.05l-3-3a.625.625 0 0 1 .88-.88l2.51 2.5 5.56-6.95a.625.625 0 0 1 .88-.1"/></svg>');
+          if (o.select) {
+            const s = document.createElement('select');
+            for (const [v, l] of o.select.options) { const op = document.createElement('option'); op.value = v; op.textContent = l; if (v === o.select.value) op.selected = true; s.appendChild(op); }
+            s.addEventListener('change', () => o.select.onChange(s.value));
+            s.addEventListener('click', (e) => e.stopPropagation());
+            d.appendChild(s);
+          }
+          if (o.click) d.addEventListener('click', () => o.click());
+          bd.appendChild(d); return d;
+        },
+        clear() { bd.textContent = ''; },
+        close: closeSub,
+        body: bd
+      };
+      sub.querySelector('.cvs-back').addEventListener('click', () => closeSub());
+      for (const ev of ['pointerdown', 'mousedown', 'click', 'keydown']) sub.addEventListener(ev, (e) => e.stopPropagation());
+      document.body.appendChild(sub);
+      build(api);
+      const off = (e) => { if (!sub) { document.removeEventListener('pointerdown', off, true); return; } if (!sub.contains(e.target)) { closeSub(); document.removeEventListener('pointerdown', off, true); } };
+      setTimeout(() => document.addEventListener('pointerdown', off, true), 0);
+      const kd = (e) => { if (e.key === 'Escape' && sub) { e.stopPropagation(); closeSub(); document.removeEventListener('keydown', kd, true); } };
+      document.addEventListener('keydown', kd, true);
+      const follow = () => { if (!sub) return; if (!ctx.panel.isConnected) { closeSub(); return; } const q = ctx.panel.getBoundingClientRect(); sub.style.left = q.left + 'px'; sub.style.top = q.top + 'px'; sub.style.height = q.height + 'px'; requestAnimationFrame(follow); };
+      requestAnimationFrame(follow);
+      return api;
+    }
+    return { scan, sub: vsSub, view: viewNow, close: closeSub };
+  }
+
+  /* v22: Notion の「ビューの設定」の Cordivestium の段 — 表をシートで開く・条件付き書式 */
+  const S_VSI = (d) => '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="' + d + '"/></svg>';
+  const S_TABLE = (c) => /^(Table|表|テーブル|List|リスト|Gallery|ギャラリー|Board|ボード)$/i.test(c.layout || '');
+  const S_VS = cordiVS([
+    { id: 'c38.sheet', where: 'section', order: 60, label: 'シートで開く', icon: S_VSI('M3.5 3.5h13v13h-13zM3.5 7.5h13M3.5 11.5h13M8 3.5v13M12.5 3.5v13'), show: S_TABLE,
+      value: () => '⌃⌥E', onClick: (ctx) => { const v = ctx.view; document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true })); setTimeout(() => { try { openSheet(v); } catch (e) { toast('シートを開けませんでした'); } }, 120); } },
+    { id: 'c38.cf', where: 'section', order: 61, label: '条件付き書式を表のセルにも', icon: S_VSI('M4 4h12v12H4zM4 10h12M10 4v12M5.5 5.5h3v3h-3z'), show: (c) => /^(Table|表|テーブル)$/i.test(c.layout || ''),
+      toggle: () => !!P.cfToNotion, onClick: () => { P.cfToNotion = !P.cfToNotion; saveP(); if (!P.cfToNotion) { const st = document.getElementById('s38-cf'); if (st) st.textContent = ''; } else restoreCf(); } }
+  ]);
+  void S_VS;
+
   window.__c38 = {
     version: VERSION,
     eval: (f) => ENGINE.show(ENGINE.run(String(f).startsWith('=') ? f : '=' + f, {})),
