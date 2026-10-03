@@ -169,7 +169,9 @@
       light: { bg: '#f0eee4', side: '#e7e3d4', sheet: '#faf9f2', raised: '#fdfcf6', ink: '#2a2a1f', mute: '#76745f', line: '#dedac6', accent: '#5f7a2f', accent2: '#7a4b2a', tint: '#ebe8db' },
       dark: { bg: '#161610', side: '#12120d', sheet: '#1c1c15', raised: '#23231a', ink: '#e8e6d4', mute: '#a3a189', line: '#303022', accent: '#a5c46a', accent2: '#c48c62', tint: '#1f1f17' } }
   ];
-  const THEME_BY_ID = Object.fromEntries(THEMES.map((t) => [t.id, t]));
+  let THEME_BY_ID = Object.fromEntries(THEMES.map((t) => [t.id, t]));
+  const allThemes = () => THEMES.concat((S && S.custom) || []);
+  const reindexThemes = () => { THEME_BY_ID = Object.fromEntries(allThemes().map((t) => [t.id, t])); };
 
   /* ============================================================
    *  4. 設定（既定値）
@@ -202,7 +204,14 @@
     ['selection', '画面', '選択とカーソル', '文字を選んだ時の色・入力の縦棒をアクセント色に', true],
     ['motion', '画面', '動き', 'ページを開いた時にふわっと出る・乗せた時の動きを滑らかに（「動きを減らす」設定の端末では止める）', true],
     ['progress', '画面', '読み進み具合', '画面の上端に、今どこまで読んだかの細い線', true],
-    ['coverAccent', '画面', '表紙からアクセント', 'ページの表紙（またはアイコン）の色を読み取って、そのページのアクセント色にする', false]
+    ['coverAccent', '画面', '表紙からアクセント', 'ページの表紙（またはアイコン）の色を読み取って、そのページのアクセント色にする', false],
+    ['genCover', '誌面', '表紙の無いページに飾り', '表紙を付けていないページの上部に、配色から作った淡い模様（光のにじみ・波・方眼・紙片）を敷く。ページの題名から模様が決まるので、ページごとに少しずつ違う', true],
+    ['dropcap', '誌面', '頭文字', '本文の最初の段落の 1 文字目を大きく（雑誌・本の章の始まりのように）', false],
+    ['endmark', '誌面', '終わりの印', 'ページの最後に小さな飾り（❧）。どこで終わったかが分かる', true],
+    ['iconTiles', 'データベース', 'アイコンを札に', '表の題字・ギャラリー・ボードのアイコンを、アクセントの淡い四角い札の上に載せる', false],
+    ['stickyGlass', 'データベース', '貼り付く見出しをすりガラスに', '表の列見出し・グループ見出しがスクロールで上に貼り付いた時、背景の質感と馴染むすりガラスにする', true],
+    ['calendar', 'データベース', 'カレンダー・タイムライン', '今日の印をアクセントの丸に・予定の札を角丸と影に', true],
+    ['hoverCard', 'データベース', 'ページの見本カード', 'リレーションのチップ・表の題字に乗せて少し待つと、そのページの表紙・アイコン・題名のカードがふわっと出る', true]
   ];
   const DEF = {
     v: 1,
@@ -225,8 +234,14 @@
       divider: 'fleuron',        // fleuron / gradient / dots / double / notion
       heading: 'rule',           // rule（下線）/ bar（左の帯）/ ornament（飾り）/ plain
       calloutStyle: 'glass',     // glass / outline / notion
-      motion: 1
+      motion: 1,
+      galleryStyle: 'card',      // card / polaroid / frame（額装）/ shelf（本棚）/ flat
+      coverPattern: 'auto',      // auto / mesh / waves / grid / confetti
+      schedule: false,           // 夜は自動で暗く（mode が auto の時）
+      nightFrom: 19, nightTo: 6,
+      hoverDelay: 450
     },
+    custom: [],            // 自作の配色 [{ id, name, en, desc, light, dark, tex, radius }]
     pages: {},             // ページ id → 配色 id（このページだけ）
     accentCache: {}
   };
@@ -239,9 +254,11 @@
       o.tune = Object.assign({}, DEF.tune, v.tune || {});
       o.pages = v.pages || {};
       o.accentCache = v.accentCache || {};
+      o.custom = Array.isArray(v.custom) ? v.custom : [];
     }
     return o;
   })();
+  reindexThemes();
   const ST = { builds: 0, dark: false, theme: '', page: '', accent: '', lastError: '' };
   const on = (id) => !!S.mods[id];
   const T = (k) => S.tune[k];
@@ -258,13 +275,19 @@
     if (b && b.classList.contains('notion-light-theme')) return false;
     try { return !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) && !(b && b.classList.contains('notion-body') && getComputedStyle(b).getPropertyValue('--c-bacPri').trim() === '#fff'); } catch (e) { return false; }
   }
+  /* 夜は自動で暗く（明るさが「Notion に合わせる」の時だけ。Notion が明るい時でも、この時間は暗い配色） */
+  function nightNow() {
+    if (!S.tune.schedule) return false;
+    const h = new Date().getHours(), a = +S.tune.nightFrom, b = +S.tune.nightTo;
+    return a > b ? (h >= a || h < b) : (h >= a && h < b);
+  }
   function curTheme() {
     const id = S.pages[pageId()] || S.theme;
     return THEME_BY_ID[id] || THEME_BY_ID.paper;
   }
   function curPalette() {
     const th = curTheme();
-    const dark = S.mode === 'dark' || (S.mode === 'auto' && notionDark());
+    const dark = S.mode === 'dark' || (S.mode === 'auto' && (notionDark() || nightNow()));
     const p = Object.assign({}, dark ? th.dark : th.light);
     let acc = S.tune.accent && /^#[0-9a-f]{6}$/i.test(S.tune.accent) ? S.tune.accent : '';
     if (!acc && on('coverAccent')) { const c = S.accentCache[pageId()]; if (c) acc = dark ? shade(c, 12) : c; }
@@ -693,6 +716,113 @@ html .notion-frame .layout-content${B}, html .notion-peek-renderer .notion-page-
 html .notion-sidebar-container [role="treeitem"]${B}, html .notion-sidebar-container [data-inp-target]${B} { transition: background .18s ease, color .18s ease; }`;
   };
 
+  /* ---- v1.0 追加: 誌面の飾り ---- */
+  /* 表紙の無いページの上部に、配色とページ名から作った淡い模様 */
+  function hashOf(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function coverArt(p, seed) {
+    const pat = T('coverPattern') === 'auto' ? ['mesh', 'waves', 'grid', 'confetti'][seed % 4] : T('coverPattern');
+    const r = (n) => ((seed >>> (n * 3)) % 97) / 97;
+    const a = p.accent, b = p.accent2, k = p.dark ? 1.5 : 1;
+    if (pat === 'waves') {
+      const c1 = rgba(a, 0.16 * k), c2 = rgba(b, 0.12 * k);
+      return svgUrl('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" preserveAspectRatio="none" viewBox="0 0 1200 220"><path d="M0 ' + (90 + r(1) * 40) + ' C 300 ' + (20 + r(2) * 60) + ', 600 ' + (160 + r(3) * 40) + ', 1200 ' + (60 + r(4) * 40) + ' L1200 0 L0 0Z" fill="' + c1 + '"/><path d="M0 ' + (140 + r(5) * 40) + ' C 400 ' + (60 + r(6) * 60) + ', 800 ' + (200 - r(7) * 40) + ', 1200 ' + (110 + r(8) * 40) + ' L1200 0 L0 0Z" fill="' + c2 + '"/></svg>') + ' top / 100% 220px no-repeat';
+    }
+    if (pat === 'grid') return 'linear-gradient(to bottom, transparent 60%, var(--lm-bg)), linear-gradient(' + rgba(a, 0.09 * k) + ' 1px, transparent 1px) 0 0 / 24px 24px, linear-gradient(90deg, ' + rgba(a, 0.09 * k) + ' 1px, transparent 1px) 0 0 / 24px 24px';
+    if (pat === 'confetti') {
+      let dots = '';
+      for (let i = 0; i < 26; i++) { const x = ((seed * (i + 3) * 7919) % 1200), y = ((seed * (i + 5) * 104729) % 200), sz = 3 + (i % 5) * 2, col = i % 3 ? rgba(a, 0.22 * k) : rgba(b, 0.2 * k), rot = (i * 37) % 180; dots += i % 2 ? '<circle cx="' + x + '" cy="' + y + '" r="' + (sz / 2) + '" fill="' + col + '"/>' : '<rect x="' + x + '" y="' + y + '" width="' + sz * 2 + '" height="' + sz + '" rx="1" fill="' + col + '" transform="rotate(' + rot + ' ' + x + ' ' + y + ')"/>'; }
+      return 'linear-gradient(to bottom, transparent 55%, var(--lm-bg)), ' + svgUrl('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220">' + dots + '</svg>') + ' top / 1200px 220px repeat-x';
+    }
+    return 'radial-gradient(60% 120% at ' + (10 + r(1) * 30).toFixed(0) + '% 0%, ' + rgba(a, 0.2 * k) + ', transparent 70%), radial-gradient(50% 110% at ' + (60 + r(2) * 35).toFixed(0) + '% 0%, ' + rgba(b, 0.16 * k) + ', transparent 70%)';
+  }
+  CSS.genCover = (p) => {
+    const art = coverArt(p, hashOf(pageId() || location.pathname));
+    return `
+html .notion-frame .layout:has(.notion-page-content):not(:has(.layout-full img[style*="object-fit: cover"]))${B} {
+  background: ${art};
+  background-repeat: no-repeat;
+  background-size: 100% 240px;
+}`;
+  };
+  CSS.dropcap = () => `
+html .notion-frame .notion-page-content > .notion-text-block:not(.notion-text-block ~ .notion-text-block)${B} [data-content-editable-leaf]::first-letter {
+  float: left; font-size: 3.3em; line-height: .86; margin: .06em .1em 0 0; color: var(--lm-accent); font-weight: 600;
+}`;
+  CSS.endmark = () => `
+html .notion-frame .layout:has(.notion-page-content) .notion-page-content${B}::after {
+  content: '❧'; display: block; align-self: center; text-align: center; margin: 46px auto 10px; color: var(--lm-accent); opacity: .55; font: 18px/1 Georgia, serif;
+}`;
+  CSS.iconTiles = () => `
+html ${SCOPE} [data-testid="property-value"] > div:not([style*="flex-wrap"]) > div > .notion-record-icon[role="button"]${B},
+html ${SCOPE} :is(.notion-gallery-view, .notion-board-view) .notion-collection-item a .notion-record-icon${B} {
+  background: var(--lm-accent-soft) !important; border-radius: 6px !important; box-shadow: inset 0 0 0 1px var(--lm-line-hair);
+}`;
+  CSS.stickyGlass = () => `
+html .notion-frame .notion-table-view-header-row${B},
+html .notion-frame .sticky-portal-target .notion-table-view-header-row${B},
+html .notion-frame .notion-table-view div[style*="position: sticky"][style*="background: var(--c-bacPri)"]${B},
+html .notion-frame .notion-board-view div[style*="position: absolute"][style*="background: var(--c-bacPri)"]${B} {
+  background: color-mix(in srgb, var(--c-bacPri) 82%, transparent) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.2); backdrop-filter: blur(8px) saturate(1.2);
+}`;
+  CSS.calendar = () => `
+html ${SCOPE} .notion-calendar-view [style*="background: var(--c-bluBacAccPri)"]${B},
+html ${SCOPE} .notion-calendar-view [style*="background: rgb(235, 87, 87)"]${B} { background: var(--lm-accent) !important; box-shadow: 0 0 0 3px var(--lm-accent-soft); }
+html ${SCOPE} .notion-calendar-view .notion-collection-item > div${B}, html ${SCOPE} .notion-timeline-view .notion-collection-item > div${B} {
+  border-radius: var(--lm-r-sm) !important; box-shadow: var(--c-shaOutSm) !important;
+}`;
+  /* ギャラリーのカードの形（card は CSS.gallery の既定） */
+  CSS.galleryStyle = () => {
+    const st = T('galleryStyle');
+    const G = 'html ' + SCOPE + ' .notion-gallery-view .notion-collection-item';
+    if (st === 'polaroid') return `
+${G} > div[role="presentation"]${B} { padding: 10px 10px 4px !important; border-radius: 3px !important; background: ${'#fdfcf8'} !important; box-shadow: 0 2px 6px rgba(0,0,0,.12), 0 14px 28px rgba(0,0,0,.08) !important; }
+${G}:nth-child(3n+1) > div[role="presentation"]${B} { transform: rotate(-1.2deg); }
+${G}:nth-child(3n+2) > div[role="presentation"]${B} { transform: rotate(.8deg); }
+${G}:nth-child(3n) > div[role="presentation"]${B} { transform: rotate(-.4deg); }
+${G}:hover > div[role="presentation"]${B} { transform: rotate(0) translateY(-4px) scale(1.02) !important; }
+${G} img[style*="object-fit"]${B} { border-radius: 1px !important; }
+${G} a > div:nth-child(2)${B} { border-top: 0 !important; color: #2b2722 !important; font-family: "Klee One", "Bradley Hand", "Segoe Print", cursive; }`;
+    if (st === 'frame') return `
+${G} > div[role="presentation"]${B} {
+  border-radius: 0 !important; padding: 14px !important; background: var(--lm-sheet) !important;
+  box-shadow: 0 0 0 1px var(--lm-line), 0 0 0 7px var(--lm-raised), 0 0 0 8px var(--lm-line), 0 18px 34px rgba(0,0,0,.14) !important;
+  margin: 8px;
+}
+${G} img[style*="object-fit"]${B} { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1); }
+${G} a > div:nth-child(2)${B} { border-top: 0 !important; justify-content: center; text-align: center; font-size: .92em; letter-spacing: .06em; }`;
+    if (st === 'shelf') return `
+${G}${B} { perspective: 900px; }
+${G} > div[role="presentation"]${B} { border-radius: 2px 6px 6px 2px !important; transform-origin: left center; box-shadow: inset 6px 0 8px -4px rgba(0,0,0,.35), 4px 6px 16px rgba(0,0,0,.18) !important; }
+${G}:hover > div[role="presentation"]${B} { transform: rotateY(-14deg) translateY(-2px) !important; box-shadow: inset 6px 0 8px -4px rgba(0,0,0,.35), 14px 12px 28px rgba(0,0,0,.25) !important; }`;
+    if (st === 'flat') return `
+${G} > div[role="presentation"]${B} { box-shadow: none !important; border: 1px solid var(--lm-line) !important; }
+${G}:hover > div[role="presentation"]${B} { transform: none !important; border-color: var(--lm-accent-line) !important; box-shadow: none !important; }`;
+    return '';
+  };
+  /* 集中モード（⌃⌥F）: 上の帯を隠し、乗せていない段落を薄く */
+  CSS.focus = () => `
+html[data-lm-focus] .notion-topbar${B} { opacity: 0; transition: opacity .3s; }
+html[data-lm-focus] .notion-topbar${B}:hover { opacity: 1; }
+html[data-lm-focus] .notion-frame .notion-page-content > [data-block-id]${B} { opacity: .32; transition: opacity .35s ease; }
+html[data-lm-focus] .notion-frame .notion-page-content > [data-block-id]${B}:is(:hover, :focus-within) { opacity: 1; }
+html[data-lm-focus] .notion-sidebar-container${B} { opacity: .15; transition: opacity .3s; }
+html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
+  /* ページの見本カード */
+  CSS.hoverCard = () => `
+#lm-hc { position: fixed; z-index: 2147483400; width: 300px; border-radius: var(--lm-r-lg); overflow: hidden; pointer-events: none;
+  background: var(--lm-raised); color: var(--lm-ink); box-shadow: var(--c-shaOutLg); outline: 1px solid var(--lm-line-hair);
+  opacity: 0; transform: translateY(6px) scale(.985); transition: opacity .18s ease, transform .22s cubic-bezier(.2,.8,.2,1); font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; }
+#lm-hc.on { opacity: 1; transform: none; }
+#lm-hc .cv { height: 120px; background: var(--lm-tint) center / cover no-repeat; position: relative; }
+#lm-hc .cv.none { height: 46px; background: linear-gradient(120deg, var(--lm-accent-soft), transparent); }
+#lm-hc .ic { position: absolute; left: 14px; bottom: -18px; width: 40px; height: 40px; border-radius: 10px; background: var(--lm-raised); box-shadow: var(--c-shaOutSm); display: flex; align-items: center; justify-content: center; font-size: 24px; overflow: hidden; }
+#lm-hc .ic img { width: 30px; height: 30px; object-fit: cover; border-radius: 6px; }
+#lm-hc .tx { padding: 24px 16px 14px; }
+#lm-hc .tx b { display: block; font-size: 15px; line-height: 1.35; }
+#lm-hc .tx small { display: block; color: var(--lm-mute); margin-top: 4px; font-size: 11.5px; }
+#lm-hc .tx p { margin: 8px 0 0; color: var(--lm-mute); font-size: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }`;
+
   CSS.progress = () => `
 #lm-progress { position: fixed; inset-inline-start: 0; top: 0; height: 2px; width: 0; z-index: 2147483000; pointer-events: none;
   background: linear-gradient(90deg, var(--lm-accent), var(--lm-accent2)); box-shadow: 0 0 8px var(--lm-accent-soft); transition: width .12s linear, opacity .3s; }`;
@@ -710,6 +840,10 @@ html .notion-sidebar-container [role="treeitem"]${B}, html .notion-sidebar-conta
       if (id === 'palette' || !on(id) || !CSS[id]) continue;
       try { css += '\n/* ── ' + id + ' ── */' + CSS[id](p) + '\n'; } catch (e) { ST.lastError = id + ': ' + (e && e.message); }
     }
+    try {
+      if (on('gallery')) css += '\n/* ── galleryStyle ── */' + CSS.galleryStyle(p) + '\n';
+      css += '\n/* ── focus（⌃⌥F）── */' + CSS.focus(p) + '\n';
+    } catch (e) { ST.lastError = 'extra: ' + (e && e.message); }
     return css;
   }
   let lastCss = '';
@@ -801,6 +935,129 @@ html .notion-sidebar-container [role="treeitem"]${B}, html .notion-sidebar-conta
   }
 
   /* ============================================================
+   *  11b. ページの見本カード（リレーションのチップ・表の題字に乗せて待つ）
+   *       記録は Notion の API（今の syncRecordValuesMain、だめなら旧 syncRecordValues）から読む
+   * ============================================================ */
+  let API_EP = null;
+  async function apiRV(requests) {
+    const send = (ep, reqs) => fetch(location.origin + '/api/v3/' + ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ requests: reqs }) });
+    const ptr = requests.map((r) => ({ pointer: { table: r.table, id: r.id }, version: -1 }));
+    for (const k of (API_EP === 'legacy' ? ['legacy', 'main'] : ['main', 'legacy'])) {
+      try {
+        const res = k === 'main' ? await send('syncRecordValuesMain', ptr) : await send('syncRecordValues', requests.map((r) => ({ table: r.table, id: r.id, version: -1 })));
+        if (res.ok) { API_EP = k; return res.json(); }
+      } catch (e) { /* 次へ */ }
+    }
+    return null;
+  }
+  const REC = new Map();
+  async function block(id) {
+    if (REC.has(id)) return REC.get(id);
+    const pr = apiRV([{ table: 'block', id }]).then((j) => {
+      const n = j && j.recordMap && j.recordMap.block && j.recordMap.block[id];
+      return n ? (n.value && n.value.value ? n.value.value : n.value) : null;
+    }).catch(() => null);
+    REC.set(id, pr);
+    return pr;
+  }
+  const uuid = (h) => (h && h.length === 32 ? h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20) : h);
+  function imgSrc(v, id, table) {
+    const s = String(v || '');
+    if (!s) return '';
+    if (/^\/images\//.test(s) || /^\/icons\//.test(s) || /^data:image\//.test(s)) return s;
+    if (/^https?:/.test(s) || /^attachment:/i.test(s)) return '/image/' + encodeURIComponent(s) + '?table=' + (table || 'block') + '&id=' + encodeURIComponent(id) + '&cache=v2&width=600';
+    return '';
+  }
+  const plain = (v) => (Array.isArray(v) ? v.map((x) => (Array.isArray(x) && typeof x[0] === 'string' && x[0] !== '‣' ? x[0] : '')).join('') : '');
+  let hcEl = null, hcT = 0, hcFor = null;
+  function hcTarget(el) {
+    if (!el || !el.closest) return null;
+    if (el.closest('#lm-panel, #lm-hc')) return null;
+    /* 素のリレーションのチップ・¹⁴ の項目・表の題字・ページへのリンク */
+    const chip = el.closest('[data-testid="property-value"] div[style*="display: inline"]:has(> .notion-record-icon), .cordi13-item, .notion-page-block > a[href], a[href*="?p="], a.notion-link-token');
+    if (chip) return chip;
+    const t = el.closest('[data-testid="property-value"] > div:not([style*="flex-wrap"]):has(> div > .notion-record-icon[role="button"])');
+    return t || null;
+  }
+  function idFrom(el) {
+    const a = el.matches('a[href]') ? el : el.querySelector('a[href]');
+    const h = a ? a.getAttribute('href') || '' : '';
+    let m = /[?&]p=([0-9a-f]{32})/i.exec(h) || /([0-9a-f]{32})/i.exec(h);
+    if (m) return uuid(m[1].toLowerCase());
+    const b = el.closest('[data-block-id]');
+    return b ? b.getAttribute('data-block-id') : '';
+  }
+  /* 編集できる表のリレーションのチップにはリンク先が書かれていない → 行の記録の中の関係（‣ p id）から、名前が同じページを探す */
+  async function chipTarget(el) {
+    const row = el.closest('.notion-collection-item[data-block-id], [data-block-id]');
+    const rid = row && row.getAttribute('data-block-id');
+    if (!rid) return '';
+    const r = await block(rid);
+    if (!r || !r.properties) return '';
+    const want = (el.querySelector('span.notranslate') || el).textContent.replace(/\s+/g, ' ').trim();
+    const ids = [];
+    for (const v of Object.values(r.properties)) if (Array.isArray(v)) for (const seg of v) if (Array.isArray(seg) && seg[0] === '‣' && Array.isArray(seg[1])) for (const f of seg[1]) if (Array.isArray(f) && f[0] === 'p' && f[1]) ids.push(f[1]);
+    if (!ids.length) return '';
+    const j = await apiRV(ids.filter((id) => !REC.has(id)).slice(0, 80).map((id) => ({ table: 'block', id })));
+    const bm = (j && j.recordMap && j.recordMap.block) || {};
+    for (const id of Object.keys(bm)) { const n = bm[id]; REC.set(id, Promise.resolve(n && (n.value && n.value.value ? n.value.value : n.value))); }
+    for (const id of ids) { const b = await block(id); if (b && plain(b.properties && b.properties.title).replace(/\s+/g, ' ').trim() === want) return id; }
+    return '';
+  }
+  async function hcShow(el, x, y) {
+    const isChip = el.matches('div[style*="display: inline"]') && !el.querySelector('a[href]');
+    const id = isChip ? await chipTarget(el) : idFrom(el);
+    if (hcFor !== el) return;
+    if (!id) return;
+    const r = await block(id);
+    if (!r || hcFor !== el) return;
+    if (!hcEl) { hcEl = document.createElement('div'); hcEl.id = 'lm-hc'; document.body.appendChild(hcEl); }
+    const f = r.format || {};
+    const cover = imgSrc(f.page_cover, id);
+    const ic = f.page_icon || '';
+    const icSrc = imgSrc(ic, id);
+    const title = plain(r.properties && r.properties.title) || '無題';
+    const when = r.last_edited_time ? new Date(r.last_edited_time) : null;
+    const kids = (r.content || []).length;
+    hcEl.innerHTML = '<div class="cv' + (cover ? '' : ' none') + '"' + (cover ? ' style="background-image:url(&quot;' + esc(cover) + '&quot;);background-position:center ' + Math.round((1 - (f.page_cover_position == null ? 0.5 : f.page_cover_position)) * 100) + '%"' : '') + '>' +
+      (ic && (icSrc || !/^[a-z]+:/i.test(ic)) ? '<span class="ic">' + (icSrc ? '<img src="' + esc(icSrc) + '" alt="">' : esc(ic)) + '</span>' : '') + '</div>' +
+      '<div class="tx"><b>' + esc(title) + '</b><small>' + (when ? '最終更新 ' + when.toLocaleDateString() : '') + (kids ? '　中のブロック ' + kids : '') + '</small></div>';
+    const W = 300, H = hcEl.offsetHeight || 220;
+    let left = x + 14, top = y + 18;
+    if (left + W > innerWidth - 10) left = innerWidth - W - 10;
+    if (top + H > innerHeight - 10) top = y - H - 14;
+    hcEl.style.left = Math.max(8, left) + 'px'; hcEl.style.top = Math.max(8, top) + 'px';
+    requestAnimationFrame(() => hcEl && hcEl.classList.add('on'));
+  }
+  function hcHide() { clearTimeout(hcT); hcFor = null; if (hcEl) hcEl.classList.remove('on'); }
+  document.addEventListener('mouseover', (e) => {
+    if (!on('hoverCard')) return;
+    const t = hcTarget(e.target);
+    if (t === hcFor) return;
+    hcHide();
+    if (!t) return;
+    hcFor = t;
+    const x = e.clientX, y = e.clientY;
+    hcT = setTimeout(() => hcShow(t, x, y), Math.max(150, +T('hoverDelay') || 450));
+  }, { passive: true, capture: true });
+  document.addEventListener('mousedown', hcHide, true);
+  document.addEventListener('scroll', hcHide, { passive: true, capture: true });
+
+  /* 集中モード */
+  function focusToggle(force) {
+    const v = force != null ? force : !document.documentElement.hasAttribute('data-lm-focus');
+    document.documentElement.toggleAttribute('data-lm-focus', v);
+    toast(v ? '集中モード：入（⌃⌥F で戻す）' : '集中モード：切');
+  }
+  function toast(msg) {
+    if (!document.body) return;
+    let t = document.getElementById('lm-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'lm-toast'; t.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:2147483600;padding:8px 14px;border-radius:999px;background:var(--lm-ink);color:var(--lm-bg);font:12.5px/1.4 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.2);transition:opacity .25s;pointer-events:none'; document.body.appendChild(t); }
+    t.textContent = msg; t.style.opacity = '1';
+    clearTimeout(toast.t); toast.t = setTimeout(() => { t.style.opacity = '0'; }, 1800);
+  }
+
+  /* ============================================================
    *  12. パネル（⌃⌥V）
    * ============================================================ */
   let panel = null;
@@ -870,7 +1127,7 @@ html:hover #lm-fab { opacity: .55; }
     panel = document.createElement('div');
     panel.id = 'lm-panel';
     panel.innerHTML = '<div class="lm-hd"><b>Lumière</b><i>見た目 · ³⁷ v' + VERSION + '</i><button class="lm-x" title="閉じる（Esc）">×</button></div>' +
-      '<div class="lm-tabs">' + [['theme', '配色'], ['mods', 'モジュール'], ['tune', '細部'], ['data', '保存']].map(([k, l]) => '<button class="lm-tab" data-tab="' + k + '">' + l + '</button>').join('') + '</div>' +
+      '<div class="lm-tabs">' + [['theme', '配色'], ['make', '自作'], ['mods', 'モジュール'], ['tune', '細部'], ['data', '保存']].map(([k, l]) => '<button class="lm-tab" data-tab="' + k + '">' + l + '</button>').join('') + '</div>' +
       '<div class="lm-body"></div><div class="lm-ft"></div>';
     document.body.appendChild(panel);
     panel.querySelector('.lm-x').onclick = panelClose;
@@ -883,6 +1140,26 @@ html:hover #lm-fab { opacity: .55; }
     return '<div class="lm-sw" style="background:' + p.bg + '"><span class="a" style="background:' + p.accent + '"></span><span class="a2" style="background:' + p.accent2 + '"></span>' +
       '<div class="s" style="background:' + p.sheet + ';box-shadow:0 1px 3px rgba(0,0,0,.12)"><i style="background:' + p.ink + ';width:70%"></i><i style="background:' + p.mute + ';width:90%;opacity:.6"></i><i style="background:' + p.mute + ';width:55%;opacity:.6"></i><i style="background:' + p.accent + ';width:30%"></i></div></div>';
   }
+  /* 自作の配色: 5 色 → 明・暗の 10 色ずつ */
+  function draftFrom(th) {
+    const l = th.base || th.light;
+    return { id: th.custom ? th.id : '', name: th.custom ? th.name : th.name + 'の写し', tex: th.tex || 'none', base: { bg: l.bg, sheet: l.sheet, ink: l.ink, accent: l.accent, accent2: l.accent2 } };
+  }
+  function deriveLight(b) {
+    const ink = readable(b.ink, b.sheet, 7);
+    return { bg: b.bg, side: mix(b.bg, ink, 0.045), sheet: b.sheet, raised: mix(b.sheet, '#ffffff', 0.5), ink, mute: readable(mix(ink, b.sheet, 0.45), b.sheet, 3.2),
+      line: mix(b.bg, ink, 0.13), accent: readable(b.accent, b.sheet, 3), accent2: readable(b.accent2, b.sheet, 3), tint: mix(b.bg, ink, 0.035) };
+  }
+  function deriveDark(b) {
+    const h = rgb2hsl(hex2rgb(b.bg));
+    const bg = rgb2hex(hsl2rgb([h[0], Math.min(h[1], 30), 9]));
+    const sheet = shade(bg, 3), raised = shade(bg, 6);
+    const ink = readable(mix(b.bg, '#ffffff', 0.35), sheet, 9);
+    return { bg, side: shade(bg, -2), sheet, raised, ink, mute: readable(mix(ink, sheet, 0.42), sheet, 3.5), line: mix(bg, ink, 0.14),
+      accent: readable(shade(b.accent, 10), sheet, 3.5), accent2: readable(shade(b.accent2, 10), sheet, 3.5), tint: shade(bg, 2) };
+  }
+  const draftTheme = (d) => ({ id: d.id || 'my-' + Date.now().toString(36), name: d.name || '自作', en: 'Custom', desc: '自作の配色', custom: true, tex: d.tex, radius: 10, base: Object.assign({}, d.base), light: deriveLight(d.base), dark: deriveDark(d.base) });
+  let tryTheme = null;
   function panelSync(full) {
     if (!panel) return;
     panel.querySelectorAll('.lm-tab').forEach((b) => b.classList.toggle('on', b.dataset.tab === tab));
@@ -897,12 +1174,28 @@ html:hover #lm-fab { opacity: .55; }
       h += '<div class="lm-ctl"><label>明るさ</label><span class="lm-seg" data-k="mode">' + [['auto', 'Notion に合わせる'], ['light', '明'], ['dark', '暗']].map(([v, l]) => '<button data-v="' + v + '"' + (S.mode === v ? ' class="on"' : '') + '>' + l + '</button>').join('') + '</span></div>';
       h += '<div class="lm-sec">配色</div><div class="lm-grid">';
       const cur = curTheme().id;
-      for (const th of THEMES) h += '<button class="lm-th' + (th.id === cur ? ' on' : '') + '" data-th="' + th.id + '" title="' + esc(th.desc) + '">' + swatch(th, dark) + '<span class="n">' + esc(th.name) + '</span><span class="e">' + esc(th.en) + '</span></button>';
+      for (const th of allThemes()) h += '<button class="lm-th' + (th.id === cur ? ' on' : '') + '" data-th="' + th.id + '" title="' + esc(th.desc) + '">' + swatch(th, dark) + '<span class="n">' + esc(th.name) + '</span><span class="e">' + esc(th.en) + '</span></button>';
       h += '</div>';
       h += '<p class="lm-desc">' + esc(curTheme().desc) + '</p>';
       h += '<div class="lm-sec">このページだけ</div>';
       h += '<div class="lm-row"><div class="t"><b>このページは別の配色</b><small>' + (pid ? (S.pages[pid] ? '「' + esc((THEME_BY_ID[S.pages[pid]] || {}).name) + '」に固定中。上で選んだ配色はこのページにだけ当たる' : 'オンにすると、上で選ぶ配色がこのページだけに当たる') : 'ページを開いている時に使える') + '</small></div><button class="lm-sw2' + (S.pages[pid] ? ' on' : '') + '" data-page="1"' + (pid ? '' : ' disabled') + '></button></div>';
       h += '<div class="lm-ctl"><label>アクセント</label><input type="color" data-t="accent" value="' + esc(S.tune.accent || ST.accent || '#a0522d') + '"><button class="lm-btn" data-clear="accent">配色の色に戻す</button></div>';
+    } else if (tab === 'make') {
+      const d = panel.__draft || (panel.__draft = draftFrom(curTheme()));
+      const col = (k, l) => '<div class="lm-ctl"><label>' + l + '</label><input type="color" data-dk="' + k + '" value="' + esc(d.base[k]) + '"><code style="font-size:11px;color:var(--lm-mute)">' + esc(d.base[k]) + '</code></div>';
+      h += '<p class="lm-desc">5 つの色を決めるだけで、明るい版と暗い版（線・薄い文字・カード・影まで）を作ります。文字が読みにくい組み合わせは、自動で読める濃さまで寄せます。</p>';
+      h += '<div class="lm-ctl"><label>名前</label><input type="text" data-dn value="' + esc(d.name) + '"></div>';
+      h += col('bg', '背景') + col('sheet', '本文の紙') + col('ink', '文字') + col('accent', 'アクセント') + col('accent2', '二色目');
+      h += '<div class="lm-ctl"><label>質感</label><select data-dtex>' + [['none', 'なし'], ['paper', '紙'], ['vellum', '羊皮紙'], ['washi', '和紙'], ['grid', '方眼'], ['glow', '光のにじみ']].map(([v, t]) => '<option value="' + v + '"' + (d.tex === v ? ' selected' : '') + '>' + t + '</option>').join('') + '</select></div>';
+      const th = draftTheme(d);
+      const cr = (a, b) => contrast(a, b).toFixed(1);
+      h += '<div class="lm-sec">見本</div><div class="lm-grid" style="grid-template-columns:1fr 1fr">' + ['light', 'dark'].map((m) => '<div><div class="lm-th">' + swatch(th, m === 'dark') + '</div><p class="lm-desc">' + (m === 'light' ? '明' : '暗') + '：文字 ' + cr(th[m].ink, th[m].sheet) + ' : 1／アクセント ' + cr(th[m].accent, th[m].sheet) + ' : 1</p></div>').join('') + '</div>';
+      h += '<p class="lm-desc">読みやすさの目安：文字は 7 以上が理想（4.5 以上なら可）、アクセントは 3 以上。</p>';
+      h += '<div style="display:flex;gap:8px;margin-top:10px"><button class="lm-btn pri" data-make="save">保存して使う</button><button class="lm-btn" data-make="try">試す（保存しない）</button><button class="lm-btn" data-make="from">いまの配色から</button></div>';
+      if (S.custom.length) {
+        h += '<div class="lm-sec">自作の配色</div>';
+        for (const c of S.custom) h += '<div class="lm-row"><div class="t"><b>' + esc(c.name) + '</b><small>' + esc(c.id) + '</small></div><button class="lm-btn" data-use="' + esc(c.id) + '">使う</button><button class="lm-btn" data-edit="' + esc(c.id) + '">直す</button><button class="lm-btn" data-del="' + esc(c.id) + '">消す</button></div>';
+      }
     } else if (tab === 'mods') {
       let g = '';
       for (const [id, grp, name, desc] of MODS) {
@@ -918,6 +1211,7 @@ html:hover #lm-fab { opacity: .55; }
       h += sel('tableStyle', '表の形', [['editorial', '誌面（縦線なし・細い横線）'], ['ledger', '罫線帳（細い縦線・見出しに太線）'], ['cards', '行を浮かせる（1 行ずつカード）']]);
       h += '<div class="lm-row"><div class="t"><b>表を縞にする</b><small>1 行おきに淡い面</small></div><button class="lm-sw2' + (S.tune.zebra ? ' on' : '') + '" data-tb="zebra"></button></div>';
       h += rng('density', '行の高さ', 0.6, 1.6, 0.05);
+      h += sel('galleryStyle', 'ギャラリーの形', [['card', 'カード（浮き上がる）'], ['polaroid', 'ポラロイド（少し傾けて貼る）'], ['frame', '額装（白い余白と額縁）'], ['shelf', '本棚（乗せると表紙が開く）'], ['flat', '平ら（線だけ）']]);
       h += sel('galleryTitle', 'ギャラリーの題名', [['below', '表紙の下'], ['overlay', '表紙の上に重ねる']]);
       h += rng('galleryLift', '乗せた時の浮き', 0, 3, 0.1);
       h += sel('chips', '選択肢のチップ', [['pebble', '丸い小石（色の点つき）'], ['outline', '枠だけ（色の点つき）'], ['solid', '塗り（太字）'], ['plain', 'Notion のまま']]);
@@ -926,6 +1220,11 @@ html:hover #lm-fab { opacity: .55; }
       h += sel('calloutStyle', 'コールアウト', [['glass', '薄いカード＋左の帯'], ['outline', '枠だけ＋左の帯'], ['notion', 'Notion のまま']]);
       h += sel('divider', '区切り線', [['fleuron', '❦ を真ん中に'], ['gradient', 'グラデーション'], ['dots', '点線'], ['double', '二重線'], ['notion', 'Notion のまま']]);
       h += sel('bullets', '箇条書きの印', [['diamond', '◆ ◇ ▪'], ['dot', '• ◦ ▪'], ['dash', '— – ·'], ['circle', '○ ◦ ·'], ['notion', 'Notion のまま']]);
+      h += sel('coverPattern', '表紙の無いページの模様', [['auto', 'ページごとに自動'], ['mesh', '光のにじみ'], ['waves', '波'], ['grid', '方眼'], ['confetti', '紙片']]);
+      h += '<div class="lm-sec">時間</div>';
+      h += '<div class="lm-row"><div class="t"><b>夜は自動で暗く</b><small>明るさが「Notion に合わせる」の時、下の時間は暗い配色にする</small></div><button class="lm-sw2' + (S.tune.schedule ? ' on' : '') + '" data-tb="schedule"></button></div>';
+      h += rng('nightFrom', '暗くする時刻', 0, 23, 1, '時') + rng('nightTo', '明るくする時刻', 0, 23, 1, '時');
+      h += rng('hoverDelay', '見本カードまでの待ち', 150, 1500, 50, 'ms');
       h += '<div class="lm-ctl"><label>本文の紙の幅</label><input type="text" data-t="sheetWidth" placeholder="例 860（空 = Notion のまま）" value="' + esc(S.tune.sheetWidth) + '"></div>';
     } else if (tab === 'data') {
       h += '<div class="lm-sec">書き出し・読み込み</div><p class="lm-desc">設定を文字にして別の端末へ。貼り付けて「読み込む」で戻せる。</p>';
@@ -947,6 +1246,24 @@ html:hover #lm-fab { opacity: .55; }
   function wire(body) {
     body.querySelectorAll('[data-th]').forEach((b) => { b.onclick = () => setTheme(b.dataset.th); });
     body.querySelectorAll('.lm-seg[data-k="mode"] button').forEach((b) => { b.onclick = () => { S.mode = b.dataset.v; save(); apply(); panelSync(true); }; });
+    body.querySelectorAll('[data-dk]').forEach((el) => { el.addEventListener('input', () => { panel.__draft.base[el.dataset.dk] = el.value; const c = el.parentElement.querySelector('code'); if (c) c.textContent = el.value; clearTimeout(el.__t); el.__t = setTimeout(() => panelSync(true), 160); }); });
+    body.querySelectorAll('[data-dn]').forEach((el) => { el.addEventListener('input', () => { panel.__draft.name = el.value; }); });
+    body.querySelectorAll('[data-dtex]').forEach((el) => { el.addEventListener('change', () => { panel.__draft.tex = el.value; panelSync(true); }); });
+    body.querySelectorAll('[data-make]').forEach((b) => {
+      b.onclick = () => {
+        const d = panel.__draft;
+        if (b.dataset.make === 'from') { panel.__draft = draftFrom(curTheme()); panelSync(true); return; }
+        const th = draftTheme(d);
+        if (b.dataset.make === 'try') { tryTheme = th; THEME_BY_ID[th.id] = th; const keep = S.theme; S.theme = th.id; apply(); S.theme = keep; toast('試しに当てています（保存はしていません）'); return; }
+        d.id = th.id;
+        const i = S.custom.findIndex((c) => c.id === th.id);
+        if (i >= 0) S.custom[i] = th; else S.custom.push(th);
+        reindexThemes(); setTheme(th.id); toast('「' + th.name + '」を保存しました');
+      };
+    });
+    body.querySelectorAll('[data-use]').forEach((b) => { b.onclick = () => setTheme(b.dataset.use); });
+    body.querySelectorAll('[data-edit]').forEach((b) => { b.onclick = () => { const c = S.custom.find((x) => x.id === b.dataset.edit); if (c) { panel.__draft = draftFrom(c); panelSync(true); } }; });
+    body.querySelectorAll('[data-del]').forEach((b) => { b.onclick = () => { if (!confirm('この配色を消しますか？')) return; S.custom = S.custom.filter((x) => x.id !== b.dataset.del); if (S.theme === b.dataset.del) S.theme = 'paper'; for (const k of Object.keys(S.pages)) if (S.pages[k] === b.dataset.del) delete S.pages[k]; reindexThemes(); save(); apply(); panelSync(true); }; });
     body.querySelectorAll('[data-mod]').forEach((b) => { b.onclick = () => { S.mods[b.dataset.mod] = !S.mods[b.dataset.mod]; b.classList.toggle('on', on(b.dataset.mod)); save(); apply(); if (b.dataset.mod === 'coverAccent') coverAccent(); }; });
     body.querySelectorAll('[data-tb]').forEach((b) => { b.onclick = () => { S.tune[b.dataset.tb] = !S.tune[b.dataset.tb]; b.classList.toggle('on', !!S.tune[b.dataset.tb]); save(); apply(); }; });
     body.querySelectorAll('[data-page]').forEach((b) => { b.onclick = () => { const pid = pageId(); if (!pid) return; if (S.pages[pid]) delete S.pages[pid]; else S.pages[pid] = curTheme().id; save(); apply(); panelSync(true); }; });
@@ -992,6 +1309,7 @@ html:hover #lm-fab { opacity: .55; }
    * ============================================================ */
   window.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.altKey && !e.metaKey && e.code === 'KeyV') { e.preventDefault(); e.stopPropagation(); panelOpen(); }
+    else if (e.ctrlKey && e.altKey && !e.metaKey && e.code === 'KeyF') { e.preventDefault(); e.stopPropagation(); focusToggle(); }
     else if (e.key === 'Escape' && panel) panelClose();
   }, true);
   /* 明暗の切り替え（body の class）・ページの移動を見張る */
