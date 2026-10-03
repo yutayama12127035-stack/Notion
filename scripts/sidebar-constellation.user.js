@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      2.1.0
-// @description  v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
+// @version      2.2.0
+// @description  v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -14,6 +14,11 @@
 // ==/UserScript==
 
 /*
+ * v2.2.0（2026-10-03）
+ *   ・選択中の行の灰色の箱が残っていた: Notion は背景を行そのものではなく、行を包む入れ物や行の中の帯に付けることがあり、
+ *     前の版は行の style 属性（bacIntTra）しか見ていなかった → 行・包む入れ物・中の帯・疑似要素の背景と影を全部消す。
+ *     選択中は太字だけで示す。戻すには __c33.set({ noBg: false })
+ *
  * v2.1.0（2026-10-03）
  *   ・書体: DB・ページの行は明朝、ビューは Notion の素の書体、と混ざっていた → 全部 --c33-item-font（ビューは --c33-view-font＝既定で同じ）。
  *     太さも変数に（行 500・ビュー 400・選択中 700）
@@ -53,13 +58,13 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '2.1.0';
+  const VERSION = '2.2.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
   const LS = 'c33.prefs.v1';
   const LS_DB = 'c33.db.v1';     // DB だと分かった行の名前（閉じていても DB の印を付ける）
-  const P = { flat: true, scale: 0.8, viewIndent: 18, on: true, alignViews: true, viewShift: 0 };
+  const P = { flat: true, scale: 0.8, viewIndent: 18, on: true, alignViews: true, viewShift: 0, noBg: true };
   try { Object.assign(P, JSON.parse(localStorage.getItem(LS) || '{}')); } catch (e) { /* noop */ }
   const saveP = () => { try { localStorage.setItem(LS, JSON.stringify(P)); } catch (e) { /* noop */ } };
   let KNOWN_DB = {};
@@ -309,6 +314,7 @@
     if (!P.on) return;
     ST.scans++; ST.rows = 0; ST.views = 0; ST.dbs = 0;
     document.documentElement.setAttribute('data-c33', P.flat ? 'flat' : 'nest');
+    document.documentElement.toggleAttribute('data-c33-nobg', P.noBg !== false);
     installCss();
     const scope = document.querySelector('nav.notion-sidebar-container, .notion-sidebar-container, .notion-sidebar');
     if (!scope) return;
@@ -401,7 +407,16 @@ html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"]${B} { min-heigh
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"] :is(div, span):not([data-c33-vslot]):not(:has(svg, img))${B} { font-family: var(--c33-view-font) !important; font-size: var(--c33-view-size) !important; font-weight: var(--c33-view-weight) !important; letter-spacing: var(--c33-view-track) !important; color: var(--c33-view-color) !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"] > :not([data-c33-vslot])${B} { transform: translateY(var(--c33-vtext-dy)); }
 /* 選択中: 背景・影は出さず、文字を濃く太く（今開いているページ・ビュー） */
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind]:is([style*="bacIntTra"], [aria-selected="true"], [aria-current="page"])${B} { background: transparent !important; box-shadow: none !important; }
+/* v2.2.0: 選択中・乗せた時の灰色の箱（影）を出さない — 行そのもの・行を包む入れ物・行の中の横いっぱいの帯、のどこに付いても消す */
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]:hover${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] :is([role="treeitem"], a, [role="button"]):has(> [data-c33-kind])${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] :is([role="treeitem"], a, [role="button"]):has(> [data-c33-kind]):hover${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind] > :not(:first-child)${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] div:has(> [data-c33-kind]):not(:has(> [data-c33-kind] ~ [data-c33-kind]))${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] div:has(> [data-c33-kind]):not(:has(> [data-c33-kind] ~ [data-c33-kind])):hover${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]::before${B},
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]::after${B} { background: transparent !important; background-color: transparent !important; box-shadow: none !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur] :is(.notranslate, .notranslate *, div:not(:has(*)), span:not(:has(*)))${B} { font-weight: var(--c33-cur-weight) !important; color: var(--c33-cur-color) !important; }
 /* ▲ ビューのアイコン（「•」の代わり）: 種類のアイコン、またはビューに付けたアイコン */
 html[data-c33] [data-c33-vslot]${B} { position: relative; width: var(--c33-vicon-size) !important; min-width: var(--c33-vicon-size) !important; margin-inline-end: var(--c33-vicon-gap) !important; padding: 0 !important; }
