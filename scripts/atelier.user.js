@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      34.0.0
-// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
+// @version      35.0.0
+// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -21,6 +21,21 @@
 // ==/UserScript==
 
 /*
+ * v35.0.0（2026-10-03）— 細かく・分かりやすく
+ *   ・どこが変わるか: すべての設定に一文の説明（例「見出しの下線 → そのシリーズの最初の本の行」）。行に乗せると、
+ *     下の帯に説明と「画面で N か所」。光るのはその設定が当たる要素だけ（サイドバー全体ではなく、行・アイコン・ビュー…）。
+ *   ・見本図: リレーション・サイドバー・本文と段落／見出し・表のセルの場所に、図を上に固定。乗せた設定の部品が青く点滅し、
+ *     空き（パディング・マージン）は矢印が動いて示す。
+ *   ・細かさ: 数の箱は ↑↓ でその設定の刻み、⇧ で 10 倍、⌥ で 1/10（小数第 3 位まで）。スライダーの範囲の外の値も入れられる。
+ *     各場所に「細部」の組（開閉）— 文字（書体・大きさ・太さ・字間・行の高さ・色・濃さ・上下左右）／アイコン（大きさ・文字との間・上下左右）／
+ *     枠（上下の外の空き・内側の上下左右・高さ・角・背景）を、その場所の要素すべてに。
+ *   ・リレーション（¹⁴ v1.50.0 の変数）: 見出しの文字・アイコン・左のずらし／最初の見出しの上／区切り線 → 見出し／見出し → 下線／
+ *     下線の太さ・色／下線 → 最初の項目／項目の行と行の間／縦線の左右の空き・太さ・色／最後の項目 → 区切り線／区切り線 → 次の見出し／区切り線の太さ・色。
+ *   ・個別登録: 「どこでも書式・個別登録」で要素を選ぶと、範囲に「このセルだけ」「この行だけ」「この列だけ（この表）」「この 1 つだけ」。
+ *     書式は文字に加えて 位置・アイコン・間隔・形 も。
+ *   ・表のセル: ³⁴ Image Cells（表の画像を大きく・高解像度）の合わせ方・高さ・列の数・間隔・角・切り抜き・影。
+ *   ・基礎の層の縦中央そろえを safe に（中身が行より高い時に、上へはみ出して列の見出しと重ならない）。
+ *
  * v34.0.0（2026-10-03）— 大幅な見直し（パネル・調整できる所・次世代の道具）
  *   ・パネル: 野暮ったさを解消。幅 760px・左の一覧は短い名前とアイコン（見切れ・詰まりなし）・設定は組ごとの枠
  *     （文字／アイコン／位置／間隔／形）・線の見えるスライダー＋単位つきの数の箱・色は見本・右上に「設定を探す」・
@@ -311,7 +326,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '34.0.0';
+  const VERSION = '35.0.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -7190,7 +7205,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     mb: { t: 'px', l: '下の間隔', min: -24, max: 160, s: 1, g: '間隔' },
     pt: { t: 'px', l: '内側の上', min: 0, max: 80, s: 1, g: '間隔' },
     pb: { t: 'px', l: '内側の下', min: 0, max: 80, s: 1, g: '間隔' },
-    pl: { t: 'px', l: '左の余白', min: 0, max: 120, s: 1, g: '間隔' },
+    pl: { t: 'px', l: '内側の左', min: 0, max: 120, s: 1, g: '間隔' },
+    pr: { t: 'px', l: '内側の右', min: 0, max: 120, s: 1, g: '間隔' },
     h: { t: 'px', l: '高さ', min: 12, max: 120, s: 1, g: '間隔' },
     w: { t: 'px', l: '幅', min: 120, max: 2400, s: 4, g: '間隔' },
     rad: { t: 'px', l: '角の丸み', min: 0, max: 32, s: 1, g: '形' },
@@ -7198,20 +7214,42 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     bc: { t: 'color', l: '線の色', g: '形' },
     bg: { t: 'color', l: '背景', g: '形' }
   };
-  const KT = { ff: 'text', fs: 'text', fw: 'text', ls: 'text', lh: 'text', col: 'text', op: 'text', it: 'text', ta: 'text', ti: 'text', tdy: 'text', tdx: 'text', isz: 'icon', igap: 'icon', idy: 'icon', idx: 'icon', mt: 'row', mb: 'row', pt: 'row', pb: 'row', pl: 'row', h: 'row', w: 'row', rad: 'row', bw: 'row', bc: 'row', bg: 'row' };
+  const KT = { ff: 'text', fs: 'text', fw: 'text', ls: 'text', lh: 'text', col: 'text', op: 'text', it: 'text', ta: 'text', ti: 'text', tdy: 'text', tdx: 'text', isz: 'icon', igap: 'icon', idy: 'icon', idx: 'icon', mt: 'row', mb: 'row', pt: 'row', pb: 'row', pl: 'row', pr: 'row', h: 'row', w: 'row', rad: 'row', bw: 'row', bc: 'row', bg: 'row' };
+  /* v35: どこが変わるかを文字で（{t} 文字の所・{i} アイコン・{r} 枠） */
+  const KD = {
+    ff: '{t}の書体', fs: '{t}の文字の大きさ', fw: '{t}の文字の太さ', ls: '{t}の、文字と文字の間（字間・em＝文字の大きさに対する割合）', lh: '{t}の 1 行の高さ（文字の大きさの何倍か）',
+    col: '{t}の文字の色', op: '{t}の濃さ（1 で不透明・0 で見えない）', it: '{t}を斜体に', ta: '{t}の揃え（左・中央・右・両端）', ti: '{t}の 1 行目だけを右へ下げる（全角何文字分）',
+    tdy: '{t}だけを上下にずらす（周りの配置は動かない・＋で下）', tdx: '{t}だけを左右にずらす（周りの配置は動かない・＋で右）',
+    isz: '{i}の幅と高さ', igap: '{i}の右側の空き（アイコン → 文字の距離）', idy: '{i}だけを上下にずらす（＋で下）', idx: '{i}だけを左右にずらす（＋で右）',
+    mt: '{r}の上の外側の空き（ひとつ前の要素との距離）', mb: '{r}の下の外側の空き（次の要素との距離）', pt: '{r}の内側の上の空き（枠の上端 → 中身）', pb: '{r}の内側の下の空き（中身 → 枠の下端）',
+    pl: '{r}の内側の左の空き（枠の左端 → 中身）', pr: '{r}の内側の右の空き（中身 → 枠の右端）', h: '{r}の高さ', w: '{r}の幅', rad: '{r}の角の丸み', bw: '{r}の線の太さ', bc: '{r}の線の色', bg: '{r}の背景の色'
+  };
   const KITS = {};
+  const KX = { text: 'ff fs fw ls lh col op tdx tdy', icon: 'isz igap idx idy', row: 'mt mb pt pb pl pr h rad bg' };
   /* k: 鍵の頭 ／ sel: { text, icon, row, … } ／ keys: 'ff fs …' ／ o: { g: 組の名前, l: 名前の差し替え, d: 既定の表示, tg: 当てる先の差し替え, prop: 書く CSS の差し替え（$ に値）, deep } */
+  /* o.n: { text, icon, row } 説明に使う要素の名前 ／ o.f: 見本図の部品の頭 ／ o.more: false で「細部」を足さない */
   function kit(k, sel, keys, o) {
     o = o || {};
     KITS[k] = { sel, deep: !!o.deep, prop: o.prop || {}, tg: o.tg || {} };
-    return keys.split(/\s+/).filter(Boolean).map((x) => {
+    const g = o.g || '';
+    const nm = Object.assign({ text: g + 'の文字', icon: g + 'のアイコン', row: g + 'の枠', blk: g + 'のブロック' }, o.n || {});
+    const list = keys.split(/\s+/).filter(Boolean);
+    const have = new Set(list);
+    const extra = [];
+    if (o.more !== false) for (const tg of ['text', 'icon', 'row']) if (sel[tg]) for (const x of KX[tg].split(' ')) if (!have.has(x) && !(o.tg && Object.values(o.tg).length && o.tg[x])) { have.add(x); extra.push(x); }
+    const mk = (x, fold) => {
       const c = Object.assign({}, KC[x], { p: k + '.' + x, kit: k, kk: x });
-      if (o.g) c.g = o.g;
+      if (g) c.g = fold ? g + '・細部' : g;
+      if (fold) c.fold = 1;
       if (o.l && o.l[x]) c.l = o.l[x];
       if (o.d && o.d[x] != null) c.d = o.d[x];
       if (o.r && o.r[x]) Object.assign(c, o.r[x]);
+      const tg = (o.tg && o.tg[x]) || KT[x];
+      c.w = (o.w && o.w[x]) || (KD[x] || '').replace('{t}', nm.text).replace('{i}', nm.icon).replace('{r}', nm[tg] || nm.row);
+      if (o.f) c.f = o.f + '-' + x;
       return c;
-    });
+    };
+    return list.map((x) => mk(x, false)).concat(extra.map((x) => mk(x, true)));
   }
   const PC = '.notion-page-content';
   const SBT = 'html[data-c33] .notion-outliner-team-container[data-c33-team]';
@@ -7223,20 +7261,20 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { p: 'selCol', t: 'color', l: '選んだ文字の背景', d: '', g: '画面全体' },
       { p: 'caretCol', t: 'color', l: '入力カーソルの色', d: '', g: '画面全体' }
     ] },
-    { id: 'body', sec: 'all', label: '本文と段落', hl: PC + ' .notion-text-block', note: 'ページの本文。段落の上と下の間隔・1 行目の字下げ・両端揃え・ページの幅まで。本文の文字の色や書体の「部分的な」書式は、文字を選ぶと出るメニュー（本文の書式）で。', ctl: [
-      ...kit('body', { text: '.notion-frame ' + PC + ', .notion-peek-renderer ' + PC }, 'ff fs lh ls col', { g: '文字', d: { fs: 16, lh: 1.5 } }),
-      ...kit('para', { text: PC + ' .notion-text-block [data-content-editable-leaf]', row: PC + ' .notion-text-block' }, 'ti ta mt mb pt pb', { g: '段落', l: { mt: '段落の上の間隔', mb: '段落の下の間隔', pt: '段落の内側の上', pb: '段落の内側の下' }, d: { mt: 1, mb: 1, pt: 3, pb: 3 } }),
-      ...kit('blocks', { row: PC + ' [data-block-id].notion-selectable:not(.notion-text-block)' }, 'mt mb', { g: 'ほかのブロック', l: { mt: 'ブロックの上', mb: 'ブロックの下' } }),
+    { id: 'body', sec: 'all', label: '本文と段落', fig: 'body', hl: PC + ' .notion-text-block', note: 'ページの本文。段落の上と下の間隔・1 行目の字下げ・両端揃え・ページの幅まで。本文の文字の色や書体の「部分的な」書式は、文字を選ぶと出るメニュー（本文の書式）で。', ctl: [
+      ...kit('body', { text: '.notion-frame ' + PC + ', .notion-peek-renderer ' + PC }, 'ff fs lh ls col', { g: '文字', d: { fs: 16, lh: 1.5 }, f: 'body', n: { text: '本文全体の文字' }, more: false }),
+      ...kit('para', { text: PC + ' .notion-text-block [data-content-editable-leaf]', row: PC + ' .notion-text-block' }, 'ti ta mt mb pt pb', { g: '段落', l: { mt: '段落の上の間隔', mb: '段落の下の間隔', pt: '段落の内側の上', pb: '段落の内側の下' }, d: { mt: 1, mb: 1, pt: 3, pb: 3 }, f: 'para', n: { text: '段落の文字', row: '段落（テキストのブロック 1 つ）' } }),
+      ...kit('blocks', { row: PC + ' [data-block-id].notion-selectable:not(.notion-text-block)' }, 'mt mb', { g: 'ほかのブロック', l: { mt: 'ブロックの上', mb: 'ブロックの下' }, f: 'blk', n: { row: '段落以外のブロック（画像・リスト・見出しなど）' } }),
       { p: 'pageW', t: 'px', l: '本文の幅', d: 708, min: 400, max: 1800, s: 4, g: 'ページの幅' },
       { p: 'pageSide', t: 'px', l: '左右の最小の余白', d: 96, min: 0, max: 400, s: 4, g: 'ページの幅' }
     ] },
-    { id: 'heads', sec: 'all', label: '見出し', hl: PC + ' :is(.notion-header-block, .notion-sub_header-block, .notion-sub_sub_header-block)', note: '見出し 1・2・3（トグル見出しも）。上と下の間隔で、見出しの前後の空きを決めます。', ctl: [
-      ...kit('h1', { text: PC + ' .notion-header-block :is(h2, [role="heading"])', row: PC + ' .notion-header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 1', d: { fs: 30, fw: 600 } }),
-      ...kit('h2', { text: PC + ' .notion-sub_header-block :is(h3, [role="heading"])', row: PC + ' .notion-sub_header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 2', d: { fs: 24, fw: 600 } }),
+    { id: 'heads', sec: 'all', label: '見出し', fig: 'body', hl: PC + ' :is(.notion-header-block, .notion-sub_header-block, .notion-sub_sub_header-block)', note: '見出し 1・2・3（トグル見出しも）。上と下の間隔で、見出しの前後の空きを決めます。', ctl: [
+      ...kit('h1', { text: PC + ' .notion-header-block :is(h2, [role="heading"])', row: PC + ' .notion-header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 1', d: { fs: 30, fw: 600 } , f: 'h1', n: { text: '見出し 1 の文字', row: '見出し 1 のブロック' }}),
+      ...kit('h2', { text: PC + ' .notion-sub_header-block :is(h3, [role="heading"])', row: PC + ' .notion-sub_header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 2', d: { fs: 24, fw: 600 } , f: 'h2', n: { text: '見出し 2 の文字', row: '見出し 2 のブロック' }}),
       ...kit('h3', { text: PC + ' .notion-sub_sub_header-block :is(h4, [role="heading"])', row: PC + ' .notion-sub_sub_header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 3', d: { fs: 20, fw: 600 } })
     ] },
     { id: 'lists', sec: 'all', label: 'リストと ToDo', hl: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block)', note: '箇条書き・番号付き・ToDo・トグル。', ctl: [
-      ...kit('li', { text: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block) [data-content-editable-leaf]', row: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block)' }, 'fs lh col mt mb', { g: '項目', l: { mt: '項目の上の間隔', mb: '項目の下の間隔' } }),
+      ...kit('li', { text: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block) [data-content-editable-leaf]', row: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block)' }, 'fs lh col mt mb', { g: '項目', l: { mt: '項目の上の間隔', mb: '項目の下の間隔' } , f: 'h3', n: { text: '見出し 3 の文字', row: '見出し 3 のブロック' }}),
       ...kit('limk', { icon: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block) > div > div:first-child' }, 'igap idy', { g: '印（・ 1. ☐ ▸）', l: { igap: '印と文字の間', idy: '印の上下' } }),
       ...kit('done', { text: PC + ' .notion-to_do-block [style*="line-through"]' }, 'op col', { g: '済んだ ToDo', l: { op: '濃さ', col: '色' } })
     ] },
@@ -7312,9 +7350,17 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { p: 'hdrColor', t: 'color', l: '色', d: '', g: '列見出し' },
       ...kit('coli', { icon: '.notion-frame .notion-table-view-header-cell svg', row: '.notion-frame .notion-table-view-header-row' }, 'isz igap idy h', { g: '列見出し', prop: { h: 'min-height:$px' }, l: { h: '見出しの行の高さ' } })
     ] },
-    { id: 'cells', sec: 'db', label: '表のセル', hl: '.notion-frame .notion-table-view-cell', note: '表ビューの普通のセル（題字・リレーション以外）。', ctl: [
-      ...kit('cell', { text: '.notion-frame .notion-table-view-cell [data-testid="property-value"]', row: '.notion-frame .notion-table-view-cell' }, 'ff fs lh col pt pb pl', { g: 'セル', deep: true }),
-      ...kit('trow', { row: '.notion-frame .notion-table-view :is(.notion-table-view-row, .notion-collection-item)' }, 'h', { g: '行', prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' } })
+    { id: 'cells', sec: 'db', label: '表のセル', fig: 'cell', hl: '.notion-frame .notion-table-view-cell', note: '表ビューの普通のセル（題字・リレーション以外）と、セルの画像（³⁴ Image Cells）。', ctl: [
+      ...kit('cell', { text: '.notion-frame .notion-table-view-cell [data-testid="property-value"]', row: '.notion-frame .notion-table-view-cell [data-testid="property-value"]' }, 'ff fs lh col pt pb pl pr', { g: 'セル', deep: true, f: 'cell', n: { text: 'セルの文字', row: 'セル' } }),
+      ...kit('trow', { row: '.notion-frame .notion-table-view :is(.notion-table-view-row, .notion-collection-item)' }, 'h', { g: '行', prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' }, n: { row: '表の 1 行' }, more: false, f: 'cell' }),
+      { v: '--c34-mode', t: 'select', l: '合わせ方', d: 'fill', o: [['fill', '幅に合わせる（ギャラリー風）'], ['height', '高さをそろえて並べる']], g: '画像（³⁴ Image Cells）', f: 'cell-img', w: 'ファイルのプロパティの画像を、セルの幅いっぱいにするか、決めた高さで横に並べるか' },
+      { v: '--c34-maxh', t: 'px', l: '高さの上限', d: 320, min: 40, max: 1200, s: 4, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '「幅に合わせる」の時の、画像の高さの上限（縦長の画像が伸びすぎない）' },
+      { v: '--c34-h', t: 'px', l: '高さ', d: 120, min: 24, max: 800, s: 2, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '「高さをそろえる」の時の画像の高さ' },
+      { v: '--c34-cols', t: 'num', l: '複数の時の列の数', d: 2, min: 1, max: 6, s: 1, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '1 つのセルに画像が 2 枚以上ある時、何列に並べるか' },
+      { v: '--c34-gap', t: 'px', l: '画像と画像の間', d: 6, min: 0, max: 32, s: 0.5, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '画像と画像の間の空き' },
+      { v: '--c34-radius', t: 'px', l: '角の丸み', d: 6, min: 0, max: 32, s: 0.5, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '画像の角の丸み' },
+      { v: '--c34-fit', t: 'select', l: '切り抜き', d: 'cover', o: [['cover', '枠いっぱい（はみ出しは切る）'], ['contain', '全体を見せる（余白あり）']], g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '高さの上限で切れる時に、切り抜くか全体を縮めるか' },
+      { v: '--c34-shadow', t: 'num', l: '影の濃さ', d: 0.12, min: 0, max: 0.6, s: 0.01, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '画像の下の影の濃さ（0 で無し）' }
     ] },
     { id: 'primary', sec: 'db', label: 'テーブルの題字列', note: '表の題字（Name）の列（旧 ¹⁷）。', ctl: [
       { p: 'primFont', t: 'font', l: '書体', d: 'Charter・Baskerville → 明朝', g: '文字' },
@@ -7326,19 +7372,40 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--cordivestium-title-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 1, g: 'アイコン' },
       ...kit('primi', { icon: '.notion-table-view-cell[data-c12-primary] .notion-record-icon' }, 'idy idx', { g: 'アイコン' })
     ] },
-    { id: 'relation', sec: 'db', label: 'リレーション', note: '表のリレーションのセル（旧 ¹⁶・¹⁴ Relation Show All の項目とシリーズ見出し）。', ctl: [
-      { p: 'relFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: '項目' },
-      { v: '--cordi-relation-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5, g: '項目' },
-      { v: '--cordi-relation-font-weight', t: 'weight', l: '太さ', d: 500, g: '項目' },
-      { v: '--cordi-relation-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05, g: '項目' },
-      ...kit('rel', { text: '.cordi13-item .cordi13-title', icon: '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)' }, 'col tdy', { g: '項目' }),
-      { v: '--cordi-relation-icon-size', t: 'px', l: 'アイコンの大きさ', d: 20, min: 12, max: 32, s: 1, g: '項目のアイコン' },
-      { v: '--cordi-relation-icon-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 1, g: '項目のアイコン' },
-      ...kit('reli', { icon: '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)' }, 'idy', { g: '項目のアイコン' }),
-      { v: '--cordi-relation-multi-gap', t: 'px', l: '項目の間', d: 3, min: 0, max: 16, s: 1, g: '間隔' },
-      { p: 'relHeadFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: 'シリーズ見出し' },
-      { p: 'relHeadSize', t: 'px', l: '大きさ', d: 11, min: 9, max: 18, s: 0.5, g: 'シリーズ見出し' },
-      ...kit('relh', { text: ':is(.cordi13-sec-head, .c23-head) > span:last-child', icon: ':is(.cordi13-sec-head, .c23-head) :is(.cordi13-sec-icon, img)', row: '.cordi13-sec-head' }, 'fw col tdy isz igap idy pt pb', { g: 'シリーズ見出し', l: { pt: '見出しの上', pb: '見出しと線の間' } })
+    { id: 'relation', sec: 'db', label: 'リレーション', fig: 'rel', hl: '[data-cordi13-on]', note: '表のリレーションのセル（¹⁴ Relation Show All）と、ページのリレーション欄（²³）。上の見本図で、行に乗せた設定がどこを動かすかが青く動きます。', ctl: [
+      { v: '--c13-head-size', t: 'px', l: '大きさ', d: 11, min: 8, max: 24, s: 0.5, g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出し（例「ガリレオ」）の文字の大きさ' },
+      { p: 'relHeadFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出しの書体' },
+      { v: '--c13-head-weight', t: 'weight', l: '太さ', d: 700, g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出しの文字の太さ' },
+      { v: '--c13-head-ls', t: 'em', l: '字間', d: 0, min: -0.05, max: 0.4, s: 0.005, g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出しの、文字と文字の間' },
+      { v: '--c13-head-color', t: 'color', l: '色', d: '', g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出しの文字の色' },
+      { v: '--c13-head-text-dy', t: 'px', l: '文字の上下', d: 0, min: -10, max: 10, s: 0.25, g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出しの文字だけを上下にずらす（＋で下）' },
+      { v: '--c13-head-indent', t: 'px', l: '左のずらし', d: 0, min: -16, max: 48, s: 0.5, g: 'シリーズ見出し', f: 'hindent', w: 'シリーズ見出し（アイコンと文字）全体を右へずらす。下線は動かない' },
+      { v: '--c13-head-icon', t: 'px', l: 'アイコンの大きさ', d: 18, min: 8, max: 40, s: 0.5, g: 'シリーズ見出しのアイコン', f: 'hicon', w: 'シリーズ見出しの左のアイコン（例 ⚗）の幅と高さ' },
+      { v: '--c13-head-gap', t: 'px', l: 'アイコンと文字の間', d: 10, min: 0, max: 32, s: 0.5, g: 'シリーズ見出しのアイコン', f: 'hgap', w: 'シリーズ見出しのアイコンの右端 → 見出しの文字の左端' },
+      { v: '--c13-head-icon-dy', t: 'px', l: 'アイコンの上下', d: 0, min: -10, max: 10, s: 0.25, g: 'シリーズ見出しのアイコン', f: 'hicon', w: 'シリーズ見出しのアイコンだけを上下にずらす（＋で下）' },
+      { v: '--c13-first-top', t: 'px', l: '最初の見出しの上', d: 0, min: 0, max: 40, s: 0.5, g: '見出しのまわりの空き', f: 'firsttop', w: 'セルの上端 → 最初のシリーズ見出しの文字' },
+      { v: '--c13-head-top', t: 'px', l: '区切り線 → 見出し', d: 14, min: 0, max: 48, s: 0.5, g: '見出しのまわりの空き', f: 'headtop', w: '前のシリーズの区切り線 → 次のシリーズ見出しの文字の上端（2 つ目以降の見出し）' },
+      { v: '--c13-head-bottom', t: 'px', l: '見出し → 下線', d: 4, min: 0, max: 32, s: 0.5, g: '見出しのまわりの空き', f: 'headbottom', w: '見出しの文字の下端 → 見出しの下線' },
+      { v: '--c13-head-body', t: 'px', l: '下線 → 最初の項目', d: 18, min: 0, max: 48, s: 0.5, g: '見出しのまわりの空き', f: 'headbody', w: '見出しの下線 → そのシリーズの最初の本の行' },
+      { v: '--c13-line-w', t: 'px', l: '下線の太さ', d: 1, min: 0, max: 4, s: 0.5, g: '見出しのまわりの空き', f: 'hline', w: '見出しの下の横線の太さ（0 で消える）' },
+      { v: '--c13-line-color', t: 'color', l: '下線の色', d: '', g: '見出しのまわりの空き', f: 'hline', w: '見出しの下の横線の色' },
+      { p: 'relFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: '項目（本）', f: 'itext', w: '項目（本の題名）の書体' },
+      { v: '--cordi-relation-font-size', t: 'px', l: '大きさ', d: 11, min: 8, max: 22, s: 0.5, g: '項目（本）', f: 'itext', w: '項目の題名の文字の大きさ' },
+      { v: '--cordi-relation-font-weight', t: 'weight', l: '太さ', d: 500, g: '項目（本）', f: 'itext', w: '項目の題名の文字の太さ' },
+      { v: '--cordi-relation-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05, g: '項目（本）', f: 'irow', w: '項目 1 行の高さ（文字の大きさの何倍か）。行と行の間も広がる' },
+      ...kit('rel', { text: '.cordi13-item .cordi13-title' }, 'col tdy', { g: '項目（本）', f: 'i', n: { text: '項目の題名' }, more: false, r: { col: { f: 'itext' }, tdy: { f: 'itext' } } }),
+      { v: '--cordi-relation-icon-size', t: 'px', l: 'アイコンの大きさ', d: 20, min: 10, max: 36, s: 0.5, g: '項目のアイコン', f: 'iicon', w: '項目（本）の左のアイコンの幅と高さ' },
+      { v: '--cordi-relation-icon-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 0.5, g: '項目のアイコン', f: 'igap', w: '項目のアイコンの右端 → 題名の左端' },
+      ...kit('reli', { icon: '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)' }, 'idy idx', { g: '項目のアイコン', n: { icon: '項目のアイコン' }, more: false, r: { idy: { f: 'iicon' }, idx: { f: 'iicon' } } }),
+      { v: '--c13-row-gap', t: 'px', l: '行と行の間', d: 3, min: 0, max: 32, s: 0.5, g: '項目の並び', f: 'rowgap', w: '項目の行の下の空き（上の本の行 → 下の本の行）' },
+      { v: '--cordi-relation-multi-gap', t: 'px', l: '項目の間（1 列の時）', d: 3, min: 0, max: 24, s: 0.5, g: '項目の並び', f: 'rowgap', w: '列に分けない（項目が少ない）時の、項目と項目の間' },
+      { v: '--c13-col-pad', t: 'px', l: '縦線の左右の空き', d: 8, min: 0, max: 32, s: 0.5, g: '項目の並び', f: 'colpad', w: '列に分けた時の、縦線と項目の間（線の左右に同じだけ）' },
+      { v: '--c13-vline-w', t: 'px', l: '縦線の太さ', d: 1, min: 0, max: 4, s: 0.5, g: '項目の並び', f: 'vline', w: '列と列の間の縦線の太さ（0 で消える）' },
+      { v: '--c13-vline-color', t: 'color', l: '縦線の色', d: '', g: '項目の並び', f: 'vline', w: '列と列の間の縦線の色' },
+      { v: '--c13-div-top', t: 'px', l: '最後の項目 → 区切り線', d: 10, min: 0, max: 48, s: 0.5, g: '次のシリーズとの区切り', f: 'divtop', w: 'シリーズの最後の本の行 → 次のシリーズとの区切り線' },
+      { v: '--c13-div-bottom', t: 'px', l: '区切り線 → 次の見出し', d: 0, min: 0, max: 48, s: 0.5, g: '次のシリーズとの区切り', f: 'divbottom', w: '区切り線 → 次のシリーズ見出しの上の空き（「区切り線 → 見出し」と足し算）' },
+      { v: '--c13-div-w', t: 'px', l: '区切り線の太さ', d: 1, min: 0, max: 4, s: 0.5, g: '次のシリーズとの区切り', f: 'div', w: 'シリーズとシリーズの間の横線の太さ（0 で消える）' },
+      { v: '--c13-div-color', t: 'color', l: '区切り線の色', d: '', g: '次のシリーズとの区切り', f: 'div', w: 'シリーズとシリーズの間の横線の色' }
     ] },
     { id: 'group', sec: 'db', label: 'グループ見出し', note: '表を「グループ」で分けた時の見出し（旧 ¹² ²¹）。', ctl: [
       { p: 'grpFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: '文字' },
@@ -7355,8 +7422,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('lst', { row: '.notion-frame .notion-list-view .notion-collection-item', text: '.notion-frame .notion-list-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-list-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col isz igap h', { g: 'リストビューの行', prop: { h: 'min-height:$px' } })
     ] },
     /* ───── サイドバー ───── */
-    { id: 'sidebar', sec: 'side', label: 'サイドバー', hl: '.notion-sidebar-container', note: '★グループ見出し（¹⁶）と ³³ Sidebar Constellation の行・ビュー・ワークスペース。アイコンの大きさ・文字との間・位置まで。ビューのアイコンは、上の DB の題名の 1 文字目にそろいます（ずらしたい時は「開始位置」）。', ctl: [
-      ...kit('sbg', { text: '#c16-root .c16-sec .c16-lbl', icon: '#c16-root .c16-sec .c16-ico', row: '#c16-root .c16-sec' }, 'ff fs fw ls col tdy isz igap idy mt', { g: '★ グループ見出し', deep: true, prop: { isz: 'width:$px;height:$px;min-width:$px;--c16-ico-size:$px;--c16-ico-box:$px' }, l: { mt: 'グループの上の間隔' } }),
+    { id: 'sidebar', sec: 'side', label: 'サイドバー', fig: 'side', hl: '.notion-sidebar-container', note: '★グループ見出し（¹⁶）と ³³ Sidebar Constellation の行・ビュー・ワークスペース。アイコンの大きさ・文字との間・位置まで。ビューのアイコンは、上の DB の題名の 1 文字目にそろいます（ずらしたい時は「開始位置」）。', ctl: [
+      ...kit('sbg', { text: '#c16-root .c16-sec .c16-lbl', icon: '#c16-root .c16-sec .c16-ico', row: '#c16-root .c16-sec' }, 'ff fs fw ls col tdy isz igap idy mt', { g: '★ グループ見出し', deep: true, f: 'sg', n: { text: '★ グループ見出しの名前', icon: '★ グループ見出しのアイコン', row: '★ グループ見出しの段' }, prop: { isz: 'width:$px;height:$px;min-width:$px;--c16-ico-size:$px;--c16-ico-box:$px' }, l: { mt: 'グループの上の間隔' } }),
       { v: '--c33-team-font', t: 'font', l: '書体', d: '★見出しと同じ', g: '■ ワークスペース' },
       { v: '--c33-team-size', t: 'px', l: '大きさ', d: 10.5, min: 8, max: 18, s: 0.5, g: '■ ワークスペース' },
       { v: '--c33-team-weight', t: 'weight', l: '太さ', d: 600, g: '■ ワークスペース' },
@@ -7397,21 +7464,63 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { p: 'scrollW', t: 'px', l: 'スクロールバーの太さ', d: 10, min: 0, max: 16, s: 1, g: 'スクロールバー' }
     ] }
   ];
+  /* v35: 変数の設定に、どこが変わるか（w）と見本図の部品（f） */
+  const FW = {
+    '--c33-team-font': ['steam', '■ ワークスペースの名前（MASTER・DATE など小さな見出し）の書体'], '--c33-team-size': ['steam', '■ ワークスペースの名前の文字の大きさ'], '--c33-team-weight': ['steam', '■ ワークスペースの名前の太さ'],
+    '--c33-team-track': ['steam', '■ ワークスペースの名前の字間（大文字の間の空き）'], '--c33-team-color': ['steam', '■ ワークスペースの名前の色'],
+    '--c33-team-gap': ['steamgap', '前のワークスペースの最後の行 → ■ ワークスペースの名前'], '--c33-team-after': ['steamafter', '■ ワークスペースの名前 → その中の最初の行'],
+    '--c33-item-font': ['srowtext', '● DB・ページの行の名前の書体'], '--c33-item-size': ['srowtext', '● DB・ページの行の名前の大きさ'], '--c33-item-weight': ['srowtext', '● DB・ページの行の名前の太さ'],
+    '--c33-item-track': ['srowtext', '● 行の名前の字間'], '--c33-item-color': ['srowtext', '● 行の名前の色'], '--c33-item-h': ['srowh', '● 行 1 本の高さ（行と行の間隔もこれで決まる）'],
+    '--c33-text-dy': ['srowtext', '● 行の名前だけを上下にずらす（＋で下）'], '--c33-icon-size': ['srowicon', '● 行の左のアイコンの幅と高さ'], '--c33-icon-gap': ['srowgap', '● 行のアイコンの右端 → 名前の左端'],
+    '--c33-icon-dy': ['srowicon', '● 行のアイコンだけを上下にずらす（＋で下）'], '--c33-icon-dx': ['srowicon', '● 行のアイコンだけを左右にずらす（＋で右）'],
+    '--c33-view-font': ['sviewtext', '▲ ビュー（Books・Light…）の名前の書体'], '--c33-view-size': ['sviewtext', '▲ ビューの名前の大きさ'], '--c33-view-weight': ['sviewtext', '▲ ビューの名前の太さ'], '--c33-view-color': ['sviewtext', '▲ ビューの名前の色'],
+    '--c33-view-h': ['sviewh', '▲ ビューの行 1 本の高さ'], '--c33-vtext-dy': ['sviewtext', '▲ ビューの名前だけを上下にずらす'], '--c33-vicon-size': ['sviewicon', '▲ ビューのアイコンの幅と高さ'],
+    '--c33-vicon-gap': ['sviewgap', '▲ ビューのアイコンの右端 → ビューの名前'], '--c33-vicon-dy': ['sviewicon', '▲ ビューのアイコンだけを上下にずらす'], '--c33-view-shift': ['sviewshift', '▲ ビューのアイコンの左端の位置。0 で上の DB の名前の 1 文字目にぴったり、＋で右・−で左'],
+    '--c33-cur-weight': ['scur', '今開いているページ・ビューの名前の太さ'], '--c33-cur-color': ['scur', '今開いているページ・ビューの名前の色'],
+    '--c17-divider-height': ['', 'ビューのタブとタブの間の縦の区切り線の高さ'], '--c17-divider-space': ['', 'タブの区切り線の左右の空き'],
+    pageW: ['body-w', '本文の列の最大の幅（Notion の既定は 708px）'], pageSide: ['body-side', '本文の左右の、最小の余白'],
+    baseSerif: ['', 'Atelier の「既定の書体」。書体を空にした所の明朝の代わり'], selCol: ['', 'マウスで文字を選んだ時の背景の色'], caretCol: ['', '入力中の縦棒（カーソル）の色']
+  };
+  /* v35: 変数の設定ごとの「光らせる所」（場所全体ではなく、変わる要素そのもの） */
+  const SB_ROW = '.notion-sidebar-container [data-c33-kind]:is([data-c33-kind="db"], [data-c33-kind="page"])';
+  const SB_VIEW = '.notion-sidebar-container [data-c33-kind="view"]';
+  const HLS = [
+    [/^--c33-team-(gap|after)$/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team'], [/^--c33-team/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team :is(.notranslate, span)'],
+    [/^--c33-(item-h)$/, SB_ROW], [/^--c33-(item|text)/, SB_ROW + ' .notranslate'], [/^--c33-icon/, SB_ROW + ' > :first-child'],
+    [/^--c33-view-h$/, SB_VIEW], [/^--c33-(view|vtext)/, SB_VIEW + ' > :not([data-c33-vslot])'], [/^--c33-(vicon|view-shift)/, SB_VIEW + ' [data-c33-vslot]'], [/^--c33-cur/, '.notion-sidebar-container [data-c33-cur]'],
+    [/^--c13-head-(icon|gap)/, '.cordi13-sec-head :is(.cordi13-sec-icon, img)'], [/^--c13-(head|first|line)/, '.cordi13-sec-head'], [/^--c13-(row-gap|col-pad)$/, '.cordi13-item'], [/^--c13-vline/, '.cordi13-item-sep'], [/^--c13-div/, '.cordi13-sec-div'],
+    [/^--cordi-relation-icon/, '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)'], [/^--cordi-relation/, '.cordi13-item .cordi13-title'], [/^rel(Head)?Font$/, '.cordi13-item .cordi13-title, .cordi13-sec-head > span:last-child'],
+    [/^--c34/, 'img[data-c34-img]'], [/^--cordivestium-title-icon|^--cordivestium-title-gap/, '.notion-table-view-cell[data-c12-primary] .notion-record-icon'], [/^--cordivestium-title|^primFont$/, '.notion-table-view-cell[data-c12-primary] [data-testid="property-value"]'],
+    [/^--c12g/, '.notion-collection_view_page-block > a[role="link"] > div:has(.notion-record-icon)'], [/^hdrTab/, '.notion-frame [role="tablist"] [role="tab"]'], [/^hdrCol/, '.notion-frame .notion-table-view-header-cell'],
+    [/^--constellucentia-full-db-(icon|title)/, '.notion-frame .notion-collection_view_page-block h1, .notion-frame .notion-collection_view_page-block .notion-record-icon'], [/^--constellucentia-full-db-(desc|quote)|^descJustify$/, '[data-constellucentia-full-db-description-aligned="true"]'],
+    [/^pg(Font|Size|Weight|Ls)$/, '.notion-frame h1[aria-roledescription="page title"]'], [/^pageW|^pageSide$/, '.notion-frame .notion-page-content'], [/^--c25/, '.notion-frame h1']
+  ];
   const AT_CTL = {};
-  for (const r of AT_REGIONS) for (const c of r.ctl) { AT_CTL[c.v || c.p] = c; c.region = r.id; }
+  for (const r of AT_REGIONS) for (const c of r.ctl) {
+    if (!c.kit) { const k = c.v || c.p; const m = HLS.find(([re]) => re.test(k)); if (m) c.hl = m[1]; }
+    AT_CTL[c.v || c.p] = c; c.region = r.id;
+    const fw = FW[c.v || c.p];
+    if (fw) { if (fw[0] && !c.f) c.f = fw[0]; if (!c.w) c.w = fw[1]; }
+    if (!c.w) c.w = (c.g ? c.g + '：' : '') + c.l;
+  }
   const UNIT = { px: 'px', em: 'em', num: '', weight: '' };
   /* kit の CSS（値の入った所だけ） */
   const addImp = (d) => d.split(';').map((x) => x.trim()).filter(Boolean).map((x) => (/!important$/.test(x) ? x : x + ' !important')).join(';');
   function atKitCss() {
-    let css = '';
     const T = TK();
-    for (const [k, K] of Object.entries(KITS)) {
+    let css = '';
+    for (const [k, K] of Object.entries(KITS)) css += kitCssFor(k, K, (x) => T[k + '.' + x]);
+    return css;
+  }
+  function kitCssFor(k, K, get) {
+    let css = '';
+    {
       const by = {};
       const add = (tg, d) => { if (!K.sel[tg]) return; (by[tg] = by[tg] || []).push(addImp(d)); };
       const tr = { text: [0, 0], icon: [0, 0] };
       let any = false;
       for (const x of Object.keys(KC)) {
-        const v = T[k + '.' + x];
+        const v = get(x);
         if (v === undefined || v === '' || v === null) continue;
         const c = KC[x], tg = K.tg[x] || KT[x], n = atNum(v);
         const val = c.t === 'font' ? atFamily(v) : c.t === 'color' || c.t === 'select' ? String(v).replace(/[;{}<>]/g, '') : n;
@@ -7448,7 +7557,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
           case 'bg': add(tg, 'background:' + val); break;
         }
       }
-      if (!any) continue;
+      if (!any) return '';
       for (const t of ['text', 'icon']) if (tr[t][0] || tr[t][1]) add(t, 'transform:translate(' + (tr[t][0] || 0) + 'px,' + (tr[t][1] || 0) + 'px)');
       for (const [tg, ds] of Object.entries(by)) {
         if (tg === '__isz' || !ds.length) continue;
@@ -7536,7 +7645,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       const v = T[k];
       if (v === undefined || v === '' || v === null) continue;
       if (c.t === 'font') { const f = atFamily(v); if (f) vars.push(c.v + ':' + f); }
-      else if (c.t === 'color') vars.push(c.v + ':' + v);
+      else if (c.t === 'color' || c.t === 'select') vars.push(c.v + ':' + String(v).replace(/[;{}<>]/g, ''));
       else if (atNum(v) != null) vars.push(c.v + ':' + atNum(v) + (UNIT[c.t] || ''));
     }
     let css = vars.length ? ':root:root:root {\n  ' + vars.join(';\n  ') + ';\n}\n' : '';
@@ -7564,6 +7673,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     return css;
   }
   const atRaw = (sel, d) => boostSel(sel) + ' {' + d + '}\n';
+  const RULE_BOX = ['tdy', 'tdx', 'isz', 'igap', 'idy', 'idx', 'mt', 'mb', 'pt', 'pb', 'pl', 'pr', 'h', 'w', 'rad', 'bw', 'bc', 'bg'];
   function atRulesCss() {
     let css = '';
     for (const r of AT.rules) {
@@ -7571,6 +7681,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       try { document.querySelector(r.sel); } catch (e) { continue; }
       const st = r.st || {};
       css += '/* ' + String(r.name || '').replace(/\*\//g, '') + ' */\n' + atRule(r.sel, { ff: st.ff ? atFamily(st.ff) : '', fs: atNum(st.fs), fw: atNum(st.fw), ls: atNum(st.ls), lh: atNum(st.lh), col: st.col || '', it: !!st.it, tt: st.tt || '', ta: st.ta || '', op: atNum(st.op) }, r.deep !== false);
+      /* v35: 位置・アイコン・間隔・形（個別登録でも同じ細かさで） */
+      css += kitCssFor('rule', { sel: { text: r.sel, row: r.sel, icon: atSplit(r.sel).map((x) => x + ' :is(.notion-record-icon, img, svg)').join(', ') }, deep: false, prop: {}, tg: {} }, (x) => (RULE_BOX.includes(x) ? st[x] : undefined));
     }
     return css;
   }
@@ -7665,7 +7777,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const cur = num === '' ? (ph === '' ? c.min : +ph) : +num;
     const pct = Math.max(0, Math.min(100, ((cur - c.min) / (c.max - c.min)) * 100));
     return '<span class="at-num' + (num === '' ? ' at-empty' : '') + '"><input type="range" ' + attr + ' min="' + c.min + '" max="' + c.max + '" step="' + c.s + '" value="' + cur + '" style="--pct:' + pct.toFixed(1) + '%">' +
-      '<span class="at-nbox"><input class="at-n" type="number" ' + attr + ' min="' + c.min + '" max="' + c.max + '" step="' + c.s + '" value="' + atEsc(num) + '" placeholder="' + atEsc(ph) + '"><small>' + (UNIT[c.t] || '') + '</small></span></span>';
+      '<span class="at-nbox" title="↑↓ で ' + c.s + ' ずつ・⇧ で 10 倍・⌥ で 1/10。範囲の外の値も入れられます"><input class="at-n" type="text" inputmode="decimal" spellcheck="false" autocomplete="off" ' + attr + ' data-step="' + c.s + '" value="' + atEsc(num) + '" placeholder="' + atEsc(ph) + '"><small>' + (UNIT[c.t] || '') + '</small></span></span>';
   }
   const AT_NAV_ICO = {
     base: 'M4 16L9.2 4h1.6L16 16M6.3 11.5h7.4', body: 'M4 5h12M4 8.5h12M4 12h12M4 15.5h7', heads: 'M5 4v12M13 4v12M5 10h8', lists: 'M8 5.5h8M8 10h8M8 14.5h8M4.5 5.5h.01M4.5 10h.01M4.5 14.5h.01',
@@ -7691,20 +7803,29 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     return h;
   }
   /* 行（コントロール 1 つ） */
+  function atStatus(t) { const f = atPanel && atPanel.querySelector('.at-foot span'); if (f) f.textContent = t || '変えるとすぐ反映・自動で保存（このブラウザ）・行に乗せると当たる所が光ります'; }
   function atRowHtml(c, showRegion) {
     const k = c.v || c.p;
     const v = TK()[k];
     const isSetV = v !== undefined && v !== '';
     const reg = showRegion ? AT_REGIONS.find((r) => r.id === c.region) : null;
-    return '<div class="at-row' + (isSetV ? ' at-set' : '') + '" data-hl="' + atEsc(k) + '"><label>' + atEsc(c.l) + (reg ? '<small>' + atEsc(reg.label + ' › ' + (c.g || '')) + '</small>' : '') + '</label><div class="at-ctl">' + atControl(c, v, 'data-k="' + atEsc(k) + '"') + '</div><button class="at-x" data-reset="' + atEsc(k) + '" title="既定に戻す">' + AT_RESET_SVG + '</button></div>';
+    return '<div class="at-row' + (isSetV ? ' at-set' : '') + '" data-hl="' + atEsc(k) + '"><label>' + atEsc(c.l) + (reg ? '<small class="at-where">' + atEsc(reg.label + ' › ' + (c.g || '')) + '</small>' : '') + (c.w && !reg ? '<small class="at-w">' + atEsc(c.w) + '</small>' : '') + '</label><div class="at-ctl">' + atControl(c, v, 'data-k="' + atEsc(k) + '"') + '</div><button class="at-x" data-reset="' + atEsc(k) + '" title="既定に戻す">' + AT_RESET_SVG + '</button></div>';
   }
   const AT_RESET_SVG = '<svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5a5.5 5.5 0 1 1 1.6 4.4"/><path d="M4 5.5v4h4"/></svg>';
   function atGroupsHtml(ctls) {
     const groups = [];
     for (const c of ctls) { const g = c.g || ''; let G = groups.find((x) => x.g === g); if (!G) { G = { g, list: [] }; groups.push(G); } G.list.push(c); }
-    return groups.map((G) => '<section class="at-card">' + (G.g ? '<div class="at-cardh"><span>' + atEsc(G.g) + '</span><button class="at-ghost" data-resetg="' + atEsc(G.g) + '" title="この組を既定に戻す">元に戻す</button></div>' : '') + G.list.map((c) => atRowHtml(c)).join('') + '</section>').join('');
+    return groups.map((G) => {
+      const fold = G.list.every((c) => c.fold);
+      const anySet = G.list.some((c) => { const v = TK()[c.v || c.p]; return v !== undefined && v !== ''; });
+      const head = '<span>' + atEsc(G.g) + (fold ? '<em>' + G.list.length + ' 項目・さらに細かく</em>' : '') + '</span><button class="at-ghost" data-resetg="' + atEsc(G.g) + '" title="この組を既定に戻す">元に戻す</button>';
+      const rows = G.list.map((c) => atRowHtml(c)).join('');
+      return fold ? '<details class="at-card at-fold"' + (anySet || atOpenFolds.has(G.g) ? ' open' : '') + ' data-fold="' + atEsc(G.g) + '"><summary class="at-cardh">' + head + '</summary>' + rows + '</details>'
+        : '<section class="at-card">' + (G.g ? '<div class="at-cardh">' + head + '</div>' : '') + rows + '</section>';
+    }).join('');
   }
   let atQuery = '';
+  const atOpenFolds = new Set();
   function atRenderMain() {
     const main = atPanel.querySelector('.at-main');
     if (atQuery) {
@@ -7723,10 +7844,104 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       return;
     }
     const r = AT_REGIONS.find((x) => x.id === atTab) || AT_REGIONS[0];
-    main.innerHTML = '<div class="at-title"><h3>' + atEsc(r.label) + '</h3><button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></div><p class="at-note">' + atEsc(r.note) + '</p>' + atGroupsHtml(r.ctl);
+    main.innerHTML = (r.fig && AT_FIGS[r.fig] ? '<div class="at-fig">' + AT_FIGS[r.fig]() + '<div class="at-figcap">設定の行に乗せると、変わる所が青く光り、空きは矢印で動きます</div></div>' : '') +
+      '<div class="at-title"><h3>' + atEsc(r.label) + '</h3><button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></div><p class="at-note">' + atEsc(r.note) + '</p>' + atGroupsHtml(r.ctl);
   }
   /* 乗せた行の当たる所を、画面で光らせる */
   let atHlEls = [];
+  /* ============================================================
+   *  v35: 見本図（どこが変わるかを、動く図で）
+   *   部品は data-f="名前"。設定の行に乗せると、その設定の f と同じ部品が青く光り、寸法の矢印が動く。
+   * ============================================================ */
+  const FG = {
+    bar: (x, y, w, h, f) => '<rect class="p" data-f="' + f + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + Math.min(3, h / 2) + '"/>',
+    ico: (x, y, s, f) => '<rect class="p pi" data-f="' + f + '" x="' + x + '" y="' + y + '" width="' + s + '" height="' + s + '" rx="2.5"/>',
+    box: (x, y, w, h, f) => '<rect class="bx" data-f="' + f + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4"/>',
+    ln: (x1, y1, x2, y2, f) => '<line class="ln" data-f="' + f + '" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>',
+    v: (x, y1, y2, f, t) => '<g class="mk" data-f="' + f + '"><line x1="' + x + '" y1="' + y1 + '" x2="' + x + '" y2="' + y2 + '" marker-start="url(#atA)" marker-end="url(#atA)"/><line class="tk" x1="' + (x - 5) + '" y1="' + y1 + '" x2="' + (x + 5) + '" y2="' + y1 + '"/><line class="tk" x1="' + (x - 5) + '" y1="' + y2 + '" x2="' + (x + 5) + '" y2="' + y2 + '"/>' + (t ? '<text x="' + (x + 8) + '" y="' + ((y1 + y2) / 2 + 3.5) + '">' + t + '</text>' : '') + '</g>',
+    h: (y, x1, x2, f, t) => '<g class="mk" data-f="' + f + '"><line x1="' + x1 + '" y1="' + y + '" x2="' + x2 + '" y2="' + y + '" marker-start="url(#atA)" marker-end="url(#atA)"/><line class="tk" x1="' + x1 + '" y1="' + (y - 5) + '" x2="' + x1 + '" y2="' + (y + 5) + '"/><line class="tk" x1="' + x2 + '" y1="' + (y - 5) + '" x2="' + x2 + '" y2="' + (y + 5) + '"/>' + (t ? '<text x="' + ((x1 + x2) / 2) + '" y="' + (y - 7) + '" text-anchor="middle">' + t + '</text>' : '') + '</g>'
+  };
+  const figSvg = (w, h, body) => '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg"><defs><marker id="atA" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L6 3 0 6z" fill="#2383e2"/></marker></defs>' + body + '</svg>';
+  const AT_FIGS = {
+    rel: () => {
+      const { bar, ico, box, ln, v, h } = FG;
+      let b = box(8, 6, 504, 236, 'cellbox');
+      const items = (y) => { let o = box(16, y - 3, 488, 18, 'irow'); for (const [x, w] of [[26, 92], [192, 80], [356, 100]]) o += ico(x, y, 12, 'iicon') + bar(x + 18, y + 2, w, 8, 'itext'); return o; };
+      b += v(14, 6, 20, 'firsttop', '');
+      b += ico(26, 20, 15, 'hicon') + h(27, 41, 48, 'hgap', '') + bar(48, 22, 74, 11, 'htext') + h(16, 16, 26, 'hindent', '');
+      b += v(136, 33, 40, 'headbottom', '');
+      b += ln(16, 40, 504, 40, 'hline');
+      b += v(14, 40, 56, 'headbody', '');
+      b += items(56) + v(14, 70, 82, 'rowgap', '') + items(82);
+      b += ln(182, 52, 182, 100, 'vline') + ln(346, 52, 346, 100, 'vline') + h(96, 172, 182, 'colpad', '') + h(96, 182, 192, 'colpad', '');
+      b += v(14, 100, 118, 'divtop', '') + ln(16, 118, 504, 118, 'div') + v(150, 118, 126, 'divbottom', '') + v(14, 118, 138, 'headtop', '');
+      b += ico(26, 138, 15, 'hicon') + bar(48, 140, 58, 11, 'htext') + ln(16, 158, 504, 158, 'hline');
+      b += items(174) + items(200);
+      b += '<text class="cap" x="430" y="30">シリーズ見出し</text><text class="cap" x="430" y="114">区切り線</text><text class="cap" x="452" y="226">項目（本）</text>';
+      return figSvg(520, 248, b);
+    },
+    side: () => {
+      const { bar, ico, box, ln, v, h } = FG;
+      let b = '';
+      b += ico(20, 10, 18, 'sg-icon') + bar(46, 13, 96, 12, 'sg-text') + h(30, 38, 46, 'sg-igap', '');
+      b += v(14, 32, 48, 'steamgap', '') + bar(46, 48, 64, 7, 'steam') + v(118, 55, 64, 'steamafter', '');
+      b += box(16, 64, 330, 28, 'srowh') + ico(42, 71, 14, 'srowicon') + h(78, 56, 64, 'srowgap', '') + bar(64, 73, 84, 10, 'srowtext') + v(356, 64, 92, 'srowh', '');
+      b += ln(64, 70, 64, 160, 'sviewshift');
+      for (const [y, w, cur] of [[96, 56, 0], [120, 70, 1], [144, 48, 0]]) b += box(16, y - 4, 330, 24, 'sviewh') + ico(64, y + 2, 11, 'sviewicon') + bar(81, y + 4, w, 8, cur ? 'sviewtext scur' : 'sviewtext') + (cur ? '<rect class="p" data-f="scur" x="81" y="' + (y + 3) + '" width="' + w + '" height="10" rx="3" opacity=".0"/>' : '');
+      b += h(110, 75, 81, 'sviewgap', '') + v(356, 92, 116, 'sviewh', '');
+      b += box(16, 168, 330, 28, 'srowh') + ico(42, 175, 14, 'srowicon') + bar(64, 177, 70, 10, 'srowtext');
+      b += '<text class="cap" x="372" y="22">★ グループ</text><text class="cap" x="372" y="56">■ ワークスペース</text><text class="cap" x="372" y="82">● DB</text><text class="cap" x="372" y="126">▲ ビュー</text><text class="cap" x="372" y="186">● ページ</text>';
+      return figSvg(520, 204, b);
+    },
+    body: () => {
+      const { bar, box, v, h } = FG;
+      let b = '';
+      b += v(52, 4, 14, 'h1-mt', '') + box(60, 14, 400, 30, 'h1-row') + bar(66, 20, 210, 18, 'h1-text') + v(52, 44, 54, 'h1-mb', '');
+      const para = (y, f2) => { let o = box(60, y, 400, 46, 'para-row blk0') + v(470, y, y + 6, 'para-pt', '') + v(470, y + 40, y + 46, 'para-pb', ''); o += bar(80, y + 8, 370, 7, 'para-text body-text') + bar(66, y + 20, 384, 7, 'para-text body-text') + bar(66, y + 32, 240, 7, 'para-text body-text'); if (f2) o += h(y + 11, 66, 80, 'para-ti', ''); return o; };
+      b += para(54, 1) + v(52, 100, 108, 'para-mb', '') + v(44, 100, 108, 'para-mt', '') + para(108, 1);
+      b += v(52, 154, 166, 'blk-mt', '') + box(60, 166, 200, 52, 'blk-row') + '<path class="p" data-f="blk-row" d="M76 208l30-26 22 18 16-12 32 20z" opacity=".55"/>' + v(52, 218, 228, 'blk-mb', '');
+      b += v(52, 228, 236, 'h2-mt', '') + box(60, 236, 400, 24, 'h2-row') + bar(66, 241, 150, 14, 'h2-text') + v(52, 260, 268, 'h2-mb', '');
+      b += box(60, 268, 400, 20, 'h3-row') + bar(66, 272, 120, 11, 'h3-text');
+      b += h(300, 60, 460, 'body-w', '') + h(300, 6, 60, 'body-side', '') + h(300, 460, 514, 'body-side', '');
+      b += '<text class="cap" x="468" y="34">見出し 1</text><text class="cap" x="468" y="82">段落</text><text class="cap" x="270" y="196">画像などのブロック</text><text class="cap" x="468" y="252">見出し 2</text>';
+      return figSvg(520, 308, b);
+    },
+    cell: () => {
+      const { bar, ico, box, ln, v, h } = FG;
+      let b = '';
+      b += ln(8, 30, 512, 30, 'hdr') + bar(18, 12, 60, 9, 'hdr') + bar(150, 12, 50, 9, 'hdr') + bar(390, 12, 50, 9, 'hdr');
+      b += ln(140, 6, 140, 170, 'grid') + ln(380, 6, 380, 170, 'grid') + ln(8, 170, 512, 170, 'grid');
+      b += ico(18, 92, 14, 'prim') + bar(38, 94, 80, 9, 'prim');
+      b += box(141, 31, 238, 138, 'cell-row') + v(146, 31, 41, 'cell-pt', '') + v(146, 159, 169, 'cell-pb', '') + h(60, 141, 151, 'cell-pl', '') + h(60, 369, 379, 'cell-pr', '');
+      b += '<rect class="p" data-f="cell-img" x="151" y="41" width="218" height="96" rx="6" opacity=".55"/><path class="p" data-f="cell-img" d="M163 127l40-36 30 24 22-16 40 28z"/>';
+      b += bar(151, 144, 150, 8, 'cell-text');
+      b += bar(390, 92, 100, 8, 'cell-text');
+      b += v(500, 31, 170, 'cell-h', '');
+      b += '<text class="cap" x="18" y="190">題字</text><text class="cap" x="151" y="190">画像のセル（³⁴）</text><text class="cap" x="390" y="190">文字のセル</text>';
+      return figSvg(520, 196, b);
+    }
+  };
+  const KROLE = { ff: 'text', fs: 'text', fw: 'text', ls: 'text', lh: 'text', col: 'text', op: 'text', it: 'text', ta: 'text', ti: 'ti', tdy: 'text', tdx: 'text', isz: 'icon', igap: 'igap', idy: 'icon', idx: 'icon', mt: 'mt', mb: 'mb', pt: 'pt', pb: 'pb', pl: 'pl', pr: 'pr', h: 'h', w: 'w', rad: 'row', bw: 'row', bc: 'row', bg: 'row' };
+  function atFigOn(f) {
+    const fig = atPanel && atPanel.querySelector('.at-fig');
+    if (!fig) return;
+    fig.querySelectorAll('.on').forEach((e) => e.classList.remove('on'));
+    if (!f) return;
+    const q = (n) => fig.querySelectorAll('[data-f~="' + n + '"]');
+    let els = q(f);
+    if (!els.length) {
+      const i = f.lastIndexOf('-');
+      if (i > 0) {
+        const pre = f.slice(0, i), key = f.slice(i + 1);
+        const role = KROLE[key] || key;
+        els = q(pre + '-' + role);
+        if (!els.length && (role === 'ti')) els = q(pre + '-text');
+        if (!els.length && /^(mt|mb|pt|pb|pl|pr|h|w|row)$/.test(role)) els = q(pre + '-row');
+        if (!els.length && role === 'igap') els = q(pre + '-icon');
+      }
+    }
+    els.forEach((e) => e.classList.add('on'));
+  }
   function atHighlight(k) {
     for (const el of atHlEls) el.remove();
     atHlEls = [];
@@ -7735,10 +7950,13 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (!c) return;
     let sel = '';
     if (c.kit) { const K = KITS[c.kit]; const tg = K.tg[c.kk] || KT[c.kk]; sel = K.sel[tg] || K.sel.text || K.sel.row || K.sel.icon || ''; }
+    else if (c.hl) sel = c.hl;
     else { const r = AT_REGIONS.find((x) => x.id === c.region); sel = (r && r.hl) || ''; }
     if (!sel) return;
     let els = [];
-    try { els = [...document.querySelectorAll(sel)].filter((e) => !e.closest('.at-panel')).slice(0, 40); } catch (e) { return; }
+    try { els = [...document.querySelectorAll(sel)].filter((e) => !e.closest('.at-panel')); } catch (e) { return; }
+    atStatus((c.w || c.l) + (els.length ? '　—　画面で ' + els.length + ' か所' : '　—　この画面には見当たりません（開いているページに無い要素）'));
+    els = els.slice(0, 60);
     for (const el of els) {
       const b = el.getBoundingClientRect();
       if (!b.width || b.bottom < 0 || b.top > innerHeight) continue;
@@ -7765,7 +7983,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   /* ---------- どこでも書式 ---------- */
   function atRenderAny(main) {
     const r = atEditRule && AT.rules.find((x) => x.id === atEditRule);
-    let h = '<div class="at-title"><h3>どこでも書式</h3></div><p class="at-note">Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー・サイドバー…）も、画面でクリックして選べば書式を当てられます。</p>' +
+    let h = '<div class="at-title"><h3>どこでも書式・個別登録</h3></div><p class="at-note">画面でクリックして選んだ要素に、文字・位置・アイコン・間隔・形を当てます。範囲は「同じ形の所すべて」から「このセルだけ」「この行だけ」「この列だけ」「この 1 つだけ」まで選べます（個別登録）。</p><p class="at-note">Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー・サイドバー…）も、画面でクリックして選べば書式を当てられます。</p>' +
       '<div class="at-row"><label>要素を選ぶ</label><div class="at-ctl"><button class="at-btn at-pri" data-a="pick">画面でクリックして選ぶ</button><span class="at-def">Esc でやめる</span></div><span></span></div>';
     if (r) {
       const st = r.st || {};
@@ -7780,6 +7998,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
         fld('tt', { t: 'select', l: '大文字・小文字', d: '', o: [['', 'そのまま'], ['uppercase', 'すべて大文字'], ['lowercase', 'すべて小文字'], ['capitalize', '頭だけ大文字']] }) +
         fld('ta', { t: 'select', l: '揃え', d: '', o: [['', 'そのまま'], ['left', '左'], ['center', '中央'], ['right', '右'], ['justify', '両端']] }) +
         fld('it', { t: 'toggle', l: '斜体', d: false }) +
+        '</div>' + [['位置', 'tdy tdx'], ['アイコン（中のアイコン・画像）', 'isz igap idy idx'], ['間隔', 'mt mb pt pb pl pr h w'], ['形', 'rad bw bc bg']].map(([g, ks]) => '<div class="at-card"><div class="at-cardh"><span>' + g + '</span></div>' + ks.split(' ').map((x) => fld(x, Object.assign({}, KC[x], { d: '', min: Math.min(KC[x].min, x === 'h' || x === 'w' ? 0 : -24) }))).join('') + '</div>').join('') + '<div class="at-card">' +
         '<div class="at-row"><label>中の文字にも</label><div class="at-ctl"><label class="at-tog"><input type="checkbox" data-rf="deep"' + (r.deep !== false ? ' checked' : '') + '><i></i></label></div><span></span></div>' +
         '<div class="at-row"><label></label><div class="at-ctl"><button class="at-btn at-ghost" data-a="delRule">この書式を消す</button><button class="at-btn" data-a="doneRule">完了</button></div><span></span></div></div>';
     }
@@ -7812,8 +8031,29 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const push = (l, sel) => { const n = cnt(sel); if (n > 0 && !out.some((o) => o.sel === sel)) out.push({ l, sel, n }); };
     push('同じ形の所すべて', strict);
     push('広く（同じ種類すべて）', loose);
-    const blk = el.closest('[data-block-id]');
-    if (blk) push('このブロックの中だけ', '[data-block-id="' + blk.getAttribute('data-block-id') + '"] ' + chain[chain.length - 1]);
+    const last = chain[chain.length - 1];
+    /* v35: 個別登録 — このセルだけ・この行だけ・この列だけ・この 1 つだけ */
+    const cell = el.closest('.notion-table-view-cell, [data-col-index]');
+    const row = el.closest('[data-block-id]');
+    const tail = (anc) => (anc === el ? '' : ' ' + last);
+    if (cell && row && row.contains(cell)) {
+      const ci = cell.getAttribute('data-col-index');
+      const rid = row.getAttribute('data-block-id');
+      const cs = ci != null ? '[data-col-index="' + ci + '"]' : '.notion-table-view-cell:nth-child(' + ([...cell.parentElement.children].indexOf(cell) + 1) + ')';
+      push('このセルだけ', '[data-block-id="' + rid + '"] ' + cs + tail(cell));
+      push('この行だけ', '[data-block-id="' + rid + '"] ' + last);
+      const view = cell.closest('.notion-collection_view-block, .notion-collection_view_page-block, .notion-frame');
+      const vid = view && view.getAttribute('data-block-id');
+      if (ci != null) push('この列だけ（この表）', (vid ? '[data-block-id="' + vid + '"] ' : '.notion-frame ') + '.notion-table-view-cell' + cs + tail(cell));
+    } else if (row) push('このブロックの中だけ', '[data-block-id="' + row.getAttribute('data-block-id') + '"] ' + last);
+    /* この 1 つだけ: いちばん近い data-block-id から nth-child でたどる */
+    const anc = row || el.closest('.notion-sidebar-container, .notion-topbar, .notion-frame');
+    if (anc && anc !== el) {
+      const path = [];
+      for (let c = el; c && c !== anc; c = c.parentElement) path.unshift(c.tagName.toLowerCase() + ':nth-child(' + ([...c.parentElement.children].indexOf(c) + 1) + ')');
+      const head = row ? '[data-block-id="' + row.getAttribute('data-block-id') + '"]' : atDescr(anc);
+      if (path.length <= 14) push('この 1 つだけ', head + ' > ' + path.join(' > '));
+    }
     return out;
   }
   function atStartPick() {
@@ -7872,6 +8112,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   function atReadVal(el, c) {
     if (el.type === 'checkbox') return el.checked ? '1' : '0';
     if (el.classList.contains('at-sel') && el.value === '__custom') return '__custom';
+    if (el.classList.contains('at-n')) { const t = el.value.trim().replace(/[^\d.\-]/g, ''); if (t === '') return ''; return isFinite(+t) && !/[.\-]$/.test(t) ? String(+t) : null; }
     return el.value;
   }
   /* スライダー・数の箱・色を互いにそろえる */
@@ -7898,6 +8139,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (k) {
       const c = AT_CTL[k];
       let v = atReadVal(el, c);
+      if (v === null) return;
       if (v === '__custom') { TK()[k] = '"Hiragino Mincho ProN", serif'; atRefresh(); return; }
       atSyncCtl(el, v);
       if (v === '') delete TK()[k]; else TK()[k] = v;
@@ -7910,6 +8152,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (!r) return;
     if (rk) {
       let v = atReadVal(el);
+      if (v === null) return;
       if (v === '__custom') { r.st[rk] = '"Hiragino Mincho ProN", serif'; atRefresh(); return; }
       atSyncCtl(el, v);
       if (rk === 'it') v = el.checked ? true : '';
@@ -7998,10 +8241,31 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       '<div class="at-body"><nav class="at-nav"></nav><div class="at-main"></div></div>' +
       '<div class="at-foot"><span>変えるとすぐ反映・自動で保存（このブラウザ）・行に乗せると当たる所が光ります</span><span><kbd>⌃⌥A</kbd> Atelier　<kbd>⌃⌥P</kbd> パレット</span></div>';
     for (const ev of ['pointerdown', 'mousedown', 'keydown', 'click', 'beforeinput', 'input', 'change']) atPanel.addEventListener(ev, (e) => { if (ev === 'keydown' && e.key === 'Escape') { if (atPick) return; closeAtelier(); } e.stopPropagation(); }, false);
+    /* v35: 数の箱 — ↑↓ で 1 刻み（設定ごと）、⇧ で 10 倍、⌥ で 1/10。小数第 3 位まで */
+    atPanel.addEventListener('keydown', (e) => {
+      const el = e.target;
+      if (!el.classList || !el.classList.contains('at-n') || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+      e.preventDefault();
+      let st = +el.dataset.step || 1;
+      if (e.shiftKey) st *= 10; if (e.altKey) st /= 10;
+      const base = el.value !== '' && isFinite(+el.value) ? +el.value : (isFinite(+el.placeholder) ? +el.placeholder : 0);
+      el.value = String(Math.round((base + (e.key === 'ArrowUp' ? st : -st)) * 1000) / 1000);
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    });
     atPanel.addEventListener('input', atOnInput);
     atPanel.addEventListener('change', atOnInput);
     atPanel.addEventListener('click', atOnClick);
-    atPanel.addEventListener('mouseover', (e) => { const r = e.target.closest('.at-row[data-hl]'); const k = r ? r.dataset.hl : ''; if (k !== atPanel.__hl) { atPanel.__hl = k; clearTimeout(atPanel.__hlT); atPanel.__hlT = setTimeout(() => atHighlight(k), 140); } });
+    atPanel.addEventListener('mouseover', (e) => {
+      const r = e.target.closest('.at-row[data-hl]'); const k = r ? r.dataset.hl : '';
+      if (k === atPanel.__hl) return;
+      atPanel.__hl = k;
+      const c = k && AT_CTL[k];
+      atFigOn(c ? c.f : '');
+      const cap = atPanel.querySelector('.at-figcap'); if (cap) cap.textContent = c ? (c.w || c.l) : '設定の行に乗せると、変わる所が青く光り、空きは矢印で動きます';
+      if (!k) atStatus('');
+      clearTimeout(atPanel.__hlT); atPanel.__hlT = setTimeout(() => atHighlight(k), 140);
+    });
+    atPanel.addEventListener('toggle', (e) => { const d = e.target; if (d.dataset && d.dataset.fold) { if (d.open) atOpenFolds.add(d.dataset.fold); else atOpenFolds.delete(d.dataset.fold); } }, true);
     atPanel.addEventListener('mouseleave', () => { atPanel.__hl = ''; clearTimeout(atPanel.__hlT); atHighlight(''); });
     const head = atPanel.querySelector('.at-head');
     head.addEventListener('mousedown', (e) => {
@@ -8124,7 +8388,36 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-rule small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--at-fg3); font: 10.5px/1.4 ui-monospace, Menlo, monospace; }
 .at-sep { height: 1px; margin: 12px 0; background: var(--at-line); }
 .at-foot { display: flex; align-items: center; justify-content: space-between; height: 36px; padding: 0 20px; border-top: 1px solid var(--at-line); color: var(--at-fg3); font-size: 11.5px; }
+.at-foot > span:first-child { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 16px; }
+.at-foot > span:last-child { flex: none; }
 .at-foot kbd { padding: 1px 6px; border-radius: 4px; background: var(--at-hov); font: 10.5px/1.5 ui-monospace, Menlo, monospace; }
+.at-row > label small.at-w { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; font-size: 10.5px; line-height: 1.45; color: var(--at-fg3); }
+.at-row:hover > label small.at-w { -webkit-line-clamp: 6; color: var(--at-fg2); }
+.at-fig { position: sticky; top: -18px; z-index: 3; margin: -18px -24px 16px; padding: 14px 24px 8px; background: var(--c-bgPri, #fff); border-bottom: 1px solid var(--at-line); }
+.at-fig svg { display: block; width: 100%; height: auto; max-height: 168px; }
+.at-main:has(.at-fig) { scroll-padding-top: 220px; }
+.at-fig .p { fill: color-mix(in srgb, var(--at-fg) 16%, transparent); transition: fill .15s; }
+.at-fig .pi { fill: color-mix(in srgb, var(--at-fg) 30%, transparent); }
+.at-fig .bx { fill: none; stroke: color-mix(in srgb, var(--at-fg) 10%, transparent); stroke-width: 1; }
+.at-fig .ln { stroke: color-mix(in srgb, var(--at-fg) 22%, transparent); stroke-width: 1; }
+.at-fig .cap { font: 10px/1 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; fill: var(--at-fg3); }
+.at-fig .mk { opacity: 0; transition: opacity .15s; }
+.at-fig .mk line { stroke: #2383e2; stroke-width: 2.2; }
+.at-fig .mk.on { filter: drop-shadow(0 0 3px rgba(35,131,226,.55)); }
+.at-fig .mk text { font: 600 9px/1 -apple-system, sans-serif; fill: #2383e2; }
+.at-fig .on.p { fill: #2383e2; animation: at-fig-blink .9s ease-in-out infinite alternate; }
+.at-fig .on.bx { stroke: #2383e2; stroke-width: 1.6; stroke-dasharray: 5 3; animation: at-fig-march .7s linear infinite; }
+.at-fig .on.ln { stroke: #2383e2; stroke-width: 2.2; animation: at-fig-blink .9s ease-in-out infinite alternate; }
+.at-fig .mk.on { opacity: 1; }
+.at-fig .mk.on line:not(.tk) { stroke-dasharray: 3 2; animation: at-fig-march .6s linear infinite; }
+@keyframes at-fig-blink { from { opacity: 1; } to { opacity: .45; } }
+@keyframes at-fig-march { to { stroke-dashoffset: -16; } }
+.at-figcap { min-height: 30px; margin-top: 6px; font-size: 11.5px; line-height: 1.45; color: var(--at-fg2); }
+details.at-fold > summary { list-style: none; cursor: pointer; }
+details.at-fold > summary::-webkit-details-marker { display: none; }
+details.at-fold > summary span::before { content: "▸"; display: inline-block; width: 14px; transition: transform .15s; }
+details.at-fold[open] > summary span::before { transform: rotate(90deg); }
+.at-cardh em { margin-left: 8px; font-style: normal; font-weight: 400; color: var(--at-fg3); letter-spacing: 0; }
 .at-hl { position: fixed; z-index: 2147483590; pointer-events: none; border-radius: 4px; box-shadow: 0 0 0 2px rgba(35,131,226,.75); background: rgba(35,131,226,.07); animation: at-hl .9s ease; }
 @keyframes at-hl { from { box-shadow: 0 0 0 6px rgba(35,131,226,.0); } to { box-shadow: 0 0 0 2px rgba(35,131,226,.75); } }
 .at-pickbox { position: fixed; z-index: 2147483601; pointer-events: none; border: 2px solid var(--at-acc, #2383e2); border-radius: 3px; background: rgba(35,131,226,.08); transition: all .06s; }
