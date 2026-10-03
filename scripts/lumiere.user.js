@@ -211,6 +211,7 @@
     ['iconTiles', 'データベース', 'アイコンを札に', '表の題字・ギャラリー・ボードのアイコンを、アクセントの淡い四角い札の上に載せる', false],
     ['stickyGlass', 'データベース', '貼り付く見出しをすりガラスに', '表の列見出し・グループ見出しがスクロールで上に貼り付いた時、背景の質感と馴染むすりガラスにする', true],
     ['calendar', 'データベース', 'カレンダー・タイムライン', '今日の印をアクセントの丸に・予定の札を角丸と影に', true],
+    ['curtain', '画面', 'カーテン（読み込みを見せない）', '開いた時・ページを移る時に、Notion の読み込みと各柱の描き直しを配色の幕で隠し、出来上がった画面だけを出す（最長 3.2 秒・CSS だけの安全弁つき）', true],
     ['hoverCard', 'データベース', 'ページの見本カード', 'リレーションのチップ・表の題字に乗せて少し待つと、そのページの表紙・アイコン・題名のカードがふわっと出る', true]
   ];
   const DEF = {
@@ -239,7 +240,10 @@
       coverPattern: 'auto',      // auto / mesh / waves / grid / confetti
       schedule: false,           // 夜は自動で暗く（mode が auto の時）
       nightFrom: 19, nightTo: 6,
-      hoverDelay: 450
+      hoverDelay: 450,
+      curtainMax: 3200,
+      fab: false,                // 右下の丸いボタン（v11 から既定で出さない。上の帯の ◐ から）
+      oshiColor: '#d4709a', oshiName: ''
     },
     custom: [],            // 自作の配色 [{ id, name, en, desc, light, dark, tex, radius }]
     pages: {},             // ページ id → 配色 id（このページだけ）
@@ -629,7 +633,15 @@ html ${SCOPE} .notion-collection-item a > div:first-child > div[style*="--c-whiB
 }
 html ${SCOPE} .notion-collection-item:hover a > div:first-child > div[style*="position: absolute"]${B},
 html ${SCOPE} .notion-collection-item:hover a > div:first-child > div[style*="--c-whiButBac"]${B} { opacity: .92 !important; }
-html ${SCOPE} .notion-collection-item a > div:first-child > div[style*="--c-whiButBac"]${B} [role="button"] { border: 0 !important; padding: 3px 6px !important; }`;
+html ${SCOPE} .notion-collection-item a > div:first-child > div[style*="--c-whiButBac"]${B} [role="button"] { border: 0 !important; padding: 3px 6px !important; }
+/* v11: アプリの表・ギャラリー・リストで乗せると出る「ボタンの段」（.quickActionContainer — コメントなど）。
+   どの形のセル・カードでも、横いっぱいに伸ばさず右上の小さな粒に（³⁴ Image Cells が無くても） */
+html ${SCOPE} div[style*="position: absolute"]:has(> .quickActionContainer)${B} { width: auto !important; inset-inline: auto 0 !important; display: flex !important; justify-content: flex-end !important; pointer-events: none !important; }
+html ${SCOPE} .quickActionContainer${B} { width: auto !important; height: 22px !important; padding: 1px !important; border-radius: 999px !important; background: var(--lm-glass) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4); box-shadow: 0 2px 8px rgba(0,0,0,.12), inset 0 0 0 1px var(--lm-glass-line) !important; opacity: .6; transition: opacity .15s ease; }
+html ${SCOPE} .quickActionContainer:hover${B} { opacity: 1; }
+html ${SCOPE} .quickActionContainer [role="button"]${B} { width: 20px !important; min-width: 20px !important; height: 20px !important; padding: 0 !important; border-radius: 999px !important; }
+html ${SCOPE} .quickActionContainer svg${B} { width: 14px !important; height: 14px !important; }`;
 
   CSS.board = () => {
     const BV = 'html ' + SCOPE + ' .notion-board-view';
@@ -812,7 +824,8 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
   CSS.hoverCard = () => `
 #lm-hc { position: fixed; z-index: 2147483400; width: 300px; border-radius: var(--lm-r-lg); overflow: hidden; pointer-events: none;
   background: var(--lm-raised); color: var(--lm-ink); box-shadow: var(--c-shaOutLg); outline: 1px solid var(--lm-line-hair);
-  opacity: 0; transform: translateY(6px) scale(.985); transition: opacity .18s ease, transform .22s cubic-bezier(.2,.8,.2,1); font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; }
+  opacity: 0; transform: translateY(6px) scale(.985); transition: opacity .18s ease, transform .22s cubic-bezier(.2,.8,.2,1); font: 13px/1.5 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); font-feature-settings: "palt" 1; }
+#lm-hc .tx b { font-family: var(--hc-ff, inherit); }
 #lm-hc.on { opacity: 1; transform: none; }
 #lm-hc .cv { height: 120px; background: var(--lm-tint) center / cover no-repeat; position: relative; }
 #lm-hc .cv.none { height: 46px; background: linear-gradient(120deg, var(--lm-accent-soft), transparent); }
@@ -1012,6 +1025,8 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
     const r = await block(id);
     if (!r || hcFor !== el) return;
     if (!hcEl) { hcEl = document.createElement('div'); hcEl.id = 'lm-hc'; document.body.appendChild(hcEl); }
+    /* 題名はいま画面で使っている書体（²⁶ Atelier が当てた題字・リレーションの書体）にそろえる */
+    try { const tx = el.querySelector('span.notranslate, span') || el; hcEl.style.setProperty('--hc-ff', getComputedStyle(tx).fontFamily); } catch (e) { /* noop */ }
     const f = r.format || {};
     const cover = imgSrc(f.page_cover, id);
     const ic = f.page_icon || '';
@@ -1052,7 +1067,7 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
   function toast(msg) {
     if (!document.body) return;
     let t = document.getElementById('lm-toast');
-    if (!t) { t = document.createElement('div'); t.id = 'lm-toast'; t.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:2147483600;padding:8px 14px;border-radius:999px;background:var(--lm-ink);color:var(--lm-bg);font:12.5px/1.4 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.2);transition:opacity .25s;pointer-events:none'; document.body.appendChild(t); }
+    if (!t) { t = document.createElement('div'); t.id = 'lm-toast'; t.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:2147483600;padding:8px 14px;border-radius:999px;background:var(--lm-ink);color:var(--lm-bg);font:12.5px/1.4 var(--cordi-ui,var(--cordi-ui-fallback,-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif));font-feature-settings:"palt" 1;box-shadow:0 8px 24px rgba(0,0,0,.2);transition:opacity .25s;pointer-events:none'; document.body.appendChild(t); }
     t.textContent = msg; t.style.opacity = '1';
     clearTimeout(toast.t); toast.t = setTimeout(() => { t.style.opacity = '0'; }, 1800);
   }
@@ -1066,7 +1081,7 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
 #lm-panel { position: fixed; z-index: 2147483600; top: 14px; right: 14px; bottom: 14px; width: 392px; display: flex; flex-direction: column;
   background: var(--lm-raised); color: var(--lm-ink); border-radius: 16px; overflow: hidden;
   box-shadow: 0 30px 70px rgba(0,0,0,.28), 0 0 0 1px var(--lm-line);
-  font: 13px/1.55 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif; animation: lm-pin .28s cubic-bezier(.2,.8,.2,1); }
+  font: 13px/1.55 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; animation: lm-pin .28s cubic-bezier(.2,.8,.2,1); }
 @keyframes lm-pin { from { opacity: 0; transform: translateX(16px) scale(.985); } to { opacity: 1; transform: none; } }
 #lm-panel * { box-sizing: border-box; }
 #lm-panel .lm-hd { padding: 16px 18px 12px; border-bottom: 1px solid var(--lm-line-soft); display: flex; align-items: baseline; gap: 10px;
@@ -1296,6 +1311,7 @@ html:hover #lm-fab { opacity: .55; }
     });
   }
   function fab() {
+    if (!S.tune.fab) { const old = document.getElementById('lm-fab'); if (old) old.remove(); return; }
     if (document.getElementById('lm-fab') || !document.body) return;
     if (!document.getElementById('lm-panel-css')) { const st = document.createElement('style'); st.id = 'lm-panel-css'; st.textContent = PANEL_CSS; document.head.appendChild(st); }
     const b = document.createElement('button');
@@ -1303,6 +1319,318 @@ html:hover #lm-fab { opacity: .55; }
     b.onclick = panelOpen;
     document.body.appendChild(b);
   }
+
+  /* ============================================================
+   *  12b. v11.0.0 — 三本柱を Notion の画面に溶け込ませる
+   *       ・上の帯（Share の左）に、柱ごとの小さなボタン（²⁶ Aa ／ ³⁷ ◐ ／ ³⁸ Σ）。押すと Notion のメニューと同じ形の小窓
+   *       ・どの柱が先に動いても、同じ「台」（#cordi-dock）に並ぶ（ほかの柱が無くても一人で動く）
+   *       ・UI の書体（--cordi-ui）と、乗せた時の説明（title の代わりの小さな札）を三本柱でそろえる
+   * ============================================================ */
+  const CORDI_UI_DEFAULT = '"Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", "Segoe UI", sans-serif';
+  const CORDI_CSS = `
+:root { --cordi-ui-fallback: ${CORDI_UI_DEFAULT}; }
+#cordi-dock { display: inline-flex; align-items: center; gap: 1px; margin-inline: 2px 6px; flex: none; height: 28px; font-family: var(--cordi-ui, var(--cordi-ui-fallback)); }
+#cordi-dock .cd-b { order: var(--cd-o, 5); width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--c-icoSec, #91918e);
+  border: 0; background: transparent; padding: 0; transition: background-color 20ms ease-in, color .12s ease; position: relative; }
+#cordi-dock .cd-b:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-icoPri, #37352f); }
+#cordi-dock .cd-b[aria-expanded="true"] { background: var(--ca-bacIntTra, rgba(55,53,47,.08)); color: var(--c-texPri, #37352f); }
+#cordi-dock .cd-b svg { width: 18px; height: 18px; display: block; }
+#cordi-dock .cd-b .cd-badge { position: absolute; top: 1px; right: 0; min-width: 13px; height: 13px; padding: 0 3px; border-radius: 999px; font: 600 8.5px/13px var(--cordi-ui, var(--cordi-ui-fallback)); text-align: center;
+  background: var(--lm-accent, var(--c-bluIcoAccPri, #2383e2)); color: #fff; box-shadow: 0 0 0 1.5px var(--c-bacPri, #fff); font-variant-numeric: tabular-nums; }
+#cordi-dock .cd-b .cd-badge:empty { display: none; }
+.cordi-pop { position: fixed; z-index: 2147483100; width: 320px; max-height: min(78vh, 680px); overflow: auto; overscroll-behavior: contain; box-sizing: border-box; padding: 6px;
+  border-radius: 12px; background: var(--c-bacEle, #fff); color: var(--c-texPri, #37352f);
+  box-shadow: var(--c-shaOutLg, 0 0 0 1px rgba(15,15,15,.05), 0 3px 6px rgba(15,15,15,.1), 0 9px 24px rgba(15,15,15,.2));
+  font: 13.5px/1.4 var(--cordi-ui, var(--cordi-ui-fallback)); font-feature-settings: "palt" 1; letter-spacing: .005em; -webkit-font-smoothing: antialiased; animation: cordi-pop-in .14s cubic-bezier(.2,.8,.2,1); }
+@keyframes cordi-pop-in { from { opacity: 0; transform: translateY(-3px) scale(.985); } to { opacity: 1; transform: none; } }
+.cordi-pop * { box-sizing: border-box; }
+.cordi-pop .cp-hd { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px 6px; }
+.cordi-pop .cp-hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cormorant Garamond", "Hoefler Text", "Hiragino Mincho ProN", Georgia, serif); letter-spacing: .03em; }
+.cordi-pop .cp-hd span { color: var(--c-texSec, #787774); font-size: 11.5px; }
+.cordi-pop .cp-hd i { margin-inline-start: auto; font-style: normal; font-size: 10.5px; color: var(--c-texTer, #a5a29a); }
+.cordi-pop .cp-sec { padding: 10px 10px 4px; font-size: 11px; font-weight: 600; color: var(--c-texSec, #787774); letter-spacing: .02em; }
+.cordi-pop .cp-div { height: 1px; margin: 6px 4px; background: var(--ca-borSecTra, rgba(55,53,47,.09)); }
+.cordi-pop .cp-i { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 30px; padding: 4px 10px; border: 0; background: none; color: inherit; font: inherit; text-align: left; border-radius: 7px; cursor: pointer; }
+.cordi-pop .cp-i:hover, .cordi-pop .cp-i.kb { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+.cordi-pop .cp-i .ic { width: 20px; height: 20px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--c-icoPri, #37352f); font-size: 15px; }
+.cordi-pop .cp-i .ic svg { width: 18px; height: 18px; }
+.cordi-pop .cp-i .lb { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cordi-pop .cp-i .lb small { display: block; font-size: 11px; color: var(--c-texSec, #787774); white-space: normal; line-height: 1.35; margin-top: 1px; }
+.cordi-pop .cp-i .k { font-size: 11px; color: var(--c-texTer, #a5a29a); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cordi-pop .cp-sw { flex: none; width: 28px; height: 16px; border-radius: 999px; background: var(--ca-borPriTra, rgba(55,53,47,.16)); position: relative; transition: background-color .18s; }
+.cordi-pop .cp-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .18s cubic-bezier(.2,.8,.2,1); }
+.cordi-pop .cp-sw.on { background: var(--lm-accent, var(--c-bluIcoAccPri, #2383e2)); }
+.cordi-pop .cp-sw.on::after { transform: translateX(12px); }
+.cordi-pop .cp-seg { display: flex; gap: 2px; margin: 2px 8px 6px; padding: 2px; border-radius: 8px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+.cordi-pop .cp-seg button { flex: 1; border: 0; background: transparent; color: var(--c-texSec, #787774); font: inherit; font-size: 12px; padding: 4px 6px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+.cordi-pop .cp-seg button.on { background: var(--c-bacEle, #fff); color: var(--c-texPri, #37352f); box-shadow: 0 1px 2px rgba(0,0,0,.12); font-weight: 600; }
+.cordi-pop .cp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 4px 8px 8px; }
+.cordi-pop .cp-th { border: 0; padding: 0; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; color: inherit; font: inherit; }
+.cordi-pop .cp-th i { display: block; width: 100%; aspect-ratio: 1.25; border-radius: 8px; position: relative; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); transition: transform .15s; }
+.cordi-pop .cp-th i::before { content: ""; position: absolute; inset: 22% 18% 20% 30%; border-radius: 3px; background: var(--s); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.cordi-pop .cp-th i::after { content: ""; position: absolute; left: 10%; top: 24%; width: 13%; aspect-ratio: 1; border-radius: 50%; background: var(--a); }
+.cordi-pop .cp-th:hover i { transform: translateY(-1px); }
+.cordi-pop .cp-th.on i { box-shadow: 0 0 0 2px var(--lm-accent, #2383e2); }
+.cordi-pop .cp-th span { font-size: 10px; color: var(--c-texSec, #787774); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cordi-pop .cp-row { display: flex; align-items: center; gap: 8px; padding: 4px 10px 8px; }
+.cordi-pop .cp-row input[type=color] { width: 30px; height: 26px; border: 0; padding: 0; background: none; cursor: pointer; }
+.cordi-pop .cp-row input[type=text], .cordi-pop .cp-row input[type=date], .cordi-pop .cp-row input[type=number], .cordi-pop .cp-row select { flex: 1; min-width: 0; height: 28px; border: 0; border-radius: 6px; padding: 0 8px; font: inherit; font-size: 12.5px; color: inherit; background: var(--ca-bacSecTra, rgba(55,53,47,.04)); box-shadow: inset 0 0 0 1px var(--ca-borPriTra, rgba(55,53,47,.16)); outline: none; }
+.cordi-pop .cp-btn { flex: none; height: 28px; padding: 0 12px; border: 0; border-radius: 6px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; background: var(--lm-accent, var(--c-bluIcoAccPri, #2383e2)); color: #fff; }
+.cordi-pop .cp-btn.ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 1px var(--ca-borPriTra, rgba(55,53,47,.16)); font-weight: 500; }
+.cordi-pop .cp-note { padding: 4px 12px 8px; font-size: 11.5px; color: var(--c-texSec, #787774); line-height: 1.55; }
+.cordi-tip { position: fixed; z-index: 2147483640; max-width: 280px; padding: 5px 9px; border-radius: 7px; pointer-events: none;
+  background: color-mix(in srgb, var(--c-texPri, #1f1f1f) 92%, transparent); color: var(--c-bacPri, #fff);
+  font: 500 11.5px/1.45 var(--cordi-ui, var(--cordi-ui-fallback)); font-feature-settings: "palt" 1; letter-spacing: .01em; -webkit-font-smoothing: antialiased;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18); opacity: 0; transform: translateY(2px); transition: opacity .12s ease, transform .12s ease; white-space: pre-line; }
+.cordi-tip.on { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .cordi-pop, .cordi-tip { animation: none !important; transition: none !important; } }`;
+  function cordiCss() {
+    if (!document.getElementById('cordi-css')) { const st = document.createElement('style'); st.id = 'cordi-css'; st.textContent = CORDI_CSS; (document.head || document.documentElement).appendChild(st); }
+  }
+  /* 上の帯の「台」— Share の左。Notion が上の帯を作り直しても置き直す */
+  function cordiDock() {
+    const more = document.querySelector('.notion-topbar .notion-topbar-more-button, .notion-topbar-more-button');
+    const share = document.querySelector('.notion-topbar .notion-topbar-share-menu, .notion-topbar-share-menu');
+    const anchor = share || more;
+    const bar = document.querySelector('.notion-topbar-action-buttons') || (anchor && anchor.parentElement);
+    if (!bar) return null;
+    let d = document.getElementById('cordi-dock');
+    if (!d) { d = document.createElement('div'); d.id = 'cordi-dock'; }
+    let ref = anchor; while (ref && ref.parentElement !== bar) ref = ref.parentElement;
+    if (d.parentElement !== bar || (ref && d.nextElementSibling !== ref)) bar.insertBefore(d, ref || bar.firstChild);
+    return d;
+  }
+  function dockButton(id, order, svg, tip, onClick) {
+    cordiCss();
+    const d = cordiDock(); if (!d) return null;
+    let b = document.getElementById(id);
+    if (!b) {
+      b = document.createElement('button'); b.id = id; b.className = 'cd-b'; b.type = 'button';
+      b.style.setProperty('--cd-o', String(order)); b.innerHTML = svg + '<span class="cd-badge"></span>';
+      b.setAttribute('aria-expanded', 'false');
+      b.addEventListener('mousedown', (e) => e.preventDefault());
+      b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onClick(b); });
+    }
+    b.title = tip;
+    if (b.parentElement !== d) d.appendChild(b);
+    return b;
+  }
+  /* 小窓（Notion のメニューと同じ形）。ほかの柱の小窓は閉じる */
+  let popEl = null, popBtn = null;
+  function popClose() { if (popEl) popEl.remove(); popEl = null; if (popBtn) popBtn.setAttribute('aria-expanded', 'false'); popBtn = null; }
+  document.addEventListener('cordi:closepops', (e) => { if (!e.detail || e.detail !== 'lm') popClose(); });
+  function popOpen(btn, render) {
+    if (popEl && popBtn === btn) { popClose(); return; }
+    popClose();
+    document.dispatchEvent(new CustomEvent('cordi:closepops', { detail: 'lm' }));
+    cordiCss();
+    popEl = document.createElement('div'); popEl.className = 'cordi-pop'; popEl.id = 'lm-pop';
+    popBtn = btn; if (btn && btn.setAttribute) btn.setAttribute('aria-expanded', 'true');
+    document.body.appendChild(popEl);
+    const place = () => {
+      if (!popEl) return;
+      const r = btn.getBoundingClientRect ? btn.getBoundingClientRect() : { left: btn.x || 0, right: btn.x || 0, bottom: btn.y || 0, top: btn.y || 0 };
+      popEl.style.top = Math.min(innerHeight - popEl.offsetHeight - 8, r.bottom + 6) + 'px';
+      popEl.style.left = Math.max(8, Math.min(innerWidth - popEl.offsetWidth - 8, r.right - popEl.offsetWidth + 4)) + 'px';
+    };
+    const draw = () => { const sc = popEl.scrollTop; popEl.innerHTML = render(); popEl.scrollTop = sc; place(); };
+    popEl.__draw = draw;
+    draw();
+    setTimeout(() => document.addEventListener('pointerdown', function off(e) {
+      if (!popEl) { document.removeEventListener('pointerdown', off, true); return; }
+      if (popEl.contains(e.target) || (popBtn && popBtn.contains && popBtn.contains(e.target))) return;
+      document.removeEventListener('pointerdown', off, true); popClose();
+    }, true), 0);
+    return popEl;
+  }
+  /* 乗せた時の説明: 三本柱の UI の title を、そろえた書体の小さな札で出す（OS の吹き出しは書体を変えられない）。
+     どれか一つの柱だけが受け持つ（html[data-cordi-tip]） */
+  const TIP_SCOPE = '#cordi-dock, .cordi-pop, #c33-orbit, #c33-orbit-btn, #c33-ob-menu, #c26-menu, #c26-sub, .c26-ui, .c26-panel, #lm-panel, [id^="s38"], [class^="s38"], [class*=" s38-"], #c16-root, #c16-newspace, #c34-view';
+  function tipsInstall() {
+    const de = document.documentElement;
+    if (!de || de.hasAttribute('data-cordi-tip')) return;
+    de.setAttribute('data-cordi-tip', 'lm');
+    let tipEl = null, tipFor = null, tipT = 0;
+    const hide = () => { clearTimeout(tipT); if (tipFor && tipFor.dataset.cordiTip != null && !tipFor.getAttribute('title')) { tipFor.setAttribute('title', tipFor.dataset.cordiTip); delete tipFor.dataset.cordiTip; } tipFor = null; if (tipEl) tipEl.classList.remove('on'); };
+    document.addEventListener('pointerover', (e) => {
+      const t = e.target instanceof Element ? e.target.closest('[title], [data-cordi-tip]') : null;
+      if (t === tipFor) return;
+      hide();
+      if (!t || !t.closest(TIP_SCOPE)) return;
+      const txt = t.getAttribute('title') || t.dataset.cordiTip || '';
+      if (!txt.trim()) return;
+      t.dataset.cordiTip = txt; t.removeAttribute('title');   // OS の吹き出しを止める
+      tipFor = t;
+      tipT = setTimeout(() => {
+        if (tipFor !== t || !t.isConnected) return;
+        cordiCss();
+        if (!tipEl) { tipEl = document.createElement('div'); tipEl.className = 'cordi-tip'; document.body.appendChild(tipEl); }
+        tipEl.textContent = txt;
+        const r = t.getBoundingClientRect();
+        tipEl.style.left = '0px'; tipEl.style.top = '0px';
+        const w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+        let top = r.bottom + 6; if (top + h > innerHeight - 6) top = r.top - h - 6;
+        tipEl.style.left = Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width / 2 - w / 2)) + 'px';
+        tipEl.style.top = Math.max(6, top) + 'px';
+        tipEl.classList.add('on');
+      }, 380);
+    }, true);
+    document.addEventListener('pointerdown', hide, true);
+    document.addEventListener('scroll', hide, { capture: true, passive: true });
+    window.addEventListener('blur', hide);
+  }
+
+  /* ---------- ³⁷ のボタンと小窓 ---------- */
+  const ICON_LM = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="10" r="6.6"/><path d="M10 3.4a6.6 6.6 0 0 1 0 13.2z" fill="currentColor" stroke="none"/><circle cx="10" cy="10" r="2.1" fill="var(--c-bacPri, #fff)" stroke="none"/></svg>';
+  const GSTYLES = [['card', 'カード'], ['polaroid', 'ポラロイド'], ['frame', '額装'], ['shelf', '本棚'], ['flat', '素']];
+  function lmPopHtml() {
+    const cur = curTheme().id, pid = pageId(), pageOnly = !!(pid && S.pages[pid]);
+    const sw = (on2) => '<span class="cp-sw' + (on2 ? ' on' : '') + '"></span>';
+    const tog = (k, label, sub, val) => '<button class="cp-i" data-lt="' + k + '"><span class="lb">' + label + (sub ? '<small>' + sub + '</small>' : '') + '</span>' + sw(val) + '</button>';
+    const p = curPalette();
+    let h = '<div class="cp-hd"><b>Lumière</b><span>見た目 · ' + esc(curTheme().name) + (p.dark ? '（暗）' : '（明）') + '</span><i>³⁷ v' + VERSION + '</i></div>';
+    h += '<div class="cp-grid">' + allThemes().map((t) => { const q = p.dark ? t.dark : t.light; return '<button class="cp-th' + (t.id === cur ? ' on' : '') + '" data-lth="' + esc(t.id) + '" title="' + esc(t.name + ' — ' + (t.desc || '')) + '"><i style="background:' + q.bg + ';--s:' + q.sheet + ';--a:' + q.accent + '"></i><span>' + esc(t.name) + '</span></button>'; }).join('') + '</div>';
+    h += '<div class="cp-seg" data-lseg="mode">' + [['auto', 'Notion に合わせる'], ['light', '明'], ['dark', '暗']].map(([v, l]) => '<button data-v="' + v + '" class="' + (S.mode === v ? 'on' : '') + '">' + l + '</button>').join('') + '</div>';
+    h += tog('pageOnly', 'このページだけこの配色', pid ? '' : '（ページを開いている時だけ）', pageOnly);
+    h += '<div class="cp-div"></div><div class="cp-sec">推し色で配色を作る</div>';
+    h += '<div class="cp-row"><input type="color" class="lm-oshi-c" value="' + esc(S.tune.oshiColor || '#d4709a') + '"><input type="text" class="lm-oshi-n" placeholder="名前（例: 推しの名前）" value="' + esc(S.tune.oshiName || '') + '"><button class="cp-btn" data-la="oshi">作る</button></div>';
+    h += '<div class="cp-div"></div><div class="cp-sec">見た目</div>';
+    h += tog('curtain', 'カーテン', '読み込み・描き直しを見せず、出来上がった画面だけを出す', on('curtain'));
+    h += tog('texture', '紙の質感', '', on('texture'));
+    h += tog('sheet', '本文を一枚の紙に', '', on('sheet'));
+    h += tog('focus', '集中モード', '本文以外を薄く（⌃⌥F）', document.documentElement.hasAttribute('data-lm-focus'));
+    h += tog('schedule', '夜は自動で暗く', (S.tune.nightFrom || 19) + ' 時〜' + (S.tune.nightTo || 6) + ' 時', !!S.tune.schedule);
+    h += tog('hoverCard', 'ページの見本カード', 'リレーション・題字に乗せると表紙つきのカード', on('hoverCard'));
+    h += '<div class="cp-sec">ギャラリーの形</div><div class="cp-seg" data-lseg="galleryStyle">' + GSTYLES.map(([v, l]) => '<button data-v="' + v + '" class="' + (S.tune.galleryStyle === v ? 'on' : '') + '">' + l + '</button>').join('') + '</div>';
+    h += '<div class="cp-div"></div>';
+    h += '<button class="cp-i" data-la="panel"><span class="ic">' + ICON_LM + '</span><span class="lb">すべての設定…<small>配色の自作・モジュール 36 個・細部・保存</small></span><span class="k">⌃⌥V</span></button>';
+    return h;
+  }
+  function lmPopClick(e) {
+    const el = e.target.closest('[data-lth], [data-lt], [data-la], [data-lseg] button');
+    if (!el || !popEl) return;
+    if (el.dataset.lth) { setTheme(el.dataset.lth); }
+    else if (el.dataset.lt) {
+      const k = el.dataset.lt;
+      if (k === 'focus') focusToggle();
+      else if (k === 'schedule') { S.tune.schedule = !S.tune.schedule; save(); apply(); }
+      else if (k === 'pageOnly') { const pid = pageId(); if (!pid) return; if (S.pages[pid]) delete S.pages[pid]; else S.pages[pid] = curTheme().id; save(); apply(); }
+      else { S.mods[k] = !S.mods[k]; save(); apply(); }
+    } else if (el.dataset.la === 'panel') { popClose(); panelOpen(); return; }
+    else if (el.dataset.la === 'oshi') {
+      const c = popEl.querySelector('.lm-oshi-c').value, n = popEl.querySelector('.lm-oshi-n').value.trim();
+      S.tune.oshiColor = c; S.tune.oshiName = n;
+      const th = oshiTheme(c, n);
+      S.custom = (S.custom || []).filter((t) => t.id !== th.id).concat([th]); reindexThemes();
+      setTheme(th.id); toast('推し色「' + th.name + '」の配色にしました');
+    } else if (el.parentElement && el.parentElement.dataset.lseg) {
+      const k = el.parentElement.dataset.lseg;
+      if (k === 'mode') S.mode = el.dataset.v; else S.tune[k] = el.dataset.v;
+      save(); apply();
+    }
+    if (popEl && popEl.__draw) popEl.__draw();
+  }
+  /* 推し色: 一色から、明・暗の配色を作る（背景はその色をごく淡く、差し色は補色寄りの二色目） */
+  function oshiTheme(hex, name) {
+    const h = rgb2hsl(hex2rgb(hex));
+    const bg = rgb2hex(hsl2rgb([h[0], Math.min(40, h[1] * 0.45), 95.5]));
+    const sheet = rgb2hex(hsl2rgb([h[0], Math.min(30, h[1] * 0.3), 98.6]));
+    const ink = rgb2hex(hsl2rgb([h[0], Math.min(25, h[1] * 0.3), 15]));
+    const accent2 = rgb2hex(hsl2rgb([(h[0] + 150) % 360, Math.min(55, h[1]), 42]));
+    const id = 'oshi-' + hex.replace('#', '').toLowerCase();
+    return draftTheme({ id, name: name ? name + 'の色' : '推し色 ' + hex, tex: 'none', base: { bg, sheet, ink, accent: hex, accent2 } });
+  }
+  function lmDock() {
+    const b = dockButton('cordi-b-lm', 3, ICON_LM, 'Lumière — 配色・見た目（⌃⌥V）', (btn) => {
+      const el = popOpen(btn, lmPopHtml);
+      if (el) { el.addEventListener('click', lmPopClick); el.addEventListener('change', (e) => { if (e.target.matches('.lm-oshi-c')) { S.tune.oshiColor = e.target.value; save(); } }); }
+    });
+    return b;
+  }
+  /* Atelier の ⋯ メニュー・ほかの柱から呼ぶ（detail は文字列 JSON か {id}） */
+  document.addEventListener('cordi:run', (e) => {
+    let d = e.detail; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (x) { d = { id: d }; } }
+    if (!d || !d.id) return;
+    if (d.id === 'lm.pop') { const b = document.getElementById('cordi-b-lm') || lmDock(); if (b) b.click(); else if (d.x != null) { const el = popOpen({ getBoundingClientRect: () => ({ left: d.x, right: d.x + 300, top: d.y, bottom: d.y }) }, lmPopHtml); if (el) el.addEventListener('click', lmPopClick); } }
+    else if (d.id === 'lm.panel') panelOpen();
+    else if (d.id === 'lm.focus') focusToggle();
+    else if (d.id === 'lm.theme' && d.theme && THEME_BY_ID[d.theme]) setTheme(d.theme);
+  });
+  /* ほかの柱に「何ができるか」を知らせる（Atelier の ⋯ メニューが並べる） */
+  function announce() {
+    document.dispatchEvent(new CustomEvent('cordi:tools', { detail: JSON.stringify({ pillar: 'lm', name: 'Lumière', icon: ICON_LM, tools: [
+      { id: 'lm.pop', label: '配色・見た目', hint: curTheme().name },
+      { id: 'lm.focus', label: '集中モード', key: '⌃⌥F' },
+      { id: 'lm.panel', label: 'Lumière の設定', key: '⌃⌥V' }
+    ] }) }));
+  }
+  document.addEventListener('cordi:tools?', announce);
+
+  /* ============================================================
+   *  12c. カーテン — 読み込みも描き直しも見せない
+   *    ・開いた瞬間（document-start）から、Notion の画面を配色の背景色の「幕」で隠す
+   *    ・本文（ページ・DB）が描かれ、書体が読み終わり、画面の変化が一息ついたら（各柱・¹⁶ の並べ替えが済んだら）、幕を上げる
+   *    ・ページを移る時（サイドバー・リンク・パンくずのクリック）も、本文の枠だけ一瞬隠して、出来上がってから出す
+   *    ・どんな時も最長で上げる（JS が止まっても CSS だけで 4 秒後に出る安全弁）
+   * ============================================================ */
+  const CUR = { t0: performance.now(), done: false, navT: 0, quietT: 0, mo: null };
+  CSS.curtain = () => `
+html[data-lm-curtain] { background: var(--lm-bg, var(--c-bacPri, #fff)) !important; }
+html[data-lm-curtain="boot"] #notion-app { opacity: 0; animation: lm-curtain-safe .01s linear ${Math.round((+T('curtainMax') || 3200) / 1000 + 0.8)}s forwards; }
+html[data-lm-curtain="nav"] .notion-frame > :not(.notion-topbar):not(:has(.notion-topbar)), html[data-lm-curtain="nav"] .notion-frame .notion-scroller { opacity: 0 !important; transition: none !important; }
+html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *, html[data-lm-curtain-up] .notion-frame .notion-scroller { transition: opacity ${reduce() ? 0 : 0.2}s cubic-bezier(.2,0,0,1) !important; }
+@keyframes lm-curtain-safe { to { opacity: 1; } }`;
+  function curtainBoot() {
+    if (!on('curtain') || !document.documentElement) return;
+    document.documentElement.setAttribute('data-lm-curtain', 'boot');
+    curtainWait('boot', +T('curtainMax') || 3200);
+  }
+  const CONTENT = '.notion-frame .notion-page-content, .notion-frame .notion-collection_view-block, .notion-frame .notion-collection-view-body, .notion-frame .notion-table-view, .notion-frame .notion-board-view, .notion-frame .notion-gallery-view, .notion-frame .notion-list-view, .notion-frame .notion-calendar-view, .notion-frame .notion-timeline-view, .notion-peek-renderer .notion-page-content, .notion-login, .notion-onboarding';
+  function curtainWait(kind, max) {
+    const start = performance.now();
+    let last = performance.now(), fontsOk = false;
+    try { (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { fontsOk = true; }); } catch (e) { fontsOk = true; }
+    if (CUR.mo) CUR.mo.disconnect();
+    CUR.mo = new MutationObserver((recs) => {
+      for (const r of recs) { const t = r.target; if (t.nodeType === 1 && (t.id === 'lm-progress' || (t.closest && t.closest('.cordi-tip, #lm-toast')))) continue; last = performance.now(); break; }
+    });
+    try { CUR.mo.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class', 'data-c16-veil'] }); } catch (e) { /* noop */ }
+    const check = () => {
+      const now = performance.now();
+      const de = document.documentElement;
+      const ready = kind === 'nav' ? ((location.href !== CUR.from && !!document.querySelector(CONTENT)) || (now - start > 450 && location.href === CUR.from)) : !!document.querySelector(CONTENT);
+      const quiet = now - last > (kind === 'nav' ? 110 : 170);
+      const busy = de.hasAttribute('data-c16-veil');
+      if ((ready && fontsOk && quiet && !busy) || now - start > max) { curtainUp(); return; }
+      CUR.quietT = setTimeout(check, 40);
+    };
+    clearTimeout(CUR.quietT);
+    CUR.quietT = setTimeout(check, kind === 'nav' ? 60 : 120);
+  }
+  function curtainUp() {
+    const de = document.documentElement;
+    if (CUR.mo) { CUR.mo.disconnect(); CUR.mo = null; }
+    if (!de.hasAttribute('data-lm-curtain')) return;
+    de.setAttribute('data-lm-curtain-up', '1');
+    requestAnimationFrame(() => {
+      de.removeAttribute('data-lm-curtain');
+      setTimeout(() => de.removeAttribute('data-lm-curtain-up'), 260);
+    });
+  }
+  /* ページを移る時: クリックの瞬間（Notion が描き変える前）に本文だけ隠す */
+  document.addEventListener('click', (e) => {
+    if (!on('curtain') || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target instanceof Element ? e.target.closest('a[href]') : null;
+    if (!a || a.target === '_blank' || a.closest('.cordi-pop, #lm-panel, [id^="s38"]')) return;
+    let u; try { u = new URL(a.getAttribute('href'), location.href); } catch (x) { return; }
+    if (u.origin !== location.origin || (u.pathname === location.pathname && u.search === location.search)) return;
+    if (/[?&]p=/.test(u.search) && u.pathname === location.pathname) return;   // ピーク（横の窓）は幕を掛けない
+    const de = document.documentElement;
+    if (de.getAttribute('data-lm-curtain') === 'boot') return;
+    CUR.from = location.href;
+    de.setAttribute('data-lm-curtain', 'nav');
+    curtainWait('nav', 900);
+  }, true);
 
   /* ============================================================
    *  13. 動かす
@@ -1316,12 +1644,15 @@ html:hover #lm-fab { opacity: .55; }
   let lastKey = '';
   function tick() {
     const k = (notionDark() ? 'd' : 'l') + '|' + pageId() + '|' + peekId();
-    if (k !== lastKey) { lastKey = k; apply(); setTimeout(coverAccent, 900); }
+    if (k !== lastKey) { lastKey = k; apply(); setTimeout(coverAccent, 900); announce(); }
     progressSetup();
   }
   apply();   // document-start: 最初の描画から色を当てる（白く光ってから変わるのを防ぐ）
+  curtainBoot();   // v11: 出来上がるまで幕
   const boot = () => {
-    apply(); fab();
+    apply(); fab(); cordiCss(); tipsInstall(); lmDock(); announce();
+    /* 上の帯は Notion がよく作り直す → すぐ置き直す */
+    new MutationObserver(() => { if (!document.getElementById('cordi-b-lm') || !document.getElementById('cordi-b-lm').isConnected) lmDock(); }).observe(document.body, { childList: true, subtree: true });
     new MutationObserver(() => tick()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     new MutationObserver(() => { const st = document.getElementById('lm-css'); if (st && document.head && document.head.lastElementChild !== st) document.head.appendChild(st); }).observe(document.head, { childList: true });
     setInterval(tick, 700);

@@ -907,7 +907,7 @@
   const SHEET_CSS = `
 #s38-sheet { position: fixed; inset: 18px; z-index: 2147483300; display: flex; flex-direction: column; border-radius: 14px; overflow: hidden;
   background: var(--lm-raised, var(--c-bacEle, #fff)); color: var(--lm-ink, var(--c-texPri, #2c2c2b));
-  box-shadow: 0 30px 80px rgba(0,0,0,.3), 0 0 0 1px var(--lm-line, rgba(0,0,0,.1)); font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  box-shadow: 0 30px 80px rgba(0,0,0,.3), 0 0 0 1px var(--lm-line, rgba(0,0,0,.1)); font: 13px/1.4 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif));
   animation: s38-in .22s cubic-bezier(.2,.8,.2,1); }
 @keyframes s38-in { from { opacity: 0; transform: scale(.985) translateY(8px); } to { opacity: 1; transform: none; } }
 #s38-sheet * { box-sizing: border-box; }
@@ -947,7 +947,7 @@
 #s38-sheet .cf-ic { margin-inline-end: 4px; }
 .s38-dlg { position: fixed; z-index: 2147483400; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(720px, 92vw); max-height: 86vh; overflow: auto; border-radius: 14px; padding: 18px 20px;
   background: var(--lm-raised, var(--c-bacEle, #fff)); color: var(--lm-ink, var(--c-texPri, #2c2c2b)); box-shadow: 0 30px 80px rgba(0,0,0,.35), 0 0 0 1px var(--lm-line, rgba(0,0,0,.1));
-  font: 13px/1.55 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif; }
+  font: 13px/1.55 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); }
 .s38-dlg h3 { margin: 0 0 4px; font: 600 18px/1.3 "Cormorant Garamond", Georgia, serif; }
 .s38-dlg p.d { margin: 0 0 12px; color: var(--lm-mute, #888); font-size: 12.5px; }
 .s38-dlg label.r { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
@@ -968,9 +968,9 @@
 .s38-dlg .step .sh .x { margin-inline-start: auto; }
 .s38-veil { position: fixed; inset: 0; z-index: 2147483390; background: rgba(0,0,0,.18); }
 #s38-toast { position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%); z-index: 2147483500; padding: 9px 16px; border-radius: 999px; background: var(--lm-ink, #222); color: var(--lm-bg, #fff);
-  font: 12.5px/1.4 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; box-shadow: 0 10px 28px rgba(0,0,0,.25); transition: opacity .25s; pointer-events: auto; display: flex; gap: 10px; align-items: center; }
+  font: 12.5px/1.4 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); box-shadow: 0 10px 28px rgba(0,0,0,.25); transition: opacity .25s; pointer-events: auto; display: flex; gap: 10px; align-items: center; }
 #s38-toast button { border: 0; background: rgba(255,255,255,.18); color: inherit; border-radius: 999px; padding: 3px 10px; cursor: pointer; font: inherit; }`;
-  function css() { if (document.getElementById('s38-css')) return; const st = document.createElement('style'); st.id = 's38-css'; st.textContent = SHEET_CSS; document.head.appendChild(st); }
+  function css() { addCss(); if (document.getElementById('s38-css')) return; const st = document.createElement('style'); st.id = 's38-css'; st.textContent = SHEET_CSS; document.head.appendChild(st); }
   function toast(msg, act) {
     let t = document.getElementById('s38-toast');
     if (!t) { t = document.createElement('div'); t.id = 's38-toast'; document.body.appendChild(t); }
@@ -1750,7 +1750,7 @@
   const REVIEW_CSS = `
 #s38-rev { position: fixed; inset: 0; z-index: 2147483350; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
   background: color-mix(in srgb, var(--lm-bg, #f4f2ee) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; color: var(--lm-ink, #2c2c2b); }
+  font: 15px/1.6 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); font-feature-settings: "palt" 1; color: var(--lm-ink, #2c2c2b); }
 #s38-rev .top { position: absolute; top: 18px; left: 24px; right: 24px; display: flex; align-items: center; gap: 12px; color: var(--lm-mute, #888); font-size: 13px; }
 #s38-rev .top .pg { flex: 1; height: 4px; border-radius: 4px; background: var(--lm-line, rgba(0,0,0,.08)); overflow: hidden; }
 #s38-rev .top .pg i { display: block; height: 100%; background: var(--lm-accent, #2783de); transition: width .3s; }
@@ -1847,7 +1847,7 @@
   const POMO = { on: false, phase: 'work', left: 0, t: 0, count: 0, el: null, startedAt: 0 };
   const POMO_CSS = `
 #s38-pomo { position: fixed; left: 18px; bottom: 18px; z-index: 2147483200; display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 8px; border-radius: 999px;
-  background: var(--lm-raised, #fff); color: var(--lm-ink, #2c2c2b); box-shadow: 0 10px 30px rgba(0,0,0,.16), 0 0 0 1px var(--lm-line, rgba(0,0,0,.08)); font: 13px/1.2 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; user-select: none; }
+  background: var(--lm-raised, #fff); color: var(--lm-ink, #2c2c2b); box-shadow: 0 10px 30px rgba(0,0,0,.16), 0 0 0 1px var(--lm-line, rgba(0,0,0,.08)); font: 13px/1.2 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); user-select: none; }
 #s38-pomo svg { width: 38px; height: 38px; transform: rotate(-90deg); }
 #s38-pomo .t { font: 600 17px/1 ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; min-width: 54px; }
 #s38-pomo .ph { font-size: 11px; color: var(--lm-mute, #888); }
@@ -1981,6 +1981,914 @@
   }
 
   /* ============================================================
+   *  15. v11.0.0 — 学びを「社労士」「語学」「記録」まで
+   * ============================================================ */
+  const K2 = { quiz: 'c38.quiz', quizMaps: 'c38.quizmaps', gloss: 'c38.gloss', ledgers: 'c38.ledgers', anniv: 'c38.anniv', drill: 'c38.drill' };
+  P.exam = Object.assign({ name: '社会保険労務士試験', date: '', on: true }, P.exam || {});
+  P.tts = Object.assign({ rate: 1, lang: 'auto' }, P.tts || {});
+  P.gloss = Object.assign({ on: true, kw: false }, P.gloss || {});
+  P.readGoal = P.readGoal || 50;
+  P.pass = Object.assign({ selTotal: 24, selEach: 3, mcTotal: 44, mcEach: 4 }, P.pass || {});
+
+  /* ---------- 社労士の科目（選択式 8・択一式 7） ---------- */
+  const SR = {
+    sel: [['rk', '労働基準法・労働安全衛生法'], ['rs', '労働者災害補償保険法'], ['ko', '雇用保険法'], ['ri', '労務管理その他の労働に関する一般常識'], ['si', '社会保険に関する一般常識'], ['ke', '健康保険法'], ['kn', '厚生年金保険法'], ['ko2', '国民年金法']],
+    mc: [['rk', '労働基準法・労働安全衛生法'], ['rs', '労災保険法（徴収法を含む）'], ['ko', '雇用保険法（徴収法を含む）'], ['ip', '労務管理その他の労働・社会保険に関する一般常識'], ['ke', '健康保険法'], ['kn', '厚生年金保険法'], ['ko2', '国民年金法']],
+    /* 用語を光らせる（科目の手がかり）。乗せると「どの科目の言葉か」 */
+    kw: {
+      '労基・安衛': ['労働基準法', '労働契約', '解雇予告', '平均賃金', '休業手当', '時間外労働', '36協定', '三六協定', '変形労働時間制', '年次有給休暇', '就業規則', '労働安全衛生法', '安全衛生委員会', '産業医', '衛生管理者', 'ストレスチェック', '健康診断', '割増賃金', '法定労働時間', '休憩', '休日'],
+      '労災': ['労災保険', '業務災害', '通勤災害', '療養補償給付', '休業補償給付', '障害補償給付', '遺族補償給付', '傷病補償年金', '介護補償給付', '二次健康診断', '特別加入', '給付基礎日額', 'メリット制'],
+      '雇用': ['雇用保険', '基本手当', '被保険者期間', '所定給付日数', '算定基礎期間', '特定受給資格者', '高年齢求職者給付金', '育児休業給付', '介護休業給付', '教育訓練給付', '就業促進手当', '失業の認定', '受給期間'],
+      '徴収': ['労働保険料', '概算保険料', '確定保険料', '一般保険料', '印紙保険料', '年度更新', '労働保険事務組合', '延納'],
+      '一般常識': ['労働組合法', '労働契約法', '最低賃金法', '男女雇用機会均等法', '育児・介護休業法', 'パートタイム・有期雇用労働法', '労働者派遣法', '職業安定法', '高年齢者雇用安定法', '障害者雇用促進法', '労働施策総合推進法', '社会保険労務士法', '確定給付企業年金法', '確定拠出年金法', '介護保険法', '国民健康保険法', '高齢者医療確保法', '船員保険法', '児童手当法'],
+      '健保': ['健康保険', '標準報酬月額', '標準賞与額', '傷病手当金', '出産手当金', '出産育児一時金', '高額療養費', '療養の給付', '入院時食事療養費', '任意継続被保険者', '被扶養者', '埋葬料', '保険外併用療養費', '訪問看護療養費'],
+      '厚年': ['厚生年金保険', '老齢厚生年金', '障害厚生年金', '遺族厚生年金', '在職老齢年金', '加給年金額', '報酬比例部分', '中高齢寡婦加算', '離婚時の年金分割', '3号分割', '特別支給の老齢厚生年金', '平均標準報酬額'],
+      '国年': ['国民年金', '老齢基礎年金', '障害基礎年金', '遺族基礎年金', '付加年金', '寡婦年金', '死亡一時金', '保険料免除', '学生納付特例', '第1号被保険者', '第2号被保険者', '第3号被保険者', '振替加算', '受給資格期間', '保険料納付済期間', '合算対象期間', '繰上げ', '繰下げ']
+    }
+  };
+  /* 試験の日: 8 月の第 4 日曜日（例年）。設定で変えられる */
+  function examDate() {
+    if (P.exam.date && /^\d{4}-\d{2}-\d{2}$/.test(P.exam.date)) { const [y, m, d] = P.exam.date.split('-').map(Number); return new Date(y, m - 1, d); }
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    for (let y = now.getFullYear(); y < now.getFullYear() + 3; y++) {
+      const d = new Date(y, 7, 1); const first = (7 - d.getDay()) % 7; const fourth = new Date(y, 7, 1 + first + 21);
+      if (fourth >= now) return fourth;
+    }
+    return null;
+  }
+  const daysUntil = (d) => { if (!d) return null; const a = new Date(); a.setHours(0, 0, 0, 0); return Math.round((d - a) / 86400000); };
+
+  /* ---------- 社労士の計算（Excel の式に足す） ---------- */
+  (() => {
+    const F = ENGINE.FN, num = ENGINE.num, isErr = ENGINE.isErr, E = ENGINE.E, sp = ENGINE.serialParts, ymd2 = ENGINE.ymdSerial;
+    const todayS = () => { const d = new Date(); return ymd2(d.getFullYear(), d.getMonth() + 1, d.getDate()); };
+    /* 健康保険の標準報酬月額（50 等級）。境目は「以上〜未満」 */
+    const KENPO = [[58000, 0], [68000, 63000], [78000, 73000], [88000, 83000], [98000, 93000], [104000, 101000], [110000, 107000], [118000, 114000], [126000, 122000], [134000, 130000], [142000, 138000], [150000, 146000], [160000, 155000], [170000, 165000], [180000, 175000], [190000, 185000], [200000, 195000], [220000, 210000], [240000, 230000], [260000, 250000], [280000, 270000], [300000, 290000], [320000, 310000], [340000, 330000], [360000, 350000], [380000, 370000], [410000, 395000], [440000, 425000], [470000, 455000], [500000, 485000], [530000, 515000], [560000, 545000], [590000, 575000], [620000, 605000], [650000, 635000], [680000, 665000], [710000, 695000], [750000, 730000], [790000, 770000], [830000, 810000], [880000, 855000], [930000, 905000], [980000, 955000], [1030000, 1005000], [1090000, 1055000], [1150000, 1115000], [1210000, 1175000], [1270000, 1235000], [1330000, 1295000], [1390000, 1355000]];
+    const kenpoGrade = (w) => { let g = 1; for (let i = 0; i < KENPO.length; i++) if (w >= KENPO[i][1]) g = i + 1; return g; };
+    /* HYOJUN(報酬月額, ["健保"|"厚年"], ["等級"]) → 標準報酬月額（または等級） */
+    F.HYOJUN = (w, kind, what) => {
+      w = num(w); if (isErr(w)) return w;
+      const k = String(kind == null ? '健保' : kind);
+      let g = kenpoGrade(w), v = KENPO[g - 1][0];
+      if (/厚|年金|kn/i.test(k)) { g = Math.max(1, Math.min(32, g - 3)); v = KENPO[g + 2][0]; }
+      return /等級|grade/i.test(String(what || '')) ? g : v;
+    };
+    /* NENREI(生年月日, [その日]) → 法律上の年齢（年齢計算ニ関スル法律: 誕生日の前日の終わりに 1 つ増える） */
+    F.NENREI = (b, at) => {
+      b = num(b); at = at == null ? todayS() : num(at); if (isErr(b)) return b; if (isErr(at)) return at;
+      const x = sp(b), y = sp(at + 1);   // 前日に加齢 → その日の翌日で数えるのと同じ
+      let a = y.y - x.y; if (y.m < x.m || (y.m === x.m && y.d < x.d)) a--;
+      return a;
+    };
+    /* TASSHIBI(生年月日, 年齢) → その年齢に「達した日」（＝誕生日の前日）。例 60 歳に達した日 */
+    F.TASSHIBI = (b, n) => { b = num(b); n = num(n); if (isErr(b)) return b; if (isErr(n)) return n; const x = sp(b); return ymd2(x.y + n, x.m, x.d) - 1; };
+    /* KIKAN(起算の出来事の日, 長さ, "日"|"週"|"月"|"年", [初日を入れる]) → 期間の末日（民法 140〜143 条: 初日不算入・応当日の前日・応当日が無ければ月末） */
+    F.KIKAN = (s, n, unit, first) => {
+      s = num(s); n = num(n); if (isErr(s)) return s; if (isErr(n)) return n;
+      const u = String(unit == null ? '日' : unit);
+      const start = first === true || /TRUE|1|入/.test(String(first || '')) ? Math.floor(s) : Math.floor(s) + 1;   // 起算日
+      if (/日|d/i.test(u) && !/月|年/.test(u)) return start + n - 1;
+      if (/週|w/i.test(u)) return start + n * 7 - 1;
+      const p = sp(start), months = /年|y/i.test(u) ? n * 12 : n;
+      let y = p.y, m = p.m + months; y += Math.floor((m - 1) / 12); m = ((m - 1) % 12) + 1;
+      const last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+      if (p.d > last) return ymd2(y, m, last);   // 応当日が無い → その月の末日
+      return ymd2(y, m, p.d) - 1;                // 応当日の前日
+    };
+    /* SOUSHITSU(退職日) → 資格喪失日（翌日）。SHIKEN() → 試験までの日数 */
+    F.SOUSHITSU = (d) => { d = num(d); return isErr(d) ? d : Math.floor(d) + 1; };
+    F.SHIKEN = () => { const d = examDate(); return d ? daysUntil(d) : E.NA(); };
+    F['標準報酬'] = F.HYOJUN; F['年齢'] = F.NENREI; F['達した日'] = F.TASSHIBI; F['期間末日'] = F.KIKAN;
+  })();
+
+  /* ============================================================
+   *  15.1 上の帯の Σ と小窓（三本柱の共通の形 — ³⁷ Lumière と同じ CSS）
+   * ============================================================ */
+  const CORDI_UI = 'var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", sans-serif))';
+  const POP_CSS = `
+:root { --cordi-ui-fallback: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", "Segoe UI", sans-serif; }
+#cordi-dock { display: inline-flex; align-items: center; gap: 1px; margin-inline: 2px 6px; flex: none; height: 28px; }
+#cordi-dock .cd-b { order: var(--cd-o, 5); width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--c-icoSec, #91918e); border: 0; background: transparent; padding: 0; position: relative; }
+#cordi-dock .cd-b:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-icoPri, #37352f); }
+#cordi-dock .cd-b[aria-expanded="true"] { background: var(--ca-bacIntTra, rgba(55,53,47,.08)); color: var(--c-texPri, #37352f); }
+#cordi-dock .cd-b svg { width: 18px; height: 18px; display: block; }
+#cordi-dock .cd-b .cd-badge { position: absolute; top: 1px; right: 0; min-width: 13px; height: 13px; padding: 0 3px; border-radius: 999px; font: 600 8.5px/13px ${CORDI_UI}; text-align: center; background: var(--lm-accent, var(--c-bluIcoAccPri, #2383e2)); color: #fff; box-shadow: 0 0 0 1.5px var(--c-bacPri, #fff); }
+#cordi-dock .cd-b .cd-badge:empty { display: none; }
+.cordi-pop { position: fixed; z-index: 2147483100; width: 320px; max-height: min(78vh, 680px); overflow: auto; overscroll-behavior: contain; box-sizing: border-box; padding: 6px; border-radius: 12px; background: var(--c-bacEle, #fff); color: var(--c-texPri, #37352f);
+  box-shadow: var(--c-shaOutLg, 0 0 0 1px rgba(15,15,15,.05), 0 3px 6px rgba(15,15,15,.1), 0 9px 24px rgba(15,15,15,.2)); font: 13.5px/1.4 ${CORDI_UI}; font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; animation: cordi-pop-in .14s cubic-bezier(.2,.8,.2,1); }
+@keyframes cordi-pop-in { from { opacity: 0; transform: translateY(-3px) scale(.985); } to { opacity: 1; transform: none; } }
+.cordi-pop * { box-sizing: border-box; }
+.cordi-pop .cp-hd { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px 6px; }
+.cordi-pop .cp-hd b { font: 600 15px/1.1 var(--cordi-ui-display, "Cormorant Garamond", "Hoefler Text", "Hiragino Mincho ProN", Georgia, serif); letter-spacing: .03em; }
+.cordi-pop .cp-hd span { color: var(--c-texSec, #787774); font-size: 11.5px; }
+.cordi-pop .cp-hd i { margin-inline-start: auto; font-style: normal; font-size: 10.5px; color: var(--c-texTer, #a5a29a); }
+.cordi-pop .cp-sec { padding: 10px 10px 4px; font-size: 11px; font-weight: 600; color: var(--c-texSec, #787774); letter-spacing: .02em; }
+.cordi-pop .cp-div { height: 1px; margin: 6px 4px; background: var(--ca-borSecTra, rgba(55,53,47,.09)); }
+.cordi-pop .cp-i { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 30px; padding: 4px 10px; border: 0; background: none; color: inherit; font: inherit; text-align: left; border-radius: 7px; cursor: pointer; }
+.cordi-pop .cp-i:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+.cordi-pop .cp-i .ic { width: 20px; height: 20px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--c-icoPri, #37352f); font-size: 15px; }
+.cordi-pop .cp-i .ic svg { width: 18px; height: 18px; }
+.cordi-pop .cp-i .lb { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cordi-pop .cp-i .lb small { display: block; font-size: 11px; color: var(--c-texSec, #787774); white-space: normal; line-height: 1.35; margin-top: 1px; }
+.cordi-pop .cp-i .k { font-size: 11px; color: var(--c-texTer, #a5a29a); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cordi-pop .cp-sw { flex: none; width: 28px; height: 16px; border-radius: 999px; background: var(--ca-borPriTra, rgba(55,53,47,.16)); position: relative; transition: background-color .18s; }
+.cordi-pop .cp-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .18s cubic-bezier(.2,.8,.2,1); }
+.cordi-pop .cp-sw.on { background: var(--lm-accent, var(--c-bluIcoAccPri, #2383e2)); }
+.cordi-pop .cp-sw.on::after { transform: translateX(12px); }
+.cordi-pop .cp-note { padding: 4px 12px 8px; font-size: 11.5px; color: var(--c-texSec, #787774); line-height: 1.55; }
+.cordi-pop .s38-hero { margin: 4px 6px 6px; padding: 12px 14px; border-radius: 10px; background: color-mix(in srgb, var(--lm-accent, #2383e2) 8%, transparent); display: flex; align-items: center; gap: 14px; }
+.cordi-pop .s38-hero .n { font: 600 30px/1 ${CORDI_UI}; font-variant-numeric: tabular-nums; letter-spacing: -.01em; color: var(--c-texPri, #37352f); }
+.cordi-pop .s38-hero .n small { font-size: 13px; font-weight: 500; margin-left: 2px; }
+.cordi-pop .s38-hero .t { font-size: 12px; color: var(--c-texSec, #787774); line-height: 1.45; }
+.cordi-pop .s38-hero .t b { color: var(--c-texPri, #37352f); font-weight: 600; }
+.cordi-pop .s38-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 6px 6px; }
+.cordi-pop .s38-tiles div { padding: 8px 10px; border-radius: 9px; background: var(--ca-bacSecTra, rgba(55,53,47,.035)); }
+.cordi-pop .s38-tiles b { display: block; font: 600 17px/1.1 ${CORDI_UI}; font-variant-numeric: tabular-nums; }
+.cordi-pop .s38-tiles span { font-size: 10.5px; color: var(--c-texSec, #787774); }
+.cordi-pop .s38-bar { height: 4px; border-radius: 4px; background: var(--ca-borSecTra, rgba(55,53,47,.09)); overflow: hidden; margin-top: 6px; }
+.cordi-pop .s38-bar i { display: block; height: 100%; border-radius: 4px; background: var(--lm-accent, #2383e2); }`;
+  function popCss() { if (!document.getElementById('s38-pop-css')) { const st = document.createElement('style'); st.id = 's38-pop-css'; st.textContent = POP_CSS; document.head.appendChild(st); } }
+  function dock() {
+    popCss();
+    const more = document.querySelector('.notion-topbar-more-button'), share = document.querySelector('.notion-topbar-share-menu');
+    const anchor = share || more;
+    const bar = document.querySelector('.notion-topbar-action-buttons') || (anchor && anchor.parentElement);
+    if (!bar) return null;
+    let d = document.getElementById('cordi-dock');
+    if (!d) { d = document.createElement('div'); d.id = 'cordi-dock'; }
+    let ref = anchor; while (ref && ref.parentElement !== bar) ref = ref.parentElement;
+    if (d.parentElement !== bar || (ref && d.nextElementSibling !== ref)) bar.insertBefore(d, ref || bar.firstChild);
+    let b = document.getElementById('cordi-b-s38');
+    if (!b) {
+      b = document.createElement('button'); b.id = 'cordi-b-s38'; b.className = 'cd-b'; b.type = 'button'; b.style.setProperty('--cd-o', '4');
+      b.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5H5.5l5 5.5-5 5.5h9"/></svg><span class="cd-badge"></span>';
+      b.title = 'Scholar — 学び・計算・記録';
+      b.setAttribute('aria-expanded', 'false');
+      b.addEventListener('mousedown', (e) => e.preventDefault());
+      b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); popOpen(b); });
+    }
+    if (b.parentElement !== d) d.appendChild(b);
+    b.querySelector('.cd-badge').textContent = dueCount() ? String(Math.min(99, dueCount())) : '';
+    return b;
+  }
+  function dueCount() { const t = dayNum(); let n = 0; for (const k of Object.keys(SRS)) if (SRS[k].due <= t) n++; return n; }
+  let pop = null, popB = null;
+  function popClose() { if (pop) pop.remove(); pop = null; if (popB) popB.setAttribute('aria-expanded', 'false'); popB = null; }
+  document.addEventListener('cordi:closepops', (e) => { if (e.detail !== 's38') popClose(); });
+  const ICO = {
+    sheet: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M3 8h14M3 12h14M8 4v12"/></svg>',
+    card: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="5" y="3.5" width="11" height="13" rx="2"/><path d="M3.5 6v9.5a1.5 1.5 0 0 0 1.5 1.5h8"/></svg>',
+    ox: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="6.5" cy="10" r="3.5"/><path d="M12 6.5l7 7M19 6.5l-7 7" transform="translate(-1.5 0)"/></svg>',
+    blank: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M3 6h5M12 6h5M3 10h2M9 10h8M3 14h9"/><rect x="8" y="4.5" width="4" height="3" rx=".8" fill="currentColor" stroke="none" opacity=".35"/></svg>',
+    red: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="14" height="10" rx="2" fill="#d94a3a" fill-opacity=".22"/><path d="M6 10h8"/></svg>',
+    gauge: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M3.5 13.5a6.5 6.5 0 1 1 13 0"/><path d="M10 13.5l3-4"/></svg>',
+    speak: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h2.5L10 5v10l-3.5-3H4z"/><path d="M13 7.5a3.5 3.5 0 0 1 0 5M15 5.5a6.5 6.5 0 0 1 0 9"/></svg>',
+    pen: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l1-3.5L13.5 4l2.5 2.5L7.5 15z"/><path d="M4 16h12" opacity=".4"/></svg>',
+    book: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M10 5.5c-1.8-1.3-4-1.6-6.5-1.2v11c2.5-.4 4.7-.1 6.5 1.2 1.8-1.3 4-1.6 6.5-1.2v-11c-2.5-.4-4.7-.1-6.5 1.2z"/><path d="M10 5.5v11"/></svg>',
+    heart: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M10 16s-6-3.6-6-8a3.2 3.2 0 0 1 6-1.6A3.2 3.2 0 0 1 16 8c0 4.4-6 8-6 8z"/></svg>',
+    news: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M6 7.5h8M6 10.5h3M11.5 10.5h2.5M6 13h8" stroke-linecap="round"/></svg>',
+    dict: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M4 15.5V5a1.5 1.5 0 0 1 1.5-1.5H16v10H5.5A1.5 1.5 0 0 0 4 15a1.5 1.5 0 0 0 1.5 1.5H16"/><path d="M8 7h5M8 9.5h3"/></svg>',
+    timer: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="10" cy="11" r="6"/><path d="M10 8v3l2 1.5M8 2.8h4"/></svg>',
+    fx: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M9 4.5c-1.6 0-2.2.9-2.5 2.6L5 15.5M4 9h5M11 9l4.5 5M15.5 9L11 14"/></svg>',
+    gear: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.8v2M10 15.2v2M17.2 10h-2M4.8 10h-2M15.1 4.9l-1.4 1.4M6.3 13.7l-1.4 1.4M15.1 15.1l-1.4-1.4M6.3 6.3L4.9 4.9" stroke-linecap="round"/></svg>',
+    chart: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M4 16V9M8.5 16V5M13 16v-5M17 16V7.5"/></svg>'
+  };
+  function popHtml() {
+    const hm = heatmap(), ex = examDate(), dn = daysUntil(ex), due = dueCount();
+    const today = hm.today, goal = P.goal || 120;
+    const sw = (v) => '<span class="cp-sw' + (v ? ' on' : '') + '"></span>';
+    const it = (a, ic, label, sub, k, right) => '<button class="cp-i" data-s="' + a + '"><span class="ic">' + (ICO[ic] || ic) + '</span><span class="lb">' + label + (sub ? '<small>' + sub + '</small>' : '') + '</span>' + (right != null ? right : k ? '<span class="k">' + k + '</span>' : '') + '</button>';
+    let h = '<div class="cp-hd"><b>Scholar</b><span>学び・計算・記録</span><i>³⁸ v' + VERSION + '</i></div>';
+    if (P.exam.on && dn != null) h += '<div class="s38-hero" data-s="examcfg" title="押すと試験の名前・日を変えられます"><div class="n">' + (dn >= 0 ? dn : 0) + '<small>日</small></div><div class="t"><b>' + esc(P.exam.name) + '</b> まで<br>' + ex.getFullYear() + '年' + (ex.getMonth() + 1) + '月' + ex.getDate() + '日（' + '日月火水木金土'[ex.getDay()] + '）' + (dn > 0 ? '・あと ' + Math.ceil(dn / 7) + ' 週' : '') + '</div></div>';
+    h += '<div class="s38-tiles"><div><b>' + today + '<small style="font-size:11px">分</small></b><span>今日の学習</span><div class="s38-bar"><i style="width:' + Math.min(100, today / goal * 100).toFixed(0) + '%"></i></div></div><div><b>' + hm.streak + '<small style="font-size:11px">日</small></b><span>続けて</span></div><div><b>' + due + '<small style="font-size:11px">枚</small></b><span>今日の復習</span></div></div>';
+    const ann = annivSoon();
+    if (ann.length) h += '<div class="cp-note">もうすぐ: ' + ann.slice(0, 3).map((a) => '<b>' + esc(a.name) + '</b> ' + esc(a.what) + (a.days === 0 ? '（今日！）' : ' まで ' + a.days + ' 日')).join('　') + '</div>';
+    h += '<div class="cp-sec">覚える</div>';
+    h += it('review', 'card', '単語帳を復習', due ? '期限の来たカード ' + due + ' 枚' : DECKS.length ? '今日の分は済みました' : 'DB のビューから単語帳を作る', '', due ? '<span class="k">' + due + '</span>' : null);
+    h += it('quiz', 'ox', '○×で解く（肢別）', '過去問の DB を ○×演習に。間違えたものは単語帳へ', '');
+    h += it('drill', 'blank', '選択式ドリル', 'このページの赤字・太字・数字を空欄にして選択肢から選ぶ', '');
+    h += it('red', 'red', '赤シート', '赤い文字を隠す', '⌃⌥K', '<span class="k">⌃⌥K</span>' + sw(STUDY.red));
+    h += it('cloze', 'blank', '穴埋め', '色を付けた背景の語を空欄に', '', '<span class="k">⌃⌥H</span>' + sw(STUDY.cloze));
+    h += it('gloss', 'dict', '用語に乗せて意味を出す', GLOSS.terms.length ? '用語集 ' + GLOSS.terms.length + ' 語' + (P.gloss.kw ? '・社労士の用語も光らせる' : '') : '用語集の DB を選ぶ（乗せると意味が出る）', '', sw(P.gloss.on && (GLOSS.terms.length || P.gloss.kw)));
+    h += '<div class="cp-sec">試験</div>';
+    h += it('pass', 'gauge', '基準点チェッカー', '選択式・択一式の点を入れて、合否と足りない科目を見る', '');
+    h += '<div class="cp-sec">語学・読む</div>';
+    h += it('speak', 'speak', '読み上げる', '選んだ文字（無ければ今の段落から）', '⌃⌥T');
+    h += it('dictation', 'pen', '書き取り', '選んだ文を聞いて打ち込み、違いを見る', '');
+    h += '<div class="cp-sec">記録</div>';
+    h += it('ledger:read', 'book', '読書の記録', ledgerHint('read'), '');
+    h += it('ledger:oshi', 'heart', '推しの記録', ledgerHint('oshi'), '');
+    h += it('ledger:news', 'news', 'ニュースのクリップ', ledgerHint('news'), '');
+    h += it('log', 'chart', '学習の記録（草）', '今週 ' + hm.week + ' 分', '');
+    h += '<div class="cp-sec">計算</div>';
+    h += it('sheet', 'sheet', 'いまの表をシートで開く', 'Excel の式・計算の列・条件付き書式・書き戻し', '⌃⌥E');
+    h += it('calc', 'fx', '選んだ式を計算', '=KIKAN(…)・=HYOJUN(…) など社労士の計算も', '⌃⌥=');
+    h += it('pomo', 'timer', POMO.el ? 'ポモドーロを止める' : 'ポモドーロ ' + P.pomo + ' 分', '', '');
+    h += '<div class="cp-div"></div>' + it('panel', 'gear', 'Scholar の設定…', '赤シートの色・ポモドーロ・試験の日・マクロ', '');
+    return h;
+  }
+  function popOpen(btn) {
+    if (pop && popB === btn) { popClose(); return; }
+    popClose(); document.dispatchEvent(new CustomEvent('cordi:closepops', { detail: 's38' }));
+    popCss();
+    pop = document.createElement('div'); pop.className = 'cordi-pop'; pop.id = 's38-pop';
+    popB = btn; btn.setAttribute && btn.setAttribute('aria-expanded', 'true');
+    document.body.appendChild(pop);
+    const draw = () => { pop.innerHTML = popHtml(); const r = btn.getBoundingClientRect(); pop.style.top = Math.min(innerHeight - pop.offsetHeight - 8, r.bottom + 6) + 'px'; pop.style.left = Math.max(8, Math.min(innerWidth - pop.offsetWidth - 8, r.right - pop.offsetWidth + 4)) + 'px'; };
+    draw(); pop.__draw = draw;
+    pop.addEventListener('click', (e) => { const el = e.target.closest('[data-s]'); if (!el) return; const a = el.dataset.s; const keep = /^(red|cloze|gloss)$/.test(a); if (!keep) popClose(); act(a); if (keep && pop) draw(); });
+    setTimeout(() => document.addEventListener('pointerdown', function off(e) { if (!pop) { document.removeEventListener('pointerdown', off, true); return; } if (pop.contains(e.target) || btn.contains(e.target)) return; document.removeEventListener('pointerdown', off, true); popClose(); }, true), 0);
+  }
+  function act(a, arg) {
+    if (a === 'review') { const t = dayNum(); const d = DECKS.find((k) => Object.entries(SRS).some(([id, c]) => id.startsWith(k.id + ':') && c.due <= t)) || DECKS[0]; if (d && dueCount()) review(d); else deckDialog(); }
+    else if (a === 'quiz') quizStart();
+    else if (a === 'drill') drillStart();
+    else if (a === 'red') setRed();
+    else if (a === 'cloze') setCloze();
+    else if (a === 'gloss') glossToggle();
+    else if (a === 'pass') passDialog();
+    else if (a === 'speak') speak(arg);
+    else if (a === 'dictation') dictation(arg);
+    else if (a.startsWith('ledger:')) ledgerOpen(a.slice(7));
+    else if (a === 'log') panel();
+    else if (a === 'sheet') openSheet(null);
+    else if (a === 'calc') evalSelection();
+    else if (a === 'pomo') { if (POMO.el) pomoStop(); else { if (window.Notification && Notification.permission === 'default') Notification.requestPermission(); pomoStart('work'); } }
+    else if (a === 'panel') panel();
+    else if (a === 'examcfg') examDialog();
+  }
+  /* ほかの柱・Atelier の ⋯ メニューから */
+  document.addEventListener('cordi:run', (e) => {
+    let d = e.detail; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (x) { d = { id: d }; } }
+    if (!d || !d.id || !/^s38\./.test(d.id)) return;
+    const a = d.id.slice(4);
+    if (a === 'pop') { const b = document.getElementById('cordi-b-s38') || dock(); if (b) popOpen(b); return; }
+    act(a, d.text);
+  });
+  document.addEventListener('cordi:tools?', announce);
+  function announce() {
+    document.dispatchEvent(new CustomEvent('cordi:tools', { detail: JSON.stringify({ pillar: 's38', name: 'Scholar', tools: [
+      { id: 's38.pop', label: '学び・計算・記録', hint: dueCount() ? '復習 ' + dueCount() + ' 枚' : '' },
+      { id: 's38.speak', label: '読み上げる', sel: true }, { id: 's38.calc', label: '選んだ式を計算', sel: true }, { id: 's38.dictation', label: '書き取り', sel: true },
+      { id: 's38.drill', label: '選択式ドリル' }, { id: 's38.red', label: '赤シート' }
+    ] }) }));
+  }
+
+  /* ============================================================
+   *  15.2 試験の日・基準点チェッカー
+   * ============================================================ */
+  function examDialog() {
+    css();
+    const ex = examDate();
+    dialog(`<h3>試験</h3><p class="d">試験までの日数を Scholar の小窓に出します。空欄なら「8 月の第 4 日曜日」（社労士試験の例年の日）。</p>
+      <label class="r"><span>名前</span><input type="text" data-k="name" value="${esc(P.exam.name)}"></label>
+      <label class="r"><span>日</span><input type="date" data-k="date" value="${esc(P.exam.date || '')}" placeholder="${ex ? ymd(ex) : ''}"></label>
+      <label class="r"><span>小窓に出す</span><input type="checkbox" data-k="on"${P.exam.on ? ' checked' : ''}></label>
+      <label class="r"><span>1 日の目標</span><input type="number" data-k="goal" value="${P.goal || 120}" style="max-width:80px"> 分</label>
+      <div class="btns"><button class="b pri" data-ok>保存</button><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelector('[data-ok]').onclick = () => { const g = (k) => d.querySelector('[data-k="' + k + '"]'); P.exam.name = g('name').value.trim() || '試験'; P.exam.date = g('date').value; P.exam.on = g('on').checked; P.goal = +g('goal').value || 120; saveP(); close(); toast('保存しました'); };
+    });
+  }
+  function passDialog() {
+    css();
+    const S0 = store.get('c38.passScores', { sel: {}, mc: {} });
+    const row = (kind, [id, nm], max) => '<tr><td>' + esc(nm) + '</td><td><input type="number" min="0" max="' + max + '" data-' + kind + '="' + id + '" value="' + (S0[kind][id] != null ? S0[kind][id] : '') + '" style="width:64px"> / ' + max + '</td><td class="st" data-st-' + kind + '="' + id + '"></td></tr>';
+    dialog(`<h3>基準点チェッカー</h3><p class="d">本試験・模試の点を入れると、総得点と科目ごとの基準点を同時に確かめます。基準点は年ごとに変わります（救済もある）— 発表に合わせて下の値を変えてください。</p>
+      <div class="step"><div class="sh">選択式（各 5 点）</div><table class="s38-pt">${SR.sel.map((s) => row('sel', s, 5)).join('')}</table></div>
+      <div class="step"><div class="sh">択一式（各 10 点）</div><table class="s38-pt">${SR.mc.map((s) => row('mc', s, 10)).join('')}</table></div>
+      <div class="step"><div class="sh">合格の基準</div>
+        <label class="r"><span>選択式</span>総得点 <input type="number" data-pass="selTotal" value="${P.pass.selTotal}" style="width:60px"> 点以上・各 <input type="number" data-pass="selEach" value="${P.pass.selEach}" style="width:50px"> 点以上</label>
+        <label class="r"><span>択一式</span>総得点 <input type="number" data-pass="mcTotal" value="${P.pass.mcTotal}" style="width:60px"> 点以上・各 <input type="number" data-pass="mcEach" value="${P.pass.mcEach}" style="width:50px"> 点以上</label></div>
+      <div class="step s38-verdict"></div>
+      <div class="btns"><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.querySelector('[data-x]').onclick = close;
+      const upd = () => {
+        for (const x of d.querySelectorAll('[data-pass]')) P.pass[x.dataset.pass] = +x.value || 0;
+        saveP();
+        const sc = { sel: {}, mc: {} };
+        let tot = { sel: 0, mc: 0 }, filled = { sel: 0, mc: 0 }; const low = { sel: [], mc: [] };
+        for (const kind of ['sel', 'mc']) for (const [id, nm] of SR[kind]) {
+          const x = d.querySelector('[data-' + kind + '="' + id + '"]'); const v = x.value === '' ? null : +x.value;
+          sc[kind][id] = v;
+          const st = d.querySelector('[data-st-' + kind + '="' + id + '"]');
+          if (v == null) { st.textContent = ''; continue; }
+          filled[kind]++; tot[kind] += v;
+          const need = kind === 'sel' ? P.pass.selEach : P.pass.mcEach;
+          st.innerHTML = v >= need ? '<span class="ok">✓ 基準点</span>' : '<span class="ng">▲ あと ' + (need - v) + ' 点</span>';
+          if (v < need) low[kind].push(nm.replace(/（.*$/, ''));
+        }
+        store.set('c38.passScores', sc);
+        const okSel = tot.sel >= P.pass.selTotal && !low.sel.length, okMc = tot.mc >= P.pass.mcTotal && !low.mc.length;
+        const v = d.querySelector('.s38-verdict');
+        if (!filled.sel && !filled.mc) { v.innerHTML = '<p class="d">点を入れると、ここに結果が出ます。</p>'; return; }
+        const line = (k, ok, t, need) => '<div class="vl ' + (ok ? 'ok' : 'ng') + '"><b>' + k + '</b> ' + t + ' 点 / 基準 ' + need + ' 点 — ' + (ok ? '基準を満たしています' : (t < need ? '総得点が ' + (need - t) + ' 点足りません' : '') + (low[k === '選択式' ? 'sel' : 'mc'].length ? '　足りない科目: ' + low[k === '選択式' ? 'sel' : 'mc'].join('・') : '')) + '</div>';
+        v.innerHTML = line('選択式', okSel, tot.sel, P.pass.selTotal) + line('択一式', okMc, tot.mc, P.pass.mcTotal) + '<div class="big ' + (okSel && okMc ? 'ok' : 'ng') + '">' + (okSel && okMc ? '合格ライン' : 'もう一歩') + '</div>';
+      };
+      d.querySelectorAll('input').forEach((x) => x.addEventListener('input', upd));
+      upd();
+    });
+  }
+
+  /* ============================================================
+   *  15.3 ○×演習（肢別）— 過去問の DB から
+   *       列: 問い（文）・正解（○×・はい/いいえ・チェック・正/誤）・解説・科目・年度（どれも名前から推定、選び直せる）
+   * ============================================================ */
+  let QUIZ = store.get(K2.quiz, {});        // 'blockId:rowId' → { n, ok, last, wrong }
+  let QMAPS = store.get(K2.quizMaps, {});   // viewId → { q, a, x, subj, year }
+  const truthy = (v) => { if (v === true) return true; if (v === false) return false; const s = String(v == null ? '' : ENGINE.show(v)).trim(); if (/^(○|〇|◯|o|O|true|TRUE|正|正しい|はい|yes|1|適切)$/.test(s)) return true; if (/^(×|✕|x|X|false|FALSE|誤|誤り|いいえ|no|0|不適切)$/.test(s)) return false; return null; };
+  function guessCol(cols, re, types) { const c = cols.find((x) => re.test(x.name) && (!types || types.includes(x.type))) || (types ? cols.find((x) => types.includes(x.type) && re.test(x.name)) : null); return c ? c.name : ''; }
+  async function quizStart() {
+    css();
+    const v = findView();
+    if (!v || !v.viewId) { toast('過去問の DB（表のビュー）を開いてから選んでください'); return; }
+    let data; try { toast('問題を読んでいます…'); data = await loadView(v, { allProps: true }); } catch (e) { toast('読めませんでした: ' + e.message); return; }
+    const cols = data.cols;
+    const m0 = QMAPS[v.viewId] || {
+      q: guessCol(cols, /問題|問い|設問|肢|question|本文/i) || (cols.find((c) => c.type === 'title') || cols[0]).name,
+      a: guessCol(cols, /正解|答え|正誤|○×|答|answer/i), x: guessCol(cols, /解説|説明|根拠|explanation|メモ/i),
+      subj: guessCol(cols, /科目|分野|subject|法/i, ['select', 'multi_select', 'text', 'status']), year: guessCol(cols, /年度|年|year|回/i)
+    };
+    const opt = (sel) => '<option value="">（なし）</option>' + cols.map((c) => '<option' + (c.name === sel ? ' selected' : '') + '>' + esc(c.name) + '</option>').join('');
+    const subjects = [...new Set(data.rows.map((r) => { const i = cols.findIndex((c) => c.name === m0.subj); return i >= 0 ? ENGINE.show(r.vals[i]) : ''; }).filter(Boolean))];
+    dialog(`<h3>○×で解く</h3><p class="d">「${esc(data.viewName || 'このビュー')}」${data.rows.length} 問。列を確かめて始めます（次からは同じ設定）。間違えた問いは、自動で単語帳「○×の間違い」に入ります。</p>
+      <label class="r"><span>問い</span><select data-m="q">${opt(m0.q)}</select></label>
+      <label class="r"><span>正解（○×）</span><select data-m="a">${opt(m0.a)}</select></label>
+      <label class="r"><span>解説</span><select data-m="x">${opt(m0.x)}</select></label>
+      <label class="r"><span>科目</span><select data-m="subj">${opt(m0.subj)}</select></label>
+      <label class="r"><span>年度</span><select data-m="year">${opt(m0.year)}</select></label>
+      <label class="r"><span>出す問い</span><select data-o="which"><option value="all">すべて（順番をまぜる）</option><option value="weak">苦手（前に間違えた・正答率 70% 未満）</option><option value="new">まだ解いていない</option></select></label>
+      ${subjects.length ? '<label class="r"><span>科目をしぼる</span><select data-o="subj"><option value="">すべて</option>' + subjects.map((s) => '<option>' + esc(s) + '</option>').join('') + '</select></label>' : ''}
+      <label class="r"><span>問いの数</span><input type="number" data-o="n" value="20" style="max-width:80px"></label>
+      <div class="btns"><button class="b pri" data-go>はじめる</button><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelector('[data-go]').onclick = () => {
+        const m = {}; d.querySelectorAll('[data-m]').forEach((s) => { m[s.dataset.m] = s.value; });
+        if (!m.q || !m.a) { toast('問いと正解の列を選んでください'); return; }
+        QMAPS[v.viewId] = m; store.set(K2.quizMaps, QMAPS);
+        const o = { which: d.querySelector('[data-o="which"]').value, subj: (d.querySelector('[data-o="subj"]') || {}).value || '', n: +d.querySelector('[data-o="n"]').value || 20 };
+        close(); quizRun(v, data, m, o);
+      };
+    });
+  }
+  const QUIZ_CSS = `
+#s38-quiz { position: fixed; inset: 0; z-index: 2147483350; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px;
+  background: color-mix(in srgb, var(--lm-bg, #f4f2ee) 94%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--lm-ink, #2c2c2b); font: 15px/1.75 ${CORDI_UI}; font-feature-settings: "palt" 1; }
+#s38-quiz .top { position: absolute; top: 16px; left: 24px; right: 24px; display: flex; align-items: center; gap: 12px; color: var(--lm-mute, #888); font-size: 12.5px; }
+#s38-quiz .top .pg { flex: 1; height: 4px; border-radius: 4px; background: var(--lm-line, rgba(0,0,0,.08)); overflow: hidden; }
+#s38-quiz .top .pg i { display: block; height: 100%; background: var(--lm-accent, #2783de); transition: width .3s; }
+#s38-quiz .top button { border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; padding: 4px 8px; border-radius: 6px; }
+#s38-quiz .top button:hover { background: var(--lm-hover, rgba(0,0,0,.05)); }
+#s38-quiz .qcard { width: min(720px, 92vw); border-radius: 18px; padding: 28px 34px; background: var(--lm-raised, #fff); box-shadow: 0 24px 60px rgba(0,0,0,.12), 0 0 0 1px var(--lm-line, rgba(0,0,0,.08)); }
+#s38-quiz .meta { display: flex; gap: 8px; margin-bottom: 10px; font-size: 11.5px; color: var(--lm-mute, #888); }
+#s38-quiz .meta span { padding: 1px 8px; border-radius: 999px; background: var(--lm-hover, rgba(0,0,0,.05)); }
+#s38-quiz .q { font-size: 17px; line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
+#s38-quiz .ans { display: flex; gap: 14px; }
+#s38-quiz .ans button { width: 128px; height: 64px; border-radius: 16px; border: 1px solid var(--lm-line, rgba(0,0,0,.12)); background: var(--lm-raised, #fff); color: inherit; font: 600 30px/1 ${CORDI_UI}; cursor: pointer; transition: transform .12s, border-color .12s; }
+#s38-quiz .ans button:hover { transform: translateY(-2px); border-color: var(--lm-accent, #2783de); }
+#s38-quiz .ans button small { display: block; font-size: 10.5px; font-weight: 500; color: var(--lm-mute, #999); margin-top: 3px; }
+#s38-quiz .res { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--lm-line, rgba(0,0,0,.08)); }
+#s38-quiz .res .v { font-weight: 700; font-size: 16px; }
+#s38-quiz .res .v.ok { color: #2e8b57; } #s38-quiz .res .v.ng { color: #c4453a; }
+#s38-quiz .res .x { margin-top: 6px; color: var(--lm-mute, #666); font-size: 14px; white-space: pre-wrap; max-height: 34vh; overflow: auto; }
+#s38-quiz .hint { color: var(--lm-mute, #999); font-size: 12px; }
+#s38-quiz .done { width: min(560px, 92vw); text-align: center; }
+#s38-quiz .done b { display: block; font: 600 30px/1.3 var(--cordi-ui-display, "Cormorant Garamond", Georgia, serif); margin-bottom: 8px; }
+#s38-quiz .done table { margin: 14px auto 0; border-collapse: collapse; font-size: 13px; }
+#s38-quiz .done td { padding: 4px 10px; border-bottom: 1px solid var(--lm-line, rgba(0,0,0,.06)); text-align: left; }
+#s38-quiz .done td.n { text-align: right; font-variant-numeric: tabular-nums; }`;
+  function quizRun(v, data, m, o) {
+    if (!document.getElementById('s38-quiz-css')) { const st = document.createElement('style'); st.id = 's38-quiz-css'; st.textContent = QUIZ_CSS; document.head.appendChild(st); }
+    const ci = (n) => data.cols.findIndex((c) => c.name === n);
+    const iq = ci(m.q), ia = ci(m.a), ix = ci(m.x), is = ci(m.subj), iy = ci(m.year);
+    const key = (r) => v.blockId + ':' + r.id;
+    let pool = data.rows.filter((r) => ENGINE.show(r.vals[iq]).trim() && truthy(r.vals[ia]) != null);
+    if (o.subj && is >= 0) pool = pool.filter((r) => ENGINE.show(r.vals[is]) === o.subj);
+    if (o.which === 'weak') pool = pool.filter((r) => { const h = QUIZ[key(r)]; return h && (h.wrong || h.ok / h.n < 0.7); });
+    if (o.which === 'new') pool = pool.filter((r) => !QUIZ[key(r)]);
+    if (!pool.length) { toast(o.which === 'weak' ? '苦手な問いはまだありません' : '出せる問いがありません（正解の列が ○×・正誤になっているか確かめてください）'); return; }
+    for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+    const queue = pool.slice(0, Math.max(1, o.n));
+    const total = queue.length, started = Date.now();
+    let idx = 0, right = 0, answered = false;
+    const bySubj = {};
+    const el = document.createElement('div'); el.id = 's38-quiz'; document.body.appendChild(el);
+    const end = () => { el.remove(); document.removeEventListener('keydown', key2, true); logStudy(Math.round((Date.now() - started) / 60000), 'review', idx); };
+    const draw = () => {
+      if (idx >= total) {
+        const rows = Object.entries(bySubj).sort((a, b) => a[1].ok / a[1].n - b[1].ok / b[1].n);
+        el.innerHTML = '<div class="done"><b>' + right + ' / ' + total + '</b>正答率 ' + Math.round(right / total * 100) + '%・' + Math.max(1, Math.round((Date.now() - started) / 60000)) + ' 分' +
+          (rows.length > 1 ? '<table>' + rows.map(([s, x]) => '<tr><td>' + esc(s) + '</td><td class="n">' + x.ok + ' / ' + x.n + '</td><td class="n">' + Math.round(x.ok / x.n * 100) + '%</td></tr>').join('') + '</table>' : '') +
+          '<div class="hint" style="margin-top:14px">間違えた問いは単語帳「○×の間違い」に入りました。Esc で閉じる</div><div style="margin-top:14px"><button class="b pri" data-again style="border:0;border-radius:10px;padding:8px 16px;background:var(--lm-accent,#2783de);color:#fff;font:inherit;cursor:pointer">苦手だけもう一度</button></div></div>';
+        el.querySelector('[data-again]').onclick = () => { end(); quizRun(v, data, m, Object.assign({}, o, { which: 'weak' })); };
+        return;
+      }
+      const r = queue[idx]; answered = false;
+      const h = QUIZ[key(r)];
+      el.innerHTML = '<div class="top"><span>○×演習</span><span class="pg"><i style="width:' + (idx / total * 100) + '%"></i></span><span>' + (idx + 1) + ' / ' + total + '・正解 ' + right + '</span><button data-q>やめる（Esc）</button></div>' +
+        '<div class="qcard"><div class="meta">' + (is >= 0 && ENGINE.show(r.vals[is]) ? '<span>' + esc(ENGINE.show(r.vals[is])) + '</span>' : '') + (iy >= 0 && ENGINE.show(r.vals[iy]) ? '<span>' + esc(ENGINE.show(r.vals[iy])) + '</span>' : '') + (h ? '<span>前回まで ' + h.ok + '/' + h.n + '</span>' : '<span>はじめて</span>') + '</div>' +
+        '<div class="q">' + esc(ENGINE.show(r.vals[iq])) + '</div><div class="res" hidden></div></div>' +
+        '<div class="ans"><button data-a="1">○<small>O ／ ←</small></button><button data-a="0">×<small>X ／ →</small></button></div><div class="hint">答えると正誤と解説。Enter・Space で次へ。S で読み上げ</div>';
+      el.querySelector('[data-q]').onclick = end;
+      el.querySelectorAll('[data-a]').forEach((b) => { b.onclick = () => answer(b.dataset.a === '1'); });
+    };
+    const answer = (yes) => {
+      if (answered) { idx++; draw(); return; }
+      answered = true;
+      const r = queue[idx], corr = truthy(r.vals[ia]), ok = yes === corr;
+      if (ok) right++;
+      const k = key(r), hh = QUIZ[k] || { n: 0, ok: 0 };
+      hh.n++; if (ok) hh.ok++; hh.wrong = !ok; hh.last = Date.now(); QUIZ[k] = hh; store.set(K2.quiz, QUIZ);
+      const s = is >= 0 ? ENGINE.show(r.vals[is]) || '（科目なし）' : 'すべて';
+      const b = bySubj[s] || (bySubj[s] = { n: 0, ok: 0 }); b.n++; if (ok) b.ok++;
+      if (!ok) wrongToDeck(v, data, m, r, corr);
+      const res = el.querySelector('.res'); res.hidden = false;
+      res.innerHTML = '<div class="v ' + (ok ? 'ok' : 'ng') + '">' + (ok ? '正解' : '不正解') + '　正しくは「' + (corr ? '○' : '×') + '」</div>' + (ix >= 0 && ENGINE.show(r.vals[ix]) ? '<div class="x">' + esc(ENGINE.show(r.vals[ix])) + '</div>' : '');
+      el.querySelector('.ans').innerHTML = '<button data-n style="width:200px;font-size:15px">次へ（Enter）</button>';
+      el.querySelector('[data-n]').onclick = () => { idx++; draw(); };
+    };
+    const key2 = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); end(); return; }
+      if (!answered && /^(o|O|ArrowLeft|1)$/.test(e.key)) { e.preventDefault(); answer(true); }
+      else if (!answered && /^(x|X|ArrowRight|2)$/.test(e.key)) { e.preventDefault(); answer(false); }
+      else if (answered && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); idx++; draw(); }
+      else if (e.key === 's' || e.key === 'S') { e.preventDefault(); const r = queue[idx]; if (r) speak(ENGINE.show(r.vals[iq])); }
+    };
+    document.addEventListener('keydown', key2, true);
+    draw();
+  }
+  /* 間違えた ○× を単語帳へ（表: 問い ／ 裏: 正解と解説） */
+  function wrongToDeck(v, data, m, r, corr) {
+    let d = DECKS.find((k) => k.id === 'oxwrong' && k.view.viewId === v.viewId);
+    if (!d) { d = { id: 'oxwrong', name: '○×の間違い', view: { blockId: v.blockId, viewId: v.viewId, inline: v.inline }, front: m.q, back: m.a, extra: m.x, newPer: 0 }; DECKS.push(d); saveDecks(); }
+    SRS['oxwrong:' + r.id] = Object.assign(sm2(SRS['oxwrong:' + r.id], 0), { due: dayNum() + 1 });
+    saveSrs();
+  }
+
+  /* ============================================================
+   *  15.4 選択式ドリル — このページの「赤字・太字・数字」を空欄にして、選択肢から選ぶ（本試験の選択式の形）
+   * ============================================================ */
+  const NUM_RE = /(\d+(?:\.\d+)?\s*(?:日|か月|ヵ月|カ月|箇月|月|年|週|時間|分の\d+|分|%|％|割|人|歳|回|円|万円|等級))/g;
+  function drillStart() {
+    css();
+    const root = document.querySelector('.notion-frame .notion-page-content') || document.querySelector('.notion-page-content');
+    if (!root) { toast('本文のあるページで使ってください'); return; }
+    const cfg = store.get(K2.drill, { red: true, bold: true, num: true, n: 5 });
+    dialog(`<h3>選択式ドリル</h3><p class="d">このページの段落から問題を作ります。空欄にするもの:</p>
+      <label class="r"><span>赤・橙の文字</span><input type="checkbox" data-c="red"${cfg.red ? ' checked' : ''}></label>
+      <label class="r"><span>太字</span><input type="checkbox" data-c="bold"${cfg.bold ? ' checked' : ''}></label>
+      <label class="r"><span>数字＋単位</span><input type="checkbox" data-c="num"${cfg.num ? ' checked' : ''}>（30 日・2 分の 1・3 年・60 歳 など。社労士の「数字」対策）</label>
+      <label class="r"><span>空欄の数（1 問）</span><input type="number" data-c="n" value="${cfg.n}" style="max-width:70px">（本試験は 5 つ・選択肢 20）</label>
+      <div class="btns"><button class="b pri" data-go>作る</button><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelector('[data-go]').onclick = () => {
+        d.querySelectorAll('[data-c]').forEach((x) => { cfg[x.dataset.c] = x.type === 'checkbox' ? x.checked : +x.value; });
+        store.set(K2.drill, cfg); close(); drillRun(root, cfg);
+      };
+    });
+  }
+  function drillRun(root, cfg) {
+    /* 段落ごとに、空欄の候補（文字の位置）を集める */
+    const paras = [];
+    for (const blk of root.querySelectorAll('[data-block-id] [data-content-editable-leaf], [data-block-id] .notranslate[contenteditable], .notion-text-block, .notion-bulleted_list-block, .notion-numbered_list-block, .notion-callout-block, .notion-quote-block, .notion-toggle-block')) {
+      if (blk.closest('.s38-drill')) continue;
+      const leaf = blk.matches('[data-content-editable-leaf], [contenteditable]') ? blk : blk.querySelector('[data-content-editable-leaf], [contenteditable]');
+      if (!leaf || paras.some((p) => p.el === leaf)) continue;
+      const text = leaf.textContent || ''; if (text.trim().length < 12) continue;
+      const marks = [];
+      for (const sp of leaf.querySelectorAll('span, b, strong')) {
+        const st = sp.getAttribute('style') || '';
+        const isRed = cfg.red && /--c-(red|ora)Tex|color:\s*(rgb\(2[0-5]\d,\s*[4-9]\d|#d|#e|#c[4-9])|red|orange/i.test(st + ' ' + (sp.className || ''));
+        const isBold = cfg.bold && (sp.tagName === 'B' || sp.tagName === 'STRONG' || /font-weight:\s*(600|700|bold)/.test(st));
+        if (!isRed && !isBold) continue;
+        const t = norm(sp.textContent); if (!t || t.length > 30) continue;
+        marks.push(t);
+      }
+      if (cfg.num) { let m; NUM_RE.lastIndex = 0; while ((m = NUM_RE.exec(text))) marks.push(m[1].replace(/\s+/g, '')); }
+      let uniq = [...new Set(marks)].filter((t) => text.replace(/\s+/g, '').includes(t.replace(/\s+/g, '')));
+      uniq = uniq.filter((t) => !uniq.some((u) => u !== t && u.includes(t)));   // 「30日」と「30日前」→ 長い方だけ
+      if (uniq.length) paras.push({ el: leaf, text: text.replace(/\s+/g, ' ').trim(), marks: uniq });
+    }
+    if (!paras.length) { toast('空欄にできる語が見つかりませんでした（赤字・太字・数字のある段落で）'); return; }
+    /* 空欄を n 個ずつに分けて問題に（段落をまたいでよい） */
+    const blanks = [];
+    for (const p of paras) for (const t of p.marks) blanks.push({ p, t });
+    for (let i = blanks.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [blanks[i], blanks[j]] = [blanks[j], blanks[i]]; }
+    const n = Math.max(1, Math.min(10, cfg.n || 5));
+    const pick = blanks.slice(0, n);
+    const allAns = [...new Set(blanks.map((b) => b.t))];
+    /* 選択肢: 正解＋ほかの空欄の語＋数字の言い換え（30 日 → 14 日・60 日 など）で 20 個まで */
+    const distract = new Set(allAns);
+    for (const b of pick) { const m = /^(\d+(?:\.\d+)?)(.*)$/.exec(b.t); if (m) for (const k of [0.5, 2, 1.5, 3, 0.25]) { const x = Math.round(+m[1] * k * 10) / 10; if (x > 0 && x !== +m[1]) distract.add(x + m[2]); } }
+    const opts = [...distract]; for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
+    const choices = [...new Set(pick.map((b) => b.t).concat(opts))].slice(0, Math.max(pick.length, 20));
+    choices.sort(() => Math.random() - 0.5);
+    const lab = 'ABCDEFGHIJ';
+    /* 問題文: 選んだ空欄を含む段落を順に、空欄を ［A］ に */
+    const usedParas = [...new Set(pick.map((b) => b.p))];
+    let qhtml = '';
+    usedParas.forEach((p) => {
+      let t = esc(p.text);
+      pick.forEach((b, i) => { if (b.p !== p) return; const e2 = esc(b.t); const at = t.indexOf(e2); if (at >= 0) t = t.slice(0, at) + '<span class="bl" data-bl="' + i + '">［' + lab[i] + '］</span>' + t.slice(at + e2.length); });
+      qhtml += '<p>' + t + '</p>';
+    });
+    css();
+    dialog(`<h3>選択式ドリル</h3><div class="s38-drill"><div class="qt">${qhtml}</div>
+      <div class="ch">${choices.map((c, i) => '<button class="c" data-c="' + i + '"><i>' + (i + 1) + '</i>' + esc(c) + '</button>').join('')}</div>
+      <div class="sl">${pick.map((b, i) => '<span>［' + lab[i] + '］<select data-sl="' + i + '"><option value="">—</option>' + choices.map((c, j) => '<option value="' + j + '">' + (j + 1) + ' ' + esc(c) + '</option>').join('') + '</select></span>').join('')}</div>
+      <div class="vd"></div></div>
+      <div class="btns"><button class="b pri" data-chk>答え合わせ</button><button class="b" data-re>別の問題</button><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.classList.add('wide');
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelector('[data-re]').onclick = () => { close(); drillRun(root, cfg); };
+      let cur = 0;
+      d.querySelectorAll('.bl').forEach((b) => { b.onclick = () => { cur = +b.dataset.bl; d.querySelector('[data-sl="' + cur + '"]').focus(); }; });
+      d.querySelectorAll('.c').forEach((b) => { b.onclick = () => { const s = d.querySelector('[data-sl="' + cur + '"]'); s.value = b.dataset.c; s.dispatchEvent(new Event('change')); cur = Math.min(pick.length - 1, cur + 1); }; });
+      d.querySelectorAll('[data-sl]').forEach((s) => { s.addEventListener('change', () => { const i = +s.dataset.sl; const bl = d.querySelector('.bl[data-bl="' + i + '"]'); if (bl) bl.textContent = '［' + lab[i] + (s.value ? '：' + choices[+s.value] : '') + '］'; }); });
+      d.querySelector('[data-chk]').onclick = () => {
+        let ok = 0;
+        pick.forEach((b, i) => { const s = d.querySelector('[data-sl="' + i + '"]'); const good = s.value !== '' && choices[+s.value] === b.t; if (good) ok++; const bl = d.querySelector('.bl[data-bl="' + i + '"]'); if (bl) { bl.classList.toggle('ok', good); bl.classList.toggle('ng', !good); bl.textContent = '［' + lab[i] + '：' + b.t + '］'; } });
+        d.querySelector('.vd').innerHTML = '<b>' + ok + ' / ' + pick.length + '</b>　' + (ok >= Math.ceil(pick.length * 0.6) ? '基準点（3/5）に届いています' : '基準点まであと ' + (Math.ceil(pick.length * 0.6) - ok)) ;
+        logStudy(1, 'review', pick.length);
+      };
+    });
+  }
+
+  /* ============================================================
+   *  15.5 語学 — 読み上げ・書き取り（ブラウザの音声合成。外へは何も送らない）
+   * ============================================================ */
+  const langOf = (t) => (P.tts.lang && P.tts.lang !== 'auto' ? P.tts.lang : /[぀-ヿ]/.test(t) ? 'ja-JP' : /[가-힯]/.test(t) ? 'ko-KR' : /[一-鿿]/.test(t) ? 'zh-CN' : /[àâçéèêëîïôûùüÿœ]/i.test(t) ? 'fr-FR' : /[äöüß]/i.test(t) ? 'de-DE' : /[ñ¿¡áíóú]/i.test(t) ? 'es-ES' : 'en-US');
+  function selText() { const s = window.getSelection(); return s ? String(s).trim() : ''; }
+  function curParagraph() {
+    const s = window.getSelection(); const n = s && s.anchorNode; const el = n && (n.nodeType === 1 ? n : n.parentElement);
+    const b = el && el.closest && el.closest('[data-block-id]');
+    return b ? norm(b.textContent) : '';
+  }
+  function speak(text, opt) {
+    if (!('speechSynthesis' in window)) { toast('このブラウザは読み上げに対応していません'); return; }
+    const t = String(text || selText() || curParagraph() || '').slice(0, 4000);
+    if (!t) { toast('読み上げる文字を選んでください'); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = (opt && opt.lang) || langOf(t);
+    u.rate = (opt && opt.rate) || P.tts.rate || 1;
+    const vs = speechSynthesis.getVoices().filter((v) => v.lang && v.lang.replace('_', '-').startsWith(u.lang.slice(0, 2)));
+    const best = vs.find((v) => /Enhanced|Premium|Natural|Siri|Kyoko|Otoya|Samantha|Google/i.test(v.name)) || vs[0];
+    if (best) u.voice = best;
+    speechSynthesis.speak(u);
+    if (!opt || !opt.quiet) toast('読み上げ（' + u.lang + '・' + u.rate + ' 倍）', ['止める', () => speechSynthesis.cancel()]);
+  }
+  function dictation(text) {
+    const t = String(text || selText() || '').trim();
+    if (!t) { toast('書き取りにする文を選んでから'); return; }
+    css();
+    dialog(`<h3>書き取り</h3><p class="d">文を聞いて、聞こえた通りに打ち込みます（${esc(langOf(t))}）。何度でも聞けます。</p>
+      <div class="btns" style="justify-content:flex-start"><button class="b pri" data-play>▶ 聞く</button><button class="b" data-slow>▶ ゆっくり</button></div>
+      <textarea class="s38-dt" rows="4" placeholder="ここに打つ"></textarea>
+      <div class="s38-diff"></div>
+      <div class="btns"><button class="b pri" data-chk>答え合わせ</button><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.querySelector('[data-x]').onclick = () => { speechSynthesis.cancel(); close(); };
+      d.querySelector('[data-play]').onclick = () => speak(t, { quiet: true });
+      d.querySelector('[data-slow]').onclick = () => speak(t, { quiet: true, rate: 0.7 });
+      d.querySelector('[data-chk]').onclick = () => {
+        const a = d.querySelector('.s38-dt').value;
+        const { html, score } = diffChars(t, a);
+        d.querySelector('.s38-diff').innerHTML = '<div class="sc">一致 ' + score + '%</div><div class="df">' + html + '</div>';
+        logStudy(1);
+      };
+      setTimeout(() => speak(t, { quiet: true }), 200);
+    });
+  }
+  /* 文字ごとの違い（LCS）: 合っている字・抜けた字・余分な字 */
+  function diffChars(ref, got) {
+    const n0 = (s) => s.replace(/\s+/g, ' ').trim();
+    const a = [...n0(ref)], b = [...n0(got)];
+    const cmp = (x, y) => x.toLowerCase() === y.toLowerCase() || (/[.,!?;:、。！？]/.test(x) && /[.,!?;:、。！？]/.test(y));
+    const L = Array.from({ length: a.length + 1 }, () => new Uint16Array(b.length + 1));
+    for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--) L[i][j] = cmp(a[i], b[j]) ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    let i = 0, j = 0, h = '';
+    while (i < a.length && j < b.length) {
+      if (cmp(a[i], b[j])) { h += esc(a[i]); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) { h += '<del title="抜けた字">' + esc(a[i]) + '</del>'; i++; }
+      else { h += '<ins title="余分な字">' + esc(b[j]) + '</ins>'; j++; }
+    }
+    while (i < a.length) h += '<del>' + esc(a[i++]) + '</del>';
+    while (j < b.length) h += '<ins>' + esc(b[j++]) + '</ins>';
+    return { html: h, score: a.length ? Math.round(L[0][0] / Math.max(a.length, b.length) * 100) : 0 };
+  }
+
+  /* ============================================================
+   *  15.6 用語に乗せて意味を出す — 本文は一切書き換えない（CSS の Highlight で印だけ付ける）
+   *       用語集: DB のビュー（用語・意味・読み）を選ぶ。社労士の用語（科目の手がかり）も光らせられる
+   * ============================================================ */
+  const GLOSS = { terms: store.get(K2.gloss, { terms: [] }).terms || [], view: store.get(K2.gloss, {}).view || null, ranges: [], t: 0, tip: null };
+  const HL_OK = typeof Highlight === 'function' && window.CSS && CSS.highlights;
+  function glossCss() {
+    if (document.getElementById('s38-gloss-css')) return;
+    const st = document.createElement('style'); st.id = 's38-gloss-css';
+    st.textContent = `::highlight(s38-gloss) { text-decoration: underline dotted color-mix(in srgb, var(--lm-accent, #2783de) 70%, transparent); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(s38-kw) { background-color: color-mix(in srgb, var(--lm-accent2, #e8b04a) 16%, transparent); }
+#s38-gtip { position: fixed; z-index: 2147483300; max-width: 340px; padding: 10px 13px; border-radius: 11px; pointer-events: none; background: var(--c-bacEle, #fff); color: var(--c-texPri, #333);
+  box-shadow: var(--c-shaOutMd, 0 8px 28px rgba(0,0,0,.16)); font: 13px/1.6 ${CORDI_UI}; font-feature-settings: "palt" 1; opacity: 0; transform: translateY(3px); transition: opacity .14s, transform .14s; }
+#s38-gtip.on { opacity: 1; transform: none; }
+#s38-gtip b { display: block; font-size: 14px; margin-bottom: 2px; }
+#s38-gtip small { color: var(--c-texSec, #888); margin-left: 6px; font-weight: 400; }
+#s38-gtip .tg { display: inline-block; margin-top: 4px; padding: 0 7px; border-radius: 999px; font-size: 11px; background: color-mix(in srgb, var(--lm-accent2, #e8b04a) 20%, transparent); }`;
+    document.head.appendChild(st);
+  }
+  function glossTerms() {
+    const out = [];
+    if (P.gloss.on) for (const t of GLOSS.terms) if (t.term && t.term.length >= 2) out.push({ term: t.term, mean: t.mean, read: t.read, kind: 'g' });
+    if (P.gloss.kw) for (const [subj, list] of Object.entries(SR.kw)) for (const w of list) out.push({ term: w, mean: '', subj, kind: 'k' });
+    out.sort((a, b) => b.term.length - a.term.length);
+    return out;
+  }
+  function glossScan() {
+    if (!HL_OK) return;
+    const terms = glossTerms();
+    if (!terms.length) { CSS.highlights.delete('s38-gloss'); CSS.highlights.delete('s38-kw'); GLOSS.ranges = []; return; }
+    glossCss();
+    const root = document.querySelector('.notion-frame .notion-page-content') || document.querySelector('.notion-peek-renderer .notion-page-content');
+    const ranges = [], hg = new Highlight(), hk = new Highlight();
+    if (root) {
+      const esc2 = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(terms.map((t) => esc2(t.term)).join('|'), 'g');
+      const byTerm = new Map(terms.map((t) => [t.term, t]));
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      let nd, count = 0;
+      while ((nd = w.nextNode()) && count < 3000) {
+        const s = nd.nodeValue; if (!s || s.length < 2) continue;
+        re.lastIndex = 0; let m;
+        while ((m = re.exec(s))) { const r = new Range(); r.setStart(nd, m.index); r.setEnd(nd, m.index + m[0].length); const t = byTerm.get(m[0]); ranges.push({ r, t }); (t.kind === 'g' ? hg : hk).add(r); count++; }
+      }
+    }
+    CSS.highlights.set('s38-gloss', hg); CSS.highlights.set('s38-kw', hk);
+    GLOSS.ranges = ranges;
+  }
+  const glossSoon = () => { clearTimeout(GLOSS.t); GLOSS.t = setTimeout(glossScan, 500); };
+  function glossHover(e) {
+    if (!GLOSS.ranges.length) return;
+    let hitR = null;
+    const pos = document.caretPositionFromPoint ? document.caretPositionFromPoint(e.clientX, e.clientY) : null;
+    const cr = pos ? null : document.caretRangeFromPoint && document.caretRangeFromPoint(e.clientX, e.clientY);
+    const node = pos ? pos.offsetNode : cr && cr.startContainer, off = pos ? pos.offset : cr && cr.startOffset;
+    if (node && node.nodeType === 3) for (const x of GLOSS.ranges) if (x.r.startContainer === node && off >= x.r.startOffset && off <= x.r.endOffset) { const rr = x.r.getBoundingClientRect(); if (e.clientX >= rr.left - 2 && e.clientX <= rr.right + 2 && e.clientY >= rr.top - 2 && e.clientY <= rr.bottom + 2) { hitR = x; break; } }
+    let tip = document.getElementById('s38-gtip');
+    if (!hitR) { if (tip) tip.classList.remove('on'); return; }
+    if (!tip) { tip = document.createElement('div'); tip.id = 's38-gtip'; document.body.appendChild(tip); }
+    const t = hitR.t;
+    tip.innerHTML = '<b>' + esc(t.term) + (t.read ? '<small>' + esc(t.read) + '</small>' : '') + '</b>' + (t.mean ? esc(t.mean) : '') + (t.subj ? '<span class="tg">社労士・' + esc(t.subj) + '</span>' : '');
+    const rr = hitR.r.getBoundingClientRect();
+    tip.classList.add('on');
+    tip.style.left = Math.max(8, Math.min(innerWidth - tip.offsetWidth - 8, rr.left)) + 'px';
+    tip.style.top = (rr.bottom + 8 + tip.offsetHeight > innerHeight ? rr.top - tip.offsetHeight - 8 : rr.bottom + 8) + 'px';
+  }
+  let ghT = 0;
+  document.addEventListener('mousemove', (e) => { if (!GLOSS.ranges.length) return; cancelAnimationFrame(ghT); ghT = requestAnimationFrame(() => glossHover(e)); }, { passive: true });
+  async function glossToggle() {
+    if (!HL_OK) { toast('このブラウザは「文字に印を付ける」機能（CSS Highlight）に対応していません'); return; }
+    css();
+    dialog(`<h3>用語に乗せて意味を出す</h3><p class="d">本文の中の用語に点線を付け、乗せると意味が出ます。本文は書き換えません（印だけ）。用語集は DB のビュー（用語・意味・読み）から読みます。</p>
+      <label class="r"><span>用語集を使う</span><input type="checkbox" data-g="on"${P.gloss.on ? ' checked' : ''}> いま ${GLOSS.terms.length} 語${GLOSS.view ? '' : '（まだ用語集がありません）'}</label>
+      <label class="r"><span>社労士の用語</span><input type="checkbox" data-g="kw"${P.gloss.kw ? ' checked' : ''}> 法律・給付の名前を淡く塗り、乗せると科目を出す（${Object.values(SR.kw).reduce((s, l) => s + l.length, 0)} 語）</label>
+      <div class="step"><div class="sh">いま見ている DB のビューを用語集にする</div><p class="d">用語の列・意味の列を選んでください。</p>
+        <label class="r"><span>用語</span><select data-m="term"></select></label><label class="r"><span>意味</span><select data-m="mean"></select></label><label class="r"><span>読み</span><select data-m="read"></select></label>
+        <div class="btns" style="justify-content:flex-start"><button class="b" data-load>このビューを用語集に</button>${GLOSS.view ? '<button class="b" data-re>用語集を読み直す</button>' : ''}</div></div>
+      <div class="btns"><button class="b" data-x>閉じる</button></div>`, async (d, close) => {
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelectorAll('[data-g]').forEach((x) => x.addEventListener('change', () => { P.gloss[x.dataset.g] = x.checked; saveP(); glossScan(); }));
+      const re = d.querySelector('[data-re]'); if (re) re.onclick = async () => { await glossLoad(GLOSS.view); close(); };
+      const v = findView();
+      if (!v || !v.viewId) { d.querySelector('[data-load]').disabled = true; return; }
+      let data; try { data = await loadView(v); } catch (e) { return; }
+      const opt = (re2) => { const g = guessCol(data.cols, re2); return '<option value="">（なし）</option>' + data.cols.map((c) => '<option' + (c.name === g ? ' selected' : '') + '>' + esc(c.name) + '</option>').join(''); };
+      d.querySelector('[data-m="term"]').innerHTML = opt(/用語|語|単語|term|word|名前|Name/i);
+      d.querySelector('[data-m="mean"]').innerHTML = opt(/意味|説明|定義|訳|meaning|definition/i);
+      d.querySelector('[data-m="read"]').innerHTML = opt(/読み|よみ|発音|reading/i);
+      if (!d.querySelector('[data-m="term"]').value) d.querySelector('[data-m="term"]').selectedIndex = 1;
+      d.querySelector('[data-load]').onclick = async () => {
+        const m = {}; d.querySelectorAll('[data-m]').forEach((s) => { m[s.dataset.m] = s.value; });
+        await glossLoad({ blockId: v.blockId, viewId: v.viewId, inline: v.inline, map: m }, data); close();
+      };
+    });
+  }
+  async function glossLoad(view, data) {
+    try { data = data || await loadView(view); } catch (e) { toast('用語集を読めませんでした: ' + e.message); return; }
+    const ci = (n) => data.cols.findIndex((c) => c.name === n);
+    const it = ci(view.map.term), im = ci(view.map.mean), ir = ci(view.map.read);
+    GLOSS.terms = data.rows.map((r) => ({ term: norm(ENGINE.show(r.vals[it])), mean: im >= 0 ? norm(ENGINE.show(r.vals[im])).slice(0, 400) : '', read: ir >= 0 ? norm(ENGINE.show(r.vals[ir])) : '' })).filter((t) => t.term);
+    GLOSS.view = view; store.set(K2.gloss, { view, terms: GLOSS.terms, at: Date.now() });
+    P.gloss.on = true; saveP(); glossScan();
+    toast('用語集: ' + GLOSS.terms.length + ' 語');
+  }
+
+  /* ============================================================
+   *  15.7 記録 — 読書・推し・ニュース（DB のビューを選ぶと、数・月ごと・評価・タグ・出費・記念日を一枚に）
+   * ============================================================ */
+  let LEDGERS = store.get(K2.ledgers, {});   // kind → { view, map, name, at }
+  const KIND = {
+    read: { name: '読書の記録', hint: '読んだ本の DB', date: /読了|読んだ|日付|日|date|終了/i, rating: /評価|★|星|rating|点/i, num: /ページ|頁|pages?/i, who: /著者|作者|author/i, tag: /ジャンル|タグ|分類|tag/i, status: /状態|ステータス|状況|status/i },
+    oshi: { name: '推しの記録', hint: '推し活（イベント・グッズ・視聴）の DB', date: /日付|日|開催|購入|発売|date/i, num: /金額|円|価格|費|出費|price|amount|cost/i, who: /推し|メンバー|キャラ|人|oshi|名前/i, tag: /種類|分類|タグ|カテゴリ|tag|ジャンル/i, birthday: /誕生|記念|birthday|anniversary|デビュー/i, rating: /評価|★|満足/i },
+    news: { name: 'ニュースのクリップ', hint: 'クリップした記事の DB', date: /日付|掲載|公開|クリップ|日|date/i, who: /媒体|出典|ソース|source|新聞|サイト|メディア/i, tag: /タグ|分類|カテゴリ|科目|tag|テーマ/i, url: /URL|リンク|link/i, rating: /重要|★|優先/i }
+  };
+  function ledgerHint(k) { const L = LEDGERS[k]; return L ? (L.name || KIND[k].name) + (L.count != null ? '・' + L.count + ' 件' : '') : KIND[k].hint + 'を選ぶ'; }
+  function autoMap(kind, cols) {
+    const K3 = KIND[kind], f = (re, types) => (re ? guessCol(cols, re, types) : '');
+    return { date: f(K3.date, ['date', 'created_time', 'last_edited_time']) || (cols.find((c) => c.type === 'date') || cols.find((c) => c.type === 'created_time') || {}).name || '',
+      rating: f(K3.rating, ['number', 'select', 'status', 'text']), num: f(K3.num, ['number', 'formula', 'rollup']), who: f(K3.who), tag: f(K3.tag, ['multi_select', 'select', 'status', 'relation']),
+      status: f(K3.status, ['status', 'select']), birthday: f(K3.birthday, ['date']), url: f(K3.url, ['url', 'text']) || (cols.find((c) => c.type === 'url') || {}).name || '' };
+  }
+  async function ledgerOpen(kind) {
+    css();
+    const L = LEDGERS[kind];
+    const v = findView();
+    if (!L) {
+      if (!v || !v.viewId) { toast(KIND[kind].hint + 'のビューを開いてから選んでください（以後はどこからでも開けます）'); return; }
+      return ledgerSetup(kind, v);
+    }
+    let data; try { toast('記録を読んでいます…'); data = await loadView(L.view, { allProps: true }); } catch (e) { toast('読めませんでした: ' + e.message); return; }
+    L.count = data.rows.length; L.at = Date.now(); store.set(K2.ledgers, LEDGERS);
+    if (kind === 'oshi') annivCache(data, L.map);
+    ledgerDash(kind, L, data, v);
+  }
+  async function ledgerSetup(kind, v) {
+    let data; try { data = await loadView(v, { allProps: true }); } catch (e) { toast('読めませんでした: ' + e.message); return; }
+    const m = autoMap(kind, data.cols);
+    const fields = { date: '日付', rating: '評価', num: kind === 'oshi' ? '金額' : 'ページ数', who: kind === 'read' ? '著者' : kind === 'oshi' ? '推し' : '媒体', tag: kind === 'news' ? 'タグ・科目' : 'ジャンル・種類', status: '状態', birthday: '誕生日・記念日', url: 'URL' };
+    const use = { read: ['date', 'rating', 'num', 'who', 'tag', 'status'], oshi: ['date', 'num', 'who', 'tag', 'birthday', 'rating'], news: ['date', 'who', 'tag', 'url', 'rating'] }[kind];
+    const opt = (sel) => '<option value="">（なし）</option>' + data.cols.map((c) => '<option' + (c.name === sel ? ' selected' : '') + '>' + esc(c.name) + '</option>').join('');
+    dialog(`<h3>${esc(KIND[kind].name)}</h3><p class="d">「${esc(data.viewName || 'このビュー')}」（${data.rows.length} 件）を${esc(KIND[kind].name)}にします。列を確かめてください。</p>
+      ${use.map((k) => '<label class="r"><span>' + fields[k] + '</span><select data-m="' + k + '">' + opt(m[k]) + '</select></label>').join('')}
+      ${kind === 'read' ? '<label class="r"><span>今年の目標</span><input type="number" data-goal value="' + P.readGoal + '" style="max-width:80px"> 冊</label>' : ''}
+      <div class="btns"><button class="b pri" data-ok>これで作る</button><button class="b" data-x>閉じる</button></div>`, (d, close) => {
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelector('[data-ok]').onclick = () => {
+        const mm = {}; d.querySelectorAll('[data-m]').forEach((s) => { mm[s.dataset.m] = s.value; });
+        const g = d.querySelector('[data-goal]'); if (g) { P.readGoal = +g.value || 50; saveP(); }
+        LEDGERS[kind] = { view: { blockId: v.blockId, viewId: v.viewId, inline: v.inline }, map: mm, name: data.viewName || KIND[kind].name, count: data.rows.length, at: Date.now() };
+        store.set(K2.ledgers, LEDGERS); close();
+        if (kind === 'oshi') annivCache(data, mm);
+        ledgerDash(kind, LEDGERS[kind], data, v);
+      };
+    });
+  }
+  /* 縦棒（月ごと）— 一系列・アクセント色・角丸 4px・棒の間 2px・乗せると値 */
+  function barsSvg(items, unit) {
+    const W = 560, H = 132, pad = 18, n = items.length, max = Math.max(1, ...items.map((x) => x.v));
+    const bw = (W - pad * 2) / n;
+    let s = '<svg viewBox="0 0 ' + W + ' ' + (H + 22) + '" class="s38-bars" role="img" aria-label="月ごとの' + esc(unit) + '">';
+    s += '<line x1="' + pad + '" x2="' + (W - pad) + '" y1="' + H + '" y2="' + H + '" class="ax"/>';
+    items.forEach((x, i) => {
+      const h = x.v ? Math.max(3, (x.v / max) * (H - 18)) : 0, X = pad + i * bw + 1, w = Math.max(2, bw - 2);
+      s += '<g class="bk" data-tip="' + esc(x.l + '　' + (unit === '円' ? x.v.toLocaleString('ja-JP') : x.v) + ' ' + unit) + '"><rect x="' + X + '" y="0" width="' + w + '" height="' + H + '" class="hit"/>';
+      if (h) s += '<path d="M' + X + ',' + H + 'V' + (H - h + 4) + 'q0,-4 4,-4h' + (w - 8) + 'q4,0 4,4V' + H + 'z" class="b' + (x.cur ? ' cur' : '') + '"/>';
+      s += '</g>';
+      if (n <= 12 || i % 2 === 0) s += '<text x="' + (X + w / 2) + '" y="' + (H + 15) + '" class="lb">' + esc(x.s) + '</text>';
+    });
+    const top = items.reduce((a, b) => (b.v > a.v ? b : a), items[0]);
+    if (top && top.v) { const i = items.indexOf(top), X = pad + i * bw + bw / 2, h = (top.v / max) * (H - 18); s += '<text x="' + X + '" y="' + (H - h - 5) + '" class="vl">' + (unit === '円' ? '¥' + top.v.toLocaleString('ja-JP') : top.v) + '</text>'; }
+    return s + '</svg>';
+  }
+  function hbar(rows, unit) {
+    if (!rows.length) return '<div class="s38-hb"><div class="r" style="display:block;color:var(--lm-mute,#999)">（この列がまだありません）</div></div>';
+    const max = Math.max(1, ...rows.map((r) => r[1]));
+    return '<div class="s38-hb">' + rows.map(([k, v]) => '<div class="r" data-tip="' + esc(k + '　' + (unit === '円' ? v.toLocaleString('ja-JP') : v) + ' ' + unit) + '"><span class="k">' + esc(k) + '</span><span class="t"><i style="width:' + (v / max * 100).toFixed(1) + '%"></i></span><span class="v">' + (unit === '円' ? '¥' + v.toLocaleString('ja-JP') : v) + '</span></div>').join('') + '</div>';
+  }
+  function ledgerDash(kind, L, data, v) {
+    const ci = (n) => (n ? data.cols.findIndex((c) => c.name === n) : -1);
+    const m = L.map, id = ci(m.date), ir = ci(m.rating), inum = ci(m.num), iw = ci(m.who), it = ci(m.tag), ist = ci(m.status), ib = ci(m.birthday);
+    const now = new Date(), Y = now.getFullYear(), M = now.getMonth() + 1;
+    const rows = data.rows.map((r) => {
+      let dv = id >= 0 ? r.vals[id] : null;
+      if (typeof dv !== 'number' && r.rec && r.rec.created_time) dv = ENGINE.toSerial(new Date(r.rec.created_time));   // 日付の列が無い・空 → 作った日
+      const ds = typeof dv === 'number' ? ENGINE.serialParts(dv) : null;
+      const title = ENGINE.show(r.vals[data.cols.findIndex((c) => c.type === 'title')] || '') || '無題';
+      const split = (i) => (i >= 0 ? String(ENGINE.show(r.vals[i]) || '').split(/[、,]\s*/).map((s) => s.trim()).filter(Boolean) : []);
+      const rt = ir >= 0 ? r.vals[ir] : null; const rating = typeof rt === 'number' ? rt : rt ? (String(ENGINE.show(rt)).match(/★/g) || []).length || (parseFloat(ENGINE.show(rt)) || null) : null;
+      return { r, title, d: ds, n: inum >= 0 && typeof r.vals[inum] === 'number' ? r.vals[inum] : (inum >= 0 ? parseFloat(String(ENGINE.show(r.vals[inum])).replace(/[^\d.-]/g, '')) || 0 : 0), who: split(iw), tags: split(it), rating, status: ist >= 0 ? ENGINE.show(r.vals[ist]) : '', bday: ib >= 0 && typeof r.vals[ib] === 'number' ? ENGINE.serialParts(r.vals[ib]) : null };
+    });
+    const dated = rows.filter((x) => x.d);
+    const months = [];
+    for (let k = 11; k >= 0; k--) { const d = new Date(Y, M - 1 - k, 1); months.push({ y: d.getFullYear(), m: d.getMonth() + 1 }); }
+    const sumBy = (fn) => months.map((mo) => ({ s: mo.m + '月', l: mo.y + '年' + mo.m + '月', cur: mo.y === Y && mo.m === M, v: dated.filter((x) => x.d.y === mo.y && x.d.m === mo.m).reduce((a, x) => a + fn(x), 0) }));
+    const thisYear = dated.filter((x) => x.d.y === Y), thisMonth = thisYear.filter((x) => x.d.m === M);
+    const count = (list, key) => { const c = new Map(); for (const x of list) for (const k of x[key]) c.set(k, (c.get(k) || 0) + 1); return [...c.entries()].sort((a, b) => b[1] - a[1]); };
+    const tiles = (arr) => '<div class="s38-kpi">' + arr.map(([v2, l, s]) => '<div><b>' + v2 + '</b><span>' + l + '</span>' + (s ? '<small>' + s + '</small>' : '') + '</div>').join('') + '</div>';
+    let h = '<h3>' + esc(KIND[kind].name) + ' <span class="sub">' + esc(L.name || '') + '・' + rows.length + ' 件</span></h3>';
+    if (kind === 'read') {
+      const done = rows.filter((x) => !x.status || /読了|済|done|読んだ|完/i.test(x.status));
+      const yDone = done.filter((x) => x.d && x.d.y === Y);
+      const doy = Math.floor((now - new Date(Y, 0, 1)) / 86400000) + 1;
+      const pace = yDone.length / doy * 365;
+      const pagesY = yDone.reduce((a, x) => a + (x.n || 0), 0);
+      h += tiles([[yDone.length + ' / ' + P.readGoal, '今年 読んだ（冊）', '見込み ' + Math.round(pace) + ' 冊' + (pace >= P.readGoal ? '・目標に届くペース' : '・あと月 ' + Math.max(0, Math.ceil((P.readGoal - yDone.length) / Math.max(1, 12 - M + 1))) + ' 冊')], [thisMonth.length, '今月'], [pagesY ? pagesY.toLocaleString('ja-JP') : '—', '今年のページ'], [rows.filter((x) => /読書中|読んでる|reading|途中/i.test(x.status)).length || '—', '読んでいる']]);
+      h += '<div class="s38-goal"><i style="width:' + Math.min(100, yDone.length / P.readGoal * 100).toFixed(1) + '%"></i><span style="left:' + Math.min(100, doy / 365 * 100).toFixed(1) + '%" title="今日の位置"></span></div>';
+      h += '<div class="sec">月ごとに読んだ冊数（直近 12 か月）</div>' + barsSvg(sumBy(() => 1), '冊');
+      const rts = rows.filter((x) => x.rating);
+      if (rts.length) { const hist = [5, 4, 3, 2, 1].map((k) => ['★'.repeat(k), rts.filter((x) => Math.round(x.rating) === k).length]); h += '<div class="cols"><div><div class="sec">評価（平均 ' + (rts.reduce((a, x) => a + x.rating, 0) / rts.length).toFixed(2) + '）</div>' + hbar(hist, '冊') + '</div>'; }
+      else h += '<div class="cols"><div></div>';
+      h += '<div><div class="sec">よく読む' + (iw >= 0 ? '著者' : 'ジャンル') + '</div>' + hbar(count(rows, iw >= 0 ? 'who' : 'tags').slice(0, 6), '冊') + '</div></div>';
+      h += '<div class="sec">最近読んだ</div><ul class="s38-recent">' + dated.slice().sort((a, b) => (b.d.y - a.d.y) || (b.d.m - a.d.m) || (b.d.d - a.d.d)).slice(0, 6).map((x) => '<li><span>' + x.d.y + '.' + x.d.m + '.' + x.d.d + '</span>' + esc(x.title) + (x.rating ? '<em>' + '★'.repeat(Math.round(x.rating)) + '</em>' : '') + '</li>').join('') + '</ul>';
+    } else if (kind === 'oshi') {
+      const yen = (n) => '¥' + Math.round(n).toLocaleString('ja-JP');
+      const spentY = thisYear.reduce((a, x) => a + (x.n || 0), 0), spentM = thisMonth.reduce((a, x) => a + (x.n || 0), 0);
+      const avg = sumBy((x) => x.n || 0).slice(0, 11).reduce((a, x) => a + x.v, 0) / 11;
+      h += tiles([[yen(spentM), '今月の推し活', avg ? '月平均 ' + yen(avg) : ''], [yen(spentY), '今年'], [thisYear.length, '今年の記録'], [annivSoon()[0] ? annivSoon()[0].days + '日' : '—', annivSoon()[0] ? annivSoon()[0].name + ' ' + annivSoon()[0].what + 'まで' : '次の記念日']]);
+      h += '<div class="sec">月ごとの出費（直近 12 か月）</div>' + barsSvg(sumBy((x) => x.n || 0), '円');
+      const byWho = new Map(); for (const x of thisYear) for (const w of (x.who.length ? x.who : ['（未設定）'])) byWho.set(w, (byWho.get(w) || 0) + (x.n || 0) / Math.max(1, x.who.length));
+      h += '<div class="cols"><div><div class="sec">推しごと（今年・円）</div>' + hbar([...byWho.entries()].map(([k, v2]) => [k, Math.round(v2)]).sort((a, b) => b[1] - a[1]).slice(0, 6), '円') + '</div>';
+      h += '<div><div class="sec">種類（今年・件）</div>' + hbar(count(thisYear, 'tags').slice(0, 6), '件') + '</div></div>';
+      const an = annivSoon();
+      if (an.length) h += '<div class="sec">もうすぐ</div><ul class="s38-recent">' + an.slice(0, 6).map((a) => '<li><span>' + (a.days === 0 ? '今日' : 'あと ' + a.days + ' 日') + '</span>' + esc(a.name) + '　' + esc(a.what) + '</li>').join('') + '</ul>';
+    } else {
+      const week = dated.filter((x) => { const d = new Date(x.d.y, x.d.m - 1, x.d.d); return (now - d) / 86400000 < 7; });
+      const kwHit = rows.filter((x) => Object.values(SR.kw).some((l) => l.some((w) => x.title.includes(w))));
+      h += tiles([[week.length, '今週クリップ'], [thisMonth.length, '今月'], [count(rows, 'who').length, '媒体の数'], [kwHit.length, '社労士に関わる記事', '題名に法律・給付の名前']]);
+      h += '<div class="sec">月ごとのクリップ（直近 12 か月）</div>' + barsSvg(sumBy(() => 1), '件');
+      h += '<div class="cols"><div><div class="sec">媒体</div>' + hbar(count(rows, 'who').slice(0, 6), '件') + '</div><div><div class="sec">テーマ・タグ</div>' + hbar(count(rows, 'tags').slice(0, 6), '件') + '</div></div>';
+      h += '<div class="sec">新しい順</div><ul class="s38-recent">' + dated.slice().sort((a, b) => (b.d.y - a.d.y) || (b.d.m - a.d.m) || (b.d.d - a.d.d)).slice(0, 8).map((x) => '<li><span>' + x.d.m + '/' + x.d.d + '</span>' + esc(x.title) + (x.who[0] ? '<em>' + esc(x.who[0]) + '</em>' : '') + '</li>').join('') + '</ul>';
+    }
+    h += '<div class="btns"><button class="b" data-tbl>表で見る（シート）</button><button class="b" data-re>列を選び直す</button><button class="b" data-x>閉じる</button></div>';
+    dialog(h, (d, close) => {
+      d.classList.add('wide', 's38-dash');
+      d.querySelector('[data-x]').onclick = close;
+      d.querySelector('[data-re]').onclick = () => { close(); delete LEDGERS[kind]; store.set(K2.ledgers, LEDGERS); if (v && v.viewId) ledgerSetup(kind, v); else toast('記録の DB のビューを開いてから、もう一度選んでください'); };
+      d.querySelector('[data-tbl]').onclick = () => { close(); openSheet(null); };
+      d.querySelectorAll('[data-tip]').forEach((g) => { g.setAttribute('title', g.getAttribute('data-tip')); });
+    });
+  }
+  /* 推しの記念日（誕生日の列）— 次に来る日までの日数。小窓の「もうすぐ」に出す */
+  function annivCache(data, m) {
+    const ib = m.birthday ? data.cols.findIndex((c) => c.name === m.birthday) : -1;
+    if (ib < 0) return;
+    const iw = m.who ? data.cols.findIndex((c) => c.name === m.who) : -1;
+    const ti = data.cols.findIndex((c) => c.type === 'title');
+    const list = [];
+    for (const r of data.rows) { const v = r.vals[ib]; if (typeof v !== 'number') continue; const p = ENGINE.serialParts(v); list.push({ name: norm(ENGINE.show(iw >= 0 ? r.vals[iw] : r.vals[ti])) || '推し', what: /誕生|birth/i.test(m.birthday) ? '誕生日' : m.birthday, m: p.m, d: p.d }); }
+    store.set(K2.anniv, list.slice(0, 200));
+  }
+  function annivSoon() {
+    const list = store.get(K2.anniv, []), t = new Date(); t.setHours(0, 0, 0, 0);
+    return list.map((a) => { let d = new Date(t.getFullYear(), a.m - 1, a.d); if (d < t) d = new Date(t.getFullYear() + 1, a.m - 1, a.d); return Object.assign({}, a, { days: Math.round((d - t) / 86400000) }); }).filter((a) => a.days <= 60).sort((a, b) => a.days - b.days);
+  }
+
+  /* ---------- 追加の見た目（ダイアログ・ドリル・記録） ---------- */
+  const ADD_CSS = `
+.s38-dlg.wide { width: min(760px, 94vw) !important; max-width: none !important; }
+.s38-pt { width: 100%; border-collapse: collapse; font-size: 13px; }
+.s38-pt td { padding: 4px 6px; border-bottom: 1px solid var(--lm-line-hair, rgba(0,0,0,.05)); }
+.s38-pt td:first-child { width: 58%; }
+.s38-pt .ok { color: #2e8b57; } .s38-pt .ng { color: #c4453a; }
+.s38-verdict .vl { padding: 6px 10px; border-radius: 8px; margin: 4px 0; font-size: 13px; }
+.s38-verdict .vl.ok { background: rgba(46,139,87,.08); } .s38-verdict .vl.ng { background: rgba(196,69,58,.08); }
+.s38-verdict .big { margin-top: 8px; font: 600 20px/1.3 var(--cordi-ui-display, "Cormorant Garamond", Georgia, serif); text-align: center; }
+.s38-verdict .big.ok { color: #2e8b57; } .s38-verdict .big.ng { color: #c4453a; }
+.s38-drill .qt { font-size: 15px; line-height: 2; padding: 10px 14px; border-radius: 10px; background: var(--lm-tint, rgba(0,0,0,.025)); max-height: 38vh; overflow: auto; }
+.s38-drill .qt p { margin: 0 0 10px; }
+.s38-drill .bl { display: inline-block; min-width: 3em; padding: 0 6px; margin: 0 2px; border-radius: 6px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--lm-accent-ink, #1d5fa8); font-weight: 600; cursor: pointer; line-height: 1.6; }
+.s38-drill .bl.ok { background: rgba(46,139,87,.14); color: #2e8b57; } .s38-drill .bl.ng { background: rgba(196,69,58,.14); color: #c4453a; }
+.s38-drill .ch { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; margin: 12px 0; }
+.s38-drill .c { text-align: left; border: 1px solid var(--lm-line, rgba(0,0,0,.1)); background: var(--lm-raised, #fff); border-radius: 8px; padding: 6px 8px; cursor: pointer; font: inherit; font-size: 13px; color: inherit; }
+.s38-drill .c:hover { border-color: var(--lm-accent, #2783de); }
+.s38-drill .c i { font-style: normal; display: inline-block; min-width: 1.6em; color: var(--lm-mute, #999); font-variant-numeric: tabular-nums; }
+.s38-drill .sl { display: flex; flex-wrap: wrap; gap: 8px; }
+.s38-drill .sl select { max-width: 200px; }
+.s38-drill .vd { margin-top: 10px; font-size: 14px; }
+.s38-dt { width: 100% !important; height: auto !important; margin-top: 10px; font: 15px/1.6 ${CORDI_UI} !important; padding: 10px; border-radius: 10px; border: 1px solid var(--lm-line, rgba(0,0,0,.12)); background: var(--lm-sheet, #fff); color: inherit; box-sizing: border-box; }
+.s38-diff { margin-top: 10px; } .s38-diff .sc { font-weight: 700; margin-bottom: 4px; }
+.s38-diff .df { font-size: 15px; line-height: 1.9; padding: 8px 12px; border-radius: 10px; background: var(--lm-tint, rgba(0,0,0,.025)); }
+.s38-diff del { color: #c4453a; text-decoration: none; background: rgba(196,69,58,.12); border-radius: 3px; }
+.s38-diff ins { color: #7a5a00; text-decoration: line-through; background: rgba(232,176,74,.18); border-radius: 3px; }
+.s38-dash h3 .sub { font: 400 12px/1 ${CORDI_UI}; color: var(--lm-mute, #888); margin-left: 6px; }
+.s38-kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 6px 0 10px; }
+.s38-kpi div { padding: 10px 12px; border-radius: 12px; background: var(--lm-tint, rgba(0,0,0,.03)); }
+.s38-kpi b { display: block; font: 600 22px/1.15 ${CORDI_UI}; font-variant-numeric: tabular-nums; letter-spacing: -.01em; color: var(--lm-ink, #2c2c2b); }
+.s38-kpi span { font-size: 11.5px; color: var(--lm-mute, #888); } .s38-kpi small { display: block; font-size: 10.5px; color: var(--lm-mute, #999); margin-top: 2px; }
+.s38-goal { position: relative; height: 6px; border-radius: 6px; background: var(--lm-line, rgba(0,0,0,.08)); margin: 2px 0 12px; }
+.s38-goal i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: var(--lm-accent, #2783de); }
+.s38-goal span { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--lm-ink, #333); opacity: .45; border-radius: 1px; }
+.s38-dash .sec { margin: 12px 0 4px; font-size: 11.5px; font-weight: 600; color: var(--lm-mute, #888); letter-spacing: .02em; }
+.s38-bars { width: 100%; height: auto; display: block; }
+.s38-bars .ax { stroke: var(--lm-line, rgba(0,0,0,.12)); stroke-width: 1; }
+.s38-bars .b { fill: color-mix(in srgb, var(--lm-accent, #2783de) 55%, transparent); transition: fill .12s; }
+.s38-bars .b.cur { fill: var(--lm-accent, #2783de); }
+.s38-bars .bk:hover .b { fill: var(--lm-accent, #2783de); }
+.s38-bars .hit { fill: transparent; }
+.s38-bars .lb { font: 10px ${CORDI_UI}; fill: var(--lm-mute, #888); text-anchor: middle; }
+.s38-bars .vl { font: 600 10.5px ${CORDI_UI}; fill: var(--lm-ink, #333); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.s38-dash .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.s38-hb .r { display: grid; grid-template-columns: minmax(0, 7em) 1fr auto; align-items: center; gap: 8px; padding: 3px 0; font-size: 12.5px; }
+.s38-hb .k { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.s38-hb .t { height: 8px; border-radius: 4px; background: var(--lm-line-hair, rgba(0,0,0,.05)); overflow: hidden; }
+.s38-hb .t i { display: block; height: 100%; border-radius: 4px; background: var(--lm-accent, #2783de); }
+.s38-hb .v { font-variant-numeric: tabular-nums; color: var(--lm-mute, #777); font-size: 12px; }
+.s38-recent { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+.s38-recent li { display: flex; gap: 10px; padding: 5px 2px; border-bottom: 1px solid var(--lm-line-hair, rgba(0,0,0,.05)); }
+.s38-recent li span { flex: none; width: 6.5em; color: var(--lm-mute, #999); font-variant-numeric: tabular-nums; font-size: 12px; }
+.s38-recent li em { margin-left: auto; font-style: normal; color: var(--lm-mute, #999); font-size: 12px; white-space: nowrap; }`;
+  function addCss() { if (!document.getElementById('s38-add-css')) { const st = document.createElement('style'); st.id = 's38-add-css'; st.textContent = ADD_CSS; document.head.appendChild(st); } }
+
+  /* ============================================================
    *  14. 動かす
    * ============================================================ */
   window.addEventListener('keydown', (e) => {
@@ -1988,8 +2896,9 @@
     const k = e.code;
     const hit = (f) => { e.preventDefault(); e.stopPropagation(); f(); };
     if (k === 'KeyE') hit(() => openSheet(null));
-    else if (k === 'KeyS') hit(panel);
-    else if (k === 'KeyR') hit(() => setRed());
+    else if (k === 'KeyK') hit(() => setRed());          // v11: ⌃⌥R は ²⁶ Atelier の縦書きリーダーと重なっていた
+    else if (k === 'KeyT') hit(() => speak());
+    else if (k === 'KeyQ') hit(() => { const b = dock(); if (b) popOpen(b); else panel(); });   // v11: ⌃⌥S は ²⁶ Atelier の設定と重なっていた
     else if (k === 'KeyH') hit(() => setCloze());
     else if (k === 'Equal' || e.key === '=') hit(evalSelection);
     else if (/^Digit[1-9]$/.test(k)) hit(() => runMacroByIndex(+k.slice(5) - 1));
@@ -1997,6 +2906,14 @@
   let lastHref = '';
   setInterval(() => { if (location.href !== lastHref) { lastHref = location.href; readScroller = null; } readingWatch(); }, 1000);
   restoreCf();
+  /* v11: 上の帯の Σ・用語の印・ほかの柱への知らせ */
+  const bootUi = () => {
+    dock(); announce();
+    new MutationObserver(() => { const b = document.getElementById('cordi-b-s38'); if (!b || !b.isConnected) dock(); glossSoon(); }).observe(document.body, { childList: true, subtree: true });
+    setInterval(() => { const b = document.getElementById('cordi-b-s38'); if (b) { const n = dueCount(); b.querySelector('.cd-badge').textContent = n ? String(Math.min(99, n)) : ''; } }, 60000);
+    glossSoon();
+  };
+  if (document.body) bootUi(); else document.addEventListener('DOMContentLoaded', bootUi, { once: true });
 
   window.__c38 = {
     version: VERSION,
@@ -2005,7 +2922,8 @@
     sheet: () => openSheet(null),
     panel,
     macros: () => MACROS.map((m) => m.name),
-    study: { redsheet: setRed, cloze: setCloze, pomodoro: () => pomoStart('work'), decks: deckDialog, log: () => LOG },
+    study: { redsheet: setRed, cloze: setCloze, pomodoro: () => pomoStart('work'), decks: deckDialog, log: () => LOG, quiz: quizStart, drill: drillStart, pass: passDialog, speak, dictation, gloss: glossToggle, ledger: ledgerOpen, exam: () => ({ date: examDate(), days: daysUntil(examDate()) }) },
+    pop: () => { const b = dock(); if (b) popOpen(b); },
     status: () => Object.assign({ prefs: Object.assign({}, P), decks: DECKS.length, macros: MACROS.length, undo: UNDO.length, sheetOpen: !!SH }, ST)
   };
 })();
