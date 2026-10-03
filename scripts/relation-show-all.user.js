@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
-// @version      1.50.0
-// @description  v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
+// @version      1.51.0
+// @description  v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
 // @run-at       document-idle
@@ -11,6 +11,16 @@
 // ==/UserScript==
 
 /*
+ * v1.51.0（2026-10-03）
+ *  - サブグループ: Notion のボードビューでしかできない「グループの中のグループ」を、リレーションのセルでも。
+ *    ただし一律（全部を同じプロパティで分ける）ではなく、グループごとに好きな分け方を作れる。
+ *    例: 「ライトノベル」のセルで、グループ「学園」の中に「アクション」「恋愛」…、その「アクション」の中にさらに…（何段でも）。
+ *    ・見出しを右クリック → 名前を入れて、入れる本にチェック → 作る。並べ替え（↑↓）・題名とアイコンの変更も。
+ *    ・本を右クリック → 「◯◯の中のサブグループ」から選ぶ／新しく作る／外す。
+ *    ・本の入っていないサブグループは出さない。サブグループがあるセルは 1 行パイプにしない。
+ *    ・保存は今までと同じ（このブラウザ・²³ Page Relation Show All と共通）。Notion のデータは書き換えない。
+ *    ・見た目は ²⁶ Atelier の「リレーション」→ サブグループ（--c13-sub-*）。
+ *
  * v1.48.0（2026-10-03）
  *  - 見出しの下線・区切り線を必ずセルの端まで: 項目が少なくグリッドにならないセル（例: 1件だけのシリーズ）では、
  *    並べ直した入れ物（wrap）とその外側の包みが中身の幅に縮み、線が見出しの文字の所で止まっていた。
@@ -653,7 +663,7 @@ PIPE_SHOW_HEADERS: true,   // v0.37.0: パイプ表示でもセクション見�
     DEBUG: false,
   };
 
-const VERSION = '1.50.0';
+const VERSION = '1.51.0';
   const STYLE_ID = 'cordi13-style-v044';
   const TAG = '[C13 v' + VERSION + ']';
 
@@ -667,15 +677,15 @@ const VERSION = '1.50.0';
    *   window.__cordiGroups を先に起きた方が作り、もう片方はそれを使う
    * ============================================================ */
   const CG = (function cordiGroups() {
-    const CGV = 1;
+    const CGV = 2;   // v2: サブグループ（グループの中に、グループごとに好きなだけ）
     if (window.__cordiGroups && window.__cordiGroups.v >= CGV) return window.__cordiGroups;
     const LS = 'cordi.groups.v1';
     const EVT = 'cordi-groups-change';
-    let S = { groups: {}, items: {}, custom: [] };
+    let S = { groups: {}, items: {}, custom: [], subs: {}, sub: {} };
     const load = () => {
       try {
         const o = JSON.parse(localStorage.getItem(LS) || 'null');
-        if (o && typeof o === 'object') S = { groups: o.groups || {}, items: o.items || {}, custom: Array.isArray(o.custom) ? o.custom : [] };
+        if (o && typeof o === 'object') S = { groups: o.groups || {}, items: o.items || {}, custom: Array.isArray(o.custom) ? o.custom : [], subs: o.subs || {}, sub: o.sub || {} };
       } catch (e) { /* noop */ }
     };
     load();
@@ -710,7 +720,37 @@ const VERSION = '1.50.0';
       save();
     }
     const assigned = (id) => S.items[id] || null;
-    function assign(id, key) { if (key) S.items[id] = key; else delete S.items[id]; save(); }
+    function assign(id, key) { if (key) S.items[id] = key; else delete S.items[id]; delete S.sub[id]; save(); }
+    /* ---------- v2: サブグループ ----------
+       S.subs[親のキー] = [{ key: 's:…', label }]（親はグループでもサブグループでもよい＝何段でも）
+       S.sub[本の id] = サブグループのキー。グループごとに別々の分け方ができる（一律ではない） */
+    const parentOf = (key) => { for (const p in S.subs) if ((S.subs[p] || []).some((x) => x.key === key)) return p; return null; };
+    const rootOf = (key) => { let k = key, g = 0; while (k && k.startsWith('s:') && g++ < 30) k = parentOf(k); return k; };
+    const subOf = (id) => S.sub[id] || null;
+    function newSub(parent, name) {
+      const key = 's:' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      (S.subs[parent] = S.subs[parent] || []).push({ key, label: name });
+      S.groups[key] = { label: name };
+      save();
+      return key;
+    }
+    function removeSub(key) {
+      const par = parentOf(key);
+      const kill = (k) => { (S.subs[k] || []).forEach((x) => kill(x.key)); delete S.subs[k]; delete S.groups[k]; Object.keys(S.sub).forEach((id) => { if (S.sub[id] === k) { if (par && par.startsWith('s:')) S.sub[id] = par; else delete S.sub[id]; } }); };
+      if (par) S.subs[par] = (S.subs[par] || []).filter((x) => x.key !== key);
+      kill(key);
+      save();
+    }
+    function assignSub(id, key) { if (key) S.sub[id] = key; else delete S.sub[id]; save(); }
+    function assignSubMany(ids, key) { ids.forEach((id) => { if (key) S.sub[id] = key; else delete S.sub[id]; }); save(); }
+    const subTree = (parent, depth) => (S.subs[parent] || []).map((x) => ({ key: x.key, label: label(x.key, x.label), icon: icon(x.key, ''), depth: depth || 1, children: subTree(x.key, (depth || 1) + 1) }));
+    const flatTree = (t, out) => { out = out || []; for (const n of t) { out.push(n); flatTree(n.children, out); } return out; };
+    function moveSub(key, dir) {
+      const par = parentOf(key); if (!par) return;
+      const L = S.subs[par], i = L.findIndex((x) => x.key === key), j = i + dir;
+      if (i < 0 || j < 0 || j >= L.length) return;
+      [L[i], L[j]] = [L[j], L[i]]; save();
+    }
     const customLabel = (key) => { const c = S.custom.find((x) => x.key === key); return c ? label(key, c.label) : null; };
     /* 本を移した先に合わせて、セクションの並びを組み直す（sections: [{name, icon, sid, standalone, items:[{id,…}]}]）
        見出しの題名・アイコンの差し替えもここで（sec.key・sec.label・sec.icon を付ける） */
@@ -738,6 +778,16 @@ const VERSION = '1.50.0';
       }
       const res = out.filter((s) => s.items.length);
       for (const s of res) { s.label = label(s.key, s.name); s.icon = icon(s.key, s.icon || ''); }
+      /* v2: サブグループに分ける（s.direct = どのサブグループにも入っていない本、s.subs = 木。空の枝は出さない） */
+      for (const s of res) {
+        const map = new Map();
+        const build = (parent, depth) => (S.subs[parent] || []).map((x) => { const n = { key: x.key, name: x.label, label: label(x.key, x.label), icon: icon(x.key, ''), depth, items: [], subs: null }; map.set(x.key, n); n.subs = build(x.key, depth + 1); return n; });
+        const tree = build(s.key, 1);
+        s.direct = [];
+        for (const it of s.items) { const n = map.get(S.sub[it.id]); if (n) n.items.push(it); else s.direct.push(it); }
+        const prune = (L) => L.filter((n) => { n.subs = prune(n.subs); n.count = n.items.length + n.subs.reduce((a, c) => a + c.count, 0); return n.count > 0; });
+        s.subs = prune(tree);
+      }
       return res;
     }
 
@@ -772,7 +822,7 @@ const VERSION = '1.50.0';
 .cg-pop .cg-mut{color:var(--c-texSec,#787774);font-size:11px;margin-top:6px}
 .cg-pop .cg-foot{display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--c-borPri,rgba(55,53,47,.1))}
 .cg-pop .cg-grow{flex:1}
-.cg-pop .cg-btn{height:26px;padding:0 10px;border:0;border-radius:6px;background:var(--c-bacHov,rgba(55,53,47,.06));color:inherit;font:500 11.5px/1 inherit;cursor:pointer}
+.cg-pop .cg-btn{white-space:nowrap;flex:none;height:26px;padding:0 10px;border:0;border-radius:6px;background:var(--c-bacHov,rgba(55,53,47,.06));color:inherit;font:500 11.5px/1 inherit;cursor:pointer}
 .cg-pop .cg-ok{background:#2383e2;color:#fff}
 .cg-pop .cg-del{background:none;color:#d44c47}
 .cg-pop .cg-list{display:flex;flex-direction:column;gap:1px;max-height:260px;overflow:auto}
@@ -817,7 +867,7 @@ const VERSION = '1.50.0';
       const cur = { label: m.label || '', icon: m.icon };
       const shownIcon = () => (cur.icon !== undefined ? cur.icon : icon(o.key, o.icon || ''));
       const el = document.createElement('div');
-      const isCustom = o.key.startsWith('c:');
+      const isCustom = o.key.startsWith('c:') || o.key.startsWith('s:');
       el.innerHTML =
         '<div class="cg-top"><span class="cg-prev"></span><input class="cg-name" spellcheck="false" placeholder="' + esc(o.name) + '"></div>' +
         '<div class="cg-tabs"><button data-tab="lib">²⁹ ライブラリ</button><button data-tab="txt">絵文字・文字</button><button data-tab="url">SVG・画像</button></div>' +
@@ -867,7 +917,7 @@ const VERSION = '1.50.0';
         if (act === 'cancel') return closePop();
         if (act === 'noicon') { cur.icon = ''; return sync(); }
         if (act === 'reset') { delete S.groups[o.key]; save(); return closePop(); }
-        if (act === 'del') { if (confirm('「' + (cur.label || o.name) + '」を削除します（中の本は元のグループへ戻ります）')) { removeGroup(o.key); closePop(); } return; }
+        if (act === 'del') { if (confirm('「' + (cur.label || o.name) + '」を削除します（中の本は元のグループへ戻ります）')) { if (o.key.startsWith('s:')) removeSub(o.key); else removeGroup(o.key); closePop(); } return; }
         if (act === 'ok') commit();
       });
       el.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target === name) { e.preventDefault(); commit(); } });
@@ -889,18 +939,68 @@ const VERSION = '1.50.0';
       const extra = S.custom.filter((c) => !keys.has(c.key)).map((c) => ({ key: c.key, label: label(c.key, c.label), icon: icon(c.key, '') }));
       if (!keys.has('__standalone__')) extra.push({ key: '__standalone__', label: label('__standalone__', '単行'), icon: icon('__standalone__', '') });
       const row = (s) => '<button data-k="' + esc(s.key) + '"' + (s.key === cur ? ' data-cur="1"' : '') + '><span class="cg-li">' + iconHtml(s.icon) + '</span>' + esc(s.label) + '</button>';
+      /* v2: いまのグループの中のサブグループ（何段でも・字下げで表す） */
+      const g = o.group || '';
+      const csub = subOf(o.id);
+      const fl = g ? flatTree(subTree(g)) : [];
+      const srow = (n) => '<button data-s="' + esc(n.key) + '"' + (n.key === csub ? ' data-cur="1"' : '') + ' style="padding-inline-start:' + (8 + n.depth * 14) + 'px"><span class="cg-li">' + (n.icon ? iconHtml(n.icon) : '└') + '</span>' + esc(n.label) + '</button>';
+      const gl = g ? label(g, o.groupName || '') : '';
+      const subHtml = g ? '<div class="cg-h" style="margin-top:10px">「' + esc(gl) + '」の中のサブグループ</div><div class="cg-list">' + fl.map(srow).join('') +
+        '<button data-a="newsub"><span class="cg-li">＋</span>新しいサブグループ…' + (csub ? '（「' + esc(label(csub, '')) + '」の中にも作れます）' : '') + '</button>' +
+        (csub ? '<button data-a="clearsub"><span class="cg-li">↺</span>サブグループから外す</button>' : '') + '</div>' : '';
       el.innerHTML = '<div class="cg-h"></div><div class="cg-list">' + o.sections.concat(extra).map(row).join('') +
-        '<button data-a="new"><span class="cg-li">＋</span>新しいグループ…</button>' + (cur ? '<button data-a="clear"><span class="cg-li">↺</span>元のグループに戻す</button>' : '') + '</div>';
+        '<button data-a="new"><span class="cg-li">＋</span>新しいグループ…</button>' + (cur ? '<button data-a="clear"><span class="cg-li">↺</span>元のグループに戻す</button>' : '') + '</div>' + subHtml;
       el.querySelector('.cg-h').textContent = '「' + o.title + '」を移す';
       el.addEventListener('click', (e) => {
         const b = e.target.closest('button'); if (!b) return;
         if (b.dataset.k) { assign(o.id, b.dataset.k); return closePop(); }
         if (b.dataset.a === 'clear') { assign(o.id, null); return closePop(); }
         if (b.dataset.a === 'new') { const nm = prompt('新しいグループの名前', ''); if (nm && nm.trim()) { assign(o.id, newGroup(nm.trim())); } closePop(); }
+        if (b.dataset.s) { assignSub(o.id, b.dataset.s); return closePop(); }
+        if (b.dataset.a === 'clearsub') { assignSub(o.id, null); return closePop(); }
+        if (b.dataset.a === 'newsub') {
+          let par = g;
+          if (csub && confirm('「' + label(csub, '') + '」の中に作りますか？\n（キャンセル＝「' + gl + '」の直下に作る）')) par = csub;
+          const nm = prompt('新しいサブグループの名前（例: アクション）', ''); if (nm && nm.trim()) assignSub(o.id, newSub(par, nm.trim()));
+          closePop();
+        }
       });
       mount(el, o.anchor);
     }
-    const api = { v: CGV, keyOf, meta, label, icon, setMeta, newGroup, removeGroup, assign, assigned, regroup, openEditor, openMover, closePop, on: (fn) => window.addEventListener(EVT, fn), STANDALONE_ICON, dump: () => JSON.parse(JSON.stringify(S)) };
+    /* v2: 見出しを右クリック → このグループ（サブグループ）の中の分け方を決める
+       { key, name, items: [{id, title}], anchor }：名前を付けて、入れる本にチェック */
+    function openSubMenu(o) {
+      const el = document.createElement('div');
+      const kids = subTree(o.key);
+      const fl = flatTree(kids);
+      const lbl = label(o.key, o.name || '');
+      const row = (n) => '<div style="display:flex;align-items:center;gap:2px"><button data-ed="' + esc(n.key) + '" style="flex:1;padding-inline-start:' + (8 + (n.depth - 1) * 14) + 'px"><span class="cg-li">' + (n.icon ? iconHtml(n.icon) : '└') + '</span>' + esc(n.label) + '</button>' +
+        '<button data-up="' + esc(n.key) + '" title="上へ" style="width:24px;justify-content:center;padding:0">↑</button><button data-dn="' + esc(n.key) + '" title="下へ" style="width:24px;justify-content:center;padding:0">↓</button></div>';
+      el.innerHTML = '<div class="cg-h">「' + esc(lbl) + '」のサブグループ</div><div class="cg-list">' + (fl.length ? fl.map(row).join('') : '<div class="cg-mut" style="margin:0 2px 6px">まだありません。グループの中を、好きな名前で分けられます（例: 学園 → アクション）</div>') + '</div>' +
+        '<div class="cg-h" style="margin-top:10px">新しいサブグループ</div><input class="cg-q cg-sn" placeholder="名前（例: アクション）" spellcheck="false">' +
+        (fl.length ? '<select class="cg-q cg-sp" style="margin-top:6px"><option value="">「' + esc(lbl) + '」の直下に作る</option>' + fl.map((n) => '<option value="' + esc(n.key) + '">' + '　'.repeat(n.depth) + esc(n.label) + ' の中に作る</option>').join('') + '</select>' : '') +
+        '<div class="cg-mut">入れる本</div><div class="cg-list cg-pick" style="max-height:180px">' + (o.items || []).map((it) => '<label style="display:flex;align-items:center;gap:8px;height:26px;padding:0 8px;border-radius:6px;cursor:pointer"><input type="checkbox" value="' + esc(it.id) + '">' + esc(it.title || '（無題）') + '</label>').join('') + '</div>' +
+        '<div class="cg-foot"><span class="cg-mut" style="margin:0;font-size:10.5px">本の右クリックでも入れられます</span><span class="cg-grow"></span><button class="cg-btn" data-a="cancel">閉じる</button><button class="cg-btn cg-ok" data-a="mk">作る</button></div>';
+      el.addEventListener('click', (e) => {
+        const b = e.target.closest('button'); if (!b) return;
+        if (b.dataset.ed) { const n = fl.find((x) => x.key === b.dataset.ed); closePop(); return openEditor({ key: n.key, name: n.label, icon: '', anchor: o.anchor }); }
+        if (b.dataset.up || b.dataset.dn) { moveSub(b.dataset.up || b.dataset.dn, b.dataset.up ? -1 : 1); closePop(); return openSubMenu(o); }
+        if (b.dataset.a === 'cancel') return closePop();
+        if (b.dataset.a === 'mk') {
+          const nm = el.querySelector('.cg-sn').value.trim();
+          if (!nm) { el.querySelector('.cg-sn').focus(); return; }
+          const sp = el.querySelector('.cg-sp');
+          const key = newSub(sp && sp.value ? sp.value : o.key, nm);
+          const ids = [...el.querySelectorAll('.cg-pick input:checked')].map((x) => x.value);
+          if (ids.length) assignSubMany(ids, key);
+          closePop();
+        }
+      });
+      el.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.matches('.cg-sn')) { e.preventDefault(); el.querySelector('[data-a="mk"]').click(); } });
+      mount(el, o.anchor);
+      setTimeout(() => { const i = el.querySelector('.cg-sn'); if (i) i.focus(); }, 0);
+    }
+    const api = { v: CGV, parentOf, rootOf, subOf, newSub, removeSub, assignSub, assignSubMany, subTree, moveSub, openSubMenu, keyOf, meta, label, icon, setMeta, newGroup, removeGroup, assign, assigned, regroup, openEditor, openMover, closePop, on: (fn) => window.addEventListener(EVT, fn), STANDALONE_ICON, dump: () => JSON.parse(JSON.stringify(S)) };
     window.__cordiGroups = api;
     return api;
   })();
@@ -986,6 +1086,13 @@ const VERSION = '1.50.0';
       '[data-cordi13-on] > .cordi13-sec-head::after, [data-cordi13-on] > .cordi13-sec-div::after { content: "" !important; position: absolute !important; left: 0 !important; bottom: -1px !important; height: 0 !important; width: var(--c13-lw, 100%) !important; pointer-events: none !important; }',
       '[data-cordi13-on] > .cordi13-sec-head::after { border-bottom: var(--c13-line-w, 1px) solid var(--c13-line-color, ' + TUNING.SEPARATOR_COLOR + ') !important; }',
       '[data-cordi13-on] > .cordi13-sec-div::after { border-bottom: var(--c13-div-w, 1px) solid var(--c13-div-color, ' + TUNING.SECTION_DIVIDER_COLOR + ') !important; }',
+      '/* v1.51.0: サブグループ（²⁶ Atelier「リレーション」の --c13-sub-* で調整） */',
+      '[data-cordi13-on] > .cordi13-sec-head.cordi13-sub-head { padding: var(--c13-sub-top, 8px) 0 var(--c13-sub-bottom, 3px) calc(var(--c13-head-indent, 0px) + var(--c13-sd, 1) * var(--c13-sub-indent, 14px)) !important; font-size: var(--c13-sub-size, calc(var(--c13-head-size, ' + TUNING.SEC_HEAD_FONT_SIZE + ') * 0.9)) !important; font-weight: var(--c13-sub-weight, 600) !important; color: var(--c13-sub-color, var(--c13-head-color, var(--c-texSec, rgba(55,53,47,0.65)))) !important; }',
+      '[data-cordi13-on] > .cordi13-sub-head::after { border-bottom-style: var(--c13-sub-line-style, dotted) !important; left: calc(var(--c13-sd, 1) * var(--c13-sub-indent, 14px)) !important; width: calc(var(--c13-lw, 100%) - var(--c13-sd, 1) * var(--c13-sub-indent, 14px)) !important; }',
+      '[data-cordi13-on] > .cordi13-sub-head .cordi13-sec-icon { width: var(--c13-sub-icon, 15px) !important; height: var(--c13-sub-icon, 15px) !important; }',
+      '[data-cordi13-on] > .cordi13-sub-gap { height: var(--c13-sub-body, 4px) !important; min-height: var(--c13-sub-body, 4px) !important; }',
+      '[data-cordi13-on] > .cordi13-item[data-c13-depth] { padding-inline-start: calc(var(--c13-sub-item-indent, var(--c13-sub-indent, 14px)) * var(--c13-sd-i, 1)) !important; }',
+      '[data-cordi13-on] > .cordi13-item[data-c13-depth="2"] { --c13-sd-i: 2; } [data-cordi13-on] > .cordi13-item[data-c13-depth="3"] { --c13-sd-i: 3; } [data-cordi13-on] > .cordi13-item[data-c13-depth="4"] { --c13-sd-i: 4; }',
       '.cordi13-sec-div {',
       '  flex: 0 0 100% !important;',
       '  width: 100% !important;',
@@ -1972,6 +2079,16 @@ const VERSION = '1.50.0';
     return node;
   }
 
+  /* v1.51.0: サブグループの見出し（字下げ・少し小さく・点線） */
+  function makeSubHead(n) {
+    const d = makeSecHead(n.label, n.icon, { key: n.key, name: n.name, iconOrig: '' });
+    d.classList.add('cordi13-sub-head');
+    d.setAttribute('data-c13-depth', String(n.depth));
+    d.style.setProperty('--c13-sd', String(n.depth));
+    d.title = 'クリックで題名とアイコン・右クリックでこの中をさらに分ける';
+    return d;
+  }
+  function makeSubGap() { const g = makeSecGap(); g.classList.add('cordi13-sub-gap'); return g; }
   function makeSecHead(name, icon, sec) {
     const d = document.createElement('div');
     d.className = 'cordi13-sec-head';
@@ -2444,7 +2561,8 @@ const VERSION = '1.50.0';
 
     // 列数: 最長題名で階段判定。グリッドは 10超かつ 2列以上のとき（それ以下は折返しのまま）。
     const cols = colsFor(visible);
-        const usePipe = TUNING.PIPE_ONELINE && visible.length >= TUNING.PIPE_MIN_ITEMS &&
+        const hasSubs = sections.some((sc) => sc.subs && sc.subs.length);   // v1.51.0: サブグループがある時は 1 行パイプにしない
+    const usePipe = TUNING.PIPE_ONELINE && !hasSubs && visible.length >= TUNING.PIPE_MIN_ITEMS &&
           visible.length <= TUNING.PIPE_MAX_ITEMS;   // v0.36.0: 多すぎるセルは1行に収まらないので従来の並びへ
     const useGrid = !usePipe && visible.length > TUNING.MULTI_THRESHOLD && cols >= 2;
     if (useGrid) {
@@ -2490,10 +2608,17 @@ const VERSION = '1.50.0';
       wrap.removeAttribute('data-cordi13-pipe');
       for (let si = 0; si < sections.length; si++) {
         const sec = sections[si];
-        if (showHeaders) { frag.appendChild(makeSecHead(sec.label, sec.icon, sec)); frag.appendChild(makeSecGap()); }
-        sec.items.forEach((it, i) => {
-          frag.appendChild(makeItem(template, it, useGrid && i % cols > 0, resolveNative(it)));
+        if (showHeaders) { const h = makeSecHead(sec.label, sec.icon, sec); h.__items = sec.items.map((x) => ({ id: x.id, title: x.title })); frag.appendChild(h); frag.appendChild(makeSecGap()); }
+        const putItems = (list, depth) => list.forEach((it, i) => {
+          const el = makeItem(template, it, useGrid && i % cols > 0, resolveNative(it));
+          if (depth) el.setAttribute('data-c13-depth', String(depth));
+          frag.appendChild(el);
         });
+        putItems(sec.direct || sec.items, 0);
+        /* v1.51.0: サブグループ（グループごとに好きな分け方・何段でも） */
+        const all = (n) => n.items.concat(...n.subs.map(all));
+        const putSubs = (subs) => { for (const n of subs || []) { const h = makeSubHead(n); h.__items = all(n).map((x) => ({ id: x.id, title: x.title })); frag.appendChild(h); frag.appendChild(makeSubGap()); putItems(n.items, n.depth); putSubs(n.subs); } };
+        putSubs(sec.subs);
         if (showHeaders && TUNING.SECTION_DIVIDER && si < sections.length - 1) {
           frag.appendChild(makeSecDiv());
         }
@@ -2738,12 +2863,24 @@ const VERSION = '1.50.0';
       if (!wrap) return;
       e.preventDefault();
       e.stopPropagation();
-      const secs = Array.from(wrap.querySelectorAll('.cordi13-sec-head')).filter((h) => h.__cg).map((h) => {
+      /* v1.51.0: いまのグループ（直前の見出し）＝サブグループを選べる */
+      let gh = null;
+      for (let p = item.previousElementSibling; p; p = p.previousElementSibling) if (p.classList.contains('cordi13-sec-head') && !p.classList.contains('cordi13-sub-head')) { gh = p; break; }
+      const secs = Array.from(wrap.querySelectorAll('.cordi13-sec-head:not(.cordi13-sub-head)')).filter((h) => h.__cg).map((h) => {
         const img = h.querySelector('.cordi13-sec-icon');
         return { key: h.__cg.key, label: h.textContent.trim(), icon: img ? (img.getAttribute('src') || img.textContent || '') : '' };
       });
       const title = (item.querySelector('.cordi13-title') || item).textContent.trim();
-      CG.openMover({ id: item.dataset.cordi13Id, title, sections: secs, anchor: item });
+      CG.openMover({ id: item.dataset.cordi13Id, title, sections: secs, anchor: item, group: gh && gh.__cg ? gh.__cg.key : '', groupName: gh ? gh.textContent.trim() : '' });
+    }, true);
+    /* v1.51.0: 見出し（グループ・サブグループ）を右クリック → この中をサブグループに分ける */
+    window.addEventListener('contextmenu', (e) => {
+      const t = e.target;
+      const head = t && t.closest ? t.closest('[data-cordi13-on] > .cordi13-sec-head') : null;
+      if (!head || !head.__cg || !CG.openSubMenu) return;
+      e.preventDefault();
+      e.stopPropagation();
+      CG.openSubMenu({ key: head.__cg.key, name: head.textContent.trim(), items: head.__items || [], anchor: head });
     }, true);
     let cgT = 0;
     CG.on(() => {

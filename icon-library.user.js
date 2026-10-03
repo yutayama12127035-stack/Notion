@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      6.3.0
+// @version      6.4.0
 // @description  v6.3.0: 「Notion」タブ — Notion の標準アイコンを名前からグループ分けし、Library と同じ形で一覧（押すと Notion の色で設定）。名前の自動グループ分けに階級の名前（大佐・少尉・軍曹…・general・sergeant…）も。v6.2.0: 拳銃・階級章などの既存のアイコンを正しいグループ（ミリタリーなど）へ振り分け直し・ミリタリーに 10 種追加。Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
@@ -22,6 +22,12 @@
 
 /*
  * v6.3.0（2026-10-03）
+ * v6.4.0（2026-10-03）
+ *   ・Default のタブを隠す（「Notion」タブが同じアイコンをグループ分けして出すので）。開くと最初から「Notion」タブ。
+ *     「Notion」タブは Notion の Filter と色の段の下に重ねる＝色は Notion の色ボタンで選んだまま付く。__c29.showDefault(true) で戻す。
+ *   ・ミリタリーの言葉を大きく増やす: 陸将・海将・空将・陸将補・一佐〜三佐・一尉〜三尉・准尉・曹長・士長・幕僚・司令・師団〜分隊・
+ *     兵器・武器・狙撃・戦闘・空母・駆逐艦・魚雷・地雷・徽章・記章 など（英語も marshal・officer・battalion・sniper・weapon など）。
+ *     取り込み済みのアイコンも一度だけ振り分け直す（手で決めたグループでも、ミリタリーの言葉ならミリタリーへ）。
  *   ・「Notion」タブ: Notion の標準アイコン（Default）を、名前（英語）から 24 グループに分け、Library と同じ見た目・検索・グループの見出しで一覧。
  *     初めて開いた時に Default の一覧を裏で最後までたどって名前と絵を集める（このブラウザに保存・右クリックで集め直し）。
  *     押すと Default の Filter に名前を入れて Notion の本物を押す＝Notion で選んでいる色のアイコンが付く。
@@ -1835,7 +1841,7 @@
   /* v6.2.0: はっきりした言葉は、学習より先にそのグループへ（拳銃・階級章 → ミリタリー など）。
      ミリタリー・スポーツ・季節・工具は v6.1 で増えたグループなので、それより前に手で別のグループへ入れた物も移す */
   const STRONG = [
-    ['military', /拳銃|ピストル|リボルバー|ライフル|機関銃|散弾銃|小銃|銃弾|弾丸|弾薬|手榴弾|ミサイル|爆弾|階級章|階級|勲章|肩章|元帥|大将|中将|少将|准将|大佐|中佐|少佐|大尉|中尉|少尉|准尉|曹長|軍曹|伍長|兵長|上等兵|一等兵|二等兵|将校|士官|下士官|軍旗|軍艦|戦艦|戦車|戦闘機|爆撃機|潜水艦|兵士|兵隊|軍隊|軍人|陸軍|海軍|空軍|自衛隊|迷彩|照準|認識票|ドッグタグ|パラシュート|大砲|砲弾|機雷|ミリタリー|短剣|銃|けんじゅう|ぴすとる|らいふる|かいきゅう|くんしょう|せんしゃ|せんとうき|ぐんかん|みりたりー|しゅりゅうだん|\b(pistol|handgun|revolver|rifle|shotgun|gun|guns|bullet|ammo|ammunition|grenade|missile|bomb|insignia|rank|ranks|epaulette|general|colonel|lieutenant|sergeant|corporal|admiral|captain-rank|chevron-rank|military-rank|tank|fighter|warship|battleship|submarine|soldier|army|navy|military|camo|camouflage|crosshair|dogtag|parachute|cannon|dagger|bayonet|sword|swords)\b/i],
+    ['military', /(陸|海|空)(将補?|佐|尉|曹長?|士長?)|[一二三](等)?(陸|海|空)?(佐|尉|曹)|准(陸|海|空)?尉|(陸|海|空)(上|自)?自衛|幕僚|司令官?|参謀|師団|旅団|連隊|大隊|中隊|小隊|分隊|部隊|兵器|武器|武装|軍用|軍事|軍服|軍帽|軍靴|軍刀|軍医|憲兵|衛生兵|狙撃|スナイパー|突撃|戦闘|戦争|戦場|戦術|戦略|戦線|戦友|戦隊|要塞|塹壕|砲台|砲兵|歩兵|騎兵|工兵|空母|駆逐艦|巡洋艦|護衛艦|揚陸艦|潜望鏡|魚雷|地雷|手りゅう弾|防弾|鉄帽|徽章|記章|星章|襟章|袖章|部隊章|拳銃|ピストル|リボルバー|ライフル|機関銃|散弾銃|小銃|銃弾|弾丸|弾薬|手榴弾|ミサイル|爆弾|階級章|階級|勲章|肩章|元帥|大将|中将|少将|准将|大佐|中佐|少佐|大尉|中尉|少尉|准尉|曹長|軍曹|伍長|兵長|上等兵|一等兵|二等兵|将校|士官|下士官|軍旗|軍艦|戦艦|戦車|戦闘機|爆撃機|潜水艦|兵士|兵隊|軍隊|軍人|陸軍|海軍|空軍|自衛隊|迷彩|照準|認識票|ドッグタグ|パラシュート|大砲|砲弾|機雷|ミリタリー|短剣|銃|けんじゅう|ぴすとる|らいふる|かいきゅう|くんしょう|せんしゃ|せんとうき|ぐんかん|みりたりー|しゅりゅうだん|\b(pistol|handgun|revolver|rifle|shotgun|gun|guns|bullet|ammo|ammunition|grenade|missile|bomb|insignia|rank|ranks|epaulette|general|colonel|lieutenant|sergeant|corporal|admiral|captain-rank|chevron-rank|military-rank|tank|fighter|warship|battleship|submarine|soldier|army|navy|military|camo|camouflage|crosshair|dogtag|parachute|cannon|dagger|bayonet|sword|swords|marshal|brigadier|commander|commando|officer|private-rank|troop|troops|battalion|regiment|platoon|squad|division-army|sniper|combat|warfare|weapon|weapons|armor|armour|landmine|torpedo|fortress|trench|artillery|infantry|cavalry|medal-military|badge-military|star-rank|stars-rank|helmet-military|machine-gun|machinegun|assault|knife-combat|jet-fighter|fighter-jet|aircraft-carrier|destroyer|cruiser|frigate|periscope|binoculars-military|barracks)\b/i],
     ['sport', /サッカー|野球|バスケ|テニス|ゴルフ|水泳|ラグビー|バレーボール|卓球|ボクシング|柔道|剣道|スキー|スケート|マラソン|陸上競技|表彰台|ストップウォッチ|\b(soccer|football|baseball|basketball|tennis|golf|swimming|rugby|volleyball|boxing|skiing|skate|marathon|podium|stopwatch)\b/i],
     ['season', /クリスマス|ハロウィン|花火|お祭り|紅葉|雪だるま|鯉のぼり|お正月|門松|七夕|ひな祭り|節分|\b(christmas|xmas|halloween|fireworks|snowman|pumpkin|easter)\b/i],
     ['tools', /ハンマー|金づち|レンチ|スパナ|ドライバー|ネジ|ねじ回し|ナット|工具|ペンチ|のこぎり|ドリル|\b(hammer|wrench|spanner|screwdriver|screw|toolbox|pliers|drill)\b/i]
@@ -1905,7 +1911,7 @@
   }
   rebuild();
   if (migrate()) rebuild();
-  if (P.regroupV !== 63) { const r = regroupStrong(); P.regroupV = 63; save(); if (r.n) { rebuild(); console.info('[²⁹] はっきりした名前のアイコンを振り分け直しました: ' + r.moved.join('・')); } }
+  if (P.regroupV !== 64) { const r = regroupStrong(); P.regroupV = 64; save(); if (r.n) { rebuild(); console.info('[²⁹] はっきりした名前のアイコンを振り分け直しました: ' + r.moved.join('・')); } }
   /* 言葉で決まらなかった物は、起動の少し後に形で振り分ける */
   setTimeout(async () => {
     const L = CUSTOM.filter((c) => c.reshape); if (!L.length) return;
@@ -2703,7 +2709,12 @@
     const T = tabsOf(menu), base = T.icons || T.all[0]; if (!base) return;
     const tl = base.closest('[role="tablist"]'), row = tl ? tl.parentElement : base.parentElement;
     const op = p.offsetParent || menu, or = op.getBoundingClientRect(), mr = menu.getBoundingClientRect();
-    const top = row ? row.getBoundingClientRect().bottom : mr.top + 40;
+    let top = row ? row.getBoundingClientRect().bottom : mr.top + 40;
+    /* v6.4.0: Notion のタブでは、Notion の Filter と色の段を見せたまま、その下に重ねる（色は Notion の色ボタンで選ぶ） */
+    if (M.mode === 'ntn') {
+      const inp = [...menu.querySelectorAll('input')].find((i) => !i.closest('[data-c29]'));
+      if (inp) { let r = inp.parentElement; for (let i = 0; i < 4 && r && r !== menu; i++, r = r.parentElement) { const rr = r.getBoundingClientRect(); if (rr.width > mr.width * 0.7) { top = Math.max(top, rr.bottom + 2); break; } } if (top < inp.getBoundingClientRect().bottom) top = inp.getBoundingClientRect().bottom + 6; }
+    }
     p.style.left = (mr.left - or.left + op.scrollLeft) + 'px';
     p.style.top = (top - or.top + op.scrollTop) + 'px';
     p.style.width = mr.width + 'px';
@@ -2846,6 +2857,9 @@
       if (!T.upload.hasAttribute('data-c29-hide')) T.upload.setAttribute('data-c29-hide', '');
       renameDefault(T.icons);
     }
+    /* v6.4.0: 「Notion」タブが Default の代わりになるので、Default のタブは隠す（__c29.showDefault(true) で戻す）。
+       タブの中身（Notion の一覧・Filter・色）はそのまま裏で使う */
+    if (P.hideDef !== false) { const dt = T.icons.parentElement && T.icons.parentElement !== (T.icons.closest('[role="tablist"]')) && T.icons.parentElement.children.length <= 2 ? T.icons.parentElement : T.icons; if (!dt.hasAttribute('data-c29-hide')) dt.setAttribute('data-c29-hide', ''); }
     let M = MENUS.get(menu);
     if (!M) {
       M = { tabs: {}, panel: null, mode: '', applying: false }; MENUS.set(menu, M);
@@ -2871,6 +2885,7 @@
       if (sel === T.emoji) { press(T.icons); if (P.tab === 'lib' || P.tab === 'imp' || P.tab === 'ntn') openPanel(menu, P.tab, false); }
       else if (sel === T.upload) openPanel(menu, P.tab === 'imp' ? 'imp' : 'lib', false);
       else if (P.tab === 'lib' || P.tab === 'imp' || P.tab === 'ntn') openPanel(menu, P.tab, false);
+      else if (P.hideDef !== false) openPanel(menu, 'ntn', false);
     }
     if (M.mode) placePanel(menu, M);
   }
@@ -2932,6 +2947,7 @@
       guess: async (text) => { const r = await toCandidates(text); await autoName(r.out); return r.out.map((c) => ({ ja: c.ja, how: c.how, sugg: c.sugg && c.sugg.ja, group: gja(c.group), ghow: c.ghow, sv: c._sv && [c._sv.name, Math.round(c._sv.v * 100), Math.round(c._sv.share * 100)] })); },
       near: async (text, k) => { const r = await toCandidates(text); const c = r.out[0]; return c ? (await neighbors(c, k || 5)).map((n) => [n.x.id, n.x.ja, Math.round(n.v * 1000) / 1000]) : []; }, groups: () => FIXED.map((g) => g[1]),
       group: (id) => { const x = BYID.get(id); return x ? x.gja : ''; },
+      showDefault: (on) => { P.hideDef = on === false; save(); document.querySelectorAll('[data-c29-hide]').forEach((e) => { if (on !== false && /^(default|icons?|アイコン)$/i.test(tabText(e))) e.removeAttribute('data-c29-hide'); }); return P.hideDef ? 'Default を隠します（次に開いた時から）' : 'Default を出しました'; },
       regroupStrong: (force) => { const r = regroupStrong(force); rebuild(); refreshAll(); return r; },
       svg: (id, o) => { const x = BYID.get(id); return x ? svgOf(x, o) : ''; },
       url: (id, o) => { const x = BYID.get(id); return x ? dataUrl(x, o) : ''; }
