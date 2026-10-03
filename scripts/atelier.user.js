@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      35.0.0
-// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
+// @version      36.0.0
+// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -21,6 +21,16 @@
 // ==/UserScript==
 
 /*
+ * v36.0.0（2026-10-03）
+ *   ・動く説明: すべての設定（場所ごとの書式・細部・個別登録）に、乗せると上の帯で小さなアニメーション。
+ *     大きさ→文字が拡大縮小／字間→文字の間が開く／上の間隔→前の要素との間が開く／内側の上→中身が下がる／アイコンと文字の間→文字が離れる／
+ *     角の丸み→角が丸く／線の太さ→線が太く／横の位置→中身が左・中央・右へ … など 30 種類。説明の文と一緒に。
+ *   ・表のセルの中の位置: 「表のセル」に、すべての列と、列の種類ごと（題字・リレーション・画像・文字や数や日付など）の
+ *     横の位置（左寄せ・中央・右寄せ）と縦の位置（上・中央・下）。
+ *   ・サイドバー: ³³ v3.0.0 の段々（★ ＞ ■ ＞ ● ＞ ▲）の開始位置のずらし（■ と ●）。
+ *   ・書体: Atelier の名前と欧文は Cormorant Garamond、和文の見出しは しっぽり明朝 B1、本文は Zen 角ゴシック New（読み込めない時は
+ *     Baskerville・ヒラギノ明朝・ヒラギノ角ゴ）。数の箱は欧文のそろった数字。
+ *
  * v35.0.0（2026-10-03）— 細かく・分かりやすく
  *   ・どこが変わるか: すべての設定に一文の説明（例「見出しの下線 → そのシリーズの最初の本の行」）。行に乗せると、
  *     下の帯に説明と「画面で N か所」。光るのはその設定が当たる要素だけ（サイドバー全体ではなく、行・アイコン・ビュー…）。
@@ -326,7 +336,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '35.0.0';
+  const VERSION = '36.0.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -7212,9 +7222,11 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     rad: { t: 'px', l: '角の丸み', min: 0, max: 32, s: 1, g: '形' },
     bw: { t: 'px', l: '線の太さ', min: 0, max: 12, s: 0.5, g: '形' },
     bc: { t: 'color', l: '線の色', g: '形' },
-    bg: { t: 'color', l: '背景', g: '形' }
+    bg: { t: 'color', l: '背景', g: '形' },
+    ah: { t: 'select', l: '横の位置', g: '位置', o: [['', 'そのまま'], ['start', '左寄せ'], ['center', '中央'], ['end', '右寄せ']] },
+    av: { t: 'select', l: '縦の位置', g: '位置', o: [['', 'そのまま'], ['start', '上'], ['center', '中央'], ['end', '下']] }
   };
-  const KT = { ff: 'text', fs: 'text', fw: 'text', ls: 'text', lh: 'text', col: 'text', op: 'text', it: 'text', ta: 'text', ti: 'text', tdy: 'text', tdx: 'text', isz: 'icon', igap: 'icon', idy: 'icon', idx: 'icon', mt: 'row', mb: 'row', pt: 'row', pb: 'row', pl: 'row', pr: 'row', h: 'row', w: 'row', rad: 'row', bw: 'row', bc: 'row', bg: 'row' };
+  const KT = { ff: 'text', fs: 'text', fw: 'text', ls: 'text', lh: 'text', col: 'text', op: 'text', it: 'text', ta: 'text', ti: 'text', tdy: 'text', tdx: 'text', isz: 'icon', igap: 'icon', idy: 'icon', idx: 'icon', mt: 'row', mb: 'row', pt: 'row', pb: 'row', pl: 'row', pr: 'row', h: 'row', w: 'row', rad: 'row', bw: 'row', bc: 'row', bg: 'row', ah: 'row', av: 'row' };
   /* v35: どこが変わるかを文字で（{t} 文字の所・{i} アイコン・{r} 枠） */
   const KD = {
     ff: '{t}の書体', fs: '{t}の文字の大きさ', fw: '{t}の文字の太さ', ls: '{t}の、文字と文字の間（字間・em＝文字の大きさに対する割合）', lh: '{t}の 1 行の高さ（文字の大きさの何倍か）',
@@ -7222,7 +7234,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     tdy: '{t}だけを上下にずらす（周りの配置は動かない・＋で下）', tdx: '{t}だけを左右にずらす（周りの配置は動かない・＋で右）',
     isz: '{i}の幅と高さ', igap: '{i}の右側の空き（アイコン → 文字の距離）', idy: '{i}だけを上下にずらす（＋で下）', idx: '{i}だけを左右にずらす（＋で右）',
     mt: '{r}の上の外側の空き（ひとつ前の要素との距離）', mb: '{r}の下の外側の空き（次の要素との距離）', pt: '{r}の内側の上の空き（枠の上端 → 中身）', pb: '{r}の内側の下の空き（中身 → 枠の下端）',
-    pl: '{r}の内側の左の空き（枠の左端 → 中身）', pr: '{r}の内側の右の空き（中身 → 枠の右端）', h: '{r}の高さ', w: '{r}の幅', rad: '{r}の角の丸み', bw: '{r}の線の太さ', bc: '{r}の線の色', bg: '{r}の背景の色'
+    pl: '{r}の内側の左の空き（枠の左端 → 中身）', pr: '{r}の内側の右の空き（中身 → 枠の右端）', h: '{r}の高さ', w: '{r}の幅', rad: '{r}の角の丸み', bw: '{r}の線の太さ', bc: '{r}の線の色', bg: '{r}の背景の色',
+    ah: '{r}の中身（文字・アイコン・画像）を、左・中央・右のどこに置くか', av: '{r}の中身を、上・中央・下のどこに置くか（行が高い時に効く）'
   };
   const KITS = {};
   const KX = { text: 'ff fs fw ls lh col op tdx tdy', icon: 'isz igap idx idy', row: 'mt mb pt pb pl pr h rad bg' };
@@ -7253,7 +7266,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   }
   const PC = '.notion-page-content';
   const SBT = 'html[data-c33] .notion-outliner-team-container[data-c33-team]';
-  const AT_SECS = [['all', '本文'], ['page', 'ページ'], ['db', 'データベース'], ['side', 'サイドバー'], ['chrome', '画面']];
+  const AT_SECS = [['all', '本文', 'Text'], ['page', 'ページ', 'Page'], ['db', 'データベース', 'Database'], ['side', 'サイドバー', 'Sidebar'], ['chrome', '画面', 'Chrome']];
   const AT_REGIONS = [
     /* ───── 本文 ───── */
     { id: 'base', sec: 'all', label: '既定の書体', note: 'Atelier 全体の基準になる書体。下の「書体」を空にした所はこの書体（--atelier-serif）を使えます。', ctl: [
@@ -7352,6 +7365,11 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     ] },
     { id: 'cells', sec: 'db', label: '表のセル', fig: 'cell', hl: '.notion-frame .notion-table-view-cell', note: '表ビューの普通のセル（題字・リレーション以外）と、セルの画像（³⁴ Image Cells）。', ctl: [
       ...kit('cell', { text: '.notion-frame .notion-table-view-cell [data-testid="property-value"]', row: '.notion-frame .notion-table-view-cell [data-testid="property-value"]' }, 'ff fs lh col pt pb pl pr', { g: 'セル', deep: true, f: 'cell', n: { text: 'セルの文字', row: 'セル' } }),
+      ...kit('cpos', { row: '.notion-frame .notion-table-view-cell [data-testid="property-value"]' }, 'ah av', { g: 'セルの中の位置（すべての列）', n: { row: 'すべてのセル' }, more: false, f: 'cell' }),
+      ...kit('cpost', { row: '.notion-table-view-cell[data-c12-primary] [data-testid="property-value"]' }, 'ah av', { g: 'セルの中の位置（列の種類ごと）', l: { ah: '題字：横', av: '題字：縦' }, n: { row: '題字（Name）のセル' }, more: false, f: 'cell' }),
+      ...kit('cposr', { row: '.notion-table-view-cell [data-testid="property-value"]:has([data-cordi13-on])' }, 'av', { g: 'セルの中の位置（列の種類ごと）', l: { av: 'リレーション：縦' }, n: { row: 'リレーションのセル' }, more: false, f: 'cell' }),
+      ...kit('cposi', { row: '.notion-table-view-cell [data-testid="property-value"]:has([data-c34-img])' }, 'ah av', { g: 'セルの中の位置（列の種類ごと）', l: { ah: '画像：横', av: '画像：縦' }, n: { row: '画像のセル' }, more: false, f: 'cell-img' }),
+      ...kit('cposx', { row: '.notion-table-view-cell:not([data-c12-primary]) [data-testid="property-value"]:not(:has([data-cordi13-on], [data-c34-img]))' }, 'ah av', { g: 'セルの中の位置（列の種類ごと）', l: { ah: '文字・数・日付など：横', av: '文字・数・日付など：縦' }, n: { row: '文字・数・日付・セレクトなどのセル' }, more: false, f: 'cell' }),
       ...kit('trow', { row: '.notion-frame .notion-table-view :is(.notion-table-view-row, .notion-collection-item)' }, 'h', { g: '行', prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' }, n: { row: '表の 1 行' }, more: false, f: 'cell' }),
       { v: '--c34-mode', t: 'select', l: '合わせ方', d: 'fill', o: [['fill', '幅に合わせる（ギャラリー風）'], ['height', '高さをそろえて並べる']], g: '画像（³⁴ Image Cells）', f: 'cell-img', w: 'ファイルのプロパティの画像を、セルの幅いっぱいにするか、決めた高さで横に並べるか' },
       { v: '--c34-maxh', t: 'px', l: '高さの上限', d: 320, min: 40, max: 1200, s: 4, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '「幅に合わせる」の時の、画像の高さの上限（縦長の画像が伸びすぎない）' },
@@ -7431,12 +7449,14 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--c33-team-color', t: 'color', l: '色', d: '', g: '■ ワークスペース' },
       { v: '--c33-team-gap', t: 'px', l: '上の間隔', d: 8, min: 0, max: 48, s: 1, g: '■ ワークスペース' },
       { v: '--c33-team-after', t: 'px', l: '下の間隔', d: 0, min: -8, max: 32, s: 1, g: '■ ワークスペース' },
+      { v: '--c33-team-shift', t: 'px', l: '開始位置のずらし', d: 0, min: -32, max: 48, s: 0.5, g: '■ ワークスペース', w: '■ チームスペースのアイコンの左端。0 で上の ★グループの名前の 1 文字目にぴったり、＋で右・−で左' },
       { v: '--c33-item-font', t: 'font', l: '書体', d: '★見出しと同じ', g: '● DB・ページの行' },
       { v: '--c33-item-size', t: 'px', l: '大きさ', d: 13, min: 10, max: 20, s: 0.5, g: '● DB・ページの行' },
       { v: '--c33-item-weight', t: 'weight', l: '太さ', d: 500, g: '● DB・ページの行' },
       { v: '--c33-item-track', t: 'em', l: '字間', d: 0.02, min: -0.05, max: 0.3, s: 0.005, g: '● DB・ページの行' },
       { v: '--c33-item-color', t: 'color', l: '色', d: '', g: '● DB・ページの行' },
       { v: '--c33-item-h', t: 'px', l: '行の高さ', d: 28, min: 20, max: 48, s: 1, g: '● DB・ページの行' },
+      { v: '--c33-db-shift', t: 'px', l: '開始位置のずらし', d: 0, min: -32, max: 48, s: 0.5, g: '● DB・ページの行', w: '● 行のアイコンの左端。0 で上の ■ チームスペースの名前（子ページは親ページの名前）の 1 文字目にぴったり' },
       { v: '--c33-text-dy', t: 'px', l: '文字の上下', d: 0, min: -8, max: 8, s: 0.5, g: '● DB・ページの行' },
       { v: '--c33-icon-size', t: 'px', l: 'アイコンの大きさ', d: 18, min: 10, max: 32, s: 0.5, g: '● DB・ページの行' },
       { v: '--c33-icon-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 0.5, g: '● DB・ページの行' },
@@ -7486,7 +7506,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   const SB_VIEW = '.notion-sidebar-container [data-c33-kind="view"]';
   const HLS = [
     [/^--c33-team-(gap|after)$/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team'], [/^--c33-team/, '.notion-sidebar-container [data-c33-team] .notion-outliner-team :is(.notranslate, span)'],
-    [/^--c33-(item-h)$/, SB_ROW], [/^--c33-(item|text)/, SB_ROW + ' .notranslate'], [/^--c33-icon/, SB_ROW + ' > :first-child'],
+    [/^--c33-db-shift$/, SB_ROW + ' > :first-child'], [/^--c33-(item-h)$/, SB_ROW], [/^--c33-(item|text)/, SB_ROW + ' .notranslate'], [/^--c33-icon/, SB_ROW + ' > :first-child'],
     [/^--c33-view-h$/, SB_VIEW], [/^--c33-(view|vtext)/, SB_VIEW + ' > :not([data-c33-vslot])'], [/^--c33-(vicon|view-shift)/, SB_VIEW + ' [data-c33-vslot]'], [/^--c33-cur/, '.notion-sidebar-container [data-c33-cur]'],
     [/^--c13-head-(icon|gap)/, '.cordi13-sec-head :is(.cordi13-sec-icon, img)'], [/^--c13-(head|first|line)/, '.cordi13-sec-head'], [/^--c13-(row-gap|col-pad)$/, '.cordi13-item'], [/^--c13-vline/, '.cordi13-item-sep'], [/^--c13-div/, '.cordi13-sec-div'],
     [/^--cordi-relation-icon/, '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)'], [/^--cordi-relation/, '.cordi13-item .cordi13-title'], [/^rel(Head)?Font$/, '.cordi13-item .cordi13-title, .cordi13-sec-head > span:last-child'],
@@ -7555,6 +7575,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
           case 'bw': add(tg, 'border-width:' + val + 'px'); break;
           case 'bc': add(tg, 'border-color:' + val); break;
           case 'bg': add(tg, 'background:' + val); break;
+          case 'ah': add(tg, 'display:flex;flex-direction:column;align-items:' + (val === 'start' ? 'flex-start' : val === 'end' ? 'flex-end' : 'center') + ';text-align:' + (val === 'start' ? 'left' : val === 'end' ? 'right' : 'center')); break;
+          case 'av': add(tg, 'display:flex;flex-direction:column;justify-content:safe ' + (val === 'start' ? 'flex-start' : val === 'end' ? 'flex-end' : 'center')); break;
         }
       }
       if (!any) return '';
@@ -7793,13 +7815,13 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const item = (id, l, extra) => '<button data-nav="' + id + '"' + (atTab === id ? ' data-on="1"' : '') + ' title="' + atEsc(l) + '">' + atNavIco(id) + '<span>' + atEsc(l) + '</span>' + (extra || '') + '</button>';
     const isSet = (r) => r.ctl.some((c) => { const k = c.v || c.p; const v = TK()[k]; return v !== undefined && v !== '' && !(AT_SEED[k] !== undefined && AT_SEED[k] === v); });
     let h = '';
-    for (const [sid, sl] of AT_SECS) {
+    for (const [sid, sl, en] of AT_SECS) {
       const rs = AT_REGIONS.filter((r) => r.sec === sid);
       if (!rs.length) continue;
-      h += '<div class="at-navh">' + atEsc(sl) + '</div>' + rs.map((r) => item(r.id, r.label, isSet(r) ? '<i class="at-dot"></i>' : '')).join('');
+      h += '<div class="at-navh"><span class="en">' + atEsc(en) + '</span>' + atEsc(sl) + '</div>' + rs.map((r) => item(r.id, r.label, isSet(r) ? '<i class="at-dot"></i>' : '')).join('');
     }
     const onCnt = Object.keys(AT_LABS).filter((k) => AT.tools[k]).length;
-    h += '<div class="at-navh">道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '次世代の道具', onCnt ? '<b>' + onCnt + '</b>' : '') + item('snip', 'スニペット') + item('layers', '基礎の層') + item('themes', 'テーマと書き出し') + item('text', '本文の書式');
+    h += '<div class="at-navh"><span class="en">Tools</span>道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '次世代の道具', onCnt ? '<b>' + onCnt + '</b>' : '') + item('snip', 'スニペット') + item('layers', '基礎の層') + item('themes', 'テーマと書き出し') + item('text', '本文の書式');
     return h;
   }
   /* 行（コントロール 1 つ） */
@@ -7844,7 +7866,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       return;
     }
     const r = AT_REGIONS.find((x) => x.id === atTab) || AT_REGIONS[0];
-    main.innerHTML = (r.fig && AT_FIGS[r.fig] ? '<div class="at-fig">' + AT_FIGS[r.fig]() + '<div class="at-figcap">設定の行に乗せると、変わる所が青く光り、空きは矢印で動きます</div></div>' : '') +
+    main.innerHTML = '<div class="at-fig">' + (r.fig && AT_FIGS[r.fig] ? AT_FIGS[r.fig]() : '') + '<div class="at-demo"><div class="at-democap">設定の行に乗せると、ここで「何がどう動くか」をアニメーションで見せます。' + (r.fig ? '上の図では変わる部品が青く光ります。' : '') + '</div></div></div>' +
       '<div class="at-title"><h3>' + atEsc(r.label) + '</h3><button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></div><p class="at-note">' + atEsc(r.note) + '</p>' + atGroupsHtml(r.ctl);
   }
   /* 乗せた行の当たる所を、画面で光らせる */
@@ -7942,6 +7964,128 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     }
     els.forEach((e) => e.classList.add('on'));
   }
+  /* ============================================================
+   *  v36: 動く説明（すべての設定）
+   *   設定の行に乗せると、その設定が「何をどう動かすか」を小さなアニメーションで見せる。
+   *   種類（大きさ・字間・上の間隔・アイコンと文字の間・角の丸み…）ごとに 1 つずつ。
+   * ============================================================ */
+  function demoKind(c) {
+    if (c.kk) return c.kk;
+    const t = (c.l || '') + ' ' + (c.w || '');
+    if (c.t === 'font') return 'ff';
+    if (c.t === 'weight') return 'fw';
+    if (c.t === 'toggle') return /斜体/.test(t) ? 'it' : /両端/.test(t) ? 'ta' : 'op';
+    if (c.t === 'color') return /線/.test(c.l) ? 'bc' : /背景/.test(c.l) ? 'bg' : 'col';
+    if (c.t === 'select') return /縦/.test(c.l) ? 'av' : /横|揃え|合わせ|位置/.test(c.l) ? 'ah' : 'ta';
+    if (/字下げ/.test(t)) return 'ti';
+    if (c.t === 'em') return 'ls';
+    if (/濃さ|影/.test(c.l)) return 'op';
+    if (/行の高さ/.test(c.l) && c.t === 'num') return 'lh';
+    if (/列の数/.test(c.l)) return 'cols';
+    if (/開始位置|左のずらし|ずらし/.test(c.l)) return 'tdx';
+    if (/アイコン/.test(c.l) && /大きさ/.test(c.l)) return 'isz';
+    if (/アイコンと文字|アイコン.*間|→ 文字/.test(c.l)) return 'igap';
+    if (/アイコン/.test(c.l) && /上下/.test(c.l)) return 'idy';
+    if (/アイコン/.test(c.l) && /左右/.test(c.l)) return 'idx';
+    if (/文字.*上下/.test(c.l)) return 'tdy';
+    if (/文字.*左右/.test(c.l)) return 'tdx';
+    if (/太さ/.test(c.l)) return 'bw';
+    if (/丸み/.test(c.l)) return 'rad';
+    if (/幅/.test(c.l)) return 'w';
+    if (/高さ/.test(c.l)) return 'h';
+    if (/内側の上|見出しの上|上の空き/.test(c.l)) return 'pt';
+    if (/内側の下/.test(c.l)) return 'pb';
+    if (/内側の左|左の余白/.test(c.l)) return 'pl';
+    if (/内側の右|右の余白/.test(c.l)) return 'pr';
+    if (/上の間隔|上|前|→ 見出し|→ 区切り/.test(c.l)) return 'mt';
+    if (/下|後|→ 最初|間/.test(c.l)) return 'mb';
+    if (/大きさ/.test(c.l)) return 'fs';
+    return 'fs';
+  }
+  const DEMO_CAP = {
+    ff: '書体が変わる', fs: '文字が大きく／小さく', fw: '文字が太く／細く', ls: '文字と文字の間が広がる', lh: '行と行の間が広がる', col: '文字の色が変わる', op: '濃さが変わる', it: '斜体になる',
+    ta: '行の揃えが変わる', ti: '1 行目だけ右へ下がる', tdy: '文字だけが上下に動く（周りは動かない）', tdx: '文字だけが左右に動く', isz: 'アイコンが大きく／小さく', igap: 'アイコンと文字の間が開く',
+    idy: 'アイコンだけが上下に動く', idx: 'アイコンだけが左右に動く', mt: '前の要素との間（上の外側）が開く', mb: '次の要素との間（下の外側）が開く', pt: '枠の上端と中身の間（内側）が開く',
+    pb: '中身と枠の下端の間（内側）が開く', pl: '枠の左端と中身の間が開く', pr: '中身と枠の右端の間が開く', h: '枠の高さが変わる', w: '枠の幅が変わる', rad: '角が丸くなる', bw: '線が太くなる',
+    bc: '線の色が変わる', bg: '背景の色が変わる', ah: '中身が左・中央・右へ', av: '中身が上・中央・下へ', cols: '並べる列の数が変わる'
+  };
+  function demoSvg(k, label) {
+    const L = String(label || '').slice(0, 14).replace(/[&<>]/g, '');
+    const base = (inner) => '<svg viewBox="0 0 220 96" xmlns="http://www.w3.org/2000/svg" class="at-dsvg" data-k="' + k + '">' + inner + '</svg>';
+    const ghost = '<rect class="d-ghost" x="20" y="6" width="180" height="14" rx="3"/>';
+    const row = (extra) => '<g class="d-row"><rect class="d-frame" x="20" y="28" width="180" height="40" rx="5"/><g class="d-in"><rect class="d-ico" x="32" y="40" width="16" height="16" rx="3"/><g class="d-txt"><rect class="d-t1" x="56" y="41" width="104" height="6" rx="3"/><rect class="d-t2" x="56" y="51" width="72" height="6" rx="3"/></g></g>' + (extra || '') + '</g>';
+    const ghost2 = '<rect class="d-ghost d-next" x="20" y="76" width="180" height="14" rx="3"/>';
+    const lab = L ? '<text class="d-lab" x="200" y="94" text-anchor="end">' + L + '</text>' : '';
+    if (k === 'ff' || k === 'fs' || k === 'fw' || k === 'ls' || k === 'col' || k === 'it' || k === 'op' || k === 'tdy' || k === 'tdx') {
+      return base('<rect class="d-frame" x="20" y="18" width="180" height="56" rx="5"/><text class="d-word" x="110" y="54" text-anchor="middle">Atelier あ</text><text class="d-word d-word2" x="110" y="54" text-anchor="middle">Atelier あ</text>' + lab);
+    }
+    if (k === 'lh' || k === 'ti' || k === 'ta') {
+      return base('<rect class="d-frame" x="20" y="10" width="180" height="76" rx="5"/><g class="d-lines"><rect class="d-l1" x="34" y="24" width="152" height="6" rx="3"/><rect class="d-l2" x="34" y="40" width="152" height="6" rx="3"/><rect class="d-l3" x="34" y="56" width="96" height="6" rx="3"/></g>' + lab);
+    }
+    if (k === 'cols') return base('<rect class="d-frame" x="20" y="10" width="180" height="76" rx="5"/><g class="d-c1"><rect x="30" y="20" width="76" height="56" rx="4" class="d-ico"/><rect x="114" y="20" width="76" height="56" rx="4" class="d-ico"/></g><g class="d-c2"><rect x="30" y="20" width="48" height="56" rx="4" class="d-ico"/><rect x="86" y="20" width="48" height="56" rx="4" class="d-ico"/><rect x="142" y="20" width="48" height="56" rx="4" class="d-ico"/></g>' + lab);
+    if (k === 'ah' || k === 'av') return base('<rect class="d-frame" x="20" y="8" width="180" height="80" rx="5"/><g class="d-blob"><rect class="d-ico" x="0" y="0" width="16" height="16" rx="3"/><rect class="d-t1" x="22" y="5" width="56" height="6" rx="3"/></g>' + lab);
+    return base(ghost + row('<g class="d-dim"><line class="d-arrow" x1="12" y1="20" x2="12" y2="28"/></g>') + ghost2 + lab);
+  }
+  const DEMO_CSS = `
+.at-demo { display: flex; align-items: center; gap: 14px; min-height: 64px; }
+.at-demo svg { flex: none; width: 168px; height: 74px; border-radius: 8px; background: color-mix(in srgb, var(--at-fg) 3%, transparent); }
+.at-demo .at-democap { flex: 1; min-width: 0; font-size: 11.5px; line-height: 1.55; color: var(--at-fg2); }
+.at-demo .at-democap b { display: block; margin-bottom: 2px; font: 600 12.5px/1.35 var(--at-serif); color: var(--at-fg); letter-spacing: .02em; }
+.at-dsvg .d-ghost { fill: color-mix(in srgb, var(--at-fg) 7%, transparent); }
+.at-dsvg .d-frame { fill: var(--c-bgPri, #fff); stroke: color-mix(in srgb, var(--at-fg) 18%, transparent); stroke-width: 1; }
+.at-dsvg .d-ico, .at-dsvg .d-t1, .at-dsvg .d-t2, .at-dsvg .d-l1, .at-dsvg .d-l2, .at-dsvg .d-l3 { fill: color-mix(in srgb, var(--at-fg) 30%, transparent); }
+.at-dsvg .d-ico { fill: color-mix(in srgb, var(--at-fg) 45%, transparent); }
+.at-dsvg .d-lab { font: 9px/1 -apple-system, sans-serif; fill: var(--at-fg3); }
+.at-dsvg .d-arrow { stroke: #2383e2; stroke-width: 2; opacity: 0; }
+.at-dsvg .d-word { font: 600 20px/1 "Cormorant Garamond", Baskerville, "Hiragino Mincho ProN", serif; fill: var(--at-fg); }
+.at-dsvg .d-word2 { opacity: 0; }
+.at-dsvg * { transform-box: fill-box; transform-origin: center; }
+@keyframes d-y { 0%, 15% { transform: translateY(0); } 85%, 100% { transform: translateY(var(--dy, 8px)); } }
+@keyframes d-x { 0%, 15% { transform: translateX(0); } 85%, 100% { transform: translateX(var(--dx, 12px)); } }
+@keyframes d-s { 0%, 15% { transform: scale(1); } 85%, 100% { transform: scale(var(--ds, 1.35)); } }
+@keyframes d-fade { 0%, 40% { opacity: 1; } 60%, 100% { opacity: 0; } }
+@keyframes d-fadein { 0%, 40% { opacity: 0; } 60%, 100% { opacity: 1; } }
+@keyframes d-blue { 0%, 20% { fill: color-mix(in srgb, var(--at-fg) 30%, transparent); } 80%, 100% { fill: #2383e2; } }
+@keyframes d-arrow { 0%, 15% { opacity: .2; } 85%, 100% { opacity: 1; } }
+.at-dsvg [class^="d-"], .at-dsvg [class*=" d-"] { animation-duration: 1.6s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+.at-dsvg[data-k="fs"] .d-word { animation-name: d-s; --ds: 1.4; }
+.at-dsvg[data-k="ff"] .d-word { animation-name: d-fade; } .at-dsvg[data-k="ff"] .d-word2 { animation-name: d-fadein; font-family: -apple-system, "Hiragino Sans", sans-serif; font-weight: 500; }
+.at-dsvg[data-k="fw"] .d-word { animation-name: d-fade; font-weight: 300; } .at-dsvg[data-k="fw"] .d-word2 { animation-name: d-fadein; font-weight: 800; }
+.at-dsvg[data-k="ls"] .d-word { animation-name: d-fade; } .at-dsvg[data-k="ls"] .d-word2 { animation-name: d-fadein; letter-spacing: .22em; }
+.at-dsvg[data-k="col"] .d-word { animation-name: d-blue; }
+.at-dsvg[data-k="op"] .d-word { animation-name: d-fade; }
+.at-dsvg[data-k="it"] .d-word { animation-name: d-fade; } .at-dsvg[data-k="it"] .d-word2 { animation-name: d-fadein; font-style: italic; }
+.at-dsvg[data-k="tdy"] .d-word { animation-name: d-y; --dy: 9px; } .at-dsvg[data-k="tdx"] .d-word { animation-name: d-x; --dx: 18px; }
+.at-dsvg[data-k="lh"] .d-l1 { animation-name: d-y; --dy: -6px; } .at-dsvg[data-k="lh"] .d-l3 { animation-name: d-y; --dy: 8px; }
+.at-dsvg[data-k="ti"] .d-l1 { animation-name: d-x; --dx: 22px; }
+.at-dsvg[data-k="ta"] .d-l3 { animation-name: d-x; --dx: 56px; }
+.at-dsvg[data-k="isz"] .d-ico { animation-name: d-s; --ds: 1.5; }
+.at-dsvg[data-k="igap"] .d-txt { animation-name: d-x; --dx: 14px; }
+.at-dsvg[data-k="idy"] .d-ico { animation-name: d-y; --dy: 7px; } .at-dsvg[data-k="idx"] .d-ico { animation-name: d-x; --dx: 10px; }
+.at-dsvg[data-k="mt"] .d-row { animation-name: d-y; --dy: 7px; } .at-dsvg[data-k="mt"] .d-arrow { animation-name: d-arrow; }
+.at-dsvg[data-k="mb"] .d-next { animation-name: d-y; --dy: 5px; } .at-dsvg[data-k="mb"] .d-ghost:first-child { animation-name: d-y; --dy: -4px; }
+.at-dsvg[data-k="pt"] .d-in { animation-name: d-y; --dy: 6px; }
+.at-dsvg[data-k="pb"] .d-in { animation-name: d-y; --dy: -6px; }
+.at-dsvg[data-k="pl"] .d-in { animation-name: d-x; --dx: 14px; }
+.at-dsvg[data-k="pr"] .d-t1 { animation-name: d-s; --ds: .8; }
+.at-dsvg[data-k="h"] .d-frame { animation-name: d-s; --ds: 1.18; }
+.at-dsvg[data-k="w"] .d-frame { animation-name: d-x; --dx: 0px; } .at-dsvg[data-k="w"] .d-row { animation-name: d-s; --ds: .86; }
+@keyframes d-rad { from { rx: 2px; } to { rx: 16px; } }
+.at-dsvg[data-k="rad"] .d-frame { animation-name: d-rad; }
+@keyframes d-bw { from { stroke-width: 1px; stroke: color-mix(in srgb, var(--at-fg) 18%, transparent); } to { stroke-width: 4px; stroke: #2383e2; } }
+.at-dsvg[data-k="bw"] .d-frame, .at-dsvg[data-k="bc"] .d-frame { animation-name: d-bw; }
+@keyframes d-bg { from { fill: var(--c-bgPri, #fff); } to { fill: rgba(35,131,226,.18); } }
+.at-dsvg[data-k="bg"] .d-frame { animation-name: d-bg; }
+.at-dsvg[data-k="cols"] .d-c1 { animation-name: d-fade; } .at-dsvg[data-k="cols"] .d-c2 { animation-name: d-fadein; }
+@keyframes d-ah { 0%, 10% { transform: translate(28px, 40px); } 45%, 55% { transform: translate(72px, 40px); } 90%, 100% { transform: translate(116px, 40px); } }
+@keyframes d-av { 0%, 10% { transform: translate(72px, 14px); } 45%, 55% { transform: translate(72px, 40px); } 90%, 100% { transform: translate(72px, 66px); } }
+.at-dsvg[data-k="ah"] .d-blob { animation: d-ah 2.4s ease-in-out infinite alternate; transform-box: view-box; transform-origin: 0 0; }
+.at-dsvg[data-k="av"] .d-blob { animation: d-av 2.4s ease-in-out infinite alternate; transform-box: view-box; transform-origin: 0 0; }
+`;
+  function atDemoHtml(c, groupLabel) {
+    const k = demoKind(c);
+    return demoSvg(k, groupLabel || c.g || '') + '<div class="at-democap"><b>' + atEsc(c.l) + '　—　' + atEsc(DEMO_CAP[k] || '') + '</b>' + atEsc(c.w || '') + '</div>';
+  }
   function atHighlight(k) {
     for (const el of atHlEls) el.remove();
     atHlEls = [];
@@ -7983,7 +8127,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   /* ---------- どこでも書式 ---------- */
   function atRenderAny(main) {
     const r = atEditRule && AT.rules.find((x) => x.id === atEditRule);
-    let h = '<div class="at-title"><h3>どこでも書式・個別登録</h3></div><p class="at-note">画面でクリックして選んだ要素に、文字・位置・アイコン・間隔・形を当てます。範囲は「同じ形の所すべて」から「このセルだけ」「この行だけ」「この列だけ」「この 1 つだけ」まで選べます（個別登録）。</p><p class="at-note">Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー・サイドバー…）も、画面でクリックして選べば書式を当てられます。</p>' +
+    let h = (atEditRule ? '<div class="at-fig"><div class="at-demo"><div class="at-democap">行に乗せると、その書式が何をどう動かすかを見せます。</div></div></div>' : '') + '<div class="at-title"><h3>どこでも書式・個別登録</h3></div><p class="at-note">画面でクリックして選んだ要素に、文字・位置・アイコン・間隔・形を当てます。範囲は「同じ形の所すべて」から「このセルだけ」「この行だけ」「この列だけ」「この 1 つだけ」まで選べます（個別登録）。</p><p class="at-note">Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー・サイドバー…）も、画面でクリックして選べば書式を当てられます。</p>' +
       '<div class="at-row"><label>要素を選ぶ</label><div class="at-ctl"><button class="at-btn at-pri" data-a="pick">画面でクリックして選ぶ</button><span class="at-def">Esc でやめる</span></div><span></span></div>';
     if (r) {
       const st = r.st || {};
@@ -8257,13 +8401,17 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     atPanel.addEventListener('click', atOnClick);
     atPanel.addEventListener('mouseover', (e) => {
       const r = e.target.closest('.at-row[data-hl]'); const k = r ? r.dataset.hl : '';
-      if (k === atPanel.__hl) return;
-      atPanel.__hl = k;
-      const c = k && AT_CTL[k];
+      const rr = !r && e.target.closest('.at-row'); const ri = rr && rr.querySelector('[data-rk]'); const rk = ri ? ri.getAttribute('data-rk') : '';
+      const key = k || (rk ? 'rule:' + rk : '');
+      if (key === atPanel.__hl) return;
+      atPanel.__hl = key;
+      let c = k && AT_CTL[k];
+      if (!c && rk) c = Object.assign({}, KC[rk] || {}, { kk: KC[rk] ? rk : undefined, g: '選んだ要素', l: ((rr.querySelector('label') || {}).textContent || rk).trim(), w: (KD[rk] || '').replace('{t}', '選んだ要素の文字').replace('{i}', '選んだ要素の中のアイコン').replace('{r}', '選んだ要素') });
       atFigOn(c ? c.f : '');
-      const cap = atPanel.querySelector('.at-figcap'); if (cap) cap.textContent = c ? (c.w || c.l) : '設定の行に乗せると、変わる所が青く光り、空きは矢印で動きます';
-      if (!k) atStatus('');
-      clearTimeout(atPanel.__hlT); atPanel.__hlT = setTimeout(() => atHighlight(k), 140);
+      const dm = atPanel.querySelector('.at-demo');
+      if (dm && c) dm.innerHTML = atDemoHtml(c, c.g);
+      if (!k) atStatus(c ? (c.w || c.l) : '');
+      clearTimeout(atPanel.__hlT); if (k) atPanel.__hlT = setTimeout(() => atHighlight(k), 140); else atHighlight('');
     });
     atPanel.addEventListener('toggle', (e) => { const d = e.target; if (d.dataset && d.dataset.fold) { if (d.open) atOpenFolds.add(d.dataset.fold); else atOpenFolds.delete(d.dataset.fold); } }, true);
     atPanel.addEventListener('mouseleave', () => { atPanel.__hl = ''; clearTimeout(atPanel.__hlT); atHighlight(''); });
@@ -8280,19 +8428,30 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     atRefresh();
   }
   function closeAtelier() { atStopPick(); atHighlight(''); if (atPanel) atPanel.remove(); atPanel = null; }
+  /* v36: パネルの書体 — 欧文は Cormorant Garamond（Atelier の名前）、和文の見出しは しっぽり明朝、本文は Zen 角ゴシック New。
+     読み込めない時は Baskerville・ヒラギノ明朝・ヒラギノ角ゴにそのまま落ちる */
+  function atFonts() {
+    if (document.getElementById('atelier-fonts')) return;
+    const l = document.createElement('link');
+    l.id = 'atelier-fonts'; l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap';
+    (document.head || document.documentElement).appendChild(l);
+  }
   function atInstallUi() {
+    atFonts();
     if (document.getElementById(AT_IDS.ui)) return;
     const st = document.createElement('style');
     st.id = AT_IDS.ui;
     st.textContent = `
-.at-panel { --at-fg: var(--c-texPri, #37352f); --at-fg2: var(--c-texSec, #787774); --at-fg3: var(--c-texTer, #9b9a97); --at-line: var(--ca-borPriTra, rgba(55,53,47,.09)); --at-hov: var(--c-bacHov, rgba(55,53,47,.06)); --at-acc: #2383e2; --at-serif: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", "Yu Mincho", serif;
-  position: fixed; z-index: 2147483600; right: 24px; top: 56px; width: 760px; max-width: calc(100vw - 32px); height: min(780px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: 12px; background: var(--c-bgPri, #fff); color: var(--at-fg); box-shadow: 0 0 0 .5px rgba(15,15,15,.1), 0 4px 12px rgba(15,15,15,.06), 0 20px 50px rgba(15,15,15,.16); font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif; overflow: hidden; }
+.at-panel { --at-fg: var(--c-texPri, #37352f); --at-fg2: var(--c-texSec, #787774); --at-fg3: var(--c-texTer, #9b9a97); --at-line: var(--ca-borPriTra, rgba(55,53,47,.09)); --at-hov: var(--c-bacHov, rgba(55,53,47,.06)); --at-acc: #2383e2; --at-brand: "Cormorant Garamond", "Cormorant", "Didot", "Bodoni 72", "Baskerville", serif; --at-serif: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Cordivestium Group Header", serif; --at-ui: "Zen Kaku Gothic New", "Hiragino Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: fixed; z-index: 2147483600; right: 24px; top: 56px; width: 760px; max-width: calc(100vw - 32px); height: min(780px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: 12px; background: var(--c-bgPri, #fff); color: var(--at-fg); box-shadow: 0 0 0 .5px rgba(15,15,15,.1), 0 4px 12px rgba(15,15,15,.06), 0 20px 50px rgba(15,15,15,.16); font: 13px/1.5 var(--at-ui); font-feature-settings: "palt" 1; overflow: hidden; }
 .at-panel * { box-sizing: border-box; }
 .at-panel.at-picking { opacity: .14; pointer-events: none; transition: opacity .15s; }
 .at-head { display: flex; align-items: center; gap: 14px; height: 52px; padding: 0 10px 0 20px; border-bottom: 1px solid var(--at-line); cursor: move; user-select: none; }
 .at-brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
-.at-brand b { font: 500 19px/1 var(--at-serif); letter-spacing: .05em; }
-.at-brand span { color: var(--at-fg3); font-size: 11.5px; letter-spacing: .06em; white-space: nowrap; }
+.at-brand b { font: 600 25px/1 var(--at-brand); letter-spacing: .03em; font-feature-settings: "liga" 1, "dlig" 1; }
+.at-brand b::first-letter { font-style: italic; }
+.at-brand span { color: var(--at-fg3); font: 500 12px/1 var(--at-serif); letter-spacing: .12em; white-space: nowrap; }
 .at-prof { padding: 2px 8px; border-radius: 999px; background: rgba(35,131,226,.1); color: var(--at-acc); font-size: 11px; white-space: nowrap; }
 .at-search { margin-left: auto; position: relative; width: 220px; }
 .at-search input { width: 100%; height: 30px; padding: 0 10px 0 30px; border: 0; border-radius: 8px; background: var(--at-hov); color: inherit; font: inherit; font-size: 12.5px; outline: none; cursor: text; }
@@ -8303,7 +8462,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 200px 1fr; }
 .at-nav { padding: 8px 8px 16px; border-right: 1px solid var(--at-line); overflow: auto; background: color-mix(in srgb, var(--at-fg) 2.5%, transparent); scrollbar-width: none; }
 .at-nav::-webkit-scrollbar { display: none; }
-.at-navh { padding: 14px 10px 5px; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--at-fg3); }
+.at-navh { display: flex; align-items: baseline; gap: 8px; padding: 16px 10px 5px; font: 500 10.5px/1 var(--at-serif); letter-spacing: .1em; color: var(--at-fg3); }
+.at-navh .en { font: 600 italic 14px/1 var(--at-brand); letter-spacing: .02em; color: var(--at-fg2); }
 .at-navh:first-child { padding-top: 6px; }
 .at-nav button { display: flex; align-items: center; gap: 9px; width: 100%; height: 30px; padding: 0 10px; margin: 1px 0; border: 0; border-radius: 6px; background: none; color: var(--at-fg2); font: inherit; font-size: 13px; text-align: start; cursor: pointer; white-space: nowrap; }
 .at-nav button span { flex: 1; min-width: 0; overflow: hidden; text-overflow: clip; }
@@ -8315,11 +8475,11 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-nav b { flex: none; min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--at-hov); font-size: 10.5px; font-weight: 600; line-height: 16px; text-align: center; color: var(--at-fg2); }
 .at-main { padding: 18px 24px 40px; overflow: auto; scroll-behavior: smooth; }
 .at-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 6px; }
-.at-title h3 { margin: 0; font: 500 18px/1.3 var(--at-serif); letter-spacing: .04em; }
+.at-title h3 { margin: 0; font: 600 19px/1.3 var(--at-serif); letter-spacing: .06em; }
 .at-note { margin: 0 0 16px; color: var(--at-fg2); font-size: 12px; line-height: 1.6; }
 .at-note code { padding: 1px 4px; border-radius: 4px; background: var(--at-hov); font: 11px/1 ui-monospace, Menlo, monospace; color: #eb5757; }
 .at-card { margin: 0 0 14px; padding: 4px 0; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--at-line); }
-.at-cardh { display: flex; align-items: center; justify-content: space-between; height: 34px; padding: 4px 14px 0; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; color: var(--at-fg3); }
+.at-cardh { display: flex; align-items: center; justify-content: space-between; height: 36px; padding: 4px 14px 0; font: 600 12px/1 var(--at-serif); letter-spacing: .08em; color: var(--at-fg2); }
 .at-cardh .at-ghost { opacity: 0; transition: opacity .12s; }
 .at-card:hover .at-cardh .at-ghost { opacity: 1; }
 .at-row { display: grid; grid-template-columns: minmax(130px, 34%) 1fr 26px; align-items: center; gap: 12px; min-height: 40px; padding: 4px 8px 4px 14px; border-radius: 8px; transition: background .12s; }
@@ -8354,7 +8514,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-num.at-empty input[type=range]::-moz-range-progress { background: color-mix(in srgb, var(--at-fg) 26%, transparent); }
 .at-nbox { flex: none; display: flex; align-items: center; width: 86px; height: 30px; padding: 0 9px 0 4px; border-radius: 7px; background: var(--at-hov); }
 .at-nbox:focus-within { box-shadow: 0 0 0 2px rgba(35,131,226,.35); }
-.at-nbox input { flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0 2px; border: 0; background: none; color: inherit; font: inherit; font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; outline: none; -moz-appearance: textfield; }
+.at-nbox input { flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0 2px; border: 0; background: none; color: inherit; font: 600 14px/1 var(--at-brand); font-variant-numeric: lining-nums tabular-nums; text-align: right; font-variant-numeric: tabular-nums; outline: none; -moz-appearance: textfield; }
 .at-nbox input::-webkit-inner-spin-button, .at-nbox input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .at-nbox input::placeholder { color: var(--at-fg3); }
 .at-nbox small { flex: none; width: 18px; margin-left: 3px; color: var(--at-fg3); font-size: 11px; }
@@ -8394,7 +8554,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-row > label small.at-w { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; font-size: 10.5px; line-height: 1.45; color: var(--at-fg3); }
 .at-row:hover > label small.at-w { -webkit-line-clamp: 6; color: var(--at-fg2); }
 .at-fig { position: sticky; top: -18px; z-index: 3; margin: -18px -24px 16px; padding: 14px 24px 8px; background: var(--c-bgPri, #fff); border-bottom: 1px solid var(--at-line); }
-.at-fig svg { display: block; width: 100%; height: auto; max-height: 168px; }
+.at-fig > svg { display: block; width: 100%; height: auto; max-height: 128px; margin-bottom: 6px; }
 .at-main:has(.at-fig) { scroll-padding-top: 220px; }
 .at-fig .p { fill: color-mix(in srgb, var(--at-fg) 16%, transparent); transition: fill .15s; }
 .at-fig .pi { fill: color-mix(in srgb, var(--at-fg) 30%, transparent); }
@@ -8418,6 +8578,7 @@ details.at-fold > summary::-webkit-details-marker { display: none; }
 details.at-fold > summary span::before { content: "▸"; display: inline-block; width: 14px; transition: transform .15s; }
 details.at-fold[open] > summary span::before { transform: rotate(90deg); }
 .at-cardh em { margin-left: 8px; font-style: normal; font-weight: 400; color: var(--at-fg3); letter-spacing: 0; }
+${DEMO_CSS}
 .at-hl { position: fixed; z-index: 2147483590; pointer-events: none; border-radius: 4px; box-shadow: 0 0 0 2px rgba(35,131,226,.75); background: rgba(35,131,226,.07); animation: at-hl .9s ease; }
 @keyframes at-hl { from { box-shadow: 0 0 0 6px rgba(35,131,226,.0); } to { box-shadow: 0 0 0 2px rgba(35,131,226,.75); } }
 .at-pickbox { position: fixed; z-index: 2147483601; pointer-events: none; border: 2px solid var(--at-acc, #2383e2); border-radius: 3px; background: rgba(35,131,226,.08); transition: all .06s; }
@@ -8593,7 +8754,9 @@ html[data-at-focus][data-at-has-cur] .layout .notion-page-content > [data-block-
     const st = document.createElement('style');
     st.id = 'atelier-labs-css';
     st.textContent = `
-.atl-ui { font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif; color: var(--c-texPri, #37352f); }
+.atl-ui { font: 13px/1.5 "Zen Kaku Gothic New", "Hiragino Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-feature-settings: "palt" 1; color: var(--c-texPri, #37352f); }
+#atl-pal .q input { font-family: "Zen Kaku Gothic New", "Hiragino Sans", sans-serif; }
+#atl-pal .h { font: 600 italic 13px/1 "Cormorant Garamond", Baskerville, serif; letter-spacing: .02em; }
 .atl-ui * { box-sizing: border-box; }
 #atl-pal-back { position: fixed; inset: 0; z-index: 2147483640; background: rgba(15,15,15,.22); display: flex; justify-content: center; align-items: flex-start; padding-top: 12vh; }
 #atl-pal { width: min(640px, calc(100vw - 32px)); max-height: 64vh; display: flex; flex-direction: column; border-radius: 14px; background: var(--c-bgPri, #fff); box-shadow: 0 0 0 .5px rgba(15,15,15,.12), 0 16px 48px rgba(15,15,15,.24); overflow: hidden; }
