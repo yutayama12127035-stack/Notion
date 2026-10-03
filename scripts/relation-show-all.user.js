@@ -19,6 +19,7 @@
  *  - 本を右クリック → 「◯◯を移す」: 一覧にあるグループ・自分で作ったグループ・単行へ移す／元に戻す／新しいグループ。
  *    Notion のデータ（Series）は書き換えない（このブラウザの表示だけ）。
  *  - 保存は localStorage「cordi.groups.v1」。²³ Page Relation Show All v2.8.0 と共通（どちらで変えても両方に出る）。
+ *  - 項目の書体は ²⁶ Atelier の「リレーション › 書体」（--atelier-rel-font）が指定されていればそれを使う。
  *  - __cordiGroups.dump() で中身を確認。
  *
  * v0.38.0（2026-09-23）
@@ -1732,7 +1733,8 @@ const VERSION = '1.47.0';
      この要素はこのスクリプトが作ったもので React が作り直さないため、インラインで安全。 */
   function applyItemFont(node) {
     try {
-      const fam = TUNING.ITEM_FONT_FAMILY;
+      /* v1.47.0: ²⁶ Atelier の「リレーション › 書体」があればそれを使う（無ければ従来の書体） */
+      const fam = 'var(--atelier-rel-font, ' + TUNING.ITEM_FONT_FAMILY + ')';
       node.style.setProperty('font-family', fam, 'important');
       if (TUNING.ITEM_FONT_SIZE) node.style.setProperty('font-size', TUNING.ITEM_FONT_SIZE, 'important');
       if (TUNING.ITEM_FONT_WEIGHT) node.style.setProperty('font-weight', TUNING.ITEM_FONT_WEIGHT, 'important');
