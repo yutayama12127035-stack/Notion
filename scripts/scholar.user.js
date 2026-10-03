@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁸ _ Scholar
 // @namespace    https://cordivestium.local/scholar
-// @version      1.0.0
-// @description  Notion を「学び」と「計算」に強くする柱（²⁶ Atelier ＝文字、³⁷ Lumière ＝見た目 と並ぶ三本柱の一つ）。【計算】Excel と同じ書き方の数式（SUM・AVERAGEIFS・VLOOKUP・XLOOKUP・INDEX/MATCH・TEXT・DATEDIF・FILTER・SORT・UNIQUE など 180 余りの関数、A1 参照・範囲・列の名前での参照）で、表のビューを丸ごと写した「シート」（⌃⌥E）を開き、計算の列・集計・条件付き書式（色の段階・データバー・印）をつけ、結果を Notion のプロパティへ書き戻せる。マクロ（手順を組んで、どの行がどう変わるかを確かめてから一括で書き込み・元に戻せる。JavaScript でも書ける）。【学び】赤シート（赤い文字を隠す・⌃⌥R）、穴埋め（色を付けた語を隠す）、DB を単語帳にして間隔反復（忘れかけた頃にもう一度）、ポモドーロと学習記録（日ごとの時間・草のような記録）、続きから読む、選んだ式をその場で計算（⌃⌥=）。⌃⌥S で Scholar のパネル。
+// @version      11.0.0
+// @description  Notion を「学び」と「計算」に強くする柱（²⁶ Atelier ＝文字、³⁷ Lumière ＝見た目 と並ぶ三本柱の一つ）。【計算】Excel と同じ書き方の数式（SUM・AVERAGEIFS・VLOOKUP・XLOOKUP・INDEX/MATCH・TEXT・DATEDIF・FILTER・SORT・UNIQUE など 180 余りの関数、A1 参照・範囲・列の名前での参照）で、表のビューを丸ごと写した「シート」（⌃⌥E）を開き、計算の列・集計・条件付き書式（色の段階・データバー・印）をつけ、結果を Notion のプロパティへ書き戻せる。マクロ（手順を組んで、どの行がどう変わるかを確かめてから一括で書き込み・元に戻せる。JavaScript でも書ける）。【学び】赤シート（赤い文字を隠す・⌃⌥K）、穴埋め（色を付けた語を隠す）、DB を単語帳にして間隔反復（忘れかけた頃にもう一度）、ポモドーロと学習記録（日ごとの時間・草のような記録）、続きから読む、選んだ式をその場で計算（⌃⌥=）。上の帯の Σ で学び・計算・記録の小窓（⌃⌥Q）。v11: 社労士（試験までの日数・基準点チェッカー・○×演習・選択式ドリル・法律上の年齢や期間の計算）・語学（読み上げ・書き取り）・用語に乗せて意味・読書／推し／ニュースの記録。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -15,6 +15,21 @@
 // ==/UserScript==
 
 /*
+ * v11.0.0（2026-10-03）
+ *   ・上の帯（Share の左）に Σ（期限の来たカードの数つき）。小窓: 試験まで何日（既定は社労士試験＝8 月の第 4 日曜日）・今日の学習・続けた日数・
+ *     今日の復習／覚える（単語帳・○×・選択式ドリル・赤シート・穴埋め・用語）／試験（基準点チェッカー）／語学（読み上げ・書き取り）／
+ *     記録（読書・推し・ニュース・学習の草）／計算（シート・選んだ式・ポモドーロ）。DB の道具の段（フィルタの左）にも Σ。
+ *   ・社労士: ○×演習（肢別。過去問の DB の 問い・正解・解説・科目・年度 を選ぶ。苦手だけ・まだ解いていない・科目でしぼる。間違いは単語帳へ）、
+ *     選択式ドリル（このページの赤字・太字・数字＋単位を空欄に、20 の選択肢から。数字は 2 倍・半分などの紛らわしい選択肢も作る）、
+ *     基準点チェッカー（選択式 8 科目・択一式 7 科目。総得点と科目ごとの基準点。基準は変えられる）、
+ *     式: HYOJUN（標準報酬月額・等級。健保 50 等級／厚年 32 等級）・NENREI（法律上の年齢）・TASSHIBI（○歳に達した日）・
+ *     KIKAN（民法の期間の末日。初日不算入・応当日の前日・月末）・SOUSHITSU（資格喪失日）・SHIKEN（試験までの日数）。
+ *   ・語学: 読み上げ（選んだ文字／今の段落。言語は自動）・書き取り（聞いて打つ → 抜けた字・余分な字を色で）。
+ *   ・用語に乗せて意味: DB のビューを用語集に。本文は書き換えず（CSS の Highlight で点線の印だけ）、乗せると意味。社労士の用語（約 150 語）も科目つきで。
+ *   ・記録: 読書（今年の冊数と目標・見込み・月ごと・評価・著者・最近）／推し（今月・今年の出費・月ごと・推しごと・種類・もうすぐの記念日）／
+ *     ニュース（今週・今月・月ごと・媒体・テーマ・社労士に関わる記事・新しい順）。日付の列が無ければ作った日で数える。
+ *   ・キーの重なりを直した: 赤シート ⌃⌥R → ⌃⌥K（⌃⌥R は ²⁶ の縦書き）、パネル ⌃⌥S → 上の帯の Σ・⌃⌥Q（⌃⌥S は ²⁶ の設定）。読み上げ ⌃⌥T。
+ *   ・UI の書体（--cordi-ui）を三本柱でそろえた。
  * ============================================================
  *  ³⁸ Scholar v1.0.0（2026-10-03）
  * ============================================================
@@ -44,7 +59,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '11.0.0';
   const TAG = '[³⁸ Scholar v' + VERSION + ']';
   if (window.__c38 && window.__c38.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -2832,9 +2847,53 @@
     return list.map((a) => { let d = new Date(t.getFullYear(), a.m - 1, a.d); if (d < t) d = new Date(t.getFullYear() + 1, a.m - 1, a.d); return Object.assign({}, a, { days: Math.round((d - t) / 86400000) }); }).filter((a) => a.days <= 60).sort((a, b) => a.days - b.days);
   }
 
+
+  /* ============================================================
+   *  15.8 DB の道具の段（フィルタ・並べ替え・検索の並び）に Σ — その DB で使える学び・計算・記録
+   * ============================================================ */
+  function dbBars() {
+    for (const f of document.querySelectorAll('.notion-collection-filter, .notion-frame [role="button"][aria-label="Search"]')) {
+      const row = f.closest('div[style*="justify-content: end"]') || f.closest('div[style*="justify-content: flex-end"]');
+      if (!row || row.querySelector(':scope > .s38-dbb')) continue;
+      const b = document.createElement('div'); b.className = 's38-dbb'; b.setAttribute('role', 'button'); b.tabIndex = 0;
+      b.title = 'Scholar — この DB をシート・単語帳・○×演習・記録に';
+      b.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5H5.5l5 5.5-5 5.5h9"/></svg>';
+      b.addEventListener('mousedown', (e) => e.preventDefault());
+      b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); dbPop(b); });
+      row.insertBefore(b, row.firstChild);
+    }
+  }
+  function dbPop(b) {
+    const blk = b.closest('.notion-collection_view-block, .notion-collection_view_page-block') || document.querySelector('.notion-frame');
+    const v = blk && blk.querySelector(VIEW_SEL); if (v) lastViewEl = v;
+    popClose(); document.dispatchEvent(new CustomEvent('cordi:closepops', { detail: 's38' }));
+    popCss();
+    pop = document.createElement('div'); pop.className = 'cordi-pop'; pop.id = 's38-pop'; popB = b;
+    const it = (a, ic, l, sub) => '<button class="cp-i" data-s="' + a + '"><span class="ic">' + ICO[ic] + '</span><span class="lb">' + l + (sub ? '<small>' + sub + '</small>' : '') + '</span></button>';
+    pop.innerHTML = '<div class="cp-hd"><b>Scholar</b><span>この DB で</span></div>' +
+      it('sheet', 'sheet', 'シートで開く', 'Excel の式・計算の列・条件付き書式・書き戻し・マクロ') +
+      it('deck', 'card', '単語帳にする', '表と裏の列を選ぶだけ。忘れかけた頃にもう一度') +
+      it('quiz', 'ox', '○×で解く', '過去問の DB を肢別演習に') +
+      it('glossmk', 'dict', '用語集にする', '本文の用語に乗せると意味が出る') +
+      '<div class="cp-div"></div>' + it('ledger:read', 'book', '読書の記録にする', '') + it('ledger:oshi', 'heart', '推しの記録にする', '') + it('ledger:news', 'news', 'ニュースのクリップにする', '');
+    document.body.appendChild(pop);
+    const r = b.getBoundingClientRect();
+    pop.style.top = Math.min(innerHeight - pop.offsetHeight - 8, r.bottom + 6) + 'px';
+    pop.style.left = Math.max(8, Math.min(innerWidth - pop.offsetWidth - 8, r.right - pop.offsetWidth)) + 'px';
+    pop.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-s]'); if (!el) return; const a = el.dataset.s; popClose();
+      if (a === 'deck') deckDialog(); else if (a === 'glossmk') glossToggle();
+      else if (a.startsWith('ledger:')) { const k = a.slice(7); const vv = findView(); if (vv && vv.viewId) ledgerSetup(k, vv); } else act(a);
+    });
+    setTimeout(() => document.addEventListener('pointerdown', function off(e) { if (!pop) { document.removeEventListener('pointerdown', off, true); return; } if (pop.contains(e.target) || b.contains(e.target)) return; document.removeEventListener('pointerdown', off, true); popClose(); }, true), 0);
+  }
+
   /* ---------- 追加の見た目（ダイアログ・ドリル・記録） ---------- */
   const ADD_CSS = `
 .s38-dlg.wide { width: min(760px, 94vw) !important; max-width: none !important; }
+.s38-dbb { width: 28px; height: 28px; flex: none; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--c-icoSec, #91918e); }
+.s38-dbb:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-icoPri, #37352f); }
+.s38-dbb svg { width: 16px; height: 16px; }
 .s38-pt { width: 100%; border-collapse: collapse; font-size: 13px; }
 .s38-pt td { padding: 4px 6px; border-bottom: 1px solid var(--lm-line-hair, rgba(0,0,0,.05)); }
 .s38-pt td:first-child { width: 58%; }
@@ -2910,7 +2969,10 @@
   try { document.documentElement.setAttribute('data-cordi-s38', VERSION); } catch (e) { /* noop */ }   // ²⁶ の ⋯ メニューが「入っている柱」を知る印
   const bootUi = () => {
     dock(); announce();
-    new MutationObserver(() => { const b = document.getElementById('cordi-b-s38'); if (!b || !b.isConnected) dock(); glossSoon(); }).observe(document.body, { childList: true, subtree: true });
+    addCss();
+    let dbT = 0;
+    new MutationObserver(() => { const b = document.getElementById('cordi-b-s38'); if (!b || !b.isConnected) dock(); glossSoon(); if (!dbT) dbT = setTimeout(() => { dbT = 0; dbBars(); }, 250); }).observe(document.body, { childList: true, subtree: true });
+    dbBars();
     setInterval(() => { const b = document.getElementById('cordi-b-s38'); if (b) { const n = dueCount(); b.querySelector('.cd-badge').textContent = n ? String(Math.min(99, n)) : ''; } }, 60000);
     glossSoon();
   };

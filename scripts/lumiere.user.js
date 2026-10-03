@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
-// @version      1.0.0
+// @version      11.0.0
 // @description  Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -15,6 +15,15 @@
 // ==/UserScript==
 
 /*
+ * v11.0.0（2026-10-03）
+ *   ・カーテン: 開いた瞬間から配色の背景色の幕で隠し、本文が描かれ・書体が読み終わり・画面の変化が一息つくまで（各柱と ¹⁶ の並べ替えが済むまで）
+ *     出さない。ページを移る時（リンク・サイドバー・パンくず）も本文の枠だけ隠して、出来上がってから出す。最長 3.2 秒・CSS だけの安全弁つき。
+ *   ・上の帯（Share の左）に ◐。押すと Notion のメニューと同じ形の小窓: 配色（全部の見本）・明暗・このページだけ・推し色で配色を作る・
+ *     カーテン・紙の質感・本文を一枚の紙に・集中モード・夜は自動で暗く・見本カード・ギャラリーの形。右下の「L」は既定で出さない。
+ *   ・推し色: 一色と名前から、明・暗の配色を作って当てる（背景はその色をごく淡く、差し色は補色寄り）。
+ *   ・コメントのボタン: アプリの表・ギャラリー・リストで乗せると出る「ボタンの段」（.quickActionContainer）を、どこでも右上の小さな粒に。
+ *   ・UI の書体（--cordi-ui）と説明の札（title の代わり）を三本柱でそろえる。見本カードの題名は、画面で使っている書体（Atelier の題字・リレーション）。
+ *   ・集中モードのキー ⌃⌥F → ⌃⌥B（⌃⌥F は ²⁶ Atelier のテキストのパネルと重なっていた）。
  * ============================================================
  *  ³⁷ Lumière v1.0.0（2026-10-03）
  * ============================================================
@@ -35,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '11.0.0';
   const TAG = '[³⁷ Lumière v' + VERSION + ']';
   if (window.__c37 && window.__c37.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1062,7 +1071,7 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
   function focusToggle(force) {
     const v = force != null ? force : !document.documentElement.hasAttribute('data-lm-focus');
     document.documentElement.toggleAttribute('data-lm-focus', v);
-    toast(v ? '集中モード：入（⌃⌥F で戻す）' : '集中モード：切');
+    toast(v ? '集中モード：入（⌃⌥B で戻す）' : '集中モード：切');
   }
   function toast(msg) {
     if (!document.body) return;
@@ -1498,7 +1507,7 @@ html:hover #lm-fab { opacity: .55; }
     h += tog('curtain', 'カーテン', '読み込み・描き直しを見せず、出来上がった画面だけを出す', on('curtain'));
     h += tog('texture', '紙の質感', '', on('texture'));
     h += tog('sheet', '本文を一枚の紙に', '', on('sheet'));
-    h += tog('focus', '集中モード', '本文以外を薄く（⌃⌥F）', document.documentElement.hasAttribute('data-lm-focus'));
+    h += tog('focus', '集中モード', '本文以外を薄く（⌃⌥B）', document.documentElement.hasAttribute('data-lm-focus'));
     h += tog('schedule', '夜は自動で暗く', (S.tune.nightFrom || 19) + ' 時〜' + (S.tune.nightTo || 6) + ' 時', !!S.tune.schedule);
     h += tog('hoverCard', 'ページの見本カード', 'リレーション・題字に乗せると表紙つきのカード', on('hoverCard'));
     h += '<div class="cp-sec">ギャラリーの形</div><div class="cp-seg" data-lseg="galleryStyle">' + GSTYLES.map(([v, l]) => '<button data-v="' + v + '" class="' + (S.tune.galleryStyle === v ? 'on' : '') + '">' + l + '</button>').join('') + '</div>';
@@ -1560,7 +1569,7 @@ html:hover #lm-fab { opacity: .55; }
   function announce() {
     document.dispatchEvent(new CustomEvent('cordi:tools', { detail: JSON.stringify({ pillar: 'lm', name: 'Lumière', icon: ICON_LM, tools: [
       { id: 'lm.pop', label: '配色・見た目', hint: curTheme().name },
-      { id: 'lm.focus', label: '集中モード', key: '⌃⌥F' },
+      { id: 'lm.focus', label: '集中モード', key: '⌃⌥B' },
       { id: 'lm.panel', label: 'Lumière の設定', key: '⌃⌥V' }
     ] }) }));
   }
@@ -1637,7 +1646,7 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
    * ============================================================ */
   window.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.altKey && !e.metaKey && e.code === 'KeyV') { e.preventDefault(); e.stopPropagation(); panelOpen(); }
-    else if (e.ctrlKey && e.altKey && !e.metaKey && e.code === 'KeyF') { e.preventDefault(); e.stopPropagation(); focusToggle(); }
+    else if (e.ctrlKey && e.altKey && !e.metaKey && e.code === 'KeyB') { e.preventDefault(); e.stopPropagation(); focusToggle(); }
     else if (e.key === 'Escape' && panel) panelClose();
   }, true);
   /* 明暗の切り替え（body の class）・ページの移動を見張る */
