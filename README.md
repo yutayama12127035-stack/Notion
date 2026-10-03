@@ -12,12 +12,12 @@
 | 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → 6.2.0 → 6.3.0 → **6.4.0** |
 | 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → 1.48.0 → 1.49.0 → 1.50.0 → **1.51.0** |
 | 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → 2.8.0 → **2.9.0** |
-| 5 | 新規ビュー → 表の画像 | `scripts/image-cells.user.js` | « No »　³⁴ _ Image Cells（³¹ Atlas Views は廃止） | 新規 **1.0.0** |
+| 5 | 新規ビュー → 表の画像 | `scripts/image-cells.user.js` | « No »　³⁴ _ Image Cells（³¹ Atlas Views は廃止） | 新規 1.0.0 → **1.1.0** |
 | 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → 1.1.0 → 1.2.0 → **1.3.0** |
 | 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → 15.7.0 → 15.8.0 → **15.9.0** |
-| 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 **1.0.0** |
+| 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 1.0.0 → **1.1.0** |
 | 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → **3.2.0** |
-| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 **1.0.0** |
+| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 1.0.0 → **1.1.0** |
 
 ## 第2便（2026-10-03）の修正
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁶ _ Sub Groups
 // @namespace    https://cordivestium.local/sub-groups
-// @version      1.0.0
+// @version      1.1.0
 // @description  データベースの「グループ」（Group by）を、ボードビュー以外（表・リスト・ギャラリー）でもサブグループに分ける。Notion の標準ではサブグループはボードだけ。グループの中を、もう 1 つのプロパティ（セレクト・ステータス・マルチセレクト・チェックボックス・日付・人・リレーション・テキスト・数値など）の値ごとに見出しを付けて並べ分け、見出しのクリックで畳む。ビューごとに覚える。グループ分けしていないビューでも使える（ビュー全体をサブグループに分ける）。見た目だけで、Notion のデータや並び順は変えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -13,6 +13,8 @@
 // ==/UserScript==
 
 /*
+ * v1.1.0（2026-10-03）
+ *   ・リレーション（Series・Synopsis など）で分けた時、関係先が 1 つなら、そのページのアイコンを見出しに出す。
  * v1.0.0（2026-10-03）
  *   ・Notion のグループ（ビューの設定 › Group）は、表・リスト・ギャラリーでも使えるが、サブグループ（Sub-group）はボードだけ。
  *     → グループの中の行（カード）を、選んだプロパティの値ごとに並べ替え、値ごとに見出し（▾ 値 · 件数）を差し込む。
@@ -32,7 +34,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const TAG = '[³⁶ v' + VERSION + ']';
   if (window.__c36 && window.__c36.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -166,9 +168,14 @@
     for (const [id, x] of raw) {
       let keys = x.keys;
       if (x.users) keys = x.users.map((u) => { const n = rec('notion_user', u); return n ? (n.name || n.given_name || n.email || '?') : '…'; });
-      if (x.pages) keys = x.pages.map((p) => { const b = rec('block', p); return b ? norm(plain(b.properties && b.properties.title)) || '無題' : '…'; });
+      let icon = null;
+      if (x.pages) {
+        keys = x.pages.map((p) => { const b = rec('block', p); return b ? norm(plain(b.properties && b.properties.title)) || '無題' : '…'; });
+        /* 関係先が 1 つなら、そのページのアイコンを見出しに（シリーズなど） */
+        if (x.pages.length === 1) { const b = rec('block', x.pages[0]); const pi = b && b.format && b.format.page_icon; if (pi) icon = { v: pi, id: x.pages[0] }; }
+      }
       keys = (keys || []).filter(Boolean);
-      out.set(id, { key: keys.join('・'), num: !!x.num });
+      out.set(id, { key: keys.join('・'), num: !!x.num, icon });
     }
     return out;
   }
@@ -258,7 +265,20 @@
     const o = (def.options || []).find((x) => x.value === k);
     return o ? (COLORS[o.color] || COLORS.default) : '';
   }
-  function makeHead(view, kind, cfg, def, k, n, closed) {
+  function iconEl(ic) {
+    if (!ic) return null;
+    const v = String(ic.v || '').trim();
+    const sp = document.createElement('span'); sp.className = 'c36-ic';
+    if (/^(https?:|data:|\/)/.test(v) || /^attachment:/i.test(v)) {
+      const im = document.createElement('img');
+      im.src = /^attachment:/i.test(v) ? '/image/' + encodeURIComponent(v) + '?table=block&id=' + encodeURIComponent(ic.id) + '&cache=v2' : v;
+      im.alt = ''; im.referrerPolicy = 'same-origin';
+      sp.appendChild(im);
+    } else if (/^[a-z][a-z0-9+.-]*:/i.test(v)) return null;
+    else sp.textContent = v;
+    return sp;
+  }
+  function makeHead(view, kind, cfg, def, k, n, closed, ic) {
     const h = document.createElement('div');
     h.className = 'c36-sh';
     h.setAttribute('data-c36-kind', kind);
@@ -269,7 +289,8 @@
     const bg = chipColor(def, k);
     if (bg && k) { lb.classList.add('c36-chip'); lb.style.background = bg; }
     const ct = document.createElement('span'); ct.className = 'c36-ct'; ct.textContent = String(n);
-    h.append(tg, lb, ct);
+    const ie = k ? iconEl(ic) : null;
+    if (ie) h.append(tg, ie, lb, ct); else h.append(tg, lb, ct);
     return h;
   }
   const SIG = new WeakMap();   // body → 署名（同じなら描き直さない）
@@ -297,17 +318,19 @@
       ST.bodies++; ST.rows += units.length;
       live.add(body);
       const groups = new Map();
+      const icons = new Map();
       let nums = true;
       for (const x of units) {
         const v = vals.get(x.id);
         const k = v ? v.key : '';
         if (v && !v.num) nums = false;
+        if (v && v.icon && !icons.has(k)) icons.set(k, v.icon);
         if (!groups.has(k)) groups.set(k, []);
         groups.get(k).push(x);
       }
       const order = sortKeys(groups.keys(), def, cfg, nums);
       const closed = cfg.closed || {};
-      const sig = key + '#' + cfg.prop + '#' + (cfg.rev ? 1 : 0) + '#' + order.map((k) => k + ':' + (closed[k] ? 'c' : 'o') + ':' + groups.get(k).map((x) => x.id).join(',')).join('|');
+      const sig = key + '#' + cfg.prop + '#' + (cfg.rev ? 1 : 0) + '#' + order.map((k) => k + ':' + (icons.get(k) ? String(icons.get(k).v).slice(0, 40) : '') + ':' + (closed[k] ? 'c' : 'o') + ':' + groups.get(k).map((x) => x.id).join(',')).join('|');
       const units0 = new Set(units.map((x) => x.unit));
       /* 入れ物の作り（flex／grid）をそろえる */
       const cs = getComputedStyle(body);
@@ -335,7 +358,7 @@
         const list = groups.get(k);
         const isClosed = !!closed[k];
         o += 1;
-        const h = makeHead(view, kind, cfg, def, k, list.length, isClosed);
+        const h = makeHead(view, kind, cfg, def, k, list.length, isClosed, icons.get(k));
         h.style.setProperty('order', String(o), 'important');
         body.appendChild(h);
         ST.heads++;
@@ -502,6 +525,8 @@
 [data-c36-body="tcol"] > .c36-sh { position: sticky; inset-inline-start: 0; width: max-content; min-width: min(100%, 320px); border-bottom: 0; box-shadow: inset 0 -1px 0 var(--c36-line); }
 [data-c36-body="grid"] > .c36-sh { grid-column: 1 / -1; margin-bottom: 0; }
 .c36-sh .c36-tg { width: 12px; font-size: 10px; opacity: .7; flex: none; }
+.c36-sh .c36-ic { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; flex: none; font-size: 14px; line-height: 1; }
+.c36-sh .c36-ic img { width: 18px; height: 18px; object-fit: cover; border-radius: 3px; display: block; }
 .c36-sh .c36-lb { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60ch; }
 .c36-sh .c36-chip { padding: 0 6px; border-radius: 3px; font-weight: 500; color: var(--c-texPri, #37352f); }
 .c36-sh .c36-ct { color: var(--c36-count); font-weight: 400; }
