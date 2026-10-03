@@ -3636,10 +3636,12 @@ html[data-c26-bm]:not(.c26-native) [role="dialog"]:has([role="option"] svg.dupli
 .m9-mini input:focus { box-shadow: 0 0 0 1.5px var(--m9-acc); background: var(--m9-bg); }
 .m9-mini.set input, .m9-num.set input { color: var(--m9-acc); }
 .m9-foot { display: flex; align-items: center; gap: 2px; }
-.m9-attools { display: flex; align-items: center; gap: 4px; padding: 2px 4px; }
-.m9-attools .m9-tb:not(.m9-atb) { width: 30px; height: 30px; flex: none; }
+/* v34: 1 段目に Atelier（横いっぱい）、2 段目に道具 6 つを等間隔（メニューの幅 224px に必ず収まる・見切れない） */
+.m9-attools { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px 2px; padding: 2px 4px 4px; }
+.m9-attools .m9-tb:not(.m9-atb) { width: 100%; height: 30px; }
 .m9-attools .m9-tb:not(.m9-atb) svg { width: 17px; height: 17px; }
-.m9-attools .m9-atb { width: auto; flex: none; height: 30px; padding: 0 12px 0 8px; gap: 7px; margin-right: auto; font-size: 13px; letter-spacing: .05em; font-family: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; color: var(--m9-fg); white-space: nowrap; }
+.m9-attools .m9-atb { grid-column: 1 / -1; width: 100%; height: 30px; padding: 0 10px 0 8px; gap: 8px; justify-content: flex-start; font-size: 13px; letter-spacing: .05em; font-family: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; color: var(--m9-fg); white-space: nowrap; }
+.m9-attools .m9-atb::after { content: "⌃⌥A"; margin-left: auto; font: 10.5px/1 -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0; color: var(--m9-ico); opacity: .7; }
 .m9-attools .m9-atb svg { width: 16px; height: 16px; color: #2383e2; }
 .m9-attools .m9-tb[aria-pressed="true"] { background: rgba(35,131,226,.12); color: #2383e2; }
 .m9-foot .m9-cmt { flex: 1 1 auto; width: auto; }
