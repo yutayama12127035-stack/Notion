@@ -7,15 +7,16 @@
 
 | # | ご依頼 | ファイル | スクリプト名 | 版 |
 |---|---|---|---|---|
-| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → **35.0.0** |
-| 2 | タイトルの改行（テーブルビュー） | `scripts/table-title-linebreak.user.js` | « No »　³⁰ _ Table Title Line Break | 新規 **1.0.0** |
-| 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → **6.2.0** |
+| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → **36.0.0** |
+| 2 | タイトルの改行（テーブルビュー） | `scripts/table-title-linebreak.user.js` | « No »　³⁰ _ Table Title Line Break | 新規 1.0.0 → **1.1.0** |
+| 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → 6.2.0 → **6.3.0** |
 | 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → 1.48.0 → 1.49.0 → **1.50.0** |
 | 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → **2.8.0**（中程度 +1） |
 | 5 | 新規ビュー → 表の画像 | `scripts/image-cells.user.js` | « No »　³⁴ _ Image Cells（³¹ Atlas Views は廃止） | 新規 **1.0.0** |
 | 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → 1.1.0 → 1.2.0 → **1.3.0** |
-| 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → **15.6.0**（軽度 +0.1） |
-| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → **2.2.0** |
+| 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → **15.7.0** |
+| 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 **1.0.0** |
+| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → **3.0.0** |
 
 ## 第2便（2026-10-03）の修正
 
@@ -28,6 +29,20 @@
 | 5 Atlas | メニューに出なかったのを修正。シアター・レコード・ポラロイド・星図を追加（v2.0.0） |
 | 6 ドラッグ | ■が逃げる・Notion が押下を先に取る・離した時にセルが開く、を修正（v1.1.0） |
 | 7 リレーション内グルーピングの線 | 項目の少ないセルでも端まで引くように（v1.48.0） |
+
+## 第5便（2026-10-03）の修正
+
+| ご指摘 | 対応 |
+|---|---|
+| サイドバー：グループとチームスペースの影・下線 | ★見出しの灰色の箱と下線をやめた（文字のクリックで編集はそのまま）。チームスペースの行の灰色の箱も出さない（¹⁶ v15.7.0・³³ v3.0.0） |
+| サイドバー：階層 | ★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー の段々に。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。ずらしは Atelier「サイドバー」（³³ v3.0.0） |
+| ギャラリービューが崩れる | ³⁰ がギャラリーのカードを表のセルと取り違え、カードの高さと切り抜きを外していた → カードは改行の折り返しだけに（³⁰ v1.1.0） |
+| アイコン：名前から自動でグループ | 階級の名前（大佐・少尉・軍曹…・general・sergeant…）もミリタリーへ。取り込みをもう一度振り分け直す（²⁹ v6.3.0） |
+| アイコン：Notion 標準も Library の形で | 「Notion」タブ — Notion の標準アイコンを名前から 24 グループに分け、Library と同じ見た目・検索・見出しで一覧。押すと Notion で選んでいる色で設定（初回だけ一覧を集める）（²⁹ v6.3.0） |
+| Atelier：セルの中の位置 | 「表のセル」に、すべての列と列の種類ごと（題字・リレーション・画像・文字など）の横（左・中央・右）と縦（上・中央・下） |
+| Atelier：すべてに動く説明 | どの設定でも、乗せると上の帯で「何がどう動くか」の小さなアニメーション（30 種類）と説明（²⁶ v36.0.0） |
+| Atelier：似合う書体 | Atelier の名前と欧文は Cormorant Garamond、和文の見出しは しっぽり明朝 B1、本文は Zen 角ゴシック New |
+| グループ分けしたビューの件数の上限（10・100） | ³⁵ Endless Load（新規）— 「Load more」が画面に近づいたら自動で押す。スクロールし続ける限り続きを表示。⌃⌥L で一時停止 |
 
 ## 第4便（2026-10-03）の修正
 
