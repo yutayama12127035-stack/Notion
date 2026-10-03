@@ -7,15 +7,27 @@
 
 | # | ご依頼 | ファイル | スクリプト名 | 版 |
 |---|---|---|---|---|
-| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → **23.0.0**（大幅 +10） |
+| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → **24.0.0** |
 | 2 | タイトルの改行（テーブルビュー） | `scripts/table-title-linebreak.user.js` | « No »　³⁰ _ Table Title Line Break | 新規 **1.0.0** |
-| 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → **5.1.0**（軽度 +0.1） |
-| 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → **1.47.0**（中程度 +1） |
+| 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → **6.1.0** |
+| 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → **1.48.0** |
 | 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → **2.8.0**（中程度 +1） |
-| 5 | 新規ビュー | `scripts/atlas-views.user.js` | « No »　³¹ _ Atlas Views | 新規 **1.0.0** |
-| 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 **1.0.0** |
+| 5 | 新規ビュー | `scripts/atlas-views.user.js` | « No »　³¹ _ Atlas Views | 新規 1.0.0 → **2.0.0** |
+| 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → **1.1.0** |
 | 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → **15.6.0**（軽度 +0.1） |
-| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 **1.0.0** |
+| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → **1.1.0** |
+
+## 第2便（2026-10-03）の修正
+
+| ご指摘 | 対応 |
+|---|---|
+| 1 Atelier のボタンが出ない | 旧 Text Styles が先に動いていると、同じ窓口名のため Atelier が黙って止まっていた → 案内を出すように。**Text Styles を無効にしてください**。²⁶ のメニュー（本文・ブロック両方）に「Atelier」の段を追加：Atelier／どこでも書式／目次／フォーカスモード／文字数（v24.0.0） |
+| 2 サイドバー | 字下げの CSS が効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていた、を修正。線と選択時の背景・左の印をやめ、ワークスペースごとに間を空けた（v1.1.0） |
+| 3 アイコンの色パネル | 色のタブが見切れていた → 折り返して全部表示、パネルを 336px に（v6.1.0） |
+| 4 Icons のグループ | ミリタリー（16）・スポーツ（8）・季節と行事（7）・道具と工具（6）を追加（v6.1.0） |
+| 5 Atlas | メニューに出なかったのを修正。シアター・レコード・ポラロイド・星図を追加（v2.0.0） |
+| 6 ドラッグ | ■が逃げる・Notion が押下を先に取る・離した時にセルが開く、を修正（v1.1.0） |
+| 7 リレーション内グルーピングの線 | 項目の少ないセルでも端まで引くように（v1.48.0） |
 
 ## 廃止してよいもの（1 の統合に伴って）
 
