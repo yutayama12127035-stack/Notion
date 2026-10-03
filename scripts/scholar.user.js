@@ -1742,7 +1742,7 @@
       d.querySelector('[data-k="name"]').value = data.viewName || 'カード';
       d.querySelector('[data-make]').onclick = () => {
         const g = (k) => d.querySelector('[data-k="' + k + '"]').value;
-        DECKS.push({ id: uid().slice(0, 8), name: g('name') || 'カード', view: v, front: g('front'), back: g('back'), extra: g('extra'), newPer: +g('newPer') || 20 });
+        DECKS.push({ id: uid().slice(0, 8), name: g('name') || 'カード', view: { blockId: v.blockId, viewId: v.viewId, inline: v.inline }, front: g('front'), back: g('back'), extra: g('extra'), newPer: +g('newPer') || 20 });
         saveDecks(); renderList();
       };
     });
@@ -1755,11 +1755,13 @@
 #s38-rev .top .pg { flex: 1; height: 4px; border-radius: 4px; background: var(--lm-line, rgba(0,0,0,.08)); overflow: hidden; }
 #s38-rev .top .pg i { display: block; height: 100%; background: var(--lm-accent, #2783de); transition: width .3s; }
 #s38-rev .card { width: min(620px, 88vw); min-height: 300px; perspective: 1400px; cursor: pointer; }
-#s38-rev .in { position: relative; width: 100%; min-height: 300px; transition: transform .55s cubic-bezier(.2,.8,.2,1); transform-style: preserve-3d; }
-#s38-rev .card.flip .in { transform: rotateY(180deg); }
-#s38-rev .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 18px; padding: 36px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+#s38-rev .in { position: relative; width: 100%; min-height: 300px; }
+#s38-rev .face { position: absolute; inset: 0; border-radius: 18px; padding: 36px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
   background: var(--lm-raised, #fff); box-shadow: 0 24px 60px rgba(0,0,0,.14), 0 0 0 1px var(--lm-line, rgba(0,0,0,.08)); }
-#s38-rev .face.b { transform: rotateY(180deg); }
+#s38-rev .face { transition: transform .32s cubic-bezier(.2,.8,.2,1), opacity .28s; }
+#s38-rev .face.b { transform: rotateY(-90deg); opacity: 0; }
+#s38-rev .card.flip .face.f { transform: rotateY(90deg); opacity: 0; }
+#s38-rev .card.flip .face.b { transform: none; opacity: 1; }
 #s38-rev .face .q { font-size: 30px; font-weight: 600; line-height: 1.35; word-break: break-word; }
 #s38-rev .face .a { font-size: 22px; line-height: 1.5; word-break: break-word; }
 #s38-rev .face .x { margin-top: 14px; color: var(--lm-mute, #888); font-size: 14px; max-height: 120px; overflow: auto; }
