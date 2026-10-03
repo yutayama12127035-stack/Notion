@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      6.2.0
-// @description  v6.2.0: 拳銃・階級章などの既存のアイコンを正しいグループ（ミリタリーなど）へ振り分け直し・ミリタリーに 10 種追加。Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
+// @version      6.3.0
+// @description  v6.3.0: 「Notion」タブ — Notion の標準アイコンを名前からグループ分けし、Library と同じ形で一覧（押すと Notion の色で設定）。名前の自動グループ分けに階級の名前（大佐・少尉・軍曹…・general・sergeant…）も。v6.2.0: 拳銃・階級章などの既存のアイコンを正しいグループ（ミリタリーなど）へ振り分け直し・ミリタリーに 10 種追加。Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -21,6 +21,12 @@
 // ==/UserScript==
 
 /*
+ * v6.3.0（2026-10-03）
+ *   ・「Notion」タブ: Notion の標準アイコン（Default）を、名前（英語）から 24 グループに分け、Library と同じ見た目・検索・グループの見出しで一覧。
+ *     初めて開いた時に Default の一覧を裏で最後までたどって名前と絵を集める（このブラウザに保存・右クリックで集め直し）。
+ *     押すと Default の Filter に名前を入れて Notion の本物を押す＝Notion で選んでいる色のアイコンが付く。
+ *   ・名前からの自動グループ分けに階級（元帥〜二等兵・将校・general・colonel・sergeant…）を追加。もう一度、取り込みを振り分け直す。
+ *
  * v6.2.0（2026-10-03）
  *   ・既存のアイコンを正しいグループへ: 名前にはっきりした言葉（拳銃・銃・階級章・勲章・戦車・ミサイル…／サッカー・野球…／
  *     クリスマス・花火…／ハンマー・レンチ…）がある取り込みは、ミリタリー・スポーツ・季節・行事・道具・工具へ移す（起動時に一度だけ。
@@ -123,7 +129,7 @@
 
 (function () {
   'use strict';
-  const VERSION = '6.2.0';
+  const VERSION = '6.3.0';
   const SIG_VER = '5.0.0';   // v5.1.0: 形の指紋のキャッシュの版（形の計算を変えた時だけ上げる）
   const UW = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const SVGNS = 'http://www.w3.org/2000/svg';
@@ -1829,7 +1835,7 @@
   /* v6.2.0: はっきりした言葉は、学習より先にそのグループへ（拳銃・階級章 → ミリタリー など）。
      ミリタリー・スポーツ・季節・工具は v6.1 で増えたグループなので、それより前に手で別のグループへ入れた物も移す */
   const STRONG = [
-    ['military', /拳銃|ピストル|リボルバー|ライフル|機関銃|散弾銃|小銃|銃弾|弾丸|弾薬|手榴弾|ミサイル|爆弾|階級章|階級|勲章|肩章|軍旗|軍艦|戦艦|戦車|戦闘機|爆撃機|潜水艦|兵士|兵隊|軍隊|軍人|陸軍|海軍|空軍|自衛隊|迷彩|照準|認識票|ドッグタグ|パラシュート|大砲|砲弾|機雷|ミリタリー|短剣|銃|けんじゅう|ぴすとる|らいふる|かいきゅう|くんしょう|せんしゃ|せんとうき|ぐんかん|みりたりー|しゅりゅうだん|\b(pistol|handgun|revolver|rifle|shotgun|gun|guns|bullet|ammo|ammunition|grenade|missile|bomb|insignia|rank|epaulette|tank|fighter|warship|battleship|submarine|soldier|army|navy|military|camo|camouflage|crosshair|dogtag|parachute|cannon|dagger|bayonet|sword|swords)\b/i],
+    ['military', /拳銃|ピストル|リボルバー|ライフル|機関銃|散弾銃|小銃|銃弾|弾丸|弾薬|手榴弾|ミサイル|爆弾|階級章|階級|勲章|肩章|元帥|大将|中将|少将|准将|大佐|中佐|少佐|大尉|中尉|少尉|准尉|曹長|軍曹|伍長|兵長|上等兵|一等兵|二等兵|将校|士官|下士官|軍旗|軍艦|戦艦|戦車|戦闘機|爆撃機|潜水艦|兵士|兵隊|軍隊|軍人|陸軍|海軍|空軍|自衛隊|迷彩|照準|認識票|ドッグタグ|パラシュート|大砲|砲弾|機雷|ミリタリー|短剣|銃|けんじゅう|ぴすとる|らいふる|かいきゅう|くんしょう|せんしゃ|せんとうき|ぐんかん|みりたりー|しゅりゅうだん|\b(pistol|handgun|revolver|rifle|shotgun|gun|guns|bullet|ammo|ammunition|grenade|missile|bomb|insignia|rank|ranks|epaulette|general|colonel|lieutenant|sergeant|corporal|admiral|captain-rank|chevron-rank|military-rank|tank|fighter|warship|battleship|submarine|soldier|army|navy|military|camo|camouflage|crosshair|dogtag|parachute|cannon|dagger|bayonet|sword|swords)\b/i],
     ['sport', /サッカー|野球|バスケ|テニス|ゴルフ|水泳|ラグビー|バレーボール|卓球|ボクシング|柔道|剣道|スキー|スケート|マラソン|陸上競技|表彰台|ストップウォッチ|\b(soccer|football|baseball|basketball|tennis|golf|swimming|rugby|volleyball|boxing|skiing|skate|marathon|podium|stopwatch)\b/i],
     ['season', /クリスマス|ハロウィン|花火|お祭り|紅葉|雪だるま|鯉のぼり|お正月|門松|七夕|ひな祭り|節分|\b(christmas|xmas|halloween|fireworks|snowman|pumpkin|easter)\b/i],
     ['tools', /ハンマー|金づち|レンチ|スパナ|ドライバー|ネジ|ねじ回し|ナット|工具|ペンチ|のこぎり|ドリル|\b(hammer|wrench|spanner|screwdriver|screw|toolbox|pliers|drill)\b/i]
@@ -1899,7 +1905,7 @@
   }
   rebuild();
   if (migrate()) rebuild();
-  if (P.regroupV !== 62) { const r = regroupStrong(); P.regroupV = 62; save(); if (r.n) { rebuild(); console.info('[²⁹] はっきりした名前のアイコンを振り分け直しました: ' + r.moved.join('・')); } }
+  if (P.regroupV !== 63) { const r = regroupStrong(); P.regroupV = 63; save(); if (r.n) { rebuild(); console.info('[²⁹] はっきりした名前のアイコンを振り分け直しました: ' + r.moved.join('・')); } }
   /* 言葉で決まらなかった物は、起動の少し後に形で振り分ける */
   setTimeout(async () => {
     const L = CUSTOM.filter((c) => c.reshape); if (!L.length) return;
@@ -2544,18 +2550,127 @@
   }
 
   /* Library と Import をまとめた入れ物 */
+  /* ============================================================
+   *  v6.3.0: Notion の標準アイコン（Default）を、Library と同じ形でグループ分けして見せる
+   *   ・Default の一覧を一度だけ裏で最後までスクロールして、名前（aria-label）と絵を集める（このブラウザに保存）
+   *   ・名前（英語）からグループを決める（はっきりした言葉 → 学習の言葉）
+   *   ・押すと Default の Filter に名前を入れて、Notion の本物のアイコンを押す（色は Notion で選んでいる色）
+   * ============================================================ */
+  const KEY_N = 'c29-notion-icons-v1';
+  const NCOLORS = /\s+(gray|lightgray|light gray|brown|orange|yellow|green|blue|purple|pink|red|default)$/i;
+  let NICONS = load(KEY_N, []); if (!Array.isArray(NICONS)) NICONS = [];
+  const nGroupOf = (n) => strongGroup(n) || (() => { const t = topOf(wordScores(n)); return t.g && t.v >= 0.6 ? t.g : 'shape'; })();
+  function NotionIcons(menuRef) {
+    const root = document.createElement('div');
+    root.className = 'c29-lib c29-ntn';
+    root.innerHTML = `
+      <div class="c29-head"><input class="c29-q" placeholder="さがす（英語の名前・グループ）" spellcheck="false"><div class="c29-gnav"></div></div>
+      <div class="c29-body"></div><div class="c29-foot"></div><div class="c29-busy" hidden><span></span><button hidden>やめる</button></div>`;
+    const q = root.querySelector('.c29-q'), body = root.querySelector('.c29-body'), foot = root.querySelector('.c29-foot'), gnav = root.querySelector('.c29-gnav');
+    const busy = root.querySelector('.c29-busy'), busyT = busy.querySelector('span');
+    const setBusy = (t) => { busy.hidden = !t; busyT.textContent = t || ''; };
+    const cell = (x) => `<button class="c29-cell" data-n="${esc(x.n)}" title="${esc(x.n)}"><img alt="" src="${esc(x.src)}"></button>`;
+    function render() {
+      root.c29.dirty = false;
+      if (!NICONS.length) { body.innerHTML = '<div class="c29-none">Notion の標準アイコンをまだ読み込んでいません<br><small>開くと一度だけ、Default の一覧から集めます</small><br><button class="c29-btn" data-a="harvest">今すぐ集める</button></div>'; foot.textContent = ''; gnav.innerHTML = ''; return; }
+      const k = q.value.trim().toLowerCase();
+      const by = new Map();
+      for (const x of NICONS) {
+        if (!x.g) x.g = nGroupOf(x.n);
+        if (k && !(x.n.toLowerCase().includes(k) || gja(x.g).includes(k))) continue;
+        if (!by.has(x.g)) by.set(x.g, []);
+        by.get(x.g).push(x);
+      }
+      let html = '', nav = '';
+      for (const g of FIXED) {
+        const list = by.get(g[0]); if (!list || !list.length) continue;
+        list.sort((a, b) => a.n.localeCompare(b.n));
+        html += `<div class="c29-h" data-sec="${g[0]}">${esc(g[1])}<span>${list.length}</span></div><div class="c29-grid">${list.map(cell).join('')}</div>`;
+        nav += `<button data-go="${g[0]}">${esc(g[1])}</button>`;
+      }
+      body.innerHTML = html || '<div class="c29-none">見つかりませんでした</div>';
+      gnav.innerHTML = k ? '' : nav;
+      foot.textContent = NICONS.length + ' 個（Notion の標準）・ 名前からグループ分け ・ 押すと Notion の色で設定 ・ 一覧を集め直す: 右クリック';
+    }
+    async function harvest() {
+      const menu = menuRef();
+      if (!menu) return;
+      setBusy('Notion の標準アイコンを集めています…');
+      try {
+        const T = tabsOf(menu);
+        if (T.icons && T.icons.getAttribute('aria-selected') !== 'true') { PRESSING = true; press(T.icons); PRESSING = false; await sleep(250); }
+        const sc = [...menu.querySelectorAll('.notion-scroller')].find((e) => e.querySelector('[role="gridcell"]'));
+        if (!sc) throw new Error('一覧が見つかりません');
+        const seen = new Map(NICONS.map((x) => [x.n, x]));
+        const y0 = sc.scrollTop; let last = -1, same = 0;
+        sc.scrollTop = 0; await sleep(80);
+        for (let i = 0; i < 400 && same < 3; i++) {
+          for (const c of sc.querySelectorAll('[role="gridcell"][aria-label]')) {
+            const img = c.querySelector('img'); if (!img) continue;
+            const n = c.getAttribute('aria-label').replace(NCOLORS, '').trim();
+            if (n && !seen.has(n)) seen.set(n, { n, src: img.getAttribute('src') || '' });
+          }
+          setBusy('Notion の標準アイコンを集めています…（' + seen.size + ' 個）');
+          sc.scrollTop += Math.max(200, sc.clientHeight * 0.9);
+          await sleep(70);
+          if (sc.scrollTop === last) same++; else same = 0;
+          last = sc.scrollTop;
+        }
+        sc.scrollTop = y0;
+        NICONS = [...seen.values()].filter((x) => x.src);
+        store(KEY_N, NICONS);
+      } catch (e) { toast('集められませんでした: ' + (e && e.message || e), 4000); }
+      setBusy(''); render();
+    }
+    async function apply(n) {
+      const menu = menuRef(); if (!menu) return;
+      setBusy('「' + n + '」を設定しています…');
+      try {
+        const T = tabsOf(menu);
+        if (T.icons && T.icons.getAttribute('aria-selected') !== 'true') { PRESSING = true; press(T.icons); PRESSING = false; await sleep(250); }
+        const inp = menu.querySelector('input[placeholder^="Filter"], input[placeholder*="フィルター"], input[role="combobox"]:not(.c29-q)');
+        const findCell = () => [...menu.querySelectorAll('[role="gridcell"][aria-label]')].find((c) => c.getAttribute('aria-label').replace(NCOLORS, '').trim() === n);
+        let c = null;
+        if (inp) {
+          const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+          set.call(inp, n); inp.dispatchEvent(new Event('input', { bubbles: true }));
+          c = await waitFor(findCell, 1500);
+        }
+        if (!c) c = findCell();
+        if (!c) throw new Error('Notion の一覧に見つかりません');
+        PRESSING = true; press(c); PRESSING = false;
+        await sleep(200);
+        if (inp && inp.isConnected) { const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set; set.call(inp, ''); inp.dispatchEvent(new Event('input', { bubbles: true })); }
+        toast('「' + n + '」を設定しました');
+      } catch (e) { toast('設定できませんでした: ' + (e && e.message || e), 4000); }
+      setBusy('');
+    }
+    q.addEventListener('input', render);
+    body.addEventListener('click', (e) => {
+      const b = e.target.closest('.c29-cell'); if (b) { apply(b.dataset.n); return; }
+      if (e.target.closest('[data-a="harvest"]')) harvest();
+    });
+    body.addEventListener('contextmenu', (e) => { e.preventDefault(); if (confirm('Notion の標準アイコンの一覧を集め直しますか')) { NICONS = []; harvest(); } });
+    gnav.addEventListener('click', (e) => { const b = e.target.closest('[data-go]'); if (!b) return; const h = body.querySelector('[data-sec="' + b.dataset.go + '"]'); if (h) body.scrollTop = h.offsetTop - body.offsetTop; });
+    for (const ev of ['keydown', 'keyup', 'keypress', 'input', 'beforeinput', 'paste']) root.addEventListener(ev, (e) => e.stopPropagation());
+    root.c29 = { dirty: true, render, focus: () => q.focus(), shown: () => { if (!NICONS.length) harvest(); } };
+    return root;
+  }
+
   function buildPanel(cls, onPick, onEdit) {
     const p = document.createElement('div');
     p.className = cls; p.setAttribute('data-c29', '');
     const lib = Library({ onPick, onEdit: (x) => onEdit(x) });
     const imp = Importer();
-    p.append(lib, imp);
+    const ntn = NotionIcons(() => p.__menu || null);
+    p.append(lib, imp, ntn);
     const show = (m) => {
-      lib.hidden = m !== 'lib'; imp.hidden = m !== 'imp';
-      const v = m === 'lib' ? lib : imp; if (v.c29.dirty) v.c29.render();
+      lib.hidden = m !== 'lib'; imp.hidden = m !== 'imp'; ntn.hidden = m !== 'ntn';
+      const v = m === 'lib' ? lib : m === 'ntn' ? ntn : imp; if (v.c29.dirty) v.c29.render();
+      if (m === 'ntn') ntn.c29.shown();
       p.c29.mode = m;
     };
-    p.c29 = { lib, imp, show, mode: 'lib', focus: () => (p.c29.mode === 'lib' ? lib : imp).c29.focus() };
+    p.c29 = { lib, imp, ntn, show, mode: 'lib', focus: () => (p.c29.mode === 'lib' ? lib : p.c29.mode === 'ntn' ? ntn : imp).c29.focus() };
     show('lib');
     return p;
   }
@@ -2600,6 +2715,7 @@
     const M = MENUS.get(menu); if (!M) return;
     if (!M.panel || !M.panel.isConnected) {
       M.panel = buildPanel('c29 c29-panel', (x) => applyFromMenu(menu, x), (x) => { openPanel(menu, 'imp', false); M.panel.c29.imp.c29.edit(x.id); });
+      M.panel.__menu = menu;
       menu.appendChild(M.panel);
     }
     M.mode = mode; P.tab = mode; save();
@@ -2736,12 +2852,13 @@
       try { M.ro = new ResizeObserver(() => { if (M.mode) placePanel(menu, M); }); M.ro.observe(menu); } catch (e) { /* なくても */ }
     }
     const tl = T.icons.closest('[role="tablist"]') || T.icons.parentElement.parentElement;
-    if (!M.tabs.lib || !M.tabs.lib.isConnected || !M.tabs.imp.isConnected) {
+    if (!M.tabs.lib || !M.tabs.lib.isConnected || !M.tabs.imp.isConnected || !M.tabs.ntn || !M.tabs.ntn.isConnected) {
       for (const k in M.tabs) M.tabs[k].remove();
       const anchor = T.icons.parentElement !== tl ? T.icons.parentElement : T.icons;
       M.tabs.lib = makeTab(T, tl, 'Library', 'lib', menu);
       M.tabs.imp = makeTab(T, tl, 'Import', 'imp', menu);
-      anchor.after(M.tabs.lib); M.tabs.lib.after(M.tabs.imp);
+      M.tabs.ntn = makeTab(T, tl, 'Notion', 'ntn', menu);
+      anchor.after(M.tabs.ntn); M.tabs.ntn.after(M.tabs.lib); M.tabs.lib.after(M.tabs.imp);
       for (const t of T.all) if (!t.__c29) {
         t.__c29 = 1;
         t.addEventListener('click', () => { if (PRESSING) return; closePanel(menu); if (t === T.icons) { P.tab = 'def'; save(); } }, true);
@@ -2751,9 +2868,9 @@
     const sel = T.all.find((t) => t.getAttribute('aria-selected') === 'true');
     if (!M.mode && !M.applying && !menu.__c29auto && sel) {
       menu.__c29auto = 1;
-      if (sel === T.emoji) { press(T.icons); if (P.tab === 'lib' || P.tab === 'imp') openPanel(menu, P.tab, false); }
+      if (sel === T.emoji) { press(T.icons); if (P.tab === 'lib' || P.tab === 'imp' || P.tab === 'ntn') openPanel(menu, P.tab, false); }
       else if (sel === T.upload) openPanel(menu, P.tab === 'imp' ? 'imp' : 'lib', false);
-      else if (P.tab === 'lib' || P.tab === 'imp') openPanel(menu, P.tab, false);
+      else if (P.tab === 'lib' || P.tab === 'imp' || P.tab === 'ntn') openPanel(menu, P.tab, false);
     }
     if (M.mode) placePanel(menu, M);
   }
@@ -2839,6 +2956,7 @@
 .c29-tw.on > .c29-ul { background:var(--c-texPri, #37352F); }
 .c29 { --fg:#37352F; --mut:rgba(55,53,47,.5); --line:rgba(55,53,47,.09); --hov:rgba(55,53,47,.06); --bg:#fff; --acc:#2383E2; font-family:ui-sans-serif,-apple-system,"Segoe UI",sans-serif; color:var(--fg); }
 .c29.dark { --fg:rgba(255,255,255,.85); --mut:rgba(255,255,255,.45); --line:rgba(255,255,255,.09); --hov:rgba(255,255,255,.06); --bg:#252525; }
+.c29-ntn .c29-btn { all:unset; cursor:pointer; margin-top:10px; padding:5px 12px; border-radius:6px; background:var(--hov); color:var(--fg); font-size:12px; }
 .c29-panel { position:absolute; z-index:5; display:flex; flex-direction:column; background:var(--bg); overflow:hidden; }
 .c29-lib, .c29-imp { flex:1; min-height:0; display:flex; flex-direction:column; position:relative; }
 .c29-head { padding:8px 12px 8px; display:flex; flex-direction:column; gap:7px; border-bottom:1px solid var(--line); }
