@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
-// @version      1.48.0
-// @description  v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
+// @version      1.49.0
+// @description  v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
 // @run-at       document-idle
@@ -647,12 +647,13 @@ PIPE_SHOW_HEADERS: true,   // v0.37.0: パイプ表示でもセクション見�
                             //   'p'    = 常に <origin>/p/<ID>  / 'bare' = 常に <origin>/<ID>
                             //   'www'  = 常に https://www.notion.so/<ID>（auto で404が続く場合の保険）
     FAIL_COOLDOWN_MS: 60000,
-    CLEANUP_ON_START: true,  // v0.34.0: 起動時に旧版の注入DOM/属性を掃除して元に戻す
+    CLEANUP_ON_START: true,
+    LINE_EDGE_INSET: 0,      // v1.49.0: 線の右端をセルの右端から何 px 手前で止めるか  // v0.34.0: 起動時に旧版の注入DOM/属性を掃除して元に戻す
 
     DEBUG: false,
   };
 
-const VERSION = '1.48.0';
+const VERSION = '1.49.0';
   const STYLE_ID = 'cordi13-style-v044';
   const TAG = '[C13 v' + VERSION + ']';
 
@@ -972,6 +973,11 @@ const VERSION = '1.48.0';
       '[data-cordi13-on] { width: 100% !important; min-width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }',
       '[data-testid="property-value"] :has(> [data-cordi13-on]), [data-testid="property-value"] :has(> * > [data-cordi13-on]) { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }',
       '[data-cordi13-on] > :is(.cordi13-sec-head, .cordi13-sec-gap, .cordi13-sec-div) { grid-column: 1 / -1 !important; flex: 0 0 100% !important; width: 100% !important; justify-self: stretch !important; align-self: stretch !important; }',
+      '/* v1.49.0: 線は ::after で描き、幅はセルの右端までの実測値（--c13-lw） */',
+      '[data-cordi13-on] > .cordi13-sec-head, [data-cordi13-on] > .cordi13-sec-div { position: relative !important; border-bottom-color: transparent !important; overflow: visible !important; }',
+      '[data-cordi13-on] > .cordi13-sec-head::after, [data-cordi13-on] > .cordi13-sec-div::after { content: "" !important; position: absolute !important; left: 0 !important; bottom: -1px !important; height: 0 !important; width: var(--c13-lw, 100%) !important; pointer-events: none !important; }',
+      '[data-cordi13-on] > .cordi13-sec-head::after { border-bottom: 1px solid ' + TUNING.SEPARATOR_COLOR + ' !important; }',
+      '[data-cordi13-on] > .cordi13-sec-div::after { border-bottom: 1px solid ' + TUNING.SECTION_DIVIDER_COLOR + ' !important; }',
       '.cordi13-sec-div {',
       '  flex: 0 0 100% !important;',
       '  width: 100% !important;',
@@ -1977,6 +1983,35 @@ const VERSION = '1.48.0';
     d.appendChild(t);
     return d;
   }
+  /* v1.49.0: 線をセルの右端まで — 実物の Notion ではセルの中身の入れ物が「中身の幅」に縮むため、
+     CSS の width:100% ではセルの端に届かなかった。セルの右端を実測し、見出しの下線と区切り線を
+     その位置まで描く（::after の幅を --c13-lw で渡す）。列の幅を変えた時も ResizeObserver で追従。 */
+  const LINE_RO = typeof ResizeObserver === 'function' ? new ResizeObserver((ents) => {
+    for (const en of ents) { const w = en.target.querySelector && en.target.querySelector('[data-cordi13-on]'); if (w) fitLines(w); }
+  }) : null;
+  function cellOfWrap(wrap) { return wrap.closest('.notion-table-view-cell, [data-col-index], td') || wrap.parentElement; }
+  function fitLines(wrap) {
+    try {
+      const cell = cellOfWrap(wrap);
+      if (!cell) return;
+      if (LINE_RO && !cell.__c13ro) { cell.__c13ro = 1; LINE_RO.observe(cell); }
+      /* 線が途中の入れ物で切られないように（wrap からセルの手前まで） */
+      for (let el = wrap; el && el !== cell; el = el.parentElement) {
+        if (getComputedStyle(el).overflowX !== 'visible') { el.style.setProperty('overflow', 'visible', 'important'); }
+      }
+      requestAnimationFrame(() => {
+        const cr = cell.getBoundingClientRect();
+        if (!cr.width) return;
+        const cs = getComputedStyle(cell);
+        const right = cr.right - (parseFloat(cs.paddingRight) || 0) - (parseFloat(cs.borderRightWidth) || 0) - TUNING.LINE_EDGE_INSET;
+        for (const el of wrap.querySelectorAll('.cordi13-sec-head, .cordi13-sec-div')) {
+          const r = el.getBoundingClientRect();
+          const w = Math.max(r.width, Math.round(right - r.left));
+          el.style.setProperty('--c13-lw', w + 'px');
+        }
+      });
+    } catch (e) { /* noop */ }
+  }
   function makeSecDiv() {
     const d = document.createElement('div');
     d.className = 'cordi13-sec-div';
@@ -2450,6 +2485,7 @@ const VERSION = '1.48.0';
     }
     frag.appendChild(makeEditBtn());
     wrap.appendChild(frag);
+    fitLines(wrap);                                                 // v1.49.0: 線をセルの右端まで（実測）
     /* v0.44.0: アイコンの自己修復を仕込む（初回描画で出ない競合への対策） */
     if (TUNING.ICON_REPAIR) {
       const runIcon = () => { try { repairIcons(wrap); } catch (e) { /* noop */ } };

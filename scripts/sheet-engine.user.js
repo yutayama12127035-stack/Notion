@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³² _ Sheet Engine
 // @namespace    https://cordivestium.local/sheet-engine
-// @version      1.1.0
-// @description  v1.1.0: ドラッグが効かなかったのを修正（■へ近づく途中で隣のセルに移って逃げていた・Notion が先に押下を受け取っていた・離した時に Notion がセルを開いていた）。Notion のテーブルビューに Excel の機能を。①フィルハンドル: セル右下の ■ を下（上）へドラッグすると連続データ（2026.01.01 → 2026.01.02…・1 → 2・Vol.1 → Vol.2・月 → 火・Jan → Feb）、⌥ を押しながらでコピー、■ のダブルクリックで最後の行まで ②元に戻す・「コピー／連続データ」の切り替え ③⇧クリックで範囲を選ぶと、右下に データの個数・合計・平均・最小・最大 ④⌃D で上のセル（範囲なら先頭）をコピー ⑤⌃; で今日の日付・⌃⇧; で今の時刻を入力。
+// @version      1.2.0
+// @description  v1.2.0: ドラッグしても値が画面に出なかったのを修正（書き込みを Notion 自身の経路 saveTransactionsFanout に・セルに出たか確かめ、出なければセルを開いて同じ値を打ち込む）。v1.1.0: ドラッグが効かなかったのを修正（■へ近づく途中で隣のセルに移って逃げていた・Notion が先に押下を受け取っていた・離した時に Notion がセルを開いていた）。Notion のテーブルビューに Excel の機能を。①フィルハンドル: セル右下の ■ を下（上）へドラッグすると連続データ（2026.01.01 → 2026.01.02…・1 → 2・Vol.1 → Vol.2・月 → 火・Jan → Feb）、⌥ を押しながらでコピー、■ のダブルクリックで最後の行まで ②元に戻す・「コピー／連続データ」の切り替え ③⇧クリックで範囲を選ぶと、右下に データの個数・合計・平均・最小・最大 ④⌃D で上のセル（範囲なら先頭）をコピー ⑤⌃; で今日の日付・⌃⇧; で今の時刻を入力。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,14 @@
 // ==/UserScript==
 
 /*
+ * v1.2.0（2026-10-03）
+ *   ・「ドラッグはできるが反映されない」を修正:
+ *     ① 書き込みを saveTransactions → saveTransactionsFanout に（今の Notion が使う経路。旧経路は保存されても
+ *        開いている画面へ変更が配られないことがあった）。使えない時だけ旧経路
+ *     ② 書いた後、値がセルに出るまで最長 1.8 秒待って確かめる。出なければ（文字・数・URL・メール・電話・題字の列）
+ *        セルを開いて同じ値を打ち込む＝ Notion 自身の入力経路で必ず画面に出る（値は同じなので二重にならない）
+ *     ③ それでも出ない時は帯に「画面を更新」。打ち込みを止めるには __c32.set({ typeFallback: false })
+ *
  * v1.1.0（2026-10-03）
  *   ・■ がつかめない／ドラッグが始まらない、を修正:
  *     ① ■ はセルの角の外側に半分はみ出していたため、近づく途中で右や下のセルに入ると ■ がそちらへ移っていた
@@ -45,7 +53,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const TAG = '[³² v' + VERSION + ']';
   if (window.__c32 && window.__c32.version) { console.warn(TAG, '旧版 ' + window.__c32.version + ' が動いています'); return; }
 
@@ -92,9 +100,17 @@
     if (sc) SCHEMA.set(collectionId, sc);
     return sc;
   }
+  /* v1.2.0: 書き込みは saveTransactionsFanout（今の Notion 自身が使う経路）。旧 saveTransactions は
+     保存はされても、開いている画面へ変更が配られず「反映されない」ことがあった。
+     Fanout が使えない時だけ旧経路へ。 */
   async function saveOps(ops, spaceId, tag) {
     if (!ops.length) return;
-    await apiPost('/api/v3/saveTransactions', { requestId: uuid(), transactions: [{ id: uuid(), spaceId, debug: { userAction: tag || 'c32.fill' }, operations: ops }] }, spaceId);
+    const body = () => ({ requestId: uuid(), transactions: [{ id: uuid(), spaceId, debug: { userAction: tag || 'c32.fill' }, operations: ops }] });
+    try { await apiPost('/api/v3/saveTransactionsFanout', body(), spaceId); ST.route = 'fanout'; }
+    catch (e) {
+      if (!/HTTP (404|405|400)/.test(String(e && e.message))) throw e;
+      await apiPost('/api/v3/saveTransactions', body(), spaceId); ST.route = 'legacy';
+    }
   }
 
   /* ============================================================
@@ -386,7 +402,8 @@
     await saveOps(ops, spaceId, 'c32.fill');
     ST.fills++; ST.cells += undo.length;
     lastFill = { srcCells, dstCells, copy, undo, spaceId, prop };
-    return { n: undo.length, prop, sample: vals.length ? plain(vals[vals.length - 1]) || (prop.type === 'date' ? (dateAnn(vals[vals.length - 1]) || {}).start_date : '') : '' };
+    const texts = TEXTISH.has(prop.type) ? vals.map((v) => plain(v)) : null;
+    return { n: undo.length, prop, texts, dstCells, sample: vals.length ? plain(vals[vals.length - 1]) || (prop.type === 'date' ? (dateAnn(vals[vals.length - 1]) || {}).start_date : '') : '' };
   }
   async function undoFill() {
     const f = lastFill;
@@ -540,7 +557,7 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
   function onDragMove(e) { if (!drag) return; e.preventDefault(); e.stopImmediatePropagation(); drag.x = e.clientX; drag.y = e.clientY; drag.alt = e.altKey; computeDrag(e.clientX, e.clientY, e.altKey); }
   let suppressClickUntil = 0;
   function blockMouse(e) { e.preventDefault(); e.stopImmediatePropagation(); }
-  window.addEventListener('click', (e) => { if (Date.now() < suppressClickUntil) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+  window.addEventListener('click', (e) => { if (!e.__c32 && Date.now() < suppressClickUntil) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);
   function onDragKey(e) {
     if (!drag) return;
     if (e.key === 'Escape') { endDrag(); return; }
@@ -580,16 +597,85 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
     showBar('書き込み中…', false);
     try {
       const r = await fill(srcs, cells, copy);
-      showBar((copy ? 'コピー' : '連続データ') + '：「' + r.prop.name + '」に ' + r.n + ' 行' + (r.sample ? '（最後: ' + r.sample + '）' : ''), true);
+      const msg = (copy ? 'コピー' : '連続データ') + '：「' + r.prop.name + '」に ' + r.n + ' 行' + (r.sample ? '（最後: ' + r.sample + '）' : '');
+      showBar(msg + ' — 画面へ反映中…', false);
+      const left = await reflect(r);
+      if (!left) showBar(msg, true);
+      else showBar(msg + '（保存済み。画面に出るまで時間がかかっています）', true, true);
     } catch (err) {
       ST.lastError = String(err && err.message || err);
       console.warn(TAG, err);
       showBar('できませんでした: ' + ST.lastError, false);
     }
   }
-  function showBar(msg, actions) {
+  /* ============================================================
+   *  v1.2.0: 画面への反映を確かめる
+   *   保存した値がセルに出るまで待つ。出ない時は、文字・数・URL の列なら
+   *   セルを開いて同じ値を打ち込む（Notion 自身の入力経路なので必ず画面に出る・値は同じなので二重にはならない）。
+   * ============================================================ */
+  const norm = (t) => String(t || '').replace(/\s+/g, ' ').trim();
+  const shown = (cell, t) => { const c = norm(cell.textContent); return t === '' ? true : c === t || c.indexOf(t) >= 0; };
+  const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+  async function reflect(r) {
+    const cells = r.dstCells;
+    const want = r.texts;
+    const pending = () => cells.filter((c, i) => c.isConnected && want && want[i] != null && !shown(c, norm(want[i])));
+    if (!want) {
+      /* 日付・セレクトなど: 中身が変わるのを待つだけ */
+      const before = cells.map((c) => norm(c.textContent));
+      for (let t = 0; t < 8; t++) { await wait(300); if (cells.every((c, i) => !c.isConnected || norm(c.textContent) !== before[i] || !before[i])) return 0; }
+      return cells.filter((c, i) => c.isConnected && norm(c.textContent) === before[i]).length;
+    }
+    for (let t = 0; t < 6; t++) { await wait(300); if (!pending().length) return 0; }
+    if (P.typeFallback === false) return pending().length;
+    for (const c of pending()) {
+      const i = cells.indexOf(c);
+      try { await typeInto(c, String(want[i])); } catch (e) { console.warn(TAG, 'typeInto', e); }
+    }
+    await wait(250);
+    return pending().length;
+  }
+  function fire(el, type, x, y) {
+    const o = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, button: 0, buttons: type.endsWith('down') ? 1 : 0, view: window };
+    const ev = type.startsWith('pointer') ? new PointerEvent(type, Object.assign({ pointerId: 1, pointerType: 'mouse', isPrimary: true }, o)) : new MouseEvent(type, o);
+    ev.__c32 = true;
+    el.dispatchEvent(ev);
+  }
+  function editorNear(cell) {
+    const a = document.activeElement;
+    if (a && a !== document.body && (a.isContentEditable || a.matches('input, textarea'))) {
+      if (cell.contains(a) || a.closest('.notion-overlay-container, [role="dialog"]')) return a;
+    }
+    return null;
+  }
+  async function typeInto(cell, text) {
+    cell.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const b = cell.getBoundingClientRect();
+    const x = b.left + Math.min(b.width - 6, 24), y = b.top + b.height / 2;
+    const target = document.elementFromPoint(x, y) || cell;
+    for (const t of ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click']) fire(target, t, x, y);
+    let ed = null;
+    for (let k = 0; k < 12 && !(ed = editorNear(cell)); k++) await wait(50);
+    if (!ed) return false;
+    if (ed.matches('input, textarea')) {
+      const proto = ed.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+      Object.getOwnPropertyDescriptor(proto, 'value').set.call(ed, text);
+      ed.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+      const rg = document.createRange(); rg.selectNodeContents(ed);
+      const sl = getSelection(); sl.removeAllRanges(); sl.addRange(rg);
+      if (!document.execCommand('insertText', false, text)) { ed.textContent = text; ed.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: text })); }
+    }
+    await wait(40);
+    ed.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true, cancelable: true }));
+    await wait(120);
+    if (editorNear(cell)) { ed.blur(); await wait(60); }
+    return true;
+  }
+
+  function showBar(msg, actions, reload) {
     installUi();
-    bar.innerHTML = '<span></span>' + (actions ? '<button data-a="undo">元に戻す</button><button data-a="flip">' + (lastFill && lastFill.copy ? '連続データにする' : 'コピーにする') + '</button>' : '') + '<button data-a="x" title="閉じる（Esc）">×</button>';
+    bar.innerHTML = '<span></span>' + (actions ? '<button data-a="undo">元に戻す</button><button data-a="flip">' + (lastFill && lastFill.copy ? '連続データにする' : 'コピーにする') + '</button>' : '') + (reload ? '<button data-a="reload" title="ページを読み込み直して最新の値を出す">画面を更新</button>' : '') + '<button data-a="x" title="閉じる（Esc）">×</button>';
     bar.firstChild.textContent = msg;
     on(bar, true);
     clearTimeout(showBar.t);
@@ -600,6 +686,7 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
     if (!b) return;
     const a = b.getAttribute('data-a');
     if (a === 'x') { on(bar, false); return; }
+    if (a === 'reload') { location.reload(); return; }
     const f = lastFill;
     if (!f) { on(bar, false); return; }
     try {
@@ -694,6 +781,7 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
     dateFormat(f) { if (f) { P.dateFmt = String(f); savePrefs(); } return P.dateFmt; },
     timeFormat(f) { if (f) { P.timeFmt = String(f); savePrefs(); } return P.timeFmt; },
     undo: undoFill,
+    set(o) { Object.assign(P, o || {}); savePrefs(); return Object.assign({}, P); },
     _values: seriesValues
   };
 })();
