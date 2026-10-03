@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³² _ Sheet Engine
 // @namespace    https://cordivestium.local/sheet-engine
-// @version      1.0.0
-// @description  Notion のテーブルビューに Excel の機能を。①フィルハンドル: セル右下の ■ を下（上）へドラッグすると連続データ（2026.01.01 → 2026.01.02…・1 → 2・Vol.1 → Vol.2・月 → 火・Jan → Feb）、⌥ を押しながらでコピー、■ のダブルクリックで最後の行まで ②元に戻す・「コピー／連続データ」の切り替え ③⇧クリックで範囲を選ぶと、右下に データの個数・合計・平均・最小・最大 ④⌃D で上のセル（範囲なら先頭）をコピー ⑤⌃; で今日の日付・⌃⇧; で今の時刻を入力。
+// @version      1.1.0
+// @description  v1.1.0: ドラッグが効かなかったのを修正（■へ近づく途中で隣のセルに移って逃げていた・Notion が先に押下を受け取っていた・離した時に Notion がセルを開いていた）。Notion のテーブルビューに Excel の機能を。①フィルハンドル: セル右下の ■ を下（上）へドラッグすると連続データ（2026.01.01 → 2026.01.02…・1 → 2・Vol.1 → Vol.2・月 → 火・Jan → Feb）、⌥ を押しながらでコピー、■ のダブルクリックで最後の行まで ②元に戻す・「コピー／連続データ」の切り替え ③⇧クリックで範囲を選ぶと、右下に データの個数・合計・平均・最小・最大 ④⌃D で上のセル（範囲なら先頭）をコピー ⑤⌃; で今日の日付・⌃⇧; で今の時刻を入力。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,15 @@
 // ==/UserScript==
 
 /*
+ * v1.1.0（2026-10-03）
+ *   ・■ がつかめない／ドラッグが始まらない、を修正:
+ *     ① ■ はセルの角の外側に半分はみ出していたため、近づく途中で右や下のセルに入ると ■ がそちらへ移っていた
+ *        → ■ をセルの内側の角に置き、角の周り（14px）にいる間は今のセルのまま
+ *     ② Notion は文書全体の入口（document の捕捉段階）で押下を受け取り、範囲選択・行のドラッグを始めていた
+ *        → さらに手前（window の捕捉段階）で ■ の押下を受け止め、Notion には渡さない。ドラッグ中の動きも渡さない
+ *     ③ 離した直後のクリックで Notion がセルの編集を開いていた → ドラッグの直後のクリックは止める
+ *   ・列の見分け: 列見出しの印（class・role）が無い表でも、表の上端より上にある文字（同じ横位置）を見出しとして読む。
+ *
  * v1.0.0（2026-10-03）
  *   ・フィルハンドル（オートフィル）
  *       テーブルのセルにカーソルを乗せると右下に小さな ■。つかんで同じ列を上下へ動かすと、範囲に青い枠と
@@ -36,7 +45,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const TAG = '[³² v' + VERSION + ']';
   if (window.__c32 && window.__c32.version) { console.warn(TAG, '旧版 ' + window.__c32.version + ' が動いています'); return; }
 
@@ -318,7 +327,20 @@
       const d = cx >= b.left && cx <= b.right ? 0 : Math.min(Math.abs(cx - b.left), Math.abs(cx - b.right));
       if (d < bd) { bd = d; best = h; }
     }
-    return best && bd < 4 ? best.textContent.replace(/\s+/g, ' ').trim() : '';
+    if (best && bd < 4) return best.textContent.replace(/\s+/g, ' ').trim();
+    /* 見出しの印が無い時: 一番上の行より上で、同じ横位置にある一番細い文字の入れ物 */
+    const col = columnCells(cell);
+    const top = col.length ? col[0].getBoundingClientRect().top : r.top;
+    let pick = null, pw = Infinity;
+    for (const el of table.querySelectorAll('div, span')) {
+      if (el.closest(CELL)) continue;
+      const b = el.getBoundingClientRect();
+      if (!b.width || b.bottom > top + 1 || b.top < top - 80 || cx < b.left || cx > b.right) continue;
+      const t = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!t || t.length > 60) continue;
+      if (b.width < pw) { pw = b.width; pick = t; }
+    }
+    return pick || '';
   }
   const normName = (s) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
   /* 列 → プロパティ（見出しの名前 → 値の一致の順で決める） */
@@ -397,16 +419,17 @@
     document.body.appendChild(ui);
     handle = ui.querySelector('.c32-handle'); box = ui.querySelector('.c32-box'); tip = ui.querySelector('.c32-tip');
     bar = ui.querySelector('.c32-bar'); stat = ui.querySelector('.c32-stat');
-    handle.addEventListener('pointerdown', onHandleDown, true);
-    handle.addEventListener('dblclick', onHandleDbl, true);
+    /* ■ の押下は window の捕捉段階で受け止める（Notion は document の捕捉段階で受け取るので、それより前） */
+    for (const t of ['pointerdown', 'mousedown']) window.addEventListener(t, (e) => { if (e.target === handle) { e.preventDefault(); e.stopImmediatePropagation(); if (t === 'pointerdown') onHandleDown(e); } }, true);
+    window.addEventListener('dblclick', (e) => { if (e.target === handle) { e.stopImmediatePropagation(); onHandleDbl(e); } }, true);
     bar.addEventListener('click', onBarClick);
     const st = document.createElement('style');
     st.id = 'c32-css';
     st.textContent = `
 #c32-ui{position:fixed;inset:0;pointer-events:none;z-index:2147483000;font:12px/1.4 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif}
-#c32-ui .c32-handle{position:fixed;width:7px;height:7px;margin:-4px 0 0 -4px;background:#2383e2;border:1.5px solid #fff;border-radius:1.5px;box-shadow:0 0 0 .5px rgba(35,131,226,.6);cursor:crosshair;pointer-events:auto;display:none}
+#c32-ui .c32-handle{position:fixed;width:8px;height:8px;margin:-9px 0 0 -9px;background:#2383e2;border:1.5px solid #fff;border-radius:1.5px;box-shadow:0 0 0 .5px rgba(35,131,226,.6);cursor:crosshair;pointer-events:auto;display:none}
 #c32-ui .c32-handle[data-on="1"]{display:block}
-#c32-ui .c32-handle:hover{transform:scale(1.25)}
+#c32-ui .c32-handle:hover{transform:scale(1.3);box-shadow:0 0 0 3px rgba(35,131,226,.18)}
 #c32-ui .c32-box{position:fixed;border:2px solid #2383e2;border-radius:2px;background:rgba(35,131,226,.06);display:none}
 #c32-ui .c32-box[data-on="1"]{display:block}
 #c32-ui .c32-box[data-mode="copy"]{border-style:dashed}
@@ -451,7 +474,12 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
       const [x, y] = lastXY;
       if (handle && handle.getAttribute('data-on') === '1') {
         const hr = handle.getBoundingClientRect();
-        if (x >= hr.left - 3 && x <= hr.right + 3 && y >= hr.top - 3 && y <= hr.bottom + 3) return;
+        if (x >= hr.left - 6 && x <= hr.right + 6 && y >= hr.top - 6 && y <= hr.bottom + 6) return;
+      }
+      /* 角の周り（14px）にいる間は今のセルのまま（隣のセルに入っても ■ を動かさない） */
+      if (hot && hot.isConnected) {
+        const r = hot.getBoundingClientRect();
+        if (x > r.right - 14 && x < r.right + 10 && y > r.bottom - 14 && y < r.bottom + 10) return;
       }
       const c = cellAtPoint(x, y);
       if (c !== hot) showHandle(c);
@@ -475,7 +503,9 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
     document.documentElement.setAttribute('data-c32-drag', '1');
     try { handle.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
     window.addEventListener('pointermove', onDragMove, true);
+    window.addEventListener('mousemove', blockMouse, true);
     window.addEventListener('pointerup', onDragUp, true);
+    window.addEventListener('mouseup', blockMouse, true);
     window.addEventListener('keydown', onDragKey, true);
     window.addEventListener('keyup', onDragKey, true);
   }
@@ -507,7 +537,10 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
       on(tip, true);
     } else on(tip, false);
   }
-  function onDragMove(e) { if (!drag) return; e.preventDefault(); drag.x = e.clientX; drag.y = e.clientY; drag.alt = e.altKey; computeDrag(e.clientX, e.clientY, e.altKey); }
+  function onDragMove(e) { if (!drag) return; e.preventDefault(); e.stopImmediatePropagation(); drag.x = e.clientX; drag.y = e.clientY; drag.alt = e.altKey; computeDrag(e.clientX, e.clientY, e.altKey); }
+  let suppressClickUntil = 0;
+  function blockMouse(e) { e.preventDefault(); e.stopImmediatePropagation(); }
+  window.addEventListener('click', (e) => { if (Date.now() < suppressClickUntil) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);
   function onDragKey(e) {
     if (!drag) return;
     if (e.key === 'Escape') { endDrag(); return; }
@@ -515,7 +548,10 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
   }
   function endDrag() {
     window.removeEventListener('pointermove', onDragMove, true);
+    window.removeEventListener('mousemove', blockMouse, true);
     window.removeEventListener('pointerup', onDragUp, true);
+    window.removeEventListener('mouseup', blockMouse, true);
+    suppressClickUntil = Date.now() + 400;
     window.removeEventListener('keydown', onDragKey, true);
     window.removeEventListener('keyup', onDragKey, true);
     document.documentElement.removeAttribute('data-c32-drag');
@@ -525,7 +561,7 @@ html[data-c32-drag] , html[data-c32-drag] *{cursor:crosshair !important;user-sel
   async function onDragUp(e) {
     const d = drag;
     if (!d) return;
-    e.preventDefault(); e.stopPropagation();
+    e.preventDefault(); e.stopImmediatePropagation();
     if (d.y == null) { endDrag(); return; }
     computeDrag(e.clientX, e.clientY, e.altKey);
     const cells = d.cells.slice(), srcs = d.dir < 0 ? d.src.slice().reverse() : d.src.slice(), copy = d.copy;
