@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      23.0.0
-// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
+// @version      24.0.0
+// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -21,6 +21,15 @@
 // ==/UserScript==
 
 /*
+ * v24.0.0（2026-10-03）— ²⁶ のメニューに Atelier を統合＋次世代の道具
+ *   ・文字を選ぶと出る ²⁶ のメニュー（本文・ブロックの両方）に「Atelier」の段を追加:
+ *       [Atelier] 見た目の全体の設定 ／ [どこでも書式] 画面の要素をクリックして書式 ／ [目次] ／ [フォーカス] ／ [文字数]
+ *     Atelier の左の一覧にも「道具」。右下「Aa」の右クリック・本文のパネルの「Atelier」・⌃⌥A でも開く。
+ *   ・目次: ページの見出し（見出し 1〜3）を右に浮かぶ目次に。押すとそこへ移動、今読んでいる所を示す。
+ *   ・フォーカスモード: サイドバーと上の帯は消え（カーソルを寄せると出る）、書いている段落以外を淡く。
+ *   ・文字数: 左下に ページの文字数・読了時間（1 分 500 字）、文字を選んでいる時は選んだ文字数。
+ *   ・道具の入切はこのブラウザに保存（次に開いた時もそのまま）。
+ *
  * v23.0.0（2026-10-03）— 名前を「Atelier」に。Text Styles（本文の書式）はそのまま全部入っています
  *   ・Atelier（⌃⌥A／右下「Aa」を右クリック／本文のパネルの「Atelier」）: 見た目の設定を一か所に集めた。
  *     場所ごとの書式: 既定の書体・フルDBタイトル・フルDBの説明・フルDBヘッダー・テーブルの題字列・リレーション・
@@ -280,7 +289,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '23.0.0';
+  const VERSION = '24.0.0';
   const API = '__c26';
   if (window[API] && window[API].version) return;
 
@@ -1343,6 +1352,14 @@
    *   ・何か操作した時だけ反映（自動で保存・リロード後も同じ）。何もしなければ何も変えない。
    *   ・メニューの外を押すと閉じる（本文で別の文字を選べば、そこへ付いていく）。Esc: 横のパネル → メニューの順に閉じる。
    * ============================================================ */
+  /* v24.0.0: Atelier の道具の絵 */
+  const ICO_AT = {
+    atelier: '<svg viewBox="0 0 20 20"><path d="M10 2.6l1.5 4.3 4.3 1.5-4.3 1.5L10 14.2l-1.5-4.3-4.3-1.5 4.3-1.5z" fill="currentColor"/><path d="M15.4 12.6l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z" fill="currentColor"/></svg>',
+    pick: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5l4 10.5 1.6-4.4 4.4-1.6z"/><path d="M11 11l4.2 4.2"/><path d="M3 9.5V3h6.5" stroke-dasharray="1.6 1.8"/></svg>',
+    toc: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><path d="M4 5h12M7 9h9M7 13h9M4 17h12"/></svg>',
+    focus: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><path d="M3 7V4.5A1.5 1.5 0 0 1 4.5 3H7M13 3h2.5A1.5 1.5 0 0 1 17 4.5V7M17 13v2.5a1.5 1.5 0 0 1-1.5 1.5H13M7 17H4.5A1.5 1.5 0 0 1 3 15.5V13"/><circle cx="10" cy="10" r="2.2"/></svg>',
+    count: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h2.5v11M3.8 15.5h5"/><path d="M11 7.5a2.2 2.2 0 0 1 4.4 0c0 2.6-4.4 4.4-4.4 8h4.6"/></svg>'
+  };
   const ICO = {
     chev: '<svg class="i-chev" viewBox="0 0 16 16"><path d="M6.722 3.238a.625.625 0 1 0-.884.884L9.716 8l-3.878 3.878a.625.625 0 0 0 .884.884l4.32-4.32a.625.625 0 0 0 0-.884z" fill="currentColor"/></svg>',
     x: '<svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
@@ -1591,6 +1608,13 @@
         '<button class="m9-row" data-sub="para"><span class="m9-ic">' + ICO.para + '</span><span class="m9-lab">段落</span><span class="m9-val m9-paraval"></span>' + ICO.chev + '</button>' +
         '<button class="m9-row" data-sub="pstyle"><span class="m9-ic">' + ICO.pstyle + '</span><span class="m9-lab">段落スタイル</span><span class="m9-val m9-psval"></span>' + ICO.chev + '</button>' +
         '<button class="m9-row m9-blkrow" data-sub="blk" hidden><span class="m9-ic">' + ICO.blk + '</span><span class="m9-lab m9-blkname">コールアウト</span>' + ICO.chev + '</button>' +
+        '<div class="m9-div"></div><div class="m9-attools">' +
+        '<button class="m9-tb m9-atb" data-a="atelier" title="Atelier — 見た目の全体（⌃⌥A）">' + ICO_AT.atelier + '<span>Atelier</span></button>' +
+        '<button class="m9-tb" data-a="atpick" title="どこでも書式 — 画面の要素をクリックして書式">' + ICO_AT.pick + '</button>' +
+        '<button class="m9-tb" data-a="attoc" title="目次">' + ICO_AT.toc + '</button>' +
+        '<button class="m9-tb" data-a="atfocus" title="フォーカスモード">' + ICO_AT.focus + '</button>' +
+        '<button class="m9-tb" data-a="atcount" title="文字数・読了時間">' + ICO_AT.count + '</button>' +
+      '</div>' +
         '<div class="m9-meta"></div></div>' +
       '<div class="m9-body m9-body-text">' +
       '<button class="m9-row m9-turn" data-n="turn" title="ブロックの種類を変える（Notion）"><span class="m9-ic">' + ICO.turn + '</span><span class="m9-lab">Text</span>' + ICO.chev + '</button>' +
@@ -1619,6 +1643,13 @@
       '<button class="m9-row" data-sub="pstyle"><span class="m9-ic">' + ICO.pstyle + '</span><span class="m9-lab">段落スタイル</span><span class="m9-val m9-psval"></span>' + ICO.chev + '</button>' +
       '<button class="m9-row m9-blkrow" data-sub="blk" hidden><span class="m9-ic">' + ICO.blk + '</span><span class="m9-lab m9-blkname">コールアウト</span>' + ICO.chev + '</button>' +
       '<button class="m9-row" data-sub="tpl"><span class="m9-ic">' + ICO.tpl + '</span><span class="m9-lab">文字テンプレート</span><span class="m9-val m9-tplval"></span>' + ICO.chev + '</button>' +
+      '<div class="m9-div"></div><div class="m9-attools">' +
+        '<button class="m9-tb m9-atb" data-a="atelier" title="Atelier — 見た目の全体（⌃⌥A）">' + ICO_AT.atelier + '<span>Atelier</span></button>' +
+        '<button class="m9-tb" data-a="atpick" title="どこでも書式 — 画面の要素をクリックして書式">' + ICO_AT.pick + '</button>' +
+        '<button class="m9-tb" data-a="attoc" title="目次">' + ICO_AT.toc + '</button>' +
+        '<button class="m9-tb" data-a="atfocus" title="フォーカスモード">' + ICO_AT.focus + '</button>' +
+        '<button class="m9-tb" data-a="atcount" title="文字数・読了時間">' + ICO_AT.count + '</button>' +
+      '</div>' +
       '</div>' +
       '<div class="m9-div"></div>' +
       '<div class="m9-foot"><button class="m9-row m9-cmt" data-n="comment">' + '<span class="m9-ic">' + ICO.comment + '</span><span class="m9-lab">コメント</span></button>' +
@@ -2564,6 +2595,9 @@
     const a = b.dataset.a;
     if (a === 'undo') undo();
     else if (a === 'settings') { hidePop(); openPanel(); }
+    else if (a === 'atelier') { hidePop(); openAtelier(); }
+    else if (a === 'atpick') { hidePop(); atPickFromMenu(); }
+    else if (a === 'attoc' || a === 'atfocus' || a === 'atcount') { atTool(a.slice(2)); syncToolButtons(); }
     else if (a === 'iconpos0') blkWrite((tg) => { delete tg.cix; delete tg.ciy; })
     else if (a === 'icons') openIconLibrary(b);
     else if (a === 'fsreset') applyStyle({ fs: null });
@@ -2976,6 +3010,7 @@
   const popOpen = () => !!(pop && !pop.hidden);
   function showPop(s) {
     if (!pop) buildPop();
+    try { syncToolButtons(); } catch (e) { /* noop */ }
     if (pop.classList.contains('m9-bmode')) setMode('text');
     if (s) {
       if (SESSION && keyOfSnap(s) !== SESSION.key) endSession();
@@ -3551,6 +3586,11 @@ html[data-c26-bm]:not(.c26-native) [role="dialog"]:has([role="option"] svg.dupli
 .m9-mini input:focus { box-shadow: 0 0 0 1.5px var(--m9-acc); background: var(--m9-bg); }
 .m9-mini.set input, .m9-num.set input { color: var(--m9-acc); }
 .m9-foot { display: flex; align-items: center; gap: 2px; }
+.m9-attools { display: flex; align-items: center; gap: 2px; padding: 0 2px; }
+.m9-attools .m9-tb:not(.m9-atb) { width: 28px; }
+.m9-attools .m9-atb { width: auto; padding: 0 10px 0 6px; gap: 6px; margin-right: auto; font-size: 13px; letter-spacing: .04em; font-family: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; color: var(--m9-fg); }
+.m9-attools .m9-atb svg { width: 16px; height: 16px; color: #2383e2; }
+.m9-attools .m9-tb[aria-pressed="true"] { background: rgba(35,131,226,.12); color: #2383e2; }
 .m9-foot .m9-cmt { flex: 1 1 auto; width: auto; }
 .m9-busy { font-size: 11px; color: var(--m9-acc); white-space: nowrap; padding: 0 4px; }
 #c26-menu.m9-nochar .m9-tools, #c26-menu.m9-nochar [data-sub="font"], #c26-menu.m9-nochar .m9-sizerow, #c26-menu.m9-nochar [data-sub="deco"], #c26-menu.m9-nochar [data-sub="tpl"], #c26-menu.m9-nochar .m9-cmt { opacity: .35; pointer-events: none; }
@@ -7355,12 +7395,19 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const item = (id, l, extra) => '<button data-nav="' + id + '"' + (atTab === id ? ' data-on="1"' : '') + '>' + atEsc(l) + (extra || '') + '</button>';
     const set = (r) => r.ctl.some((c) => { const v = AT.tokens[c.v || c.p]; return v !== undefined && v !== '' && !(AT_SEED[c.p] !== undefined && AT_SEED[c.p] === v); });
     return '<div class="at-navh">場所</div>' + AT_REGIONS.map((r) => item(r.id, r.label, set(r) ? '<i class="at-dot"></i>' : '')).join('') +
-      '<div class="at-navh">道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('layers', '基礎の層（旧 Stylus）') + item('themes', 'テーマ・書き出し') + item('body', '本文（Text Styles）');
+      '<div class="at-navh">道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '道具（目次・フォーカス…）') + item('layers', '基礎の層（旧 Stylus）') + item('themes', 'テーマ・書き出し') + item('body', '本文（Text Styles）');
   }
   function atRenderMain() {
     const main = atPanel.querySelector('.at-main');
     if (atTab === 'any') return atRenderAny(main);
     if (atTab === 'layers') return atRenderLayers(main);
+    if (atTab === 'tools') {
+      const row = (k, l, n) => '<div class="at-row"><label>' + l + '<small>' + n + '</small></label><div class="at-ctl"><label class="at-tog" data-tool="' + k + '"><input type="checkbox"' + (AT.tools[k] ? ' checked' : '') + '><i></i></label></div><span></span></div>';
+      main.innerHTML = '<h3>道具</h3><p class="at-note">文字を選ぶと出る ²⁶ のメニューの下の段からも入切できます。</p>' +
+        row('toc', '目次', '見出しを右に浮かぶ目次に') + row('focus', 'フォーカスモード', 'サイドバーと上の帯を隠し、書いている段落以外を淡く') + row('count', '文字数・読了時間', '左下に表示（選んだ文字数も）') +
+        '<div class="at-row"><label>どこでも書式</label><div class="at-ctl"><button class="at-btn" data-a="pick">画面でクリックして選ぶ</button></div><span></span></div>';
+      return;
+    }
     if (atTab === 'themes') return atRenderThemes(main);
     if (atTab === 'body') {
       main.innerHTML = '<h3>本文（Text Styles）</h3><p class="at-note">本文の文字・段落・コールアウト・引用の書式は、文字を選ぶと出るメニュー（⌃⌥F）と、本文のパネル（⌃⌥S）で。ここからも開けます。</p><div class="at-row"><button class="at-btn at-pri" data-a="openText">本文のパネルを開く</button></div>';
@@ -7533,6 +7580,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   function atOnClick(e) {
     const t = e.target;
     const nav = t.closest('[data-nav]'); if (nav) { atTab = nav.dataset.nav; atRefresh(); return; }
+    const tl = t.closest('[data-tool]'); if (tl && t.tagName === 'INPUT') { atTool(tl.dataset.tool, t.checked); return; }
     const rs = t.closest('[data-reset]'); if (rs) { delete AT.tokens[rs.dataset.reset]; atWrite('tokens'); atSave(); atRefresh(); return; }
     const rr = t.closest('[data-rreset]'); if (rr) { const r = AT.rules.find((x) => x.id === atEditRule); if (r) { delete r.st[rr.dataset.rreset]; atWrite('rules'); atSave(); atRefresh(); } return; }
     const ed = t.closest('[data-redit]'); if (ed) { atEditRule = atEditRule === ed.dataset.redit ? null : ed.dataset.redit; atRefresh(); return; }
@@ -7675,6 +7723,122 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   }
   const atNorm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
 
+
+  /* ============================================================
+   *  v24.0.0  Atelier の道具（目次・フォーカスモード・文字数）
+   * ============================================================ */
+  if (!AT.tools || typeof AT.tools !== 'object') AT.tools = {};
+  function syncToolButtons() {
+    for (const b of document.querySelectorAll('#c26-menu [data-a="attoc"], #c26-menu [data-a="atfocus"], #c26-menu [data-a="atcount"], .at-panel [data-tool]')) {
+      const k = b.dataset.a ? b.dataset.a.slice(2) : b.dataset.tool;
+      b.setAttribute('aria-pressed', AT.tools[k] ? 'true' : 'false');
+      if (b.dataset.tool) { const i = b.querySelector('input'); if (i) i.checked = !!AT.tools[k]; }
+    }
+  }
+  function atTool(k, force) {
+    AT.tools[k] = force === undefined ? !AT.tools[k] : !!force;
+    atSave();
+    atApplyTools();
+    syncToolButtons();
+    return AT.tools[k];
+  }
+  function atPickFromMenu() { if (!atPanel) openAtelier(); atTab = 'any'; atRefresh(); atStartPick(); }
+  function atToolCss() {
+    if (document.getElementById('atelier-tools-css')) return;
+    const st = document.createElement('style');
+    st.id = 'atelier-tools-css';
+    st.textContent = `
+#at-toc { position: fixed; z-index: 90; right: 22px; top: 120px; width: 220px; max-height: calc(100vh - 220px); overflow: auto; padding: 10px 6px 10px 8px; border-radius: 10px; color: var(--c-texSec, #787774); font: 12.5px/1.45 "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; background: color-mix(in srgb, var(--c-bgPri, #fff) 86%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 0 0 .5px rgba(15,15,15,.08); opacity: .55; transition: opacity .2s; scrollbar-width: none; }
+#at-toc:hover { opacity: 1; }
+#at-toc::-webkit-scrollbar { display: none; }
+#at-toc .at-toch { padding: 0 8px 6px; font-size: 10.5px; letter-spacing: .14em; color: var(--c-texTer, #9b9a97); }
+#at-toc a { display: block; padding: 3px 8px; border-radius: 5px; color: inherit; text-decoration: none; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 2px solid transparent; }
+#at-toc a:hover { background: var(--c-bacHov, rgba(55,53,47,.06)); color: var(--c-texPri, #37352f); }
+#at-toc a[data-l="2"] { padding-left: 20px; font-size: 12px; }
+#at-toc a[data-l="3"] { padding-left: 32px; font-size: 11.5px; }
+#at-toc a.on { color: var(--c-texPri, #37352f); border-left-color: #2383e2; font-weight: 600; }
+html[data-at-focus] .notion-sidebar-container:not(:hover) { opacity: 0 !important; transition: opacity .25s !important; }
+html[data-at-focus] .notion-topbar:not(:hover), html[data-at-focus] .notion-topbar-mobile:not(:hover) { opacity: 0 !important; transition: opacity .25s !important; }
+html[data-at-focus] .layout .notion-page-content > [data-block-id] { transition: opacity .25s ease; }
+html[data-at-focus][data-at-has-cur] .layout .notion-page-content > [data-block-id]:not([data-at-cur]) { opacity: .3; }
+#at-count { position: fixed; z-index: 90; left: calc(var(--at-sbw, 0px) + 18px); bottom: 14px; padding: 4px 10px; border-radius: 999px; color: var(--c-texSec, #787774); font: 11px/1.4 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--c-bgPri, #fff) 88%, transparent); box-shadow: 0 0 0 .5px rgba(15,15,15,.1); pointer-events: none; }
+#at-count b { color: var(--c-texPri, #37352f); font-weight: 600; }
+`;
+    (document.head || document.documentElement).appendChild(st);
+  }
+  const mainContent = () => { const f = document.querySelector('.notion-frame'); return f ? f.querySelector('.notion-page-content') : null; };
+  /* 目次 */
+  let tocEl = null, tocT = 0, tocHeads = [];
+  function tocBuild() {
+    if (!AT.tools.toc) { if (tocEl) { tocEl.remove(); tocEl = null; } return; }
+    const pc = mainContent();
+    const hs = pc ? [...pc.querySelectorAll('.notion-header-block, .notion-sub_header-block, .notion-sub_sub_header-block')] : [];
+    tocHeads = hs.map((h) => ({ el: h, l: h.classList.contains('notion-header-block') ? 1 : h.classList.contains('notion-sub_header-block') ? 2 : 3, t: atNorm(h.textContent).slice(0, 60) })).filter((x) => x.t);
+    if (!tocHeads.length) { if (tocEl) tocEl.hidden = true; return; }
+    atToolCss();
+    if (!tocEl || !tocEl.isConnected) {
+      tocEl = document.createElement('nav');
+      tocEl.id = 'at-toc';
+      tocEl.setAttribute('data-no-passthrough', '1');
+      tocEl.addEventListener('click', (e) => { const a = e.target.closest('a[data-i]'); if (!a) return; e.preventDefault(); const h = tocHeads[+a.dataset.i]; if (h && h.el.isConnected) h.el.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
+      document.body.appendChild(tocEl);
+    }
+    tocEl.hidden = false;
+    tocEl.innerHTML = '<div class="at-toch">目次</div>' + tocHeads.map((h, i) => '<a data-i="' + i + '" data-l="' + h.l + '">' + atEsc(h.t) + '</a>').join('');
+    tocMark();
+  }
+  function tocMark() {
+    if (!tocEl || tocEl.hidden) return;
+    let cur = 0;
+    tocHeads.forEach((h, i) => { if (h.el.isConnected && h.el.getBoundingClientRect().top < 160) cur = i; });
+    tocEl.querySelectorAll('a').forEach((a, i) => a.classList.toggle('on', i === cur));
+  }
+  /* フォーカス */
+  function focusMark() {
+    const de = document.documentElement;
+    if (!AT.tools.focus) { de.removeAttribute('data-at-has-cur'); return; }
+    const sel = document.getSelection();
+    const n = sel && sel.anchorNode;
+    const el = n ? (n.nodeType === 1 ? n : n.parentElement) : null;
+    const pc = mainContent();
+    let blk = null;
+    if (el && pc && pc.contains(el)) { blk = el; while (blk && blk.parentElement !== pc) blk = blk.parentElement; }
+    for (const x of document.querySelectorAll('[data-at-cur]')) if (x !== blk) x.removeAttribute('data-at-cur');
+    if (blk) { blk.setAttribute('data-at-cur', '1'); de.setAttribute('data-at-has-cur', '1'); } else de.removeAttribute('data-at-has-cur');
+  }
+  /* 文字数 */
+  let countEl = null;
+  function countUpdate() {
+    if (!AT.tools.count) { if (countEl) { countEl.remove(); countEl = null; } return; }
+    const pc = mainContent();
+    if (!pc) { if (countEl) countEl.hidden = true; return; }
+    atToolCss();
+    if (!countEl || !countEl.isConnected) { countEl = document.createElement('div'); countEl.id = 'at-count'; document.body.appendChild(countEl); }
+    const sb = document.querySelector('.notion-sidebar-container');
+    countEl.style.setProperty('--at-sbw', (sb ? Math.round(sb.getBoundingClientRect().width) : 0) + 'px');
+    const chars = (s) => [...String(s).replace(/\s+/g, '')].length;
+    const total = chars(pc.innerText || pc.textContent || '');
+    const sel = document.getSelection();
+    const picked = sel && !sel.isCollapsed && pc.contains(sel.anchorNode) ? chars(sel.toString()) : 0;
+    countEl.hidden = false;
+    countEl.innerHTML = (picked ? '選択 <b>' + picked.toLocaleString() + '</b> 字　·　' : '') + '<b>' + total.toLocaleString() + '</b> 字　·　約 ' + Math.max(1, Math.round(total / 500)) + ' 分';
+  }
+  function atApplyTools() {
+    document.documentElement.toggleAttribute('data-at-focus', !!AT.tools.focus);
+    if (AT.tools.focus) atToolCss();
+    tocBuild(); focusMark(); countUpdate();
+  }
+  let toolT = 0;
+  const toolSoon = () => { clearTimeout(toolT); toolT = setTimeout(() => { if (AT.tools.toc) tocBuild(); if (AT.tools.count) countUpdate(); }, 500); };
+  document.addEventListener('selectionchange', () => { if (AT.tools.focus) focusMark(); if (AT.tools.count) toolSoon(); });
+  window.addEventListener('scroll', () => { if (AT.tools.toc) { clearTimeout(tocT); tocT = setTimeout(tocMark, 60); } }, true);
+  new MutationObserver((recs) => {
+    if (!AT.tools.toc && !AT.tools.count) return;
+    for (const r of recs) { const t = r.target; if (t.nodeType === 1 && t.closest && (t.closest('#at-toc, #at-count, .at-panel, #c26-menu'))) continue; toolSoon(); return; }
+  }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  document.addEventListener('DOMContentLoaded', () => setTimeout(atApplyTools, 800), { once: true });
+  if (document.readyState !== 'loading') setTimeout(atApplyTools, 800);
+
   /* 起動（document-start: 基礎の層と変数は描画前に入れる） */
   atWrite();
   document.addEventListener('DOMContentLoaded', () => { atKeepLast(); g12Start(); }, { once: true });
@@ -7692,7 +7856,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     set: (k, v) => { if (v === undefined || v === null || v === '') delete AT.tokens[k]; else AT.tokens[k] = String(v); atWrite('tokens'); atSave(); return AT.tokens[k]; },
     layer: (k, on) => { AT.layers[k] = on !== false; atWrite('base'); atSave(); return AT.layers[k]; },
     rules: () => AT.rules.map((r) => ({ name: r.name, sel: r.sel, on: r.on !== false })),
-    pick: () => { openAtelier(); atTab = 'any'; atRefresh(); atStartPick(); },
+    pick: () => { if (!atPanel) openAtelier(); atTab = 'any'; atRefresh(); atStartPick(); },
+    tool: (k, on) => atTool(k, on),
     css: () => [atBaseCss().length + ' 文字（基礎の層）', atTokensCss(), atRulesCss()].join('\n'),
     export: () => JSON.stringify({ atelier: AT })
   };
