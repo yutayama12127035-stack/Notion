@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      1.0.0
-// @description  サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
+// @version      1.1.0
+// @description  v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -14,6 +14,14 @@
 // ==/UserScript==
 
 /*
+ * v1.1.0（2026-10-03）
+ *   ・字下げが一度も効いていなかった: CSS が data-c33-pad という属性を条件にしていたのに、JS は CSS 変数しか付けていなかった。
+ *   ・ビューのアイコンが「■」: 土台の規則（強さ ID 3 つ分）が mask を none で打ち消し、種類ごとの絵の指定（弱い）が負けていた。
+ *   ・ビューが左端に崩れる: Notion のビュー行の字下げは深さに関係なく 24px 固定。「左に浅い行が DB」という判定が外れていた
+ *     → ビュー行のすぐ上のページ行を DB とみなし、DB の位置＋一段で描く。
+ *   ・見た目: グループの間の線・ビューの導線・選択中の背景と左の印をやめた（ずらしているのが背景で見えていた）。
+ *     選択中は文字を濃く太く。ワークスペース（■）は小さな見出しにして、ワークスペースごとに少し間を空ける。
+ *
  * v1.0.0（2026-10-03）
  *   ・階層
  *       旧: ★グループ ＞ ■ワークスペース ＞ ●フルDB（一段下）＞ •ビュー
@@ -24,8 +32,7 @@
  *       __c33.set({ flat: false }) で元の段（DB を一段下げる）に戻せる。
  *   ・ビューの種類: DB のページの view_ids を Notion の API で読み、並び順でビューの行と対応させる（読めない時は名前から推定）。
  *       ³¹ Atlas Views で作った「Atlas」は専用のアイコン。
- *   ・デザイン: ★グループ見出しは明朝・件数は小さな丸、グループの間に細い線。■ワークスペースは字間を空けた小さな見出し。
- *       ●行は明朝 13px・高さ 28px・角丸、選択中は左に 2px の色の印（グループの色）。▲ビューは 12px・導線つき。
+ *   ・デザイン: ★グループ見出しの件数は小さな丸。■ワークスペースは字間を空けた小さな見出し。●行は明朝 13px。▲ビューは 12px（v1.1.0 で線と選択の背景はやめた）。
  *       値は CSS 変数（--c33-*）。²⁶ Atelier の「サイドバー」から書体・大きさを変えられる。
  *   ・Notion の要素は動かさない（属性 data-c33-* と CSS 変数だけ）。¹⁶ の並べ替え・ドラッグはそのまま。
  *   ・コンソール: __c33.status() ／ __c33.set({ flat, scale }) ／ __c33.off()
@@ -34,7 +41,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -177,11 +184,13 @@
     const pagePads = info.filter((x) => !x.slot).map((x) => x.pad);
     const minPad = pagePads.length ? Math.min(...pagePads) : Math.min(...info.map((x) => x.pad));
     /* ビューの行のすぐ上（左に浅い）のページ行が DB */
+    /* ビュー行のすぐ上（間にビュー行だけを挟む）のページ行が DB（Notion のビュー行の字下げは 24px 固定なので深さでは見ない） */
     for (let i = 0; i < info.length; i++) {
       const x = info[i];
       if (!x.slot) continue;
       for (let j = i - 1; j >= 0; j--) {
-        if (!info[j].slot && info[j].pad < x.pad) { info[j].db = true; x.dbRow = info[j]; break; }
+        if (info[j].slot) continue;
+        info[j].db = true; x.dbRow = info[j]; break;
       }
     }
     const teamKey = team.getAttribute('data-c16-k') || norm(btn.textContent);
@@ -194,7 +203,7 @@
         const pad = base + P.viewIndent;
         setAttr(r, 'data-c33-kind', 'view');
         setVar(r, '--c33-pad', pad.toFixed(1) + 'px');
-        setVar(r, '--c33-guide', (base + 9).toFixed(1) + 'px');
+        setAttr(r, 'data-c33-pad', '1');
         setAttr(x.slot, 'data-c33-vslot', '1');
         let type = typeFromName(nameOf(r));
         if (db && db.id) {
@@ -211,6 +220,7 @@
       const level = Math.max(0, x.pad - minPad);
       x.newPad = P.flat ? teamPad + level * P.scale : x.pad;
       setVar(r, '--c33-pad', x.newPad.toFixed(1) + 'px');
+      setAttr(r, 'data-c33-pad', '1');
       x.id = idOf(r);
       const dbKey = teamKey + '|' + name;
       if (x.db) { if (!KNOWN_DB[dbKey]) { KNOWN_DB[dbKey] = 1; saveDb(); } }
@@ -255,7 +265,7 @@
     if (document.getElementById('c33-css')) return;
     const st = document.createElement('style');
     st.id = 'c33-css';
-    const icons = Object.entries(VICON).map(([k, v]) => 'html[data-c33] [data-c33-kind="view"][data-c33-vt="' + k + '"] [data-c33-vslot]::after{-webkit-mask-image:' + v + ';mask-image:' + v + ';}').join('\n');
+    const icons = Object.entries(VICON).map(([k, v]) => 'html[data-c33] [data-c33-kind="view"][data-c33-vt="' + k + '"] [data-c33-vslot]' + B + '::after{-webkit-mask-image:' + v + ' !important;mask-image:' + v + ' !important;}').join('\n');
     st.textContent = `
 :root {
   --c33-serif: var(--c16-head-font, "Baskerville", "Hiragino Mincho ProN", "Yu Mincho", serif);
@@ -265,39 +275,28 @@
   --c33-view-size: 12px;
   --c33-team-size: 10.5px;
   --c33-team-track: .14em;
+  --c33-team-gap: 8px;
   --c33-radius: 6px;
-  --c33-hover: var(--c-bacHov, rgba(55,53,47,.06));
-  --c33-active: color-mix(in srgb, var(--c33-tint, #2383e2) 9%, transparent);
-  --c33-guide-c: color-mix(in srgb, var(--c-texPri, #37352f) 14%, transparent);
 }
-/* ★ グループ見出し */
-html[data-c33] #c16-root .c16-head${B} { letter-spacing: .04em; border-radius: 8px; }
+/* ★ グループ見出し: 件数を小さな丸に */
 html[data-c33] #c16-root .c16-cnt${B} { min-width: 18px; height: 16px; padding: 0 5px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; background: color-mix(in srgb, var(--c-texPri, #37352f) 6%, transparent); font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-html[data-c33] #c16-root .c16-sec[data-c16-first="0"]${B} { position: relative; }
-html[data-c33] #c16-root .c16-sec[data-c16-first="0"]${B}::before { content: ""; position: absolute; left: 6px; right: 10px; top: calc(var(--c16-gap-sections, 18px) / -2); height: 1px; background: linear-gradient(90deg, transparent, var(--c33-guide-c) 18%, var(--c33-guide-c) 82%, transparent); pointer-events: none; }
-/* ■ ワークスペース（小さな見出し） */
-html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B} { min-height: 26px !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} .notranslate${B} { font-family: var(--c33-serif) !important; font-size: var(--c33-team-size) !important; font-weight: 600 !important; letter-spacing: var(--c33-team-track) !important; text-transform: uppercase; color: var(--c-texSec, #787774) !important; }
-/* ● DB・ページ */
+/* ■ ワークスペース（小さな見出し）。ワークスペースごとに少し間を空ける */
+html[data-c33] ${SEL_TEAM}[data-c33-team]${B} { margin-top: var(--c33-team-gap) !important; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B},
+html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} :is(div, span):not(:has(svg, img))${B} { font-family: var(--c33-serif) !important; font-size: var(--c33-team-size) !important; font-weight: 600 !important; letter-spacing: var(--c33-team-track) !important; text-transform: uppercase !important; color: var(--c-texSec, #787774) !important; }
+/* ● DB・ページ ／ ▲ ビュー: 字下げ */
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-pad]${B} { padding-inline-start: var(--c33-pad) !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="db"]${B},
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="page"]${B} { min-height: var(--c33-item-h) !important; border-radius: var(--c33-radius) !important; position: relative; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"])${B} { min-height: var(--c33-item-h) !important; border-radius: var(--c33-radius) !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] :is([data-c33-kind="db"], [data-c33-kind="page"]) .notranslate${B} { font-family: var(--c33-item-font) !important; font-size: var(--c33-item-size) !important; letter-spacing: .02em; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="db"] .notranslate${B} { font-weight: 600 !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][style*="bacIntTra"]${B} { background: var(--c33-active) !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][style*="bacIntTra"]${B}::before { content: ""; position: absolute; left: 2px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: var(--c33-tint, #2383e2); }
-/* ▲ ビュー */
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"]${B} { min-height: 24px !important; height: 26px !important; font-size: var(--c33-view-size) !important; color: var(--c-texSec, #787774) !important; border-radius: var(--c33-radius) !important; position: relative; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"]${B}::after { content: ""; position: absolute; left: var(--c33-guide, 18px); top: 0; bottom: 0; width: 1px; background: var(--c33-guide-c); pointer-events: none; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"][style*="bacIntTra"]${B} { color: var(--c-texPri, #37352f) !important; }
-html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"][style*="bacIntTra"]${B}::after { background: var(--c33-tint, #2383e2); width: 2px; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind="view"]${B} { min-height: 24px !important; height: 26px !important; font-size: var(--c33-view-size) !important; color: var(--c-texSec, #787774) !important; border-radius: var(--c33-radius) !important; }
+/* 選択中: 背景・影は出さず、文字を濃く太く */
+html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][style*="bacIntTra"]${B} { background: transparent !important; box-shadow: none !important; color: var(--c-texPri, #37352f) !important; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][style*="bacIntTra"] :is(.notranslate, div:not(:has(*)))${B} { font-weight: 700 !important; color: var(--c-texPri, #37352f) !important; }
+/* ▲ ビューの種類のアイコン（「•」の代わり） */
 html[data-c33] [data-c33-vslot]${B} { position: relative; width: 16px !important; margin-inline-end: 7px !important; }
 html[data-c33] [data-c33-vslot]${B} > * { opacity: 0 !important; }
-html[data-c33] [data-c33-vslot]${B}::after { content: ""; position: absolute; inset: 50% auto auto 50%; width: 15px; height: 15px; transform: translate(-50%, -50%); background: currentColor; opacity: .78; -webkit-mask: none center / 15px 15px no-repeat; mask: none center / 15px 15px no-repeat; }
+html[data-c33] [data-c33-vslot]${B}::after { content: ""; position: absolute; left: 50%; top: 50%; width: 15px; height: 15px; transform: translate(-50%, -50%); background: currentColor; opacity: .78; -webkit-mask-position: center; mask-position: center; -webkit-mask-size: 15px 15px; mask-size: 15px 15px; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 ${icons}
-@media (prefers-reduced-motion: no-preference) {
-  html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B} { transition: background-color .12s ease; }
-}
 `;
     (document.head || document.documentElement).appendChild(st);
   }
