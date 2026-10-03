@@ -2,7 +2,7 @@
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
 // @version      1.51.0
-// @description  v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
+// @description  v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。ボードビュー: リレーションで分けたボードの列（本 1 冊ごと）を、シリーズ（グループ）ごとに隣どうしへ並べ替え（見た目だけ）、シリーズの最初の列の上に名前とアイコン、境目に縦線。名前のクリックで題名とアイコン・右クリックでサブグループ。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
 // @run-at       document-idle
@@ -20,6 +20,10 @@
  *    ・本の入っていないサブグループは出さない。サブグループがあるセルは 1 行パイプにしない。
  *    ・保存は今までと同じ（このブラウザ・²³ Page Relation Show All と共通）。Notion のデータは書き換えない。
  *    ・見た目は ²⁶ Atelier の「リレーション」→ サブグループ（--c13-sub-*）。
+ *  - ボードビュー: リレーション（例 Tactus）でグループ分けしたボードは、関係先の本 1 冊ごとに列ができ、シリーズがばらばらだった。
+ *    → 列を表と同じシリーズ（自分で作ったグループ・移動・サブグループも共通）で並べ替え（CSS の order・Notion の並びは変えない）、
+ *      シリーズの最初の列の上に名前、境目に縦線。__c13.tune({ BOARD_ORDER: false }) で並べ替えだけ止める・BOARD_SERIES: false で全部止める。
+ *      __c13.board() で今すぐ並べ直す。
  *
  * v1.48.0（2026-10-03）
  *  - 見出しの下線・区切り線を必ずセルの端まで: 項目が少なくグリッドにならないセル（例: 1件だけのシリーズ）では、
@@ -554,6 +558,8 @@
    */
 
   const TUNING = {
+    BOARD_SERIES: true,        // v1.51.0: リレーションで分けたボードの列を、シリーズごとに並べて名前を出す
+    BOARD_ORDER: true,         // v1.51.0: 同じシリーズの列を隣どうしに並べ替える（見た目だけ・Notion の並びは変えない）
     MULTI_THRESHOLD: 2,        // v0.43.0: 3件以上で整列グリッド。7〜10件が「何も起きない」空白地帯だった   // 全件数がこれを超えたらグリッド化（それ以下はフレックス折返しのまま）
     GATE_MODE: 'either',   // v0.35.0: 既定。チップ付きは無条件、チップ無しは
                            //   legacy（最長 >= MIN_CHARS_GATE 字）or 件数 >= MIN_ITEMS_GATE or 全角換算 >= MIN_WIDTH_EQUIV。
@@ -2843,6 +2849,132 @@ const VERSION = '1.51.0';
     }, TUNING.DEBOUNCE_MS);
   }
 
+  /* ============================================================
+   *  v1.51.0: ボードビュー — リレーション（例 Tactus）で分けたボードは、関係先の本 1 冊ごとに列ができ、
+   *  シリーズがばらばらに並ぶ。→ 表のセルと同じ「シリーズ（グループ）」で列を並べ直し（見た目だけ）、
+   *  シリーズの最初の列の上に名前とアイコン、シリーズの境目に縦線。自分で作ったグループ・移動・名前の変更も表と共通。
+   *  名前をクリック → 題名とアイコン、右クリック → サブグループ（表のセルで使う分け方）
+   * ============================================================ */
+  let CG_SIG = 0;
+  function boardCss() {
+    if (document.getElementById('c13b-css')) return;
+    const st = document.createElement('style');
+    st.id = 'c13b-css';
+    st.textContent = [
+      '.notion-board-view [data-c13b] { position: relative !important; }',
+      '.c13b-cap { position: absolute; top: var(--c13b-cap-top, -8px); left: 8px; right: 8px; display: flex; align-items: center; gap: 5px; height: 14px; overflow: hidden; white-space: nowrap; font: var(--c13-head-weight, 700) var(--c13b-cap-size, 10.5px)/1 var(--c13-head-font, "Baskerville", "Hiragino Mincho ProN", serif); letter-spacing: .05em; color: var(--c13-head-color, var(--c-texSec, rgba(55,53,47,.65))); cursor: pointer; z-index: 3; }',
+      '.c13b-cap img, .c13b-cap .c13b-emo { width: 12px; height: 12px; flex: none; object-fit: contain; font-size: 11px; line-height: 12px; }',
+      '.c13b-cap:hover span:last-child { text-decoration: underline dotted; text-underline-offset: 2px; }',
+      '.notion-board-view [data-c13b-first="1"] { box-shadow: inset var(--c13-vline-w, 1px) 0 0 var(--c13b-line, var(--c13-div-color, rgba(55,53,47,.18))) !important; }'
+    ].join('\n');
+    (document.head || document.documentElement).appendChild(st);
+  }
+  const uuidOf = (h) => h.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5');
+  function boardPid(h) {
+    const a = h.querySelector('a[href*="p="]');
+    const m = a && /[?&]p=([0-9a-f]{32})/i.exec(a.getAttribute('href') || '');
+    return m ? uuidOf(m[1].toLowerCase()) : '';
+  }
+  function boardCols(bv) {
+    const heads = Array.from(bv.querySelectorAll('div[style*="cursor: grab"]')).filter((h) => h.querySelector('[aria-label="More group options"]'));
+    const groups = Array.from(bv.querySelectorAll('.notion-board-group'));
+    return { heads, groups };
+  }
+  function capIcon(icon) {
+    if (!icon) return null;
+    const r = resolveIcon(String(icon), '');
+    if (r.kind === 'url') { const im = document.createElement('img'); im.src = r.src; im.alt = ''; return im; }
+    if (r.kind === 'unknown') return null;
+    const sp = document.createElement('span'); sp.className = 'c13b-emo'; sp.textContent = String(icon); return sp;
+  }
+  async function boardOne(bv) {
+    const { heads, groups } = boardCols(bv);
+    if (heads.length < 2) return;
+    const ids = heads.map(boardPid);
+    const uniq = Array.from(new Set(ids.filter(Boolean)));
+    if (uniq.length < 2) return;
+    const sig = ids.join(',') + '|' + CG_SIG + '|' + groups.length;
+    if (bv.__c13b === sig && heads.every((h) => !boardPid(h) || h.hasAttribute('data-c13b'))) return;
+    bv.__c13b = sig;
+    const recs = await fetchBlocks(uniq);
+    if (!recs.size) return;
+    const sp = await findSeriesProp(recs, uniq, null, null);
+    if (!sp) { log('[board] シリーズのプロパティが見つからないので並べ替えない'); return; }
+    const refs = new Map(), sids = [];
+    for (const id of uniq) {
+      const r = recs.get(id);
+      const ref = parseSeriesValue(r && r.properties ? r.properties[sp.key] : null);
+      refs.set(id, ref);
+      if (ref && ref.kind === 'page' && !seriesCache.has(ref.raw)) sids.push(ref.raw);
+    }
+    if (sids.length) {
+      const srs = await fetchBlocks(Array.from(new Set(sids)));
+      for (const [sid, sr] of srs) { const t = recTitle(sr); if (t) { seriesCache.set(sid, t); seriesIconCache.set(sid, (sr.format && sr.format.page_icon) || null); } }
+    }
+    let sections = [];
+    const byName = new Map();
+    for (const id of uniq) {
+      const ref = refs.get(id), r = recs.get(id);
+      let series = null, sid = '';
+      if (ref && ref.kind === 'page' && seriesCache.has(ref.raw)) { series = seriesCache.get(ref.raw); sid = ref.raw; }
+      else if (ref && ref.kind === 'text') series = ref.raw;
+      const standalone = !series;
+      const name = series || TUNING.STANDALONE_LABEL;
+      if (!byName.has(name)) { const sec = { name, icon: standalone ? null : (sid ? seriesIconCache.get(sid) : null), sid, standalone, items: [] }; byName.set(name, sec); sections.push(sec); }
+      byName.get(name).items.push({ id, title: r ? recTitle(r) : '' });
+    }
+    const st = sections.findIndex((x) => x.standalone);
+    if (st >= 0) sections.push(sections.splice(st, 1)[0]);
+    sections.forEach((x) => { x.iconOrig = x.icon || ''; });
+    sections = CG.regroup(sections, TUNING.STANDALONE_LABEL);
+    /* 並び順（サブグループがあればその順も） */
+    const orderOf = new Map(), firstOf = new Map();
+    let ord = 1;
+    for (const sec of sections) {
+      const list = [];
+      const walk = (n) => { list.push(...n.items); (n.subs || []).forEach(walk); };
+      list.push(...(sec.direct || sec.items));
+      (sec.subs || []).forEach(walk);
+      list.forEach((it, i) => { orderOf.set(it.id, ord++); if (i === 0) firstOf.set(it.id, sec); });
+    }
+    boardCss();
+    const same = groups.length === heads.length;
+    heads.forEach((h, i) => {
+      const id = ids[i];
+      const g = same ? groups[i] : null;
+      h.querySelectorAll(':scope > .c13b-cap').forEach((x) => x.remove());
+      if (!id || !orderOf.has(id)) { h.removeAttribute('data-c13b-first'); if (g) g.removeAttribute('data-c13b-first'); return; }
+      h.setAttribute('data-c13b', '1');
+      if (TUNING.BOARD_ORDER && same) { h.style.setProperty('order', String(orderOf.get(id)), 'important'); g.style.setProperty('order', String(orderOf.get(id)), 'important'); }
+      const sec = firstOf.get(id);
+      if (sec) {
+        h.setAttribute('data-c13b-first', '1'); if (g) g.setAttribute('data-c13b-first', '1');
+        const cap = document.createElement('div');
+        cap.className = 'c13b-cap';
+        cap.title = 'クリック: 題名とアイコン／右クリック: サブグループ';
+        const ic = capIcon(sec.icon); if (ic) cap.appendChild(ic);
+        const t = document.createElement('span'); t.textContent = sec.label || sec.name; cap.appendChild(t);
+        cap.__cg = { key: sec.key, name: sec.name, icon: sec.standalone ? '' : (sec.iconOrig || ''), items: sec.items.map((x) => ({ id: x.id, title: x.title })) };
+        for (const ev of ['pointerdown', 'mousedown']) cap.addEventListener(ev, (e) => e.stopPropagation());
+        cap.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); CG.openEditor({ key: cap.__cg.key, name: cap.__cg.name, icon: cap.__cg.icon, anchor: cap }); });
+        cap.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); CG.openSubMenu({ key: cap.__cg.key, name: t.textContent, items: cap.__cg.items, anchor: cap }); });
+        h.appendChild(cap);
+      } else { h.removeAttribute('data-c13b-first'); if (g) g.removeAttribute('data-c13b-first'); }
+    });
+    log('[board] ' + uniq.length + ' 列を ' + sections.length + ' のシリーズに並べました');
+  }
+  let boardT = 0, boardBusy = false;
+  function scheduleBoard() {
+    if (!TUNING.BOARD_SERIES || boardT) return;
+    boardT = setTimeout(async () => {
+      boardT = 0;
+      if (boardBusy) return;
+      boardBusy = true;
+      try { for (const bv of document.querySelectorAll('.notion-board-view')) { try { await boardOne(bv); } catch (e) { log('[board] ' + (e && e.message || e)); } } }
+      finally { boardBusy = false; }
+    }, 500);
+  }
+
   function start() {
     if (window.__cordi13ActiveVersion && window.__cordi13ActiveVersion !== VERSION) {
       log('!! 注意: 別バージョン（v' + window.__cordi13ActiveVersion + '）の C13 スクリプトも同時に走ってます。Tampermonkey で旧版を無効化してください（CSS が競合して見た目が入れ替わります）');
@@ -2885,19 +3017,23 @@ const VERSION = '1.51.0';
     let cgT = 0;
     CG.on(() => {
       clearTimeout(cgT);
-      cgT = setTimeout(() => { try { cleanupInjected(); sweep(); } catch (err) { /* noop */ } }, 60);
+      cgT = setTimeout(() => { try { cleanupInjected(); sweep(); } catch (err) { /* noop */ } CG_SIG++; scheduleBoard(); }, 60);
     });
     const mo = new MutationObserver((recs) => {
       try { prePaintNative(recs); } catch (e) { /* noop */ }   // v0.46.0: 描画前に「不発」を付ける
       schedule();
+      scheduleBoard();
     });
     mo.observe(document.body, { childList: true, subtree: true });
+    scheduleBoard();
     log('クリック: ' + TUNING.CLICK_MODE + (TUNING.CLICK_NEW_TAB ? '・別タブ' : '・同じタブ') +
       '（成否はピークの器の出現で判定・フォールバック=' + (TUNING.CLICK_FALLBACK ? 'あり' : 'なし') + '）');
     /* チューニング用の窓口（読み取りのみ） */
     try {
       window.__c13 = {
         VERSION,
+        /* v1.51.0: ボードの列をシリーズで並べ直す（今すぐ） */
+        board: async function () { const out = []; for (const bv of document.querySelectorAll('.notion-board-view')) { bv.__c13b = ''; try { await boardOne(bv); out.push(document.querySelectorAll('.c13b-cap').length + ' 見出し'); } catch (e) { out.push('失敗: ' + (e && e.message || e)); } } return out; },
         TUNING,
         metrics: charMetrics,
         tune: tune,
