@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁴ _ Image Cells
 // @namespace    https://cordivestium.local/image-cells
-// @version      1.0.0
+// @version      2.0.0
 // @description  テーブルビューの画像（ファイルのプロパティ）を、ギャラリーのように大きく・くっきり。Notion は表の画像を高さ 24px・幅 100px の縮小版で出すが、セルの幅いっぱい（または決めた高さ）に広げ、表示の大きさ×画面の解像度に合わせた高解像度版（最大 3840px＝4K）に差し替える。読み込みが済んでから入れ替えるので、ちらつかない。複数の画像は並べて（列の数は指定可）。大きさ・角の丸み・間隔・合わせ方は ²⁶ Atelier「表のセル」から。⌥クリックで原寸の拡大表示。³¹ Atlas Views の代わり（Atlas は廃止）。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -13,6 +13,13 @@
 // ==/UserScript==
 
 /*
+ * v2.0.0（2026-10-03）
+ *   ・表紙のセルに乗せると、コメントのボタンが「白い帯」になって表紙の上を横いっぱいに覆っていた（²⁷ の画像）。
+ *     原因はこのスクリプト: 画像を並べるために「セルの中身の直接の子」を全部 横いっぱいの格子（display: grid; width: 100%）にしていたが、
+ *     Notion は乗せた時だけ、同じ段に「ボタンの段」（position: absolute の箱 ＞ .quickActionContainer）を差し込む。
+ *     それまで格子にして横いっぱいに伸ばしていた。→ 格子にするのは画像の段だけ（absolute の箱・ボタンの段は除く）。
+ *   ・ボタンの段そのものも、表紙を隠さないように: 右上の小さなすりガラスの粒（半透明）。粒に乗せた時だけはっきり出る。
+ *     ³⁷ Lumière が無くても効く。
  * v1.0.0（2026-10-03）
  *   ・対象: 表ビューのセルの中の画像（/image/… の Notion 経由の画像・外部の画像 URL）。フルページの DB・インライン DB・ピークの中。
  *   ・大きく: 既定は「幅に合わせる」— 画像をセルの幅いっぱいに、縦横比はそのまま（高さの上限 --c34-maxh）。
@@ -30,7 +37,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '2.0.0';
   const TAG = '[³⁴ v' + VERSION + ']';
   if (window.__c34 && window.__c34.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -146,8 +153,14 @@
     st.textContent = `
 :root { --c34-maxh: 320px; --c34-h: 120px; --c34-cols: 2; --c34-gap: 6px; --c34-radius: 6px; --c34-fit: cover; --c34-shadow: .12; }
 [data-c34]${B} { height: auto !important; overflow: visible !important; }
-[data-c34] > div${B} { display: grid !important; grid-template-columns: 1fr !important; gap: var(--c34-gap) !important; width: 100% !important; }
-[data-c34="multi"] > div${B} { grid-template-columns: repeat(var(--c34-cols), minmax(0, 1fr)) !important; }
+[data-c34] > div:not([style*="position: absolute"]):not(:has(> .quickActionContainer))${B} { display: grid !important; grid-template-columns: 1fr !important; gap: var(--c34-gap) !important; width: 100% !important; }
+[data-c34="multi"] > div:not([style*="position: absolute"]):not(:has(> .quickActionContainer))${B} { grid-template-columns: repeat(var(--c34-cols), minmax(0, 1fr)) !important; }
+/* v2.0.0: 乗せた時に Notion が差し込むボタンの段（コメントなど）— 表紙を隠さない右上の小さな粒 */
+[data-c34] > div:is([style*="position: absolute"], :has(> .quickActionContainer))${B} { display: flex !important; justify-content: flex-end !important; width: auto !important; inset-inline: auto 0 !important; top: 4px !important; margin: 0 4px !important; pointer-events: none !important; }
+[data-c34] .quickActionContainer${B} { width: auto !important; height: 22px !important; padding: 1px !important; gap: 0 !important; border-radius: 999px !important; background: color-mix(in srgb, var(--c-bacEle, #fff) 62%, transparent) !important; -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4); box-shadow: 0 0 0 .5px rgba(15,15,15,.12), 0 2px 8px rgba(15,15,15,.12) !important; opacity: .55; transition: opacity .15s ease; }
+[data-c34] .quickActionContainer:hover${B} { opacity: 1; background: var(--c-bacEle, #fff) !important; }
+[data-c34] .quickActionContainer [role="button"]${B} { width: 20px !important; min-width: 20px !important; height: 20px !important; padding: 0 !important; border-radius: 999px !important; }
+[data-c34] .quickActionContainer svg${B} { width: 14px !important; height: 14px !important; }
 img[data-c34-img]${B} { display: block !important; max-height: none !important; max-width: 100% !important; border-radius: var(--c34-radius) !important; box-shadow: 0 0 0 .5px rgba(15,15,15,calc(var(--c34-shadow) * .8)), 0 2px 8px rgba(15,15,15,var(--c34-shadow)) !important; background: var(--c-bacHov, rgba(55,53,47,.06)); image-rendering: auto; transition: opacity .2s ease; }
 html[data-c34-mode="fill"] img[data-c34-img]${B} { width: 100% !important; height: auto !important; max-height: var(--c34-maxh) !important; object-fit: var(--c34-fit) !important; }
 html[data-c34-mode="height"] [data-c34] > div${B} { display: flex !important; flex-wrap: wrap !important; }
