@@ -383,6 +383,25 @@
   const LS_SLOTS = 'c26-slots-v1';   // 文字の書式の枠（Notion の色 → 書体）
   const LS_SELS = 'c26-colorsel-v1'; // Notion の色の描き方（自動で覚える）
   const TITLE = 'h1[aria-roledescription="page title"]';
+  /* ============================================================
+   *  v47: 表の「題字」と「リレーション」は全くの別物 — 形で見分ける（2026-10 の Notion を実測）
+   *   題字（その行のページそのもの。クリックで開く）:
+   *     [data-testid="property-value"] > div(flex) > div(flex-shrink:0) > .notion-record-icon[role="button"]
+   *                                   > div(flex-grow:1) > div(contents) > … > span（ただの文字）
+   *     ※ 題字は先頭の列とは限らない（Medias の Index は Creators が先頭、Works が 2 列目）
+   *   リレーション（別の DB のページへのチップ。Notion の素の表示）:
+   *     [data-testid="property-value"] > div > div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"]
+   *       > .notion-record-icon（role 無し）+ span.notranslate
+   *   ¹⁴ Relation Show All が並べ直したセルは .cordi13-item（項目）・.cordi13-sec-head（シリーズ見出し）
+   * ============================================================ */
+  const CELL_PV = '.notion-table-view-cell [data-testid="property-value"]';
+  const T_ROW = CELL_PV + ' > div:not([style*="flex-wrap"]):has(> div > .notion-record-icon[role="button"])';
+  const SEL_TITLE_ICON = T_ROW + ' > div > .notion-record-icon[role="button"], .notion-table-view-cell[data-c12-primary] .notion-record-icon';
+  const SEL_TITLE_TEXT = T_ROW + ' > div:not(:has(.notion-record-icon)) span, .cordivestium-v1121-title-token, .notion-table-view-cell[data-c12-primary] [data-testid="property-value"] span.notranslate';
+  const SEL_TITLE_CELL = '.notion-table-view-cell:has([data-testid="property-value"] > div:not([style*="flex-wrap"]) > div > .notion-record-icon[role="button"])';   // :has の入れ子は書けないので平らに
+  const SEL_REL_CHIP = CELL_PV + ' div[style*="flex-wrap: wrap"] > div > div[style*="display: inline"]:has(> .notion-record-icon:not([role="button"]))';
+  const SEL_REL_TEXT = SEL_REL_CHIP + ' > span.notranslate';
+  const SEL_REL_ICON = SEL_REL_CHIP + ' > .notion-record-icon';
   const BOOST_T = BOOST;   // ²⁵（ID 3 つ分）より強く
 
   /* ============================================================
@@ -390,12 +409,62 @@
    *    出典: Apple「Fonts included with macOS Tahoe」
    * ============================================================ */
   const LATIN_FB = '"Hiragino Mincho ProN", "YuMincho", serif';
+  const WEB_SANS_FB = '"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif';
   const CJK_FB = '"Hiragino Mincho ProN", serif';
   const SAMPLE = { ja: '永あア 花鳥風月', zh: '永 宋體 書法', ko: '한글 명조', la: 'Aa Gg Rr & 1234' };
   const CATALOG = [
     { g: 'このセットの書体', s: 'la', items: [
       ['canela13', 'フルDBタイトルと同じ（¹³）', null, 'var(--constellucentia-full-db-title-font-family, "Canela Deck", "Hoefler Text", "Hiragino Mincho ProN", serif)'],
       ['group12', 'グループ見出しと同じ（¹²）', null, '"Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", "YuMincho", serif']
+    ] },
+    /* v47: ウェブ書体 — Notion のセキュリティ設定（CSP）は Google Fonts を通さないが、cdn.jsdelivr.net は通す。
+       Fontsource の配布（jsDelivr）から、使う書体の CSS だけを読み込む。端末に入っていなくても当たる */
+    { g: 'ウェブ明朝（和文・どの端末でも）', s: 'ja', web: 1, items: [
+      ['w-shippori-mincho-b1', 'しっぽり明朝 B1', ['Shippori Mincho B1'], '"Shippori Mincho B1", ' + CJK_FB, { pkg: 'shippori-mincho-b1', w: [400, 500, 600, 700, 800] }],
+      ['w-shippori-mincho', 'しっぽり明朝', ['Shippori Mincho'], '"Shippori Mincho", ' + CJK_FB, { pkg: 'shippori-mincho', w: [400, 500, 600, 700, 800] }],
+      ['w-zen-old-mincho', 'Zen オールド明朝', ['Zen Old Mincho'], '"Zen Old Mincho", ' + CJK_FB, { pkg: 'zen-old-mincho', w: [400, 500, 600, 700, 900] }],
+      ['w-noto-serif-jp', 'Noto Serif JP（源ノ明朝）', ['Noto Serif JP'], '"Noto Serif JP", ' + CJK_FB, { pkg: 'noto-serif-jp', w: [300, 400, 500, 600, 700, 800, 900] }],
+      ['w-biz-udpmincho', 'BIZ UDP明朝（ウェブ）', ['BIZ UDPMincho'], '"BIZ UDPMincho", ' + CJK_FB, { pkg: 'biz-udpmincho', w: [400, 700] }],
+      ['w-hina-mincho', 'ひな明朝', ['Hina Mincho'], '"Hina Mincho", ' + CJK_FB, { pkg: 'hina-mincho', w: [400] }],
+      ['w-sawarabi-mincho', 'さわらび明朝', ['Sawarabi Mincho'], '"Sawarabi Mincho", ' + CJK_FB, { pkg: 'sawarabi-mincho', w: [400] }],
+      ['w-kaisei-opti', '解星 オプティ', ['Kaisei Opti'], '"Kaisei Opti", ' + CJK_FB, { pkg: 'kaisei-opti', w: [400, 500, 700] }],
+      ['w-kaisei-decol', '解星 デコール', ['Kaisei Decol'], '"Kaisei Decol", ' + CJK_FB, { pkg: 'kaisei-decol', w: [400, 500, 700] }],
+      ['w-zen-antique', 'Zen アンチック', ['Zen Antique'], '"Zen Antique", ' + CJK_FB, { pkg: 'zen-antique', w: [400] }]
+    ] },
+    { g: 'ウェブ手書き・個性（和文）', s: 'ja', web: 1, items: [
+      ['w-klee-one', 'Klee One（クレー）', ['Klee One'], '"Klee One", ' + CJK_FB, { pkg: 'klee-one', w: [400, 600] }],
+      ['w-yuji-syuku', '佑字 肅', ['Yuji Syuku'], '"Yuji Syuku", ' + CJK_FB, { pkg: 'yuji-syuku', w: [400] }],
+      ['w-kiwi-maru', 'Kiwi 丸', ['Kiwi Maru'], '"Kiwi Maru", ' + CJK_FB, { pkg: 'kiwi-maru', w: [300, 400, 500] }],
+      ['w-zen-kurenaido', 'Zen 紅道', ['Zen Kurenaido'], '"Zen Kurenaido", ' + WEB_SANS_FB, { pkg: 'zen-kurenaido', w: [400] }],
+      ['w-shippori-antique', 'しっぽりアンチック', ['Shippori Antique'], '"Shippori Antique", ' + WEB_SANS_FB, { pkg: 'shippori-antique', w: [400] }],
+      ['w-dela-gothic-one', 'デラゴシック', ['Dela Gothic One'], '"Dela Gothic One", ' + CJK_FB, { pkg: 'dela-gothic-one', w: [400] }],
+      ['w-rocknroll-one', 'ロックンロール', ['RocknRoll One'], '"RocknRoll One", ' + WEB_SANS_FB, { pkg: 'rocknroll-one', w: [400] }]
+    ] },
+    { g: 'ウェブゴシック（和文）', s: 'ja', web: 1, items: [
+      ['w-zen-kaku-gothic-new', 'Zen 角ゴシック New', ['Zen Kaku Gothic New'], '"Zen Kaku Gothic New", ' + WEB_SANS_FB, { pkg: 'zen-kaku-gothic-new', w: [300, 400, 500, 700, 900] }],
+      ['w-zen-maru-gothic', 'Zen 丸ゴシック', ['Zen Maru Gothic'], '"Zen Maru Gothic", ' + WEB_SANS_FB, { pkg: 'zen-maru-gothic', w: [300, 400, 500, 700, 900] }],
+      ['w-noto-sans-jp', 'Noto Sans JP（源ノ角ゴ）', ['Noto Sans JP'], '"Noto Sans JP", ' + WEB_SANS_FB, { pkg: 'noto-sans-jp', w: [300, 400, 500, 600, 700, 800, 900] }],
+      ['w-biz-udpgothic', 'BIZ UDPゴシック（ウェブ）', ['BIZ UDPGothic'], '"BIZ UDPGothic", ' + WEB_SANS_FB, { pkg: 'biz-udpgothic', w: [400, 700] }],
+      ['w-m-plus-1p', 'M PLUS 1p', ['M PLUS 1p'], '"M PLUS 1p", ' + WEB_SANS_FB, { pkg: 'm-plus-1p', w: [300, 400, 500, 700, 800, 900] }],
+      ['w-m-plus-rounded-1c', 'M PLUS Rounded 1c', ['M PLUS Rounded 1c'], '"M PLUS Rounded 1c", ' + WEB_SANS_FB, { pkg: 'm-plus-rounded-1c', w: [300, 400, 500, 700, 800, 900] }],
+      ['w-ibm-plex-sans-jp', 'IBM Plex Sans JP', ['IBM Plex Sans JP'], '"IBM Plex Sans JP", ' + WEB_SANS_FB, { pkg: 'ibm-plex-sans-jp', w: [300, 400, 500, 600, 700] }],
+      ['w-murecho', 'ムレチョ', ['Murecho'], '"Murecho", ' + WEB_SANS_FB, { pkg: 'murecho', w: [300, 400, 500, 600, 700, 800, 900] }]
+    ] },
+    { g: 'ウェブ Serif・Sans（欧文）', s: 'la', web: 1, items: [
+      ['w-cormorant-garamond', 'Cormorant Garamond', ['Cormorant Garamond'], '"Cormorant Garamond", ' + LATIN_FB, { pkg: 'cormorant-garamond', w: [300, 400, 500, 600, 700], it: 1 }],
+      ['w-cormorant', 'Cormorant', ['Cormorant'], '"Cormorant", ' + LATIN_FB, { pkg: 'cormorant', w: [300, 400, 500, 600, 700], it: 1 }],
+      ['w-eb-garamond', 'EB Garamond', ['EB Garamond'], '"EB Garamond", ' + LATIN_FB, { pkg: 'eb-garamond', w: [400, 500, 600, 700, 800], it: 1 }],
+      ['w-playfair-display', 'Playfair Display', ['Playfair Display'], '"Playfair Display", ' + LATIN_FB, { pkg: 'playfair-display', w: [400, 500, 600, 700, 800, 900], it: 1 }],
+      ['w-libre-baskerville', 'Libre Baskerville', ['Libre Baskerville'], '"Libre Baskerville", ' + LATIN_FB, { pkg: 'libre-baskerville', w: [400, 500, 600, 700], it: 1 }],
+      ['w-crimson-pro', 'Crimson Pro', ['Crimson Pro'], '"Crimson Pro", ' + LATIN_FB, { pkg: 'crimson-pro', w: [300, 400, 500, 600, 700, 800, 900], it: 1 }],
+      ['w-lora', 'Lora', ['Lora'], '"Lora", ' + LATIN_FB, { pkg: 'lora', w: [400, 500, 600, 700], it: 1 }],
+      ['w-source-serif-4', 'Source Serif 4', ['Source Serif 4'], '"Source Serif 4", ' + LATIN_FB, { pkg: 'source-serif-4', w: [300, 400, 500, 600, 700, 800, 900], it: 1 }],
+      ['w-fraunces', 'Fraunces', ['Fraunces'], '"Fraunces", ' + LATIN_FB, { pkg: 'fraunces', w: [300, 400, 500, 600, 700, 800, 900], it: 1 }],
+      ['w-dm-serif-display', 'DM Serif Display', ['DM Serif Display'], '"DM Serif Display", ' + LATIN_FB, { pkg: 'dm-serif-display', w: [400], it: 1 }],
+      ['w-cinzel', 'Cinzel', ['Cinzel'], '"Cinzel", ' + LATIN_FB, { pkg: 'cinzel', w: [400, 500, 600, 700, 800, 900] }],
+      ['w-ibm-plex-serif', 'IBM Plex Serif', ['IBM Plex Serif'], '"IBM Plex Serif", ' + LATIN_FB, { pkg: 'ibm-plex-serif', w: [300, 400, 500, 600, 700], it: 1 }],
+      ['w-noto-serif-display', 'Noto Serif Display', ['Noto Serif Display'], '"Noto Serif Display", ' + LATIN_FB, { pkg: 'noto-serif-display', w: [300, 400, 500, 600, 700, 800, 900], it: 1 }],
+      ['w-inter', 'Inter', ['Inter'], '"Inter", ' + LATIN_FB, { pkg: 'inter', w: [300, 400, 500, 600, 700, 800, 900], it: 1 }]
     ] },
     { g: '明朝体（和文）', s: 'ja', items: [
       ['hiramin', 'ヒラギノ明朝 ProN', ['Hiragino Mincho ProN', 'ヒラギノ明朝 ProN', 'Hiragino Mincho Pro']],
@@ -450,13 +519,33 @@
       ['gungseo', '궁서（GungSeo）', ['GungSeo']]
     ] }
   ];
+  /* v47: ウェブ書体の読み込み（jsDelivr の Fontsource）。CSS は太さごとの 1 枚。字の形のファイルは、
+     その太さ・その文字を画面で使った時だけブラウザが取りに行く（unicode-range）ので、和文でも重くならない */
+  const WEB_CDN = 'https://cdn.jsdelivr.net/npm/@fontsource/';
+  const WEB_LOADED = new Set();
+  function webFontLoad(f) {
+    if (!f || !f.web || WEB_LOADED.has(f.id)) return;
+    WEB_LOADED.add(f.id);
+    const add = (file) => {
+      const id = 'c26-wf-' + f.web.pkg + '-' + file.replace(/\W/g, '');
+      if (document.getElementById(id)) return;
+      const l = document.createElement('link');
+      l.id = id; l.rel = 'stylesheet'; l.href = WEB_CDN + f.web.pkg + '@5/' + file + '.css';
+      l.setAttribute('data-c26-webfont', f.web.pkg);
+      (document.head || document.documentElement).appendChild(l);
+    };
+    for (const w of f.web.w) { add(String(w)); if (f.web.it && (w === 400 || w === 500 || w === 600)) add(w + '-italic'); }
+  }
   const FONT_LIST = [];
   const FONT_BY_ID = {};
   for (const grp of CATALOG) {
     for (const it of grp.items) {
       const a = typeof it === 'string' ? [it.toLowerCase().replace(/[^a-z0-9]+/g, ''), it, [it]] : it;
-      const f = { id: a[0], name: a[1], fams: a[2], group: grp.g, s: grp.s };
-      f.css = a[3] || (f.fams.map((x) => '"' + x + '"').join(', ') + ', ' + (grp.s === 'la' ? LATIN_FB : CJK_FB));
+      const f = { id: a[0], name: a[1], fams: a[2], group: grp.g, s: grp.s, web: a[4] || null };
+      const css = a[3] || (f.fams.map((x) => '"' + x + '"').join(', ') + ', ' + (grp.s === 'la' ? LATIN_FB : CJK_FB));
+      /* v47: ウェブ書体は、どこかで書体名（css）が使われた瞬間に読み込む（一覧の見本・本文の書式・Atelier の設定すべて） */
+      if (f.web) Object.defineProperty(f, 'css', { enumerable: true, get() { webFontLoad(f); return css; } });
+      else f.css = css;
       FONT_LIST.push(f);
       FONT_BY_ID[f.id] = f;
     }
@@ -482,6 +571,7 @@
     const has = (fam) => bases.some((b, i) => { ctx.font = '40px "' + fam + '", ' + b; return Math.abs(ctx.measureText(str).width - bw[i]) > 0.05; });
     const hasJa = (fam) => bases.some((b, i) => { ctx.font = '40px "' + fam + '", ' + b; return Math.abs(ctx.measureText(ja).width - bj[i]) > 0.05; });
     for (const f of FONT_LIST) {
+      if (f.web) { AVAIL.set(f.id, true); f.ja = f.s === 'ja'; continue; }   // v47: ウェブ書体はどの端末でも使える
       const ok = f.fams ? f.fams.some(has) : true;
       AVAIL.set(f.id, ok);
       f.ja = f.fams ? (ok && f.fams.some(hasJa)) : true;
@@ -7431,15 +7521,21 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--c34-fit', t: 'select', l: '切り抜き', d: 'cover', o: [['cover', '枠いっぱい（はみ出しは切る）'], ['contain', '全体を見せる（余白あり）']], g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '高さの上限で切れる時に、切り抜くか全体を縮めるか' },
       { v: '--c34-shadow', t: 'num', l: '影の濃さ', d: 0.12, min: 0, max: 0.6, s: 0.01, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '画像の下の影の濃さ（0 で無し）' }
     ] },
-    { id: 'primary', sec: 'db', label: 'テーブルの題字列', note: '表の題字（Name）の列（旧 ¹⁷）。', ctl: [
+    { id: 'primary', sec: 'db', label: 'テーブルの題字列', hl: SEL_TITLE_CELL, note: '表の「題字」＝その行のページそのもの（アイコン＋名前。クリックでそのページが開く）。リレーション（別の DB のページへのチップ）とは別物です。題字は先頭の列とは限らず、形（ボタンになったアイコン＋その隣の名前）で見つけます。', ctl: [
       { p: 'primFont', t: 'font', l: '書体', d: 'Charter・Baskerville → 明朝', g: '文字' },
       { v: '--cordivestium-title-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5, g: '文字' },
       { v: '--cordivestium-title-font-weight', t: 'weight', l: '太さ', d: 500, g: '文字' },
       { v: '--cordivestium-title-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05, g: '文字' },
-      ...kit('prim', { text: '.notion-table-view-cell[data-c12-primary] [data-testid="property-value"] span.notranslate', icon: '.notion-table-view-cell[data-c12-primary] .notion-record-icon' }, 'col tdy', { g: '文字' }),
+      ...kit('prim', { text: SEL_TITLE_TEXT, icon: SEL_TITLE_ICON }, 'col ls tdy', { g: '文字', n: { text: '題字の名前', icon: '題字のアイコン' } }),
       { v: '--cordivestium-title-icon-size', t: 'px', l: 'アイコンの大きさ', d: 20, min: 12, max: 32, s: 1, g: 'アイコン' },
       { v: '--cordivestium-title-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 1, g: 'アイコン' },
-      ...kit('primi', { icon: '.notion-table-view-cell[data-c12-primary] .notion-record-icon' }, 'idy idx', { g: 'アイコン' })
+      ...kit('primi', { icon: SEL_TITLE_ICON }, 'idy idx', { g: 'アイコン', n: { icon: '題字のアイコン' } })
+    ] },
+    /* v47: Notion の素のリレーション（¹⁴ が並べ直していないセル。1〜2 件のセルなど） */
+    { id: 'nrel', sec: 'db', label: '表のリレーション（素のチップ）', hl: SEL_REL_CHIP, note: '表の「リレーション」＝別の DB のページへのリンク（チップ：小さなアイコン＋名前、下に細い線）。¹⁴ が並べ直したセル（シリーズ見出しのある所）は次の「リレーション」で。題字とは別に書体・大きさ・色を決められます。', ctl: [
+      ...kit('nrel', { text: SEL_REL_TEXT, icon: SEL_REL_ICON, row: SEL_REL_CHIP }, 'ff fs fw ls col tdy isz igap idy', { g: 'チップ', n: { text: 'リレーションの名前', icon: 'リレーションのアイコン', row: 'リレーションのチップ' } }),
+      { v: '--at-nrel-uline', t: 'select', l: '下の細い線', d: '', g: 'チップ', o: [['', 'そのまま'], ['none', '消す']], w: 'チップの名前の下の細い線（Notion の印）' },
+      { v: '--at-nrel-gap', t: 'px', l: 'チップとチップの間', d: 8, min: 0, max: 24, s: 0.5, g: '並び', w: '横に並んだチップの間（上下は 6px）' }
     ] },
     { id: 'relation', sec: 'db', label: 'リレーション', fig: 'rel', hl: '[data-cordi13-on]', note: '表のリレーションのセル（¹⁴ Relation Show All）と、ページのリレーション欄（²³）。上の見本図で、行に乗せた設定がどこを動かすかが青く動きます。', ctl: [
       { v: '--c13-head-size', t: 'px', l: '大きさ', d: 11, min: 8, max: 24, s: 0.5, g: 'シリーズ見出し', f: 'htext', w: 'シリーズ見出し（例「ガリレオ」）の文字の大きさ' },
@@ -7572,7 +7668,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     [/^--c33-view-h$/, SB_VIEW], [/^--c33-(view|vtext)/, SB_VIEW + ' > :not([data-c33-vslot])'], [/^--c33-(vicon|view-shift)/, SB_VIEW + ' [data-c33-vslot]'], [/^--c33-cur/, '.notion-sidebar-container [data-c33-cur]'],
     [/^--c13-head-(icon|gap)/, '.cordi13-sec-head :is(.cordi13-sec-icon, img)'], [/^--c13-(head|first|line)/, '.cordi13-sec-head'], [/^--c13-(row-gap|col-pad)$/, '.cordi13-item'], [/^--c13-vline/, '.cordi13-item-sep'], [/^--c13-div/, '.cordi13-sec-div'],
     [/^--cordi-relation-icon/, '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)'], [/^--cordi-relation/, '.cordi13-item .cordi13-title'], [/^rel(Head)?Font$/, '.cordi13-item .cordi13-title, .cordi13-sec-head > span:last-child'],
-    [/^--c34/, 'img[data-c34-img]'], [/^--cordivestium-title-icon|^--cordivestium-title-gap/, '.notion-table-view-cell[data-c12-primary] .notion-record-icon'], [/^--cordivestium-title|^primFont$/, '.notion-table-view-cell[data-c12-primary] [data-testid="property-value"]'],
+    [/^--c34/, 'img[data-c34-img]'], [/^--cordivestium-title-icon|^--cordivestium-title-gap/, SEL_TITLE_ICON], [/^--cordivestium-title|^primFont$/, SEL_TITLE_CELL], [/^--at-nrel/, SEL_REL_CHIP],
     [/^--c12g/, '.notion-collection_view_page-block > a[role="link"] > div:has(.notion-record-icon)'], [/^hdrTab/, '.notion-frame [role="tablist"] [role="tab"]'], [/^hdrCol/, '.notion-frame .notion-table-view-header-cell'],
     [/^--constellucentia-full-db-(icon|title)/, '.notion-frame .notion-collection_view_page-block h1, .notion-frame .notion-collection_view_page-block .notion-record-icon'], [/^--constellucentia-full-db-(desc|quote)|^descJustify$/, '[data-constellucentia-full-db-description-aligned="true"]'],
     [/^pg(Font|Size|Weight|Ls)$/, '.notion-frame h1[aria-roledescription="page title"]'], [/^pageW|^pageSide$/, '.notion-frame .notion-page-content'], [/^--c25/, '.notion-frame h1']
@@ -7748,8 +7844,19 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     css += atRule(scope + ' [role="tablist"] :is(.notion-collection-view-tab, .notion-collection-view-tab-button, [role="tab"])', { ff: fam('hdrTabFont'), fs: n('hdrTabSize'), fw: n('hdrTabWeight'), ls: n('hdrTabLs') }, true);
     css += atRule(scope + ' .notion-table-view-header-cell', { ff: fam('hdrColFont'), fs: n('hdrColSize'), fw: n('hdrColWeight'), ls: n('hdrColLs'), col: T.hdrColor || '' }, true);
     /* 題字列・リレーション・グループ見出しの書体（変数の無い所） */
-    if (fam('primFont')) css += atRule('.cordivestium-v1121-title-token, .notion-table-view-cell[data-c12-primary] [data-testid="property-value"] span.notranslate, .notion-table-view-cell[data-c12-primary] [data-testid="property-value"] > div > div[style*="flex-grow"] span', { ff: fam('primFont') }, false);
-    if (fam('relFont')) css += atRule('[data-testid="property-value"] div[style*="display: inline"] > .notion-record-icon + span.notranslate:not([data-token-index]), .cordi13-item .cordi13-title, .cordi13-item span.notranslate', { ff: fam('relFont') }, false);
+    /* v47: 題字は形（SEL_TITLE_*）で当てる — ⁰⁹・¹⁵ の印が無くても（題字が 2 列目以降でも）効く */
+    if (fam('primFont')) css += atRule(SEL_TITLE_TEXT, { ff: fam('primFont') }, false);
+    {
+      const ts = n('--cordivestium-title-font-size'), tw = n('--cordivestium-title-font-weight'), tl = n('--cordivestium-title-line-height');
+      if (ts != null || tw != null || tl != null) css += atRule(SEL_TITLE_TEXT, { fs: ts, fw: tw, lh: tl }, false);
+      const is = n('--cordivestium-title-icon-size'), ig = n('--cordivestium-title-gap');
+      if (is != null) css += atRaw(atSplit(SEL_TITLE_ICON).map((x) => x + BOOST).join(', '), 'width:' + is + 'px !important;height:' + is + 'px !important') + atRaw(atSplit(SEL_TITLE_ICON).map((x) => x + BOOST + ' img').join(', '), 'width:' + (is * 0.87).toFixed(1) + 'px !important;height:' + (is * 0.87).toFixed(1) + 'px !important');
+      if (ig != null) css += atRaw(atSplit(SEL_TITLE_ICON).map((x) => x + BOOST).join(', '), 'margin-inline-end:' + ig + 'px !important');
+    }
+    /* リレーションの書体: ¹⁴ の項目と、素のチップ（題字には当てない） */
+    if (fam('relFont')) css += atRule(SEL_REL_TEXT + ', .cordi13-item .cordi13-title, .cordi13-item span.notranslate', { ff: fam('relFont') }, false);
+    if (T['--at-nrel-uline'] === 'none') css += atRaw(atSplit(SEL_REL_TEXT).map((x) => x + BOOST).join(', '), 'background-image:none !important');
+    if (n('--at-nrel-gap') != null) css += atRaw(CELL_PV + ' div[style*="flex-wrap: wrap"]:has(> div > div[style*="display: inline"] > .notion-record-icon)' + BOOST, 'column-gap:' + n('--at-nrel-gap') + 'px !important');
     if (fam('relHeadFont') || n('relHeadSize') != null) css += atRule('.cordi13-sec-head, .c23-head', { ff: fam('relHeadFont'), fs: n('relHeadSize') }, true);
     if (fam('grpFont')) css += atRule('html[data-c05-full="1"] .notion-collection_view_page-block > a[role="link"] > div:has(.notion-record-icon) > :not(.notion-record-icon):not(:has(.notion-record-icon))', { ff: fam('grpFont') }, true);
     /* 通常ページのタイトル */
@@ -8585,8 +8692,10 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (document.getElementById('atelier-fonts')) return;
     const l = document.createElement('link');
     l.id = 'atelier-fonts'; l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap';
+    /* v47: Google Fonts は Notion の CSP で読めなかった（パネルが Baskerville 等に落ちていた）→ jsDelivr の Fontsource */
+    l.href = WEB_CDN + 'cormorant-garamond@5/600.css';
     (document.head || document.documentElement).appendChild(l);
+    for (const id of ['w-cormorant-garamond', 'w-shippori-mincho-b1', 'w-zen-kaku-gothic-new']) webFontLoad(FONT_BY_ID[id]);
   }
   function atInstallUi() {
     atFonts();
