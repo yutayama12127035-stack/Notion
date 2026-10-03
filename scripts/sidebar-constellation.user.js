@@ -415,8 +415,8 @@ html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] :is([role="treeitem"], 
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind] > :not(:first-child)${B},
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] div:has(> [data-c33-kind]):not(:has(> [data-c33-kind] ~ [data-c33-kind]))${B},
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] div:has(> [data-c33-kind]):not(:has(> [data-c33-kind] ~ [data-c33-kind])):hover${B},
-html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]::before${B},
-html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]::after${B} { background: transparent !important; background-color: transparent !important; box-shadow: none !important; }
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B}::before,
+html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B}::after { background: transparent !important; background-color: transparent !important; box-shadow: none !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur] :is(.notranslate, .notranslate *, div:not(:has(*)), span:not(:has(*)))${B} { font-weight: var(--c33-cur-weight) !important; color: var(--c33-cur-color) !important; }
 /* ▲ ビューのアイコン（「•」の代わり）: 種類のアイコン、またはビューに付けたアイコン */
 html[data-c33] [data-c33-vslot]${B} { position: relative; width: var(--c33-vicon-size) !important; min-width: var(--c33-vicon-size) !important; margin-inline-end: var(--c33-vicon-gap) !important; padding: 0 !important; }
