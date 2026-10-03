@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      24.0.0
-// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
+// @version      34.0.0
+// @description  見た目を、ひとつの場所で — 旧 Text Styles の統合版。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -21,6 +21,27 @@
 // ==/UserScript==
 
 /*
+ * v34.0.0（2026-10-03）— 大幅な見直し（パネル・調整できる所・次世代の道具）
+ *   ・パネル: 野暮ったさを解消。幅 760px・左の一覧は短い名前とアイコン（見切れ・詰まりなし）・設定は組ごとの枠
+ *     （文字／アイコン／位置／間隔／形）・線の見えるスライダー＋単位つきの数の箱・色は見本・右上に「設定を探す」・
+ *     行にカーソルを乗せると、その設定が当たる所が画面で光る・組ごと／場所ごとに元に戻す。
+ *   ・調整できる所（Notion の画面の要素を洗い出して割り振り）:
+ *       本文: 既定の書体／本文と段落（段落の上の間隔・下の間隔・内側・1 行目の字下げ・揃え・ほかのブロックの上下・本文の幅・左右の余白）／
+ *             見出し 1〜3（書体・大きさ・太さ・字間・行の高さ・色・上と下の間隔）／リストと ToDo（項目の間・印と文字の間・済んだ項目）／
+ *             引用（線の太さ・色・線と文字の間）とコールアウト（余白・角・背景・アイコン）／コード・区切り線・表ブロック／リンクとメンション
+ *       ページ: タイトル（位置・上下の余白）とページのアイコン（大きさ・位置）／プロパティ（名前・値・アイコン）／行ページのタイトル
+ *       データベース: フルDBタイトル・説明／タブと列見出し（アイコン・見出しの行の高さ）／表のセル（余白・行の高さ）／
+ *             題字列・リレーション（文字とアイコンの上下・シリーズ見出しのアイコンと余白）／グループ見出し／カードと一覧
+ *       サイドバー: ★グループ見出し・■ワークスペース・●行・▲ビュー それぞれの 書体・大きさ・太さ・色・行の高さ・
+ *             アイコンの大きさ／文字との間／上下左右・文字の上下（³³ v2.1.0 の変数）
+ *       画面: 上の帯（パンくず）・メニューと候補・サイドピークの幅・スクロールバー・選んだ文字の背景・入力カーソルの色
+ *   ・次世代の道具（Notion の上にもう一枚「操作の層」）:
+ *       コマンドパレット（⌃⌥P: ページ・見出し・道具・設定の項目・テーマを名前で探して実行）／
+ *       分割ビュー（⌥クリックで右半分に並べて開く・幅はドラッグ）／縦書きリーダー（⌃⌥R・縦中横）／マーカー一覧（⌃⌥M）／
+ *       付箋（ページごとのメモ）／スニペット（;today ＋ スペース → 日付 など・自由に追加）／タイプライター（書く行を真ん中に）／
+ *       進み具合のレール（上端の線・右端の見出しの目盛）／ページごとの見た目（このページ専用の Atelier の設定・開くと自動で切り替え）
+ *   ・²⁶ のメニューの段: Atelier／どこでも書式／パレット／縦書き／マーカー／目次／フォーカス（間隔を空けて並べ直し）
+ *
  * v24.0.0（2026-10-03）— ²⁶ のメニューに Atelier を統合＋次世代の道具
  *   ・文字を選ぶと出る ²⁶ のメニュー（本文・ブロックの両方）に「Atelier」の段を追加:
  *       [Atelier] 見た目の全体の設定 ／ [どこでも書式] 画面の要素をクリックして書式 ／ [目次] ／ [フォーカス] ／ [文字数]
@@ -290,7 +311,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '24.0.0';
+  const VERSION = '34.0.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -1373,6 +1394,9 @@
    * ============================================================ */
   /* v24.0.0: Atelier の道具の絵 */
   const ICO_AT = {
+    palette: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="12" rx="2.5"/><path d="M6.5 8.5l2 1.5-2 1.5M10.5 12h3"/></svg>',
+    reader: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><path d="M14.5 3.5v13M11 3.5v9M7.5 3.5v11M4.5 3.5v6"/></svg>',
+    marks: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5h12" /><path d="M7 12.5l6.5-6.5 1.5 1.5L8.5 14H7z"/><path d="M12 7.5l1.5 1.5"/></svg>',
     atelier: '<svg viewBox="0 0 20 20"><path d="M10 2.6l1.5 4.3 4.3 1.5-4.3 1.5L10 14.2l-1.5-4.3-4.3-1.5 4.3-1.5z" fill="currentColor"/><path d="M15.4 12.6l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z" fill="currentColor"/></svg>',
     pick: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5l4 10.5 1.6-4.4 4.4-1.6z"/><path d="M11 11l4.2 4.2"/><path d="M3 9.5V3h6.5" stroke-dasharray="1.6 1.8"/></svg>',
     toc: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><path d="M4 5h12M7 9h9M7 13h9M4 17h12"/></svg>',
@@ -1630,9 +1654,11 @@
         '<div class="m9-div"></div><div class="m9-attools">' +
         '<button class="m9-tb m9-atb" data-a="atelier" title="Atelier — 見た目の全体（⌃⌥A）">' + ICO_AT.atelier + '<span>Atelier</span></button>' +
         '<button class="m9-tb" data-a="atpick" title="どこでも書式 — 画面の要素をクリックして書式">' + ICO_AT.pick + '</button>' +
+        '<button class="m9-tb" data-a="atpal" title="コマンドパレット（⌃⌥P）">' + ICO_AT.palette + '</button>' +
+        '<button class="m9-tb" data-a="atreader" title="縦書きリーダー（⌃⌥R）">' + ICO_AT.reader + '</button>' +
+        '<button class="m9-tb" data-a="atmarks" title="マーカー一覧（⌃⌥M）">' + ICO_AT.marks + '</button>' +
         '<button class="m9-tb" data-a="attoc" title="目次">' + ICO_AT.toc + '</button>' +
         '<button class="m9-tb" data-a="atfocus" title="フォーカスモード">' + ICO_AT.focus + '</button>' +
-        '<button class="m9-tb" data-a="atcount" title="文字数・読了時間">' + ICO_AT.count + '</button>' +
       '</div>' +
         '<div class="m9-meta"></div></div>' +
       '<div class="m9-body m9-body-text">' +
@@ -1665,9 +1691,11 @@
       '<div class="m9-div"></div><div class="m9-attools">' +
         '<button class="m9-tb m9-atb" data-a="atelier" title="Atelier — 見た目の全体（⌃⌥A）">' + ICO_AT.atelier + '<span>Atelier</span></button>' +
         '<button class="m9-tb" data-a="atpick" title="どこでも書式 — 画面の要素をクリックして書式">' + ICO_AT.pick + '</button>' +
+        '<button class="m9-tb" data-a="atpal" title="コマンドパレット（⌃⌥P）">' + ICO_AT.palette + '</button>' +
+        '<button class="m9-tb" data-a="atreader" title="縦書きリーダー（⌃⌥R）">' + ICO_AT.reader + '</button>' +
+        '<button class="m9-tb" data-a="atmarks" title="マーカー一覧（⌃⌥M）">' + ICO_AT.marks + '</button>' +
         '<button class="m9-tb" data-a="attoc" title="目次">' + ICO_AT.toc + '</button>' +
         '<button class="m9-tb" data-a="atfocus" title="フォーカスモード">' + ICO_AT.focus + '</button>' +
-        '<button class="m9-tb" data-a="atcount" title="文字数・読了時間">' + ICO_AT.count + '</button>' +
       '</div>' +
       '</div>' +
       '<div class="m9-div"></div>' +
@@ -2617,6 +2645,9 @@
     else if (a === 'atelier') { hidePop(); openAtelier(); }
     else if (a === 'atpick') { hidePop(); atPickFromMenu(); }
     else if (a === 'attoc' || a === 'atfocus' || a === 'atcount') { atTool(a.slice(2)); syncToolButtons(); }
+    else if (a === 'atpal') { hidePop(); palOpen(); }
+    else if (a === 'atreader') { hidePop(); readerOpen(); }
+    else if (a === 'atmarks') { hidePop(); marksOpen(); }
     else if (a === 'iconpos0') blkWrite((tg) => { delete tg.cix; delete tg.ciy; })
     else if (a === 'icons') openIconLibrary(b);
     else if (a === 'fsreset') applyStyle({ fs: null });
@@ -3605,9 +3636,10 @@ html[data-c26-bm]:not(.c26-native) [role="dialog"]:has([role="option"] svg.dupli
 .m9-mini input:focus { box-shadow: 0 0 0 1.5px var(--m9-acc); background: var(--m9-bg); }
 .m9-mini.set input, .m9-num.set input { color: var(--m9-acc); }
 .m9-foot { display: flex; align-items: center; gap: 2px; }
-.m9-attools { display: flex; align-items: center; gap: 2px; padding: 0 2px; }
-.m9-attools .m9-tb:not(.m9-atb) { width: 28px; }
-.m9-attools .m9-atb { width: auto; padding: 0 10px 0 6px; gap: 6px; margin-right: auto; font-size: 13px; letter-spacing: .04em; font-family: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; color: var(--m9-fg); }
+.m9-attools { display: flex; align-items: center; gap: 4px; padding: 2px 4px; }
+.m9-attools .m9-tb:not(.m9-atb) { width: 30px; height: 30px; flex: none; }
+.m9-attools .m9-tb:not(.m9-atb) svg { width: 17px; height: 17px; }
+.m9-attools .m9-atb { width: auto; flex: none; height: 30px; padding: 0 12px 0 8px; gap: 7px; margin-right: auto; font-size: 13px; letter-spacing: .05em; font-family: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; color: var(--m9-fg); white-space: nowrap; }
 .m9-attools .m9-atb svg { width: 16px; height: 16px; color: #2383e2; }
 .m9-attools .m9-tb[aria-pressed="true"] { background: rgba(35,131,226,.12); color: #2383e2; }
 .m9-foot .m9-cmt { flex: 1 1 auto; width: auto; }
@@ -7122,105 +7154,325 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   const atFamily = (v) => { if (!v) return ''; const f = fontOf(v); return f ? f.css : String(v).replace(/[;{}<>]/g, ''); };
   const atNum = (v) => (v === '' || v == null || !isFinite(+v) ? null : +v);
 
+  /* v34.0.0: ページごとの見た目 — 今のページ専用の設定があればそれを使う */
+  let profFor = '';
+  const TK = () => (profFor && AT.profiles && AT.profiles[profFor] ? AT.profiles[profFor].tokens : AT.tokens);
   /* ---------- 場所ごとの書式（コントロールの定義） ----------
    *   t: font | px | num | em | weight | color | toggle | select
    *   v: 上書きする CSS 変数 ／ p: Atelier が規則を書く（変数の無い所）
-   *   d: 何も指定していない時の値（表示だけ。基礎の層の既定） */
+   *   d: 何も指定していない時の値（表示だけ。基礎の層の既定）
+   *   g: パネルの中の組（文字・アイコン・位置・間隔 …）
+   *
+   * v34.0.0: Notion の画面の要素を一通り洗い出し、場所ごとに
+   *   文字（書体・大きさ・太さ・字間・行の高さ・色・揃え・字下げ）／アイコン（大きさ・文字との間・上下左右）／
+   *   位置（文字の上下左右）／間隔（上下の間・内側の余白・高さ）／形（角の丸み・線・背景）
+   *   を同じ部品（kit）で割り振った。 */
+  const KC = {
+    ff: { t: 'font', l: '書体', g: '文字' },
+    fs: { t: 'px', l: '大きさ', min: 6, max: 72, s: 0.5, g: '文字' },
+    fw: { t: 'weight', l: '太さ', g: '文字' },
+    ls: { t: 'em', l: '字間', min: -0.08, max: 0.5, s: 0.005, g: '文字' },
+    lh: { t: 'num', l: '行の高さ', min: 0.8, max: 4, s: 0.05, g: '文字' },
+    col: { t: 'color', l: '色', g: '文字' },
+    op: { t: 'num', l: '濃さ', min: 0, max: 1, s: 0.05, g: '文字' },
+    it: { t: 'toggle', l: '斜体', g: '文字' },
+    ta: { t: 'select', l: '揃え', g: '文字', o: [['', 'そのまま'], ['left', '左'], ['center', '中央'], ['right', '右'], ['justify', '両端揃え']] },
+    ti: { t: 'em', l: '1 行目の字下げ', min: 0, max: 4, s: 0.5, g: '文字' },
+    tdy: { t: 'px', l: '文字の上下', min: -16, max: 16, s: 0.5, g: '位置' },
+    tdx: { t: 'px', l: '文字の左右', min: -32, max: 32, s: 0.5, g: '位置' },
+    isz: { t: 'px', l: 'アイコンの大きさ', min: 8, max: 96, s: 0.5, g: 'アイコン' },
+    igap: { t: 'px', l: 'アイコンと文字の間', min: -8, max: 48, s: 0.5, g: 'アイコン' },
+    idy: { t: 'px', l: 'アイコンの上下', min: -16, max: 16, s: 0.5, g: 'アイコン' },
+    idx: { t: 'px', l: 'アイコンの左右', min: -32, max: 32, s: 0.5, g: 'アイコン' },
+    mt: { t: 'px', l: '上の間隔', min: -24, max: 160, s: 1, g: '間隔' },
+    mb: { t: 'px', l: '下の間隔', min: -24, max: 160, s: 1, g: '間隔' },
+    pt: { t: 'px', l: '内側の上', min: 0, max: 80, s: 1, g: '間隔' },
+    pb: { t: 'px', l: '内側の下', min: 0, max: 80, s: 1, g: '間隔' },
+    pl: { t: 'px', l: '左の余白', min: 0, max: 120, s: 1, g: '間隔' },
+    h: { t: 'px', l: '高さ', min: 12, max: 120, s: 1, g: '間隔' },
+    w: { t: 'px', l: '幅', min: 120, max: 2400, s: 4, g: '間隔' },
+    rad: { t: 'px', l: '角の丸み', min: 0, max: 32, s: 1, g: '形' },
+    bw: { t: 'px', l: '線の太さ', min: 0, max: 12, s: 0.5, g: '形' },
+    bc: { t: 'color', l: '線の色', g: '形' },
+    bg: { t: 'color', l: '背景', g: '形' }
+  };
+  const KT = { ff: 'text', fs: 'text', fw: 'text', ls: 'text', lh: 'text', col: 'text', op: 'text', it: 'text', ta: 'text', ti: 'text', tdy: 'text', tdx: 'text', isz: 'icon', igap: 'icon', idy: 'icon', idx: 'icon', mt: 'row', mb: 'row', pt: 'row', pb: 'row', pl: 'row', h: 'row', w: 'row', rad: 'row', bw: 'row', bc: 'row', bg: 'row' };
+  const KITS = {};
+  /* k: 鍵の頭 ／ sel: { text, icon, row, … } ／ keys: 'ff fs …' ／ o: { g: 組の名前, l: 名前の差し替え, d: 既定の表示, tg: 当てる先の差し替え, prop: 書く CSS の差し替え（$ に値）, deep } */
+  function kit(k, sel, keys, o) {
+    o = o || {};
+    KITS[k] = { sel, deep: !!o.deep, prop: o.prop || {}, tg: o.tg || {} };
+    return keys.split(/\s+/).filter(Boolean).map((x) => {
+      const c = Object.assign({}, KC[x], { p: k + '.' + x, kit: k, kk: x });
+      if (o.g) c.g = o.g;
+      if (o.l && o.l[x]) c.l = o.l[x];
+      if (o.d && o.d[x] != null) c.d = o.d[x];
+      if (o.r && o.r[x]) Object.assign(c, o.r[x]);
+      return c;
+    });
+  }
+  const PC = '.notion-page-content';
+  const SBT = 'html[data-c33] .notion-outliner-team-container[data-c33-team]';
+  const AT_SECS = [['all', '本文'], ['page', 'ページ'], ['db', 'データベース'], ['side', 'サイドバー'], ['chrome', '画面']];
   const AT_REGIONS = [
-    { id: 'base', label: '既定の書体', note: 'Atelier 全体の基準になる書体。下の「書体」を空にした所はこの書体（--atelier-serif）を使えます。', ctl: [
-      { p: 'baseSerif', t: 'font', l: '基準の Serif', d: 'グループ見出しと同じ' }
+    /* ───── 本文 ───── */
+    { id: 'base', sec: 'all', label: '既定の書体', note: 'Atelier 全体の基準になる書体。下の「書体」を空にした所はこの書体（--atelier-serif）を使えます。', ctl: [
+      { p: 'baseSerif', t: 'font', l: '基準の Serif', d: 'グループ見出しと同じ', g: '書体' },
+      { p: 'selCol', t: 'color', l: '選んだ文字の背景', d: '', g: '画面全体' },
+      { p: 'caretCol', t: 'color', l: '入力カーソルの色', d: '', g: '画面全体' }
     ] },
-    { id: 'dbTitle', label: 'フルDBタイトル', note: 'フルページの DB のタイトルとアイコン（旧 ¹³）。行ページのタイトルも同じ値を使います。', ctl: [
-      { v: '--constellucentia-full-db-title-font-family', t: 'font', l: '書体', d: 'Canela Deck → 明朝' },
-      { v: '--constellucentia-full-db-title-japanese-font-family', t: 'font', l: '和文の書体', d: 'ヒラギノ明朝' },
-      { v: '--constellucentia-full-db-title-size', t: 'px', l: '大きさ', d: 20, min: 12, max: 48, s: 0.5 },
-      { v: '--constellucentia-full-db-title-weight', t: 'weight', l: '太さ', d: 500 },
-      { v: '--constellucentia-full-db-title-line-height', t: 'num', l: '行の高さ', d: 1.16, min: 0.9, max: 2, s: 0.01 },
-      { v: '--constellucentia-full-db-title-letter-spacing', t: 'em', l: '字間', d: 0.085, min: -0.05, max: 0.3, s: 0.005 },
-      { v: '--constellucentia-full-db-icon-size', t: 'px', l: 'アイコン', d: 36, min: 16, max: 72, s: 1 },
-      { v: '--constellucentia-full-db-icon-title-gap', t: 'px', l: 'アイコンとの間', d: 12, min: 0, max: 40, s: 1 },
-      { v: '--constellucentia-full-db-title-y', t: 'px', l: '文字の上下', d: 1, min: -10, max: 10, s: 0.5 },
-      { v: '--constellucentia-full-db-icon-y', t: 'px', l: 'アイコンの上下', d: 1, min: -10, max: 10, s: 0.5 }
+    { id: 'body', sec: 'all', label: '本文と段落', hl: PC + ' .notion-text-block', note: 'ページの本文。段落の上と下の間隔・1 行目の字下げ・両端揃え・ページの幅まで。本文の文字の色や書体の「部分的な」書式は、文字を選ぶと出るメニュー（本文の書式）で。', ctl: [
+      ...kit('body', { text: '.notion-frame ' + PC + ', .notion-peek-renderer ' + PC }, 'ff fs lh ls col', { g: '文字', d: { fs: 16, lh: 1.5 } }),
+      ...kit('para', { text: PC + ' .notion-text-block [data-content-editable-leaf]', row: PC + ' .notion-text-block' }, 'ti ta mt mb pt pb', { g: '段落', l: { mt: '段落の上の間隔', mb: '段落の下の間隔', pt: '段落の内側の上', pb: '段落の内側の下' }, d: { mt: 1, mb: 1, pt: 3, pb: 3 } }),
+      ...kit('blocks', { row: PC + ' [data-block-id].notion-selectable:not(.notion-text-block)' }, 'mt mb', { g: 'ほかのブロック', l: { mt: 'ブロックの上', mb: 'ブロックの下' } }),
+      { p: 'pageW', t: 'px', l: '本文の幅', d: 708, min: 400, max: 1800, s: 4, g: 'ページの幅' },
+      { p: 'pageSide', t: 'px', l: '左右の最小の余白', d: 96, min: 0, max: 400, s: 4, g: 'ページの幅' }
     ] },
-    { id: 'dbDesc', label: 'フルDBの説明', note: 'タイトルの下の説明文（旧 ¹⁴ ¹⁵、両端揃えは旧 ⁰⁶ の代わり）。', ctl: [
-      { v: '--constellucentia-full-db-description-serif', t: 'font', l: '欧文の書体', d: 'Source Serif 4' },
-      { v: '--constellucentia-full-db-description-mincho', t: 'font', l: '和文の書体', d: 'ヒラギノ明朝' },
-      { v: '--constellucentia-full-db-description-font-size', t: 'px', l: '大きさ', d: 12, min: 9, max: 24, s: 0.5 },
-      { v: '--constellucentia-full-db-description-font-weight', t: 'weight', l: '太さ', d: 400 },
-      { v: '--constellucentia-full-db-description-line-height', t: 'num', l: '行の高さ', d: 1.65, min: 1, max: 3, s: 0.05 },
-      { v: '--constellucentia-full-db-description-letter-spacing', t: 'em', l: '字間', d: 0.07, min: -0.05, max: 0.3, s: 0.005 },
-      { p: 'descJustify', t: 'toggle', l: '両端揃え（最終行は左）', d: true },
-      { v: '--constellucentia-full-db-description-gap', t: 'px', l: 'タイトルとの間', d: 15, min: 0, max: 60, s: 1 },
-      { v: '--constellucentia-full-db-description-right-inset', t: 'px', l: '右の余白', d: 120, min: 0, max: 400, s: 4 },
-      { v: '--constellucentia-full-db-quote-line-width', t: 'px', l: '左線の太さ', d: 2, min: 0, max: 8, s: 0.5 },
-      { v: '--constellucentia-full-db-quote-line-gap', t: 'px', l: '左線と文字の間', d: 10, min: 0, max: 40, s: 1 },
-      { v: '--constellucentia-full-db-quote-line-opacity', t: 'num', l: '左線の濃さ', d: 0.55, min: 0, max: 1, s: 0.05 }
+    { id: 'heads', sec: 'all', label: '見出し', hl: PC + ' :is(.notion-header-block, .notion-sub_header-block, .notion-sub_sub_header-block)', note: '見出し 1・2・3（トグル見出しも）。上と下の間隔で、見出しの前後の空きを決めます。', ctl: [
+      ...kit('h1', { text: PC + ' .notion-header-block :is(h2, [role="heading"])', row: PC + ' .notion-header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 1', d: { fs: 30, fw: 600 } }),
+      ...kit('h2', { text: PC + ' .notion-sub_header-block :is(h3, [role="heading"])', row: PC + ' .notion-sub_header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 2', d: { fs: 24, fw: 600 } }),
+      ...kit('h3', { text: PC + ' .notion-sub_sub_header-block :is(h4, [role="heading"])', row: PC + ' .notion-sub_sub_header-block' }, 'ff fs fw ls lh col mt mb', { g: '見出し 3', d: { fs: 20, fw: 600 } })
     ] },
-    { id: 'hdr', label: 'フルDBヘッダー', note: 'ビューのタブ（Table・Books …）と表の列見出し（Aa Name …）。既定で Serif に統一（⁹）。', ctl: [
-      { p: 'hdrScope', t: 'select', l: '当てる所', d: 'full', o: [['full', 'フルページの DB だけ'], ['all', 'インライン DB・ピークも']] },
-      { p: 'hdrTabFont', t: 'font', l: 'タブの書体', d: '' },
-      { p: 'hdrTabSize', t: 'px', l: 'タブの大きさ', d: 14, min: 9, max: 20, s: 0.5 },
-      { p: 'hdrTabWeight', t: 'weight', l: 'タブの太さ', d: 500 },
-      { p: 'hdrTabLs', t: 'em', l: 'タブの字間', d: 0, min: -0.05, max: 0.3, s: 0.005 },
-      { p: 'hdrColFont', t: 'font', l: '列見出しの書体', d: '' },
-      { p: 'hdrColSize', t: 'px', l: '列見出しの大きさ', d: 14, min: 9, max: 20, s: 0.5 },
-      { p: 'hdrColWeight', t: 'weight', l: '列見出しの太さ', d: 400 },
-      { p: 'hdrColLs', t: 'em', l: '列見出しの字間', d: 0, min: -0.05, max: 0.3, s: 0.005 },
-      { p: 'hdrColor', t: 'color', l: '列見出しの色', d: '' },
-      { v: '--c17-divider-height', t: 'px', l: 'タブの区切り線の高さ', d: 14, min: 0, max: 24, s: 1 },
-      { v: '--c17-divider-space', t: 'px', l: 'タブの区切りの余白', d: 2, min: 0, max: 16, s: 1 }
+    { id: 'lists', sec: 'all', label: 'リストと ToDo', hl: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block)', note: '箇条書き・番号付き・ToDo・トグル。', ctl: [
+      ...kit('li', { text: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block) [data-content-editable-leaf]', row: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block)' }, 'fs lh col mt mb', { g: '項目', l: { mt: '項目の上の間隔', mb: '項目の下の間隔' } }),
+      ...kit('limk', { icon: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block) > div > div:first-child' }, 'igap idy', { g: '印（・ 1. ☐ ▸）', l: { igap: '印と文字の間', idy: '印の上下' } }),
+      ...kit('done', { text: PC + ' .notion-to_do-block [style*="line-through"]' }, 'op col', { g: '済んだ ToDo', l: { op: '濃さ', col: '色' } })
     ] },
-    { id: 'primary', label: 'テーブルの題字列', note: '表の題字（Name）の列（旧 ¹⁷）。', ctl: [
-      { p: 'primFont', t: 'font', l: '書体', d: 'Charter・Baskerville → 明朝' },
-      { v: '--cordivestium-title-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5 },
-      { v: '--cordivestium-title-font-weight', t: 'weight', l: '太さ', d: 500 },
-      { v: '--cordivestium-title-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05 },
-      { v: '--cordivestium-title-icon-size', t: 'px', l: 'アイコン', d: 20, min: 12, max: 32, s: 1 },
-      { v: '--cordivestium-title-gap', t: 'px', l: 'アイコンとの間', d: 8, min: 0, max: 24, s: 1 }
+    { id: 'quote', sec: 'all', label: '引用とコールアウト', hl: PC + ' :is(.notion-quote-block, .notion-callout-block)', note: '引用の左線・コールアウトの余白とアイコン。', ctl: [
+      ...kit('quote', { text: PC + ' .notion-quote-block [data-content-editable-leaf]', row: PC + ' .notion-quote-block [style*="border-left"]' }, 'ff fs lh col it bw bc pl', { g: '引用', prop: { bw: 'border-left-width:$px', bc: 'border-left-color:$', pl: 'padding-left:$px' }, l: { pl: '線と文字の間' } }),
+      ...kit('callout', { text: PC + ' .notion-callout-block [data-content-editable-leaf]', row: PC + ' .notion-callout-block > [role="note"] > div', icon: PC + ' .notion-callout-block .notion-record-icon' }, 'ff fs lh pt pb pl rad bg isz igap idy', { g: 'コールアウト' })
     ] },
-    { id: 'relation', label: 'リレーション', note: '表のリレーションのセル（旧 ¹⁶・¹⁴ Relation Show All の項目）。', ctl: [
-      { p: 'relFont', t: 'font', l: '書体', d: 'Baskerville → 明朝' },
-      { v: '--cordi-relation-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5 },
-      { v: '--cordi-relation-font-weight', t: 'weight', l: '太さ', d: 500 },
-      { v: '--cordi-relation-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05 },
-      { v: '--cordi-relation-icon-size', t: 'px', l: 'アイコン', d: 20, min: 12, max: 32, s: 1 },
-      { v: '--cordi-relation-icon-gap', t: 'px', l: 'アイコンとの間', d: 8, min: 0, max: 24, s: 1 },
-      { v: '--cordi-relation-multi-gap', t: 'px', l: '項目の間', d: 3, min: 0, max: 16, s: 1 },
-      { p: 'relHeadFont', t: 'font', l: 'シリーズ見出しの書体', d: 'Baskerville → 明朝' },
-      { p: 'relHeadSize', t: 'px', l: 'シリーズ見出しの大きさ', d: 11, min: 9, max: 18, s: 0.5 }
+    { id: 'code', sec: 'all', label: 'コード・線・表', hl: PC + ' :is(.notion-code-block, .notion-divider-block, .notion-table-block)', note: 'コードブロック・区切り線・表ブロック（データベースでない表）。', ctl: [
+      ...kit('code', { text: PC + ' .notion-code-block :is([data-content-editable-leaf], code)', row: PC + ' .notion-code-block > div' }, 'ff fs lh pt pb rad bg', { g: 'コード' }),
+      ...kit('hr', { row: PC + ' .notion-divider-block [role="separator"]', blk: PC + ' .notion-divider-block' }, 'bw bc mt mb', { g: '区切り線', prop: { bw: 'border-bottom-width:$px', bc: 'border-bottom-color:$' }, tg: { mt: 'blk', mb: 'blk' } }),
+      ...kit('stbl', { text: PC + ' .notion-table-block :is(td, th)' }, 'ff fs lh pt pb', { g: '表ブロック', tg: { pt: 'text', pb: 'text' }, prop: { pt: 'padding-top:$px', pb: 'padding-bottom:$px' }, l: { pt: 'セルの内側の上', pb: 'セルの内側の下' } })
     ] },
-    { id: 'group', label: 'グループ見出し', note: '表を「グループ」で分けた時の見出し（旧 ¹² ²¹）。', ctl: [
-      { p: 'grpFont', t: 'font', l: '書体', d: 'Baskerville → 明朝' },
-      { v: '--c12g-size', t: 'px', l: '大きさ', d: 12, min: 9, max: 24, s: 0.5 },
-      { v: '--c12g-weight', t: 'weight', l: '太さ', d: 700 },
-      { v: '--c12g-lh', t: 'num', l: '行の高さ', d: 1.35, min: 0.8, max: 3, s: 0.05 },
-      { v: '--c12g-icon', t: 'px', l: 'アイコン', d: 19.2, min: 8, max: 40, s: 0.2 },
-      { v: '--c12g-gap', t: 'px', l: 'アイコンとの間', d: 8, min: 0, max: 32, s: 0.5 },
-      { v: '--c12g-pad', t: 'px', l: '左の余白', d: 6.4, min: 0, max: 32, s: 0.2 }
+    { id: 'links', sec: 'all', label: 'リンクとメンション', hl: PC + ' :is(.notion-page-block, .notion-page-mention-token)', note: '本文の中の「ページへのリンク」ブロックと、@ メンション。', ctl: [
+      ...kit('plink', { row: PC + ' .notion-page-block', text: PC + ' .notion-page-block .notranslate', icon: PC + ' .notion-page-block .notion-record-icon' }, 'ff fs fw col isz igap idy tdy mt mb', { g: 'ページへのリンク' }),
+      ...kit('ment', { text: PC + ' .notion-page-mention-token', icon: PC + ' .notion-page-mention-token .notion-record-icon' }, 'fw col isz igap idy', { g: 'メンション' })
     ] },
-    { id: 'rowTitle', label: '行ページのタイトル', note: 'DB の行を開いた時のタイトル（旧 ²⁵）。書体は「フルDBタイトル」と同じ。', ctl: [
-      { v: '--c25-title-size', t: 'px', l: '大きさ', d: 20, min: 12, max: 48, s: 0.5 }
+    /* ───── ページ ───── */
+    { id: 'page', sec: 'page', label: 'ページのタイトル', hl: '.notion-frame h1[aria-roledescription="page title"]', note: 'DB でない普通のページのタイトルとアイコン。空のままなら Notion のまま（¹⁴ Page Jitter Stopper が書体を測るので、変えたら再読み込みを）。', ctl: [
+      { p: 'pgFont', t: 'font', l: '書体', d: '', g: 'タイトル' },
+      { p: 'pgSize', t: 'px', l: '大きさ', d: 40, min: 16, max: 72, s: 1, g: 'タイトル' },
+      { p: 'pgWeight', t: 'weight', l: '太さ', d: 700, g: 'タイトル' },
+      { p: 'pgLs', t: 'em', l: '字間', d: 0, min: -0.05, max: 0.3, s: 0.005, g: 'タイトル' },
+      ...kit('pgt', { text: '.notion-frame .layout h1[aria-roledescription="page title"]', row: '.notion-frame .layout .notion-page-block:has(> h1[aria-roledescription="page title"])' }, 'lh col tdy mt mb', { g: 'タイトルの位置と余白', l: { mt: 'タイトルの上', mb: 'タイトルの下' } }),
+      ...kit('pgi', { icon: '.notion-frame .layout :is([aria-label="Change page icon"] .notion-record-icon, .notion-record-icon[aria-label="Change page icon"])' }, 'isz idy idx', { g: 'ページのアイコン', d: { isz: 78 } })
     ] },
-    { id: 'page', label: '通常ページのタイトル', note: 'DB でない普通のページのタイトル。空のままなら Notion のまま（¹⁴ Page Jitter Stopper が書体を測るので、変えたら再読み込みを）。', ctl: [
-      { p: 'pgFont', t: 'font', l: '書体', d: '' },
-      { p: 'pgSize', t: 'px', l: '大きさ', d: 40, min: 16, max: 64, s: 1 },
-      { p: 'pgWeight', t: 'weight', l: '太さ', d: 700 },
-      { p: 'pgLs', t: 'em', l: '字間', d: 0, min: -0.05, max: 0.3, s: 0.005 }
+    { id: 'props', sec: 'page', label: 'プロパティ', hl: '.notion-frame .layout [role="cell"][aria-haspopup="dialog"]', note: 'DB の行を開いた時の、タイトルの下のプロパティ欄（名前と値）。', ctl: [
+      ...kit('pname', { text: '.notion-frame .layout [role="cell"][aria-haspopup="dialog"]', icon: '.notion-frame .layout [role="cell"][aria-haspopup="dialog"] svg' }, 'ff fs fw ls col isz igap idy h', { g: 'プロパティの名前', deep: true, prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' } }),
+      ...kit('pval', { text: '.notion-frame .layout [data-testid="property-value"]:not(.notion-table-view-cell *):not(.notion-collection-item *)' }, 'ff fs fw ls lh col', { g: 'プロパティの値', deep: true })
     ] },
-    { id: 'sidebar', label: 'サイドバー', note: '★グループ見出し（¹⁶）と、³³ Sidebar Constellation の行・ワークスペース・ビュー。', ctl: [
-      { v: '--c16-head-font', t: 'font', l: '★見出しの書体', d: 'Baskerville → 明朝' },
-      { v: '--c16-font-size', t: 'px', l: '★見出しの大きさ', d: 14, min: 10, max: 20, s: 0.5 },
-      { v: '--c16-head-weight', t: 'weight', l: '★見出しの太さ', d: 700 },
-      { v: '--c33-item-font', t: 'font', l: '行の書体', d: '★見出しと同じ' },
-      { v: '--c33-item-size', t: 'px', l: '行の大きさ', d: 13, min: 10, max: 18, s: 0.5 },
-      { v: '--c33-item-h', t: 'px', l: '行の高さ', d: 28, min: 22, max: 40, s: 1 },
-      { v: '--c33-team-size', t: 'px', l: 'ワークスペースの大きさ', d: 10.5, min: 8, max: 16, s: 0.5 },
-      { v: '--c33-view-size', t: 'px', l: 'ビューの大きさ', d: 12, min: 9, max: 16, s: 0.5 }
+    { id: 'rowTitle', sec: 'page', label: '行ページのタイトル', note: 'DB の行を開いた時のタイトル（旧 ²⁵）。書体は「フルDBタイトル」と同じ。', ctl: [
+      { v: '--c25-title-size', t: 'px', l: '大きさ', d: 20, min: 12, max: 48, s: 0.5, g: 'タイトル' }
+    ] },
+    /* ───── データベース ───── */
+    { id: 'dbTitle', sec: 'db', label: 'フルDBタイトル', note: 'フルページの DB のタイトルとアイコン（旧 ¹³）。行ページのタイトルも同じ値を使います。', ctl: [
+      { v: '--constellucentia-full-db-title-font-family', t: 'font', l: '書体', d: 'Canela Deck → 明朝', g: '文字' },
+      { v: '--constellucentia-full-db-title-japanese-font-family', t: 'font', l: '和文の書体', d: 'ヒラギノ明朝', g: '文字' },
+      { v: '--constellucentia-full-db-title-size', t: 'px', l: '大きさ', d: 20, min: 12, max: 48, s: 0.5, g: '文字' },
+      { v: '--constellucentia-full-db-title-weight', t: 'weight', l: '太さ', d: 500, g: '文字' },
+      { v: '--constellucentia-full-db-title-line-height', t: 'num', l: '行の高さ', d: 1.16, min: 0.9, max: 2, s: 0.01, g: '文字' },
+      { v: '--constellucentia-full-db-title-letter-spacing', t: 'em', l: '字間', d: 0.085, min: -0.05, max: 0.3, s: 0.005, g: '文字' },
+      { v: '--constellucentia-full-db-icon-size', t: 'px', l: 'アイコンの大きさ', d: 36, min: 16, max: 72, s: 1, g: 'アイコン' },
+      { v: '--constellucentia-full-db-icon-title-gap', t: 'px', l: 'アイコンと文字の間', d: 12, min: 0, max: 40, s: 1, g: 'アイコン' },
+      { v: '--constellucentia-full-db-icon-y', t: 'px', l: 'アイコンの上下', d: 1, min: -10, max: 10, s: 0.5, g: 'アイコン' },
+      { v: '--constellucentia-full-db-title-y', t: 'px', l: '文字の上下', d: 1, min: -10, max: 10, s: 0.5, g: '位置' }
+    ] },
+    { id: 'dbDesc', sec: 'db', label: 'フルDBの説明', note: 'タイトルの下の説明文（旧 ¹⁴ ¹⁵、両端揃えは旧 ⁰⁶ の代わり）。', ctl: [
+      { v: '--constellucentia-full-db-description-serif', t: 'font', l: '欧文の書体', d: 'Source Serif 4', g: '文字' },
+      { v: '--constellucentia-full-db-description-mincho', t: 'font', l: '和文の書体', d: 'ヒラギノ明朝', g: '文字' },
+      { v: '--constellucentia-full-db-description-font-size', t: 'px', l: '大きさ', d: 12, min: 9, max: 24, s: 0.5, g: '文字' },
+      { v: '--constellucentia-full-db-description-font-weight', t: 'weight', l: '太さ', d: 400, g: '文字' },
+      { v: '--constellucentia-full-db-description-line-height', t: 'num', l: '行の高さ', d: 1.65, min: 1, max: 3, s: 0.05, g: '文字' },
+      { v: '--constellucentia-full-db-description-letter-spacing', t: 'em', l: '字間', d: 0.07, min: -0.05, max: 0.3, s: 0.005, g: '文字' },
+      { p: 'descJustify', t: 'toggle', l: '両端揃え（最終行は左）', d: true, g: '文字' },
+      { v: '--constellucentia-full-db-description-gap', t: 'px', l: 'タイトルとの間', d: 15, min: 0, max: 60, s: 1, g: '間隔' },
+      { v: '--constellucentia-full-db-description-right-inset', t: 'px', l: '右の余白', d: 120, min: 0, max: 400, s: 4, g: '間隔' },
+      { v: '--constellucentia-full-db-quote-line-width', t: 'px', l: '左線の太さ', d: 2, min: 0, max: 8, s: 0.5, g: '左の線' },
+      { v: '--constellucentia-full-db-quote-line-gap', t: 'px', l: '左線と文字の間', d: 10, min: 0, max: 40, s: 1, g: '左の線' },
+      { v: '--constellucentia-full-db-quote-line-opacity', t: 'num', l: '左線の濃さ', d: 0.55, min: 0, max: 1, s: 0.05, g: '左の線' }
+    ] },
+    { id: 'hdr', sec: 'db', label: 'タブと列見出し', note: 'ビューのタブ（Books・Light …）と表の列見出し（Aa Name …）。既定で Serif に統一（⁹）。', ctl: [
+      { p: 'hdrScope', t: 'select', l: '当てる所', d: 'full', o: [['full', 'フルページの DB だけ'], ['all', 'インライン DB・ピークも']], g: '範囲' },
+      { p: 'hdrTabFont', t: 'font', l: '書体', d: '', g: 'ビューのタブ' },
+      { p: 'hdrTabSize', t: 'px', l: '大きさ', d: 14, min: 9, max: 20, s: 0.5, g: 'ビューのタブ' },
+      { p: 'hdrTabWeight', t: 'weight', l: '太さ', d: 500, g: 'ビューのタブ' },
+      { p: 'hdrTabLs', t: 'em', l: '字間', d: 0, min: -0.05, max: 0.3, s: 0.005, g: 'ビューのタブ' },
+      ...kit('tabi', { icon: '.notion-frame [role="tablist"] :is(.notion-collection-view-tab, .notion-collection-view-tab-button, [role="tab"]) :is(svg, .notion-record-icon, img)' }, 'isz igap idy', { g: 'ビューのタブ' }),
+      { v: '--c17-divider-height', t: 'px', l: '区切り線の高さ', d: 14, min: 0, max: 24, s: 1, g: 'ビューのタブ' },
+      { v: '--c17-divider-space', t: 'px', l: '区切りの余白', d: 2, min: 0, max: 16, s: 1, g: 'ビューのタブ' },
+      { p: 'hdrColFont', t: 'font', l: '書体', d: '', g: '列見出し' },
+      { p: 'hdrColSize', t: 'px', l: '大きさ', d: 14, min: 9, max: 20, s: 0.5, g: '列見出し' },
+      { p: 'hdrColWeight', t: 'weight', l: '太さ', d: 400, g: '列見出し' },
+      { p: 'hdrColLs', t: 'em', l: '字間', d: 0, min: -0.05, max: 0.3, s: 0.005, g: '列見出し' },
+      { p: 'hdrColor', t: 'color', l: '色', d: '', g: '列見出し' },
+      ...kit('coli', { icon: '.notion-frame .notion-table-view-header-cell svg', row: '.notion-frame .notion-table-view-header-row' }, 'isz igap idy h', { g: '列見出し', prop: { h: 'min-height:$px' }, l: { h: '見出しの行の高さ' } })
+    ] },
+    { id: 'cells', sec: 'db', label: '表のセル', hl: '.notion-frame .notion-table-view-cell', note: '表ビューの普通のセル（題字・リレーション以外）。', ctl: [
+      ...kit('cell', { text: '.notion-frame .notion-table-view-cell [data-testid="property-value"]', row: '.notion-frame .notion-table-view-cell' }, 'ff fs lh col pt pb pl', { g: 'セル', deep: true }),
+      ...kit('trow', { row: '.notion-frame .notion-table-view :is(.notion-table-view-row, .notion-collection-item)' }, 'h', { g: '行', prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' } })
+    ] },
+    { id: 'primary', sec: 'db', label: 'テーブルの題字列', note: '表の題字（Name）の列（旧 ¹⁷）。', ctl: [
+      { p: 'primFont', t: 'font', l: '書体', d: 'Charter・Baskerville → 明朝', g: '文字' },
+      { v: '--cordivestium-title-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5, g: '文字' },
+      { v: '--cordivestium-title-font-weight', t: 'weight', l: '太さ', d: 500, g: '文字' },
+      { v: '--cordivestium-title-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05, g: '文字' },
+      ...kit('prim', { text: '.notion-table-view-cell[data-c12-primary] [data-testid="property-value"] span.notranslate', icon: '.notion-table-view-cell[data-c12-primary] .notion-record-icon' }, 'col tdy', { g: '文字' }),
+      { v: '--cordivestium-title-icon-size', t: 'px', l: 'アイコンの大きさ', d: 20, min: 12, max: 32, s: 1, g: 'アイコン' },
+      { v: '--cordivestium-title-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 1, g: 'アイコン' },
+      ...kit('primi', { icon: '.notion-table-view-cell[data-c12-primary] .notion-record-icon' }, 'idy idx', { g: 'アイコン' })
+    ] },
+    { id: 'relation', sec: 'db', label: 'リレーション', note: '表のリレーションのセル（旧 ¹⁶・¹⁴ Relation Show All の項目とシリーズ見出し）。', ctl: [
+      { p: 'relFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: '項目' },
+      { v: '--cordi-relation-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5, g: '項目' },
+      { v: '--cordi-relation-font-weight', t: 'weight', l: '太さ', d: 500, g: '項目' },
+      { v: '--cordi-relation-line-height', t: 'num', l: '行の高さ', d: 2.5, min: 1, max: 4, s: 0.05, g: '項目' },
+      ...kit('rel', { text: '.cordi13-item .cordi13-title', icon: '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)' }, 'col tdy', { g: '項目' }),
+      { v: '--cordi-relation-icon-size', t: 'px', l: 'アイコンの大きさ', d: 20, min: 12, max: 32, s: 1, g: '項目のアイコン' },
+      { v: '--cordi-relation-icon-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 1, g: '項目のアイコン' },
+      ...kit('reli', { icon: '.cordi13-item :is(.notion-record-icon, img, .cordi13-emoji)' }, 'idy', { g: '項目のアイコン' }),
+      { v: '--cordi-relation-multi-gap', t: 'px', l: '項目の間', d: 3, min: 0, max: 16, s: 1, g: '間隔' },
+      { p: 'relHeadFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: 'シリーズ見出し' },
+      { p: 'relHeadSize', t: 'px', l: '大きさ', d: 11, min: 9, max: 18, s: 0.5, g: 'シリーズ見出し' },
+      ...kit('relh', { text: ':is(.cordi13-sec-head, .c23-head) > span:last-child', icon: ':is(.cordi13-sec-head, .c23-head) :is(.cordi13-sec-icon, img)', row: '.cordi13-sec-head' }, 'fw col tdy isz igap idy pt pb', { g: 'シリーズ見出し', l: { pt: '見出しの上', pb: '見出しと線の間' } })
+    ] },
+    { id: 'group', sec: 'db', label: 'グループ見出し', note: '表を「グループ」で分けた時の見出し（旧 ¹² ²¹）。', ctl: [
+      { p: 'grpFont', t: 'font', l: '書体', d: 'Baskerville → 明朝', g: '文字' },
+      { v: '--c12g-size', t: 'px', l: '大きさ', d: 12, min: 9, max: 24, s: 0.5, g: '文字' },
+      { v: '--c12g-weight', t: 'weight', l: '太さ', d: 700, g: '文字' },
+      { v: '--c12g-lh', t: 'num', l: '行の高さ', d: 1.35, min: 0.8, max: 3, s: 0.05, g: '文字' },
+      { v: '--c12g-icon', t: 'px', l: 'アイコンの大きさ', d: 19.2, min: 8, max: 40, s: 0.2, g: 'アイコン' },
+      { v: '--c12g-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 32, s: 0.5, g: 'アイコン' },
+      { v: '--c12g-pad', t: 'px', l: '左の余白', d: 6.4, min: 0, max: 32, s: 0.2, g: '間隔' }
+    ] },
+    { id: 'cards', sec: 'db', label: 'カードと一覧', hl: '.notion-frame :is(.notion-gallery-view, .notion-board-view, .notion-list-view) .notion-collection-item', note: 'ギャラリー・ボードのカードと、リストビューの行。', ctl: [
+      ...kit('gal', { row: '.notion-frame .notion-gallery-view .notion-collection-item', text: '.notion-frame .notion-gallery-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-gallery-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col rad isz igap', { g: 'ギャラリーのカード' }),
+      ...kit('brd', { row: '.notion-frame .notion-board-view .notion-collection-item', text: '.notion-frame .notion-board-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-board-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col rad isz igap', { g: 'ボードのカード' }),
+      ...kit('lst', { row: '.notion-frame .notion-list-view .notion-collection-item', text: '.notion-frame .notion-list-view .notion-collection-item .notranslate', icon: '.notion-frame .notion-list-view .notion-collection-item .notion-record-icon' }, 'ff fs fw col isz igap h', { g: 'リストビューの行', prop: { h: 'min-height:$px' } })
+    ] },
+    /* ───── サイドバー ───── */
+    { id: 'sidebar', sec: 'side', label: 'サイドバー', hl: '.notion-sidebar-container', note: '★グループ見出し（¹⁶）と ³³ Sidebar Constellation の行・ビュー・ワークスペース。アイコンの大きさ・文字との間・位置まで。ビューのアイコンは、上の DB の題名の 1 文字目にそろいます（ずらしたい時は「開始位置」）。', ctl: [
+      ...kit('sbg', { text: '#c16-root .c16-sec .c16-lbl', icon: '#c16-root .c16-sec .c16-ico', row: '#c16-root .c16-sec' }, 'ff fs fw ls col tdy isz igap idy mt', { g: '★ グループ見出し', deep: true, prop: { isz: 'width:$px;height:$px;min-width:$px;--c16-ico-size:$px;--c16-ico-box:$px' }, l: { mt: 'グループの上の間隔' } }),
+      { v: '--c33-team-font', t: 'font', l: '書体', d: '★見出しと同じ', g: '■ ワークスペース' },
+      { v: '--c33-team-size', t: 'px', l: '大きさ', d: 10.5, min: 8, max: 18, s: 0.5, g: '■ ワークスペース' },
+      { v: '--c33-team-weight', t: 'weight', l: '太さ', d: 600, g: '■ ワークスペース' },
+      { v: '--c33-team-track', t: 'em', l: '字間', d: 0.14, min: 0, max: 0.4, s: 0.01, g: '■ ワークスペース' },
+      { v: '--c33-team-color', t: 'color', l: '色', d: '', g: '■ ワークスペース' },
+      { v: '--c33-team-gap', t: 'px', l: '上の間隔', d: 8, min: 0, max: 48, s: 1, g: '■ ワークスペース' },
+      { v: '--c33-team-after', t: 'px', l: '下の間隔', d: 0, min: -8, max: 32, s: 1, g: '■ ワークスペース' },
+      { v: '--c33-item-font', t: 'font', l: '書体', d: '★見出しと同じ', g: '● DB・ページの行' },
+      { v: '--c33-item-size', t: 'px', l: '大きさ', d: 13, min: 10, max: 20, s: 0.5, g: '● DB・ページの行' },
+      { v: '--c33-item-weight', t: 'weight', l: '太さ', d: 500, g: '● DB・ページの行' },
+      { v: '--c33-item-track', t: 'em', l: '字間', d: 0.02, min: -0.05, max: 0.3, s: 0.005, g: '● DB・ページの行' },
+      { v: '--c33-item-color', t: 'color', l: '色', d: '', g: '● DB・ページの行' },
+      { v: '--c33-item-h', t: 'px', l: '行の高さ', d: 28, min: 20, max: 48, s: 1, g: '● DB・ページの行' },
+      { v: '--c33-text-dy', t: 'px', l: '文字の上下', d: 0, min: -8, max: 8, s: 0.5, g: '● DB・ページの行' },
+      { v: '--c33-icon-size', t: 'px', l: 'アイコンの大きさ', d: 18, min: 10, max: 32, s: 0.5, g: '● DB・ページの行' },
+      { v: '--c33-icon-gap', t: 'px', l: 'アイコンと文字の間', d: 8, min: 0, max: 24, s: 0.5, g: '● DB・ページの行' },
+      { v: '--c33-icon-dy', t: 'px', l: 'アイコンの上下', d: 0, min: -8, max: 8, s: 0.5, g: '● DB・ページの行' },
+      { v: '--c33-icon-dx', t: 'px', l: 'アイコンの左右', d: 0, min: -16, max: 16, s: 0.5, g: '● DB・ページの行' },
+      { v: '--c33-view-font', t: 'font', l: '書体', d: '行と同じ', g: '▲ ビューの行' },
+      { v: '--c33-view-size', t: 'px', l: '大きさ', d: 12.5, min: 9, max: 18, s: 0.5, g: '▲ ビューの行' },
+      { v: '--c33-view-weight', t: 'weight', l: '太さ', d: 400, g: '▲ ビューの行' },
+      { v: '--c33-view-color', t: 'color', l: '色', d: '', g: '▲ ビューの行' },
+      { v: '--c33-view-h', t: 'px', l: '行の高さ', d: 26, min: 18, max: 40, s: 1, g: '▲ ビューの行' },
+      { v: '--c33-vtext-dy', t: 'px', l: '文字の上下', d: 0, min: -8, max: 8, s: 0.5, g: '▲ ビューの行' },
+      { v: '--c33-vicon-size', t: 'px', l: 'アイコンの大きさ', d: 15, min: 8, max: 28, s: 0.5, g: '▲ ビューの行' },
+      { v: '--c33-vicon-gap', t: 'px', l: 'アイコンと文字の間', d: 7, min: 0, max: 24, s: 0.5, g: '▲ ビューの行' },
+      { v: '--c33-vicon-dy', t: 'px', l: 'アイコンの上下', d: 0, min: -8, max: 8, s: 0.5, g: '▲ ビューの行' },
+      { v: '--c33-view-shift', t: 'px', l: '開始位置のずらし', d: 0, min: -24, max: 24, s: 0.5, g: '▲ ビューの行' },
+      { v: '--c33-cur-weight', t: 'weight', l: '太さ', d: 700, g: '今開いている所' },
+      { v: '--c33-cur-color', t: 'color', l: '色', d: '', g: '今開いている所' },
+      ...kit('sbsw', { text: '.notion-sidebar-switcher :is(.notranslate, div:not(:has(*)))', icon: '.notion-sidebar-switcher .notion-record-icon' }, 'ff fs fw isz igap', { g: '一番上のワークスペース名' })
+    ] },
+    /* ───── 画面 ───── */
+    { id: 'chrome', sec: 'chrome', label: '上の帯とメニュー', hl: '.notion-topbar', note: '上の帯（パンくず）・メニューと候補の一覧・サイドピーク・スクロールバー。', ctl: [
+      ...kit('top', { text: '.notion-topbar :is(.notranslate, [role="button"] div:not(:has(*)))', icon: '.notion-topbar .notion-record-icon' }, 'ff fs fw col isz igap', { g: '上の帯（パンくず）' }),
+      ...kit('menu', { text: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(.notranslate, div:not(:has(*)))', icon: '.notion-overlay-container :is([role="menuitem"], [role="option"]) :is(svg, .notion-record-icon)' }, 'ff fs fw isz igap', { g: 'メニュー・候補' }),
+      ...kit('peek', { row: '.notion-peek-renderer' }, 'w rad', { g: 'サイドピーク', prop: { w: 'width:$px;max-width:calc(100vw - 80px)' }, l: { w: 'ピークの幅' } }),
+      { p: 'scrollW', t: 'px', l: 'スクロールバーの太さ', d: 10, min: 0, max: 16, s: 1, g: 'スクロールバー' }
     ] }
   ];
   const AT_CTL = {};
-  for (const r of AT_REGIONS) for (const c of r.ctl) AT_CTL[c.v || c.p] = c;
+  for (const r of AT_REGIONS) for (const c of r.ctl) { AT_CTL[c.v || c.p] = c; c.region = r.id; }
   const UNIT = { px: 'px', em: 'em', num: '', weight: '' };
+  /* kit の CSS（値の入った所だけ） */
+  const addImp = (d) => d.split(';').map((x) => x.trim()).filter(Boolean).map((x) => (/!important$/.test(x) ? x : x + ' !important')).join(';');
+  function atKitCss() {
+    let css = '';
+    const T = TK();
+    for (const [k, K] of Object.entries(KITS)) {
+      const by = {};
+      const add = (tg, d) => { if (!K.sel[tg]) return; (by[tg] = by[tg] || []).push(addImp(d)); };
+      const tr = { text: [0, 0], icon: [0, 0] };
+      let any = false;
+      for (const x of Object.keys(KC)) {
+        const v = T[k + '.' + x];
+        if (v === undefined || v === '' || v === null) continue;
+        const c = KC[x], tg = K.tg[x] || KT[x], n = atNum(v);
+        const val = c.t === 'font' ? atFamily(v) : c.t === 'color' || c.t === 'select' ? String(v).replace(/[;{}<>]/g, '') : n;
+        if (val === null || val === '') continue;
+        any = true;
+        if (K.prop[x]) { add(tg, K.prop[x].replace(/\$/g, val)); continue; }
+        switch (x) {
+          case 'ff': add(tg, 'font-family:' + val); break;
+          case 'fs': add(tg, 'font-size:' + val + 'px'); break;
+          case 'fw': add(tg, 'font-weight:' + val); break;
+          case 'ls': add(tg, 'letter-spacing:' + val + 'em'); break;
+          case 'lh': add(tg, 'line-height:' + val); break;
+          case 'col': add(tg, 'color:' + val); break;
+          case 'op': add(tg, 'opacity:' + val); break;
+          case 'it': if (v === '1' || v === true) add(tg, 'font-style:italic'); break;
+          case 'ta': add(tg, 'text-align:' + val + (val === 'justify' ? ';text-justify:inter-character;text-align-last:start' : '')); break;
+          case 'ti': add(tg, 'text-indent:' + val + 'em'); break;
+          case 'tdy': tr.text[1] = val; break;
+          case 'tdx': tr.text[0] = val; break;
+          case 'idy': tr.icon[1] = val; break;
+          case 'idx': tr.icon[0] = val; break;
+          case 'isz': add(tg, 'width:' + val + 'px;height:' + val + 'px;min-width:' + val + 'px;font-size:' + (val * 0.86).toFixed(2) + 'px'); by.__isz = val; break;
+          case 'igap': add(tg, 'margin-inline-end:' + val + 'px'); break;
+          case 'mt': add(tg, 'margin-top:' + val + 'px'); break;
+          case 'mb': add(tg, 'margin-bottom:' + val + 'px'); break;
+          case 'pt': add(tg, 'padding-top:' + val + 'px'); break;
+          case 'pb': add(tg, 'padding-bottom:' + val + 'px'); break;
+          case 'pl': add(tg, 'padding-left:' + val + 'px'); break;
+          case 'h': add(tg, 'height:' + val + 'px;min-height:' + val + 'px'); break;
+          case 'w': add(tg, 'width:' + val + 'px'); break;
+          case 'rad': add(tg, 'border-radius:' + val + 'px;overflow:hidden'); break;
+          case 'bw': add(tg, 'border-width:' + val + 'px'); break;
+          case 'bc': add(tg, 'border-color:' + val); break;
+          case 'bg': add(tg, 'background:' + val); break;
+        }
+      }
+      if (!any) continue;
+      for (const t of ['text', 'icon']) if (tr[t][0] || tr[t][1]) add(t, 'transform:translate(' + (tr[t][0] || 0) + 'px,' + (tr[t][1] || 0) + 'px)');
+      for (const [tg, ds] of Object.entries(by)) {
+        if (tg === '__isz' || !ds.length) continue;
+        css += '/* ' + k + ' */\n' + boostSel(K.sel[tg]) + ' {' + ds.join(';') + '}\n';
+        if (tg === 'text' && K.deep) {
+          const inh = ds.join(';').match(/(font-family|font-size|font-weight|letter-spacing|line-height|color|font-style)\s*:/g);
+          if (inh) css += boostSel(atSplit(K.sel.text).map((s) => s + ' ' + DEEP).join(', ')) + ' {' + [...new Set(inh.map((x) => x.replace(/\s*:$/, '')))].map((p) => p + ':inherit !important').join(';') + '}\n';
+        }
+      }
+      if (by.__isz && K.sel.icon) css += boostSel(atSplit(K.sel.icon).map((s) => s + ' :is(img, svg)').join(', ')) + ' {width:100% !important;height:100% !important;max-width:none !important;max-height:none !important}\n';
+    }
+    return css;
+  }
+  /* 変数でも kit でもない、Atelier が直接書く所 */
+  function atMiscCss() {
+    const T = TK(), n = (k) => atNum(T[k]);
+    let css = '';
+    if (n('pageW') != null || n('pageSide') != null) {
+      const w = n('pageW') != null ? n('pageW') : 708, s = n('pageSide') != null ? n('pageSide') : 96;
+      css += boostSel('.notion-frame .layout:not(.layout-wide), .notion-peek-renderer .layout:not(.layout-wide)') + ' {grid-template-columns:[full-start] minmax(' + s + 'px, 1fr) [content-start] minmax(auto, ' + w + 'px) [content-end] minmax(' + s + 'px, 1fr) [full-end] !important}\n';
+    }
+    if (T.selCol) css += '::selection{background:' + String(T.selCol).replace(/[;{}<>]/g, '') + ' !important}\n';
+    if (T.caretCol) css += '[contenteditable="true"], input, textarea{caret-color:' + String(T.caretCol).replace(/[;{}<>]/g, '') + ' !important}\n';
+    if (n('scrollW') != null) { const w = n('scrollW'); css += '.notion-scroller::-webkit-scrollbar{width:' + w + 'px !important;height:' + w + 'px !important}\n' + (w === 0 ? '.notion-scroller{scrollbar-width:none !important}\n' : ''); }
+    return css;
+  }
 
   /* ---------- CSS を書く ---------- */
   function atStyle(id) {
@@ -7275,7 +7527,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     return css;
   }
   function atTokensCss() {
-    const T = AT.tokens;
+    const T = TK();
     const vars = [];
     for (const [k, c] of Object.entries(AT_CTL)) {
       if (!c.v) continue;
@@ -7306,6 +7558,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (fam('grpFont')) css += atRule('html[data-c05-full="1"] .notion-collection_view_page-block > a[role="link"] > div:has(.notion-record-icon) > :not(.notion-record-icon):not(:has(.notion-record-icon))', { ff: fam('grpFont') }, true);
     /* 通常ページのタイトル */
     css += atRule('.layout:not(:has([aria-label="View/hide details"])) .notion-page-block > h1[aria-roledescription="page title"]', { ff: fam('pgFont'), fs: n('pgSize'), fw: n('pgWeight'), ls: n('pgLs') }, true);
+    css += atKitCss() + atMiscCss();
     return css;
   }
   const atRaw = (sel, d) => boostSel(sel) + ' {' + d + '}\n';
@@ -7321,7 +7574,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   }
   function atWrite(which) {
     if (!which || which === 'base') { const s = atStyle(AT_IDS.base); const c = atBaseCss(); if (s.textContent !== c) s.textContent = c; }
-    if (!which || which === 'tokens') { const s = atStyle(AT_IDS.tokens); const c = atTokensCss(); if (s.textContent !== c) s.textContent = c; }
+    if (!which || which === 'tokens') { const s = atStyle(AT_IDS.tokens); const c = atTokensCss(); if (s.textContent !== c) { s.textContent = c; clearTimeout(atWrite.t); atWrite.t = setTimeout(() => { try { document.dispatchEvent(new CustomEvent('atelier-change')); } catch (e) { /* noop */ } }, 60); } }
     if (!which || which === 'rules') { const s = atStyle(AT_IDS.rules); const c = atRulesCss(); if (s.textContent !== c) s.textContent = c; }
   }
   /* <head> ができたら、Stylus より後ろへ（同じ強さの規則は後ろが勝つ） */
@@ -7373,7 +7626,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     g12Shim = {
       atelier: true,
       status: () => ({ by: 'Atelier', styledBlocks: document.querySelectorAll('.' + G12_CLASS.block).length }),
-      set: (patch) => { const map = { HEADER_PAD_LEFT_PX: '--c12g-pad', ICON_TEXT_GAP_PX: '--c12g-gap', ICON_SIZE_PX: '--c12g-icon', FONT_SIZE_PX: '--c12g-size', LINE_HEIGHT: '--c12g-lh', FONT_WEIGHT: '--c12g-weight' }; for (const k of Object.keys(patch || {})) if (map[k]) AT.tokens[map[k]] = String(patch[k]); atSave(); atWrite('tokens'); return Object.assign({}, AT.tokens); },
+      set: (patch) => { const map = { HEADER_PAD_LEFT_PX: '--c12g-pad', ICON_TEXT_GAP_PX: '--c12g-gap', ICON_SIZE_PX: '--c12g-icon', FONT_SIZE_PX: '--c12g-size', LINE_HEIGHT: '--c12g-lh', FONT_WEIGHT: '--c12g-weight' }; for (const k of Object.keys(patch || {})) if (map[k]) TK()[map[k]] = String(patch[k]); atSave(); atWrite('tokens'); return Object.assign({}, TK()); },
       scan: () => { g12Tag(); return g12Shim.status(); }
     };
     window[G12_API] = g12Shim;
@@ -7402,47 +7655,105 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const v = val === undefined ? '' : val;
     const ph = c.d === '' || c.d == null ? '' : String(c.d);
     if (c.t === 'font') return atFontSelect(v, attr) + (ph && !v ? '<span class="at-def">既定: ' + atEsc(ph) + '</span>' : '');
-    if (c.t === 'weight') return '<select class="at-sel" ' + attr + '><option value="">（既定 ' + atEsc(ph) + '）</option>' + WEIGHTS.map(([w, l]) => '<option value="' + w + '"' + (String(w) === String(v) ? ' selected' : '') + '>' + w + ' ' + l + '</option>').join('') + '</select>';
-    if (c.t === 'select') return '<select class="at-sel" ' + attr + '>' + c.o.map(([k, l]) => '<option value="' + k + '"' + ((v || c.d) === k ? ' selected' : '') + '>' + atEsc(l) + '</option>').join('') + '</select>';
+    if (c.t === 'weight') return '<select class="at-sel" ' + attr + '><option value="">' + (ph ? '既定（' + atEsc(ph) + '）' : '既定のまま') + '</option>' + WEIGHTS.map(([w, l]) => '<option value="' + w + '"' + (String(w) === String(v) ? ' selected' : '') + '>' + w + '　' + l + '</option>').join('') + '</select>';
+    if (c.t === 'select') return '<select class="at-sel" ' + attr + '>' + c.o.map(([k, l]) => '<option value="' + k + '"' + ((v || c.d || '') === k ? ' selected' : '') + '>' + atEsc(l) + '</option>').join('') + '</select>';
     if (c.t === 'toggle') { const on = v === '' ? !!c.d : (v === '1' || v === true); return '<label class="at-tog"><input type="checkbox" ' + attr + (on ? ' checked' : '') + '><i></i></label>'; }
-    if (c.t === 'color') return '<span class="at-color"><input type="color" ' + attr + ' value="' + (/^#[0-9a-f]{6}$/i.test(v) ? v : '#787774') + '"' + (v ? '' : ' data-empty="1"') + '><span class="at-def">' + (v ? atEsc(v) : '既定のまま') + '</span></span>';
+    if (c.t === 'color') return '<span class="at-color"><label class="at-sw' + (v ? '' : ' at-empty') + '" style="--sw:' + atEsc(v || 'transparent') + '"><input type="color" ' + attr + ' value="' + (/^#[0-9a-f]{6}$/i.test(v) ? v : '#787774') + '"></label><span class="at-def">' + (v ? atEsc(v) : '既定のまま') + '</span></span>';
     const num = v === '' ? '' : v;
-    return '<span class="at-num"><input type="range" ' + attr + ' min="' + c.min + '" max="' + c.max + '" step="' + c.s + '" value="' + (num === '' ? ph : num) + '"' + (num === '' ? ' data-empty="1"' : '') + '>' +
-      '<input class="at-in at-n" type="number" ' + attr + ' min="' + c.min + '" max="' + c.max + '" step="' + c.s + '" value="' + atEsc(num) + '" placeholder="' + atEsc(ph) + '"><small>' + (UNIT[c.t] || '') + '</small></span>';
+    const cur = num === '' ? (ph === '' ? c.min : +ph) : +num;
+    const pct = Math.max(0, Math.min(100, ((cur - c.min) / (c.max - c.min)) * 100));
+    return '<span class="at-num' + (num === '' ? ' at-empty' : '') + '"><input type="range" ' + attr + ' min="' + c.min + '" max="' + c.max + '" step="' + c.s + '" value="' + cur + '" style="--pct:' + pct.toFixed(1) + '%">' +
+      '<span class="at-nbox"><input class="at-n" type="number" ' + attr + ' min="' + c.min + '" max="' + c.max + '" step="' + c.s + '" value="' + atEsc(num) + '" placeholder="' + atEsc(ph) + '"><small>' + (UNIT[c.t] || '') + '</small></span></span>';
   }
+  const AT_NAV_ICO = {
+    base: 'M4 16L9.2 4h1.6L16 16M6.3 11.5h7.4', body: 'M4 5h12M4 8.5h12M4 12h12M4 15.5h7', heads: 'M5 4v12M13 4v12M5 10h8', lists: 'M8 5.5h8M8 10h8M8 14.5h8M4.5 5.5h.01M4.5 10h.01M4.5 14.5h.01',
+    quote: 'M5 8.5c0-2 1-3.5 3-4M5 8.5h3v4H5zM11 8.5c0-2 1-3.5 3-4M11 8.5h3v4h-3z', code: 'M7.5 6L4 10l3.5 4M12.5 6L16 10l-3.5 4', links: 'M8.5 11.5l3-3M9.5 6.5l1-1a3 3 0 0 1 4 4l-1 1M10.5 13.5l-1 1a3 3 0 0 1-4-4l1-1',
+    page: 'M6 3.5h6l3 3V16.5H6zM12 3.5v3h3', props: 'M4 6h4M11 6h5M4 10h4M11 10h5M4 14h4M11 14h5', rowTitle: 'M4 5h12M4 9h8M4 16h12',
+    dbTitle: 'M4 4h12M10 4v12', dbDesc: 'M5 5v10M8 6h7M8 10h7M8 14h4', hdr: 'M3.5 5.5h13v9h-13zM3.5 8.5h13', cells: 'M3.5 4.5h13v11h-13zM3.5 8.2h13M3.5 11.8h13M8.5 4.5v11', primary: 'M4 5h5v10H4zM12 7h4M12 10h4M12 13h4',
+    relation: 'M6 6.5a2 2 0 1 0 0 .01M14 13.5a2 2 0 1 0 0 .01M7.6 7.8l4.8 4.4', group: 'M4 5h12M6 9.5h10M6 14h10M4 9.5h.01M4 14h.01', cards: 'M3.5 4h5.5v5.5H3.5zM11 4h5.5v5.5H11zM3.5 11.5h5.5V17H3.5zM11 11.5h5.5V17H11z',
+    sidebar: 'M3.5 4h13v12h-13zM8 4v12', chrome: 'M3.5 4h13v12h-13zM3.5 7.5h13',
+    any: 'M5 15l3-1 7-7-2-2-7 7zM12 6l2 2', tools: 'M6 14l8-8M11.5 4.5a3 3 0 0 0 4 4L14 10l-4-4zM4.5 15.5l2-2', snip: 'M5 5h10v10H5zM8 9h4M8 12h2.5', layers: 'M10 3.5l6.5 3.5L10 10.5 3.5 7zM3.5 10.5L10 14l6.5-3.5', themes: 'M10 3.5a6.5 6.5 0 1 0 0 13c1 0 1.5-.8 1-1.6-.6-1 0-2 1.2-2h1.8A3 3 0 0 0 16.5 10 6.5 6.5 0 0 0 10 3.5zM6.5 10h.01M8 6.8h.01M12 6.8h.01', text: 'M5 5.5h10M10 5.5v10M7.5 15.5h5'
+  };
+  const atNavIco = (id) => '<svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="' + (AT_NAV_ICO[id] || AT_NAV_ICO.tools) + '"/></svg>';
   function atNav() {
-    const item = (id, l, extra) => '<button data-nav="' + id + '"' + (atTab === id ? ' data-on="1"' : '') + '>' + atEsc(l) + (extra || '') + '</button>';
-    const set = (r) => r.ctl.some((c) => { const v = AT.tokens[c.v || c.p]; return v !== undefined && v !== '' && !(AT_SEED[c.p] !== undefined && AT_SEED[c.p] === v); });
-    return '<div class="at-navh">場所</div>' + AT_REGIONS.map((r) => item(r.id, r.label, set(r) ? '<i class="at-dot"></i>' : '')).join('') +
-      '<div class="at-navh">道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '道具（目次・フォーカス…）') + item('layers', '基礎の層（旧 Stylus）') + item('themes', 'テーマ・書き出し') + item('body', '本文（Text Styles）');
+    const item = (id, l, extra) => '<button data-nav="' + id + '"' + (atTab === id ? ' data-on="1"' : '') + ' title="' + atEsc(l) + '">' + atNavIco(id) + '<span>' + atEsc(l) + '</span>' + (extra || '') + '</button>';
+    const isSet = (r) => r.ctl.some((c) => { const k = c.v || c.p; const v = TK()[k]; return v !== undefined && v !== '' && !(AT_SEED[k] !== undefined && AT_SEED[k] === v); });
+    let h = '';
+    for (const [sid, sl] of AT_SECS) {
+      const rs = AT_REGIONS.filter((r) => r.sec === sid);
+      if (!rs.length) continue;
+      h += '<div class="at-navh">' + atEsc(sl) + '</div>' + rs.map((r) => item(r.id, r.label, isSet(r) ? '<i class="at-dot"></i>' : '')).join('');
+    }
+    const onCnt = Object.keys(AT_LABS).filter((k) => AT.tools[k]).length;
+    h += '<div class="at-navh">道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '次世代の道具', onCnt ? '<b>' + onCnt + '</b>' : '') + item('snip', 'スニペット') + item('layers', '基礎の層') + item('themes', 'テーマと書き出し') + item('text', '本文の書式');
+    return h;
   }
+  /* 行（コントロール 1 つ） */
+  function atRowHtml(c, showRegion) {
+    const k = c.v || c.p;
+    const v = TK()[k];
+    const isSetV = v !== undefined && v !== '';
+    const reg = showRegion ? AT_REGIONS.find((r) => r.id === c.region) : null;
+    return '<div class="at-row' + (isSetV ? ' at-set' : '') + '" data-hl="' + atEsc(k) + '"><label>' + atEsc(c.l) + (reg ? '<small>' + atEsc(reg.label + ' › ' + (c.g || '')) + '</small>' : '') + '</label><div class="at-ctl">' + atControl(c, v, 'data-k="' + atEsc(k) + '"') + '</div><button class="at-x" data-reset="' + atEsc(k) + '" title="既定に戻す">' + AT_RESET_SVG + '</button></div>';
+  }
+  const AT_RESET_SVG = '<svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5a5.5 5.5 0 1 1 1.6 4.4"/><path d="M4 5.5v4h4"/></svg>';
+  function atGroupsHtml(ctls) {
+    const groups = [];
+    for (const c of ctls) { const g = c.g || ''; let G = groups.find((x) => x.g === g); if (!G) { G = { g, list: [] }; groups.push(G); } G.list.push(c); }
+    return groups.map((G) => '<section class="at-card">' + (G.g ? '<div class="at-cardh"><span>' + atEsc(G.g) + '</span><button class="at-ghost" data-resetg="' + atEsc(G.g) + '" title="この組を既定に戻す">元に戻す</button></div>' : '') + G.list.map((c) => atRowHtml(c)).join('') + '</section>').join('');
+  }
+  let atQuery = '';
   function atRenderMain() {
     const main = atPanel.querySelector('.at-main');
-    if (atTab === 'any') return atRenderAny(main);
-    if (atTab === 'layers') return atRenderLayers(main);
-    if (atTab === 'tools') {
-      const row = (k, l, n) => '<div class="at-row"><label>' + l + '<small>' + n + '</small></label><div class="at-ctl"><label class="at-tog" data-tool="' + k + '"><input type="checkbox"' + (AT.tools[k] ? ' checked' : '') + '><i></i></label></div><span></span></div>';
-      main.innerHTML = '<h3>道具</h3><p class="at-note">文字を選ぶと出る ²⁶ のメニューの下の段からも入切できます。</p>' +
-        row('toc', '目次', '見出しを右に浮かぶ目次に') + row('focus', 'フォーカスモード', 'サイドバーと上の帯を隠し、書いている段落以外を淡く') + row('count', '文字数・読了時間', '左下に表示（選んだ文字数も）') +
-        '<div class="at-row"><label>どこでも書式</label><div class="at-ctl"><button class="at-btn" data-a="pick">画面でクリックして選ぶ</button></div><span></span></div>';
+    if (atQuery) {
+      const q = atQuery.toLowerCase();
+      const hits = AT_REGIONS.flatMap((r) => r.ctl.filter((c) => (r.label + ' ' + (c.g || '') + ' ' + c.l).toLowerCase().includes(q)));
+      main.innerHTML = '<div class="at-title"><h3>「' + atEsc(atQuery) + '」</h3><span class="at-def">' + hits.length + ' 件</span></div>' + (hits.length ? '<section class="at-card">' + hits.slice(0, 80).map((c) => atRowHtml(c, true)).join('') + '</section>' : '<p class="at-note">見つかりませんでした。「アイコン」「間隔」「行の高さ」「段落」などで探せます。</p>');
       return;
     }
+    if (atTab === 'any') return atRenderAny(main);
+    if (atTab === 'layers') return atRenderLayers(main);
+    if (atTab === 'tools') return atRenderTools(main);
+    if (atTab === 'snip') return atRenderSnips(main);
     if (atTab === 'themes') return atRenderThemes(main);
-    if (atTab === 'body') {
-      main.innerHTML = '<h3>本文（Text Styles）</h3><p class="at-note">本文の文字・段落・コールアウト・引用の書式は、文字を選ぶと出るメニュー（⌃⌥F）と、本文のパネル（⌃⌥S）で。ここからも開けます。</p><div class="at-row"><button class="at-btn at-pri" data-a="openText">本文のパネルを開く</button></div>';
+    if (atTab === 'text' || atTab === 'body0') {
+      main.innerHTML = '<div class="at-title"><h3>本文の書式</h3></div><p class="at-note">本文の文字の書式（色・書体・マーカー・ルビ風の小さな文字など）と、段落・コールアウト・引用のスタイルは、文字を選ぶと出るメニュー（⌃⌥F）と本文のパネル（⌃⌥S）で。段落の間隔や見出しの大きさは、左の「本文」から。</p><section class="at-card"><div class="at-row"><label>本文のパネル</label><div class="at-ctl"><button class="at-btn at-pri" data-a="openText">開く</button></div><span></span></div></section>';
       return;
     }
     const r = AT_REGIONS.find((x) => x.id === atTab) || AT_REGIONS[0];
-    main.innerHTML = '<h3>' + atEsc(r.label) + '<button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></h3><p class="at-note">' + atEsc(r.note) + '</p>' +
-      r.ctl.map((c) => { const k = c.v || c.p; const v = AT.tokens[k]; return '<div class="at-row' + (v !== undefined && v !== '' ? ' at-set' : '') + '"><label>' + atEsc(c.l) + '</label><div class="at-ctl">' + atControl(c, v, 'data-k="' + atEsc(k) + '"') + '</div><button class="at-x" data-reset="' + atEsc(k) + '" title="既定に戻す">↺</button></div>'; }).join('');
+    main.innerHTML = '<div class="at-title"><h3>' + atEsc(r.label) + '</h3><button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></div><p class="at-note">' + atEsc(r.note) + '</p>' + atGroupsHtml(r.ctl);
+  }
+  /* 乗せた行の当たる所を、画面で光らせる */
+  let atHlEls = [];
+  function atHighlight(k) {
+    for (const el of atHlEls) el.remove();
+    atHlEls = [];
+    if (!k) return;
+    const c = AT_CTL[k];
+    if (!c) return;
+    let sel = '';
+    if (c.kit) { const K = KITS[c.kit]; const tg = K.tg[c.kk] || KT[c.kk]; sel = K.sel[tg] || K.sel.text || K.sel.row || K.sel.icon || ''; }
+    else { const r = AT_REGIONS.find((x) => x.id === c.region); sel = (r && r.hl) || ''; }
+    if (!sel) return;
+    let els = [];
+    try { els = [...document.querySelectorAll(sel)].filter((e) => !e.closest('.at-panel')).slice(0, 40); } catch (e) { return; }
+    for (const el of els) {
+      const b = el.getBoundingClientRect();
+      if (!b.width || b.bottom < 0 || b.top > innerHeight) continue;
+      const d = document.createElement('div');
+      d.className = 'at-hl';
+      Object.assign(d.style, { left: b.left - 2 + 'px', top: b.top - 2 + 'px', width: b.width + 4 + 'px', height: b.height + 4 + 'px' });
+      document.body.appendChild(d);
+      atHlEls.push(d);
+    }
   }
   function atRenderLayers(main) {
-    main.innerHTML = '<h3>基礎の層（旧 Stylus）</h3><p class="at-note">旧 Stylus の Typography 系 CSS を Atelier が内蔵しています。Stylus 側の同じスタイルは止めて大丈夫です（両方動いていても同じ規則なので見た目は変わりません）。層を切ると、その部分は Notion の素の見た目に戻ります。</p>' +
+    main.innerHTML = '<div class="at-title"><h3>基礎の層（旧 Stylus）</h3></div><p class="at-note">旧 Stylus の Typography 系 CSS を Atelier が内蔵しています。Stylus 側の同じスタイルは止めて大丈夫です（両方動いていても同じ規則なので見た目は変わりません）。層を切ると、その部分は Notion の素の見た目に戻ります。</p>' +
       AT_LAYERS.map(([k, l, src]) => '<div class="at-row"><label>' + atEsc(l) + '<small>' + atEsc(src) + '</small></label><div class="at-ctl"><label class="at-tog"><input type="checkbox" data-layer="' + k + '"' + (AT.layers[k] !== false ? ' checked' : '') + '><i></i></label><span class="at-def">' + Math.round((AT_BASE[k] || '').length / 100) / 10 + ' KB</span></div><span></span></div>').join('');
   }
   function atRenderThemes(main) {
     const names = Object.keys(AT.themes || {});
-    main.innerHTML = '<h3>テーマ・書き出し</h3><p class="at-note">今の「場所ごとの書式」と「どこでも書式」に名前を付けて保存し、いつでも切り替えられます。</p>' +
+    main.innerHTML = '<div class="at-title"><h3>テーマと書き出し</h3></div><p class="at-note">今の「場所ごとの書式」と「どこでも書式」に名前を付けて保存し、いつでも切り替えられます。</p>' +
       '<div class="at-row"><label>今の書式を</label><div class="at-ctl"><button class="at-btn at-pri" data-a="saveTheme">テーマとして保存</button></div><span></span></div>' +
       (names.length ? names.map((nm) => '<div class="at-row"><label>' + atEsc(nm) + '<small>' + new Date(AT.themes[nm].at || 0).toLocaleString() + '</small></label><div class="at-ctl"><button class="at-btn" data-theme="' + atEsc(nm) + '">適用</button><button class="at-btn at-ghost" data-deltheme="' + atEsc(nm) + '">削除</button></div><span></span></div>').join('') : '<p class="at-note">保存したテーマはまだありません。</p>') +
       '<div class="at-sep"></div><div class="at-row"><label>書き出し</label><div class="at-ctl"><button class="at-btn" data-a="exportAt">Atelier だけ</button><button class="at-btn" data-a="exportAll">本文の書式も一緒に</button></div><span></span></div>' +
@@ -7452,7 +7763,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   /* ---------- どこでも書式 ---------- */
   function atRenderAny(main) {
     const r = atEditRule && AT.rules.find((x) => x.id === atEditRule);
-    let h = '<h3>どこでも書式</h3><p class="at-note">Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー・サイドバー…）も、画面でクリックして選べば書式を当てられます。</p>' +
+    let h = '<div class="at-title"><h3>どこでも書式</h3></div><p class="at-note">Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー・サイドバー…）も、画面でクリックして選べば書式を当てられます。</p>' +
       '<div class="at-row"><label>要素を選ぶ</label><div class="at-ctl"><button class="at-btn at-pri" data-a="pick">画面でクリックして選ぶ</button><span class="at-def">Esc でやめる</span></div><span></span></div>';
     if (r) {
       const st = r.st || {};
@@ -7561,17 +7872,33 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (el.classList.contains('at-sel') && el.value === '__custom') return '__custom';
     return el.value;
   }
+  /* スライダー・数の箱・色を互いにそろえる */
+  function atSyncCtl(el, v) {
+    const box = el.closest('.at-num');
+    if (box) {
+      const rg = box.querySelector('input[type=range]'), n = box.querySelector('.at-n');
+      if (el === rg && n) n.value = v;
+      if (el === n && rg && v !== '') rg.value = v;
+      if (rg) rg.style.setProperty('--pct', Math.max(0, Math.min(100, ((+rg.value - +rg.min) / (+rg.max - +rg.min)) * 100)).toFixed(1) + '%');
+      box.classList.toggle('at-empty', v === '');
+    }
+    if (el.type === 'color') {
+      const sw = el.closest('.at-sw'); if (sw) { sw.classList.remove('at-empty'); sw.style.setProperty('--sw', v); }
+      const d = el.closest('.at-color') && el.closest('.at-color').querySelector('.at-def'); if (d) d.textContent = v;
+    }
+  }
   function atOnInput(e) {
+    const sv = e.target.closest && e.target.closest('[data-snk], [data-snv]');
+    if (sv) { const i = +(sv.dataset.snk || sv.dataset.snv); if (AT.snips[i]) { AT.snips[i][sv.dataset.snk != null ? 0 : 1] = sv.value; atSave(); } return; }
+    if (e.target.classList && e.target.classList.contains('at-q')) { atQuery = e.target.value.trim(); const main = atPanel.querySelector('.at-main'); atRenderMain(); main.scrollTop = 0; return; }
     const el = e.target;
     const k = el.getAttribute('data-k'), rk = el.getAttribute('data-rk');
     if (k) {
       const c = AT_CTL[k];
       let v = atReadVal(el, c);
-      if (v === '__custom') { AT.tokens[k] = '"Hiragino Mincho ProN", serif'; atRefresh(); return; }
-      if (el.type === 'range') { const n = el.parentElement.querySelector('.at-n'); if (n) n.value = v; el.removeAttribute('data-empty'); }
-      if (el.classList.contains('at-n')) { const rg = el.parentElement.querySelector('input[type=range]'); if (rg && v !== '') rg.value = v; }
-      if (el.type === 'color') { el.removeAttribute('data-empty'); const d = el.parentElement.querySelector('.at-def'); if (d) d.textContent = v; }
-      if (v === '') delete AT.tokens[k]; else AT.tokens[k] = v;
+      if (v === '__custom') { TK()[k] = '"Hiragino Mincho ProN", serif'; atRefresh(); return; }
+      atSyncCtl(el, v);
+      if (v === '') delete TK()[k]; else TK()[k] = v;
       el.closest('.at-row') && el.closest('.at-row').classList.toggle('at-set', v !== '');
       atWrite('tokens'); atSave();
       if (e.type === 'change' && c && c.t === 'font') atRefresh();
@@ -7582,8 +7909,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (rk) {
       let v = atReadVal(el);
       if (v === '__custom') { r.st[rk] = '"Hiragino Mincho ProN", serif'; atRefresh(); return; }
-      if (el.type === 'range') { const n = el.parentElement.querySelector('.at-n'); if (n) n.value = v; }
-      if (el.classList.contains('at-n')) { const rg = el.parentElement.querySelector('input[type=range]'); if (rg && v !== '') rg.value = v; }
+      atSyncCtl(el, v);
       if (rk === 'it') v = el.checked ? true : '';
       if (v === '' || v === '0') delete r.st[rk]; else r.st[rk] = v;
       atWrite('rules'); atSave();
@@ -7600,7 +7926,10 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const t = e.target;
     const nav = t.closest('[data-nav]'); if (nav) { atTab = nav.dataset.nav; atRefresh(); return; }
     const tl = t.closest('[data-tool]'); if (tl && t.tagName === 'INPUT') { atTool(tl.dataset.tool, t.checked); return; }
-    const rs = t.closest('[data-reset]'); if (rs) { delete AT.tokens[rs.dataset.reset]; atWrite('tokens'); atSave(); atRefresh(); return; }
+    const lb = t.closest('[data-lab]'); if (lb) { labAct(lb.dataset.lab); return; }
+    const rg = t.closest('[data-resetg]'); if (rg) { const r = AT_REGIONS.find((x) => x.id === atTab); if (r) { for (const c of r.ctl) if ((c.g || '') === rg.dataset.resetg) delete TK()[c.v || c.p]; atWrite('tokens'); atSave(); atRefresh(); } return; }
+    const sd = t.closest('[data-sndel]'); if (sd) { AT.snips.splice(+sd.dataset.sndel, 1); atSave(); atRefresh(); return; }
+    const rs = t.closest('[data-reset]'); if (rs) { delete TK()[rs.dataset.reset]; atWrite('tokens'); atSave(); atRefresh(); return; }
     const rr = t.closest('[data-rreset]'); if (rr) { const r = AT.rules.find((x) => x.id === atEditRule); if (r) { delete r.st[rr.dataset.rreset]; atWrite('rules'); atSave(); atRefresh(); } return; }
     const ed = t.closest('[data-redit]'); if (ed) { atEditRule = atEditRule === ed.dataset.redit ? null : ed.dataset.redit; atRefresh(); return; }
     const on = t.closest('[data-ron]'); if (on) { const r = AT.rules.find((x) => x.id === on.dataset.ron); if (r) { r.on = on.checked; atWrite('rules'); atSave(); } return; }
@@ -7611,11 +7940,12 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const act = a.dataset.a;
     if (act === 'close') closeAtelier();
     else if (act === 'pick') atStartPick();
+    else if (act === 'snipAdd') { AT.snips.push([';', '']); atSave(); atRefresh(); const ins = atPanel.querySelectorAll('[data-snk]'); if (ins.length) ins[ins.length - 1].focus(); }
     else if (act === 'openText') { closeAtelier(); openPanel(); }
-    else if (act === 'resetRegion') { const r = AT_REGIONS.find((x) => x.id === atTab); if (r) { for (const c of r.ctl) delete AT.tokens[c.v || c.p]; atWrite('tokens'); atSave(); atRefresh(); } }
+    else if (act === 'resetRegion') { const r = AT_REGIONS.find((x) => x.id === atTab); if (r) { for (const c of r.ctl) delete TK()[c.v || c.p]; atWrite('tokens'); atSave(); atRefresh(); } }
     else if (act === 'delRule') { AT.rules = AT.rules.filter((x) => x.id !== atEditRule); atEditRule = null; atWrite('rules'); atSave(); atRefresh(); }
     else if (act === 'doneRule') { atEditRule = null; atRefresh(); }
-    else if (act === 'saveTheme') { const nm = prompt('テーマの名前', 'テーマ ' + (Object.keys(AT.themes).length + 1)); if (nm) { AT.themes[nm] = { at: Date.now(), tokens: JSON.parse(JSON.stringify(AT.tokens)), rules: JSON.parse(JSON.stringify(AT.rules)) }; atSave(); atRefresh(); } }
+    else if (act === 'saveTheme') { const nm = prompt('テーマの名前', 'テーマ ' + (Object.keys(AT.themes).length + 1)); if (nm) { AT.themes[nm] = { at: Date.now(), tokens: JSON.parse(JSON.stringify(TK())), rules: JSON.parse(JSON.stringify(AT.rules)) }; atSave(); atRefresh(); } }
     else if (act === 'exportAt' || act === 'exportAll') {
       const o = { atelier: AT };
       if (act === 'exportAll') o.textStyles = JSON.parse(exportAll());
@@ -7632,12 +7962,22 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       } catch (err) { alert('読み込めませんでした: ' + err.message); }
     } else if (act === 'resetAll') { if (confirm('場所ごとの書式を初期値（⁹ の Serif 統一だけ入った状態）に戻します')) { AT.tokens = Object.assign({}, AT_SEED); atWrite('tokens'); atSave(); atRefresh(); } }
   }
+  /* 直下に並んだ行を枠（カード）にまとめる */
+  function atCardify(main) {
+    let card = null;
+    for (const el of [...main.children]) {
+      if (el.classList.contains('at-row') || el.classList.contains('at-rule')) { if (!card) { card = document.createElement('section'); card.className = 'at-card'; el.before(card); } card.appendChild(el); }
+      else if (el.classList.contains('at-sep')) { card = null; el.remove(); }
+      else card = null;
+    }
+  }
   function atRefresh() {
     if (!atPanel) return;
     atPanel.querySelector('.at-nav').innerHTML = atNav();
     const main = atPanel.querySelector('.at-main');
     const y = main.scrollTop;
     atRenderMain();
+    atCardify(main);
     main.scrollTop = y;
   }
   function openAtelier() {
@@ -7649,14 +7989,21 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     atPanel.setAttribute('data-no-passthrough', '1');
     atPanel.setAttribute('role', 'dialog');
     atPanel.setAttribute('aria-label', 'Atelier');
-    atPanel.innerHTML = '<div class="at-head"><div><b>Atelier</b><span>見た目を、ひとつの場所で</span></div><button class="at-x at-close" data-a="close" title="閉じる（Esc）">×</button></div><div class="at-body"><nav class="at-nav"></nav><div class="at-main"></div></div><div class="at-foot"><span>変えるとすぐ反映・自動で保存（このブラウザ）</span><span>⌃⌥A</span></div>';
+    const prof = profFor && AT.profiles[profFor];
+    atPanel.innerHTML = '<div class="at-head"><div class="at-brand"><b>Atelier</b><span>見た目を、ひとつの場所で</span></div>' + (prof ? '<span class="at-prof" title="このページを開いている間は、このページ専用の設定を編集しています">このページ専用</span>' : '') +
+      '<label class="at-search"><svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13 13l3.5 3.5"/></svg><input class="at-q" placeholder="設定を探す" spellcheck="false" value="' + atEsc(atQuery) + '"></label>' +
+      '<button class="at-close" data-a="close" title="閉じる（Esc）"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>' +
+      '<div class="at-body"><nav class="at-nav"></nav><div class="at-main"></div></div>' +
+      '<div class="at-foot"><span>変えるとすぐ反映・自動で保存（このブラウザ）・行に乗せると当たる所が光ります</span><span><kbd>⌃⌥A</kbd> Atelier　<kbd>⌃⌥P</kbd> パレット</span></div>';
     for (const ev of ['pointerdown', 'mousedown', 'keydown', 'click', 'beforeinput', 'input', 'change']) atPanel.addEventListener(ev, (e) => { if (ev === 'keydown' && e.key === 'Escape') { if (atPick) return; closeAtelier(); } e.stopPropagation(); }, false);
     atPanel.addEventListener('input', atOnInput);
     atPanel.addEventListener('change', atOnInput);
     atPanel.addEventListener('click', atOnClick);
+    atPanel.addEventListener('mouseover', (e) => { const r = e.target.closest('.at-row[data-hl]'); const k = r ? r.dataset.hl : ''; if (k !== atPanel.__hl) { atPanel.__hl = k; clearTimeout(atPanel.__hlT); atPanel.__hlT = setTimeout(() => atHighlight(k), 140); } });
+    atPanel.addEventListener('mouseleave', () => { atPanel.__hl = ''; clearTimeout(atPanel.__hlT); atHighlight(''); });
     const head = atPanel.querySelector('.at-head');
     head.addEventListener('mousedown', (e) => {
-      if (e.target.closest('button')) return;
+      if (e.target.closest('button, input, label')) return;
       e.preventDefault();
       const r = atPanel.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top;
       const mv = (ev) => { atPanel.style.left = Math.max(0, Math.min(innerWidth - 120, ev.clientX - dx)) + 'px'; atPanel.style.top = Math.max(0, Math.min(innerHeight - 40, ev.clientY - dy)) + 'px'; atPanel.style.right = 'auto'; };
@@ -7666,77 +8013,121 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     document.body.appendChild(atPanel);
     atRefresh();
   }
-  function closeAtelier() { atStopPick(); if (atPanel) atPanel.remove(); atPanel = null; }
+  function closeAtelier() { atStopPick(); atHighlight(''); if (atPanel) atPanel.remove(); atPanel = null; }
   function atInstallUi() {
     if (document.getElementById(AT_IDS.ui)) return;
     const st = document.createElement('style');
     st.id = AT_IDS.ui;
     st.textContent = `
-.at-panel { position: fixed; z-index: 2147483600; right: 24px; top: 64px; width: 620px; max-width: calc(100vw - 32px); height: min(720px, calc(100vh - 88px)); display: flex; flex-direction: column; border-radius: 14px; background: var(--c-bgPri, #fff); color: var(--c-texPri, #37352f); box-shadow: 0 0 0 .5px rgba(15,15,15,.12), 0 6px 16px rgba(15,15,15,.08), 0 24px 56px rgba(15,15,15,.18); font: 12.5px/1.45 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif; overflow: hidden; }
+.at-panel { --at-fg: var(--c-texPri, #37352f); --at-fg2: var(--c-texSec, #787774); --at-fg3: var(--c-texTer, #9b9a97); --at-line: var(--ca-borPriTra, rgba(55,53,47,.09)); --at-hov: var(--c-bacHov, rgba(55,53,47,.06)); --at-acc: #2383e2; --at-serif: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  position: fixed; z-index: 2147483600; right: 24px; top: 56px; width: 760px; max-width: calc(100vw - 32px); height: min(780px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: 12px; background: var(--c-bgPri, #fff); color: var(--at-fg); box-shadow: 0 0 0 .5px rgba(15,15,15,.1), 0 4px 12px rgba(15,15,15,.06), 0 20px 50px rgba(15,15,15,.16); font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif; overflow: hidden; }
 .at-panel * { box-sizing: border-box; }
-.at-panel.at-picking { opacity: .18; pointer-events: none; transition: opacity .15s; }
-.at-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 12px 18px; border-bottom: 1px solid var(--ca-borPriTra, rgba(55,53,47,.1)); cursor: move; user-select: none; }
-.at-head b { font: 600 17px/1 "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; letter-spacing: .06em; margin-right: 10px; }
-.at-head span { color: var(--c-texSec, #787774); font-size: 11.5px; letter-spacing: .04em; }
-.at-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 176px 1fr; }
-.at-nav { padding: 10px 8px; border-right: 1px solid var(--ca-borPriTra, rgba(55,53,47,.08)); overflow: auto; background: color-mix(in srgb, var(--c-texPri, #37352f) 2%, transparent); }
-.at-navh { padding: 8px 10px 4px; font-size: 10.5px; font-weight: 600; letter-spacing: .08em; color: var(--c-texTer, #9b9a97); }
-.at-nav button { display: flex; align-items: center; gap: 6px; width: 100%; height: 28px; padding: 0 10px; border: 0; border-radius: 6px; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
-.at-nav button:hover { background: var(--c-bacHov, rgba(55,53,47,.06)); }
-.at-nav button[data-on="1"] { background: var(--c-bacHov2, rgba(55,53,47,.09)); font-weight: 600; }
-.at-nav .at-dot { width: 5px; height: 5px; border-radius: 50%; background: #2383e2; margin-left: auto; }
-.at-nav b { margin-left: auto; font-size: 10.5px; font-weight: 500; color: var(--c-texSec, #787774); }
-.at-main { padding: 14px 18px 24px; overflow: auto; }
-.at-main h3 { display: flex; align-items: center; justify-content: space-between; margin: 2px 0 4px; font: 600 15px/1.3 "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", serif; letter-spacing: .04em; }
-.at-note { margin: 0 0 12px; color: var(--c-texSec, #787774); font-size: 11.5px; }
-.at-row { display: grid; grid-template-columns: 132px 1fr 22px; align-items: center; gap: 10px; min-height: 34px; padding: 2px 0; border-radius: 6px; }
-.at-row > label { color: var(--c-texSec, #787774); font-size: 12px; display: flex; flex-direction: column; }
-.at-row > label small { font-size: 10.5px; color: var(--c-texTer, #9b9a97); }
-.at-row.at-set > label { color: var(--c-texPri, #37352f); font-weight: 500; }
+.at-panel.at-picking { opacity: .14; pointer-events: none; transition: opacity .15s; }
+.at-head { display: flex; align-items: center; gap: 14px; height: 52px; padding: 0 10px 0 20px; border-bottom: 1px solid var(--at-line); cursor: move; user-select: none; }
+.at-brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.at-brand b { font: 500 19px/1 var(--at-serif); letter-spacing: .05em; }
+.at-brand span { color: var(--at-fg3); font-size: 11.5px; letter-spacing: .06em; white-space: nowrap; }
+.at-prof { padding: 2px 8px; border-radius: 999px; background: rgba(35,131,226,.1); color: var(--at-acc); font-size: 11px; white-space: nowrap; }
+.at-search { margin-left: auto; position: relative; width: 220px; }
+.at-search input { width: 100%; height: 30px; padding: 0 10px 0 30px; border: 0; border-radius: 8px; background: var(--at-hov); color: inherit; font: inherit; font-size: 12.5px; outline: none; cursor: text; }
+.at-search input:focus { box-shadow: 0 0 0 2px rgba(35,131,226,.35); background: var(--c-bgPri, #fff); }
+.at-search svg { position: absolute; left: 9px; top: 8px; color: var(--at-fg3); pointer-events: none; }
+.at-close { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 7px; background: none; color: var(--at-fg3); cursor: pointer; }
+.at-close:hover { background: var(--at-hov); color: var(--at-fg); }
+.at-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 200px 1fr; }
+.at-nav { padding: 8px 8px 16px; border-right: 1px solid var(--at-line); overflow: auto; background: color-mix(in srgb, var(--at-fg) 2.5%, transparent); scrollbar-width: none; }
+.at-nav::-webkit-scrollbar { display: none; }
+.at-navh { padding: 14px 10px 5px; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--at-fg3); }
+.at-navh:first-child { padding-top: 6px; }
+.at-nav button { display: flex; align-items: center; gap: 9px; width: 100%; height: 30px; padding: 0 10px; margin: 1px 0; border: 0; border-radius: 6px; background: none; color: var(--at-fg2); font: inherit; font-size: 13px; text-align: start; cursor: pointer; white-space: nowrap; }
+.at-nav button span { flex: 1; min-width: 0; overflow: hidden; text-overflow: clip; }
+.at-nav button svg { flex: none; opacity: .75; }
+.at-nav button:hover { background: var(--at-hov); color: var(--at-fg); }
+.at-nav button[data-on="1"] { background: var(--c-bacHov2, rgba(55,53,47,.08)); color: var(--at-fg); font-weight: 600; }
+.at-nav button[data-on="1"] svg { opacity: 1; color: var(--at-acc); }
+.at-nav .at-dot { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--at-acc); }
+.at-nav b { flex: none; min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--at-hov); font-size: 10.5px; font-weight: 600; line-height: 16px; text-align: center; color: var(--at-fg2); }
+.at-main { padding: 18px 24px 40px; overflow: auto; scroll-behavior: smooth; }
+.at-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 6px; }
+.at-title h3 { margin: 0; font: 500 18px/1.3 var(--at-serif); letter-spacing: .04em; }
+.at-note { margin: 0 0 16px; color: var(--at-fg2); font-size: 12px; line-height: 1.6; }
+.at-note code { padding: 1px 4px; border-radius: 4px; background: var(--at-hov); font: 11px/1 ui-monospace, Menlo, monospace; color: #eb5757; }
+.at-card { margin: 0 0 14px; padding: 4px 0; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--at-line); }
+.at-cardh { display: flex; align-items: center; justify-content: space-between; height: 34px; padding: 4px 14px 0; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; color: var(--at-fg3); }
+.at-cardh .at-ghost { opacity: 0; transition: opacity .12s; }
+.at-card:hover .at-cardh .at-ghost { opacity: 1; }
+.at-row { display: grid; grid-template-columns: minmax(130px, 34%) 1fr 26px; align-items: center; gap: 12px; min-height: 40px; padding: 4px 8px 4px 14px; border-radius: 8px; transition: background .12s; }
+.at-row:hover { background: color-mix(in srgb, var(--at-fg) 2.5%, transparent); }
+.at-row > label { display: flex; flex-direction: column; gap: 1px; min-width: 0; color: var(--at-fg2); font-size: 12.5px; }
+.at-row > label small { font-size: 11px; color: var(--at-fg3); line-height: 1.45; }
+.at-row > label kbd { align-self: flex-start; margin: 2px 0; padding: 1px 6px; border-radius: 4px; background: var(--at-hov); font: 10.5px/1.5 ui-monospace, Menlo, monospace; color: var(--at-fg2); }
+.at-row.at-set > label { color: var(--at-fg); font-weight: 500; }
+.at-row.at-flash { background: rgba(35,131,226,.12); }
+.at-lab { grid-template-columns: 1fr auto 8px; padding-top: 8px; padding-bottom: 8px; }
+.at-lab > label { color: var(--at-fg); font-weight: 500; }
+.at-snip { grid-template-columns: 130px 1fr 26px; }
 .at-ctl { display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap; }
-.at-sel, .at-in { height: 28px; min-width: 0; max-width: 100%; padding: 0 8px; border: 0; border-radius: 6px; background: var(--c-bacHov, rgba(55,53,47,.06)); color: inherit; font: inherit; outline: none; }
-.at-sel { flex: 1 1 auto; max-width: 280px; }
-.at-in:focus, .at-sel:focus { box-shadow: 0 0 0 2px rgba(35,131,226,.4); }
+.at-sel, .at-in { height: 30px; min-width: 0; max-width: 100%; padding: 0 10px; border: 0; border-radius: 7px; background: var(--at-hov); color: inherit; font: inherit; font-size: 12.5px; outline: none; }
+.at-sel { flex: 1 1 auto; max-width: 320px; appearance: none; -webkit-appearance: none; padding-right: 28px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%239b9a97' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 12px; }
+.at-in { flex: 1 1 auto; }
+.at-in:focus, .at-sel:focus { box-shadow: 0 0 0 2px rgba(35,131,226,.35); }
 .at-custom { flex: 1 1 100%; font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
-.at-code { height: 54px; width: 100%; padding: 6px 8px; resize: vertical; font-family: ui-monospace, Menlo, monospace; font-size: 11px; line-height: 1.4; }
-.at-def { font-size: 10.5px; color: var(--c-texTer, #9b9a97); }
-.at-num { display: flex; align-items: center; gap: 8px; width: 100%; }
-.at-num input[type=range] { flex: 1; accent-color: #2383e2; }
-.at-num input[type=range][data-empty] { opacity: .45; }
-.at-num .at-n { width: 72px; text-align: right; font-variant-numeric: tabular-nums; }
-.at-num small { width: 18px; color: var(--c-texTer, #9b9a97); }
-.at-color { display: flex; align-items: center; gap: 8px; }
-.at-color input { width: 28px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; }
-.at-color input[data-empty] { opacity: .4; }
-.at-x { width: 22px; height: 22px; border: 0; border-radius: 5px; background: none; color: var(--c-texTer, #9b9a97); cursor: pointer; font-size: 13px; opacity: 0; }
+.at-code { height: 58px; width: 100%; padding: 7px 10px; resize: vertical; font-family: ui-monospace, Menlo, monospace; font-size: 11px; line-height: 1.45; }
+.at-def { font-size: 11px; color: var(--at-fg3); white-space: nowrap; }
+/* 数: 線の見えるスライダー＋数の箱 */
+.at-num { display: flex; align-items: center; gap: 12px; width: 100%; }
+.at-num input[type=range] { flex: 1; min-width: 60px; height: 20px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; --pct: 50%; }
+.at-num input[type=range]:focus { outline: none; }
+.at-num input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(to right, var(--at-acc) 0 var(--pct), color-mix(in srgb, var(--at-fg) 13%, transparent) var(--pct) 100%); }
+.at-num input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--at-fg) 13%, transparent); }
+.at-num input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--at-acc); }
+.at-num input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(15,15,15,.14), 0 1px 3px rgba(15,15,15,.22); transition: transform .1s; }
+.at-num input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(15,15,15,.14), 0 1px 3px rgba(15,15,15,.22); }
+.at-num input[type=range]:active::-webkit-slider-thumb { transform: scale(1.12); }
+.at-num.at-empty input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(to right, color-mix(in srgb, var(--at-fg) 26%, transparent) 0 var(--pct), color-mix(in srgb, var(--at-fg) 10%, transparent) var(--pct) 100%); }
+.at-num.at-empty input[type=range]::-moz-range-progress { background: color-mix(in srgb, var(--at-fg) 26%, transparent); }
+.at-nbox { flex: none; display: flex; align-items: center; width: 86px; height: 30px; padding: 0 9px 0 4px; border-radius: 7px; background: var(--at-hov); }
+.at-nbox:focus-within { box-shadow: 0 0 0 2px rgba(35,131,226,.35); }
+.at-nbox input { flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0 2px; border: 0; background: none; color: inherit; font: inherit; font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; outline: none; -moz-appearance: textfield; }
+.at-nbox input::-webkit-inner-spin-button, .at-nbox input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.at-nbox input::placeholder { color: var(--at-fg3); }
+.at-nbox small { flex: none; width: 18px; margin-left: 3px; color: var(--at-fg3); font-size: 11px; }
+.at-color { display: flex; align-items: center; gap: 10px; }
+.at-sw { position: relative; width: 30px; height: 22px; border-radius: 6px; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(15,15,15,.14); cursor: pointer; overflow: hidden; }
+.at-sw.at-empty { background: repeating-linear-gradient(135deg, transparent 0 4px, rgba(55,53,47,.12) 4px 5px); }
+.at-sw input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.at-x { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 6px; background: none; color: var(--at-fg3); cursor: pointer; opacity: 0; transition: opacity .12s; }
 .at-row:hover .at-x, .at-row.at-set .at-x { opacity: 1; }
-.at-x:hover { background: var(--c-bacHov, rgba(55,53,47,.08)); color: var(--c-texPri, #37352f); }
-.at-close { opacity: 1; font-size: 18px; width: 28px; height: 28px; }
-.at-btn { height: 28px; padding: 0 12px; border: 0; border-radius: 6px; background: var(--c-bacHov, rgba(55,53,47,.06)); color: inherit; font: 500 12px/1 inherit; cursor: pointer; }
+.at-x:hover { background: var(--at-hov); color: var(--at-fg); }
+.at-btn { height: 30px; padding: 0 14px; border: 0; border-radius: 7px; background: var(--at-hov); color: inherit; font: 500 12.5px/1 inherit; cursor: pointer; white-space: nowrap; }
 .at-btn:hover { background: var(--c-bacHov2, rgba(55,53,47,.1)); }
-.at-pri { background: #2383e2; color: #fff; }
+.at-pri { background: var(--at-acc); color: #fff; }
 .at-pri:hover { background: #1f74c9; }
-.at-ghost { background: none; color: var(--c-texSec, #787774); font-size: 11px; height: 24px; }
+.at-ghost { height: 26px; padding: 0 8px; border: 0; border-radius: 6px; background: none; color: var(--at-fg3); font: 500 11.5px/1 inherit; cursor: pointer; }
+.at-ghost:hover { background: var(--at-hov); color: var(--at-fg); }
 .at-tog { position: relative; display: inline-flex; cursor: pointer; }
 .at-tog input { position: absolute; opacity: 0; pointer-events: none; }
-.at-tog i { width: 30px; height: 17px; border-radius: 9px; background: var(--ca-borPriTra, rgba(55,53,47,.2)); position: relative; transition: background .15s; }
-.at-tog i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
-.at-tog input:checked + i { background: #2383e2; }
-.at-tog input:checked + i::after { transform: translateX(13px); }
-.at-card { margin-top: 10px; padding: 10px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--ca-borPriTra, rgba(55,53,47,.1)); }
-.at-chips { gap: 4px; }
-.at-chip { height: 24px; padding: 0 8px; border: 0; border-radius: 12px; background: var(--c-bacHov, rgba(55,53,47,.06)); color: inherit; font: 11.5px/1 inherit; cursor: pointer; }
-.at-chip small { margin-left: 6px; color: var(--c-texTer, #9b9a97); }
-.at-chip.on { background: rgba(35,131,226,.14); color: #2383e2; }
-.at-rule { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 8px; }
+.at-tog i { width: 32px; height: 18px; border-radius: 9px; background: color-mix(in srgb, var(--at-fg) 18%, transparent); position: relative; transition: background .15s; }
+.at-tog i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.at-tog input:checked + i { background: var(--at-acc); }
+.at-tog input:checked + i::after { transform: translateX(14px); }
+.at-chips { gap: 6px; }
+.at-chip { height: 26px; padding: 0 10px; border: 0; border-radius: 13px; background: var(--at-hov); color: inherit; font: 12px/1 inherit; cursor: pointer; }
+.at-chip small { margin-left: 6px; color: var(--at-fg3); }
+.at-chip.on { background: rgba(35,131,226,.14); color: var(--at-acc); }
+.at-rule { display: flex; align-items: center; gap: 10px; padding: 4px 10px; border-radius: 8px; }
 .at-rule.on { background: rgba(35,131,226,.07); }
-.at-rule button { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; padding: 4px 6px; border: 0; border-radius: 6px; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
-.at-rule button:hover { background: var(--c-bacHov, rgba(55,53,47,.06)); }
-.at-rule small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--c-texTer, #9b9a97); font: 10.5px/1.4 ui-monospace, Menlo, monospace; }
-.at-sep { height: 1px; margin: 12px 0; background: var(--ca-borPriTra, rgba(55,53,47,.1)); }
-.at-foot { display: flex; justify-content: space-between; padding: 8px 18px; border-top: 1px solid var(--ca-borPriTra, rgba(55,53,47,.08)); color: var(--c-texTer, #9b9a97); font-size: 11px; }
-.at-pickbox { position: fixed; z-index: 2147483601; pointer-events: none; border: 2px solid #2383e2; border-radius: 3px; background: rgba(35,131,226,.08); transition: all .06s; }
+.at-rule button { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; padding: 5px 6px; border: 0; border-radius: 6px; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.at-rule button:hover { background: var(--at-hov); }
+.at-rule small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--at-fg3); font: 10.5px/1.4 ui-monospace, Menlo, monospace; }
+.at-sep { height: 1px; margin: 12px 0; background: var(--at-line); }
+.at-foot { display: flex; align-items: center; justify-content: space-between; height: 36px; padding: 0 20px; border-top: 1px solid var(--at-line); color: var(--at-fg3); font-size: 11.5px; }
+.at-foot kbd { padding: 1px 6px; border-radius: 4px; background: var(--at-hov); font: 10.5px/1.5 ui-monospace, Menlo, monospace; }
+.at-hl { position: fixed; z-index: 2147483590; pointer-events: none; border-radius: 4px; box-shadow: 0 0 0 2px rgba(35,131,226,.75); background: rgba(35,131,226,.07); animation: at-hl .9s ease; }
+@keyframes at-hl { from { box-shadow: 0 0 0 6px rgba(35,131,226,.0); } to { box-shadow: 0 0 0 2px rgba(35,131,226,.75); } }
+.at-pickbox { position: fixed; z-index: 2147483601; pointer-events: none; border: 2px solid var(--at-acc, #2383e2); border-radius: 3px; background: rgba(35,131,226,.08); transition: all .06s; }
 .at-picktip { position: fixed; z-index: 2147483602; pointer-events: none; max-width: 320px; padding: 4px 8px; border-radius: 6px; background: rgba(15,15,15,.88); color: #fff; font: 11px/1.4 ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 720px) { .at-body { grid-template-columns: 150px 1fr; } .at-search { width: 140px; } .at-brand span { display: none; } }
 `;
     (document.head || document.documentElement).appendChild(st);
   }
@@ -7858,6 +8249,523 @@ html[data-at-focus][data-at-has-cur] .layout .notion-page-content > [data-block-
   document.addEventListener('DOMContentLoaded', () => setTimeout(atApplyTools, 800), { once: true });
   if (document.readyState !== 'loading') setTimeout(atApplyTools, 800);
 
+
+  /* ============================================================
+   *  v34.0.0  次世代の道具（Atelier Labs）
+   *   Word に近づくのではなく、Notion の外側にもう一枚「操作の層」を足す:
+   *     コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・
+   *     タイプライター・読む進み具合のレール・ページごとの見た目
+   * ============================================================ */
+  const AT_LABS = {
+    palette: { cat: '動く', l: 'コマンドパレット', d: '⌃⌥P で、ページ・見出し・設定・道具を名前で探して実行。設定の項目（「段落の下の間隔」など）にも直接飛べます。', def: true, kbd: '⌃⌥P' },
+    split: { cat: '動く', l: '分割ビュー', d: 'リンクやサイドバーのページを ⌥クリック すると、右半分に並べて開く（読みながら書く）。境目はドラッグで幅を変えられます。', def: true, kbd: '⌥クリック' },
+    snippets: { cat: '書く', l: 'スニペット', d: ';today ＋ スペース → 2026.10.03 のように、短い合言葉を定型文に展開。「スニペット」で自由に追加。', def: true, kbd: '; ＋ 合言葉 ＋ スペース' },
+    typewriter: { cat: '書く', l: 'タイプライター', d: '書いている行を、いつも画面の真ん中あたりに保つ（下端で書き続けなくて済む）。', def: false },
+    focus: { cat: '書く', l: 'フォーカスモード', d: 'サイドバーと上の帯を隠し、書いている段落以外を淡く。', def: false },
+    note: { cat: '書く', l: '付箋', d: 'ページごとの小さなメモを右下に。Notion には保存されず、このブラウザだけに残る下書き置き場。', def: false },
+    toc: { cat: '読む', l: '目次', d: '見出しを右に浮かぶ目次に。今読んでいる所に印。', def: false },
+    rail: { cat: '読む', l: '進み具合のレール', d: '上端に読んだ割合の細い線、右端に見出しの目盛（押すとそこへ）。', def: false },
+    count: { cat: '読む', l: '文字数・読了時間', d: '左下に表示（選んだ文字数も）。', def: false },
+    reader: { cat: '読む', l: '縦書きリーダー', d: '今のページを縦書き・明朝で読む（2 桁の数字は縦中横）。⌃⌥R。', act: true, kbd: '⌃⌥R' },
+    marks: { cat: '読む', l: 'マーカー一覧', d: 'ページの中の色付き（背景色）の文字を一覧に。押すとそこへ・まとめてコピー。⌃⌥M。', act: true, kbd: '⌃⌥M' },
+    profile: { cat: '見た目', l: 'ページごとの見た目', d: '今のページだけの Atelier の設定を作る（小説のページは明朝・広い行間、など）。そのページを開くと自動で切り替わります。', act: true }
+  };
+  for (const [k, f] of Object.entries(AT_LABS)) if (!f.act && AT.tools[k] === undefined) AT.tools[k] = !!f.def;
+  if (!Array.isArray(AT.snips)) AT.snips = [[';today', '{date}'], [';now', '{time}'], [';dt', '{date} {time}'], [';wd', '{wd}'], [';ar', '→'], [';dash', '――'], [';q', '「」'], [';qq', '『』'], [';ok', '✓'], [';ng', '✗'], [';star', '★'], [';sig', '— ' + (document.title ? '' : '')]];
+  if (!AT.profiles || typeof AT.profiles !== 'object') AT.profiles = {};
+  const atPageId = () => { const m = /([0-9a-f]{32})(?:[?#/]|$)/i.exec(location.pathname) || /([0-9a-f]{32})/i.exec(location.pathname + location.search); return m ? m[1].toLowerCase() : ''; };
+
+  function atRenderTools(main) {
+    const cats = ['動く', '書く', '読む', '見た目'];
+    let h = '<div class="at-title"><h3>次世代の道具</h3></div><p class="at-note">Notion の上に、もう一枚の操作の層を。入れたものは文字を選ぶと出るメニューの下の段・コマンドパレット（⌃⌥P）からも使えます。</p>';
+    for (const cat of cats) {
+      const list = Object.entries(AT_LABS).filter(([, f]) => f.cat === cat);
+      h += '<section class="at-card"><div class="at-cardh"><span>' + cat + '</span></div>' + list.map(([k, f]) => '<div class="at-row at-lab"><label>' + atEsc(f.l) + (f.kbd ? '<kbd>' + atEsc(f.kbd) + '</kbd>' : '') + '<small>' + atEsc(f.d) + '</small></label><div class="at-ctl">' +
+        (f.act ? (k === 'profile' ? (AT.profiles[atPageId()] ? '<button class="at-btn" data-lab="profileOff">このページ専用をやめる</button>' : '<button class="at-btn" data-lab="profileOn">このページ専用にする</button>') : '<button class="at-btn" data-lab="' + k + '">開く</button>') :
+          '<label class="at-tog" data-tool="' + k + '"><input type="checkbox"' + (AT.tools[k] ? ' checked' : '') + '><i></i></label>') + '</div><span></span></div>').join('') + '</section>';
+    }
+    h += '<section class="at-card"><div class="at-cardh"><span>どこでも書式</span></div><div class="at-row"><label>画面の要素に書式を当てる<small>Notion では変えられない所も、クリックで選んで。</small></label><div class="at-ctl"><button class="at-btn" data-a="pick">選ぶ</button></div><span></span></div></section>';
+    main.innerHTML = h;
+  }
+  function atRenderSnips(main) {
+    main.innerHTML = '<div class="at-title"><h3>スニペット</h3><button class="at-btn at-ghost" data-a="snipAdd">＋ 追加</button></div><p class="at-note">本文で「合言葉」に続けてスペース（または Tab）を押すと、右の文に置き換わります。<code>{date}</code> 今日の日付・<code>{time}</code> 時刻・<code>{wd}</code> 曜日・<code>{title}</code> ページの題名・<code>{clip}</code> クリップボード。</p><section class="at-card">' +
+      AT.snips.map(([k, v], i) => '<div class="at-row at-snip"><div class="at-ctl"><input class="at-in at-snk" data-snk="' + i + '" value="' + atEsc(k) + '" spellcheck="false"></div><div class="at-ctl"><input class="at-in" data-snv="' + i + '" value="' + atEsc(v) + '" spellcheck="false"></div><button class="at-x" data-sndel="' + i + '" title="消す">×</button></div>').join('') + '</section>';
+  }
+
+  /* ---------- 共通 ---------- */
+  const labCss = () => {
+    if (document.getElementById('atelier-labs-css')) return;
+    const st = document.createElement('style');
+    st.id = 'atelier-labs-css';
+    st.textContent = `
+.atl-ui { font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif; color: var(--c-texPri, #37352f); }
+.atl-ui * { box-sizing: border-box; }
+#atl-pal-back { position: fixed; inset: 0; z-index: 2147483640; background: rgba(15,15,15,.22); display: flex; justify-content: center; align-items: flex-start; padding-top: 12vh; }
+#atl-pal { width: min(640px, calc(100vw - 32px)); max-height: 64vh; display: flex; flex-direction: column; border-radius: 14px; background: var(--c-bgPri, #fff); box-shadow: 0 0 0 .5px rgba(15,15,15,.12), 0 16px 48px rgba(15,15,15,.24); overflow: hidden; }
+#atl-pal .q { display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 52px; border-bottom: 1px solid var(--ca-borPriTra, rgba(55,53,47,.09)); }
+#atl-pal .q svg { flex: none; color: var(--c-texTer, #9b9a97); }
+#atl-pal .q input { flex: 1; height: 100%; border: 0; outline: 0; background: none; color: inherit; font: 16px/1 inherit; }
+#atl-pal .q kbd { font: 11px/1 ui-monospace, Menlo, monospace; color: var(--c-texTer, #9b9a97); }
+#atl-pal .l { overflow: auto; padding: 6px; }
+#atl-pal .h { padding: 8px 10px 4px; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--c-texTer, #9b9a97); }
+#atl-pal .i { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+#atl-pal .i .ic { width: 20px; height: 20px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--c-texSec, #787774); }
+#atl-pal .i .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#atl-pal .i .s { flex: none; max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; color: var(--c-texTer, #9b9a97); }
+#atl-pal .i mark { background: none; color: #2383e2; font-weight: 600; }
+#atl-pal .i.on { background: var(--c-bacHov, rgba(55,53,47,.07)); }
+#atl-pal .e { padding: 28px; text-align: center; color: var(--c-texTer, #9b9a97); }
+html[data-atl-split] #notion-app { width: calc(100vw - var(--atl-split-w, 46vw)) !important; }
+#atl-split { position: fixed; z-index: 2147483000; top: 0; right: 0; bottom: 0; width: var(--atl-split-w, 46vw); display: flex; flex-direction: column; background: var(--c-bgPri, #fff); box-shadow: -1px 0 0 var(--ca-borPriTra, rgba(55,53,47,.12)); }
+#atl-split .bar { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 8px 0 12px; border-bottom: 1px solid var(--ca-borPriTra, rgba(55,53,47,.08)); font-size: 12px; color: var(--c-texSec, #787774); }
+#atl-split .bar span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#atl-split .bar button { height: 26px; padding: 0 8px; border: 0; border-radius: 6px; background: none; color: inherit; font: inherit; cursor: pointer; }
+#atl-split .bar button:hover { background: var(--c-bacHov, rgba(55,53,47,.07)); color: var(--c-texPri, #37352f); }
+#atl-split iframe { flex: 1; width: 100%; border: 0; background: var(--c-bgPri, #fff); }
+#atl-split .grip { position: absolute; left: -4px; top: 0; bottom: 0; width: 8px; cursor: col-resize; }
+#atl-split .grip:hover, #atl-split.drag .grip { background: linear-gradient(to right, transparent 3px, #2383e2 3px, #2383e2 5px, transparent 5px); }
+#atl-split.drag iframe { pointer-events: none; }
+#atl-reader { position: fixed; inset: 0; z-index: 2147483500; display: flex; flex-direction: column; background: var(--atl-paper, #fbfaf6); color: #2b2a26; }
+html.dark #atl-reader, .notion-dark-theme #atl-reader { --atl-paper: #1d1c1a; color: #e6e2d8; }
+#atl-reader .bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; font: 12px/1 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; color: rgba(55,53,47,.6); }
+#atl-reader .bar b { flex: 1; font: 600 13px/1 "Hiragino Mincho ProN", "Yu Mincho", serif; letter-spacing: .12em; color: inherit; }
+#atl-reader .bar button { height: 28px; min-width: 28px; padding: 0 9px; border: 0; border-radius: 6px; background: rgba(55,53,47,.06); color: inherit; font: inherit; cursor: pointer; }
+#atl-reader .pg { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 40px 64px 48px; writing-mode: vertical-rl; font: var(--atl-rs, 18px)/1.95 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; letter-spacing: .06em; text-align: justify; text-justify: inter-character; line-break: strict; scrollbar-width: thin; }
+#atl-reader .pg h1 { font-size: 1.6em; margin: 0 0 0 2.5em; letter-spacing: .14em; }
+#atl-reader .pg h2 { font-size: 1.3em; margin: 0 1.6em 0 1em; }
+#atl-reader .pg h3 { font-size: 1.12em; margin: 0 1.2em 0 .8em; }
+#atl-reader .pg p { margin: 0 0 0 .6em; text-indent: 1em; }
+#atl-reader .pg p.li { text-indent: -1em; padding-top: 1em; }
+#atl-reader .pg blockquote { margin: 0 1em; padding-top: 1.5em; border-right: 2px solid rgba(55,53,47,.2); }
+#atl-reader .pg hr { border: 0; border-right: 1px solid rgba(55,53,47,.2); margin: 0 1.6em; height: 40%; align-self: center; }
+#atl-reader .tcy { text-combine-upright: all; }
+#atl-marks { position: fixed; z-index: 2147483200; right: 20px; top: 84px; width: 300px; max-height: calc(100vh - 140px); display: flex; flex-direction: column; border-radius: 12px; background: var(--c-bgPri, #fff); box-shadow: 0 0 0 .5px rgba(15,15,15,.12), 0 8px 28px rgba(15,15,15,.16); overflow: hidden; }
+#atl-marks .bar, #atl-note .bar { display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 8px 0 14px; border-bottom: 1px solid var(--ca-borPriTra, rgba(55,53,47,.08)); font-weight: 600; cursor: move; user-select: none; }
+#atl-marks .bar span, #atl-note .bar span { flex: 1; }
+#atl-marks .bar button, #atl-note .bar button { height: 24px; padding: 0 8px; border: 0; border-radius: 6px; background: none; color: var(--c-texSec, #787774); font: 12px/1 inherit; cursor: pointer; }
+#atl-marks .bar button:hover, #atl-note .bar button:hover { background: var(--c-bacHov, rgba(55,53,47,.07)); }
+#atl-marks .l { overflow: auto; padding: 6px; }
+#atl-marks a { display: block; padding: 7px 10px; border-radius: 7px; color: inherit; text-decoration: none; cursor: pointer; border-left: 3px solid var(--mk, #f5d76e); margin-bottom: 4px; background: color-mix(in srgb, var(--mk, #f5d76e) 12%, transparent); }
+#atl-marks a:hover { background: color-mix(in srgb, var(--mk, #f5d76e) 22%, transparent); }
+#atl-note { position: fixed; z-index: 2147483100; right: 22px; bottom: 22px; width: 280px; height: 220px; display: flex; flex-direction: column; border-radius: 10px; background: #fff8d6; box-shadow: 0 0 0 .5px rgba(120,100,0,.18), 0 6px 22px rgba(80,70,0,.18); overflow: hidden; resize: both; }
+.notion-dark-theme #atl-note { background: #3a3522; color: #eee6c8; }
+#atl-note .bar { border-color: rgba(120,100,0,.14); background: rgba(255,230,120,.25); }
+#atl-note textarea { flex: 1; width: 100%; padding: 10px 12px; border: 0; outline: 0; resize: none; background: none; color: inherit; font: 13px/1.6 "Hiragino Sans", -apple-system, sans-serif; }
+#atl-rail { position: fixed; z-index: 95; height: 2px; background: #2383e2; transform-origin: left; pointer-events: none; transition: transform .08s linear; }
+#atl-ticks { position: fixed; z-index: 95; width: 10px; pointer-events: none; }
+#atl-ticks i { position: absolute; right: 2px; width: 6px; height: 2px; border-radius: 1px; background: var(--c-texTer, #9b9a97); pointer-events: auto; cursor: pointer; opacity: .6; }
+#atl-ticks i[data-l="1"] { width: 9px; opacity: .9; }
+#atl-ticks i:hover { background: #2383e2; opacity: 1; }
+#atl-toast { position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%); z-index: 2147483647; padding: 9px 16px; border-radius: 8px; background: rgba(15,15,15,.88); color: #fff; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; pointer-events: none; opacity: 0; transition: opacity .2s; }
+`;
+    (document.head || document.documentElement).appendChild(st);
+  };
+  function atlToast(msg) {
+    labCss();
+    let t = document.getElementById('atl-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'atl-toast'; document.body.appendChild(t); }
+    t.textContent = msg; t.style.opacity = '1';
+    clearTimeout(atlToast.t); atlToast.t = setTimeout(() => { t.style.opacity = '0'; }, 2600);
+  }
+  function atlPress(el) {
+    const r = el.getBoundingClientRect();
+    const o = { bubbles: true, cancelable: true, view: window, clientX: r.left + Math.min(r.width / 2, 40), clientY: r.top + r.height / 2, button: 0 };
+    for (const [C, t] of [[PointerEvent, 'pointerdown'], [MouseEvent, 'mousedown'], [PointerEvent, 'pointerup'], [MouseEvent, 'mouseup'], [MouseEvent, 'click']]) el.dispatchEvent(new C(t, o));
+  }
+  function dragBy(handle, box) {
+    handle.addEventListener('mousedown', (e) => {
+      if (e.target.closest('button')) return;
+      e.preventDefault();
+      const r = box.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top;
+      const mv = (ev) => { box.style.left = Math.max(0, Math.min(innerWidth - 80, ev.clientX - dx)) + 'px'; box.style.top = Math.max(0, Math.min(innerHeight - 40, ev.clientY - dy)) + 'px'; box.style.right = 'auto'; box.style.bottom = 'auto'; };
+      const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); };
+      document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+    });
+  }
+  const atlStop = (el) => { for (const ev of ['pointerdown', 'mousedown', 'keydown', 'keyup', 'click', 'beforeinput', 'input', 'paste', 'copy', 'cut']) el.addEventListener(ev, (e) => e.stopPropagation(), false); };
+
+  /* ---------- コマンドパレット ---------- */
+  let palEl = null, palItems = [], palIdx = 0;
+  const PAL_ICO = {
+    page: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 3.5h6l3 3V16.5H6zM12 3.5v3h3"/></svg>',
+    head: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 4v12M13 4v12M5 10h8"/></svg>',
+    set: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 6h7M14 6h2M4 14h2M9 14h7"/><circle cx="12.5" cy="6" r="1.6"/><circle cx="7.5" cy="14" r="1.6"/></svg>',
+    tool: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3l1.6 4.4L16 9l-4.4 1.6L10 15l-1.6-4.4L4 9l4.4-1.6z"/></svg>',
+    theme: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="6.5"/><path d="M10 3.5v13" /></svg>'
+  };
+  function palSource() {
+    const out = [];
+    /* 道具 */
+    for (const [k, f] of Object.entries(AT_LABS)) {
+      if (k === 'palette') continue;
+      if (f.act) {
+        if (k === 'profile') out.push({ g: '道具', ic: 'tool', t: AT.profiles[atPageId()] ? 'このページ専用の見た目をやめる' : 'このページ専用の見た目にする', s: f.l, run: () => labAct(AT.profiles[atPageId()] ? 'profileOff' : 'profileOn') });
+        else out.push({ g: '道具', ic: 'tool', t: f.l, s: f.kbd || '', run: () => labAct(k) });
+      } else out.push({ g: '道具', ic: 'tool', t: f.l + (AT.tools[k] ? ' を切る' : ' を入れる'), s: f.kbd || (AT.tools[k] ? '入' : '切'), run: () => { atTool(k); atlToast(f.l + (AT.tools[k] ? ' 入' : ' 切')); } });
+    }
+    out.push({ g: '道具', ic: 'tool', t: 'Atelier を開く', s: '⌃⌥A', run: () => { if (!atPanel) openAtelier(); } });
+    out.push({ g: '道具', ic: 'tool', t: 'どこでも書式（画面で要素を選ぶ）', s: '', run: () => atPickFromMenu() });
+    out.push({ g: '道具', ic: 'tool', t: '本文の書式のパネル', s: '⌃⌥S', run: () => openPanel() });
+    try { if (window.__c31) out.push({ g: '道具', ic: 'tool', t: 'Atlas（このビューを書架・シアターなどで）', s: '⌃⌥V', run: () => window.__c31.toggle() }); } catch (e) { /* noop */ }
+    /* 見出し */
+    const pc = mainContent();
+    if (pc) for (const h of pc.querySelectorAll('.notion-header-block, .notion-sub_header-block, .notion-sub_sub_header-block')) {
+      const t = atNorm(h.textContent).slice(0, 80);
+      if (t) out.push({ g: 'このページの見出し', ic: 'head', t, s: h.classList.contains('notion-header-block') ? 'H1' : h.classList.contains('notion-sub_header-block') ? 'H2' : 'H3', run: () => h.scrollIntoView({ block: 'start', behavior: 'smooth' }) });
+    }
+    /* サイドバーのページ */
+    const seen = new Set();
+    for (const row of document.querySelectorAll('.notion-sidebar-container [data-inp-target="sidebar-page-item"], .notion-sidebar-container [data-c33-kind]')) {
+      const t = atNorm((row.querySelector('.notranslate') || row).textContent).slice(0, 80);
+      if (!t || seen.has(t)) continue;
+      seen.add(t);
+      const team = row.closest('.notion-outliner-team-container');
+      const tn = team ? atNorm((team.querySelector('.notion-outliner-team') || team).textContent).slice(0, 24) : '';
+      out.push({ g: 'ページ', ic: 'page', t, s: (row.getAttribute('data-c33-kind') === 'view' ? 'ビュー · ' : '') + tn, row, run: () => atlPress(row) });
+    }
+    /* 設定の項目（Atelier） */
+    for (const r of AT_REGIONS) for (const c of r.ctl) out.push({ g: '設定', ic: 'set', t: c.l + '（' + (c.g || r.label) + '）', s: r.label, run: () => { if (!atPanel) openAtelier(); atQuery = ''; atTab = r.id; atRefresh(); setTimeout(() => { const row = atPanel && atPanel.querySelector('[data-hl="' + CSS.escape(c.v || c.p) + '"]'); if (row) { row.scrollIntoView({ block: 'center' }); row.classList.add('at-flash'); setTimeout(() => row.classList.remove('at-flash'), 1200); } }, 30); } });
+    /* テーマ */
+    for (const nm of Object.keys(AT.themes || {})) out.push({ g: 'テーマ', ic: 'theme', t: 'テーマ「' + nm + '」を当てる', s: '', run: () => { const o = AT.themes[nm]; AT.tokens = JSON.parse(JSON.stringify(o.tokens || {})); AT.rules = JSON.parse(JSON.stringify(o.rules || [])); atWrite(); atSave(); atRefresh(); atlToast('テーマ「' + nm + '」'); } });
+    return out;
+  }
+  /* あいまい検索（順番に文字が含まれていれば当たり。続いて当たるほど・先頭ほど上） */
+  function palScore(t, q) {
+    if (!q) return { s: 1, hl: [] };
+    const T = t.toLowerCase(), Q = q.toLowerCase().replace(/\s+/g, '');
+    const i0 = T.indexOf(Q);
+    if (i0 >= 0) return { s: 1000 - i0 * 2 - T.length * 0.1, hl: [[i0, i0 + Q.length]] };
+    let ti = 0, s = 0, run = 0; const hl = [];
+    for (const ch of Q) {
+      const j = T.indexOf(ch, ti);
+      if (j < 0) return null;
+      run = j === ti ? run + 1 : 1;
+      s += run * 3 - (j - ti) * 0.2;
+      hl.push([j, j + 1]); ti = j + 1;
+    }
+    return { s, hl };
+  }
+  const palMark = (t, hl) => { let o = '', p = 0; for (const [a, b] of hl) { o += atEsc(t.slice(p, a)) + '<mark>' + atEsc(t.slice(a, b)) + '</mark>'; p = b; } return o + atEsc(t.slice(p)); };
+  function palRender() {
+    const q = palEl.querySelector('input').value.trim();
+    const src = palSource();
+    const G_ORDER = q ? ['道具', 'このページの見出し', 'ページ', '設定', 'テーマ'] : ['道具', 'このページの見出し', 'ページ', 'テーマ'];
+    let list = [];
+    for (const it of src) { if (!q && it.g === '設定') continue; const m = palScore(it.t + ' ' + (it.s || ''), q); if (m) list.push(Object.assign({}, it, { sc: m.s + (it.g === '道具' ? 5 : 0), hl: palScore(it.t, q) ? palScore(it.t, q).hl : [] })); }
+    if (q) list.sort((a, b) => b.sc - a.sc);
+    list = list.slice(0, q ? 60 : 80);
+    if (!q) list.sort((a, b) => G_ORDER.indexOf(a.g) - G_ORDER.indexOf(b.g));
+    palItems = list; palIdx = 0;
+    const l = palEl.querySelector('.l');
+    if (!list.length) { l.innerHTML = '<div class="e">見つかりません</div>'; return; }
+    let h = '', g = '';
+    list.forEach((it, i) => { if (!q && it.g !== g) { g = it.g; h += '<div class="h">' + atEsc(g) + '</div>'; } h += '<button class="i' + (i === 0 ? ' on' : '') + '" data-i="' + i + '"><span class="ic">' + (PAL_ICO[it.ic] || '') + '</span><span class="t">' + palMark(it.t, it.hl || []) + '</span><span class="s">' + atEsc(q ? (it.g + (it.s ? ' · ' + it.s : '')) : (it.s || '')) + '</span></button>'; });
+    l.innerHTML = h;
+  }
+  function palMove(d) {
+    if (!palItems.length) return;
+    palIdx = (palIdx + d + palItems.length) % palItems.length;
+    palEl.querySelectorAll('.i').forEach((b) => b.classList.toggle('on', +b.dataset.i === palIdx));
+    const on = palEl.querySelector('.i.on'); if (on) on.scrollIntoView({ block: 'nearest' });
+  }
+  function palRun(i) { const it = palItems[i]; palClose(); if (it) setTimeout(() => { try { it.run(); } catch (e) { console.warn(TAG, e); } }, 10); }
+  function palClose() { if (palEl) { palEl.remove(); palEl = null; } }
+  function palOpen() {
+    if (palEl) { palClose(); return; }
+    labCss();
+    palEl = document.createElement('div');
+    palEl.id = 'atl-pal-back';
+    palEl.className = 'atl-ui c26-ui';
+    palEl.setAttribute('data-no-passthrough', '1');
+    palEl.innerHTML = '<div id="atl-pal" role="dialog" aria-label="コマンドパレット"><div class="q"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13 13l3.5 3.5"/></svg><input placeholder="ページ・見出し・道具・設定を探す…" spellcheck="false"><kbd>esc</kbd></div><div class="l"></div></div>';
+    atlStop(palEl);
+    palEl.addEventListener('mousedown', (e) => { if (e.target === palEl) palClose(); });
+    palEl.addEventListener('click', (e) => { const b = e.target.closest('.i'); if (b) palRun(+b.dataset.i); });
+    const inp = palEl.querySelector('input');
+    inp.addEventListener('input', palRender);
+    inp.addEventListener('keydown', (e) => {
+      if (e.isComposing) return;
+      if (e.key === 'Escape') { e.preventDefault(); palClose(); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); palMove(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); palMove(-1); }
+      else if (e.key === 'Enter') { e.preventDefault(); palRun(palIdx); }
+    });
+    document.body.appendChild(palEl);
+    palRender();
+    inp.focus();
+  }
+
+  /* ---------- 分割ビュー ---------- */
+  let splitEl = null;
+  function splitOpen(url, title) {
+    labCss();
+    if (!splitEl) {
+      splitEl = document.createElement('div');
+      splitEl.id = 'atl-split';
+      splitEl.className = 'atl-ui';
+      splitEl.innerHTML = '<div class="grip" title="ドラッグで幅を変える"></div><div class="bar"><span></span><button data-s="swap" title="こちらを左（本体）で開く">左で開く</button><button data-s="tab" title="新しいタブで開く">別タブ</button><button data-s="x" title="閉じる">×</button></div><iframe referrerpolicy="same-origin"></iframe>';
+      splitEl.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-s]'); if (!b) return;
+        const u = splitEl.dataset.url;
+        if (b.dataset.s === 'x') splitClose();
+        else if (b.dataset.s === 'tab') window.open(u, '_blank');
+        else if (b.dataset.s === 'swap') { splitClose(); location.assign(u); }
+      });
+      const grip = splitEl.querySelector('.grip');
+      grip.addEventListener('mousedown', (e) => {
+        e.preventDefault(); splitEl.classList.add('drag');
+        const mv = (ev) => { const w = Math.max(320, Math.min(innerWidth - 360, innerWidth - ev.clientX)); document.documentElement.style.setProperty('--atl-split-w', w + 'px'); };
+        const up = () => { splitEl.classList.remove('drag'); document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); try { localStorage.setItem('atelier-split-w', document.documentElement.style.getPropertyValue('--atl-split-w')); } catch (er) { /* noop */ } window.dispatchEvent(new Event('resize')); };
+        document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+      });
+      try { const w = localStorage.getItem('atelier-split-w'); if (w) document.documentElement.style.setProperty('--atl-split-w', w); } catch (e) { /* noop */ }
+      document.body.appendChild(splitEl);
+    }
+    splitEl.dataset.url = url;
+    splitEl.querySelector('.bar span').textContent = title || url.replace(location.origin, '');
+    splitEl.querySelector('iframe').src = url;
+    document.documentElement.setAttribute('data-atl-split', '1');
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+  }
+  function splitClose() { if (splitEl) { splitEl.remove(); splitEl = null; } document.documentElement.removeAttribute('data-atl-split'); setTimeout(() => window.dispatchEvent(new Event('resize')), 50); }
+  const HEX32 = /([0-9a-f]{32})/i;
+  function linkTarget(el) {
+    const a = el.closest('a[href]');
+    if (a) { try { const u = new URL(a.getAttribute('href'), location.href); if (u.origin === location.origin && HEX32.test(u.pathname)) return { url: u.href, title: atNorm(a.textContent).slice(0, 80) }; } catch (e) { /* noop */ } }
+    const row = el.closest('.notion-sidebar-container [data-inp-target="sidebar-page-item"], .notion-sidebar-container [role="treeitem"], .notion-page-block, .notion-page-mention-token, .notion-collection-item');
+    if (row) {
+      const holder = row.closest('[data-block-id]') || row;
+      let id = holder.getAttribute('data-block-id') || '';
+      if (!id) for (const at of row.attributes) { const m = HEX32.exec(at.value.replace(/-/g, '')); if (m) { id = m[1]; break; } }
+      if (!id) { const inner = row.querySelector('a[href]'); if (inner) { const m = HEX32.exec(inner.getAttribute('href').replace(/-/g, '')); if (m) id = m[1]; } }
+      if (id) return { url: location.origin + '/' + id.replace(/-/g, ''), title: atNorm((row.querySelector('.notranslate') || row).textContent).slice(0, 80) };
+    }
+    return null;
+  }
+  for (const t of ['pointerdown', 'mousedown', 'click']) {
+    window.addEventListener(t, (e) => {
+      if (!AT.tools.split || !e.altKey || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (!(e.target instanceof Element) || e.target.closest('.at-panel, #atl-split, .atl-ui')) return;
+      const lt = linkTarget(e.target);
+      if (!lt) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (t === 'click') splitOpen(lt.url, lt.title);
+    }, true);
+  }
+
+  /* ---------- スニペット ---------- */
+  function snipExpand(tpl) {
+    const d = new Date(), z = (n) => String(n).padStart(2, '0');
+    const title = atNorm((document.querySelector('.notion-frame h1') || {}).textContent || document.title.replace(/\s*[|–-]\s*Notion.*$/, ''));
+    return Promise.resolve(/\{clip\}/.test(tpl) && navigator.clipboard && navigator.clipboard.readText ? navigator.clipboard.readText().catch(() => '') : '').then((clip) =>
+      tpl.replace(/\{date\}/g, d.getFullYear() + '.' + z(d.getMonth() + 1) + '.' + z(d.getDate())).replace(/\{time\}/g, z(d.getHours()) + ':' + z(d.getMinutes()))
+        .replace(/\{wd\}/g, '日月火水木金土'[d.getDay()]).replace(/\{title\}/g, title).replace(/\{clip\}/g, clip || ''));
+  }
+  window.addEventListener('keydown', (e) => {
+    if (!AT.tools.snippets || e.isComposing || (e.key !== ' ' && e.key !== 'Tab') || e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target;
+    if (!(t instanceof Element) || !t.isContentEditable || t.closest('.at-panel, .atl-ui, #c26-menu')) return;
+    const sel = getSelection();
+    if (!sel || !sel.isCollapsed || !sel.anchorNode || sel.anchorNode.nodeType !== 3) return;
+    const node = sel.anchorNode, off = sel.anchorOffset, before = node.nodeValue.slice(0, off);
+    let hit = null;
+    for (const [k, v] of AT.snips) if (k && before.endsWith(k) && (before.length === k.length || /[\s　(（「『]$/.test(before.slice(0, before.length - k.length)) || /^[;:\\/]/.test(k))) { if (!hit || k.length > hit[0].length) hit = [k, v]; }
+    if (!hit) return;
+    e.preventDefault(); e.stopPropagation();
+    const rg = document.createRange(); rg.setStart(node, off - hit[0].length); rg.setEnd(node, off);
+    snipExpand(hit[1]).then((txt) => { sel.removeAllRanges(); sel.addRange(rg); if (!document.execCommand('insertText', false, txt)) { rg.deleteContents(); rg.insertNode(document.createTextNode(txt)); } });
+  }, true);
+
+  /* ---------- タイプライター ---------- */
+  let twT = 0;
+  function typewriter() {
+    if (!AT.tools.typewriter) return;
+    cancelAnimationFrame(twT);
+    twT = requestAnimationFrame(() => {
+      const sel = getSelection();
+      if (!sel || !sel.rangeCount || !sel.isCollapsed) return;
+      const n = sel.anchorNode; const el = n && (n.nodeType === 1 ? n : n.parentElement);
+      if (!el || !el.closest('.notion-frame .notion-page-content')) return;
+      const r0 = sel.getRangeAt(0);
+      let rc = r0.getClientRects()[0] || r0.getBoundingClientRect();
+      if (!rc || (!rc.height && !rc.top)) rc = el.getBoundingClientRect();
+      const sc = el.closest('.notion-scroller.vertical') || el.closest('.notion-frame .notion-scroller');
+      if (!sc) return;
+      const sb = sc.getBoundingClientRect();
+      const want = sb.top + sb.height * 0.45;
+      const d = rc.top - want;
+      if (Math.abs(d) > 28) sc.scrollBy({ top: d, behavior: 'smooth' });
+    });
+  }
+  document.addEventListener('input', (e) => { if (AT.tools.typewriter && e.target instanceof Element && e.target.isContentEditable) typewriter(); }, true);
+  document.addEventListener('keyup', (e) => { if (AT.tools.typewriter && /^(Enter|ArrowUp|ArrowDown|PageUp|PageDown)$/.test(e.key)) typewriter(); }, true);
+
+  /* ---------- 進み具合のレール ---------- */
+  let railEl = null, ticksEl = null, railT = 0;
+  function railUpdate() {
+    if (!AT.tools.rail) { if (railEl) { railEl.remove(); railEl = null; } if (ticksEl) { ticksEl.remove(); ticksEl = null; } return; }
+    const frame = document.querySelector('.notion-frame');
+    const sc = frame && (frame.querySelector('.notion-scroller.vertical') || frame.querySelector('.notion-scroller'));
+    if (!sc) return;
+    labCss();
+    if (!railEl || !railEl.isConnected) { railEl = document.createElement('div'); railEl.id = 'atl-rail'; document.body.appendChild(railEl); }
+    if (!ticksEl || !ticksEl.isConnected) {
+      ticksEl = document.createElement('div'); ticksEl.id = 'atl-ticks'; document.body.appendChild(ticksEl);
+      ticksEl.addEventListener('click', (e) => { const i = e.target.closest('i'); if (i && i.__h && i.__h.isConnected) i.__h.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
+    }
+    const b = sc.getBoundingClientRect();
+    const max = Math.max(1, sc.scrollHeight - sc.clientHeight);
+    Object.assign(railEl.style, { left: b.left + 'px', top: b.top + 'px', width: b.width + 'px', transform: 'scaleX(' + Math.min(1, sc.scrollTop / max).toFixed(4) + ')' });
+    Object.assign(ticksEl.style, { left: b.right - 12 + 'px', top: b.top + 'px', height: b.height + 'px' });
+    const hs = [...sc.querySelectorAll('.notion-page-content :is(.notion-header-block, .notion-sub_header-block)')];
+    const key = hs.length + ':' + sc.scrollHeight;
+    if (ticksEl.dataset.k !== key) {
+      ticksEl.dataset.k = key;
+      ticksEl.innerHTML = '';
+      const top0 = sc.getBoundingClientRect().top - sc.scrollTop;
+      for (const h of hs) {
+        const y = (h.getBoundingClientRect().top - top0) / Math.max(1, sc.scrollHeight) * b.height;
+        const i = document.createElement('i'); i.style.top = y.toFixed(1) + 'px'; i.dataset.l = h.classList.contains('notion-header-block') ? '1' : '2'; i.title = atNorm(h.textContent).slice(0, 60); i.__h = h;
+        ticksEl.appendChild(i);
+      }
+    }
+  }
+  window.addEventListener('scroll', () => { if (AT.tools.rail) { cancelAnimationFrame(railT); railT = requestAnimationFrame(railUpdate); } }, true);
+  window.addEventListener('resize', () => { if (AT.tools.rail) railUpdate(); });
+
+  /* ---------- 縦書きリーダー ---------- */
+  function readerOpen() {
+    const pc = mainContent();
+    if (!pc) { atlToast('ページの本文が見つかりません'); return; }
+    labCss();
+    const old = document.getElementById('atl-reader'); if (old) { old.remove(); return; }
+    const tcy = (s) => atEsc(s).replace(/(^|[^0-9A-Za-z])([0-9]{1,2}|[A-Za-z]{1,2}|[!?！？]{2})(?=[^0-9A-Za-z]|$)/g, (m, a, b) => a + '<span class="tcy">' + b + '</span>');
+    let h = '';
+    const title = atNorm((document.querySelector('.notion-frame h1') || {}).textContent || '');
+    if (title) h += '<h1>' + tcy(title) + '</h1>';
+    for (const b of pc.querySelectorAll(':scope > [data-block-id], :scope > div > [data-block-id].notion-selectable')) {
+      const t = atNorm(b.innerText || b.textContent || '');
+      const cl = b.classList;
+      if (cl.contains('notion-divider-block')) { h += '<hr>'; continue; }
+      if (!t) continue;
+      if (cl.contains('notion-header-block')) h += '<h2>' + tcy(t) + '</h2>';
+      else if (cl.contains('notion-sub_header-block')) h += '<h3>' + tcy(t) + '</h3>';
+      else if (cl.contains('notion-sub_sub_header-block')) h += '<h3>' + tcy(t) + '</h3>';
+      else if (cl.contains('notion-quote-block') || cl.contains('notion-callout-block')) h += '<blockquote>' + tcy(t) + '</blockquote>';
+      else if (cl.contains('notion-bulleted_list-block') || cl.contains('notion-to_do-block')) h += '<p class="li">・' + tcy(t) + '</p>';
+      else if (cl.contains('notion-numbered_list-block')) h += '<p class="li">' + tcy(t) + '</p>';
+      else if (cl.contains('notion-code-block') || cl.contains('notion-collection_view-block') || cl.contains('notion-image-block')) continue;
+      else h += '<p>' + tcy(t).replace(/\n/g, '</p><p>') + '</p>';
+    }
+    const r = document.createElement('div');
+    r.id = 'atl-reader';
+    r.className = 'atl-ui';
+    r.innerHTML = '<div class="bar"><b>' + atEsc(title || '縦書き') + '</b><button data-r="-">小</button><button data-r="+">大</button><button data-r="x">閉じる（Esc）</button></div><div class="pg">' + h + '</div>';
+    atlStop(r);
+    let fs = +(localStorage.getItem('atelier-reader-fs') || 18);
+    const apply = () => { r.style.setProperty('--atl-rs', fs + 'px'); try { localStorage.setItem('atelier-reader-fs', fs); } catch (e) { /* noop */ } };
+    apply();
+    r.addEventListener('click', (e) => { const b = e.target.closest('[data-r]'); if (!b) return; if (b.dataset.r === 'x') r.remove(); else { fs = Math.max(12, Math.min(32, fs + (b.dataset.r === '+' ? 1 : -1))); apply(); } });
+    const pg = r.querySelector('.pg');
+    pg.addEventListener('wheel', (e) => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.preventDefault(); pg.scrollLeft -= e.deltaY; } }, { passive: false });
+    r.addEventListener('keydown', (e) => { if (e.key === 'Escape') r.remove(); else if (e.key === 'ArrowLeft' || e.key === ' ') { pg.scrollLeft -= pg.clientWidth * 0.9; e.preventDefault(); } else if (e.key === 'ArrowRight') { pg.scrollLeft += pg.clientWidth * 0.9; e.preventDefault(); } });
+    r.tabIndex = -1;
+    document.body.appendChild(r);
+    r.focus();
+    pg.scrollLeft = pg.scrollWidth;
+  }
+
+  /* ---------- マーカー一覧 ---------- */
+  function marksOpen() {
+    const old = document.getElementById('atl-marks'); if (old) { old.remove(); return; }
+    const pc = mainContent();
+    if (!pc) { atlToast('ページの本文が見つかりません'); return; }
+    labCss();
+    const hits = [];
+    for (const s of pc.querySelectorAll('[data-content-editable-leaf] :is(span[style*="background"], mark, [data-c26-mark], [class*="c26-m-"])')) {
+      if (s.parentElement && s.parentElement.closest('span[style*="background"], mark') && s.parentElement.closest('[data-content-editable-leaf]')) continue;
+      const t = atNorm(s.textContent);
+      if (!t) continue;
+      const bg = getComputedStyle(s).backgroundColor;
+      if (!bg || /rgba\(0, 0, 0, 0\)|transparent/.test(bg)) continue;
+      hits.push({ el: s, t, bg });
+    }
+    const box = document.createElement('div');
+    box.id = 'atl-marks';
+    box.className = 'atl-ui';
+    box.innerHTML = '<div class="bar"><span>マーカー ' + hits.length + '</span><button data-m="copy">まとめてコピー</button><button data-m="x">×</button></div><div class="l">' + (hits.length ? hits.map((h, i) => '<a data-i="' + i + '" style="--mk:' + atEsc(h.bg) + '">' + atEsc(h.t.slice(0, 200)) + '</a>').join('') : '<p class="at-note" style="padding:14px;color:var(--c-texTer,#9b9a97)">背景色の付いた文字がありません。</p>') + '</div>';
+    atlStop(box);
+    box.addEventListener('click', (e) => {
+      const a = e.target.closest('a[data-i]');
+      if (a) { const h = hits[+a.dataset.i]; if (h && h.el.isConnected) { h.el.scrollIntoView({ block: 'center', behavior: 'smooth' }); h.el.animate([{ outline: '2px solid #2383e2' }, { outline: '2px solid transparent' }], { duration: 1400 }); } return; }
+      const b = e.target.closest('[data-m]'); if (!b) return;
+      if (b.dataset.m === 'x') box.remove();
+      else { const txt = hits.map((h) => '・' + h.t).join('\n'); try { navigator.clipboard.writeText(txt); atlToast(hits.length + ' 件をコピーしました'); } catch (err) { prompt('コピーしてください', txt); } }
+    });
+    dragBy(box.querySelector('.bar'), box);
+    document.body.appendChild(box);
+  }
+
+  /* ---------- 付箋 ---------- */
+  let noteEl = null;
+  const NOTE_KEY = 'atelier-notes';
+  const noteAll = () => { try { return JSON.parse(localStorage.getItem(NOTE_KEY) || '{}') || {}; } catch (e) { return {}; } };
+  function noteUpdate() {
+    if (!AT.tools.note) { if (noteEl) { noteEl.remove(); noteEl = null; } return; }
+    const pid = atPageId();
+    if (!pid) { if (noteEl) noteEl.hidden = true; return; }
+    labCss();
+    if (!noteEl || !noteEl.isConnected) {
+      noteEl = document.createElement('div');
+      noteEl.id = 'atl-note';
+      noteEl.className = 'atl-ui';
+      noteEl.innerHTML = '<div class="bar"><span>付箋</span><button data-n="copy" title="写す">写す</button><button data-n="x" title="付箋を切る">×</button></div><textarea placeholder="このページのメモ（このブラウザだけに保存）" spellcheck="false"></textarea>';
+      atlStop(noteEl);
+      noteEl.addEventListener('click', (e) => { const b = e.target.closest('[data-n]'); if (!b) return; if (b.dataset.n === 'x') atTool('note', false); else { try { navigator.clipboard.writeText(noteEl.querySelector('textarea').value); atlToast('写しました'); } catch (er) { /* noop */ } } });
+      noteEl.querySelector('textarea').addEventListener('input', (e) => { const all = noteAll(); const v = e.target.value; if (v) all[noteEl.dataset.pid] = v; else delete all[noteEl.dataset.pid]; try { localStorage.setItem(NOTE_KEY, JSON.stringify(all)); } catch (er) { /* noop */ } });
+      dragBy(noteEl.querySelector('.bar'), noteEl);
+      document.body.appendChild(noteEl);
+    }
+    noteEl.hidden = false;
+    if (noteEl.dataset.pid !== pid) { noteEl.dataset.pid = pid; noteEl.querySelector('textarea').value = noteAll()[pid] || ''; }
+  }
+
+  /* ---------- ページごとの見た目 ---------- */
+  function profileSync() {
+    const pid = atPageId();
+    const want = pid && AT.profiles[pid] ? pid : '';
+    if (want === profFor) return;
+    profFor = want;
+    atWrite('tokens');
+    if (atPanel) atRefresh();
+  }
+  function labAct(k) {
+    if (k === 'reader') readerOpen();
+    else if (k === 'marks') marksOpen();
+    else if (k === 'profileOn') {
+      const pid = atPageId(); if (!pid) { atlToast('ページを開いてから'); return; }
+      AT.profiles[pid] = { at: Date.now(), name: atNorm((document.querySelector('.notion-frame h1') || {}).textContent || '').slice(0, 40), tokens: JSON.parse(JSON.stringify(TK())) };
+      atSave(); profFor = ''; profileSync(); atlToast('このページ専用の見た目にしました（Atelier で変えるとこのページだけに効きます）');
+    } else if (k === 'profileOff') {
+      const pid = atPageId(); delete AT.profiles[pid]; atSave(); profFor = '__'; profileSync(); atlToast('このページ専用の見た目をやめました');
+    }
+    if (atPanel) atRefresh();
+  }
+
+  /* ---------- 起動・巡回 ---------- */
+  let labHref = '';
+  function labTick() {
+    if (location.href !== labHref) { labHref = location.href; profileSync(); noteUpdate(); if (AT.tools.rail && ticksEl) ticksEl.dataset.k = ''; }
+    if (AT.tools.rail) railUpdate();
+  }
+  setInterval(labTick, 700);
+  window.addEventListener('keydown', (e) => {
+    if (!(e.ctrlKey && e.altKey) || e.metaKey) return;
+    if (e.code === 'KeyP' && AT.tools.palette) { e.preventDefault(); e.stopPropagation(); palOpen(); }
+    else if (e.code === 'KeyR') { e.preventDefault(); e.stopPropagation(); readerOpen(); }
+    else if (e.code === 'KeyM') { e.preventDefault(); e.stopPropagation(); marksOpen(); }
+  }, true);
+
   /* 起動（document-start: 基礎の層と変数は描画前に入れる） */
   atWrite();
   document.addEventListener('DOMContentLoaded', () => { atKeepLast(); g12Start(); }, { once: true });
@@ -7871,8 +8779,8 @@ html[data-at-focus][data-at-has-cur] .layout .notion-page-content > [data-block-
   }
   const ATELIER_API = {
     version: VERSION, open: openAtelier, close: closeAtelier,
-    tokens: () => Object.assign({}, AT.tokens),
-    set: (k, v) => { if (v === undefined || v === null || v === '') delete AT.tokens[k]; else AT.tokens[k] = String(v); atWrite('tokens'); atSave(); return AT.tokens[k]; },
+    tokens: () => Object.assign({}, TK()),
+    set: (k, v) => { if (v === undefined || v === null || v === '') delete TK()[k]; else TK()[k] = String(v); atWrite('tokens'); atSave(); return TK()[k]; },
     layer: (k, on) => { AT.layers[k] = on !== false; atWrite('base'); atSave(); return AT.layers[k]; },
     rules: () => AT.rules.map((r) => ({ name: r.name, sel: r.sel, on: r.on !== false })),
     pick: () => { if (!atPanel) openAtelier(); atTab = 'any'; atRefresh(); atStartPick(); },
