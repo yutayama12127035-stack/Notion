@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³¹ _ Atlas Views
 // @namespace    https://cordivestium.local/atlas-views
-// @version      2.0.0
-// @description  v2.0.0: 「Add a new view」に Atlas が出なかったのを修正。見ていて楽しいビューを追加 — シアター（映画ポスターの壁）・レコード（ジャケットと盤）・ポラロイド（写真の壁）・星図（グループを星座に）。Notion に無い新しいビュー「Atlas」。「Add a new view」の空いている枠に Atlas を追加。書架（背表紙が棚に並ぶ・縦書き・グループごとの棚）／年表（日付で年・月ごとの縦のタイムライン）／集計（Excel のピボット: 2 つのプロパティのクロス集計・合計・押すと一覧）を切り替えて使える。ビューのフィルター・並べ替えはそのまま効く。本・ページを押すとサイドピークで開く。既存のビューも ⌃⌥V で Atlas に切り替え／戻す。
+// @version      2.1.0
+// @description  v2.1.0: Atlas のタイルが押せない・押しても何も見えなかったのを修正（押下を Notion より先に受け止める・ビューの本体を広く探し、見つからなければ DB の画面に重ねて出す・新しいビューが作れない時は今のビューを Atlas で表示）。v2.0.0: 「Add a new view」に Atlas が出なかったのを修正。見ていて楽しいビューを追加 — シアター（映画ポスターの壁）・レコード（ジャケットと盤）・ポラロイド（写真の壁）・星図（グループを星座に）。Notion に無い新しいビュー「Atlas」。「Add a new view」の空いている枠に Atlas を追加。書架（背表紙が棚に並ぶ・縦書き・グループごとの棚）／年表（日付で年・月ごとの縦のタイムライン）／集計（Excel のピボット: 2 つのプロパティのクロス集計・合計・押すと一覧）を切り替えて使える。ビューのフィルター・並べ替えはそのまま効く。本・ページを押すとサイドピークで開く。既存のビューも ⌃⌥V で Atlas に切り替え／戻す。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,13 @@
 // ==/UserScript==
 
 /*
+ * v2.1.0（2026-10-03）
+ *   ・タイルが押せなかった: Notion は document の捕捉段階で押下を取り、写したタイルには React の処理が無いので止まっていた
+ *     → window の捕捉段階（Notion より手前）で受け止める
+ *   ・見えなかった: 表の本体を .notion-collection-view-body だけで探していた（今の Notion には無いことがある）
+ *     → 表・ボード・ギャラリー・リスト…の本体を広く探す。見つからなければ DB の画面に重ねて出す
+ *   ・新しいビューが 3 秒で現れない時は、メニューを閉じて今のビューを Atlas で表示（「表に戻す」／⌃⌥V で戻る）
+ *
  * v2.0.0（2026-10-03）
  *   ・「Add a new view」に Atlas が出なかった: メニューの中身は後から描かれるのに、足された要素の文字だけで探していた／
  *     タイルを role 属性で探していた（Notion のタイルには role が無い）。
@@ -44,7 +51,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const TAG = '[³¹ v' + VERSION + ']';
   if (window.__c31 && window.__c31.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -128,7 +135,8 @@
     const vm = await getRecords('collection_view', [vid]);
     const v = vm.get(vid);
     if (!v) return;
-    await apiPost('/api/v3/saveTransactions', { requestId: uuid(), transactions: [{ id: uuid(), spaceId: v.space_id, debug: { userAction: 'c31.renameView' }, operations: [{ pointer: { table: 'collection_view', id: vid, spaceId: v.space_id }, path: ['name'], command: 'set', args: name }] }] }, v.space_id);
+    const body = () => ({ requestId: uuid(), transactions: [{ id: uuid(), spaceId: v.space_id, debug: { userAction: 'c31.renameView' }, operations: [{ pointer: { table: 'collection_view', id: vid, spaceId: v.space_id }, path: ['name'], command: 'set', args: name }] }] });
+    try { await apiPost('/api/v3/saveTransactionsFanout', body(), v.space_id); } catch (e) { await apiPost('/api/v3/saveTransactions', body(), v.space_id); }
   }
 
   /* ============================================================
@@ -385,22 +393,56 @@
   }
   function message(t) { if (host) host.innerHTML = '<div class="c31-bar"><span class="c31-brand">✦ Atlas</span><span class="c31-grow"></span><button class="c31-btn" data-a="off">表に戻す</button></div><div class="c31-empty">' + esc(t) + '</div>'; }
 
-  /* ---- 置き場所（表の本体の代わり） ---- */
+  /* ---- 置き場所（表の本体の代わり） ----
+     v2.1.0: Notion のビューの本体は class 名が版で変わるので候補を広く探す。見つからない時は
+     DB の画面の上に重ねて出す（どの版でも必ず見える）。 */
+  const BODY_SELS = ['.notion-collection-view-body', '.notion-table-view', '.notion-board-view', '.notion-gallery-view', '.notion-list-view', '.notion-calendar-view', '.notion-timeline-view', '.notion-feed-view', '.notion-chart-view', '.notion-map-view'];
+  function mainFrame() { return document.querySelector('main .notion-frame, .notion-frame') || null; }
   function frameBody() {
-    const frame = document.querySelector('.notion-frame');
+    const frame = mainFrame();
     if (!frame) return null;
-    return frame.querySelector('.notion-collection-view-body') || null;
+    for (const sel of BODY_SELS) {
+      for (const el of frame.querySelectorAll(sel)) {
+        if (el.closest('#c31-view') || el.closest('.notion-peek-renderer')) continue;
+        /* 一番外側（本体の中の入れ子は避ける） */
+        let top = el;
+        for (let p = el.parentElement; p && p !== frame; p = p.parentElement) if (BODY_SELS.some((x) => p.matches(x))) top = p;
+        return top;
+      }
+    }
+    return null;
+  }
+  let hidden = null;
+  function hideBody(el) {
+    if (hidden && hidden !== el) hidden.removeAttribute('data-c31-hidden');
+    hidden = el;
+    if (el) el.setAttribute('data-c31-hidden', '1');
+  }
+  function placeFloat() {
+    if (!host || !host.classList.contains('c31-float')) return;
+    const f = mainFrame();
+    const r = f ? f.getBoundingClientRect() : { left: 0, top: 0, width: innerWidth, height: innerHeight };
+    host.style.left = r.left + 'px'; host.style.top = (r.top + 44) + 'px'; host.style.width = r.width + 'px'; host.style.height = Math.max(200, r.height - 44) + 'px';
   }
   async function ensure() {
     const vid = currentViewId();
     const on = !!(vid && VIEWS[vid] && VIEWS[vid].on);
     document.documentElement.toggleAttribute('data-c31-on', on);
-    if (!on) { if (host) { host.remove(); host = null; } return; }
-    const body = frameBody();
-    if (!body) return;
+    if (!on) { if (host) { host.remove(); host = null; } hideBody(null); return; }
     installCss();
     if (!host) { host = document.createElement('div'); host.id = 'c31-view'; host.addEventListener('click', onHostClick); host.addEventListener('change', onHostChange); }
-    if (host.nextElementSibling !== body || !host.isConnected) body.parentElement.insertBefore(host, body);
+    const body = frameBody();
+    if (body) {
+      host.classList.remove('c31-float');
+      ['left', 'top', 'width', 'height'].forEach((k) => host.style.removeProperty(k));
+      if (host.nextElementSibling !== body || !host.isConnected) body.parentElement.insertBefore(host, body);
+      hideBody(body);
+    } else {
+      /* 本体が見つからない → 重ねて出す */
+      host.classList.add('c31-float');
+      if (host.parentElement !== document.body) document.body.appendChild(host);
+      placeFloat();
+    }
     if (dataFor !== vid && !loading) {
       loading = true;
       message('読み込んでいます…');
@@ -409,6 +451,7 @@
       finally { loading = false; }
     } else if (data && dataFor === vid && !host.querySelector('.c31-body')) draw();
   }
+  window.addEventListener('resize', () => placeFloat());
   function openPage(id) {
     const u = new URL(location.href);
     u.searchParams.set('p', id.replace(/-/g, ''));
@@ -491,8 +534,7 @@
     const lab = leafOf(tile, 'Form') || leafOf(tile, 'フォーム') || leafOf(tile, 'Calendar') || leafOf(tile, 'カレンダー');
     if (lab) lab.textContent = 'Atlas';
     tile.setAttribute('data-c31-tile', '1');
-    tile.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); createAtlas(table); }, true);
-    for (const t of ['pointerdown', 'mousedown', 'pointerup', 'mouseup']) tile.addEventListener(t, (e) => e.stopPropagation(), true);
+    tile.__c31table = table;
     last.parentElement.insertBefore(tile, last.nextSibling);
     return true;
   }
@@ -502,18 +544,38 @@
       try { if (decorateMenu(el)) return; } catch (e) { ST.lastError = String(e && e.message || e); }
     }
   }
+  /* v2.1.0: タイルの押下は window の捕捉段階で受け止める（Notion は document の捕捉段階で押下を受け取り、
+     写したタイルには React の処理が無いので、そこで止まって何も起きなかった） */
+  let tileBusy = false;
+  for (const t of ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click']) {
+    window.addEventListener(t, (e) => {
+      const tile = e.target instanceof Element && e.target.closest('[data-c31-tile]');
+      if (!tile || e.__c31) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (t === 'click' && !tileBusy) { tileBusy = true; createAtlas(tile.__c31table).finally(() => { tileBusy = false; }); }
+    }, true);
+  }
+  function closeMenus() {
+    const o = { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true, cancelable: true };
+    (document.activeElement || document.body).dispatchEvent(new KeyboardEvent('keydown', o));
+    document.dispatchEvent(new KeyboardEvent('keydown', o));
+  }
+  function toast(msg) {
+    let t = document.getElementById('c31-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'c31-toast'; document.body.appendChild(t); }
+    t.textContent = msg; t.style.opacity = '1';
+    clearTimeout(toast.t); toast.t = setTimeout(() => { t.style.opacity = '0'; }, 4200);
+  }
   function press(el) {
     const r = el.getBoundingClientRect();
     const o = { bubbles: true, cancelable: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, button: 0 };
-    el.dispatchEvent(new PointerEvent('pointerdown', o)); el.dispatchEvent(new MouseEvent('mousedown', o));
-    el.dispatchEvent(new PointerEvent('pointerup', o)); el.dispatchEvent(new MouseEvent('mouseup', o));
-    el.dispatchEvent(new MouseEvent('click', o));
+    for (const [C, t] of [[PointerEvent, 'pointerdown'], [MouseEvent, 'mousedown'], [PointerEvent, 'pointerup'], [MouseEvent, 'mouseup'], [MouseEvent, 'click']]) { const ev = new C(t, o); ev.__c31 = true; el.dispatchEvent(ev); }
   }
   async function createAtlas(tableTile) {
     const before = currentViewId();
-    press(tableTile);
+    if (tableTile && tableTile.isConnected) press(tableTile);
     const t0 = Date.now();
-    while (Date.now() - t0 < 8000) {
+    while (Date.now() - t0 < 3000) {
       await new Promise((r) => setTimeout(r, 120));
       const v = currentViewId();
       if (v && v !== before) {
@@ -524,8 +586,14 @@
         return v;
       }
     }
-    console.warn(TAG, '新しいビューを見つけられませんでした（作られたビューを開いて ⌃⌥V で Atlas にできます）');
-    return null;
+    /* 新しいビューが作れなかった → 今のビューを Atlas で見せる（⌃⌥V・「表に戻す」で戻る） */
+    closeMenus();
+    if (!before) { toast('Atlas は ?v= のあるフルページの DB で使えます'); return null; }
+    VIEWS[before] = Object.assign({ layout: 'shelf' }, VIEWS[before] || {}, { on: true });
+    saveViews();
+    setTimeout(() => ensure(), 120);
+    toast('このビューを Atlas で表示しています（「表に戻す」か ⌃⌥V で元に戻ります）');
+    return before;
   }
 
   /* ============================================================
@@ -536,7 +604,9 @@
     const st = document.createElement('style');
     st.id = 'c31-css';
     st.textContent = `
-html[data-c31-on] .notion-frame .notion-collection-view-body { display: none !important; }
+html[data-c31-on] [data-c31-hidden] { display: none !important; }
+#c31-view.c31-float { position: fixed; z-index: 90; overflow: auto; padding: 4px 96px 64px; background: var(--c-bgPri, #fff); }
+#c31-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 2147483000; padding: 9px 16px; border-radius: 8px; background: rgba(15,15,15,.88); color: #fff; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; pointer-events: none; opacity: 0; transition: opacity .2s; }
 #c31-view { --serif: "Cordivestium Group Header", "Baskerville", "Hiragino Mincho ProN", "Yu Mincho", serif; position: relative; padding: 4px 0 64px; color: var(--c-texPri, #37352f); font-family: var(--serif); }
 #c31-view * { box-sizing: border-box; }
 #c31-view a { color: inherit; text-decoration: none; }
