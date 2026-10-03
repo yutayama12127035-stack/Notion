@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      6.1.0
-// @description  Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
+// @version      6.2.0
+// @description  v6.2.0: 拳銃・階級章などの既存のアイコンを正しいグループ（ミリタリーなど）へ振り分け直し・ミリタリーに 10 種追加。Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -21,6 +21,14 @@
 // ==/UserScript==
 
 /*
+ * v6.2.0（2026-10-03）
+ *   ・既存のアイコンを正しいグループへ: 名前にはっきりした言葉（拳銃・銃・階級章・勲章・戦車・ミサイル…／サッカー・野球…／
+ *     クリスマス・花火…／ハンマー・レンチ…）がある取り込みは、ミリタリー・スポーツ・季節・行事・道具・工具へ移す（起動時に一度だけ。
+ *     この 4 つは v6.1 で増えたグループなので、それ以前に手で別のグループへ入れた物も移す）。新しく取り込む物も同じ言葉で先に決める。
+ *     やり直し: __c29.regroupStrong()（手で決めた物も含めるなら __c29.regroupStrong(true)）
+ *   ・ミリタリーに 10 種を追加: 拳銃・ライフル・弾丸・手榴弾・ミサイル・爆弾・階級章（星）・階級章（肩章）・短剣・潜水艦（全 26 種）
+ *   ・方位・コンパスを「天体・宇宙」から「旅行・地図」へ
+ *
  * v6.1.0（2026-10-03）
  *   ・グループを 4 つ追加（24 → 28）: ミリタリー・スポーツ・季節・行事・道具・工具。
  *     ミリタリー 16: ヘルメット・勲章・盾・双剣・戦車・戦闘機・錨・階級章・認識票・双眼鏡・パラシュート・照準・軍旗・軍艦・レーダー・ヘリコプター
@@ -115,7 +123,7 @@
 
 (function () {
   'use strict';
-  const VERSION = '6.1.0';
+  const VERSION = '6.2.0';
   const SIG_VER = '5.0.0';   // v5.1.0: 形の指紋のキャッシュの版（形の計算を変えた時だけ上げる）
   const UW = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const SVGNS = 'http://www.w3.org/2000/svg';
@@ -799,6 +807,16 @@
     ['m-flag', '軍旗', 'ぐんき はた れんたい military flag banner', 'S2:M5 21.5V2.5;U:M5 3.5h13.5l-3 4.5 3 4.5H5z;H:M10.5 5.9l.7 1.4 1.5.2-1.1 1.1.3 1.5-1.4-.7-1.4.7.3-1.5-1.1-1.1 1.5-.2z'],
     ['m-warship', '軍艦', 'ぐんかん せんかん かいぐん warship battleship navy', 'U:M1.8 14.6h20.4l-2.6 5.4H4.4z;U:R(6.6,10.6,9.4,4,0.6);U:R(9.4,7,4.4,3.6,0.6);S1.4:M11.6 7V2.8;S1.6:M16 12.6h5.4'],
     ['m-radar', 'レーダー', 'れーだー たんち radar sonar detect', 'S:M12 12l6.4-6.4;S:M20.5 12A8.5 8.5 0 1 1 12 3.5;S:M16.2 12A4.2 4.2 0 1 1 12 7.8;D:O(12,12,1.5);D:O(16.6,15.4,1)'],
+    ['m-pistol', '拳銃', 'けんじゅう ぴすとる じゅう pistol handgun gun', 'U:R(2.5,5.5,17.5,4.6,1.1);U:M11.2 10h7.6l-1.5 9.6a1.2 1.2 0 0 1-1.2 1h-4.4a1 1 0 0 1-1-1.2z;S1.4:M11.2 10.2v2.2a2 2 0 0 1-2 2H8;C1:M15 6.6v2.4M16.8 6.6v2.4'],
+    ['m-rifle', 'ライフル', 'らいふる じゅう しょうじゅう rifle gun', 'S1.7:M1.2 10.2h8.4;U:M8.8 8.4h7.4l1.2-1.1h4.4v4.6l-5 .9-1 1.8h-3.5l-1.3 4.5a.8.8 0 0 1-.8.6H8.3a.5.5 0 0 1-.5-.6l1.1-4.5h-.1z;U:M13.2 13.6h2.3l.8 3.8h-2.3z;U:R(4.6,6.4,5.8,1.7,0.7)'],
+    ['m-bullet', '弾丸', 'だんがん たま だんやく bullet ammo', 'U:M9 9.4c0-4 1.4-6.5 3-6.9 1.6.4 3 2.9 3 6.9z;U:R(9,10.4,6,8.6,0.6);U:R(8.4,19.6,7.2,1.9,0.5)'],
+    ['m-grenade', '手榴弾', 'しゅりゅうだん ぐれねーど grenade', 'U:E(12,14.8,6,6.6,0);C1.1:M6.2 12.8h11.6M6.2 16.8h11.6M12 8.4v13;U:R(10,5.4,4,3,0.8);S1.6:M14 6.6c2.6-.4 4.4.6 5 2.6;S1.4:M10 6a2 2 0 1 1-2.8-1.8'],
+    ['m-missile', 'ミサイル', 'みさいる ろけっとだん missile', 'U:M15.4 3.2c2.6-.7 4.5-.7 5.4.2.9.9.9 2.8.2 5.4l-8.4 8.4-5.6-5.6z;U:M6.6 11.8l-3.2.4-1 2.7 3.6.5zM12.2 17.4l-.4 3.2-2.7 1-.5-3.6z;S1.6:M3.6 20.4l3-3'],
+    ['m-bomb', '爆弾', 'ばくだん ぼむ bomb', 'U:O(10.5,14.2,7);U:R(13.4,4.6,4,3.6,0.8);S1.6:M17.4 5.4c1.2-1.5 2.4-1.9 3.6-1.3;U:SP(20.8,3.2,1.8)'],
+    ['m-stars', '階級章（星）', 'かいきゅうしょう ほし しょうかん rank stars general insignia', 'U:R(2.5,8,19,8,1.6);H:ST(6.6,12,5,2.5,1,-90);H:ST(12,12,5,2.5,1,-90);H:ST(17.4,12,5,2.5,1,-90)'],
+    ['m-board', '階級章（肩章）', 'かいきゅうしょう けんしょう rank shoulder board epaulette insignia', 'U:M6 3.5h12v15l-6 3-6-3z;H:R(8.5,9,7,1.6,0.5);H:R(8.5,12.4,7,1.6,0.5);H:ST(12,6.2,5,1.6,.65,-90)'],
+    ['m-dagger', '短剣', 'たんけん ないふ けん つるぎ dagger knife', 'U:M12 1.8l2 3V13h-4V4.8z;U:R(6.5,13,11,2,1);U:R(10.8,15,2.4,5,0.8);U:O(12,21.2,1.4)'],
+    ['m-sub', '潜水艦', 'せんすいかん かいぐん submarine navy', 'U:R(2,11,20,6.5,3.25);U:R(9,7.5,5,4.5,1);S1.4:M11.5 7.5V4h2;H:O(7,14.2,1);H:O(11,14.2,1);H:O(15,14.2,1)'],
     ['m-heli', 'ヘリコプター', 'へりこぷたー へり helicopter', 'S:M3 5.8h18M12 5.8v2.4;U:M4 12.6A5 4 0 0 1 9 8.6h4a4.6 4.6 0 0 1 4.6 4.6v.4a2.6 2.6 0 0 1-2.6 2.6H9a5 3.5 0 0 1-5-3.6z;H:M12.6 10.2h2.2a2 2 0 0 1 1.6 1.8h-3.8z;S1.6:M17.4 11.6h4.6M21.6 9.6v4;S1.4:M8 19h8.4M10 16.4V19M14.4 16.4V19']
   ]);
   add('sport', 'スポーツ', [
@@ -883,7 +901,7 @@
     ['sport', 'スポーツ', 'すぽーつ うんどう きょうぎ さっかー やきゅう ばすけ てにす ごるふ すいえい ひょうしょうだい sports soccer baseball basketball tennis golf swim podium stopwatch athlete'],
     ['season', '季節・行事', 'きせつ ぎょうじ はる なつ あき ふゆ くりすます はろうぃん はなび まつり もみじ ゆき こいのぼり season event christmas halloween fireworks festival autumn winter summer spring holiday'],
     ['tools', '道具・工具', 'どうぐ こうぐ はんまー れんち どらいばー ねじ ぺんき diy tools hammer wrench screwdriver toolbox repair build'],
-    ['military', 'ミリタリー', 'みりたりー ぐんたい へいたい せんしゃ せんとうき ぐんかん へるめっと くんしょう たて けん いかり ぱらしゅーと しょうじゅん れーだー military army navy soldier tank jet fighter warship helmet medal shield sword anchor parachute target radar badge rank'],
+    ['military', 'ミリタリー', 'みりたりー ぐんたい へいたい せんしゃ せんとうき ぐんかん へるめっと くんしょう たて けん いかり ぱらしゅーと しょうじゅん れーだー けんじゅう じゅう らいふる だんがん しゅりゅうだん みさいる ばくだん かいきゅうしょう かいきゅう せんすいかん たんけん ないふ 拳銃 銃 階級章 勲章 軍 military army navy soldier tank jet fighter warship helmet medal shield sword anchor parachute target radar badge rank insignia pistol gun rifle bullet ammo grenade missile bomb submarine dagger knife camo'],
     ['orig', 'オリジナル', '']
   ];
   const FX = new Map(FIXED.map((g, i) => [g[0], { id: g[0], ja: g[1], kw: g[2], i }]));
@@ -900,7 +918,7 @@
     building: 'building store f-building f-store f-bank f-school f-hospital f-castle f-factory f-lighthouse f-torii',
     comm: 'megaphone mail send phone chat chat-dots',
     people: 'user users user-plus id-card baby',
-    travel: 'pin-map map tent suitcase ticket f-map',
+    travel: 'pin-map map tent suitcase ticket f-map compass compass-rose',
     food: 'coffee tea utensils cake apple wine beer f-mug f-teacup f-onigiri f-ramen f-cake f-apple',
     vehicle: 'car bicycle train plane ship f-car f-car-front f-bus f-truck f-train f-plane f-sailboat f-fuel f-parking',
     health: 'pill f-heart-pulse f-firstaid f-mortar',
@@ -1808,11 +1826,23 @@
     }
     return sc;
   }
+  /* v6.2.0: はっきりした言葉は、学習より先にそのグループへ（拳銃・階級章 → ミリタリー など）。
+     ミリタリー・スポーツ・季節・工具は v6.1 で増えたグループなので、それより前に手で別のグループへ入れた物も移す */
+  const STRONG = [
+    ['military', /拳銃|ピストル|リボルバー|ライフル|機関銃|散弾銃|小銃|銃弾|弾丸|弾薬|手榴弾|ミサイル|爆弾|階級章|階級|勲章|肩章|軍旗|軍艦|戦艦|戦車|戦闘機|爆撃機|潜水艦|兵士|兵隊|軍隊|軍人|陸軍|海軍|空軍|自衛隊|迷彩|照準|認識票|ドッグタグ|パラシュート|大砲|砲弾|機雷|ミリタリー|短剣|銃|けんじゅう|ぴすとる|らいふる|かいきゅう|くんしょう|せんしゃ|せんとうき|ぐんかん|みりたりー|しゅりゅうだん|\b(pistol|handgun|revolver|rifle|shotgun|gun|guns|bullet|ammo|ammunition|grenade|missile|bomb|insignia|rank|epaulette|tank|fighter|warship|battleship|submarine|soldier|army|navy|military|camo|camouflage|crosshair|dogtag|parachute|cannon|dagger|bayonet|sword|swords)\b/i],
+    ['sport', /サッカー|野球|バスケ|テニス|ゴルフ|水泳|ラグビー|バレーボール|卓球|ボクシング|柔道|剣道|スキー|スケート|マラソン|陸上競技|表彰台|ストップウォッチ|\b(soccer|football|baseball|basketball|tennis|golf|swimming|rugby|volleyball|boxing|skiing|skate|marathon|podium|stopwatch)\b/i],
+    ['season', /クリスマス|ハロウィン|花火|お祭り|紅葉|雪だるま|鯉のぼり|お正月|門松|七夕|ひな祭り|節分|\b(christmas|xmas|halloween|fireworks|snowman|pumpkin|easter)\b/i],
+    ['tools', /ハンマー|金づち|レンチ|スパナ|ドライバー|ネジ|ねじ回し|ナット|工具|ペンチ|のこぎり|ドリル|\b(hammer|wrench|spanner|screwdriver|screw|toolbox|pliers|drill)\b/i]
+  ];
+  const NEW_GROUPS = new Set(['military', 'sport', 'season', 'tools']);
+  function strongGroup(text) { const t = String(text || ''); for (const [g, re] of STRONG) if (re.test(t)) return g; return ''; }
   const topOf = (sc) => { let g = '', v = 0; for (const k in sc) if (sc[k] > v) { v = sc[k]; g = k; } return { g, v }; };
   async function guessGroup(c, useShape) {
     /* 覚えたグループは v4 の 24 グループで覚えた物だけ（前の版の自由な名前は、言葉と形で決め直す） */
     const mem = c.key && P.names[c.key];
     if (mem && FX.has(mem.group)) return { g: mem.group, how: '覚えたグループ' };
+    const sg = strongGroup([c.ja, c.kana, c.tags, c.hint || ''].join(' '));
+    if (sg) return { g: sg, how: 'ことばから' };
     const t = topOf(wordScores([c.ja, c.kana, c.tags, c.hint ? normHint(c.hint) : ''].join(' ')));
     if (t.g && t.v >= 1.2) return { g: t.g, how: 'ことばから' };
     if (useShape !== false && c.body) {
@@ -1853,8 +1883,23 @@
     if (n) saveC();
     return n;
   }
+  /* v6.2.0: はっきりした言葉の物を、正しいグループへ（一度だけ・__c29.regroupStrong() でやり直せる） */
+  function regroupStrong(force) {
+    let n = 0;
+    const moved = [];
+    for (const c of CUSTOM) {
+      const sg = strongGroup([/ \d{3}$/.test(c.ja || '') ? '' : c.ja, c.kana, c.tags, c.hint || ''].join(' '));
+      if (!sg || sg === c.group) continue;
+      if (c.gset && !NEW_GROUPS.has(sg) && !force) continue;
+      moved.push(c.ja || c.id);
+      c.group = sg; n++;
+    }
+    if (n) saveC();
+    return { n, moved };
+  }
   rebuild();
   if (migrate()) rebuild();
+  if (P.regroupV !== 62) { const r = regroupStrong(); P.regroupV = 62; save(); if (r.n) { rebuild(); console.info('[²⁹] はっきりした名前のアイコンを振り分け直しました: ' + r.moved.join('・')); } }
   /* 言葉で決まらなかった物は、起動の少し後に形で振り分ける */
   setTimeout(async () => {
     const L = CUSTOM.filter((c) => c.reshape); if (!L.length) return;
@@ -2770,6 +2815,7 @@
       guess: async (text) => { const r = await toCandidates(text); await autoName(r.out); return r.out.map((c) => ({ ja: c.ja, how: c.how, sugg: c.sugg && c.sugg.ja, group: gja(c.group), ghow: c.ghow, sv: c._sv && [c._sv.name, Math.round(c._sv.v * 100), Math.round(c._sv.share * 100)] })); },
       near: async (text, k) => { const r = await toCandidates(text); const c = r.out[0]; return c ? (await neighbors(c, k || 5)).map((n) => [n.x.id, n.x.ja, Math.round(n.v * 1000) / 1000]) : []; }, groups: () => FIXED.map((g) => g[1]),
       group: (id) => { const x = BYID.get(id); return x ? x.gja : ''; },
+      regroupStrong: (force) => { const r = regroupStrong(force); rebuild(); refreshAll(); return r; },
       svg: (id, o) => { const x = BYID.get(id); return x ? svgOf(x, o) : ''; },
       url: (id, o) => { const x = BYID.get(id); return x ? dataUrl(x, o) : ''; }
     };
