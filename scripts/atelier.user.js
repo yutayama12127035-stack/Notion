@@ -29,6 +29,7 @@
  *   ・フォーカスモード: サイドバーと上の帯は消え（カーソルを寄せると出る）、書いている段落以外を淡く。
  *   ・文字数: 左下に ページの文字数・読了時間（1 分 500 字）、文字を選んでいる時は選んだ文字数。
  *   ・道具の入切はこのブラウザに保存（次に開いた時もそのまま）。
+ *   ・旧 Text Styles が先に動いていると Atelier は起動できない（同じ窓口のため黙って止まっていた）→ 右下に案内を出す。
  *
  * v23.0.0（2026-10-03）— 名前を「Atelier」に。Text Styles（本文の書式）はそのまま全部入っています
  *   ・Atelier（⌃⌥A／右下「Aa」を右クリック／本文のパネルの「Atelier」）: 見た目の設定を一か所に集めた。
@@ -291,7 +292,25 @@
 
   const VERSION = '24.0.0';
   const API = '__c26';
-  if (window[API] && window[API].version) return;
+  if (window[API] && window[API].version) {
+    /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
+       黙って止まらず、画面に案内を出す */
+    const old = String(window[API].version || '');
+    if (parseInt(old, 10) < 23) {
+      const note = () => {
+        if (document.getElementById('atelier-legacy-note')) return;
+        const d = document.createElement('div');
+        d.id = 'atelier-legacy-note';
+        d.style.cssText = 'position:fixed;z-index:2147483646;right:20px;bottom:20px;max-width:360px;padding:12px 14px;border-radius:10px;background:#fff;color:#37352f;box-shadow:0 0 0 .5px rgba(15,15,15,.12),0 10px 30px rgba(15,15,15,.18);font:12.5px/1.6 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif';
+        d.innerHTML = '<b style="font-family:Baskerville,serif;letter-spacing:.06em">Atelier を起動できません</b><br>旧「²⁶ Text Styles」（v' + old.replace(/[<>&]/g, '') + '）が動いています。ScriptCat で Text Styles を無効にして、ページを再読み込みしてください（本文の書式は Atelier が引き継ぎます）。<div style="text-align:right;margin-top:6px"><button style="border:0;border-radius:6px;padding:4px 10px;background:rgba(55,53,47,.08);cursor:pointer">閉じる</button></div>';
+        d.querySelector('button').onclick = () => d.remove();
+        document.body.appendChild(d);
+      };
+      if (document.body) note(); else document.addEventListener('DOMContentLoaded', note, { once: true });
+      console.warn('[²⁶ Atelier] 旧 Text Styles v' + old + ' が動いているため起動しません。Text Styles を無効にしてください。');
+    }
+    return;
+  }
 
   const LS_KEY = 'c26-styles-v1';     // ブロック単位の書式（v1 から続く）
   const LS_PREFS = 'c26-prefs-v1';    // ポップアップなどの設定
