@@ -1590,7 +1590,12 @@ html[data-lm-curtain="nav"] .notion-frame > :not(.notion-topbar):not(:has(.notio
 html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *, html[data-lm-curtain-up] .notion-frame .notion-scroller { transition: opacity ${reduce() ? 0 : 0.2}s cubic-bezier(.2,0,0,1) !important; }
 @keyframes lm-curtain-safe { to { opacity: 1; } }`;
   function curtainBoot() {
-    if (!on('curtain') || !document.documentElement) return;
+    if (!on('curtain')) return;
+    if (!document.documentElement) {   // document-start の最初の瞬間は <html> もまだ無い → できた瞬間に幕を掛ける
+      const w = new MutationObserver(() => { if (document.documentElement) { w.disconnect(); apply(); curtainBoot(); } });
+      w.observe(document, { childList: true });
+      return;
+    }
     document.documentElement.setAttribute('data-lm-curtain', 'boot');
     curtainWait('boot', +T('curtainMax') || 3200);
   }
