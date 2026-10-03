@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      4.0.0
-// @description  Notion のアイコン画面を Default｜Library｜Import の 3 タブに。アイコンを選ぶと色・見た目が出る（Notion と同じ順番）。24 グループに固定して自動で振り分け（学習つき）。SF Filled 系の新しいアイコン 54 種。PNG・JPG をなぞってアイコンに。⌃⌥I で単独の窓、⌃⌥U で取り込み。
+// @version      5.0.0
+// @description  Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -21,6 +21,22 @@
 // ==/UserScript==
 
 /*
+ * v5.0.0
+ *   ・新しい Notion の「Icon」の画面（タブが Icon 1 つ・Filter・Random）にも Library｜Import を出す。
+ *     Upload のタブがないので、データ URL とファイル（SVG）の両方で貼ってみて、だめなら ⌘V を待つ。
+ *   ・色・見た目を Figma 風に: このアイコンそのものの見本でスタイル（塗り／線／二色）と背景 7 種を選ぶ、
+ *     色はタブ（基本・Notion・深い色・やさしい色・メタル・グラデ）＋角丸の四角、名前と色コードを下に、トグルのスイッチ。
+ *   ・形から名前を当てる仕組みを作り直し: 形の外接枠をそろえた濃淡の指紋＋相関＋左右反転。
+ *     上位 8 つを「同じ物」ごとにまとめる多数決で決める（例: 鳥の SVG → 「鳥」・生き物・植物）。
+ *   ・「オリジナル」は本当のオリジナルだけ（« No »・Astrarium の 19 の席）。自動では入れない。
+ *     前の版で自動で入っていた取り込みは、言葉と形で振り分け直す。月桂樹・封蝋などの標準も各グループへ。
+ *   ・Astrarium の席（¹⁸ の CSS の 18 の絵＋憲章）を、絵を一字も変えずにオリジナルとして収録。
+ *   ・ランタンを BALMUDA 風（輪の取っ手・丸い肩・すりガラスの胴と光の筋・台座）に描き直し、「暮らし・生活」へ。
+ *   ・鳥（塗り）を追加。
+ *   ・ウェブで探す（Library で検索した時）: Iconify（150 以上のアイコン集をまとめて）と icons8（PNG をなぞる）。
+ *     日本語の言葉は手持ちのアイコンの英語に置き換えて探す。塗り／線で絞れる。押すと取り込んで、そのまま色を選べる。
+ *   ・Import に画像の URL（icons8 の https://img.icons8.com/?…&format=png など）を貼ると、取ってきてなぞる。
+ *
  * v4.0.0
  *   ・色の選び方を Notion と同じ順番に: アイコンを押す → その場に「色・見た目」が出る → 色を押すとそのまま設定。
  *     色にカーソルを乗せると見本が変わる。Enter で設定・Esc で閉じる・←→ で色を送る。
@@ -82,7 +98,7 @@
 
 (function () {
   'use strict';
-  const VERSION = '4.0.0';
+  const VERSION = '5.0.0';
   const UW = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -681,7 +697,7 @@
     ['star-pen', '星のペン', 'ほし ぺん star pen', 'U:M13.5 6.5l4 4-8.5 8.5-5 1 1-5z;K:M11.5 8.5l4 4;U:M19 2.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4L17 4.5l1.4-.6z'],
     ['astro-compass', '星図', 'せいず ほしのちず star chart', 'U:O(12,12,9);U:M12 5l1.4 5.6L19 12l-5.6 1.4L12 19l-1.4-5.6L5 12l5.6-1.4z;K1:M12 3v2M12 19v2M3 12h2M19 12h2'],
     ['spark-planet', 'きらめく惑星', 'わくせい きらめき sparkle planet', 'U:O(10.5,13.5,5);S:M4.2 17.2c-1.6 1.4-2.3 2.6-1.8 3.2.9 1.2 5.1-.6 9.3-3.6s7-6.6 6.2-7.8c-.4-.6-1.6-.5-3.2.1;U:M18.5 2.5c.3 1.9 1.2 2.8 3 3-1.8.3-2.7 1.2-3 3-.3-1.8-1.2-2.7-3-3 1.8-.2 2.7-1.1 3-3z'],
-    ['lantern', 'ランタン', 'らんたん あかり lantern', 'S:M12 2.5v2M9 4.5h6;U:M8 6.5h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-10a1 1 0 0 1 1-1z;S:M9 21h6M12 18.5V21;U:M12 9.5c1.2 1.2 1.6 2.2 1.6 3a1.6 1.6 0 0 1-3.2 0c0-.8.4-1.8 1.6-3z'],
+        ['lantern', 'ランタン', 'らんたん あかり きゃんぷ lantern lamp light', 'S1.4:M9 5.3c0-2.6 1.3-3.8 3-3.8s3 1.2 3 3.8;U:M8.2 5.2h7.6a1.2 1.2 0 0 1 1.2 1.2v1.2H7V6.4a1.2 1.2 0 0 1 1.2-1.2z;U:R(7.6,8.3,8.8,9.4,1.6);H:R(11.15,10,1.7,6.2,0.85);U:M7 18.4h10v1.6a1.7 1.7 0 0 1-1.7 1.7H8.7A1.7 1.7 0 0 1 7 20z'],
     ['key-ornate', '古い鍵', 'ふるいかぎ あんてぃーく antique key', 'U:O(7,7,3.5);K:O(7,7,1.2);S:M9.5 9.5 20 20M17 17l-2 2M19 19l-1.5 1.5M14.5 14.5l-1.5 1.5'],
     ['hourglass-star', '星の砂時計', 'ほし すなどけい star hourglass', 'K:M6 3.5h12M6 20.5h12;U:M7.5 3.5v2.5a4.5 4.5 0 0 0 9 0V3.5;U:M7.5 20.5V18a4.5 4.5 0 0 1 9 0v2.5;D:M12 16.3l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z'],
     ['scroll', '巻物', 'まきもの すくろーる scroll', 'U:M7 4h11a2 2 0 0 1 2 2v1.5h-3V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.5h3z;K:M7 4a2 2 0 0 0-2 2v1.5h2M17 7.5V6a2 2 0 0 0-2-2M10 9h4M10 12.5h4'],
@@ -745,7 +761,30 @@
     ['f-clipboard', 'クリップボード（塗り）', 'くりっぷぼーど きろく めも clipboard record', 'U:R(4.5,4,15,18,2.5);H1.4:R(8.5,2.2,7,3.6,1.2);U:R(8.5,2.2,7,3.6,1.2);H:R(8,10,8,1.4,0.7);H:R(8,13.5,8,1.4,0.7);H:R(8,17,5,1.4,0.7)'],
     ['f-wings', '羽根（一対）', 'はね つばさ ふぇざー wings feathers', 'U:M10.6 19.5C6 18.8 3 15 3.2 9.2 3.3 6.3 4.3 4.2 5.6 3c1.3 2.4 3 4.4 4.5 6.9 1.4 2.4 1.6 5.6.5 9.6z;U:M13.4 19.5c4.6-.7 7.6-4.5 7.4-10.3-.1-2.9-1.1-5-2.4-6.2-1.3 2.4-3 4.4-4.5 6.9-1.4 2.4-1.6 5.6-.5 9.6z;C1:M10.2 19 5.8 8.6M13.8 19l4.4-10.4;U:SP(12,4,1.8)'],
     ['f-tray-down', '受け取り', 'うけとり だうんろーど みぶんるい download tray inbox unsorted', 'U:M3 13.5h4.8l1.4 2.5h5.6l1.4-2.5H21v5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5z;U:M10.8 3.5h2.4v6.1l2.1-2.1 1.7 1.7-5 5-5-5 1.7-1.7 2.1 2.1z'],
+    ['f-bird', '鳥（塗り）', 'とり ことり すずめ はと bird sparrow dove', 'U:M18.6 3a4.8 4.8 0 0 1 4.6 3.4l-2.4 1.6v2.1A10.5 10.5 0 0 1 10.3 20.6H3.3a1.2 1.2 0 0 1-.9-2l8.1-9.1V7.9A4.9 4.9 0 0 1 18.6 3z;C1.5:M15.6 10.6 8.4 19;H:O(17.8,7.3,1.2)'],
     ['f-telescope', '望遠鏡（塗り）', 'ぼうえんきょう てんたい ほし telescope astronomy', 'U:M2.6 12.3 14.4 7l1.9 4.2L4.5 16.5a1 1 0 0 1-1.3-.5L2.1 13.6a1 1 0 0 1 .5-1.3z;U:M15.5 6.3l3.6-1.6a1 1 0 0 1 1.3.5l2 4.4a1 1 0 0 1-.5 1.3l-3.6 1.6z;C1.4:M10.5 13.6 7 21M10.5 13.6 14 21;S1.6:M10.5 13.6 7 21M10.5 13.6 14 21;U:O(10.5,13.4,1.5);U:SP(5,4.6,2.2);D:O(8.6,3,0.7)']
+  ]);
+  /* Astrarium の席（ユウさんのオリジナル。¹⁸ の CSS の絵をそのまま。V: は SVG をそのまま使う印） */
+  add('astra', 'Astrarium', [
+    ['astra-charter', 'アストラリウム（憲章）', 'astrarium charter あすとらりうむ けんしょう けんぽう', 'V:<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.09 22.91"><g fill="none" stroke="black" stroke-miterlimit="10" stroke-width="1.5"><path d="m9.545 9.545.6 1.26 1.35.2-.98.98.23 1.38-1.2-.65-1.2.65.23-1.38-.98-.98 1.35-.2Z" data-name="Path 38"/><path d="M5.725 18.135h7.64" data-name="Line 19"/><path d="M.955.955h17.18v21H.955z" data-name="Rectangle 5"/><path d="M5.725 5.725a8.7 8.7 0 0 1 3.82-.95 8.7 8.7 0 0 1 3.82.95" data-name="Path 39"/></g></svg>'],
+    ['astra-01', 'アリアドネコロネクサ（本棚）', 'ariadnecoronexa ありあどね あすとらりうむ ほんだな かんむり ariadne bookshelf crown astrarium あすとらりうむ せき1', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-2.165,-1.115) scale(1.16582)"><path d="M3.0 5.6 H21.0 V7.2 H3.0 Z" fill="#000" stroke="none"/><path d="M3.0 19.2 H21.0 V20.8 H3.0 Z" fill="#000" stroke="none"/><path d="M4.6 7.2 H7.2 V19.2 H4.6 Z" fill="#000" stroke="none"/><path d="M8.8 17.0 H20.4 V19.2 H8.8 Z" fill="#000" stroke="none"/><path d="M9.2 14.8 H19.8 V17.0 H9.2 Z" fill="#000" stroke="none"/><path d="M9.6 12.6 H19.2 V14.8 H9.6 Z" fill="#000" stroke="none"/><path d="M19.2 1.7999999999999998 L19.618 3.582 L21.4 4.0 L19.618 4.418 L19.2 6.2 L18.782 4.418 L17.0 4.0 L18.782 3.582 Z" fill="#000" stroke="none"/><path d="M19.00 2.39 L19.57 3.82 L21.10 3.92 L19.92 4.90 L20.30 6.38 L19.00 5.57 L17.70 6.38 L18.08 4.90 L16.90 3.92 L18.43 3.82 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-02', 'ヘルメサジッタクエシータ（地図）', 'hermesagittaquaesita へるめす ちず みちすじ hermes map astrarium あすとらりうむ せき2', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-4.711,-0.131) scale(1.23787)"><path d="M M6.60 16.40m-1.35 0a1.35 1.35 0 1 0 2.70 0a1.35 1.35 0 1 0 -2.70 0M9.40 13.60m-1.15 0a1.15 1.15 0 1 0 2.30 0a1.15 1.15 0 1 0 -2.30 0M12.20 12.20m-1.00 0a1.00 1.00 0 1 0 2.00 0a1.00 1.00 0 1 0 -2.00 0M15.40 10.40m-0.85 0a0.85 0.85 0 1 0 1.70 0a0.85 0.85 0 1 0 -1.70 0" fill-rule="evenodd" fill="#000" stroke="none"/><path d="M4.6 6.2 L9.0 8.0 V18.2 L4.6 16.4 Z" fill="#000" stroke="none"/><path d="M9.9 8.0 L14.1 6.2 V16.4 L9.9 18.2 Z" fill="#000" stroke="none"/><path d="M15.0 6.2 L19.4 8.0 V18.2 L15.0 16.4 Z" fill="#000" stroke="none"/><path d="M20.4 1.5 L20.799 3.201 L22.5 3.6 L20.799 3.999 L20.4 5.7 L20.000999999999998 3.999 L18.299999999999997 3.6 L20.000999999999998 3.201 Z" fill="#000" stroke="none"/><path d="M19.00 2.60 L19.38 4.22 L21.00 4.60 L19.38 4.98 L19.00 6.60 L18.62 4.98 L17.00 4.60 L18.62 4.22 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-03', 'アテナプレアドソフィア（開いた書）', 'athenapleiadosophia あてな ほん せいだん ぷれあです athena book pleiades astrarium あすとらりうむ せき3', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-1.100,-0.771) scale(1.09622)"><path d="M11.4 9.2 C9.4 7.4 6.6 6.8 3.6 7.4 V18.6 C6.6 18.0 9.4 18.6 11.4 20.4" fill="none" stroke-width="2.8"/><path d="M12.6 9.2 C14.6 7.4 17.4 6.8 20.4 7.4 V18.6 C17.4 18.0 14.6 18.6 12.6 20.4" fill="none" stroke-width="2.8"/><path d="M12 9.4 L12 20.6" fill="none" stroke-width="1.7"/><path d="M12 4.8 L12.38 6.42 L14.0 6.8 L12.38 7.18 L12 8.8 L11.62 7.18 L10.0 6.8 L11.62 6.42 Z" fill="#000" stroke="none"/><path d="M8.8 3.4499999999999997 L9.056500000000002 4.5435 L10.15 4.8 L9.056500000000002 5.0565 L8.8 6.15 L8.5435 5.0565 L7.450000000000001 4.8 L8.5435 4.5435 Z" fill="#000" stroke="none"/><path d="M15.4 4.1 L15.628 5.072 L16.6 5.3 L15.628 5.528 L15.4 6.5 L15.172 5.528 L14.200000000000001 5.3 L15.172 5.072 Z" fill="#000" stroke="none"/><path d="M12.4 1.6 L12.59 2.41 L13.4 2.6 L12.59 2.79 L12.4 3.6 L12.21 2.79 L11.4 2.6 L12.21 2.41 Z" fill="#000" stroke="none"/><path d="M7.4 2.75 L7.580500000000001 3.5195000000000003 L8.35 3.7 L7.580500000000001 3.8805 L7.4 4.65 L7.2195 3.8805 L6.45 3.7 L7.2195 3.5195000000000003 Z" fill="#000" stroke="none"/><circle cx="7.6" cy="5.4" r="1.5" fill="#000" stroke="none"/><circle cx="11.4" cy="3.4" r="1.25" fill="#000" stroke="none"/><circle cx="15.6" cy="5.0" r="1.0" fill="#000" stroke="none"/><path d="M7.6 5.4 L11.4 3.4" fill="none" stroke-width="1.4"/><path d="M11.4 3.4 L15.6 5.0" fill="none" stroke-width="1.4"/></g></svg>'],
+    ['astra-04', 'オルフェリラヴェスティジア（竪琴）', 'orphelyravestigia おるふぇうす たてごと orpheus lyre astrarium あすとらりうむ せき4', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-0.801,0.563) scale(1.04924)"><path d="M6.6 19.4 C3.4 15.4 3.6 9.6 7.2 6.2" fill="none" stroke-width="2.6"/><path d="M17.4 19.4 C20.6 15.4 20.4 9.6 16.8 6.2" fill="none" stroke-width="2.6"/><path d="M7.2 6.2 C9.6 5.0 14.4 5.0 16.8 6.2" fill="none" stroke-width="2.6"/><path d="M5.9 19.1 C6.7 22.2 17.3 22.2 18.1 19.1 Z" fill="#000" stroke="none"/><path d="M8.8 7.6 L8.8 19.0" fill="none" stroke-width="1.9"/><path d="M12.0 7.2 L12.0 19.0" fill="none" stroke-width="1.9"/><path d="M15.2 7.6 L15.2 19.0" fill="none" stroke-width="1.9"/><path d="M12 0.3999999999999999 L12.418 2.182 L14.2 2.6 L12.418 3.0180000000000002 L12 4.800000000000001 L11.582 3.0180000000000002 L9.8 2.6 L11.582 2.182 Z" fill="#000" stroke="none"/><path d="M15.82 3.41 A9.4 9.4 0 0 1 19.20 5.96" fill="none" stroke-width="2.2"/><path d="M15.29 5.82 A7.0 7.0 0 0 1 17.20 7.32" fill="none" stroke-width="2.0"/><path d="M19.60 1.40 L20.12 2.69 L21.50 2.78 L20.44 3.67 L20.78 5.02 L19.60 4.28 L18.42 5.02 L18.76 3.67 L17.70 2.78 L19.08 2.69 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-05', 'ヘファイストフォルナリア（織機）', 'hephaestofornaria へふぁいすとす しょっき ひばな hephaestus loom forge astrarium あすとらりうむ せき5', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-0.862,-0.401) scale(1.02484)"><path d="M5.0 4.4 L5.0 20.0" fill="none" stroke-width="2.6"/><path d="M19.0 4.4 L19.0 20.0" fill="none" stroke-width="2.6"/><path d="M5.0 4.4 L19.0 4.4" fill="none" stroke-width="2.6"/><path d="M5.0 20.0 L19.0 20.0" fill="none" stroke-width="2.6"/><path d="M9.2 6.6 L9.2 12.6" fill="none" stroke-width="1.9"/><path d="M12.0 6.6 L12.0 12.6" fill="none" stroke-width="1.9"/><path d="M14.8 6.6 L14.8 12.6" fill="none" stroke-width="1.9"/><path d="M6.6 13.0 H17.4 V18.0 H6.6 Z" fill="#000" stroke="none"/><path d="M16.0 14.4 C19.2 13.8 20.8 11.6 21.4 8.8" fill="none" stroke-width="1.8"/><path d="M21.4 5.0 L21.779999999999998 6.62 L23.4 7.0 L21.779999999999998 7.38 L21.4 9.0 L21.02 7.38 L19.4 7.0 L21.02 6.62 Z" fill="#000" stroke="none"/><path d="M19.00 2.50 L19.54 3.85 L21.00 3.95 L19.88 4.89 L20.23 6.30 L19.00 5.52 L17.77 6.30 L18.12 4.89 L17.00 3.95 L18.46 3.85 Z" fill="#000" stroke="none"/><circle cx="4.4" cy="18.6" r="1.15" fill="#000" stroke="none"/><circle cx="2.6" cy="21.0" r="0.8" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-06', 'ヒュプノカシオネイリア（三日月）', 'hypnocassioneiria ひゅぷのす みかづき ねむり hypnos moon astrarium あすとらりうむ せき6', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-0.051,-0.362) scale(1.03446)"><path d="M15.2 3.2 A9.8 9.8 0 1 0 15.2 20.8 A7.8 7.8 0 1 1 15.2 3.2 Z" fill="#000" stroke="none"/><path d="M16.6 5.699999999999999 L16.961000000000002 7.239 L18.5 7.6 L16.961000000000002 7.960999999999999 L16.6 9.5 L16.239 7.960999999999999 L14.700000000000001 7.6 L16.239 7.239 Z" fill="#000" stroke="none"/><path d="M19.0 11.25 L19.2565 12.343499999999999 L20.35 12.6 L19.2565 12.8565 L19.0 13.95 L18.7435 12.8565 L17.65 12.6 L18.7435 12.343499999999999 Z" fill="#000" stroke="none"/><path d="M18.2 16.6 L18.39 17.41 L19.2 17.6 L18.39 17.790000000000003 L18.2 18.6 L18.009999999999998 17.790000000000003 L17.2 17.6 L18.009999999999998 17.41 Z" fill="#000" stroke="none"/><path d="M19.00 2.50 L19.54 3.85 L21.00 3.95 L19.88 4.89 L20.23 6.30 L19.00 5.52 L17.77 6.30 L18.12 4.89 L17.00 3.95 L18.46 3.85 Z" fill="#000" stroke="none"/><circle cx="19.6" cy="17.0" r="1.2" fill="#000" stroke="none"/><circle cx="21.6" cy="19.6" r="0.8" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-07', 'アスクレピオフィサルティア（心臓の脈）', 'asclepiophisalutia あすくれぴおす しんぱく けんこう asclepius heart pulse astrarium あすとらりうむ せき7', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-2.388,-1.967) scale(1.20404)"><path d="M12 20.6 C6.4 16.6 3.2 13.4 3.2 9.8 C3.2 6.6 5.6 4.8 8.2 4.8 C10.0 4.8 11.2 5.8 12 7.0 C12.8 5.8 14.0 4.8 15.8 4.8 C18.4 4.8 20.8 6.6 20.8 9.8 C20.8 13.4 17.6 16.6 12 20.6 Z M2.80 12.45 L8.20 12.45 L9.90 8.45 L11.60 15.85 L13.20 12.45 L21.20 12.45 L21.20 14.35 L13.20 14.35 L11.60 17.75 L9.90 10.35 L8.20 14.35 L2.80 14.35 Z" fill-rule="evenodd" fill="#000" stroke="none"/><path d="M12 2.7 L12.437 4.563 L14.3 5.0 L12.437 5.437 L12 7.3 L11.563 5.437 L9.7 5.0 L11.563 4.563 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-08', 'ヘルメスカリナヴィア（帆船）', 'hermescarinavia へるめす はんせん ふね hermes ship astrarium あすとらりうむ せき8', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-0.440,-0.598) scale(1.05426)"><path d="M3.4 13.6 H20.6 C19.4 17.8 17.2 20.4 14.0 20.4 H10.0 C6.8 20.4 4.6 17.8 3.4 13.6 Z" fill="#000" stroke="none"/><path d="M12 5.2 L12 13.6" fill="none" stroke-width="2.8"/><path d="M12.5 5.8 C16.0 7.8 18.0 10.8 18.5 13.4 H12.5 Z" fill="#000" stroke="none"/><path d="M11.5 7.0 C9.4 8.8 8.2 10.8 7.8 13.4" fill="none" stroke-width="1.6"/><path d="M3.0 19.8 C8.0 22.6 16.0 22.4 21.0 18.8" fill="none" stroke-width="1.5"/><path d="M12.2 1.5 L12.561 3.0389999999999997 L14.1 3.4 L12.561 3.761 L12.2 5.3 L11.838999999999999 3.761 L10.299999999999999 3.4 L11.838999999999999 3.0389999999999997 Z" fill="#000" stroke="none"/><circle cx="6.2" cy="20.0" r="1.2" fill="#000" stroke="none"/><circle cx="4.2" cy="20.8" r="0.95" fill="#000" stroke="none"/><circle cx="2.6" cy="21.4" r="0.7" fill="#000" stroke="none"/><path d="M19.00 2.50 L19.54 3.85 L21.00 3.95 L19.88 4.89 L20.23 6.30 L19.00 5.52 L17.77 6.30 L18.12 4.89 L17.00 3.95 L18.46 3.85 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-09', 'アラヘスティアカエリア（家）', 'arahestiacaelia へすてぃあ いえ hestia house astrarium あすとらりうむ せき9', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-1.928,-0.159) scale(1.14166)"><path fill-rule="evenodd" d="M12 3.6 L21.4 11.4 H19.2 V20.4 H4.8 V11.4 H2.6 Z M10.1 20.4 V15.4 H13.9 V20.4 Z M12 5.799999999999999 L12.456 7.744 L14.4 8.2 L12.456 8.655999999999999 L12 10.6 L11.544 8.655999999999999 L9.6 8.2 L11.544 7.744 Z M10.3 7.4 H13.700000000000001 V10.4 H10.3 Z" fill="#000" stroke="none"/><rect x="15.4" y="4.2" width="2.3" height="5.2" rx="1.15" fill="#000" stroke="none"/><circle cx="19.2" cy="3.4" r="1.35" fill="#000" stroke="none"/><circle cx="20.9" cy="2.0" r="0.95" fill="#000" stroke="none"/><path d="M19.00 2.60 L19.52 3.89 L20.90 3.98 L19.84 4.87 L20.18 6.22 L19.00 5.48 L17.82 6.22 L18.16 4.87 L17.10 3.98 L18.48 3.89 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-10', 'クリオホロムネミア（砂時計）', 'cliohoromnemia くりお すなどけい clio hourglass astrarium あすとらりうむ せき10', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-3.848,-2.081) scale(1.17829)"><rect x="6.0" y="3.8" width="12.0" height="2.0" rx="6.0" fill="#000" stroke="none"/><rect x="6.0" y="19.4" width="12.0" height="2.0" rx="6.0" fill="#000" stroke="none"/><path d="M7.6 4.8 L16.4 4.8 L12 11.6 Z" fill="none" stroke-width="1.9"/><path d="M7.6 18.4 L16.4 18.4 L12 11.6 Z" fill="none" stroke-width="1.9"/><path d="M12 13.0 L12.456 14.944 L14.4 15.4 L12.456 15.856 L12 17.8 L11.544 15.856 L9.6 15.4 L11.544 14.944 Z" fill="#000" stroke="none"/><path d="M12 9.049999999999999 L12.2185 9.981499999999999 L13.15 10.2 L12.2185 10.4185 L12 11.35 L11.7815 10.4185 L10.85 10.2 L11.7815 9.981499999999999 Z" fill="#000" stroke="none"/><circle cx="12.0" cy="16.4" r="1.15" fill="#000" stroke="none"/><circle cx="12.0" cy="13.6" r="0.95" fill="#000" stroke="none"/><circle cx="12.0" cy="11.4" r="0.75" fill="#000" stroke="none"/><path d="M19.00 2.60 L19.38 4.22 L21.00 4.60 L19.38 4.98 L19.00 6.60 L18.62 4.98 L17.00 4.60 L18.62 4.22 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-11', 'エルピスフェニクシデシデリア（壺）', 'elpisphoenixidesideria えるぴす つぼ ふしちょう elpis vase phoenix astrarium あすとらりうむ せき11', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-1.838,0.131) scale(1.06445)"><rect x="8.8" y="5.2" width="6.4" height="2.0" rx="3.2" fill="#000" stroke="none"/><path d="M9.8 6.2 L9.8 8.6" fill="none" stroke-width="2.4"/><path d="M14.2 6.2 L14.2 8.6" fill="none" stroke-width="2.4"/><path d="M9.8 8.6 C5.8 10.2 5.6 15.8 8.4 18.4 C9.8 19.8 14.2 19.8 15.6 18.4 C18.4 15.8 18.2 10.2 14.2 8.6" fill="none" stroke-width="2.6"/><path d="M9.0 20.4 L15.0 20.4" fill="none" stroke-width="2.4"/><path d="M12 1.0 L12.418 2.782 L14.2 3.2 L12.418 3.6180000000000003 L12 5.4 L11.582 3.6180000000000003 L9.8 3.2 L11.582 2.782 Z" fill="#000" stroke="none"/><circle cx="11.4" cy="4.2" r="1.15" fill="#000" stroke="none"/><circle cx="13.0" cy="2.4" r="0.9" fill="#000" stroke="none"/><circle cx="15.0" cy="1.5" r="0.65" fill="#000" stroke="none"/><path d="M19.00 2.60 L19.52 3.89 L20.90 3.98 L19.84 4.87 L20.18 6.22 L19.00 5.48 L17.82 6.22 L18.16 4.87 L17.10 3.98 L18.48 3.89 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-12', 'アトラスウルサメトリア（天球）', 'atlasursametria あとらす てんきゅう atlas sphere astrarium あすとらりうむ せき12', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(0.401,0.401) scale(0.97066)"><circle cx="12" cy="12" r="8.4" fill="none" stroke-width="2.8"/><ellipse cx="12" cy="12" rx="3.7" ry="8.4" fill="none" stroke-width="2.8"/><path d="M4.2 19.8 L19.8 4.2" fill="none" stroke-width="2.0"/><path d="M20.2 2.2 L20.58 3.8200000000000003 L22.2 4.2 L20.58 4.58 L20.2 6.2 L19.82 4.58 L18.2 4.2 L19.82 3.8200000000000003 Z" fill="#000" stroke="none"/><path d="M3.8 18.7 L4.0089999999999995 19.591 L4.9 19.8 L4.0089999999999995 20.009 L3.8 20.900000000000002 L3.5909999999999997 20.009 L2.6999999999999997 19.8 L3.5909999999999997 19.591 Z" fill="#000" stroke="none"/><ellipse cx="12.0" cy="12.0" rx="11.0" ry="4.4" fill="none" stroke-width="2.3" transform="rotate(-24 12.0 12.0)"/><circle cx="21.6" cy="6.0" r="1.15" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-13', 'プルート（レシート）', 'pluto ぷるーと れしーと receipt astrarium あすとらりうむ せき13', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1.229,0.196) scale(0.98366)"><path d="M6.6 4.8 H17.4 V18.9 L15.9 17.9 L14.4 18.9 L12.9 17.9 L11.4 18.9 L9.9 17.9 L8.4 18.9 L6.6 18.0 Z" fill="none" stroke-width="2.5"/><path d="M9.0 9.4 L15.0 9.4" fill="none" stroke-width="1.5"/><path d="M9.0 12.6 L15.0 12.6" fill="none" stroke-width="1.5"/><path d="M9.0 15.8 L13.0 15.8" fill="none" stroke-width="1.5"/><path d="M12 0.7999999999999998 L12.418 2.582 L14.2 3.0 L12.418 3.418 L12 5.2 L11.582 3.418 L9.8 3.0 L11.582 2.582 Z" fill="#000" stroke="none"/><circle cx="5.0" cy="18.4" r="1.45" fill="#000" stroke="none"/><circle cx="3.2" cy="20.6" r="1.15" fill="#000" stroke="none"/><circle cx="1.9" cy="22.4" r="0.85" fill="#000" stroke="none"/><path d="M19.00 2.60 L19.38 4.22 L21.00 4.60 L19.38 4.98 L19.00 6.60 L18.62 4.98 L17.00 4.60 L18.62 4.22 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-14', 'カリオカラムス（引用符）', 'caliocalamus かりおぺ いんようふ calliope quote astrarium あすとらりうむ せき14', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-0.754,2.448) scale(1.08542)"><path d="M7.00 8.80m-3.30 0a3.30 3.30 0 1 0 6.60 0a3.30 3.30 0 1 0 -6.60 0" fill="#000" stroke="none"/><path d="M5.87 11.90 L1.60 15.60 L3.70 8.80 Z" fill="#000" stroke="none"/><path d="M16.60 8.80m-3.30 0a3.30 3.30 0 1 0 6.60 0a3.30 3.30 0 1 0 -6.60 0" fill="#000" stroke="none"/><path d="M17.73 11.90 L22.00 15.60 L19.90 8.80 Z" fill="#000" stroke="none"/><path d="M20.20 2.10 L20.69 3.32 L22.01 3.41 L21.00 4.26 L21.32 5.54 L20.20 4.84 L19.08 5.54 L19.40 4.26 L18.39 3.41 L19.71 3.32 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-15', 'ダイダロス（歯車）', 'daedalus だいだろす はぐるま gear astrarium あすとらりうむ せき15', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-2.824,-0.920) scale(1.15361)"><rect x="-1.7" y="-1.7" width="3.4" height="3.4" rx="1.7" fill="#000" stroke="none" transform="translate(19.0,12.0) rotate(0)"/><rect x="-1.7" y="-1.7" width="3.4" height="3.4" rx="1.7" fill="#000" stroke="none" transform="translate(15.5,18.06217782649107) rotate(60)"/><rect x="-1.7" y="-1.7" width="3.4" height="3.4" rx="1.7" fill="#000" stroke="none" transform="translate(8.500000000000002,18.062177826491073) rotate(120)"/><rect x="-1.7" y="-1.7" width="3.4" height="3.4" rx="1.7" fill="#000" stroke="none" transform="translate(5.0,12.0) rotate(180)"/><rect x="-1.7" y="-1.7" width="3.4" height="3.4" rx="1.7" fill="#000" stroke="none" transform="translate(8.499999999999996,5.937822173508931) rotate(240)"/><rect x="-1.7" y="-1.7" width="3.4" height="3.4" rx="1.7" fill="#000" stroke="none" transform="translate(15.5,5.93782217350893) rotate(300)"/><circle cx="12" cy="12" r="5.6" fill="none" stroke-width="2.7"/><path d="M12 9.8 L12.418 11.582 L14.2 12 L12.418 12.418 L12 14.2 L11.582 12.418 L9.8 12 L11.582 11.582 Z" fill="#000" stroke="none"/><circle cx="20.6" cy="6.4" r="1.15" fill="#000" stroke="none"/><circle cx="21.6" cy="9.6" r="0.9" fill="#000" stroke="none"/><circle cx="21.2" cy="12.8" r="0.7" fill="#000" stroke="none"/><path d="M19.00 2.70 L19.36 4.24 L20.90 4.60 L19.36 4.96 L19.00 6.50 L18.64 4.96 L17.10 4.60 L18.64 4.24 Z" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-16', 'ゼピュロス（サイコロ）', 'zephyr ぜぴゅろす さいころ dice astrarium あすとらりうむ せき16', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(0.662,-1.584) scale(1.06961)"><path fill-rule="evenodd" d="M6.6 5.4 H17.4 A1.6 1.6 0 0 1 19 7 V17 A1.6 1.6 0 0 1 17.4 18.6 H6.6 A1.6 1.6 0 0 1 5 17 V7 A1.6 1.6 0 0 1 6.6 5.4 Z M7.699999999999999 9.2 A1.5 1.5 0 1 0 10.7 9.2 A1.5 1.5 0 1 0 7.699999999999999 9.2 Z M10.4 12 A1.6 1.6 0 1 0 13.6 12 A1.6 1.6 0 1 0 10.4 12 Z M13.3 14.8 A1.5 1.5 0 1 0 16.3 14.8 A1.5 1.5 0 1 0 13.3 14.8 Z" fill="#000" stroke="none"/><path d="M18.6 2.3999999999999995 L19.018 4.1819999999999995 L20.8 4.6 L19.018 5.018 L18.6 6.8 L18.182000000000002 5.018 L16.400000000000002 4.6 L18.182000000000002 4.1819999999999995 Z" fill="#000" stroke="none"/><circle cx="3.6" cy="19.0" r="1.15" fill="#000" stroke="none"/><circle cx="2.1" cy="20.9" r="0.9" fill="#000" stroke="none"/><circle cx="1.2" cy="22.4" r="0.65" fill="#000" stroke="none"/></g></svg>'],
+    ['astra-17', 'デメテル（椀）', 'demeter でめてる わん ゆげ bowl astrarium あすとらりうむ せき17', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-2.221,-1.827) scale(1.12418)"><path d="M4.4 12.6 C4.4 17.7 7.8 20.9 12 20.9 C16.2 20.9 19.6 17.7 19.6 12.6" fill="none" stroke-width="2.6"/><rect x="3.2" y="10.4" width="17.6" height="2.3" rx="1.15" fill="#000" stroke="none"/><path d="M9.8 20.9 L14.2 20.9" fill="none" stroke-width="2.4"/><path d="M15.6 3.4 L19.6 10.2" fill="none" stroke-width="1.7"/><path d="M17.9 4.0 L21.4 10.2" fill="none" stroke-width="1.7"/><path d="M6.8 5.199999999999999 L7.294 7.306 L9.4 7.8 L7.294 8.294 L6.8 10.4 L6.306 8.294 L4.199999999999999 7.8 L6.306 7.306 Z" fill="#000" stroke="none"/><path d="M8.8 9.8 C7.5 8.0 10.1 6.6 8.8 4.8" fill="none" stroke-width="2.2"/><path d="M15.2 9.8 C13.9 8.0 16.5 6.6 15.2 4.8" fill="none" stroke-width="2.2"/></g></svg>'],
+    ['astra-18', 'クロト（Tシャツ）', 'clotho くろと しゃつ shirt astrarium あすとらりうむ せき18', 'V:<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(-3.862,-3.265) scale(1.32735)"><path fill-rule="evenodd" d="M8.4 4.6 L12 3.2 L15.6 4.6 L19.6 6.9 L17.6 10.4 L16.0 9.3 V19.9 H8.0 V9.3 L6.4 10.4 L4.4 6.9 Z M10.3 5.0 L13.7 5.0 L12 7.8 Z M12 8.6 L12.494 10.706 L14.6 11.2 L12.494 11.693999999999999 L12 13.799999999999999 L11.506 11.693999999999999 L9.4 11.2 L11.506 10.706 Z M12.00 11.70 L12.75 13.57 L14.76 13.70 L13.21 14.99 L13.70 16.95 L12.00 15.88 L10.30 16.95 L10.79 14.99 L9.24 13.70 L11.25 13.57 Z" fill="#000" stroke="none"/></g></svg>']
   ]);
   /* ▲▲▲ 標準アイコンのデータ ここまで ▲▲▲ */
 
@@ -777,11 +816,11 @@
     ['nature', '自然・天気', 'しぜん てんき はれ くもり あめ ゆき かみなり かぜ にじ かさ おんど しずく ほのお やま うみ なみ かざん nature weather sun cloud rain snow thunder wind rainbow umbrella temperature drop water fire flame mountain sea wave volcano'],
     ['creature', '生き物・植物', 'いきもの どうぶつ しょくぶつ ねこ いぬ とり さかな ちょう むし あしあと はね かい き は はな さくら め くろーばー さぼてん きのこ animal pet cat dog bird fish butterfly bug paw feather wing shell plant tree leaf flower sakura sprout clover cactus mushroom'],
     ['sky', '天体・宇宙', 'てんたい うちゅう ほし つき たいよう わくせい ぎんが せいざ ほしうらない ぼうえんきょう ろけっと すいせい ながれぼし sky space star moon sun planet galaxy constellation zodiac horoscope telescope rocket comet orbit astronomy night'],
-    ['orig', 'オリジナル', 'おりじなる ろご まーく かざり もよう もんしょう original logo mark ornament emblem pattern']
+    ['orig', 'オリジナル', '']
   ];
   const FX = new Map(FIXED.map((g, i) => [g[0], { id: g[0], ja: g[1], kw: g[2], i }]));
   /* 標準アイコンの所属（元の 15 グループ → 24 グループ。個別に動かすものは下の表で） */
-  const STD_BASE = { basic: 'basic', note: 'note', shape: 'shape', arrow: 'arrow', number: 'shape', sky: 'sky', zodiac: 'sky', const: 'sky', nature: 'nature', work: 'work', tech: 'tech', life: 'home', face: 'people', status: 'status', orig: 'orig', filled: 'home' };
+  const STD_BASE = { basic: 'basic', note: 'note', shape: 'shape', arrow: 'arrow', number: 'shape', sky: 'sky', zodiac: 'sky', const: 'sky', nature: 'nature', work: 'work', tech: 'tech', life: 'home', face: 'people', status: 'status', orig: 'orig', filled: 'home', astra: 'orig' };
   const STD_MOVE = {
     book: 'book-open book books journal glasses f-library',
     study: 'grad-cap backpack abc math flask atom dna globe-book brain bulb',
@@ -799,10 +838,23 @@
     basic: 'f-gear f-tray-down',
     note: 'f-hourglass',
     work: 'target f-clipboard',
-    sky: 'f-moon-stars f-telescope'
+    sky: 'f-moon-stars f-telescope triple-moon zodiac-wheel day-night astro-compass spark-planet',
+    /* 「オリジナル」には本当のオリジナル（« No »・Astrarium の席）だけ */
+    shape2: ''
   };
+  Object.assign(STD_MOVE, {
+    home: (STD_MOVE.home || '') + ' lantern candle key-ornate',
+    shape: (STD_MOVE.shape || '') + ' quatrefoil divider flower-life heart-star orbit-heart wreath',
+    hobby: STD_MOVE.hobby + ' crystal-ball tarot gem',
+    note: STD_MOVE.note + ' star-note star-pen hourglass-star comet-note',
+    book: STD_MOVE.book + ' moon-book scroll bookmark-star',
+    work: STD_MOVE.work + ' ribbon',
+    comm: STD_MOVE.comm + ' seal',
+    creature: STD_MOVE.creature + ' f-bird'
+  });
+  delete STD_MOVE.shape2;
   const STD_OF = new Map();
-  for (const g in STD_MOVE) for (const id of STD_MOVE[g].split(' ')) STD_OF.set(id, g);
+  for (const g in STD_MOVE) for (const id of STD_MOVE[g].split(' ')) if (id) STD_OF.set(id, g);
   /* 前の版のグループ名 → 24 グループ */
   const LEGACY = { '基本': 'basic', 'ノート・文具': 'note', '図形': 'shape', '矢印': 'arrow', '番号・文字': 'shape', '天体・宇宙': 'sky', '十二星座・天体記号': 'sky', '星座': 'sky',
     '自然・天気': 'nature', '仕事・お金': 'work', 'テック・メディア': 'tech', '暮らし': 'home', '顔・気持ち': 'people', '進み具合・状態': 'status', 'オリジナル': 'orig',
@@ -852,6 +904,7 @@
     for (const g of G) for (const it of g.items) {
       const gid = STD_OF.get(it[0]) || STD_BASE[g.id] || 'orig';
       const x = { id: it[0], ja: it[1], kana: it[2], shape: it[3], ch: it[4] || '', group: gid, gja: gja(gid), std: 1 };
+      if (x.shape.startsWith('V:')) { x.vec = vecOf(x); if (!x.vec) continue; }
       BYID.set(x.id, x);
       if (P.hidden.includes(x.id)) continue;
       gm.get(gid).list.push(x);
@@ -917,8 +970,15 @@
     return `<g transform='translate(${f(ox)} ${f(oy)}) scale(${Math.round(s * 10000) / 10000}) translate(${-vx} ${-vy})'>${b}</g>`;
   }
 
+  /* V: の標準アイコン（SVG をそのまま）。一度だけ読んで覚える */
+  const VEC = new Map();
+  function vecOf(x) {
+    if (!VEC.has(x.id)) { let v = null; try { v = normSvg(x.shape.slice(2)); } catch (e) { /* 読めない */ } VEC.set(x.id, v); }
+    return VEC.get(x.id);
+  }
   function inner(x, style, paint) {
     if (x.custom) return customInner(x.custom, paint);
+    if (x.vec) return customInner(x.vec, paint);
     if (x.shape.startsWith('RAW:')) return `<g fill='${paint}' color='${paint}'>${x.shape.slice(4)}</g>`;
     const p = parse(x), sw0 = style === 'line' ? 1.6 : 2, out = [], ks = [];
     /* z: で縮めた形は、線の太さを倍率で割って見た目をそろえる */
@@ -1380,8 +1440,15 @@
     for (const e of extract(text)) {
       let code = e.src, n = null;
       if (RASTER.test(code)) n = await rasterCand(code, e.hint);
-      else if (e.remote && RASTER_URL.test(code)) { const u = await fetchDataUrl(code); n = u && await rasterCand(u, e.hint || code.split(/[?#]/)[0].split('/').pop()); }
-      else {
+      else if (e.remote && !/\.svg(\?|#|$)/i.test(code)) {
+        /* 画像の URL（icons8 の ?format=png など）: 取ってきて、PNG ならなぞる・SVG ならそのまま。icons8 は大きい画像を頼む */
+        const url = /img\.icons8\.com/i.test(code) ? code.replace(/([?&]size=)\d+/i, '$1256') : code;
+        const u = await fetchDataUrl(url), nm = e.hint || (/icons8/i.test(url) ? '' : url.split(/[?#]/)[0].split('/').pop());
+        if (/^data:image\/svg/i.test(u)) n = normSvg(decodeDataUrl(u));
+        else if (RASTER.test(u)) n = await rasterCand(u, nm);
+        else if (/^data:/i.test(u) && !/^data:text/i.test(u)) n = await rasterCand(u.replace(/^data:[^;,]*/, 'data:image/png'), nm);
+        if (!n) { const t = await fetchText(code); n = t && /<svg/i.test(t) ? normSvg(t) : null; }
+      } else {
         if (e.remote) code = await fetchText(e.src);
         else if (/^data:/i.test(code)) code = decodeDataUrl(code);
         n = code && normSvg(code);
@@ -1443,25 +1510,39 @@
     words.forEach((w, i) => { if (!hit[i]) return; (ADJW.test(w) ? adj : noun).push(hit[i]); });
     return { ja: adj.concat(noun).join(''), how: '英語から訳' };
   }
-  /* 形の指紋（16×16 の白黒）。手持ちのアイコンは一度だけ作って覚えておく */
-  /* 形の指紋は保存しておき、2 回目からはすぐに比べられるようにする */
-  const SIG = new Map(), KEY_S = 'c29-sig-v1';
-  const toHex = (u) => { let h = ''; for (let i = 0; i < 256; i += 4) h += (u[i] << 3 | u[i + 1] << 2 | u[i + 2] << 1 | u[i + 3]).toString(16); return h; };
-  const fromHex = (h) => { const u = new Uint8Array(256); for (let i = 0; i < 64; i++) { const v = parseInt(h[i], 16); u[i * 4] = v >> 3 & 1; u[i * 4 + 1] = v >> 2 & 1; u[i * 4 + 2] = v >> 1 & 1; u[i * 4 + 3] = v & 1; } return u; };
-  { const o = load(KEY_S, {}); if (o && o.v === VERSION && o.s) for (const k in o.s) SIG.set(k, fromHex(o.s[k])); }
+  /* 形の指紋（v5）: 形の外接枠を 16×16 にそろえた濃淡 → ぼかし → 相関で比べる。左右反転も比べる。
+   *  余白の違い・大きさの違い・向き（左向き／右向き）に強い。手持ちの分は一度だけ作って保存 */
+  const SIG = new Map(), KEY_S = 'c29-sig-v2', SN = 16;
+  const SIM_NAME = 0.88, SIM_SUGG = 0.78, SIM_GROUP = 0.75;
+  /* よみから英語だけ（形で借りた名前に、元の日本語のよみまで付けない） */
+  const enOf = (k) => String(k || '').split(/\s+/).filter((w) => /^[a-z][a-z-]+$/.test(w)).slice(0, 3).join(' ');
+  const b64e = (u) => { let t = ''; for (let i = 0; i < u.length; i++) t += String.fromCharCode(u[i]); return btoa(t); };
+  const b64d = (h) => { try { const t = atob(h), u = new Uint8Array(t.length); for (let i = 0; i < t.length; i++) u[i] = t.charCodeAt(i); return u.length === SN * SN ? u : null; } catch (e) { return null; } };
+  { const o = load(KEY_S, {}); if (o && o.v === VERSION && o.s) for (const k in o.s) { const u = b64d(o.s[k]); if (u) SIG.set(k, u); } }
   let sigDirty = 0;
-  function saveSig() { const o = { v: VERSION, s: {} }; for (const [k, u] of SIG) if (u) o.s[k] = toHex(u); store(KEY_S, o); }
+  function saveSig() { const o = { v: VERSION, s: {} }; for (const [k, u] of SIG) if (u) o.s[k] = b64e(u); store(KEY_S, o); }
   function sigOf(svg) {
     return new Promise((res) => {
       const img = new Image();
       img.onload = () => {
         try {
-          const cv = document.createElement('canvas'); cv.width = cv.height = 16;
-          const g = cv.getContext('2d'); g.drawImage(img, 0, 0, 16, 16);
-          const d = g.getImageData(0, 0, 16, 16).data, out = new Uint8Array(256);
-          for (let i = 0; i < 256; i++) out[i] = d[i * 4 + 3] > 70 ? 1 : 0;
+          const W = 64, cv = document.createElement('canvas'); cv.width = cv.height = W;
+          const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(img, 0, 0, W, W);
+          const d = g.getImageData(0, 0, W, W).data;
+          let x0 = W, y0 = W, x1 = -1, y1 = -1;
+          for (let y = 0; y < W; y++) for (let x = 0; x < W; x++) if (d[(y * W + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+          if (x1 < 0) return res(null);
+          const bw = x1 - x0 + 1, bh = y1 - y0 + 1, sc = (SN - 1) / Math.max(bw, bh);
+          const c2 = document.createElement('canvas'); c2.width = c2.height = SN;
+          const g2 = c2.getContext('2d', { willReadFrequently: true }); g2.imageSmoothingQuality = 'high';
+          const dw = bw * sc, dh = bh * sc;
+          g2.drawImage(cv, x0, y0, bw, bh, (SN - dw) / 2, (SN - dh) / 2, dw, dh);
+          const e = g2.getImageData(0, 0, SN, SN).data, v = new Float32Array(SN * SN);
+          for (let i = 0; i < SN * SN; i++) v[i] = e[i * 4 + 3] / 255;
+          const bl = blur(v, SN, SN), out = new Uint8Array(SN * SN);
+          for (let i = 0; i < SN * SN; i++) out[i] = Math.round(Math.min(1, bl[i]) * 255);
           res(out);
-        } catch (e) { res(null); }
+        } catch (err) { res(null); }
       };
       img.onerror = () => res(null);
       img.src = 'data:image/svg+xml,' + encodeURIComponent(svg.replace(/currentColor/g, '#000'));
@@ -1474,7 +1555,17 @@
     if (SIG.has(k)) return SIG.get(k);
     const s = await sigOf(plain(x)); SIG.set(k, s); sigDirty++; return s;
   }
-  function jaccard(a, b) { let i = 0, u = 0; for (let k = 0; k < 256; k++) { const p = a[k], q = b[k]; if (p || q) { u++; if (p && q) i++; } } return u ? i / u : 0; }
+  /* 相関（-1〜1 → 0〜1 に切る）。b は左右反転も試す */
+  function similar(a, b) {
+    const n = SN * SN; let ma = 0, mb = 0; for (let i = 0; i < n; i++) { ma += a[i]; mb += b[i]; } ma /= n; mb /= n;
+    let sa = 0, sb = 0, p = 0, q = 0;
+    for (let y = 0; y < SN; y++) for (let x = 0; x < SN; x++) {
+      const i = y * SN + x, A = a[i] - ma, B = b[i] - mb, Bf = b[y * SN + (SN - 1 - x)] - mb;
+      sa += A * A; sb += B * B; p += A * B; q += A * Bf;
+    }
+    const den = Math.sqrt(sa * sb) || 1;
+    return Math.max(0, Math.max(p, q) / den);
+  }
   /* 形が近い順に k 個（候補の指紋は一度だけ作る） */
   async function neighbors(cand, k) {
     if (cand._sig === undefined) cand._sig = await sigOf(`<svg xmlns='${SVGNS}' viewBox='0 0 24 24'>${customInner(cand, '#000')}</svg>`);
@@ -1485,7 +1576,7 @@
       const sl = pool.slice(i, i + 100), sigs = await Promise.all(sl.map(sigOfItem));
       sl.forEach((x, j) => {
         if (!sigs[j]) return;
-        const v = jaccard(s, sigs[j]);
+        const v = similar(s, sigs[j]);
         if (top.length < k || v > top[top.length - 1].v) { top.push({ x, v }); top.sort((a, b) => b.v - a.v); if (top.length > k) top.pop(); }
       });
     }
@@ -1493,6 +1584,16 @@
     return top;
   }
   async function nearest(cand) { const n = await neighbors(cand, 1); return n[0] || null; }
+  /* 形の多数決: 上位 8 つを「同じものの名前」ごとにまとめ、いちばん似ている物との差で重みを付けて足す
+   * （似た形の別物が 1 つだけ高く出ても、同じ物が複数並ぶ方を選ぶ） */
+  const concept = (ja) => String(ja || '').replace(/（[^）]*）/g, '').replace(/\s*\d+$/, '').trim();
+  async function shapeVote(cand) {
+    const nb = await neighbors(cand, 8);
+    const by = new Map(); let tot = 0; const top = nb.length ? nb[0].v : 0;
+    for (const n of nb) { const w = Math.exp((n.v - top) / 0.02), k = concept(n.x.ja); tot += w; const e = by.get(k) || { w: 0, x: n.x, v: n.v }; e.w += w; if (n.v > e.v) { e.v = n.v; e.x = n.x; } by.set(k, e); }
+    let best = null; for (const [k, e] of by) if (!best || e.w > best.w) best = Object.assign({ name: k }, e);
+    return best ? Object.assign(best, { share: tot ? best.w / tot : 0, list: nb }) : null;
+  }
   /* 候補に名前とグループを付ける（名前が見つからなければ空のまま → 取り込む時に番号） */
   async function autoName(list, onStep) {
     let n = 0;
@@ -1504,9 +1605,9 @@
         if (mem) { c.ja = mem.ja; c.kana = [c.kana, mem.kana].filter(Boolean).join(' '); if (!c.group && FX.has(mem.group)) { c.group = mem.group; c.ghow = '覚えたグループ'; } c.how = '覚えた名前'; }
         else if (t) { c.ja = t.ja; c.how = t.how; }
         else {
-          const nb = await nearest(c);
-          if (nb && nb.v >= 0.8) { c.ja = nb.x.ja; c.kana = [c.kana, nb.x.kana].filter(Boolean).join(' '); c.how = `形が似ている ${Math.round(nb.v * 100)}%`; }
-          else if (nb && nb.v >= 0.6) c.sugg = { ja: nb.x.ja, kana: nb.x.kana || '', v: Math.round(nb.v * 100) };
+          const sv = c._sv = await shapeVote(c);
+          if (sv && sv.v >= SIM_NAME && sv.share >= 0.55) { c.ja = sv.name; c.kana = [c.kana, enOf(sv.x.kana)].filter(Boolean).join(' '); c.how = `形から ${Math.round(sv.v * 100)}%`; }
+          else if (sv && sv.v >= SIM_SUGG) c.sugg = { ja: sv.name, kana: enOf(sv.x.kana), v: Math.round(sv.v * 100) };
         }
       } else c.how = c.how || '元の名前';
       c.group = toGid(c.group);
@@ -1622,8 +1723,9 @@
       for (const w of en) if (!ENIDX.has(w) || (en.length === 1)) ENIDX.set(w, ja);
     }
     const put = (t, g, w) => { let m = WORDIDX.get(t); if (!m) WORDIDX.set(t, (m = {})); m[g] = (m[g] || 0) + w; };
-    for (const g of FIXED) for (const t of toks(g[1] + ' ' + g[2])) put(t, g[0], 3);
-    for (const x of ALL) if (!x.custom || x.custom.gset || FX.has(x.custom.group)) for (const t of toks(`${x.kana} ${x.ja} ${x.tags || ''}`)) put(t, x.group, x.custom ? 0.5 : 1);
+    /* 「オリジナル」は自動では選ばない（手で決めた時だけ）ので、手がかりにも入れない */
+    for (const g of FIXED) if (g[0] !== 'orig') for (const t of toks(g[1] + ' ' + g[2])) put(t, g[0], 3);
+    for (const x of ALL) if (x.group !== 'orig' && (!x.custom || x.custom.gset || FX.has(x.custom.group))) for (const t of toks(`${x.kana} ${x.ja} ${x.tags || ''}`)) put(t, x.group, x.custom ? 0.5 : 1);
   }
   function wordScores(text) {
     const sc = {};
@@ -1645,12 +1747,15 @@
     const t = topOf(wordScores([c.ja, c.kana, c.tags, c.hint ? normHint(c.hint) : ''].join(' ')));
     if (t.g && t.v >= 1.2) return { g: t.g, how: 'ことばから' };
     if (useShape !== false && c.body) {
+      /* 形の多数決で「同じ物」がはっきりしていれば、その物のグループ */
+      const sv = c._sv || (c._sv = await shapeVote(c));
+      if (sv && sv.v >= SIM_SUGG && sv.share >= 0.4 && sv.x.group !== 'orig') return { g: sv.x.group, how: '形から' };
       const vs = {};
-      for (const n of await neighbors(c, 5)) if (n.v >= 0.5) vs[n.x.group] = (vs[n.x.group] || 0) + n.v;
+      for (const n of await neighbors(c, 8)) if (n.v >= SIM_GROUP && n.x.group !== 'orig') vs[n.x.group] = (vs[n.x.group] || 0) + Math.exp((n.v - 1) / 0.03);
       const s2 = topOf(vs);
       if (s2.g) return { g: s2.g, how: '形から' };
     }
-    return t.g ? { g: t.g, how: 'ことばから' } : { g: 'orig', how: '' };
+    return t.g ? { g: t.g, how: 'ことばから' } : { g: 'shape', how: '' };
   }
   /* 手でグループを決めた時に、その名前の言葉とグループを結びつけて覚える */
   function learnGroup(c, g) {
@@ -1663,11 +1768,17 @@
   function migrate() {
     let n = 0;
     for (const c of CUSTOM) {
+      /* v5: 「オリジナル」は手で決めた物だけ。自動で入っていた物は振り分け直す */
+      if (c.group === 'orig' && !c.gset) {
+        const t = topOf(wordScores([/ \d{3}$/.test(c.ja) ? '' : c.ja, c.kana, c.tags].join(' ')));
+        c.group = t.g && t.v >= 1.2 ? t.g : 'shape'; if (!(t.g && t.v >= 1.2)) c.reshape = 1; n++; continue;
+      }
       if (FX.has(c.group)) continue;
       const old = String(c.group || '');
       if (/^インク[｜|]/.test(old) && !/インク/.test(c.tags || '')) c.tags = ((c.tags || '') + ' インク').trim();
       const t = topOf(wordScores([c.ja, c.kana, c.tags].join(' ')));
-      c.group = t.g && t.v >= 1.5 ? t.g : (toGid(old) || t.g || 'orig');
+      c.group = t.g && t.v >= 1.5 ? t.g : ((toGid(old) !== 'orig' && toGid(old)) || t.g || 'shape');
+      if (!(t.g && t.v >= 1.5) && !(toGid(old) && toGid(old) !== 'orig')) c.reshape = 1;
       n++;
     }
     if (n) saveC();
@@ -1675,6 +1786,19 @@
   }
   rebuild();
   if (migrate()) rebuild();
+  /* 言葉で決まらなかった物は、起動の少し後に形で振り分ける */
+  setTimeout(async () => {
+    const L = CUSTOM.filter((c) => c.reshape); if (!L.length) return;
+    for (const c of L) {
+      /* 番号だけの名前（取り込み 003 など）は、形がはっきり似ていれば名前も付け直す */
+      const auto = / \d{3}$/.test(c.ja);
+      const t = { key: c.key, ja: auto ? '' : c.ja, kana: c.kana, tags: c.tags, body: c.body, vb: c.vb, mono: c.mono, group: '' };
+      await autoName([t]);
+      if (auto && t.ja && /^形から/.test(t.how || '')) { c.ja = t.ja; c.kana = [c.kana, t.kana].filter(Boolean).join(' ').trim(); }
+      c.group = t.group || 'shape'; delete c.reshape;
+    }
+    saveC(); rebuild(); refreshAll();
+  }, 2500);
 
   /* ============================================================
    *  小道具
@@ -1760,6 +1884,73 @@
     setTimeout(() => document.addEventListener('mousedown', off, true), 0);
   }
 
+  /* ============================================================
+   *  ウェブで探す（横断検索）
+   *    Iconify: 150 以上のアイコン集（Material・Phosphor・Fluent・Tabler・Remix・Solar…）をまとめて検索。SVG のまま取り込む
+   *    icons8: PNG を取ってきて、なぞって SVG にする（使う時は icons8 のライセンス・クレジット表記に従ってください）
+   *    日本語で探した時は、手持ちのアイコンの英語に置き換えて探す（望遠鏡 → telescope）
+   * ============================================================ */
+  const WEBC = new Map();
+  const FILLED_SET = /^(material-symbols|ic|mdi|bxs|fa6-solid|fa-solid|heroicons-solid|zondicons|entypo|typcn|wpf|fontisto|gis|game-icons|maki|eva|clarity|carbon|ri|ph|mingcute|solar|fluent|tabler|majesticons|iconamoon|ion|akar-icons|f7)$/;
+  const isFilledName = (p, n) => /(^|-)(fill|filled|solid|bold|glyph|sharp)(-|$)/.test(n) || (/^(material-symbols|ic|mdi|bxs|fa6-solid|fa-solid|heroicons-solid|zondicons|entypo|game-icons|maki|f7)$/.test(p) && !/(outline|outlined|line|light|thin|-o)$/.test(n));
+  const isLineName = (p, n) => /(outline|outlined|line|light|thin|regular|linear|stroke)/.test(n) || /^(lucide|tabler|iconoir|feather|heroicons-outline|radix-icons|octicon|uil|line-md|basil|hugeicons|mynaui)$/.test(p) && !/fill|filled|solid/.test(n);
+  function toEnglish(q) {
+    q = String(q || '').trim(); if (!q || !/[ぁ-んァ-ヶ一-龠]/.test(q)) return q;
+    const words = [];
+    for (const x of search(q).slice(0, 6)) { const e = enOf(x.kana).split(' ')[0]; if (e && !words.includes(e)) words.push(e); }
+    if (!words.length) for (const k in EN_JA) if (EN_JA[k] === q) words.push(k);
+    return words[0] || q;
+  }
+  const jparse = (t) => { try { return JSON.parse(t); } catch (e) { return null; } };
+  async function webSearch(src, q) {
+    const en = toEnglish(q), key = src + '|' + en;
+    if (WEBC.has(key)) return WEBC.get(key);
+    let out = [];
+    if (src === 'iconify') {
+      const t0 = await fetchText(`https://api.iconify.design/search?query=${encodeURIComponent(en)}&limit=120`); if (!t0) throw new Error('net');
+      const j = jparse(t0) || {};
+      const names = Array.isArray(j.icons) ? j.icons : [], by = {};
+      for (const nm of names) { const i = nm.indexOf(':'); if (i > 0) (by[nm.slice(0, i)] = by[nm.slice(0, i)] || []).push(nm.slice(i + 1)); }
+      const got = new Map();
+      await Promise.all(Object.keys(by).map(async (pf) => {
+        const d = jparse(await fetchText(`https://api.iconify.design/${pf}.json?icons=${by[pf].map(encodeURIComponent).join(',')}`)) || {};
+        for (const nm of by[pf]) {
+          let ic = d.icons && d.icons[nm]; const al = !ic && d.aliases && d.aliases[nm];
+          if (al && d.icons) ic = Object.assign({}, d.icons[al.parent], al);
+          if (!ic || !ic.body) continue;
+          const w = ic.width || d.width || 16, h = ic.height || d.height || 16, l = ic.left || d.left || 0, t = ic.top || d.top || 0;
+          const svg = `<svg xmlns="${SVGNS}" viewBox="${l} ${t} ${w} ${h}">${ic.body}</svg>`;
+          const set = (j.collections && j.collections[pf] && j.collections[pf].name) || pf;
+          got.set(pf + ':' + nm, { src, id: pf + ':' + nm, name: nm, set, svg, fill: isFilledName(pf, nm), line: isLineName(pf, nm), url: 'data:image/svg+xml,' + encodeURIComponent(svg.replace(/currentColor/g, '#37352F')) });
+        }
+      }));
+      out = names.map((n) => got.get(n)).filter(Boolean);
+    } else if (src === 'icons8') {
+      const t0 = await fetchText(`https://search.icons8.com/api/iconsets/v5/search?term=${encodeURIComponent(en)}&amount=48&offset=0&language=en`); if (!t0) throw new Error('net');
+      const j = jparse(t0) || {};
+      const arr = (j.icons || (j.result && j.result.icons) || []).filter((i) => i && i.id && !i.isColor && !i.isAnimated);
+      out = arr.slice(0, 36).map((i) => {
+        const pl = String(i.platform || '');
+        return { src, id: String(i.id), name: i.name || i.commonName || en, set: 'icons8 ' + pl, fill: /fill|glyph|solid|sf-black/.test(pl), line: !/fill|glyph|solid|black/.test(pl), png: `https://img.icons8.com/?size=256&id=${encodeURIComponent(i.id)}&format=png&color=000000`, small: `https://img.icons8.com/?size=48&id=${encodeURIComponent(i.id)}&format=png&color=37352F` };
+      });
+      await Promise.all(out.map(async (it) => { it.url = await fetchDataUrl(it.small); }));
+      out = out.filter((it) => it.url);
+    }
+    const r = { en, items: out }; WEBC.set(key, r); return r;
+  }
+  /* ウェブの 1 つを取り込む（名前とグループは自動）→ 取り込んだアイコンを返す */
+  async function importWeb(it) {
+    let c = null;
+    if (it.svg) c = normSvg(it.svg);
+    else if (it.png) { const u = await fetchDataUrl(it.png); c = u && await traceRaster(u, P.trace); }
+    if (!c) return null;
+    const dup = CUSTOM.find((x) => x.key === c.key); if (dup) return BYID.get(dup.id);
+    Object.assign(c, { ja: '', kana: normHint(it.name), tags: it.set, group: '', id: '', hint: it.name, src: it.src });
+    await autoName([c]);
+    commit([c], '');
+    return BYID.get(CUSTOM[CUSTOM.length - 1].id);
+  }
+
   function Library(opt) {
     const root = document.createElement('div');
     root.className = 'c29-lib';
@@ -1784,7 +1975,8 @@
       const k = q.value.trim(); let html = '';
       if (k) {
         const hit = search(k);
-        html = hit.length ? `<div class="c29-h">見つかった<span>${hit.length}</span></div><div class="c29-grid">${hit.map(cell).join('')}</div>` : '<div class="c29-none">見つかりませんでした<br><small>Import タブで取り込めます（SVG・PNG）</small></div>';
+        html = hit.length ? `<div class="c29-h">見つかった<span>${hit.length}</span></div><div class="c29-grid">${hit.map(cell).join('')}</div>` : '<div class="c29-none">手持ちには見つかりませんでした<br><small>下の「ウェブで探す」か、Import タブで取り込めます（SVG・PNG）</small></div>';
+        html += webHtml(k);
         gnav.innerHTML = '';
       } else {
         const live = (ids) => ids.map((i) => BYID.get(i)).filter((x) => x && ALL.includes(x));
@@ -1796,25 +1988,54 @@
       }
       body.innerHTML = html; act = -1; total();
     }
+    /* ---- ウェブで探す ---- */
+    let web = null; /* { src, q, state: 'busy'|'done'|'err', items, en } */
+    const WF = [['all', 'すべて'], ['fill', '塗り'], ['line', '線']];
+    function webHtml(k) {
+      const on = (v) => (web && web.src === v && web.q === k ? ' on' : '');
+      let h = `<div class="c29-h c29-webh">ウェブで探す<span>アイコン集を横断</span></div><div class="c29-webbar"><button data-web="iconify" class="${on('iconify')}">Iconify<small>150+ 集</small></button><button data-web="icons8" class="${on('icons8')}">icons8<small>PNG→なぞる</small></button><span class="c29-grow"></span><div class="c29-pkgd c29-wf">${WF.map((w) => `<button data-wf="${w[0]}" class="${(P.wf || 'all') === w[0] ? 'on' : ''}">${w[1]}</button>`).join('')}</div></div>`;
+      if (!web || web.q !== k) return h;
+      if (web.state === 'busy') return h + '<div class="c29-none">探しています…</div>';
+      if (web.state === 'err') return h + '<div class="c29-none">つながりませんでした<br><small>Tampermonkey で、この接続を「許可」してください</small></div>';
+      const f = P.wf || 'all', list = web.items.map((it, i) => [it, i]).filter(([it]) => f === 'all' || (f === 'fill' ? it.fill : it.line));
+      return h + (list.length ? `<div class="c29-mut c29-webq">「${esc(web.en)}」で ${list.length} 件・押すと取り込んで色を選べます${web.src === 'icons8' ? '・icons8 はライセンスとクレジット表記に従ってください' : ''}</div><div class="c29-grid">${list.map(([it, i]) => `<button class="c29-cell c29-wcell" data-w="${i}" title="${esc(it.name + ' — ' + it.set)}"><img alt="" src="${esc(it.url)}"></button>`).join('')}</div>` : '<div class="c29-none">見つかりませんでした</div>');
+    }
+    async function runWeb(src) {
+      const k = q.value.trim(); if (!k) return;
+      web = { src, q: k, state: 'busy', items: [] }; render();
+      try { const r = await webSearch(src, k); if (web.q !== k || web.src !== src) return; web.items = r.items; web.en = r.en; web.state = 'done'; }
+      catch (err) { web.state = 'err'; }
+      render();
+    }
     const showFoot = (c) => { const x = c && BYID.get(c.dataset.id); if (x) foot.textContent = `${x.ja}　·　${x.gja}${x.custom ? (x.custom.mono ? '　·　取り込み' : '　·　取り込み（元の色）') : ''}`; };
 
     /* ---- アイコンを選んだ後に出る「色・見た目」（Notion と同じ順番） ---- */
     let pkx = null, hoverC = null, gridDirty = false;
     const pkOpts = () => (hoverC ? { color: hoverC } : {});
+    const cgOf = (id) => { const c = COLORS.find((k) => k[0] === id); return c ? c[3] : 'base'; };
+    const hexOf = (c) => (Array.isArray(c[2]) ? c[2].join(' → ') : c[0] === 'auto' ? '#37352F ／ #E3E2E0' : c[2].toUpperCase());
+    function swatches() {
+      const t = P.ctab || cgOf(P.color);
+      for (const b of pk.querySelectorAll('.c29-ctabs button')) b.classList.toggle('on', b.dataset.ct === t);
+      pk.querySelector('.c29-pksw').innerHTML = COLORS.filter((c) => c[3] === t).map((c) => `<button data-c="${c[0]}" title="${esc(c[1])}" style="background:${swatchBg(c)}"></button>`).join('');
+    }
     function syncPk() {
       if (!pkx) return;
-      for (const s of pk.querySelectorAll('.c29-seg')) for (const b of s.children) b.classList.toggle('on', P[s.dataset.k] === b.dataset.v);
-      for (const b of pk.querySelectorAll('.c29-sw button')) b.classList.toggle('on', b.dataset.c === P.color);
-      const cc = hoverC || P.color, grad = Array.isArray(colorOf(cc));
-      pk.querySelector('.c29-gd').hidden = !grad;
-      const ck = pk.querySelector('[data-k="adapt"]'); ck.checked = !!P.adapt; ck.parentElement.hidden = grad || cc === 'auto';
-      pk.querySelector('.c29-pkv img').src = dataUrl(pkx, pkOpts());
-      const cn = COLORS.find((c) => c[0] === cc);
-      pk.querySelector('.c29-pkn small').textContent = `${pkx.gja}${cn ? '　·　' + cn[1].replace(/（.*）/, '') : ''}`;
+      const o = pkOpts();
+      for (const g of pk.querySelectorAll('[data-k]')) for (const b of g.querySelectorAll(':scope > button')) b.classList.toggle('on', P[g.dataset.k] === b.dataset.v);
+      for (const b of pk.querySelectorAll('.c29-pksty button')) b.querySelector('img').src = dataUrl(pkx, Object.assign({}, o, { style: b.dataset.v }));
+      for (const b of pk.querySelectorAll('.c29-pkbg button')) b.querySelector('img').src = dataUrl(pkx, Object.assign({}, o, { bg: b.dataset.v }));
+      for (const b of pk.querySelectorAll('.c29-pksw button')) b.classList.toggle('on', b.dataset.c === P.color);
+      const cc = hoverC || P.color, grad = Array.isArray(colorOf(cc)), cn = COLORS.find((c) => c[0] === cc);
+      pk.querySelector('.c29-pkgd').hidden = !grad;
+      const ck = pk.querySelector('[data-k2="adapt"]'); ck.checked = !!P.adapt; ck.closest('label').hidden = grad || cc === 'auto';
+      pk.querySelector('.c29-pkv img').src = dataUrl(pkx, o);
+      pk.querySelector('.c29-pkn small').textContent = pkx.gja;
+      pk.querySelector('.c29-hex').innerHTML = cn ? `<i style="background:${swatchBg(cn)}"></i><b>${esc(cn[1].replace(/（.*）/, ''))}</b><span>${esc(hexOf(cn))}</span>` : '';
     }
     function placePk(anchor) {
       const rr = root.getBoundingClientRect(), W = root.clientWidth, H = root.clientHeight;
-      const w = Math.min(W - 12, 372); pk.style.width = w + 'px'; pk.style.maxHeight = (H - 12) + 'px';
+      const w = Math.min(W - 12, 312); pk.style.width = w + 'px'; pk.style.maxHeight = (H - 12) + 'px';
       const ph = pk.offsetHeight;
       let left = 6, top = 6;
       if (anchor) {
@@ -1829,12 +2050,14 @@
     function openPicker(x, anchor) {
       pkx = x; hoverC = null;
       pk.innerHTML = `
-        <div class="c29-pkh"><span class="c29-pkv"><img alt=""></span><div class="c29-pkn"><b>${esc(x.ja)}</b><small></small></div><button class="c29-pkgo" data-a="go" title="この見た目で設定（Enter）">設定</button></div>
-        <div class="c29-row"><div class="c29-seg" data-k="style">${STYLES.map((s) => `<button data-v="${s[0]}">${s[1]}</button>`).join('')}</div><div class="c29-seg c29-gd" data-k="gdir" title="グラデーションの向き">${GDIR.map((s) => `<button data-v="${s[0]}">${s[1]}</button>`).join('')}</div></div>
-        <div class="c29-seg c29-bgs" data-k="bg">${BGS.map((s) => `<button data-v="${s[0]}">${s[1]}</button>`).join('')}</div>
-        ${CGROUPS.map(([g, l]) => `<div class="c29-swg"><span>${l}</span><div class="c29-sw">${COLORS.filter((c) => c[3] === g).map((c) => `<button data-c="${c[0]}" title="${esc(c[1])}" style="background:${swatchBg(c)}"></button>`).join('')}</div></div>`).join('')}
-        <label class="c29-chk"><input type="checkbox" data-k="adapt"> ダークモードでは自動で明るく（OS・ブラウザの明暗に合わせる）</label>
-        <div class="c29-pkt">色を押すとそのまま設定 ・ Enter で設定 ・ Esc で閉じる</div>`;
+        <div class="c29-pkh"><span class="c29-pkv"><img alt=""></span><div class="c29-pkn"><b>${esc(x.ja)}</b><small></small></div><button class="c29-pkgo" data-a="go" title="この見た目で設定">設定<kbd>↵</kbd></button></div>
+        <div class="c29-pks"><div class="c29-lbl">スタイル</div><div class="c29-pksty" data-k="style">${STYLES.map((t) => `<button data-v="${t[0]}"><img alt=""><span>${t[1]}</span></button>`).join('')}</div></div>
+        <div class="c29-pks"><div class="c29-lbl">背景</div><div class="c29-pkbg" data-k="bg">${BGS.map((t) => `<button data-v="${t[0]}" title="${t[1]}"><img alt=""></button>`).join('')}</div></div>
+        <div class="c29-pks"><div class="c29-lbl"><span class="c29-ctabs">${CGROUPS.map(([g, l]) => `<button data-ct="${g}">${l}</button>`).join('')}</span></div>
+          <div class="c29-pksw"></div>
+          <div class="c29-pkgd" data-k="gdir" title="グラデーションの向き">${GDIR.map((t) => `<button data-v="${t[0]}">${t[1]}</button>`).join('')}</div></div>
+        <div class="c29-pkf"><span class="c29-hex"></span><label class="c29-tog" title="OS・ブラウザがダークの時は自動で明るい色に"><input type="checkbox" data-k2="adapt"><i></i>ダークで明るく</label></div>`;
+      P.ctab = cgOf(P.color); swatches();
       pk.hidden = false; syncPk(); placePk(anchor);
       try { pk.focus({ preventScroll: true }); } catch (e) { /* なくても */ }
     }
@@ -1857,15 +2080,17 @@
       if (pkx === x && !pk.hidden) return pick(x, e);
       openPicker(x, c);
     }
-    pk.addEventListener('mouseover', (e) => { const b = e.target.closest('.c29-sw button'); if (b && hoverC !== b.dataset.c) { hoverC = b.dataset.c; syncPk(); } });
-    pk.addEventListener('mouseleave', () => { if (hoverC) { hoverC = null; syncPk(); } });
+    pk.addEventListener('mouseover', (e) => { const b = e.target.closest('.c29-pksw button'); if (b && hoverC !== b.dataset.c) { hoverC = b.dataset.c; syncPk(); } });
+    pk.addEventListener('mouseout', (e) => { if (hoverC && e.target.closest('.c29-pksw') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.c29-pksw'))) { hoverC = null; syncPk(); } });
     pk.addEventListener('click', (e) => {
       e.stopPropagation();
-      const sg = e.target.closest('.c29-seg button');
-      if (sg) { P[sg.parentElement.dataset.k] = sg.dataset.v; save(); gridDirty = true; return syncPk(); }
-      const sw = e.target.closest('.c29-sw button');
+      const ct = e.target.closest('.c29-ctabs button');
+      if (ct) { P.ctab = ct.dataset.ct; save(); swatches(); return syncPk(); }
+      const sw = e.target.closest('.c29-pksw button');
       if (sw) { P.color = sw.dataset.c; save(); return pick(pkx, e); }
-      const ck = e.target.closest('input[data-k="adapt"]');
+      const sg = e.target.closest('[data-k] > button');
+      if (sg) { P[sg.parentElement.dataset.k] = sg.dataset.v; save(); gridDirty = true; return syncPk(); }
+      const ck = e.target.closest('input[data-k2="adapt"]');
       if (ck) { P.adapt = ck.checked; save(); gridDirty = true; return syncPk(); }
       if (e.target.closest('[data-a="go"]')) return pick(pkx, e);
     });
@@ -1876,15 +2101,15 @@
       const mv = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 }[e.key];
       if (mv) {
         e.preventDefault();
-        const i = COLORS.findIndex((c) => c[0] === P.color);
-        P.color = COLORS[(i + mv + COLORS.length) % COLORS.length][0]; save(); gridDirty = true; hoverC = null; syncPk();
+        const t = P.ctab || cgOf(P.color), list = COLORS.filter((c) => c[3] === t), i = list.findIndex((c) => c[0] === P.color);
+        P.color = list[(i + mv + list.length) % list.length][0]; save(); gridDirty = true; hoverC = null; syncPk();
       }
     });
 
     q.addEventListener('input', () => { closePk(false); render(); });
     q.addEventListener('keydown', (e) => {
       e.stopPropagation();
-      const cells = [...body.querySelectorAll('.c29-cell')];
+      const cells = [...body.querySelectorAll('.c29-cell:not(.c29-wcell)')];
       if (e.key === 'Escape' && q.value) { e.preventDefault(); q.value = ''; return render(); }
       if (!cells.length) return;
       if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && act < 0) return;
@@ -1897,7 +2122,7 @@
         cells[act].scrollIntoView({ block: 'nearest' }); showFoot(cells[act]);
       } else if (e.key === 'Enter') { e.preventDefault(); choose(cells[act < 0 ? 0 : act], e.shiftKey ? e : null); }
     });
-    body.addEventListener('mouseover', (e) => { const c = e.target.closest('.c29-cell'); if (c) showFoot(c); });
+    body.addEventListener('mouseover', (e) => { const c = e.target.closest('.c29-cell'); if (c && c.classList.contains('c29-wcell') && web) { const it = web.items[c.dataset.w]; if (it) foot.textContent = `${it.name}　·　${it.set}`; } else if (c) showFoot(c); });
     body.addEventListener('mouseleave', total);
     body.addEventListener('scroll', () => { if (!pk.hidden) closePk(false); }, { passive: true });
     root.addEventListener('mousedown', (e) => {
@@ -1910,6 +2135,23 @@
       const gb = e.target.closest('.c29-gnav button');
       if (gb) { const h = body.querySelector(`[data-sec="${gb.dataset.g}"]`); if (h) body.scrollTop = h.offsetTop - body.offsetTop - 2; return; }
       if (e.target === busyB) { if (root.c29.onCancel) root.c29.onCancel(); return; }
+      const wb = e.target.closest('[data-web]');
+      if (wb) return runWeb(wb.dataset.web);
+      const wf = e.target.closest('[data-wf]');
+      if (wf) { P.wf = wf.dataset.wf; save(); return render(); }
+      const wc = e.target.closest('.c29-wcell');
+      if (wc && web) {
+        const it = web.items[wc.dataset.w]; if (!it) return;
+        root.c29.busy('取り込んでいます…（名前とグループは自動）');
+        importWeb(it).then((x) => {
+          root.c29.busy('');
+          if (!x) return toast('取り込めませんでした');
+          toast(`「${x.ja}」を取り込みました（${x.gja}）`);
+          const again = body.querySelector(`.c29-wcell[data-w="${wc.dataset.w}"]`);
+          if (direct(x, e)) pick(x, e); else openPicker(x, again);
+        }, () => { root.c29.busy(''); toast('取り込めませんでした'); });
+        return;
+      }
       const c = e.target.closest('.c29-cell');
       if (c) choose(c, e);
     });
@@ -1937,7 +2179,7 @@
     const root = document.createElement('div');
     root.className = 'c29-imp';
     root.innerHTML = `<div class="c29-ib">
-      <div class="c29-drop"><textarea class="c29-ta" spellcheck="false" placeholder="ここに貼る・ファイルをドロップ&#10;SVG: データ URL（%3csvg… / utf8 / base64）・&lt;svg&gt;・Notion の HTML・JSON・URL&#10;PNG・JPG・WebP: なぞって、色を替えられるアイコンにします。まとめて OK"></textarea></div>
+      <div class="c29-drop"><textarea class="c29-ta" spellcheck="false" placeholder="ここに貼る・ファイルをドロップ&#10;SVG: データ URL（%3csvg… / utf8 / base64）・&lt;svg&gt;・Notion の HTML・JSON・URL&#10;PNG・JPG・WebP（ファイル・画像の URL・icons8 の PNG リンク）: なぞって、色を替えられるアイコンにします。まとめて OK"></textarea></div>
       <div class="c29-row"><button data-a="clip">クリップボードから</button><button data-a="file">ファイル…</button><input type="file" accept=".svg,.json,.txt,.html,.png,.jpg,.jpeg,.webp,.gif,image/*,application/json,text/plain" multiple hidden><span class="c29-grow"></span><select class="c29-in c29-gname" title="取り込むグループ（24 から選ぶ。自動なら形と名前から振り分け）">${gopts(P.lastGroup, 'グループ: 自動で振り分け')}</select></div>
       <div class="c29-png" hidden>
         <div class="c29-pngh"><b>PNG → アイコン</b><span class="c29-mut">画像の輪郭をなぞって形にします。下の候補にすぐ反映されます</span></div>
@@ -2283,10 +2525,12 @@
   function uploadArea(menu) {
     return [...menu.querySelectorAll('[role="button"]')].find((b) => !b.closest('[data-c29]') && /upload an image|画像をアップロード/i.test(tabText(b)));
   }
-  function pasteText(target, text) {
+  function pasteText(target, text, file) {
     const W = UW && UW.DataTransfer ? UW : window;
     let dt; try { dt = new W.DataTransfer(); } catch (e) { dt = new DataTransfer(); }
     dt.setData('text/plain', text);
+    /* 新しい Icon の画面には Upload のタブがないので、画像のファイルとしても渡してみる */
+    if (file) { try { dt.items.add(new (W.File || File)([file.svg], file.name, { type: 'image/svg+xml' })); } catch (e) { try { dt.items.add(new File([file.svg], file.name, { type: 'image/svg+xml' })); } catch (e2) { /* 渡せない */ } } }
     const ev = mk('ClipboardEvent', 'paste', { clipboardData: dt });
     if (!ev.clipboardData) { try { Object.defineProperty(ev, 'clipboardData', { value: dt }); } catch (e) { /* 渡せない */ } }
     target.dispatchEvent(ev);
@@ -2298,12 +2542,12 @@
     if (r !== 'gone') press(r);
     return !!(await waitFor(() => !menu.isConnected || !findSave(menu) && !menu.querySelector('[aria-disabled="false"]'), 1800)) || !menu.isConnected;
   }
-  async function tryPaste(menu, url) {
+  async function tryPaste(menu, url, file) {
     const area = uploadArea(menu);
     const targets = [area, area && area.parentElement, menu, document.activeElement, document].filter((t, i, a) => t && a.indexOf(t) === i && !(t.closest && t.closest('[data-c29]')));
     for (const t of targets) {
       try { if (t.focus) t.focus({ preventScroll: true }); } catch (e) { /* なくても */ }
-      pasteText(t, url);
+      pasteText(t, url, file);
       if (await finish(menu, 700)) return true;
     }
     return false;
@@ -2334,12 +2578,13 @@
       }
       await sleep(120);
       if (menu.isConnected) placePanel(menu, M);
-      let ok = await tryPaste(menu, url);
+      const single = !T.upload;
+      let ok = await tryPaste(menu, url, single ? { svg: svgOf(x), name: (x.id || 'icon') + '.svg' } : null);
       if (!ok && menu.isConnected) {
         /* Upload の画面は出さず、パネルのまま ⌘V を待つ */
         await copyText(url);
         const area = uploadArea(menu); try { if (area) area.focus({ preventScroll: true }); } catch (e) { /* なくても */ }
-        lib.c29.busy('⌘V（Ctrl+V）を押すと、そのまま設定します', true);
+        lib.c29.busy(single ? 'データ URL をコピーしました。⌘V（Ctrl+V）で貼ると設定します\n（この Icon の画面が画像を受け付けない時は、ページのアイコンの画面で ⌘V してください）' : '⌘V（Ctrl+V）を押すと、そのまま設定します', true);
         ok = await waitManual(menu, lib);
       }
       toast(ok ? '「' + x.ja + '」を設定しました' : '設定をやめました');
@@ -2355,12 +2600,15 @@
     const T = tabsOf(menu);
     if (!T.all.length || !T.icons) return;
     if (T.emoji && !T.emoji.hasAttribute('data-c29-hide')) T.emoji.setAttribute('data-c29-hide', '');
+    /* 前の形（Emoji｜Icons｜Upload）: Upload が出るまで待つ。
+     * 新しい形（Icon のタブ 1 つだけ・Filter と Random）: そのまま Library｜Import を足す */
     if (!T.upload) {
       if (T.emoji && T.emoji.getAttribute('aria-selected') === 'true' && !menu.__c29sw) { menu.__c29sw = 1; press(T.icons); }
-      return;
+      if (T.emoji) return;
+    } else {
+      if (!T.upload.hasAttribute('data-c29-hide')) T.upload.setAttribute('data-c29-hide', '');
+      renameDefault(T.icons);
     }
-    if (!T.upload.hasAttribute('data-c29-hide')) T.upload.setAttribute('data-c29-hide', '');
-    renameDefault(T.icons);
     let M = MENUS.get(menu);
     if (!M) {
       M = { tabs: {}, panel: null, mode: '', applying: false }; MENUS.set(menu, M);
@@ -2442,7 +2690,9 @@
       version: VERSION, count: () => ALL.length, open: openFloat, ids: () => ALL.map((x) => x.id),
       custom: () => JSON.parse(JSON.stringify(CUSTOM)),
       import: async (text, group) => { const r = await toCandidates(text); await autoName(r.out); return commit(r.out, group); },
-      trace: (src, o) => traceRaster(src, o), groups: () => FIXED.map((g) => g[1]),
+      trace: (src, o) => traceRaster(src, o),
+      guess: async (text) => { const r = await toCandidates(text); await autoName(r.out); return r.out.map((c) => ({ ja: c.ja, how: c.how, sugg: c.sugg && c.sugg.ja, group: gja(c.group), ghow: c.ghow, sv: c._sv && [c._sv.name, Math.round(c._sv.v * 100), Math.round(c._sv.share * 100)] })); },
+      near: async (text, k) => { const r = await toCandidates(text); const c = r.out[0]; return c ? (await neighbors(c, k || 5)).map((n) => [n.x.id, n.x.ja, Math.round(n.v * 1000) / 1000]) : []; }, groups: () => FIXED.map((g) => g[1]),
       group: (id) => { const x = BYID.get(id); return x ? x.gja : ''; },
       svg: (id, o) => { const x = BYID.get(id); return x ? svgOf(x, o) : ''; },
       url: (id, o) => { const x = BYID.get(id); return x ? dataUrl(x, o) : ''; }
@@ -2495,7 +2745,7 @@
 .c29-cell img { width:22px; height:22px; pointer-events:none; }
 .c29-none { grid-column:1/-1; padding:20px; text-align:center; color:var(--mut); font-size:13px; }
 .c29-foot { flex:none; height:24px; line-height:24px; padding:0 12px; font-size:11.5px; color:var(--mut); border-top:1px solid var(--line); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.c29-busy { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; background:color-mix(in srgb, var(--bg) 86%, transparent); font-size:13px; text-align:center; padding:16px; }
+.c29-busy { white-space:pre-line; position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; background:color-mix(in srgb, var(--bg) 86%, transparent); font-size:13px; text-align:center; padding:16px; }
 .c29 button.pri, .c29-busy button, .c29-imp .c29-row > button { all:unset; font-size:12.5px; padding:4px 10px; border-radius:6px; cursor:pointer; box-shadow:inset 0 0 0 1px var(--line); color:var(--fg); }
 .c29-imp .c29-row > button:hover, .c29-busy button:hover { background:var(--hov); }
 .c29-imp .c29-row > button:disabled { opacity:.4; cursor:default; }
@@ -2548,17 +2798,59 @@
 .c29-gnav:empty { display:none; }
 .c29-gnav button { all:unset; flex:none; font-size:11.5px; padding:2px 8px; border-radius:10px; cursor:pointer; color:var(--mut); background:var(--hov); white-space:nowrap; }
 .c29-gnav button:hover { color:var(--fg); background:var(--line); }
-.c29-pk { position:absolute; z-index:6; box-sizing:border-box; padding:10px 12px; border-radius:10px; background:var(--bg); box-shadow:0 0 0 1px rgba(15,15,15,.08), 0 10px 28px rgba(15,15,15,.22); display:flex; flex-direction:column; gap:7px; overflow:auto; outline:none; }
-.c29.dark .c29-pk { box-shadow:0 0 0 1px rgba(255,255,255,.1), 0 10px 28px rgba(0,0,0,.5); }
+.c29-pk { position:absolute; z-index:6; box-sizing:border-box; padding:12px; border-radius:12px; background:var(--bg); box-shadow:0 0 0 .5px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.06), 0 12px 32px rgba(0,0,0,.16); display:flex; flex-direction:column; gap:12px; overflow:auto; outline:none; font-size:12px; --acc2:#0D99FF; }
+.c29.dark .c29-pk { box-shadow:0 0 0 .5px rgba(255,255,255,.14), 0 12px 32px rgba(0,0,0,.55); }
 .c29-pkh { display:flex; align-items:center; gap:10px; }
-.c29-pkv { flex:none; width:44px; height:44px; border-radius:9px; background:var(--hov); display:flex; align-items:center; justify-content:center; }
-.c29-pkv img { width:30px; height:30px; }
-.c29-pkn { flex:1; min-width:0; display:flex; flex-direction:column; }
-.c29-pkn b { font-size:13.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.c29-pkv { flex:none; width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; background-color:var(--hov); background-image:linear-gradient(45deg, var(--line) 25%, transparent 25%, transparent 75%, var(--line) 75%), linear-gradient(45deg, var(--line) 25%, transparent 25%, transparent 75%, var(--line) 75%); background-size:8px 8px; background-position:0 0, 4px 4px; box-shadow:inset 0 0 0 .5px var(--line); }
+.c29-pkv img { width:32px; height:32px; }
+.c29-pkn { flex:1; min-width:0; display:flex; flex-direction:column; gap:1px; }
+.c29-pkn b { font-size:13px; font-weight:600; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .c29-pkn small { font-size:11px; color:var(--mut); }
-.c29 .c29-pkgo { all:unset; flex:none; font-size:12.5px; padding:5px 12px; border-radius:6px; cursor:pointer; background:var(--acc); color:#fff; }
-.c29-pkt { font-size:10.5px; color:var(--mut); }
-.c29-pk .c29-swg > span { flex-basis:62px; }
+.c29 .c29-pkgo { all:unset; flex:none; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; height:28px; padding:0 10px; border-radius:6px; cursor:pointer; background:var(--acc2); color:#fff; }
+.c29 .c29-pkgo:hover { filter:brightness(1.06); }
+.c29-pkgo kbd { font:inherit; font-size:10.5px; opacity:.75; }
+.c29-pks { display:flex; flex-direction:column; gap:6px; }
+.c29-lbl { display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:500; color:var(--mut); }
+.c29-pksty { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; }
+.c29-pksty button, .c29-pkbg button { all:unset; box-sizing:border-box; cursor:pointer; border-radius:8px; box-shadow:inset 0 0 0 1px var(--line); display:flex; align-items:center; justify-content:center; transition:box-shadow .12s, background .12s; }
+.c29-pksty button { gap:6px; height:34px; font-size:11.5px; color:var(--mut); }
+.c29-pksty img { width:18px; height:18px; }
+.c29-pkbg { display:grid; grid-template-columns:repeat(7, 1fr); gap:5px; }
+.c29-pkbg button { aspect-ratio:1; }
+.c29-pkbg img { width:62%; height:62%; }
+.c29-pksty button:hover, .c29-pkbg button:hover { background:var(--hov); }
+.c29-pksty button.on, .c29-pkbg button.on { box-shadow:inset 0 0 0 1.5px var(--acc2); background:color-mix(in srgb, var(--acc2) 8%, transparent); color:var(--fg); }
+.c29-ctabs { display:flex; gap:1px; overflow-x:auto; scrollbar-width:none; }
+.c29-ctabs button { all:unset; cursor:pointer; font-size:11px; font-weight:500; padding:2px 6px; border-radius:5px; color:var(--mut); white-space:nowrap; }
+.c29-ctabs button:hover { color:var(--fg); }
+.c29-ctabs button.on { color:var(--fg); background:var(--hov); }
+.c29-pksw { display:grid; grid-template-columns:repeat(auto-fill, 24px); gap:6px; min-height:24px; }
+.c29-pksw button { all:unset; width:24px; height:24px; border-radius:6px; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(0,0,0,.1); transition:transform .1s; }
+.c29.dark .c29-pksw button { box-shadow:inset 0 0 0 1px rgba(255,255,255,.14); }
+.c29-pksw button:hover { transform:scale(1.08); }
+.c29-pksw button.on { box-shadow:0 0 0 2px var(--bg), 0 0 0 3.5px var(--acc2); }
+.c29-pkgd { display:flex; gap:2px; align-self:flex-start; background:var(--hov); border-radius:6px; padding:2px; }
+.c29-pkgd button { all:unset; cursor:pointer; width:24px; height:20px; display:flex; align-items:center; justify-content:center; border-radius:4px; font-size:11px; color:var(--mut); }
+.c29-pkgd button.on { background:var(--bg); color:var(--fg); box-shadow:0 1px 2px rgba(0,0,0,.12); }
+.c29-pkf { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:10px; border-top:1px solid var(--line); min-height:18px; }
+.c29-hex { display:flex; align-items:center; gap:6px; min-width:0; font-size:11px; }
+.c29-hex i { flex:none; width:12px; height:12px; border-radius:3px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.1); }
+.c29-hex b { font-weight:500; white-space:nowrap; }
+.c29-hex span { color:var(--mut); font-family:ui-monospace,Menlo,monospace; font-size:10.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.c29-tog { display:flex; align-items:center; gap:6px; flex:none; font-size:11px; color:var(--mut); cursor:pointer; }
+.c29-tog input { display:none; }
+.c29-tog i { position:relative; width:26px; height:15px; border-radius:8px; background:var(--line); transition:background .15s; }
+.c29-tog i::after { content:''; position:absolute; left:2px; top:2px; width:11px; height:11px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.25); transition:transform .15s; }
+.c29-tog input:checked + i { background:var(--acc2); }
+.c29-tog input:checked + i::after { transform:translateX(11px); }
+.c29-webh span { font-weight:400; }
+.c29-webbar { display:flex; align-items:center; gap:6px; margin:2px 2px 6px; }
+.c29-webbar > button { all:unset; cursor:pointer; display:flex; align-items:baseline; gap:5px; font-size:12px; font-weight:500; padding:4px 10px; border-radius:6px; box-shadow:inset 0 0 0 1px var(--line); }
+.c29-webbar > button small { font-size:10.5px; font-weight:400; color:var(--mut); }
+.c29-webbar > button:hover { background:var(--hov); }
+.c29-webbar > button.on { box-shadow:inset 0 0 0 1.5px #0D99FF; }
+.c29-webq { margin:0 2px 4px; font-size:11px; }
+.c29-wf button { width:auto; padding:0 8px; white-space:nowrap; }
 .c29-png { border:1px solid var(--line); border-radius:8px; padding:9px 10px; display:flex; flex-direction:column; gap:7px; }
 .c29-pngh { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; font-size:12.5px; }
 .c29-tl { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--mut); }
