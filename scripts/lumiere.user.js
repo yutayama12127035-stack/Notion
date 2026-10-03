@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
-// @version      11.0.0
-// @description  Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
+// @version      12.0.0
+// @description  v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -44,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '11.0.0';
+  const VERSION = '12.0.0';
   const TAG = '[³⁷ Lumière v' + VERSION + ']';
   if (window.__c37 && window.__c37.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -221,6 +221,7 @@
     ['stickyGlass', 'データベース', '貼り付く見出しをすりガラスに', '表の列見出し・グループ見出しがスクロールで上に貼り付いた時、背景の質感と馴染むすりガラスにする', true],
     ['calendar', 'データベース', 'カレンダー・タイムライン', '今日の印をアクセントの丸に・予定の札を角丸と影に', true],
     ['curtain', '画面', 'カーテン（読み込みを見せない）', '開いた時・ページを移る時に、Notion の読み込みと各柱の描き直しを配色の幕で隠し、出来上がった画面だけを出す（最長 3.2 秒・CSS だけの安全弁つき）', true],
+    ['boardWrap', 'データベース', 'ボードを折り返す', 'ボードの列を横一列に並べず、画面の幅で折り返して段にする（見出しの段・カードの段・見出しの段…）。横にスクロールしなくても全部見える', true],
     ['hoverCard', 'データベース', 'ページの見本カード', 'リレーションのチップ・表の題字に乗せて少し待つと、そのページの表紙・アイコン・題名のカードがふわっと出る', true]
   ];
   const DEF = {
@@ -236,6 +237,8 @@
       accent: '',          // アクセントの上書き（#rrggbb）
       sheetWidth: '',      // 本文の紙の幅（空 = Notion のまま）
       tableStyle: 'editorial',   // editorial（誌面）/ ledger（罫線帳）/ cards（行を浮かせる）
+      colLines: 'soft',          // v12: 縦の罫線（列の境目）none / hair / soft / strong
+      boardCols: 0,              // v12: ボードを折り返す時の 1 段の列の数（0 = 画面の幅に合わせる）
       zebra: false,
       galleryTitle: 'below',     // below / overlay
       galleryLift: 1,
@@ -568,10 +571,15 @@ html ${SCOPE} .notion-file-block${B} > div { border-radius: var(--lm-r-sm) !impo
     const st = T('tableStyle');
     const d = +T('density') || 1;
     const TV = 'html ' + SCOPE + ' .notion-table-view';
+    /* v12: 縦の罫線（列の境目）。誌面でも境目は残せる */
+    const cl = T('colLines') || 'soft';
+    const LV = { none: 'transparent', hair: 'var(--lm-line-hair)', soft: 'var(--lm-line-soft)', strong: 'var(--lm-line)' };
+    const vl = cl === 'none' ? (st === 'ledger' ? LV.hair : LV.none) : LV[cl] || LV.soft;
+    const vh = cl === 'none' ? (st === 'ledger' ? LV.soft : LV.none) : (cl === 'hair' ? LV.soft : LV.strong);
     let css = `
 /* 表を誌面に: 縦のマス目を消し、横線を細く */
-${TV} .notion-table-view-cell${B} { border-inline-end-color: ${st === 'ledger' ? 'var(--lm-line-hair)' : 'transparent'} !important; }
-${TV} .notion-table-view-header-cell${B} { border-inline-end-color: ${st === 'ledger' ? 'var(--lm-line-soft)' : 'transparent'} !important; }
+${TV} .notion-table-view-cell${B} { border-inline-end: 1px solid ${vl} !important; }
+${TV} .notion-table-view-header-cell${B} { border-inline-end: 1px solid ${vh} !important; }
 ${TV} .notion-table-view-row${B} { border-bottom-color: ${st === 'cards' ? 'transparent' : 'var(--lm-line-hair)'} !important; position: relative; transition: background .15s; }
 ${TV} .notion-table-view-header-row${B} { border-bottom: 1px solid ${st === 'ledger' ? 'var(--lm-ink)' : 'var(--lm-line)'} !important; }
 ${TV} .notion-table-view-header-cell${B} { color: var(--lm-mute); }
@@ -649,8 +657,12 @@ html ${SCOPE} div[style*="position: absolute"]:has(> .quickActionContainer)${B} 
 html ${SCOPE} .quickActionContainer${B} { width: auto !important; height: 22px !important; padding: 1px !important; border-radius: 999px !important; background: var(--lm-glass) !important;
   -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4); box-shadow: 0 2px 8px rgba(0,0,0,.12), inset 0 0 0 1px var(--lm-glass-line) !important; opacity: .6; transition: opacity .15s ease; }
 html ${SCOPE} .quickActionContainer:hover${B} { opacity: 1; }
-html ${SCOPE} .quickActionContainer [role="button"]${B} { width: 20px !important; min-width: 20px !important; height: 20px !important; padding: 0 !important; border-radius: 999px !important; }
-html ${SCOPE} .quickActionContainer svg${B} { width: 14px !important; height: 14px !important; }`;
+html ${SCOPE} .quickActionContainer [role="button"]${B} { width: auto !important; min-width: 20px !important; height: 20px !important; padding: 0 3px !important; border-radius: 999px !important; gap: 0 !important; font-size: 0 !important; letter-spacing: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+html ${SCOPE} .quickActionContainer [role="button"] > :not(svg):not(:has(svg))${B} { display: none !important; }
+html ${SCOPE} .quickActionContainer svg${B} { width: 14px !important; height: 14px !important; flex: none !important; }
+html ${SCOPE} [data-testid="property-value"]:has(.quickActionContainer)${B} { overflow: visible !important; }
+/* v12: 表紙（画像）のセルではコメントなどのボタンを出さない（表紙を隠さない） */
+html ${SCOPE} [data-c34] div:has(> .quickActionContainer)${B} { display: none !important; }`;
 
   CSS.board = () => {
     const BV = 'html ' + SCOPE + ' .notion-board-view';
@@ -829,21 +841,138 @@ html[data-lm-focus] .notion-frame .notion-page-content > [data-block-id]${B} { o
 html[data-lm-focus] .notion-frame .notion-page-content > [data-block-id]${B}:is(:hover, :focus-within) { opacity: 1; }
 html[data-lm-focus] .notion-sidebar-container${B} { opacity: .15; transition: opacity .3s; }
 html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
+
+  /* ============================================================
+   *  v12: ボードを折り返す
+   *    Notion のボードは「見出しの段」と「列（カード）の段」が別の入れ物にある。
+   *    → 二つの入れ物と、その間の入れ物を display: contents にして、ボード全体を 1 枚の格子にし、
+   *      見出し k と列 k を、同じ桁・上下の段に置く（■■■■ / ●●●● / ■■■■ / ●●●●）。
+   *      Notion の要素は動かさない（格子の位置を書くだけ）。並び順は CSS の order（¹⁴ の並べ替え）にも従う。
+   * ============================================================ */
+  CSS.boardWrap = () => `
+html [data-lm-bw]${B} { display: grid !important; grid-template-columns: repeat(var(--lm-bw-cols, 3), var(--lm-bw-w, 288px)) !important; grid-auto-flow: row !important; align-items: start !important; justify-content: start !important; padding-bottom: 48px !important; position: relative !important; }
+html [data-lm-bw] [data-lm-bw-c]${B} { display: contents !important; }
+html [data-lm-bw] [data-lm-bw-x]${B} { display: none !important; }
+html [data-lm-bw] [data-lm-bw-h]${B} { grid-row: var(--lm-r) !important; grid-column: var(--lm-c) !important; order: 0 !important; position: relative !important; height: 44px; align-self: end !important; }
+html [data-lm-bw] [data-lm-bw-h]:not([data-lm-bw-first])${B} { margin-top: 22px !important; }
+html [data-lm-bw] [data-lm-bw-g]${B} { grid-row: var(--lm-r) !important; grid-column: var(--lm-c) !important; order: 0 !important; margin-bottom: 4px !important; }
+html [data-lm-bw] [data-lm-bw-n]${B} { grid-row: var(--lm-r) !important; grid-column: 1 / -1 !important; }
+html [data-lm-bw-v]${B} { float: none !important; }
+html [data-lm-bw-v] + div[style*="clear: both"]${B} { display: none !important; }`;
+  const BW_ATTRS = ['data-lm-bw', 'data-lm-bw-c', 'data-lm-bw-x', 'data-lm-bw-h', 'data-lm-bw-g', 'data-lm-bw-n', 'data-lm-bw-first', 'data-lm-bw-v'];
+  function bwClear(root) {
+    (root || document).querySelectorAll(BW_ATTRS.map((a) => '[' + a + ']').join(',')).forEach((el) => {
+      BW_ATTRS.forEach((a) => el.removeAttribute(a));
+      ['--lm-r', '--lm-c', '--lm-bw-cols', '--lm-bw-w'].forEach((v) => el.style.removeProperty(v));
+    });
+  }
+  function bwParts(bv) {
+    const groups = [...bv.querySelectorAll('.notion-board-group')];
+    if (groups.length < 2) return null;
+    let heads = [...bv.querySelectorAll('div[style*="cursor: grab"]')].filter((h) => h.querySelector('[aria-label="More group options"]') && !h.closest('.notion-board-group'));
+    let hc = heads[0] && heads[0].parentElement;
+    if (hc) heads = [...hc.children].filter((c) => c.style && c.style.display === 'flex');
+    else {
+      /* 閲覧だけのボード（掴む所も ⋯ も無い）: 列の見出しのリンクの段から */
+      const a = [...bv.querySelectorAll('a[href*="p="]')].find((x) => !x.closest('.notion-board-group'));
+      let h = a;
+      while (h && h.parentElement && h.parentElement !== bv && [...h.parentElement.children].filter((c) => c.style && c.style.display === 'flex').length < 2) h = h.parentElement;
+      hc = h && h.parentElement;
+      heads = hc ? [...hc.children].filter((c) => c.style && c.style.display === 'flex') : [];
+    }
+    const gc = groups[0].parentElement;
+    if (!hc || !gc || heads.length !== groups.length) return null;
+    /* 二つの入れ物の、いちばん近い共通の祖先＝格子にする箱 */
+    let box = gc;
+    while (box && !box.contains(hc)) box = box.parentElement;
+    if (!box || !bv.contains(box)) return null;
+    return { heads, groups, hc, gc, box };
+  }
+  let bwT = 0;
+  function bwSoon(ms) { clearTimeout(bwT); bwT = setTimeout(bwRun, ms == null ? 120 : ms); }
+  function bwRun() {
+    if (!on('boardWrap')) { if (document.querySelector('[data-lm-bw]')) bwClear(); return; }
+    for (const bv of document.querySelectorAll('.notion-board-view')) {
+      if (bv.closest('.notion-peek-renderer') && bv.getBoundingClientRect().width < 500) continue;
+      const P = bwParts(bv);
+      if (!P) continue;
+      const { heads, groups, hc, gc, box } = P;
+      /* 見出し・列は DOM の順で対。並びは order（¹⁴ が書く）→ DOM の順 */
+      const ordOf = (el, i) => { const o = parseFloat(el.style.order || getComputedStyle(el).order) || 0; return o * 10000 + i; };
+      const pairs = heads.map((h, i) => ({ h, g: groups[i], k: ordOf(h, i) })).sort((a, b) => a.k - b.k);
+      /* 1 段の列の数: 画面（横のスクロール枠）の幅に収まるだけ */
+      const sc = bv.closest('.notion-scroller') || bv.parentElement;
+      const bcs = getComputedStyle(bv);
+      const avail = (sc ? sc.clientWidth : innerWidth) - (parseFloat(bcs.marginInlineStart) || 0) - (parseFloat(bcs.marginInlineEnd) || 0) - (parseFloat(bcs.paddingInlineStart) || 0) - 8;
+      const gw = groups[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(groups[0]).marginInlineEnd) || 0) || 288;
+      const cols = Math.max(1, +T('boardCols') || Math.floor(avail / gw));
+      bv.setAttribute('data-lm-bw-v', '');
+      box.setAttribute('data-lm-bw', '');
+      if (box.style.getPropertyValue('--lm-bw-cols') !== String(cols)) box.style.setProperty('--lm-bw-cols', String(cols));
+      if (box.style.getPropertyValue('--lm-bw-w') !== gw.toFixed(1) + 'px') box.style.setProperty('--lm-bw-w', gw.toFixed(1) + 'px');
+      /* 間の入れ物を contents に。見出し・列以外の子（間の飾り・New group など）は外す／最後の段へ */
+      const mid = new Set();
+      for (const leaf of [hc, gc]) { let x = leaf; while (x && x !== box) { mid.add(x); x = x.parentElement; } }
+      for (const m of mid) {
+        if (!m.hasAttribute('data-lm-bw-c')) m.setAttribute('data-lm-bw-c', '');
+        for (const ch of m.children) {
+          if (mid.has(ch) || ch === box) continue;
+          if (m === hc || m === gc) continue;
+          if (/New group|新しいグループ|Load more|さらに読み込む/.test(ch.textContent || '')) { ch.setAttribute('data-lm-bw-n', ''); ch.style.setProperty('--lm-r', String(Math.ceil(pairs.length / cols) * 2 + 1)); }
+          else if (!ch.hasAttribute('data-lm-bw-x')) ch.setAttribute('data-lm-bw-x', '');
+        }
+      }
+      for (const ch of hc.children) if (!heads.includes(ch)) ch.setAttribute('data-lm-bw-x', '');
+      const lastRow = String(Math.ceil(pairs.length / cols) * 2 + 1);
+      for (const ch of box.children) if (!mid.has(ch) && /New group|新しいグループ|Load more|さらに読み込む/.test(ch.textContent || '')) { ch.setAttribute('data-lm-bw-n', ''); if (ch.style.getPropertyValue('--lm-r') !== lastRow) ch.style.setProperty('--lm-r', lastRow); }
+      for (const ch of gc.children) if (!groups.includes(ch) && /New group|新しいグループ|Load more|さらに読み込む/.test(ch.textContent || '')) { ch.setAttribute('data-lm-bw-n', ''); if (ch.style.getPropertyValue('--lm-r') !== lastRow) ch.style.setProperty('--lm-r', lastRow); }
+      pairs.forEach((p, k) => {
+        const r = Math.floor(k / cols) * 2 + 1, c = (k % cols) + 1;
+        p.h.setAttribute('data-lm-bw-h', ''); p.g.setAttribute('data-lm-bw-g', '');
+        p.h.toggleAttribute('data-lm-bw-first', r === 1);
+        if (p.h.style.getPropertyValue('--lm-r') !== String(r)) p.h.style.setProperty('--lm-r', String(r));
+        if (p.h.style.getPropertyValue('--lm-c') !== String(c)) p.h.style.setProperty('--lm-c', String(c));
+        if (p.g.style.getPropertyValue('--lm-r') !== String(r + 1)) p.g.style.setProperty('--lm-r', String(r + 1));
+        if (p.g.style.getPropertyValue('--lm-c') !== String(c)) p.g.style.setProperty('--lm-c', String(c));
+      });
+    }
+  }
+  (function bwBoot() {
+    if (!document.body) return document.addEventListener('DOMContentLoaded', bwBoot, { once: true });
+    new MutationObserver((recs) => {
+      for (const r of recs) { const t = r.target; if (t.nodeType === 1 && (t.closest('.notion-board-view') || t.querySelector && t.querySelector('.notion-board-view'))) { bwSoon(); return; } }
+    }).observe(document.body, { childList: true, subtree: true });
+    addEventListener('resize', () => bwSoon(160));
+    setInterval(() => { if (on('boardWrap') && document.querySelector('.notion-board-view')) bwRun(); }, 1500);
+    bwSoon(400);
+  })();
+
   /* ページの見本カード */
   CSS.hoverCard = () => `
-#lm-hc { position: fixed; z-index: 2147483400; width: 300px; border-radius: var(--lm-r-lg); overflow: hidden; pointer-events: none;
-  background: var(--lm-raised); color: var(--lm-ink); box-shadow: var(--c-shaOutLg); outline: 1px solid var(--lm-line-hair);
-  opacity: 0; transform: translateY(6px) scale(.985); transition: opacity .18s ease, transform .22s cubic-bezier(.2,.8,.2,1); font: 13px/1.5 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); font-feature-settings: "palt" 1; }
-#lm-hc .tx b { font-family: var(--hc-ff, inherit); }
+#lm-hc { position: fixed; z-index: 2147483400; width: 320px; border-radius: 14px; overflow: hidden; pointer-events: none;
+  background: var(--lm-raised); color: var(--lm-ink); box-shadow: 0 1px 2px rgba(15,15,15,.06), 0 12px 32px -6px rgba(15,15,15,.22), 0 0 0 1px var(--lm-line-hair);
+  opacity: 0; transform: translateY(6px) scale(.98); transform-origin: var(--hc-o, top left); transition: opacity .16s ease, transform .24s cubic-bezier(.2,.8,.2,1);
+  font: 12.5px/1.5 var(--cordi-ui, var(--cordi-ui-fallback, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif)); font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; }
 #lm-hc.on { opacity: 1; transform: none; }
-#lm-hc .cv { height: 120px; background: var(--lm-tint) center / cover no-repeat; position: relative; }
-#lm-hc .cv.none { height: 46px; background: linear-gradient(120deg, var(--lm-accent-soft), transparent); }
-#lm-hc .ic { position: absolute; left: 14px; bottom: -18px; width: 40px; height: 40px; border-radius: 10px; background: var(--lm-raised); box-shadow: var(--c-shaOutSm); display: flex; align-items: center; justify-content: center; font-size: 24px; overflow: hidden; }
-#lm-hc .ic img { width: 30px; height: 30px; object-fit: cover; border-radius: 6px; }
-#lm-hc .tx { padding: 24px 16px 14px; }
-#lm-hc .tx b { display: block; font-size: 15px; line-height: 1.35; }
-#lm-hc .tx small { display: block; color: var(--lm-mute); margin-top: 4px; font-size: 11.5px; }
-#lm-hc .tx p { margin: 8px 0 0; color: var(--lm-mute); font-size: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }`;
+#lm-hc .cv { height: 118px; background: var(--lm-tint) center / cover no-repeat; position: relative; }
+#lm-hc .cv::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 55%, color-mix(in srgb, var(--lm-raised) 55%, transparent)); }
+#lm-hc .cv.none { height: 10px; background: linear-gradient(90deg, var(--lm-accent-soft), transparent 80%); }
+#lm-hc .cv.none::after { display: none; }
+#lm-hc .hd { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 12px; padding: 12px 16px 0; }
+#lm-hc .cv:not(.none) + .hd { margin-top: -26px; position: relative; }
+#lm-hc .ic { width: 42px; height: 42px; border-radius: 11px; background: var(--lm-raised); box-shadow: 0 0 0 1px var(--lm-line-hair), 0 2px 8px rgba(15,15,15,.1); display: flex; align-items: center; justify-content: center; font-size: 24px; overflow: hidden; }
+#lm-hc .ic img { width: 30px; height: 30px; object-fit: contain; }
+#lm-hc .ic.no { display: none; }
+#lm-hc .hd .tt { min-width: 0; grid-column: 2; }
+#lm-hc .ic.no + .tt { grid-column: 1 / -1; }
+#lm-hc .tt b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--hc-ff, var(--cordi-ui-display, inherit)); font-size: 15.5px; font-weight: 600; line-height: 1.35; letter-spacing: .01em; }
+#lm-hc .cv:not(.none) + .hd .tt { padding-top: 26px; }
+#lm-hc .tt small { display: flex; gap: 6px; align-items: center; color: var(--lm-mute); margin-top: 2px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#lm-hc .tt small i { font-style: normal; opacity: .5; }
+#lm-hc .pr { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 10px 16px 0; padding-top: 10px; border-top: 1px solid var(--lm-line-hair); font-size: 11.5px; }
+#lm-hc .pr dt { color: var(--lm-mute); white-space: nowrap; max-width: 96px; overflow: hidden; text-overflow: ellipsis; }
+#lm-hc .pr dd { margin: 0; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#lm-hc .ft { height: 14px; }`;
 
   CSS.progress = () => `
 #lm-progress { position: fixed; inset-inline-start: 0; top: 0; height: 2px; width: 0; z-index: 2147483000; pointer-events: none;
@@ -870,6 +999,7 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
   }
   let lastCss = '';
   function apply() {
+    try { bwSoon(60); } catch (e) { /* noop */ }
     if (!document.documentElement) { setTimeout(apply, 0); return; }   // document-start の最初の瞬間（html もまだ無い）
     let st = document.getElementById('lm-css');
     if (!st) {
@@ -982,6 +1112,12 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
     REC.set(id, pr);
     return pr;
   }
+  const COLL = new Map();
+  function coll(id) {
+    if (COLL.has(id)) return COLL.get(id);
+    const pr = apiRV([{ table: 'collection', id }]).then((j) => { const n = j && j.recordMap && j.recordMap.collection && j.recordMap.collection[id]; return n ? (n.value && n.value.value ? n.value.value : n.value) : null; }).catch(() => null);
+    COLL.set(id, pr); return pr;
+  }
   const uuid = (h) => (h && h.length === 32 ? h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20) : h);
   function imgSrc(v, id, table) {
     const s = String(v || '');
@@ -1042,11 +1178,34 @@ html[data-lm-focus] .notion-sidebar-container${B}:hover { opacity: 1; }`;
     const icSrc = imgSrc(ic, id);
     const title = plain(r.properties && r.properties.title) || '無題';
     const when = r.last_edited_time ? new Date(r.last_edited_time) : null;
-    const kids = (r.content || []).length;
-    hcEl.innerHTML = '<div class="cv' + (cover ? '' : ' none') + '"' + (cover ? ' style="background-image:url(&quot;' + esc(cover) + '&quot;);background-position:center ' + Math.round((1 - (f.page_cover_position == null ? 0.5 : f.page_cover_position)) * 100) + '%"' : '') + '>' +
-      (ic && (icSrc || !/^[a-z]+:/i.test(ic)) ? '<span class="ic">' + (icSrc ? '<img src="' + esc(icSrc) + '" alt="">' : esc(ic)) + '</span>' : '') + '</div>' +
-      '<div class="tx"><b>' + esc(title) + '</b><small>' + (when ? '最終更新 ' + when.toLocaleDateString() : '') + (kids ? '　中のブロック ' + kids : '') + '</small></div>';
-    const W = 300, H = hcEl.offsetHeight || 220;
+    /* v12: DB の行なら、DB の名前と、短いプロパティを 4 つまで（リレーションは件数） */
+    let dbName = '', props = [];
+    if (r.parent_table === 'collection' && r.parent_id) {
+      const c = await coll(r.parent_id);
+      if (hcFor !== el) return;
+      if (c) {
+        dbName = plain(c.name);
+        const sch = c.schema || {};
+        for (const [k, v] of Object.entries(r.properties || {})) {
+          if (k === 'title' || !sch[k] || props.length >= 4) continue;
+          const t = sch[k].type;
+          let val = '';
+          if (t === 'relation') { const n = (v || []).filter((x) => Array.isArray(x) && x[0] === '‣').length; val = n ? n + ' 件' : ''; }
+          else if (t === 'date') { const d = (v || []).flatMap((x) => (Array.isArray(x) && x[1]) || []).find((x) => Array.isArray(x) && x[0] === 'd'); val = d && d[1] ? (d[1].start_date || '') + (d[1].end_date ? ' → ' + d[1].end_date : '') : ''; }
+          else if (t === 'checkbox') val = plain(v) === 'Yes' ? '✓' : '';
+          else if (t === 'file' || t === 'formula' || t === 'rollup' || t === 'button') val = '';
+          else val = plain(v);
+          val = String(val || '').replace(/\s+/g, ' ').trim();
+          if (val) props.push([sch[k].name || '', val.length > 40 ? val.slice(0, 40) + '…' : val]);
+        }
+      }
+    }
+    const rel = (d) => { const s2 = (Date.now() - d.getTime()) / 1000; if (s2 < 3600) return Math.max(1, Math.round(s2 / 60)) + ' 分前'; if (s2 < 86400) return Math.round(s2 / 3600) + ' 時間前'; if (s2 < 86400 * 30) return Math.round(s2 / 86400) + ' 日前'; return d.toLocaleDateString(); };
+    const icHtml = ic && (icSrc || !/^[a-z]+:/i.test(ic)) ? '<span class="ic">' + (icSrc ? '<img src="' + esc(icSrc) + '" alt="">' : esc(ic)) + '</span>' : '<span class="ic no"></span>';
+    hcEl.innerHTML = '<div class="cv' + (cover ? '' : ' none') + '"' + (cover ? ' style="background-image:url(&quot;' + esc(cover) + '&quot;);background-position:center ' + Math.round((1 - (f.page_cover_position == null ? 0.5 : f.page_cover_position)) * 100) + '%"' : '') + '></div>' +
+      '<div class="hd">' + icHtml + '<div class="tt"><b>' + esc(title) + '</b><small>' + (dbName ? '<span>' + esc(dbName) + '</span>' + (when ? '<i>·</i>' : '') : '') + (when ? '<span>' + rel(when) + 'に更新</span>' : '') + '</small></div></div>' +
+      (props.length ? '<dl class="pr">' + props.map(([k, v]) => '<dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd>').join('') + '</dl>' : '') + '<div class="ft"></div>';
+    const W = 320, H = hcEl.offsetHeight || 220;
     let left = x + 14, top = y + 18;
     if (left + W > innerWidth - 10) left = innerWidth - W - 10;
     if (top + H > innerHeight - 10) top = y - H - 14;
@@ -1157,8 +1316,15 @@ html:hover #lm-fab { opacity: .55; }
     panel.querySelector('.lm-x').onclick = panelClose;
     panel.querySelectorAll('.lm-tab').forEach((b) => { b.onclick = () => { tab = b.dataset.tab; panelSync(true); }; });
     panelSync(true);
+    setTimeout(() => document.addEventListener('pointerdown', panelOutside, true), 0);
   }
-  function panelClose() { if (panel) panel.remove(); panel = null; }
+  /* 外（余白・別の要素）を押したら閉じる。ドックの小窓・色の選択は除く */
+  function panelOutside(e) {
+    const t = e.target;
+    if (!panel || !t || !t.closest || panel.contains(t) || t.closest('#cordi-dock, .cordi-pop, [data-lm-keep]')) return;
+    panelClose();
+  }
+  function panelClose() { document.removeEventListener('pointerdown', panelOutside, true); if (panel) panel.remove(); panel = null; }
   function swatch(th, dark) {
     const p = dark ? th.dark : th.light;
     return '<div class="lm-sw" style="background:' + p.bg + '"><span class="a" style="background:' + p.accent + '"></span><span class="a2" style="background:' + p.accent2 + '"></span>' +
@@ -1233,6 +1399,7 @@ html:hover #lm-fab { opacity: .55; }
       h += rng('radius', '角の丸み', 0, 24, 1, 'px') + rng('shadow', '影の深さ', 0, 2, 0.05) + rng('texture', '質感の強さ', 0, 2, 0.05) + rng('motion', '動きの大きさ', 0, 2, 0.1);
       h += '<div class="lm-sec">表・ギャラリー</div>';
       h += sel('tableStyle', '表の形', [['editorial', '誌面（縦線なし・細い横線）'], ['ledger', '罫線帳（細い縦線・見出しに太線）'], ['cards', '行を浮かせる（1 行ずつカード）']]);
+      h += sel('colLines', '縦の罫線（列の境目）', [['soft', 'ふつう'], ['hair', 'ごく細く淡く'], ['strong', 'はっきり'], ['none', '引かない']]);
       h += '<div class="lm-row"><div class="t"><b>表を縞にする</b><small>1 行おきに淡い面</small></div><button class="lm-sw2' + (S.tune.zebra ? ' on' : '') + '" data-tb="zebra"></button></div>';
       h += rng('density', '行の高さ', 0.6, 1.6, 0.05);
       h += sel('galleryStyle', 'ギャラリーの形', [['card', 'カード（浮き上がる）'], ['polaroid', 'ポラロイド（少し傾けて貼る）'], ['frame', '額装（白い余白と額縁）'], ['shelf', '本棚（乗せると表紙が開く）'], ['flat', '平ら（線だけ）']]);
@@ -1510,6 +1677,7 @@ html:hover #lm-fab { opacity: .55; }
     h += tog('focus', '集中モード', '本文以外を薄く（⌃⌥B）', document.documentElement.hasAttribute('data-lm-focus'));
     h += tog('schedule', '夜は自動で暗く', (S.tune.nightFrom || 19) + ' 時〜' + (S.tune.nightTo || 6) + ' 時', !!S.tune.schedule);
     h += tog('hoverCard', 'ページの見本カード', 'リレーション・題字に乗せると表紙つきのカード', on('hoverCard'));
+    h += '<div class="cp-sec">表の縦の罫線</div><div class="cp-seg" data-lseg="colLines">' + [['none', 'なし'], ['hair', '淡く'], ['soft', 'ふつう'], ['strong', 'はっきり']].map(([v, l]) => '<button data-v="' + v + '" class="' + ((S.tune.colLines || 'soft') === v ? 'on' : '') + '">' + l + '</button>').join('') + '</div>';
     h += '<div class="cp-sec">ギャラリーの形</div><div class="cp-seg" data-lseg="galleryStyle">' + GSTYLES.map(([v, l]) => '<button data-v="' + v + '" class="' + (S.tune.galleryStyle === v ? 'on' : '') + '">' + l + '</button>').join('') + '</div>';
     h += '<div class="cp-div"></div>';
     h += '<button class="cp-i" data-la="panel"><span class="ic">' + ICON_LM + '</span><span class="lb">すべての設定…<small>配色の自作・モジュール 36 個・細部・保存</small></span><span class="k">⌃⌥V</span></button>';

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      57.2.0
-// @description  v47.2.0: 書体がきちんと当たるように — Notion の CSP は Google Fonts を通さないため、jsDelivr（Fontsource）から読み込むウェブ書体 39 種（しっぽり明朝・Zen オールド明朝・Noto Serif JP・BIZ UDP明朝・Klee One・Cormorant Garamond・EB Garamond・Playfair ほか）を追加。端末に入っていなくても当たる。表の「題字」と「リレーション」を形で見分ける（題字＝その行のページ、リレーション＝別 DB へのチップ）。題字の列の書体・大きさ・太さ・行の高さ・アイコンが ⁰⁹ の印なしでも効く。素のリレーションのチップの書式（新しい区画）。見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
+// @version      67.2.0
+// @description  v67.2.0: 組は英語・中は日本語に再編（Database は タイトル→リレーション→セル…）・重複の整理・外を押したら閉じる・動き・パネル自体の見た目（書体・大きさ・色・詰め具合）・全項目にアイコン。v47.2.0: 書体がきちんと当たるように — Notion の CSP は Google Fonts を通さないため、jsDelivr（Fontsource）から読み込むウェブ書体 39 種（しっぽり明朝・Zen オールド明朝・Noto Serif JP・BIZ UDP明朝・Klee One・Cormorant Garamond・EB Garamond・Playfair ほか）を追加。端末に入っていなくても当たる。表の「題字」と「リレーション」を形で見分ける（題字＝その行のページ、リレーション＝別 DB へのチップ）。題字の列の書体・大きさ・太さ・行の高さ・アイコンが ⁰⁹ の印なしでも効く。素のリレーションのチップの書式（新しい区画）。見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -363,7 +363,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '57.2.0';
+  const VERSION = '67.2.0';
   const API = '__c26';
   if (window[API] && window[API].version) {
     /* v24.0.0: 旧 Text Styles（同じ窓口 __c26）が先に起きていると、Atelier は起動できない（メニューが二重になるため）。
@@ -4806,7 +4806,8 @@ html[data-c26-dock] #c26-fab { display: none !important; }`;
       it('reader', ICO_AT.reader, '縦書きリーダー', '', '⌃⌥R') +
       it('marks', ICO_AT.marks, 'マーカー一覧', '', '⌃⌥M') +
       it('toc', ICO_AT.toc, '目次', '', '') + it('focus', ICO_AT.focus, 'フォーカスモード', '', '') +
-      '<div class="dv"></div>' + it('ui', ICO_PL.aa, 'UI の書体…', 'メニュー・小窓・Notion の UI の書体', '') + it('settings', ICO_AT.atelier, '本文の設定', '', '⌃⌥S');
+      '<div class="dv"></div>' + it('ui', ICO_PL.aa, 'UI の書体…', 'メニュー・小窓・Notion の UI の書体', '') + it('settings', ICO_AT.atelier, '本文の設定', '', '⌃⌥S') +
+      (document.documentElement.hasAttribute('data-cordi-s39') ? it('css', ICO_AT.atelier, 'スタイルシート…', '旧 Stylus の 27 本を 1 本ずつ入切（³⁹）', '') : '');
     document.body.appendChild(dockPop);
     const r = b.getBoundingClientRect();
     dockPop.style.top = (r.bottom + 6) + 'px';
@@ -4824,7 +4825,8 @@ html[data-c26-dock] #c26-fab { display: none !important; }`;
       else if (a === 'marks') marksOpen();
       else if (a === 'toc' || a === 'focus') atTool(a);
       else if (a === 'settings') openPanel();
-      else if (a === 'ui') { openAtelier(); try { atTab = 'chrome'; atRefresh(); } catch (er) { /* noop */ } }
+      else if (a === 'ui') { openAtelier(); try { atTab = 'uifont'; atRefresh(); } catch (er) { /* noop */ } }
+      else if (a === 'css') { const r = b.getBoundingClientRect(); document.dispatchEvent(new CustomEvent('cordi:run', { detail: JSON.stringify({ id: 's39.panel', x: r.left + r.width / 2, y: r.bottom }) })); }
     });
     setTimeout(() => document.addEventListener('pointerdown', function off(e) { if (!dockPop) { document.removeEventListener('pointerdown', off, true); return; } if (dockPop.contains(e.target) || b.contains(e.target)) return; document.removeEventListener('pointerdown', off, true); dockPopClose(); }, true), 0);
   }
@@ -7539,7 +7541,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   }
   const PC = '.notion-page-content';
   const SBT = 'html[data-c33] .notion-outliner-team-container[data-c33-team]';
-  const AT_SECS = [['all', '本文', 'Text'], ['page', 'ページ', 'Page'], ['db', 'データベース', 'Database'], ['side', 'サイドバー', 'Sidebar'], ['chrome', '画面', 'Chrome']];
+  /* v67: 組の名前は英語だけ、中の項目は日本語（Text の中に テキスト・見出し… ／ Database の中に タイトル・リレーション・セル…） */
+  const AT_SECS = [['all', '本文', 'Text'], ['page', 'ページ', 'Page'], ['db', 'データベース', 'Database'], ['side', 'サイドバー', 'Sidebar'], ['chrome', '画面', 'Interface'], ['self', 'Atelier', 'Atelier']];
   const AT_REGIONS = [
     /* ───── 本文 ───── */
     { id: 'base', sec: 'all', label: '既定の書体', note: 'Atelier 全体の基準になる書体。下の「書体」を空にした所はこの書体（--atelier-serif）を使えます。', ctl: [
@@ -7547,7 +7550,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { p: 'selCol', t: 'color', l: '選んだ文字の背景', d: '', g: '画面全体' },
       { p: 'caretCol', t: 'color', l: '入力カーソルの色', d: '', g: '画面全体' }
     ] },
-    { id: 'body', sec: 'all', label: '本文と段落', fig: 'body', hl: PC + ' .notion-text-block', note: 'ページの本文。段落の上と下の間隔・1 行目の字下げ・両端揃え・ページの幅まで。本文の文字の色や書体の「部分的な」書式は、文字を選ぶと出るメニュー（本文の書式）で。', ctl: [
+    { id: 'body', sec: 'all', label: 'テキストと段落', fig: 'body', hl: PC + ' .notion-text-block', note: 'ページの本文。段落の上と下の間隔・1 行目の字下げ・両端揃え・ページの幅まで。本文の文字の色や書体の「部分的な」書式は、文字を選ぶと出るメニュー（本文の書式）で。', ctl: [
       ...kit('body', { text: '.notion-frame ' + PC + ', .notion-peek-renderer ' + PC }, 'ff fs lh ls col', { g: '文字', d: { fs: 16, lh: 1.5 }, f: 'body', n: { text: '本文全体の文字' }, more: false }),
       ...kit('para', { text: PC + ' .notion-text-block [data-content-editable-leaf]', row: PC + ' .notion-text-block' }, 'ti ta mt mb pt pb', { g: '段落', l: { mt: '段落の上の間隔', mb: '段落の下の間隔', pt: '段落の内側の上', pb: '段落の内側の下' }, d: { mt: 1, mb: 1, pt: 3, pb: 3 }, f: 'para', n: { text: '段落の文字', row: '段落（テキストのブロック 1 つ）' } }),
       ...kit('blocks', { row: PC + ' [data-block-id].notion-selectable:not(.notion-text-block)' }, 'mt mb', { g: 'ほかのブロック', l: { mt: 'ブロックの上', mb: 'ブロックの下' }, f: 'blk', n: { row: '段落以外のブロック（画像・リスト・見出しなど）' } }),
@@ -7564,7 +7567,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('limk', { icon: PC + ' :is(.notion-bulleted_list-block, .notion-numbered_list-block, .notion-to_do-block, .notion-toggle-block) > div > div:first-child' }, 'igap idy', { g: '印（・ 1. ☐ ▸）', l: { igap: '印と文字の間', idy: '印の上下' } }),
       ...kit('done', { text: PC + ' .notion-to_do-block [style*="line-through"]' }, 'op col', { g: '済んだ ToDo', l: { op: '濃さ', col: '色' } })
     ] },
-    { id: 'quote', sec: 'all', label: '引用とコールアウト', hl: PC + ' :is(.notion-quote-block, .notion-callout-block)', note: '引用の左線・コールアウトの余白とアイコン。', ctl: [
+    { id: 'quote', sec: 'all', label: 'コールアウトと引用', hl: PC + ' :is(.notion-quote-block, .notion-callout-block)', note: '引用の左線・コールアウトの余白とアイコン。', ctl: [
       ...kit('quote', { text: PC + ' .notion-quote-block [data-content-editable-leaf]', row: PC + ' .notion-quote-block [style*="border-left"]' }, 'ff fs lh col it bw bc pl', { g: '引用', prop: { bw: 'border-left-width:$px', bc: 'border-left-color:$', pl: 'padding-left:$px' }, l: { pl: '線と文字の間' } }),
       ...kit('callout', { text: PC + ' .notion-callout-block [data-content-editable-leaf]', row: PC + ' .notion-callout-block > [role="note"] > div', icon: PC + ' .notion-callout-block .notion-record-icon' }, 'ff fs lh pt pb pl rad bg isz igap idy', { g: 'コールアウト' })
     ] },
@@ -7590,11 +7593,11 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('pname', { text: '.notion-frame .layout [role="cell"][aria-haspopup="dialog"]', icon: '.notion-frame .layout [role="cell"][aria-haspopup="dialog"] svg' }, 'ff fs fw ls col isz igap idy h', { g: 'プロパティの名前', deep: true, prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' } }),
       ...kit('pval', { text: '.notion-frame .layout [data-testid="property-value"]:not(.notion-table-view-cell *):not(.notion-collection-item *)' }, 'ff fs fw ls lh col', { g: 'プロパティの値', deep: true })
     ] },
-    { id: 'rowTitle', sec: 'page', label: '行ページのタイトル', note: 'DB の行を開いた時のタイトル（旧 ²⁵）。書体は「フルDBタイトル」と同じ。', ctl: [
+    { id: 'rowTitle', sec: 'db', label: '行ページのタイトル', note: 'DB の行を開いた時のタイトル（旧 ²⁵）。書体は「タイトル」と同じ。アイコンをタイトルの左に並べるのは ³⁹ Style Sheets の「題字の左にアイコン」。', ctl: [
       { v: '--c25-title-size', t: 'px', l: '大きさ', d: 20, min: 12, max: 48, s: 0.5, g: 'タイトル' }
     ] },
     /* ───── データベース ───── */
-    { id: 'dbTitle', sec: 'db', label: 'フルDBタイトル', note: 'フルページの DB のタイトルとアイコン（旧 ¹³）。行ページのタイトルも同じ値を使います。', ctl: [
+    { id: 'dbTitle', sec: 'db', label: 'タイトル', note: 'フルページの DB のタイトルとアイコン（旧 ¹³）。行ページのタイトルも同じ値を使います。', ctl: [
       { v: '--constellucentia-full-db-title-font-family', t: 'font', l: '書体', d: 'Canela Deck → 明朝', g: '文字' },
       { v: '--constellucentia-full-db-title-japanese-font-family', t: 'font', l: '和文の書体', d: 'ヒラギノ明朝', g: '文字' },
       { v: '--constellucentia-full-db-title-size', t: 'px', l: '大きさ', d: 20, min: 12, max: 48, s: 0.5, g: '文字' },
@@ -7606,7 +7609,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--constellucentia-full-db-icon-y', t: 'px', l: 'アイコンの上下', d: 1, min: -10, max: 10, s: 0.5, g: 'アイコン' },
       { v: '--constellucentia-full-db-title-y', t: 'px', l: '文字の上下', d: 1, min: -10, max: 10, s: 0.5, g: '位置' }
     ] },
-    { id: 'dbDesc', sec: 'db', label: 'フルDBの説明', note: 'タイトルの下の説明文（旧 ¹⁴ ¹⁵、両端揃えは旧 ⁰⁶ の代わり）。', ctl: [
+    { id: 'dbDesc', sec: 'db', label: '説明文', note: 'タイトルの下の説明文（旧 ¹⁴ ¹⁵、両端揃えは旧 ⁰⁶ の代わり）。', ctl: [
       { v: '--constellucentia-full-db-description-serif', t: 'font', l: '欧文の書体', d: 'Source Serif 4', g: '文字' },
       { v: '--constellucentia-full-db-description-mincho', t: 'font', l: '和文の書体', d: 'ヒラギノ明朝', g: '文字' },
       { v: '--constellucentia-full-db-description-font-size', t: 'px', l: '大きさ', d: 12, min: 9, max: 24, s: 0.5, g: '文字' },
@@ -7636,7 +7639,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { p: 'hdrColor', t: 'color', l: '色', d: '', g: '列見出し' },
       ...kit('coli', { icon: '.notion-frame .notion-table-view-header-cell svg', row: '.notion-frame .notion-table-view-header-row' }, 'isz igap idy h', { g: '列見出し', prop: { h: 'min-height:$px' }, l: { h: '見出しの行の高さ' } })
     ] },
-    { id: 'cells', sec: 'db', label: '表のセル', fig: 'cell', hl: '.notion-frame .notion-table-view-cell', note: '表ビューの普通のセル（題字・リレーション以外）と、セルの画像（³⁴ Image Cells）。', ctl: [
+    { id: 'cells', sec: 'db', label: 'セル（文字・数・画像）', fig: 'cell', hl: '.notion-frame .notion-table-view-cell', note: '表ビューの普通のセル（題字・リレーション以外）と、セルの画像（³⁴ Image Cells）。', ctl: [
       ...kit('cell', { text: '.notion-frame .notion-table-view-cell [data-testid="property-value"]', row: '.notion-frame .notion-table-view-cell [data-testid="property-value"]' }, 'ff fs lh col pt pb pl pr', { g: 'セル', deep: true, f: 'cell', n: { text: 'セルの文字', row: 'セル' } }),
       ...kit('cpos', { row: '.notion-frame .notion-table-view-cell' }, 'ah av', { g: 'セルの中の位置（すべての列）', n: { row: 'すべてのセル' }, more: false, f: 'cell', pos: '*' }),
       ...kit('cpost', { row: '.notion-frame .notion-table-view-cell' }, 'ah av', { g: 'セルの中の位置（列の種類ごと）', l: { ah: '題字：横', av: '題字：縦' }, n: { row: '題字（Name）のセル' }, more: false, f: 'cell', pos: 'title' }),
@@ -7644,6 +7647,8 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       ...kit('cposi', { row: '.notion-frame .notion-table-view-cell' }, 'ah av', { g: 'セルの中の位置（列の種類ごと）', l: { ah: '画像：横', av: '画像：縦' }, n: { row: '画像のセル' }, more: false, f: 'cell-img', pos: 'img' }),
       ...kit('cposx', { row: '.notion-frame .notion-table-view-cell' }, 'ah av', { g: 'セルの中の位置（列の種類ごと）', l: { ah: '文字・数・日付など：横', av: '文字・数・日付など：縦' }, n: { row: '文字・数・日付・セレクトなどのセル' }, more: false, f: 'cell', pos: 'x' }),
       ...kit('trow', { row: '.notion-frame .notion-table-view :is(.notion-table-view-row, .notion-collection-item)' }, 'h', { g: '行', prop: { h: 'min-height:$px' }, l: { h: '行の最小の高さ' }, n: { row: '表の 1 行' }, more: false, f: 'cell' }),
+      { p: 'cellTnum', t: 'toggle', l: '数字の幅をそろえる', d: false, g: '数', w: '数・日付の数字を等幅に（桁が縦にそろう）' },
+      { p: 'cellNumAlign', t: 'select', l: '数の列の寄せ', d: '', o: [['', 'Notion のまま'], ['end', '右に寄せる'], ['center', '中央']], g: '数', w: '数のプロパティのセル（数字だけのセル）を右か中央に寄せる' },
       { v: '--c34-mode', t: 'select', l: '合わせ方', d: 'fill', o: [['fill', '幅に合わせる（ギャラリー風）'], ['height', '高さをそろえて並べる']], g: '画像（³⁴ Image Cells）', f: 'cell-img', w: 'ファイルのプロパティの画像を、セルの幅いっぱいにするか、決めた高さで横に並べるか' },
       { v: '--c34-maxh', t: 'px', l: '高さの上限', d: 320, min: 40, max: 1200, s: 4, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '「幅に合わせる」の時の、画像の高さの上限（縦長の画像が伸びすぎない）' },
       { v: '--c34-h', t: 'px', l: '高さ', d: 120, min: 24, max: 800, s: 2, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '「高さをそろえる」の時の画像の高さ' },
@@ -7653,7 +7658,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { v: '--c34-fit', t: 'select', l: '切り抜き', d: 'cover', o: [['cover', '枠いっぱい（はみ出しは切る）'], ['contain', '全体を見せる（余白あり）']], g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '高さの上限で切れる時に、切り抜くか全体を縮めるか' },
       { v: '--c34-shadow', t: 'num', l: '影の濃さ', d: 0.12, min: 0, max: 0.6, s: 0.01, g: '画像（³⁴ Image Cells）', f: 'cell-img', w: '画像の下の影の濃さ（0 で無し）' }
     ] },
-    { id: 'primary', sec: 'db', label: 'テーブルの題字列', hl: SEL_TITLE_CELL, note: '表の「題字」＝その行のページそのもの（アイコン＋名前。クリックでそのページが開く）。リレーション（別の DB のページへのチップ）とは別物です。題字は先頭の列とは限らず、形（ボタンになったアイコン＋その隣の名前）で見つけます。', ctl: [
+    { id: 'primary', sec: 'db', label: '題字の列', hl: SEL_TITLE_CELL, note: '表の「題字」＝その行のページそのもの（アイコン＋名前。クリックでそのページが開く）。リレーション（別の DB のページへのチップ）とは別物です。題字は先頭の列とは限らず、形（ボタンになったアイコン＋その隣の名前）で見つけます。', ctl: [
       { p: 'primFont', t: 'font', l: '書体', d: 'Charter・Baskerville → 明朝', g: '文字' },
       { v: '--cordivestium-title-font-size', t: 'px', l: '大きさ', d: 11, min: 9, max: 20, s: 0.5, g: '文字' },
       { v: '--cordivestium-title-font-weight', t: 'weight', l: '太さ', d: 500, g: '文字' },
@@ -7778,8 +7783,47 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       { p: 'uiDisplay', t: 'font', l: '柱の名前（Atelier・Lumière…）', d: '', g: 'UI の書体' },
       { p: 'uiNotion', t: 'font', l: 'Notion の UI（サイドバー以外も）', d: '', g: 'UI の書体' },
       { p: 'uiPalt', t: 'toggle', l: '和文を詰める（palt）', d: true, g: 'UI の書体' }
+    ] },
+    /* ───── Atelier そのもの（v67: このパネルの見た目も変えられる） ───── */
+    { id: 'atui', sec: 'self', label: 'パネルの見た目', hl: '.at-panel', note: 'この Atelier のパネル自体の書体・文字の大きさ・色・詰め具合・動き。変えるとすぐパネルに反映します（どのページでも共通）。', ctl: [
+      { p: 'atUiFont', t: 'font', l: '本文の書体', d: 'Zen 角ゴシック New', g: '書体' },
+      { p: 'atUiHead', t: 'font', l: '見出しの書体', d: 'しっぽり明朝', g: '書体' },
+      { p: 'atUiBrand', t: 'font', l: '「Atelier」と組の名前', d: 'Cormorant Garamond', g: '書体' },
+      { p: 'atUiSize', t: 'px', l: '文字の大きさ', d: 13, min: 11, max: 17, s: 0.5, g: '大きさ' },
+      { p: 'atUiScale', t: 'num', l: 'パネル全体の倍率', d: 1, min: 0.8, max: 1.3, s: 0.05, g: '大きさ' },
+      { p: 'atUiWidth', t: 'px', l: 'パネルの幅', d: 760, min: 600, max: 1200, s: 10, g: '大きさ' },
+      { p: 'atUiNavW', t: 'px', l: '左の一覧の幅', d: 200, min: 160, max: 300, s: 4, g: '大きさ' },
+      { p: 'atUiAcc', t: 'color', l: 'アクセントの色', d: '#2383e2', g: '色と形' },
+      { p: 'atUiRad', t: 'px', l: '角の丸み', d: 12, min: 0, max: 24, s: 1, g: '色と形' },
+      { p: 'atUiGlass', t: 'toggle', l: 'すりガラス', d: false, g: '色と形' },
+      { p: 'atUiDense', t: 'select', l: '行の詰め具合', d: '', o: [['', 'ふつう'], ['compact', '詰める'], ['airy', 'ゆったり']], g: '色と形' },
+      { p: 'atUiMotion', t: 'select', l: '動き', d: '', o: [['', 'なめらか'], ['lively', 'はっきり'], ['none', '動かさない']], g: '動き' },
+      { p: 'atUiOutside', t: 'toggle', l: '外を押したら閉じる', d: true, g: '動き' }
     ] }
   ];
+  /* v67: 重複の整理 — 素のチップ（旧「表のリレーション（素のチップ）」）は「リレーション」の中へ。
+     細部（・細部）のうち、同じ場所にすでに同じ名前の設定があるものは出さない（アイコンの大きさ が 2 つ…を無くす） */
+  {
+    const ni = AT_REGIONS.findIndex((r) => r.id === 'nrel'), rel = AT_REGIONS.find((r) => r.id === 'relation');
+    if (ni >= 0 && rel) {
+      const nr = AT_REGIONS[ni];
+      for (const c of nr.ctl) c.g = c.g === '並び' ? '素のチップの並び' : (c.g || '').replace(/^チップ/, '素のチップ');
+      rel.ctl = nr.ctl.concat(rel.ctl);
+      rel.note = '表のリレーション。¹⁴ Relation Show All が並べ直したセル（シリーズ見出し・項目）と、並べ直していない素のチップ（小さなアイコン＋名前・下に細い線）、ページのリレーション欄（²³）。上の見本図で、行に乗せた設定がどこを動かすかが青く動きます。';
+      AT_REGIONS.splice(ni, 1);
+    }
+    for (const r of AT_REGIONS) {
+      const plain = r.ctl.filter((c) => !c.fold);
+      r.ctl = r.ctl.filter((c) => !c.fold || !plain.some((x) => x.l === c.l && (!x.kit || x.kit === c.kit)));
+    }
+    /* Database の並び: タイトル → 説明文 → タブと列見出し → 題字の列 → リレーション → セル → グループ見出し → カード → 行ページ */
+    const ord = ['dbTitle', 'dbDesc', 'hdr', 'primary', 'relation', 'cells', 'group', 'cards', 'rowTitle'];
+    const dbs = ord.map((id) => AT_REGIONS.find((r) => r.id === id)).filter(Boolean);
+    const first = AT_REGIONS.findIndex((r) => r.sec === 'db');
+    const rest = AT_REGIONS.filter((r) => !dbs.includes(r));
+    AT_REGIONS.length = 0;
+    AT_REGIONS.push(...rest.slice(0, first), ...dbs, ...rest.slice(first));
+  }
   /* v35: 変数の設定に、どこが変わるか（w）と見本図の部品（f） */
   const FW = {
     '--c33-team-font': ['steam', '■ ワークスペースの名前（MASTER・DATE など小さな見出し）の書体'], '--c33-team-size': ['steam', '■ ワークスペースの名前の文字の大きさ'], '--c33-team-weight': ['steam', '■ ワークスペースの名前の太さ'],
@@ -7818,7 +7862,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     AT_CTL[c.v || c.p] = c; c.region = r.id;
     const fw = FW[c.v || c.p];
     if (fw) { if (fw[0] && !c.f) c.f = fw[0]; if (!c.w) c.w = fw[1]; }
-    if (!c.w) c.w = (c.g ? c.g + '：' : '') + c.l;
+    if (!c.w) { c.w = (c.g ? c.g + '：' : '') + c.l; c.wAuto = 1; }
   }
   const UNIT = { px: 'px', em: 'em', num: '', weight: '' };
   /* kit の CSS（値の入った所だけ） */
@@ -7901,6 +7945,9 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     }
     if (T.selCol) css += '::selection{background:' + String(T.selCol).replace(/[;{}<>]/g, '') + ' !important}\n';
     if (T.caretCol) css += '[contenteditable="true"], input, textarea{caret-color:' + String(T.caretCol).replace(/[;{}<>]/g, '') + ' !important}\n';
+    /* v67: 数のセル — 等幅数字・寄せ（数だけのセルは JS が data-at-num を付ける） */
+    if (T.cellTnum === true || T.cellTnum === '1') css += '.notion-table-view-cell [data-testid="property-value"]{font-variant-numeric:tabular-nums !important}\n';
+    if (T.cellNumAlign === 'end' || T.cellNumAlign === 'center') css += '.notion-table-view-cell[data-at-num] [data-testid="property-value"]{justify-content:' + (T.cellNumAlign === 'end' ? 'flex-end' : 'center') + ' !important;text-align:' + T.cellNumAlign + ' !important}\n.notion-table-view-cell[data-at-num] [data-testid="property-value"] > *{text-align:' + T.cellNumAlign + ' !important}\n';
     if (n('scrollW') != null) { const w = n('scrollW'); css += '.notion-scroller::-webkit-scrollbar{width:' + w + 'px !important;height:' + w + 'px !important}\n' + (w === 0 ? '.notion-scroller{scrollbar-width:none !important}\n' : ''); }
     return css;
   }
@@ -7908,7 +7955,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   /* ---------- CSS を書く ---------- */
   function atStyle(id) {
     let st = document.getElementById(id);
-    if (!st) { st = document.createElement('style'); st.id = id; (document.head || document.documentElement).appendChild(st); }
+    if (!st) { st = document.createElement('style'); st.id = id; const root = document.head || document.documentElement; if (root) root.appendChild(st); }
     else if (st.parentNode !== (document.head || document.documentElement) && document.head) document.head.appendChild(st);
     return st;
   }
@@ -8210,20 +8257,21 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     dbTitle: 'M4 4h12M10 4v12', dbDesc: 'M5 5v10M8 6h7M8 10h7M8 14h4', hdr: 'M3.5 5.5h13v9h-13zM3.5 8.5h13', cells: 'M3.5 4.5h13v11h-13zM3.5 8.2h13M3.5 11.8h13M8.5 4.5v11', primary: 'M4 5h5v10H4zM12 7h4M12 10h4M12 13h4',
     relation: 'M6 6.5a2 2 0 1 0 0 .01M14 13.5a2 2 0 1 0 0 .01M7.6 7.8l4.8 4.4', group: 'M4 5h12M6 9.5h10M6 14h10M4 9.5h.01M4 14h.01', cards: 'M3.5 4h5.5v5.5H3.5zM11 4h5.5v5.5H11zM3.5 11.5h5.5V17H3.5zM11 11.5h5.5V17H11z',
     sidebar: 'M3.5 4h13v12h-13zM8 4v12', chrome: 'M3.5 4h13v12h-13zM3.5 7.5h13',
+    uifont: 'M3.5 15.5L7 5h1l3.5 10.5M4.8 12h5.4M13 9.5h3.5M14.75 9.5v6M13 15.5h3.5', atui: 'M10 3.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5zM4 16.5h12',
     any: 'M5 15l3-1 7-7-2-2-7 7zM12 6l2 2', tools: 'M6 14l8-8M11.5 4.5a3 3 0 0 0 4 4L14 10l-4-4zM4.5 15.5l2-2', snip: 'M5 5h10v10H5zM8 9h4M8 12h2.5', layers: 'M10 3.5l6.5 3.5L10 10.5 3.5 7zM3.5 10.5L10 14l6.5-3.5', themes: 'M10 3.5a6.5 6.5 0 1 0 0 13c1 0 1.5-.8 1-1.6-.6-1 0-2 1.2-2h1.8A3 3 0 0 0 16.5 10 6.5 6.5 0 0 0 10 3.5zM6.5 10h.01M8 6.8h.01M12 6.8h.01', text: 'M5 5.5h10M10 5.5v10M7.5 15.5h5'
   };
   const atNavIco = (id) => '<svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="' + (AT_NAV_ICO[id] || AT_NAV_ICO.tools) + '"/></svg>';
   function atNav() {
-    const item = (id, l, extra) => '<button data-nav="' + id + '"' + (atTab === id ? ' data-on="1"' : '') + ' title="' + atEsc(l) + '">' + atNavIco(id) + '<span>' + atEsc(l) + '</span>' + (extra || '') + '</button>';
+    const item = (id, l, extra) => '<button data-nav="' + id + '"' + (atTab === id ? ' data-on="1"' : '') + '>' + atNavIco(id) + '<span>' + atEsc(l) + '</span>' + (extra || '') + '</button>';
     const isSet = (r) => r.ctl.some((c) => { const k = c.v || c.p; const v = TK()[k]; return v !== undefined && v !== '' && !(AT_SEED[k] !== undefined && AT_SEED[k] === v); });
     let h = '';
     for (const [sid, sl, en] of AT_SECS) {
       const rs = AT_REGIONS.filter((r) => r.sec === sid);
       if (!rs.length) continue;
-      h += '<div class="at-navh"><span class="en">' + atEsc(en) + '</span>' + atEsc(sl) + '</div>' + rs.map((r) => item(r.id, r.label, isSet(r) ? '<i class="at-dot"></i>' : '')).join('');
+      h += '<div class="at-navh"><span class="en">' + atEsc(en) + '</span></div>' + rs.map((r) => item(r.id, r.label, isSet(r) ? '<i class="at-dot"></i>' : '')).join('');
     }
     const onCnt = Object.keys(AT_LABS).filter((k) => AT.tools[k]).length;
-    h += '<div class="at-navh"><span class="en">Tools</span>道具</div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '次世代の道具', onCnt ? '<b>' + onCnt + '</b>' : '') + item('snip', 'スニペット') + item('layers', '基礎の層') + item('themes', 'テーマと書き出し') + item('text', '本文の書式');
+    h += '<div class="at-navh"><span class="en">Tools</span></div>' + item('any', 'どこでも書式', AT.rules.length ? '<b>' + AT.rules.length + '</b>' : '') + item('tools', '次世代の道具', onCnt ? '<b>' + onCnt + '</b>' : '') + item('snip', 'スニペット') + item('layers', '基礎の層') + item('themes', 'テーマと書き出し') + item('text', '本文の書式');
     return h;
   }
   /* 行（コントロール 1 つ） */
@@ -8233,7 +8281,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     const v = TK()[k];
     const isSetV = v !== undefined && v !== '';
     const reg = showRegion ? AT_REGIONS.find((r) => r.id === c.region) : null;
-    return '<div class="at-row' + (isSetV ? ' at-set' : '') + '" data-hl="' + atEsc(k) + '"><label>' + atEsc(c.l) + (reg ? '<small class="at-where">' + atEsc(reg.label + ' › ' + (c.g || '')) + '</small>' : '') + (c.w && !reg ? '<small class="at-w">' + atEsc(c.w) + '</small>' : '') + '</label><div class="at-ctl">' + atControl(c, v, 'data-k="' + atEsc(k) + '"') + '</div><button class="at-x" data-reset="' + atEsc(k) + '" title="既定に戻す">' + AT_RESET_SVG + '</button></div>';
+    return '<div class="at-row' + (isSetV ? ' at-set' : '') + '" data-hl="' + atEsc(k) + '"><label>' + atEsc(c.l) + (reg ? '<small class="at-where">' + atEsc(reg.label + ' › ' + (c.g || '')) + '</small>' : '') + (c.w && !c.wAuto && !reg ? '<small class="at-w">' + atEsc(c.w) + '</small>' : '') + '</label><div class="at-ctl">' + atControl(c, v, 'data-k="' + atEsc(k) + '"') + '</div><button class="at-x" data-reset="' + atEsc(k) + '" title="既定に戻す">' + AT_RESET_SVG + '</button></div>';
   }
   const AT_RESET_SVG = '<svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5a5.5 5.5 0 1 1 1.6 4.4"/><path d="M4 5.5v4h4"/></svg>';
   function atGroupsHtml(ctls) {
@@ -8269,7 +8317,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     }
     const r = AT_REGIONS.find((x) => x.id === atTab) || AT_REGIONS[0];
     main.innerHTML = '<div class="at-fig">' + (r.fig && AT_FIGS[r.fig] ? AT_FIGS[r.fig]() : '') + '<div class="at-demo"><div class="at-democap">設定の行に乗せると、ここで「何がどう動くか」をアニメーションで見せます。' + (r.fig ? '上の図では変わる部品が青く光ります。' : '') + '</div></div></div>' +
-      '<div class="at-title"><h3>' + atEsc(r.label) + '</h3><button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></div><p class="at-note">' + atEsc(r.note) + '</p>' + atGroupsHtml(r.ctl);
+      '<div class="at-title"><h3><span class="at-ti">' + atNavIco(r.id) + '</span><span><small class="at-kick">' + atEsc((AT_SECS.find((x) => x[0] === r.sec) || ['', '', ''])[2]) + '</small>' + atEsc(r.label) + '</span></h3><button class="at-btn at-ghost" data-a="resetRegion" title="この場所の指定を全部消す">この場所を元に戻す</button></div><p class="at-note">' + atEsc(r.note) + '</p>' + atGroupsHtml(r.ctl);
   }
   /* 乗せた行の当たる所を、画面で光らせる */
   let atHlEls = [];
@@ -8691,6 +8739,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       if (v === '') delete TK()[k]; else TK()[k] = v;
       el.closest('.at-row') && el.closest('.at-row').classList.toggle('at-set', v !== '');
       atWrite('tokens'); atSave();
+      if (/^atUi/.test(k)) atApplyUi();
       if (e.type === 'change' && c && c.t === 'font') atRefresh();
       return;
     }
@@ -8762,14 +8811,48 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       else card = null;
     }
   }
+  let atLastTab = '';
   function atRefresh() {
     if (!atPanel) return;
+    atApplyUi();
     atPanel.querySelector('.at-nav').innerHTML = atNav();
     const main = atPanel.querySelector('.at-main');
-    const y = main.scrollTop;
+    const swap = atLastTab !== atTab + '|' + atQuery;
+    const y = swap ? 0 : main.scrollTop;
     atRenderMain();
     atCardify(main);
     main.scrollTop = y;
+    if (swap && atLastTab) { main.classList.remove('at-swap'); void main.offsetWidth; main.classList.add('at-swap'); }
+    atLastTab = atTab + '|' + atQuery;
+  }
+  /* v67: パネル自体の見た目（「Atelier › パネルの見た目」）。プロファイルではなく全体の値を優先 */
+  function atApplyUi() {
+    if (!atPanel) return;
+    const T = Object.assign({}, AT.tokens || {}, TK());
+    const st = atPanel.style, num = (k) => atNum(T[k]);
+    const set = (v, val) => { if (val === null || val === undefined || val === '') st.removeProperty(v); else st.setProperty(v, val); };
+    set('--at-ui', T.atUiFont ? atFamily(T.atUiFont) + ', "Hiragino Sans", sans-serif' : '');
+    set('--at-serif', T.atUiHead ? atFamily(T.atUiHead) + ', "Hiragino Mincho ProN", serif' : '');
+    set('--at-brand', T.atUiBrand ? atFamily(T.atUiBrand) + ', serif' : '');
+    set('--at-fs', num('atUiSize') != null ? num('atUiSize') + 'px' : '');
+    set('--at-acc', /^#[0-9a-f]{3,8}$/i.test(T.atUiAcc || '') ? T.atUiAcc : '');
+    set('--at-rad', num('atUiRad') != null ? num('atUiRad') + 'px' : '');
+    set('--at-navw', num('atUiNavW') != null ? num('atUiNavW') + 'px' : '');
+    if (num('atUiWidth') != null) st.width = num('atUiWidth') + 'px'; else st.removeProperty('width');
+    const z = num('atUiScale'); if (z && z !== 1) st.zoom = String(z); else st.removeProperty('zoom');
+    atPanel.dataset.dense = T.atUiDense || '';
+    atPanel.dataset.motion = T.atUiMotion || '';
+    atPanel.toggleAttribute('data-glass', T.atUiGlass === true || T.atUiGlass === '1');
+  }
+  const atOutsideOn = () => { const T = Object.assign({}, AT.tokens || {}, TK()); return !(T.atUiOutside === false || T.atUiOutside === '0'); };
+  /* v67: 外（余白・別の要素）を押したら閉じる。選ぶ途中（どこでも書式で要素を選ぶ時）や、Atelier 自身の小窓・ドックは除く */
+  function atOutside(e) {
+    if (!atPanel || atPick || !atOutsideOn()) return;
+    const t = e.target;
+    if (!t || !t.closest || atPanel.contains(t)) return;
+    if (t.closest('#cordi-dock, #cordi-b-at, .cordi-pop, #atl-pal-back, .m9, [data-at-keep]')) return;
+    if (document.documentElement.classList.contains('c26-scrubbing')) return;
+    closeAtelier();
   }
   function openAtelier() {
     if (atPanel) { closeAtelier(); return; }
@@ -8827,9 +8910,19 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
       document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
     });
     document.body.appendChild(atPanel);
+    atLastTab = '';
     atRefresh();
+    setTimeout(() => document.addEventListener('pointerdown', atOutside, true), 0);
   }
-  function closeAtelier() { atStopPick(); atHighlight(''); if (atPanel) atPanel.remove(); atPanel = null; }
+  function closeAtelier() {
+    atStopPick(); atHighlight('');
+    document.removeEventListener('pointerdown', atOutside, true);
+    const p = atPanel; atPanel = null;
+    if (!p) return;
+    if (p.dataset.motion === 'none' || matchMedia('(prefers-reduced-motion: reduce)').matches) { p.remove(); return; }
+    p.classList.add('at-leaving'); p.style.pointerEvents = 'none';
+    setTimeout(() => p.remove(), 170);
+  }
   /* v36: パネルの書体 — 欧文は Cormorant Garamond（Atelier の名前）、和文の見出しは しっぽり明朝、本文は Zen 角ゴシック New。
      読み込めない時は Baskerville・ヒラギノ明朝・ヒラギノ角ゴにそのまま落ちる */
   function atFonts() {
@@ -8848,7 +8941,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     st.id = AT_IDS.ui;
     st.textContent = `
 .at-panel { --at-fg: var(--c-texPri, #37352f); --at-fg2: var(--c-texSec, #787774); --at-fg3: var(--c-texTer, #9b9a97); --at-line: var(--ca-borPriTra, rgba(55,53,47,.09)); --at-hov: var(--c-bacHov, rgba(55,53,47,.06)); --at-acc: #2383e2; --at-brand: "Cormorant Garamond", "Cormorant", "Didot", "Bodoni 72", "Baskerville", serif; --at-serif: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Cordivestium Group Header", serif; --at-ui: "Zen Kaku Gothic New", "Hiragino Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  position: fixed; z-index: 2147483600; right: 24px; top: 56px; width: 760px; max-width: calc(100vw - 32px); height: min(780px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: 12px; background: var(--c-bgPri, #fff); color: var(--at-fg); box-shadow: 0 0 0 .5px rgba(15,15,15,.1), 0 4px 12px rgba(15,15,15,.06), 0 20px 50px rgba(15,15,15,.16); font: 13px/1.5 var(--at-ui); font-feature-settings: "palt" 1; overflow: hidden; }
+  position: fixed; z-index: 2147483600; right: 24px; top: 56px; width: 760px; max-width: calc(100vw - 32px); height: min(780px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: var(--at-rad, 12px); background: var(--c-bgPri, #fff); color: var(--at-fg); box-shadow: 0 0 0 .5px rgba(15,15,15,.1), 0 4px 12px rgba(15,15,15,.06), 0 20px 50px rgba(15,15,15,.16); font: var(--at-fs, 13px)/1.5 var(--at-ui); transform-origin: top right; animation: at-in .26s cubic-bezier(.2,.9,.25,1) both; font-feature-settings: "palt" 1; overflow: hidden; }
 .at-panel * { box-sizing: border-box; }
 .at-panel.at-picking { opacity: .14; pointer-events: none; transition: opacity .15s; }
 .at-head { display: flex; align-items: center; gap: 14px; height: 52px; padding: 0 10px 0 20px; border-bottom: 1px solid var(--at-line); cursor: move; user-select: none; }
@@ -8863,13 +8956,13 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-search svg { position: absolute; left: 9px; top: 8px; color: var(--at-fg3); pointer-events: none; }
 .at-close { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 7px; background: none; color: var(--at-fg3); cursor: pointer; }
 .at-close:hover { background: var(--at-hov); color: var(--at-fg); }
-.at-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 200px 1fr; }
+.at-body { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--at-navw, 200px) 1fr; }
 .at-nav { padding: 8px 8px 16px; border-right: 1px solid var(--at-line); overflow: auto; background: color-mix(in srgb, var(--at-fg) 2.5%, transparent); scrollbar-width: none; }
 .at-nav::-webkit-scrollbar { display: none; }
 .at-navh { display: flex; align-items: baseline; gap: 8px; padding: 16px 10px 5px; font: 500 10.5px/1 var(--at-serif); letter-spacing: .1em; color: var(--at-fg3); }
 .at-navh .en { font: 600 italic 14px/1 var(--at-brand); letter-spacing: .02em; color: var(--at-fg2); }
 .at-navh:first-child { padding-top: 6px; }
-.at-nav button { display: flex; align-items: center; gap: 9px; width: 100%; height: 30px; padding: 0 10px; margin: 1px 0; border: 0; border-radius: 6px; background: none; color: var(--at-fg2); font: inherit; font-size: 13px; text-align: start; cursor: pointer; white-space: nowrap; }
+.at-nav button { display: flex; align-items: center; gap: 9px; width: 100%; height: 30px; padding: 0 10px; margin: 1px 0; border: 0; border-radius: 6px; background: none; color: var(--at-fg2); font: inherit; font-size: var(--at-fs, 13px); text-align: start; cursor: pointer; white-space: nowrap; transition: background .14s, color .14s, transform .14s; }
 .at-nav button span { flex: 1; min-width: 0; overflow: hidden; text-overflow: clip; }
 .at-nav button svg { flex: none; opacity: .75; }
 .at-nav button:hover { background: var(--at-hov); color: var(--at-fg); }
@@ -8879,8 +8972,31 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-nav b { flex: none; min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--at-hov); font-size: 10.5px; font-weight: 600; line-height: 16px; text-align: center; color: var(--at-fg2); }
 .at-main { padding: 18px 24px 40px; overflow: auto; scroll-behavior: smooth; }
 .at-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 6px; }
-.at-title h3 { margin: 0; font: 600 19px/1.3 var(--at-serif); letter-spacing: .06em; }
-.at-note { margin: 0 0 16px; color: var(--at-fg2); font-size: 12px; line-height: 1.6; }
+.at-title h3 { display: flex; align-items: center; gap: 12px; margin: 0; font: 600 calc(var(--at-fs, 13px) + 6px)/1.3 var(--at-serif); letter-spacing: .06em; }
+.at-title h3 > span:last-child { display: flex; flex-direction: column; gap: 3px; }
+.at-ti { flex: none; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 9px; background: color-mix(in srgb, var(--at-acc) 10%, transparent); color: var(--at-acc); }
+.at-ti svg { width: 19px; height: 19px; }
+.at-kick { font: 600 italic 12.5px/1 var(--at-brand); letter-spacing: .04em; color: var(--at-fg3); }
+/* v67: 動き（開く・閉じる・切り替え）と、詰め具合・すりガラス */
+@keyframes at-in { from { opacity: 0; transform: translateY(-6px) scale(.975); } to { opacity: 1; transform: none; } }
+@keyframes at-out { to { opacity: 0; transform: translateY(-4px) scale(.98); } }
+@keyframes at-swap { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.at-panel.at-leaving { animation: at-out .16s ease-in both; }
+.at-main.at-swap > * { animation: at-swap .22s cubic-bezier(.2,.9,.25,1) both; }
+.at-main.at-swap > *:nth-child(2) { animation-delay: .02s; } .at-main.at-swap > *:nth-child(3) { animation-delay: .04s; } .at-main.at-swap > *:nth-child(n+4) { animation-delay: .06s; }
+.at-panel[data-motion="lively"] { animation-duration: .4s; animation-timing-function: cubic-bezier(.3,1.4,.4,1); }
+.at-panel[data-motion="lively"] .at-main.at-swap > * { animation-duration: .34s; }
+.at-panel[data-motion="lively"] .at-nav button:active { transform: scale(.97); }
+.at-panel[data-motion="none"], .at-panel[data-motion="none"] * { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .at-panel, .at-panel * { animation: none !important; } }
+.at-panel[data-dense="compact"] .at-row { min-height: 32px; padding-top: 1px; padding-bottom: 1px; }
+.at-panel[data-dense="compact"] .at-nav button { height: 26px; }
+.at-panel[data-dense="compact"] .at-card { margin-bottom: 10px; }
+.at-panel[data-dense="airy"] .at-row { min-height: 48px; padding-top: 7px; padding-bottom: 7px; }
+.at-panel[data-dense="airy"] .at-nav button { height: 34px; }
+.at-panel[data-glass] { background: color-mix(in srgb, var(--c-bgPri, #fff) 78%, transparent); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); }
+.at-panel[data-glass] .at-nav { background: transparent; }
+.at-note { margin: 0 0 16px; color: var(--at-fg2); font-size: calc(var(--at-fs, 13px) - 1px); line-height: 1.65; }
 .at-note code { padding: 1px 4px; border-radius: 4px; background: var(--at-hov); font: 11px/1 ui-monospace, Menlo, monospace; color: #eb5757; }
 .at-card { margin: 0 0 14px; padding: 4px 0; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--at-line); }
 .at-cardh { display: flex; align-items: center; justify-content: space-between; height: 36px; padding: 4px 14px 0; font: 600 12px/1 var(--at-serif); letter-spacing: .08em; color: var(--at-fg2); }
@@ -8888,7 +9004,7 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
 .at-card:hover .at-cardh .at-ghost { opacity: 1; }
 .at-row { display: grid; grid-template-columns: minmax(130px, 34%) 1fr 26px; align-items: center; gap: 12px; min-height: 40px; padding: 4px 8px 4px 14px; border-radius: 8px; transition: background .12s; }
 .at-row:hover { background: color-mix(in srgb, var(--at-fg) 2.5%, transparent); }
-.at-row > label { display: flex; flex-direction: column; gap: 1px; min-width: 0; color: var(--at-fg2); font-size: 12.5px; }
+.at-row > label { display: flex; flex-direction: column; gap: 1px; min-width: 0; color: var(--at-fg2); font-size: calc(var(--at-fs, 13px) - .5px); }
 .at-row > label small { font-size: 11px; color: var(--at-fg3); line-height: 1.45; }
 .at-row > label kbd { align-self: flex-start; margin: 2px 0; padding: 1px 6px; border-radius: 4px; background: var(--at-hov); font: 10.5px/1.5 ui-monospace, Menlo, monospace; color: var(--at-fg2); }
 .at-row.at-set > label { color: var(--at-fg); font-weight: 500; }
@@ -9630,6 +9746,15 @@ html.dark #atl-reader, .notion-dark-theme #atl-reader { --atl-paper: #1d1c1a; co
     if (AT.tools.rail) railUpdate();
   }
   setInterval(labTick, 700);
+  /* v67: 数だけのセルに印（「数の列の寄せ」を選んだ時だけ動く） */
+  setInterval(() => {
+    const T = TK(); if (T.cellNumAlign !== 'end' && T.cellNumAlign !== 'center') return;
+    for (const c of document.querySelectorAll('.notion-frame .notion-table-view-cell')) {
+      const t = (c.textContent || '').trim();
+      const num = !!t && t.length < 24 && /^[\s¥$€£￥+\-−]*[\d,，]+(\.\d+)?\s*(%|円|件|点|人|個|分|時間|日|kg|km|h)?$/.test(t);
+      if (num !== c.hasAttribute('data-at-num')) c.toggleAttribute('data-at-num', num);
+    }
+  }, 1200);
   window.addEventListener('keydown', (e) => {
     if (!(e.ctrlKey && e.altKey) || e.metaKey) return;
     if (e.code === 'KeyP' && AT.tools.palette) { e.preventDefault(); e.stopPropagation(); palOpen(); }

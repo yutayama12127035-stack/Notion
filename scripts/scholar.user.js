@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁸ _ Scholar
 // @namespace    https://cordivestium.local/scholar
-// @version      11.0.0
-// @description  Notion を「学び」と「計算」に強くする柱（²⁶ Atelier ＝文字、³⁷ Lumière ＝見た目 と並ぶ三本柱の一つ）。【計算】Excel と同じ書き方の数式（SUM・AVERAGEIFS・VLOOKUP・XLOOKUP・INDEX/MATCH・TEXT・DATEDIF・FILTER・SORT・UNIQUE など 180 余りの関数、A1 参照・範囲・列の名前での参照）で、表のビューを丸ごと写した「シート」（⌃⌥E）を開き、計算の列・集計・条件付き書式（色の段階・データバー・印）をつけ、結果を Notion のプロパティへ書き戻せる。マクロ（手順を組んで、どの行がどう変わるかを確かめてから一括で書き込み・元に戻せる。JavaScript でも書ける）。【学び】赤シート（赤い文字を隠す・⌃⌥K）、穴埋め（色を付けた語を隠す）、DB を単語帳にして間隔反復（忘れかけた頃にもう一度）、ポモドーロと学習記録（日ごとの時間・草のような記録）、続きから読む、選んだ式をその場で計算（⌃⌥=）。上の帯の Σ で学び・計算・記録の小窓（⌃⌥Q）。v11: 社労士（試験までの日数・基準点チェッカー・○×演習・選択式ドリル・法律上の年齢や期間の計算）・語学（読み上げ・書き取り）・用語に乗せて意味・読書／推し／ニュースの記録。
+// @version      21.0.0
+// @description  v21.0.0: Notion の「数式を編集」に Cordivestium の関数（標準報酬月額・年齢・和暦…）とマクロを統合（Notion の数式として書き込む）。Notion を「学び」と「計算」に強くする柱（²⁶ Atelier ＝文字、³⁷ Lumière ＝見た目 と並ぶ三本柱の一つ）。【計算】Excel と同じ書き方の数式（SUM・AVERAGEIFS・VLOOKUP・XLOOKUP・INDEX/MATCH・TEXT・DATEDIF・FILTER・SORT・UNIQUE など 180 余りの関数、A1 参照・範囲・列の名前での参照）で、表のビューを丸ごと写した「シート」（⌃⌥E）を開き、計算の列・集計・条件付き書式（色の段階・データバー・印）をつけ、結果を Notion のプロパティへ書き戻せる。マクロ（手順を組んで、どの行がどう変わるかを確かめてから一括で書き込み・元に戻せる。JavaScript でも書ける）。【学び】赤シート（赤い文字を隠す・⌃⌥K）、穴埋め（色を付けた語を隠す）、DB を単語帳にして間隔反復（忘れかけた頃にもう一度）、ポモドーロと学習記録（日ごとの時間・草のような記録）、続きから読む、選んだ式をその場で計算（⌃⌥=）。上の帯の Σ で学び・計算・記録の小窓（⌃⌥Q）。v11: 社労士（試験までの日数・基準点チェッカー・○×演習・選択式ドリル・法律上の年齢や期間の計算）・語学（読み上げ・書き取り）・用語に乗せて意味・読書／推し／ニュースの記録。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -59,7 +59,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '11.0.0';
+  const VERSION = '21.0.0';
   const TAG = '[³⁸ Scholar v' + VERSION + ']';
   if (window.__c38 && window.__c38.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -2978,6 +2978,251 @@
   };
   if (document.body) bootUi(); else document.addEventListener('DOMContentLoaded', bootUi, { once: true });
 
+  /* ============================================================
+   *  16. v12: Notion の数式エディタに組み込む（関数とマクロ）
+   *    Notion の数式は Notion の中で計算される → 独自の関数そのものは足せない。
+   *    → 「Edit formula」の左の一覧に、Notion の一覧と同じ形の段（Cordivestium）を足し、選ぶと
+   *      同じ計算をする「Notion の数式」をその場に書き込む（＝マクロ）。書き込んだ式は Notion の式なので、
+   *      ほかの端末・スクリプトの無い所でも、そのまま Notion がいつも計算する。
+   *    ・右の説明の欄も Notion と同じ形（名前・説明・例）。プロパティを選ぶ欄つき。
+   *    ・入力中の語でしぼる（Notion の一覧と同じく）。
+   *    ・自分のマクロ: 今の式を名前を付けて保存 → 次からこの段に出る。
+   * ============================================================ */
+  const FX_KEY = 'c38.fxmacros';
+  let FXU = store.get(FX_KEY, []);
+  const KENPO_T = [[58000, 0], [68000, 63000], [78000, 73000], [88000, 83000], [98000, 93000], [104000, 101000], [110000, 107000], [118000, 114000], [126000, 122000], [134000, 130000], [142000, 138000], [150000, 146000], [160000, 155000], [170000, 165000], [180000, 175000], [190000, 185000], [200000, 195000], [220000, 210000], [240000, 230000], [260000, 250000], [280000, 270000], [300000, 290000], [320000, 310000], [340000, 330000], [360000, 350000], [380000, 370000], [410000, 395000], [440000, 425000], [470000, 455000], [500000, 485000], [530000, 515000], [560000, 545000], [590000, 575000], [620000, 605000], [650000, 635000], [680000, 665000], [710000, 695000], [750000, 730000], [790000, 770000], [830000, 810000], [880000, 855000], [930000, 905000], [980000, 955000], [1030000, 1005000], [1090000, 1055000], [1150000, 1115000], [1210000, 1175000], [1270000, 1235000], [1330000, 1295000], [1390000, 1355000]];
+  function fxHyojun(x, kind, grade) {
+    const rows = kind === 'kn' ? KENPO_T.slice(3, 35) : KENPO_T;
+    const parts = [];
+    for (let i = 0; i < rows.length - 1; i++) parts.push('w < ' + rows[i + 1][1] + ', ' + (grade ? i + 1 : rows[i][0]));
+    parts.push(String(grade ? rows.length : rows[rows.length - 1][0]));
+    return 'lets(w, ' + x + ', ifs(' + parts.join(', ') + '))';
+  }
+  const ymdOf = (d) => d ? d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') : '';
+  /* 引数: d = 日付のプロパティ, n = 数のプロパティか数, k = 数（そのまま）, s = 選ぶ */
+  const FXB = [
+    { id: 'HYOJUN', name: '標準報酬月額', en: 'HYOJUN', cat: '社労士', ret: 'number', args: [['報酬月額', 'n'], ['制度', 's', [['kp', '健康保険（50 等級）'], ['kn', '厚生年金（32 等級）']]]],
+      desc: '報酬月額から、標準報酬月額を出す（以上〜未満で等級を決める）。表は令和 2 年 9 月からの現行のもの。', ex: ['標準報酬月額(prop("報酬")) → 300000'],
+      f: (a) => fxHyojun(a[0], a[1], false) },
+    { id: 'TOUKYU', name: '標準報酬の等級', en: 'TOUKYU', cat: '社労士', ret: 'number', args: [['報酬月額', 'n'], ['制度', 's', [['kp', '健康保険（50 等級）'], ['kn', '厚生年金（32 等級）']]]],
+      desc: '報酬月額から、標準報酬の等級（健保 1〜50・厚年 1〜32）を出す。', ex: ['等級(prop("報酬")) → 22'], f: (a) => fxHyojun(a[0], a[1], true) },
+    { id: 'NENREI', name: '年齢（法律上）', en: 'NENREI', cat: '社労士', ret: 'number', args: [['生年月日', 'd']],
+      desc: '「年齢計算ニ関スル法律」の数え方で、今日の年齢。誕生日の前日が終わる時に 1 つ増える。', ex: ['年齢(prop("生年月日")) → 34'],
+      f: (a) => 'dateBetween(dateAdd(today(), 1, "days"), ' + a[0] + ', "years")' },
+    { id: 'TASSHIBI', name: '○歳に達した日', en: 'TASSHIBI', cat: '社労士', ret: 'date', args: [['生年月日', 'd'], ['年齢', 'k', 60]],
+      desc: 'その年齢に「達した日」（＝誕生日の前日）。60 歳・65 歳・70 歳・75 歳の手続きの日に。', ex: ['達した日(prop("生年月日"), 65)'],
+      f: (a) => 'dateSubtract(dateAdd(' + a[0] + ', ' + a[1] + ', "years"), 1, "days")' },
+    { id: 'KIKAN', name: '期間の末日（民法）', en: 'KIKAN', cat: '社労士', ret: 'date', args: [['出来事の日', 'd'], ['長さ', 'k', 2], ['単位', 's', [['years', '年'], ['months', '月'], ['weeks', '週'], ['days', '日']]]],
+      desc: '民法 140〜143 条: 初日は数えず、応当日の前日で終わる。応当日が無い月は月末。時効・申請の期限の確かめに。', ex: ['期間末日(prop("退職日"), 2, "年")'],
+      f: (a) => 'dateAdd(' + a[0] + ', ' + a[1] + ', "' + a[2] + '")' },
+    { id: 'SOUSHITSU', name: '資格喪失日', en: 'SOUSHITSU', cat: '社労士', ret: 'date', args: [['退職日・死亡日', 'd']],
+      desc: '被保険者の資格を失う日（その翌日）。', ex: ['資格喪失日(prop("退職日"))'], f: (a) => 'dateAdd(' + a[0] + ', 1, "days")' },
+    { id: 'SHIKEN', name: '試験まであと', en: 'SHIKEN', cat: '社労士', ret: 'number', args: [],
+      desc: '社労士試験の日（Scholar の設定。既定は 8 月の第 4 日曜日）まで、あと何日。', ex: ['試験まで() → 322'],
+      f: () => 'dateBetween(parseDate("' + ymdOf(examDate()) + '"), today(), "days")' },
+    { id: 'WAREKI', name: '和暦', en: 'WAREKI', cat: '暮らし', ret: 'text', args: [['日付', 'd']],
+      desc: '日付の年を、令和・平成・昭和で（元年も）。', ex: ['和暦(prop("日付")) → 令和8年'],
+      f: (a) => 'lets(y, year(' + a[0] + '), ifs(y >= 2019, "令和" + if(y == 2019, "元", format(y - 2018)), y >= 1989, "平成" + if(y == 1989, "元", format(y - 1988)), "昭和" + format(y - 1925)) + "年")' },
+    { id: 'YOUBI', name: '曜日', en: 'YOUBI', cat: '暮らし', ret: 'text', args: [['日付', 'd']],
+      desc: '日付の曜日を 1 文字で（月〜日）。', ex: ['曜日(prop("日付")) → 土'],
+      f: (a) => 'substring("月火水木金土日", day(' + a[0] + ') - 1, day(' + a[0] + '))' },
+    { id: 'KEIKA', name: '経過日数', en: 'KEIKA', cat: '暮らし', ret: 'number', args: [['日付', 'd']],
+      desc: 'その日から今日まで何日たったか。', ex: ['経過日数(prop("始めた日"))'], f: (a) => 'dateBetween(today(), ' + a[0] + ', "days")' },
+    { id: 'NOKORI', name: '残り日数', en: 'NOKORI', cat: '暮らし', ret: 'number', args: [['期限', 'd']],
+      desc: '今日から期限まで、あと何日（過ぎたら負の数）。', ex: ['残り日数(prop("期限"))'], f: (a) => 'dateBetween(' + a[0] + ', today(), "days")' },
+    { id: 'KINENBI', name: '次の記念日まで', en: 'KINENBI', cat: '推し・記録', ret: 'number', args: [['記念日・誕生日', 'd']],
+      desc: '毎年の記念日（推しの誕生日・デビュー日など）の、次の日まであと何日。', ex: ['次の記念日まで(prop("誕生日")) → 41'],
+      f: (a) => 'lets(b, ' + a[0] + ', n, dateAdd(b, year(today()) - year(b), "years"), nx, if(n < today(), dateAdd(n, 1, "years"), n), dateBetween(nx, today(), "days"))' },
+    { id: 'BAR', name: '進み具合の棒', en: 'BAR', cat: '推し・記録', ret: 'text', args: [['今', 'n'], ['全体', 'n']],
+      desc: '読んだページ・進んだ量を、■□ の棒と % で（読書記録・学習の進み）。', ex: ['進み具合(prop("読んだ"), prop("全ページ")) → ■■■■■■□□□□ 62%'],
+      f: (a) => 'lets(r, min(1, max(0, ' + a[0] + ' / ' + a[1] + ')), repeat("■", round(r * 10)) + repeat("□", 10 - round(r * 10)) + " " + format(round(r * 100)) + "%")' },
+    { id: 'ZEIKOMI', name: '税込', en: 'ZEIKOMI', cat: '推し・記録', ret: 'number', args: [['税抜の金額', 'n'], ['税率', 's', [['1.1', '10%'], ['1.08', '8%（軽減）']]]],
+      desc: '税抜の金額から税込（1 円未満は切り捨て）。推し活の出費の記録に。', ex: ['税込(prop("金額")) → 3300'], f: (a) => 'floor(' + a[0] + ' * ' + a[1] + ')' }
+  ];
+  const FX_ICO = {
+    number: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M8.848 3.085c.34.06.567.384.507.724l-.61 3.466h3.42l.65-3.683a.625.625 0 0 1 1.23.216l-.61 3.467h2.435a.625.625 0 1 1 0 1.25h-2.655l-.52 2.95h2.435a.625.625 0 0 1 0 1.25h-2.655l-.65 3.684a.625.625 0 0 1-1.23-.217l.61-3.467h-3.42l-.65 3.684a.625.625 0 0 1-1.23-.217l.61-3.467H4.13a.625.625 0 1 1 0-1.25h2.605l.52-2.95H4.87a.625.625 0 0 1 0-1.25h2.605l.65-3.683a.625.625 0 0 1 .723-.507m2.578 8.39.52-2.95H8.523l-.52 2.95z"/></svg>',
+    date: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M5.25 3.125A2.125 2.125 0 0 0 3.125 5.25v9.5c0 1.174.951 2.125 2.125 2.125h9.5a2.125 2.125 0 0 0 2.125-2.125v-9.5a2.125 2.125 0 0 0-2.125-2.125zm-.875 3.69h11.25v7.935a.875.875 0 0 1-.875.875h-9.5a.875.875 0 0 1-.875-.875z"/></svg>',
+    text: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M2.9 4.375a.625.625 0 0 0 0 1.25h14.2a.625.625 0 1 0 0-1.25zm0 3.333a.625.625 0 0 0 0 1.25h14.2a.625.625 0 0 0 0-1.25zM2.275 15c0-.345.28-.625.625-.625H10a.625.625 0 1 1 0 1.25H2.9A.625.625 0 0 1 2.275 15m.625-3.958a.625.625 0 1 0 0 1.25h14.2a.625.625 0 0 0 0-1.25z"/></svg>',
+    macro: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M11.633 1.812c.263.096.43.354.41.632l-.392 5.51h3.099a.625.625 0 0 1 .506.992l-6.18 8.54a.625.625 0 0 1-1.13-.412l.402-5.5H5.25a.625.625 0 0 1-.507-.99l6.17-8.55a.625.625 0 0 1 .72-.222m-5.161 8.513H9.02a.625.625 0 0 1 .623.67l-.29 3.976 4.173-5.766H10.98a.625.625 0 0 1-.623-.67l.284-3.987z"/></svg>',
+    plus: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M10 3.4a.66.66 0 0 1 .66.66v5.28h5.28a.66.66 0 0 1 0 1.32h-5.28v5.28a.66.66 0 0 1-1.32 0v-5.28H4.06a.66.66 0 0 1 0-1.32h5.28V4.06A.66.66 0 0 1 10 3.4"/></svg>'
+  };
+  const fxCss = () => {
+    if (document.getElementById('c38-fx-css')) return;
+    const st = document.createElement('style'); st.id = 'c38-fx-css';
+    st.textContent = `
+.c38-fx-it[data-act] { background: rgb(from var(--ca-bacIntTra) r g b / calc(alpha * 1)); }
+.c38-fx-desc { position: absolute; inset: 0; z-index: 3; background: var(--c-popBac, #fff); display: flex; flex-direction: column; font-size: 12px; gap: 8px; overflow: auto; padding: 12px 14px; text-wrap: wrap; }
+.c38-fx-desc .h { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.c38-fx-desc .h small { font-weight: 400; color: var(--c-texTer); font-size: 11px; margin-inline-start: auto; }
+.c38-fx-desc .d { color: var(--c-texSec); line-height: 1.55; }
+.c38-fx-desc code { font-family: monospace; white-space: pre-wrap; font-size: 11px; border-radius: 5px; border: 1px solid var(--c-borSec); margin: 0 -4px; padding: 6px; opacity: .95; display: block; word-break: break-all; }
+.c38-fx-desc .args { display: grid; grid-template-columns: max-content 1fr; gap: 6px 10px; align-items: center; }
+.c38-fx-desc .args label { color: var(--c-texSec); }
+.c38-fx-desc select, .c38-fx-desc input { font: inherit; font-size: 12px; height: 26px; border-radius: 6px; border: 0; padding: 0 6px; background: var(--ca-bacSecTra, rgba(55,53,47,.06)); color: var(--c-texPri); box-shadow: var(--ca-borPriTra) 0 0 0 1px; min-width: 0; }
+.c38-fx-desc .bt { display: flex; gap: 6px; margin-top: 2px; }
+.c38-fx-desc button { font: inherit; font-size: 12px; font-weight: 500; height: 28px; padding: 0 12px; border-radius: 6px; border: 0; cursor: pointer; background: var(--ca-bacSecTra, rgba(55,53,47,.06)); color: var(--c-texPri); }
+.c38-fx-desc button.pri { background: var(--c-intBlu, #2383e2); color: #fff; }
+.c38-fx-x { margin-inline-start: auto; opacity: 0; font-size: 13px; padding: 0 4px; color: var(--c-texTer); cursor: pointer; }
+.c38-fx-it:hover .c38-fx-x { opacity: 1; }`;
+    document.head.appendChild(st);
+  };
+  /* 数式のエディタ（等幅の入力欄）と、左の一覧を見つける */
+  function fxFind(dlg) {
+    const ed = [...dlg.querySelectorAll('[contenteditable="true"][role="textbox"]')].find((e) => /SFMono|monospace/i.test(e.getAttribute('style') || ''));
+    const menu = dlg.querySelector('[role="menu"]');
+    if (!ed || !menu) return null;
+    const pane = menu.closest('div[style*="position: relative"]');
+    const desc = pane && pane.nextElementSibling;
+    return { ed, menu, desc };
+  }
+  /* 今の式を Notion の式の文字に（プロパティの札は prop("名前") に戻す） */
+  function fxSerialize(ed) {
+    let out = '';
+    const walk = (n) => {
+      if (n.nodeType === 3) { out += n.nodeValue; return; }
+      if (n.nodeType !== 1) return;
+      if (n.classList.contains('notion-text-mention-token')) { out += 'prop("' + norm(n.textContent).replace(/"/g, '\\"') + '")'; return; }
+      for (const c of n.childNodes) walk(c);
+    };
+    walk(ed);
+    return out.replace(/ /g, ' ').trim();
+  }
+  function fxProps(menu) {
+    /* 一覧の最初の段（Properties）の名前 = この DB のプロパティ */
+    const sec = [...menu.children].find((s) => !s.hasAttribute('data-c38-fx') && /^(Properties|プロパティ)/.test(norm((s.firstElementChild || {}).textContent)));
+    return sec ? [...sec.querySelectorAll('[role="menuitem"]')].map((m) => norm(m.textContent)).filter(Boolean) : [];
+  }
+  function fxInsert(ed, code) {
+    ed.focus();
+    const sel = getSelection();
+    if (!sel.rangeCount || !ed.contains(sel.anchorNode)) { const r = document.createRange(); r.selectNodeContents(ed); r.collapse(false); sel.removeAllRanges(); sel.addRange(r); }
+    const before = fxSerialize(ed);
+    let ok = false;
+    try { ok = document.execCommand('insertText', false, code); } catch (e) { ok = false; }
+    setTimeout(() => {
+      if (!ok || fxSerialize(ed) === before) {
+        try { navigator.clipboard.writeText(code); } catch (e) { /* noop */ }
+        toast('式をクリップボードに写しました。数式の欄で ⌘V で貼ってください');
+      }
+    }, 60);
+  }
+  function fxDescHtml(m, props, user) {
+    const opt = (list, cur) => list.map(([v, l]) => '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(l) + '</option>').join('');
+    const pick = (want) => props.find((p) => p.includes(want)) || props[0] || '';
+    let args = '';
+    (m.args || []).forEach(([l, t, x], i) => {
+      let c;
+      if (t === 's') c = '<select data-a="' + i + '">' + opt(x) + '</select>';
+      else if (t === 'k') c = '<input data-a="' + i + '" value="' + esc(x == null ? '' : x) + '" inputmode="decimal">';
+      else c = '<select data-a="' + i + '">' + opt(props.map((p) => ['prop:' + p, p]), 'prop:' + pick(l.slice(0, 2))) + (t === 'n' ? '<option value="num">数を入れる…</option>' : '') + '</select>';
+      args += '<label>' + esc(l) + '</label>' + c;
+    });
+    return '<div class="h">' + (FX_ICO[m.ret] || FX_ICO.macro) + esc(m.name) + '<small>' + esc(user ? '自分のマクロ' : 'Cordivestium · ' + m.cat) + '</small></div>' +
+      '<div class="d">' + esc(m.desc || '') + '</div>' +
+      (args ? '<div class="args">' + args + '</div>' : '') +
+      '<div class="bt"><button class="pri" data-go>式を書き込む</button>' + (user ? '<button data-del>このマクロを消す</button>' : '') + '</div>' +
+      (m.ex || []).map((e) => '<code>' + esc(e) + '</code>').join('') +
+      '<div class="d" style="font-size:11px">書き込むのは Notion の数式そのもの（' + esc(m.en || '') + ' の中身を Notion の関数で書いたもの）。保存すれば、この印の無い端末でも Notion がそのまま計算します。</div>';
+  }
+  function fxArgs(m, box) {
+    return (m.args || []).map(([l, t], i) => {
+      const el = box.querySelector('[data-a="' + i + '"]');
+      let v = el ? el.value : '';
+      if (t === 'k') return String(+v || 0);
+      if (t === 's') return v;
+      if (v === 'num') { const n = prompt(l + '（数）', '0'); return String(+n || 0); }
+      return v.startsWith('prop:') ? 'prop("' + v.slice(5).replace(/"/g, '\\"') + '")' : '0';
+    });
+  }
+  function fxInject(dlg) {
+    const F = fxFind(dlg);
+    if (!F) return;
+    const { ed, menu, desc } = F;
+    const q = ((fxSerialize(ed).match(/[\p{L}\p{N}_]+$/u) || [''])[0]).toLowerCase();
+    let sec = menu.querySelector(':scope > [data-c38-fx]');
+    const tplSec = [...menu.children].find((s) => !s.hasAttribute('data-c38-fx') && s.querySelector('[role="menuitem"]'));
+    if (!tplSec) return;
+    const list = FXB.map((m) => ({ m, user: false })).concat(FXU.map((m) => ({ m: Object.assign({ ret: 'macro', cat: 'マクロ', args: [] }, m), user: true })));
+    const hit = (m) => !q || [m.name, m.en, m.cat].some((x) => String(x || '').toLowerCase().includes(q));
+    const shown = list.filter((x) => hit(x.m));
+    const sig = q + '|' + shown.map((x) => x.m.id || x.m.name).join(',');
+    if (sec && sec.__sig === sig) { if (menu.firstElementChild !== sec && !q) menu.insertBefore(sec, menu.firstElementChild); return; }
+    if (sec) sec.remove();
+    if (!shown.length && q) return;
+    fxCss();
+    sec = tplSec.cloneNode(false);
+    sec.setAttribute('data-c38-fx', '1');
+    sec.__sig = sig;
+    const head = tplSec.firstElementChild.cloneNode(true);
+    head.querySelectorAll('[role="status"], [contenteditable="false"]').forEach((x) => x.remove());
+    const ht = head.querySelector('.xamitd3') || head.firstElementChild || head;
+    ht.textContent = 'Cordivestium';
+    sec.appendChild(head);
+    const tplIt = tplSec.querySelector('[role="menuitem"]');
+    const mk = (label, ico, fn, user) => {
+      const it = tplIt.cloneNode(true);
+      it.removeAttribute('id'); it.querySelectorAll('[id]').forEach((x) => x.removeAttribute('id'));
+      it.classList.add('c38-fx-it');
+      it.style.background = '';
+      const icw = it.querySelector('svg') && it.querySelector('svg').parentElement;
+      if (icw) icw.innerHTML = ico;
+      const pres = it.querySelector('[role="presentation"]');
+      if (pres) pres.innerHTML = '<span style="color: var(--c-texPri);">' + esc(label) + '</span><span style="color: var(--c-texTer);">()</span>';
+      const tail = it.querySelector('.xvc5jky');
+      if (tail && user) tail.innerHTML = '<span class="c38-fx-x" title="消す">×</span>';
+      it.addEventListener('mouseenter', () => fxShow(dlg, fn, user));
+      it.addEventListener('mousedown', (e) => e.preventDefault());
+      it.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fxShow(dlg, fn, user, true); });
+      return it;
+    };
+    for (const { m, user } of shown) sec.appendChild(mk(m.name, FX_ICO[m.ret] || FX_ICO.macro, m, user));
+    if (!q) {
+      const save = mk('いまの式をマクロに', FX_ICO.plus, null, false);
+      const pres = save.querySelector('[role="presentation"]'); if (pres) pres.innerHTML = '<span style="color: var(--c-texSec);">＋ いまの式をマクロとして保存</span>';
+      save.onclick = (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const code = fxSerialize(ed);
+        if (!code) { toast('式が空です'); return; }
+        const name = prompt('マクロの名前（この段に出ます）', '');
+        if (!name) return;
+        FXU = FXU.filter((x) => x.name !== name).concat([{ id: 'u' + Date.now().toString(36), name, en: 'MACRO', code, desc: '自分で保存した式。', ex: [code.length > 120 ? code.slice(0, 120) + '…' : code] }]);
+        store.set(FX_KEY, FXU); toast('マクロ「' + name + '」を保存しました'); sec.__sig = ''; fxInject(dlg);
+      };
+      sec.appendChild(save);
+    }
+    menu.insertBefore(sec, menu.firstElementChild);
+    sec.addEventListener('mouseleave', () => { if (!dlg.__fxPin) fxHide(dlg); });
+  }
+  function fxHide(dlg) { const o = dlg.querySelector('.c38-fx-desc'); if (o) o.remove(); dlg.__fxPin = false; }
+  function fxShow(dlg, m, user, pin) {
+    const F = fxFind(dlg); if (!F || !F.desc) return;
+    if (dlg.__fxPin && !pin) return;
+    if (!m) return;
+    let o = dlg.querySelector('.c38-fx-desc');
+    if (!o) { o = document.createElement('div'); o.className = 'c38-fx-desc'; if (getComputedStyle(F.desc).position === 'static') F.desc.style.position = 'relative'; F.desc.appendChild(o); }
+    o.innerHTML = fxDescHtml(m, fxProps(F.menu), user);
+    dlg.__fxPin = !!pin;
+    o.querySelector('[data-go]').onclick = () => {
+      const code = user ? m.code : m.f(fxArgs(m, o));
+      fxInsert(F.ed, code); fxHide(dlg);
+    };
+    const del = o.querySelector('[data-del]');
+    if (del) del.onclick = () => { FXU = FXU.filter((x) => x.id !== m.id); store.set(FX_KEY, FXU); fxHide(dlg); const s = dlg.querySelector('[data-c38-fx]'); if (s) { s.__sig = ''; } fxInject(dlg); toast('マクロ「' + m.name + '」を消しました'); };
+    o.addEventListener('mousedown', (e) => { if (!/SELECT|INPUT|OPTION/.test(e.target.tagName)) e.preventDefault(); });
+  }
+  let fxT = 0;
+  function fxScan() {
+    for (const dlg of document.querySelectorAll('[role="dialog"]')) {
+      if (!dlg.querySelector('[role="menu"]')) continue;
+      try { fxInject(dlg); } catch (e) { ST.lastError = 'fx: ' + (e && e.message); }
+    }
+  }
+  const fxBoot = () => {
+    new MutationObserver(() => { if (!fxT) fxT = setTimeout(() => { fxT = 0; fxScan(); }, 90); }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    document.addEventListener('pointerdown', (e) => { for (const dlg of document.querySelectorAll('[role="dialog"]')) if (dlg.__fxPin && !e.target.closest('.c38-fx-desc, .c38-fx-it')) fxHide(dlg); }, true);
+  };
+  if (document.body) fxBoot(); else document.addEventListener('DOMContentLoaded', fxBoot, { once: true });
+
   window.__c38 = {
     version: VERSION,
     eval: (f) => ENGINE.show(ENGINE.run(String(f).startsWith('=') ? f : '=' + f, {})),
@@ -2987,6 +3232,7 @@
     macros: () => MACROS.map((m) => m.name),
     study: { redsheet: setRed, cloze: setCloze, pomodoro: () => pomoStart('work'), decks: deckDialog, log: () => LOG, quiz: quizStart, drill: drillStart, pass: passDialog, speak, dictation, gloss: glossToggle, ledger: ledgerOpen, exam: () => ({ date: examDate(), days: daysUntil(examDate()) }) },
     pop: () => { const b = dock(); if (b) popOpen(b); },
+    fx: { list: () => FXB.map((m) => m.name), expand: (id, args) => { const m = FXB.find((x) => x.id === id); return m ? m.f(args || []) : ''; }, scan: fxScan },
     status: () => Object.assign({ prefs: Object.assign({}, P), decks: DECKS.length, macros: MACROS.length, undo: UNDO.length, sheetOpen: !!SH }, ST)
   };
 })();

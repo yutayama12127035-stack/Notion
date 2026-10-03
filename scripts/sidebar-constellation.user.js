@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      23.2.0
+// @version      24.2.0
 // @description  v3.1.0: 段々が実物の Notion で効いていなかったのを作り直し — 本物のアイコンの位置を測り、アイコンの入れ物を直接ずらす（¹⁶・Stylus の字下げと取り合わない・毎回差を測るので必ず目標で止まる）。■のアイコン＝★の名前の 1 文字目、●＝■の名前の 1 文字目、▲＝●の名前の 1 文字目。v3.0.0: 階層を段々に（★グループ ＞ ■チームスペース ＞ ●フルDB ＞ ▲ビュー）。どの段もアイコンの左端が一つ上の段の名前の 1 文字目にそろう（実測）。チームスペースの灰色の箱も出さない。元の並べ方は __c33.set({ tree: false })。v2.2.0: 選択中・カーソルを乗せた時の灰色の箱（影）を出さない（__c33.set({ noBg: false }) で戻せる）。v2.1.0: 書体を 1 つにそろえた（ビューも行と同じ書体）・ビューに付けたアイコンを表示・ビューのアイコンの左端を上の DB の題名の 1 文字目にそろえる（実測）・アイコンの大きさ／文字との間／上下、文字の上下、行の高さ、ワークスペースの間隔などを全部 CSS 変数にし ²⁶ Atelier の「サイドバー」から調整できるように。今開いているページ・ビューを太字に。v1.1.0: 字下げが効いていなかった・ビューのアイコンが■になっていた・ビューが左端に崩れていたのを修正。線・選択時の背景と左の印をやめ、ワークスペースごとに間を空けて区分けを明確に。サイドバーの大幅な見直し。階層を ★グループ ／ ■ワークスペース ／ ●フルDB（ワークスペースと同じ段）／ ▲各種ビュー（DB の下）に組み直し、ビューの「•」をビューの種類のアイコン（表・ボード・ギャラリー・リスト・カレンダー・タイムライン・グラフ・フィード・地図・フォーム・Atlas）に。ワークスペースは小さな見出し、DB とページは明朝の行、ビューは細い導線つきの小さな行、選択中は左に色の印。¹⁶ Sidebar Workspace Grouper（v15.6.0 以降）と一緒に使う。Notion の要素は動かさず、印と CSS だけで描く。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -91,7 +91,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '23.2.0';
+  const VERSION = '24.2.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -410,8 +410,12 @@
       const g = team.getAttribute('data-c16-g');
       /* v23.0.0: 輪（Orbit）が出ている間は ★ が輪に出ているので、■ は ★ の「アイコン」の位置へ（★ の名前の下まで下げない＝一段ぶん浅く） */
       const orbitOn = document.documentElement.hasAttribute('data-c33-orbit');
-      const lbl = g ? document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(g) + '"] ' + (orbitOn ? '.c16-ico' : '.c16-lbl')) : null;
-      if (lbl && lbl.getBoundingClientRect().width) place(btn, (orbitOn ? lbl.getBoundingClientRect().left : textLeft(lbl)) + cssPx('--c33-team-shift'));
+      /* v24.2.0: 輪で 1 つの大分類を選んでいる間は ★ の見出しを出さない（輪と二重になる）→ ■ は一覧の左端（★ の段の左＋14px）へ */
+      const sec = g ? document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(g) + '"]') : null;
+      const headHidden = orbitOn && document.documentElement.hasAttribute('data-c33-osel');
+      const lbl = sec ? sec.querySelector(orbitOn ? '.c16-ico' : '.c16-lbl') : null;
+      if (headHidden && sec && sec.getBoundingClientRect().width) place(btn, sec.getBoundingClientRect().left + 14 + cssPx('--c33-team-shift'));
+      else if (lbl && lbl.getBoundingClientRect().width) place(btn, (orbitOn ? lbl.getBoundingClientRect().left : textLeft(lbl)) + cssPx('--c33-team-shift'));
       const teamText = textEl(btn) || btn;
       const tTeam = textLeft(teamText);
       /* ● 行・▲ ビュー: 上から順に、親の名前の 1 文字目へ（親を先に動かしてから子を測る） */
@@ -431,6 +435,7 @@
         stack.push(x);
       }
       ST.aligned = (ST.aligned || 0) + 1;
+      obFixSoon();
     });
   }
   function scan() {
@@ -584,8 +589,9 @@ ${icons}
    *    ・¹⁶ の★見出しの文字クリック・「⋯ › 横に開く」でも、ここで開く。
    *    ・⌃⌥O で入／切。⌃⌥↑↓ で前後の大分類へ。
    * ============================================================ */
-  const OB_KEY = 'c33.orbit.v1';
-  const OB = Object.assign({ on: true, sel: '', itemH: 54, pin: false, hideEmpty: false, all: true }, (() => { try { return JSON.parse(localStorage.getItem(OB_KEY) || '{}'); } catch (e) { return {}; } })());
+  /* v24.2.0: 輪を出すのを既定に（前の版でしまっていても、この版で一度だけ出し直す。以降はしまえば覚える） */
+  const OB_KEY = 'c33.orbit.v2';
+  const OB = Object.assign({ on: true, sel: '', itemH: 54, pin: false, hideEmpty: false, all: true }, (() => { try { const v2 = localStorage.getItem(OB_KEY); if (v2) return JSON.parse(v2); const v1 = JSON.parse(localStorage.getItem('c33.orbit.v1') || '{}'); v1.on = true; return v1; } catch (e) { return {}; } })());
   delete OB.railW;
   const obSave = () => { try { localStorage.setItem(OB_KEY, JSON.stringify(OB)); } catch (e) { /* noop */ } };
   const RAIL_W = 58, RAIL_X = 184;
@@ -632,8 +638,10 @@ ${icons}
 :root { --c33-rail-w: ${RAIL_W}px; --c33-rail-x: ${RAIL_X}px; --c33-ui: var(--cordi-ui, "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", sans-serif); }
 /* 輪の入れ物: サイドバーの中だけで完結（Notion の本体はずらさない＝右が見切れない） */
 html[data-c33-orbit] [data-c33-host] { position: relative !important; }
-html[data-c33-orbit] [data-c33-host] > :not(#c33-orbit) { margin-inline-start: var(--c33-rail-w) !important; min-width: 0 !important; }
-html[data-c33-orbit][data-c33-orbit-pin] [data-c33-host] > :not(#c33-orbit) { margin-inline-start: var(--c33-rail-x) !important; }
+html[data-c33-orbit] [data-c33-host] > :not(#c33-orbit) { margin-inline-start: calc(var(--c33-rail-w) + var(--c33-rail-fix, 0px)) !important; min-width: 0 !important; }
+html[data-c33-orbit][data-c33-orbit-pin] [data-c33-host] > :not(#c33-orbit) { margin-inline-start: calc(var(--c33-rail-x) + var(--c33-rail-fix, 0px)) !important; }
+/* 1 つの大分類を選んでいる間は、★ の見出し（名前・件数・⋯）を出さない（左の輪で分かるので二重になる） */
+html[data-c33-orbit][data-c33-osel] .notion-sidebar-container #c16-root .c16-sec > .c16-head { display: none !important; }
 ${sel ? `html[data-c33-orbit] .notion-sidebar-container #c16-root .c16-sec:not([data-c16-g="${sel}"]) { display: none !important; }
 html[data-c33-orbit] .notion-sidebar-container ${SEL_TEAM}[data-c16-g]:not([data-c16-g="${sel}"]) { display: none !important; }
 html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEAM}[data-c16-g="${sel}"])):has(${SEL_TEAM}) { display: none !important; }` : ''}
@@ -831,7 +839,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const its = obEl ? [...obEl.querySelectorAll('.ob-it')] : [];
     const N = its.length;
     const i = its.findIndex((x) => x.dataset.g === gid);
+    const changed = OB.sel !== gid;
     OB.sel = gid; obSave(); obCss();
+    if (changed) { obResetMv(); setTimeout(() => schedule(0), 300); }
     if (i >= 0 && N) { const cur = obMod(Math.round(obTarget), N); let delta = i - cur; if (delta > N / 2) delta -= N; if (delta < -N / 2) delta += N; obTarget = Math.round(obTarget) + delta; obAnim(); }
     /* ¹⁶ で閉じていたら開く */
     if (gid !== ALL) {
@@ -849,8 +859,35 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const i = its.findIndex((x) => x.dataset.g === OB.sel);
     obSelect(its[obMod(i + k, its.length)].dataset.g);
   }
+  /* 輪の入切・大分類の切り替えの時は、前の状態で測った寄せ（margin）を一度すべて消して、測り直す（解除後に崩れたままにならない） */
+  function obResetMv() {
+    document.querySelectorAll('[data-c33-mv]').forEach((m) => { m.style.removeProperty('margin-inline-start'); m.removeAttribute('data-c33-mv'); MV.delete(m); });
+    document.documentElement.style.removeProperty('--c33-rail-fix');
+  }
+  /* 被りの自己点検: 輪の右端より左に、一覧のアイコン・文字が潜っていたら、その分だけ一覧を右へ（最大 120px） */
+  let obFixT = 0;
+  function obFixSoon() { clearTimeout(obFixT); obFixT = setTimeout(obFix, 60); }
+  function obFix() {
+    const de = document.documentElement;
+    if (!OB.on || !obEl || !obEl.isConnected || !obHost) { if (de.style.getPropertyValue('--c33-rail-fix')) de.style.removeProperty('--c33-rail-fix'); return; }
+    const railRight = obEl.getBoundingClientRect().left + (de.hasAttribute('data-c33-orbit-pin') ? RAIL_X : RAIL_W);
+    let min = Infinity;
+    for (const ch of obHost.children) {
+      if (ch === obEl) continue;
+      for (const e of ch.querySelectorAll('.notion-record-icon, .c16-ico, .c16-lbl, svg, img')) {
+        if (e.closest('#c33-orbit')) continue;
+        const r = e.getBoundingClientRect();
+        if (r.width < 4 || r.height < 4 || r.bottom < 0 || r.top > innerHeight) continue;
+        if (r.left < min) min = r.left;
+      }
+    }
+    if (!isFinite(min)) return;
+    const cur = parseFloat(de.style.getPropertyValue('--c33-rail-fix')) || 0;
+    const want = Math.max(0, Math.min(120, cur + (railRight + 8 - min)));
+    if (Math.abs(want - cur) >= 1 && (min < railRight + 6 || cur > 0)) { de.style.setProperty('--c33-rail-fix', want.toFixed(0) + 'px'); ST.railFix = want; }
+  }
   function obToggle(v) {
-    OB.on = v == null ? !OB.on : !!v; obSave(); obSig = ''; obBuild(); schedule(30);
+    OB.on = v == null ? !OB.on : !!v; obSave(); obSig = ''; obResetMv(); obBuild(); schedule(30); setTimeout(() => schedule(0), 400);
     if (!OB.on) obToast('輪をしまいました。サイドバーの上の段の ◎（Orbit）を押すと、いつでも戻せます（⌃⌥O でも）。');
   }
   window.addEventListener('c16-open', (e) => { if (!OB.on || !e.detail) return; e.preventDefault(); obSelect(e.detail.gid); });

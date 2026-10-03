@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁴ _ Image Cells
 // @namespace    https://cordivestium.local/image-cells
-// @version      2.0.0
+// @version      2.1.0
 // @description  テーブルビューの画像（ファイルのプロパティ）を、ギャラリーのように大きく・くっきり。Notion は表の画像を高さ 24px・幅 100px の縮小版で出すが、セルの幅いっぱい（または決めた高さ）に広げ、表示の大きさ×画面の解像度に合わせた高解像度版（最大 3840px＝4K）に差し替える。読み込みが済んでから入れ替えるので、ちらつかない。複数の画像は並べて（列の数は指定可）。大きさ・角の丸み・間隔・合わせ方は ²⁶ Atelier「表のセル」から。⌥クリックで原寸の拡大表示。³¹ Atlas Views の代わり（Atlas は廃止）。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -37,7 +37,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const TAG = '[³⁴ v' + VERSION + ']';
   if (window.__c34 && window.__c34.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -160,6 +160,8 @@
 [data-c34] .quickActionContainer${B} { width: auto !important; height: 22px !important; padding: 1px !important; gap: 0 !important; border-radius: 999px !important; background: color-mix(in srgb, var(--c-bacEle, #fff) 62%, transparent) !important; -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4); box-shadow: 0 0 0 .5px rgba(15,15,15,.12), 0 2px 8px rgba(15,15,15,.12) !important; opacity: .55; transition: opacity .15s ease; }
 [data-c34] .quickActionContainer:hover${B} { opacity: 1; background: var(--c-bacEle, #fff) !important; }
 [data-c34] .quickActionContainer [role="button"]${B} { width: 20px !important; min-width: 20px !important; height: 20px !important; padding: 0 !important; border-radius: 999px !important; }
+/* v2.1.0: 表紙のセルではボタンの段ごと出さない（コメントは表紙の上に要らない） */
+[data-c34] > div:is([style*="position: absolute"], :has(> .quickActionContainer)):has(.quickActionContainer)${B} { display: none !important; }
 [data-c34] .quickActionContainer svg${B} { width: 14px !important; height: 14px !important; }
 img[data-c34-img]${B} { display: block !important; max-height: none !important; max-width: 100% !important; border-radius: var(--c34-radius) !important; box-shadow: 0 0 0 .5px rgba(15,15,15,calc(var(--c34-shadow) * .8)), 0 2px 8px rgba(15,15,15,var(--c34-shadow)) !important; background: var(--c-bacHov, rgba(55,53,47,.06)); image-rendering: auto; transition: opacity .2s ease; }
 html[data-c34-mode="fill"] img[data-c34-img]${B} { width: 100% !important; height: auto !important; max-height: var(--c34-maxh) !important; object-fit: var(--c34-fit) !important; }
