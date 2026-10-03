@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      5.0.0
+// @version      5.1.0
 // @description  Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
@@ -21,6 +21,15 @@
 // ==/UserScript==
 
 /*
+ * v5.1.0
+ *   ・色・見た目のパネルが、色を選ぶ・色にカーソルを乗せる時に少し動いていたのを止めた。
+ *     原因: ①グラデの色に乗せた時だけ「向き」の行を出し入れしていた（パネルの高さが 30px 変わる）
+ *           ②「ダークで明るく」を出し入れしていた（下の行の左右が動く）
+ *           ③色の見本がホバーで 1.08 倍に拡大していた（隣の見本に重なって揺れて見える）
+ *           ④色のタブを替えると見本の段数が変わり、パネルの高さが変わっていた
+ *     → 行は常に場所を取り、見えなくするだけ（visibility）。拡大はやめて輪で示す。見本の欄は一番多いタブの段数で高さを固定。
+ *   ・形の指紋のキャッシュは版をまたいで使う（版を上げても再計算しない）。
+ *
  * v5.0.0
  *   ・新しい Notion の「Icon」の画面（タブが Icon 1 つ・Filter・Random）にも Library｜Import を出す。
  *     Upload のタブがないので、データ URL とファイル（SVG）の両方で貼ってみて、だめなら ⌘V を待つ。
@@ -98,7 +107,8 @@
 
 (function () {
   'use strict';
-  const VERSION = '5.0.0';
+  const VERSION = '5.1.0';
+  const SIG_VER = '5.0.0';   // v5.1.0: 形の指紋のキャッシュの版（形の計算を変えた時だけ上げる）
   const UW = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -1518,9 +1528,9 @@
   const enOf = (k) => String(k || '').split(/\s+/).filter((w) => /^[a-z][a-z-]+$/.test(w)).slice(0, 3).join(' ');
   const b64e = (u) => { let t = ''; for (let i = 0; i < u.length; i++) t += String.fromCharCode(u[i]); return btoa(t); };
   const b64d = (h) => { try { const t = atob(h), u = new Uint8Array(t.length); for (let i = 0; i < t.length; i++) u[i] = t.charCodeAt(i); return u.length === SN * SN ? u : null; } catch (e) { return null; } };
-  { const o = load(KEY_S, {}); if (o && o.v === VERSION && o.s) for (const k in o.s) { const u = b64d(o.s[k]); if (u) SIG.set(k, u); } }
+  { const o = load(KEY_S, {}); if (o && o.v === SIG_VER && o.s) for (const k in o.s) { const u = b64d(o.s[k]); if (u) SIG.set(k, u); } }
   let sigDirty = 0;
-  function saveSig() { const o = { v: VERSION, s: {} }; for (const [k, u] of SIG) if (u) o.s[k] = b64e(u); store(KEY_S, o); }
+  function saveSig() { const o = { v: SIG_VER, s: {} }; for (const [k, u] of SIG) if (u) o.s[k] = b64e(u); store(KEY_S, o); }
   function sigOf(svg) {
     return new Promise((res) => {
       const img = new Image();
@@ -2017,7 +2027,13 @@
     function swatches() {
       const t = P.ctab || cgOf(P.color);
       for (const b of pk.querySelectorAll('.c29-ctabs button')) b.classList.toggle('on', b.dataset.ct === t);
-      pk.querySelector('.c29-pksw').innerHTML = COLORS.filter((c) => c[3] === t).map((c) => `<button data-c="${c[0]}" title="${esc(c[1])}" style="background:${swatchBg(c)}"></button>`).join('');
+      const sw = pk.querySelector('.c29-pksw');
+      sw.innerHTML = COLORS.filter((c) => c[3] === t).map((c) => `<button data-c="${c[0]}" title="${esc(c[1])}" style="background:${swatchBg(c)}"></button>`).join('');
+      /* v5.1.0: どのタブでも同じ高さ（一番多いタブの段数）にして、タブを替えてもパネルが動かないように */
+      const cols = Math.max(1, Math.floor(((sw.clientWidth || 288) + 6) / 30));
+      const most = Math.max(1, ...CGROUPS.map(([g]) => COLORS.filter((c) => c[3] === g).length));
+      const rows = Math.ceil(most / cols);
+      sw.style.minHeight = (rows * 24 + (rows - 1) * 6) + 'px';
     }
     function syncPk() {
       if (!pkx) return;
@@ -2027,8 +2043,9 @@
       for (const b of pk.querySelectorAll('.c29-pkbg button')) b.querySelector('img').src = dataUrl(pkx, Object.assign({}, o, { bg: b.dataset.v }));
       for (const b of pk.querySelectorAll('.c29-pksw button')) b.classList.toggle('on', b.dataset.c === P.color);
       const cc = hoverC || P.color, grad = Array.isArray(colorOf(cc)), cn = COLORS.find((c) => c[0] === cc);
-      pk.querySelector('.c29-pkgd').hidden = !grad;
-      const ck = pk.querySelector('[data-k2="adapt"]'); ck.checked = !!P.adapt; ck.closest('label').hidden = grad || cc === 'auto';
+      /* v5.1.0: 出し入れせず、場所は取ったまま見えなくするだけ（高さ・左右が動かない） */
+      pk.querySelector('.c29-pkgd').classList.toggle('c29-off', !grad);
+      const ck = pk.querySelector('[data-k2="adapt"]'); ck.checked = !!P.adapt; ck.closest('label').classList.toggle('c29-off', grad || cc === 'auto');
       pk.querySelector('.c29-pkv img').src = dataUrl(pkx, o);
       pk.querySelector('.c29-pkn small').textContent = pkx.gja;
       pk.querySelector('.c29-hex').innerHTML = cn ? `<i style="background:${swatchBg(cn)}"></i><b>${esc(cn[1].replace(/（.*）/, ''))}</b><span>${esc(hexOf(cn))}</span>` : '';
@@ -2825,9 +2842,10 @@
 .c29-ctabs button:hover { color:var(--fg); }
 .c29-ctabs button.on { color:var(--fg); background:var(--hov); }
 .c29-pksw { display:grid; grid-template-columns:repeat(auto-fill, 24px); gap:6px; min-height:24px; }
-.c29-pksw button { all:unset; width:24px; height:24px; border-radius:6px; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(0,0,0,.1); transition:transform .1s; }
+.c29-pksw button { all:unset; box-sizing:border-box; width:24px; height:24px; border-radius:6px; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(0,0,0,.1); transition:box-shadow .1s; }
 .c29.dark .c29-pksw button { box-shadow:inset 0 0 0 1px rgba(255,255,255,.14); }
-.c29-pksw button:hover { transform:scale(1.08); }
+.c29-pksw button:hover { box-shadow:0 0 0 2px var(--bg), 0 0 0 3px var(--line); }
+.c29-pk .c29-off { visibility:hidden; pointer-events:none; }
 .c29-pksw button.on { box-shadow:0 0 0 2px var(--bg), 0 0 0 3.5px var(--acc2); }
 .c29-pkgd { display:flex; gap:2px; align-self:flex-start; background:var(--hov); border-radius:6px; padding:2px; }
 .c29-pkgd button { all:unset; cursor:pointer; width:24px; height:20px; display:flex; align-items:center; justify-content:center; border-radius:4px; font-size:11px; color:var(--mut); }
