@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      48.0.0
-// @description  v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      49.0.0
+// @description  v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -16,10 +16,18 @@
 // @connect      www.google.co.jp
 // @connect      www.google.com
 // @connect      api.anthropic.com
+// @connect      generativelanguage.googleapis.com
 // @noframes
 // ==/UserScript==
 
 /*
+ * v49.0.0
+ *   ・B.U.R.I の AI を「無料」で使えるように。「AI」で使う AI を選ぶ:
+ *       Gemini（無料・既定）… aistudio.google.com で無料の鍵を作って貼るだけ。カード登録なし・使った分の請求なし（上限を超えたら少し待つだけ）
+ *       Chrome 内蔵（無料・鍵なし）… 新しい Chrome の端末内 AI（Gemini Nano）。使えない端末では自動で抜粋モードへ
+ *       Claude（有料・従量）… これまで通り
+ *       使わない … 抜粋をつないで答える
+ *   ・AI がつながらない・上限の時は、黙って抜粋モードで答える（止まらない）。
  * v48.0.0
  *   ・輪で大分類を選んでも右が真っ白 → ¹⁶ で畳まれた大分類だった。選んだら ¹⁶ で開き、CSS でも中身を出す。
  *   ・輪のスクロールの向きを逆に（指を上へ → 輪も上へ）。設定 › スクロールの向き で元に戻せる。
@@ -36,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '48.0.0';
+  const VERSION = '49.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1822,7 +1830,20 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
      * ============================================================ */
     const gmGet = (k, d) => { try { return typeof GM_getValue === 'function' ? GM_getValue(k, d) : d; } catch (e) { return d; } };
     const gmSet = (k, v) => { try { if (typeof GM_setValue === 'function') GM_setValue(k, v); } catch (e) { /* noop */ } };
-    const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false };
+    const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false,
+      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'gemini-flash-latest'), provider: '' };
+    /* v49: どの AI を使うか — gemini（無料・既定）/ chrome（無料・鍵なし）/ claude（有料）/ none（抜粋だけ） */
+    AI.provider = gmGet('c33.buri.provider', '') || (AI.key ? 'claude' : 'gemini');
+    const PROVIDERS = [['gemini', 'Google Gemini（無料枠・おすすめ）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし・端末内）'], ['claude', 'Claude（有料・使った分だけ）'], ['none', '使わない（見つけた抜粋をつなぐだけ）']];
+    const GEMINI_MODELS = [['gemini-flash-latest', 'Gemini Flash（既定・無料枠が広い）'], ['gemini-flash-lite-latest', 'Gemini Flash-Lite（いちばん軽い・回数に強い）'], ['gemini-pro-latest', 'Gemini Pro（賢いが無料枠は少なめ）']];
+    const chromeLM = () => { try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; return W.LanguageModel || (W.ai && W.ai.languageModel) || null; } catch (e) { return null; } };
+    function aiOn() {
+      if (AI.provider === 'gemini') return !!AI.gkey;
+      if (AI.provider === 'claude') return !!AI.key;
+      if (AI.provider === 'chrome') return !!chromeLM();
+      return false;
+    }
+    const aiName = () => AI.provider === 'gemini' ? 'Gemini' : AI.provider === 'chrome' ? 'Chrome 内蔵 AI' : AI.provider === 'claude' ? 'Claude' : '';
     const AI_MODELS = [['claude-opus-5-5', 'Claude Opus 5.5（既定・いちばん賢い）'], ['claude-sonnet-5-5', 'Claude Sonnet 5.5（速い）'], ['claude-haiku-4-5', 'Claude Haiku 4.5（いちばん安い）']];
     const aiHist = [];   // これまでの会話（文字だけ・後ろに足すだけ）
     function gmReq(o) {
@@ -1928,6 +1949,52 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: text || '（空の返事）' });
       return { text };
     }
+    /* v49: Google Gemini（無料枠）— 鍵は aistudio.google.com で無料。請求先を登録しない限り課金されない */
+    async function gemini(question, ctxText) {
+      const contents = aiHist.slice(-8).map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }))
+        .concat([{ role: 'user', parts: [{ text: ctxText + '\n\n# 質問\n' + question }] }]);
+      const r = await gmReq({
+        method: 'POST', url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(AI.gmodel || 'gemini-flash-latest') + ':generateContent',
+        headers: { 'content-type': 'application/json', 'x-goog-api-key': AI.gkey },
+        data: JSON.stringify({ systemInstruction: { parts: [{ text: SYS }] }, contents, generationConfig: { maxOutputTokens: 2048, temperature: 0.5 } })
+      });
+      let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
+      if (r.status === 429) return { err: '無料枠の回数を使い切りました。1 分〜明日まで待つと戻ります（お金はかかりません）' };
+      if (!j) return { err: r.err || ('応答を読めませんでした（' + r.status + '）') };
+      if (j.error || r.status >= 400) return { err: (j.error && j.error.message) || ('エラー ' + r.status) };
+      const c = (j.candidates || [])[0];
+      const text = c && c.content && (c.content.parts || []).map((p) => p.text || '').join('').trim();
+      if (!text) return { err: (j.promptFeedback && j.promptFeedback.blockReason) ? 'この質問には答えられないと判断されました。' : '空の返事でした' };
+      aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: text });
+      return { text };
+    }
+    /* v49: Chrome 内蔵 AI（Prompt API / Gemini Nano）— 無料・鍵なし・端末の中だけで動く。読める量が少ないので根拠を短くして渡す */
+    let chromeSess = null;
+    async function chromeAI(question, ctxText) {
+      const LM = chromeLM();
+      if (!LM) return { err: 'この Chrome では内蔵 AI が使えません（新しい Chrome とある程度の性能の PC が要ります）' };
+      try {
+        const opt = { expectedInputs: [{ type: 'text', languages: ['ja', 'en'] }], expectedOutputs: [{ type: 'text', languages: ['ja'] }] };
+        if (typeof LM.availability === 'function') {
+          const av = await LM.availability(opt);
+          if (av === 'unavailable') return { err: 'この端末では Chrome 内蔵 AI が使えません' };
+        }
+        if (!chromeSess) chromeSess = await LM.create(Object.assign({ initialPrompts: [{ role: 'system', content: SYS }] }, opt));
+        const text = String(await chromeSess.prompt(String(ctxText).slice(0, 3500) + '\n\n# 質問\n' + question) || '').trim();
+        if (!text) return { err: '空の返事でした' };
+        aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: text });
+        return { text };
+      } catch (e) {
+        chromeSess = null;
+        return { err: (e && e.message) || 'Chrome 内蔵 AI が動きませんでした（初回はモデルのダウンロード待ちのことがあります）' };
+      }
+    }
+    async function askAI(question, ctxText) {
+      if (AI.provider === 'gemini') return gemini(question, ctxText);
+      if (AI.provider === 'chrome') return chromeAI(question, ctxText);
+      if (AI.provider === 'claude') return claude(question, ctxText);
+      return { err: 'AI を使わない設定です' };
+    }
     function firstSentence(s) { const t = String(s || '').replace(/\s+/g, ' ').trim(); const m = /^(.{20,160}?[。．！？!?])/.exec(t); return m ? m[1] : t.slice(0, 120) + (t.length > 120 ? '…' : ''); }
     async function deep(raw, shelf, baseCards, baseChips) {
       const q = raw.replace(/(について)?(教えて|おしえて|知りたい|調べて|しらべて|って何|ってなに|とは|は\?|は？)/g, ' ').replace(/\s+/g, ' ').trim() || raw;
@@ -1936,12 +2003,12 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       nh.slice(0, 4).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Notion のページ', linkLabel: 'Notion で開く' }));
       wh.slice(0, 3).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Web', linkLabel: 'Web で開く' }));
       if (!nh.length && !wh.length && !shelf.length) return reply('「' + q + '」は、Notion の中にも Web にも見つかりませんでした。言い方を変えて聞いてみてください。', [], exChips().slice(0, 2), ['notion'], q);
-      if (AI.key) {
-        const r = await claude(raw, sourcesText(nh, wh, shelf));
+      if (aiOn()) {
+        const r = await askAI(raw, sourcesText(nh, wh, shelf));
         if (r.text) return reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q);
-        return reply('AI につながりませんでした（' + r.err + '）。かわりに見つけたものを並べます。\n\n' + plain(), cards, baseChips || [], ['notion'], q);
+        return reply(aiName() + ' につながりませんでした（' + r.err + '）。かわりに見つけたものを並べます。\n\n' + plain(), cards, baseChips || [], ['notion'], q);
       }
-      return reply(plain() + '\n\n（AI の鍵を入れると、これを読んでまとめて話せます — 上の「AI」から）', cards, baseChips || [], ['notion'], q);
+      return reply(plain() + (AI.provider === 'none' ? '' : '\n\n（上の「AI」で無料の Gemini の鍵を入れると、これを読んでまとめて話せます）'), cards, baseChips || [], ['notion'], q);
       function plain() {
         let t = '';
         if (shelf.length) t += '本棚では ' + shelf.length + ' 件：' + shelf.slice(0, 5).map((r) => '「' + r.title + '」').join('・') + '。\n';
@@ -2106,7 +2173,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if (it.rec) return recommend(cand, label, raw);
       const lr = list(it.all || commonSeries(cand) ? cand.slice().sort(bySeries) : sortSmart(cand, tokens), label, raw);
       /* v48: 鍵があれば、本棚の答えに Notion・Web の情報も足して話す（一覧の操作「全部」「他には」はそのまま） */
-      if (AI.key && !it.all) return await deep(raw, cand.slice(0, 8), lr.cards, lr.chips);
+      if (aiOn() && !it.all) return await deep(raw, cand.slice(0, 8), lr.cards, lr.chips);
       return lr;
     }
 
@@ -2115,7 +2182,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, gmSet, aiReset: () => { aiHist.length = 0; } };
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, aiOn, aiName, chromeLM, gmSet, aiReset: () => { aiHist.length = 0; chromeSess = null; } };
   })();
 
   /* ============================================================
@@ -2224,7 +2291,13 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const bX = mk('button', 'cb-tool cb-x', '×', top); bX.type = 'button'; bX.setAttribute('aria-label', '閉じる');
     const log = mk('div', 'cb-log', null, panel); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite');
     const foot = mk('div', 'cb-foot', '', panel);
-    const footText = () => { foot.textContent = BURI.AI.key ? '本棚・Notion 全体・Google を調べ、Claude（' + BURI.AI.model + '）がまとめて話します。質問と見つけた抜粋が Anthropic に送られます。' : '本棚・Notion 全体・Google を調べて答えます。「AI」で鍵を入れると、まとめて話せるようになります。'; };
+    const footText = () => {
+      const A = BURI.AI, on = BURI.aiOn();
+      foot.textContent = !on ? '本棚・Notion 全体・Google を調べて答えます。「AI」で無料の Gemini（または Chrome 内蔵 AI）を選ぶと、まとめて話せるようになります。'
+        : A.provider === 'gemini' ? '本棚・Notion・Google を調べ、Gemini（無料枠・' + A.gmodel + '）がまとめて話します。質問と抜粋が Google に送られます（無料枠では改善に使われることがあります）。'
+        : A.provider === 'chrome' ? '本棚・Notion・Google を調べ、Chrome 内蔵 AI がこの端末の中でまとめて話します（無料・外へは送りません）。'
+        : '本棚・Notion・Google を調べ、Claude（' + A.model + '・有料）がまとめて話します。質問と抜粋が Anthropic に送られます。';
+    };
     footText();
     const file = mk('input'); file.id = 'c33-buri-file'; file.type = 'file'; file.accept = '.csv,.json,text/csv,application/json'; file.hidden = true;
     document.body.append(header, panel, file);
@@ -2452,18 +2525,43 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const b = mk('div', 'cb-body', null, m);
       const box = mk('div', 'cb-card', null, b);
       mk('strong', null, 'AI の設定', box);
-      mk('div', 'cb-meta', 'Anthropic の API キー（console.anthropic.com で作れます）。この端末の ScriptCat の中だけに保存します。', box);
-      const key = mk('input', null, null, box); key.type = 'password'; key.placeholder = A.key ? '入っています（替える時だけ入力）' : 'sk-ant-…'; key.style.cssText = 'width:100%;margin:4px 0;padding:4px 6px;border:1px solid var(--ca-borSecTra);border-radius:6px;background:transparent;color:inherit;font:inherit';
-      const sel = mk('select', null, null, box); sel.style.cssText = 'width:100%;margin:2px 0 4px;font:inherit;background:transparent;color:inherit';
-      BURI.AI_MODELS.forEach(([v, l]) => { const o = mk('option', null, l, sel); o.value = v; if (v === A.model) o.selected = true; });
-      const wl = mk('label', 'cb-meta', null, box); const wc = mk('input', null, null, wl); wc.type = 'checkbox'; wc.checked = A.web; wl.append(' Google でも調べる');
+      const css = 'width:100%;margin:2px 0 4px;padding:4px 6px;border:1px solid var(--ca-borSecTra);border-radius:6px;background:transparent;color:inherit;font:inherit';
+      const pv = mk('select', null, null, box); pv.style.cssText = css;
+      BURI.PROVIDERS.forEach(([v, l]) => { const o = mk('option', null, l, pv); o.value = v; if (v === A.provider) o.selected = true; });
+      const note = mk('div', 'cb-meta', null, box);
+      const link = mk('a', null, 'aistudio.google.com/apikey を開く（無料の鍵を作る）', box); link.href = 'https://aistudio.google.com/apikey'; link.target = '_blank'; link.rel = 'noopener'; link.style.cssText = 'font-size:11px;color:var(--lm-accent,#2783de)';
+      const key = mk('input', null, null, box); key.type = 'password'; key.style.cssText = css;
+      const sel = mk('select', null, null, box); sel.style.cssText = css;
+      const wl = mk('label', 'cb-meta', null, box); const wc = mk('input', null, null, wl); wc.type = 'checkbox'; wc.checked = A.web; wl.append(' Google でも調べる（検索は無料）');
+      const paint = () => {
+        const p = pv.value;
+        link.style.display = p === 'gemini' ? '' : 'none';
+        key.style.display = sel.style.display = (p === 'gemini' || p === 'claude') ? '' : 'none';
+        const has = p === 'gemini' ? A.gkey : A.key;
+        key.value = ''; key.placeholder = has ? '入っています（替える時だけ入力）' : (p === 'gemini' ? 'AIza…' : 'sk-ant-…');
+        sel.textContent = '';
+        (p === 'claude' ? BURI.AI_MODELS : BURI.GEMINI_MODELS).forEach(([v, l]) => { const o = mk('option', null, l, sel); o.value = v; if (v === (p === 'claude' ? A.model : A.gmodel)) o.selected = true; });
+        note.textContent = p === 'gemini' ? '無料です。Google アカウントで AI Studio を開き「API キーを作成」→ 下に貼るだけ。カード登録は不要で、請求先を登録しない限りお金はかかりません（使いすぎると少し待たされるだけ）。無料枠では、送った質問が Google の改善に使われることがあります。鍵はこの端末の ScriptCat の中だけに保存します。'
+          : p === 'chrome' ? (BURI.chromeLM() ? '無料・鍵なし。この Chrome の中の AI（Gemini Nano）で答えます。外には送りません。初回はモデルのダウンロードで少し待つことがあります。読める量が少ないので、答えは短め・素朴です。' : 'この Chrome では内蔵 AI が見つかりません（新しい Chrome・空きディスク・ある程度の性能が要ります）。選んでおくと、使えない間は抜粋モードで答えます。')
+          : p === 'claude' ? '有料（使った分だけ）。Anthropic の API キー（console.anthropic.com）。いちばん上手に話しますが、お金がかかります。'
+          : 'AI は使いません。見つけた抜粋をつないで答えます（無料・外へ送るのは Google 検索の言葉だけ）。';
+      };
+      pv.addEventListener('change', paint); paint();
       const row = mk('div', 'cb-chips', null, box);
       const ok = mk('button', 'cb-chip', '保存', row); ok.type = 'button';
-      const del = mk('button', 'cb-chip act', '鍵を消す', row); del.type = 'button';
+      const del = mk('button', 'cb-chip act', 'この鍵を消す', row); del.type = 'button';
       const rs = mk('button', 'cb-chip act', '会話を忘れる', row); rs.type = 'button';
       const say = (t) => addBuri({ text: t, cards: [], chips: [], actions: [] });
-      ok.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); if (key.value.trim()) { A.key = key.value.trim(); BURI.gmSet('c33.buri.key', A.key); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web); footText(); m.remove(); say(A.key ? '準備できました。なんでも聞いてください。たとえば「東野圭吾について教えて」。' : '設定を保存しました（鍵はまだ入っていません）。'); });
-      del.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); A.key = ''; BURI.gmSet('c33.buri.key', ''); footText(); m.remove(); say('鍵を消しました。これからは見つけた抜粋をつないで答えます。'); });
+      ok.addEventListener('click', (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const p = pv.value, k = key.value.trim();
+        A.provider = p; BURI.gmSet('c33.buri.provider', p);
+        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
+        if (p === 'claude') { if (k) { A.key = k; BURI.gmSet('c33.buri.key', k); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); }
+        A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web); BURI.aiReset(); footText(); m.remove();
+        say(BURI.aiOn() ? BURI.aiName() + ' で準備できました。なんでも聞いてください。たとえば「東野圭吾について教えて」。' : p === 'none' ? 'AI は使わずに、見つけたものをつないで答えます。' : '設定を保存しました（' + (p === 'chrome' ? 'この Chrome では内蔵 AI が見つからないので、しばらくは抜粋で答えます' : '鍵がまだ入っていません') + '）。');
+      });
+      del.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); if (pv.value === 'claude') { A.key = ''; BURI.gmSet('c33.buri.key', ''); } else { A.gkey = ''; BURI.gmSet('c33.buri.gkey', ''); } footText(); m.remove(); say('鍵を消しました。'); });
       rs.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); BURI.aiReset(); m.remove(); say('これまでの会話を忘れました。'); });
       scrollEnd();
     });
