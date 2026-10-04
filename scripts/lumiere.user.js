@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
-// @version      12.0.0
+// @version      13.0.0
 // @description  v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -44,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '12.0.0';
+  const VERSION = '13.0.0';
   const TAG = '[³⁷ Lumière v' + VERSION + ']';
   if (window.__c37 && window.__c37.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -989,7 +989,7 @@ html [data-lm-bw-v] + div[style*="clear: both"]${B} { display: none !important; 
     css += ':root:root {\n' + declare(lmVars(p)) + '\n}\n';
     if (on('palette') && !p.none) css += ROOTS + ' {\n' + declare(notionVars(p)) + '\n}\n';
     for (const [id] of MODS) {
-      if (id === 'palette' || !on(id) || !CSS[id]) continue;
+      if (id === 'palette' || !on(id) || !CSS[id] || (id === 'curtain' && c39Curtain())) continue;
       try { css += '\n/* ── ' + id + ' ── */' + CSS[id](p) + '\n'; } catch (e) { ST.lastError = id + ': ' + (e && e.message); }
     }
     try {
@@ -1761,8 +1761,10 @@ html[data-lm-curtain="boot"] #notion-app { opacity: 0; animation: lm-curtain-saf
 html[data-lm-curtain="nav"] .notion-frame > :not(.notion-topbar):not(:has(.notion-topbar)), html[data-lm-curtain="nav"] .notion-frame .notion-scroller { opacity: 0 !important; transition: none !important; }
 html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *, html[data-lm-curtain-up] .notion-frame .notion-scroller { transition: opacity ${reduce() ? 0 : 0.2}s cubic-bezier(.2,0,0,1) !important; }
 @keyframes lm-curtain-safe { to { opacity: 1; } }`;
+  /* v13: ³⁹ Style Sheets で 16c の幕を出している時は、こちらの幕は出さない（幕が二重になって開くのが遅れる） */
+  function c39Curtain() { try { return localStorage.getItem('c39.curtain') === '1'; } catch (e) { return false; } }
   function curtainBoot() {
-    if (!on('curtain')) return;
+    if (!on('curtain') || c39Curtain()) return;
     if (!document.documentElement) {   // document-start の最初の瞬間は <html> もまだ無い → できた瞬間に幕を掛ける
       const w = new MutationObserver(() => { if (document.documentElement) { w.disconnect(); apply(); curtainBoot(); } });
       w.observe(document, { childList: true });
@@ -1805,7 +1807,7 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
   }
   /* ページを移る時: クリックの瞬間（Notion が描き変える前）に本文だけ隠す */
   document.addEventListener('click', (e) => {
-    if (!on('curtain') || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (!on('curtain') || c39Curtain() || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const a = e.target instanceof Element ? e.target.closest('a[href]') : null;
     if (!a || a.target === '_blank' || a.closest('.cordi-pop, #lm-panel, [id^="s38"]')) return;
     let u; try { u = new URL(a.getAttribute('href'), location.href); } catch (x) { return; }

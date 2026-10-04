@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁸ _ Scholar
 // @namespace    https://cordivestium.local/scholar
-// @version      21.0.0
+// @version      22.0.0
 // @description  v21.0.0: Notion の「数式を編集」に Cordivestium の関数（標準報酬月額・年齢・和暦…）とマクロを統合（Notion の数式として書き込む）。Notion を「学び」と「計算」に強くする柱（²⁶ Atelier ＝文字、³⁷ Lumière ＝見た目 と並ぶ三本柱の一つ）。【計算】Excel と同じ書き方の数式（SUM・AVERAGEIFS・VLOOKUP・XLOOKUP・INDEX/MATCH・TEXT・DATEDIF・FILTER・SORT・UNIQUE など 180 余りの関数、A1 参照・範囲・列の名前での参照）で、表のビューを丸ごと写した「シート」（⌃⌥E）を開き、計算の列・集計・条件付き書式（色の段階・データバー・印）をつけ、結果を Notion のプロパティへ書き戻せる。マクロ（手順を組んで、どの行がどう変わるかを確かめてから一括で書き込み・元に戻せる。JavaScript でも書ける）。【学び】赤シート（赤い文字を隠す・⌃⌥K）、穴埋め（色を付けた語を隠す）、DB を単語帳にして間隔反復（忘れかけた頃にもう一度）、ポモドーロと学習記録（日ごとの時間・草のような記録）、続きから読む、選んだ式をその場で計算（⌃⌥=）。上の帯の Σ で学び・計算・記録の小窓（⌃⌥Q）。v11: 社労士（試験までの日数・基準点チェッカー・○×演習・選択式ドリル・法律上の年齢や期間の計算）・語学（読み上げ・書き取り）・用語に乗せて意味・読書／推し／ニュースの記録。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -59,7 +59,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '21.0.0';
+  const VERSION = '22.0.0';
   const TAG = '[³⁸ Scholar v' + VERSION + ']';
   if (window.__c38 && window.__c38.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -3039,6 +3039,48 @@
     { id: 'ZEIKOMI', name: '税込', en: 'ZEIKOMI', cat: '推し・記録', ret: 'number', args: [['税抜の金額', 'n'], ['税率', 's', [['1.1', '10%'], ['1.08', '8%（軽減）']]]],
       desc: '税抜の金額から税込（1 円未満は切り捨て）。推し活の出費の記録に。', ex: ['税込(prop("金額")) → 3300'], f: (a) => 'floor(' + a[0] + ' * ' + a[1] + ')' }
   ];
+  /* v22: 表引き・集計（Excel の VLOOKUP・SUMIF…）— Notion では別の DB の値は「リレーション」の先から引く。
+     find／filter／map を使った Notion の式に置き換えて書き込む（関係先の列の名前はそのまま打つ） */
+  const Q = (t) => '"' + String(t).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+  const FXX = [
+    { id: 'VLOOKUP', name: 'VLOOKUP（表引き）', en: 'VLOOKUP', cat: '表引き・集計', ret: 'text', args: [['関係（リレーション）', 'r'], ['探す列（関係先）', 't', 'Name'], ['探す値', 'v'], ['返す列（関係先）', 't', 'No.']],
+      desc: 'リレーションの先の DB から、「探す列」が「探す値」と同じ行を見つけ、その行の「返す列」を返す。Excel の VLOOKUP(値, 表, 列, FALSE) と同じ。', ex: ['VLOOKUP(Series, Name, prop("シリーズ名"), No.)', 'prop("Series").find(current.prop("Name") == prop("シリーズ名")).prop("No.")'],
+      f: (a) => a[0] + '.find(current.prop(' + Q(a[1]) + ') == ' + a[2] + ').prop(' + Q(a[3]) + ')' },
+    { id: 'XLOOKUP', name: 'XLOOKUP（見つからない時も）', en: 'XLOOKUP', cat: '表引き・集計', ret: 'text', args: [['関係（リレーション）', 'r'], ['探す列（関係先）', 't', 'Name'], ['探す値', 'v'], ['返す列（関係先）', 't', 'No.'], ['見つからない時', 't', '—']],
+      desc: 'VLOOKUP と同じだが、見つからない時に出す文字を決められる。', ex: ['XLOOKUP(Series, Name, prop("名前"), No., "—")'],
+      f: (a) => 'lets(h, ' + a[0] + '.find(current.prop(' + Q(a[1]) + ') == ' + a[2] + '), if(empty(h), ' + Q(a[4]) + ', format(h.prop(' + Q(a[3]) + '))))' },
+    { id: 'INDEX', name: 'INDEX（n 番目）', en: 'INDEX', cat: '表引き・集計', ret: 'text', args: [['関係（リレーション）', 'r'], ['何番目', 'k', 1], ['返す列（関係先）', 't', 'Name']],
+      desc: 'リレーションの n 番目のページの、ある列の値。', ex: ['INDEX(Tactus, 1, Works)'], f: (a) => a[0] + '.at(' + a[1] + ' - 1).prop(' + Q(a[2]) + ')' },
+    { id: 'MATCH', name: 'MATCH（何番目にあるか）', en: 'MATCH', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['探す列（関係先）', 't', 'Name'], ['探す値', 'v']],
+      desc: '探す値が、リレーションの何番目にあるか（無ければ 0）。', ex: ['MATCH(Tactus, Works, "予知夢") → 2'], f: (a) => a[0] + '.findIndex(current.prop(' + Q(a[1]) + ') == ' + a[2] + ') + 1' },
+    { id: 'SUMIF', name: 'SUMIF（条件で合計）', en: 'SUMIF', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['条件の列（関係先）', 't', 'Status'], ['条件の値', 'v'], ['足す列（関係先）', 't', '金額']],
+      desc: 'リレーションの先で、条件に合う行だけの合計。', ex: ['SUMIF(明細, 種類, "グッズ", 金額)'], f: (a) => a[0] + '.filter(current.prop(' + Q(a[1]) + ') == ' + a[2] + ').map(current.prop(' + Q(a[3]) + ')).sum()' },
+    { id: 'COUNTIF', name: 'COUNTIF（条件で数える）', en: 'COUNTIF', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['条件の列（関係先）', 't', 'Status'], ['条件の値', 'v']],
+      desc: 'リレーションの先で、条件に合う行の数。', ex: ['COUNTIF(Tactus, 読了, true)'], f: (a) => a[0] + '.filter(current.prop(' + Q(a[1]) + ') == ' + a[2] + ').length()' },
+    { id: 'AVERAGEIF', name: 'AVERAGEIF（条件で平均）', en: 'AVERAGEIF', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['条件の列（関係先）', 't', 'Status'], ['条件の値', 'v'], ['平均する列（関係先）', 't', '点数']],
+      desc: '条件に合う行だけの平均。', ex: ['AVERAGEIF(過去問, 科目, "労基", 点数)'], f: (a) => a[0] + '.filter(current.prop(' + Q(a[1]) + ') == ' + a[2] + ').map(current.prop(' + Q(a[3]) + ')).average()' },
+    { id: 'MAXIFS', name: 'MAXIFS（条件で最大）', en: 'MAXIFS', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['条件の列（関係先）', 't', 'Status'], ['条件の値', 'v'], ['列（関係先）', 't', '点数']],
+      desc: '条件に合う行の中の最大。', ex: ['MAXIFS(過去問, 科目, "労基", 点数)'], f: (a) => a[0] + '.filter(current.prop(' + Q(a[1]) + ') == ' + a[2] + ').map(current.prop(' + Q(a[3]) + ')).max()' },
+    { id: 'MINIFS', name: 'MINIFS（条件で最小）', en: 'MINIFS', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['条件の列（関係先）', 't', 'Status'], ['条件の値', 'v'], ['列（関係先）', 't', '点数']],
+      desc: '条件に合う行の中の最小。', ex: ['MINIFS(過去問, 科目, "労基", 点数)'], f: (a) => a[0] + '.filter(current.prop(' + Q(a[1]) + ') == ' + a[2] + ').map(current.prop(' + Q(a[3]) + ')).min()' },
+    { id: 'SUMR', name: 'SUM（関係先の列を合計）', en: 'SUM', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['足す列（関係先）', 't', '金額']],
+      desc: 'リレーションの先の、ある列の合計（ロールアップを作らずに）。', ex: ['SUM(明細, 金額)'], f: (a) => a[0] + '.map(current.prop(' + Q(a[1]) + ')).sum()' },
+    { id: 'TEXTJOIN', name: 'TEXTJOIN（つないで 1 つの文字に）', en: 'TEXTJOIN', cat: '表引き・集計', ret: 'text', args: [['関係（リレーション）', 'r'], ['列（関係先）', 't', 'Name'], ['区切り', 't', '、']],
+      desc: 'リレーションの先の、ある列の値を区切りでつなぐ。', ex: ['TEXTJOIN(Tactus, Works, "、")'], f: (a) => a[0] + '.map(current.prop(' + Q(a[1]) + ')).join(' + Q(a[2]) + ')' },
+    { id: 'UNIQUEN', name: 'UNIQUE（重ならない数）', en: 'UNIQUE', cat: '表引き・集計', ret: 'number', args: [['関係（リレーション）', 'r'], ['列（関係先）', 't', 'Series']],
+      desc: 'リレーションの先の、ある列の値の種類の数（重なりを除く）。', ex: ['UNIQUE(Tactus, Series) → 4'], f: (a) => a[0] + '.map(current.prop(' + Q(a[1]) + ')).unique().length()' },
+    { id: 'IFERROR', name: 'IFERROR（空なら代わり）', en: 'IFERROR', cat: '表引き・集計', ret: 'text', args: [['値', 'n'], ['空の時', 't', '—']],
+      desc: '値が空なら、代わりの文字。', ex: ['IFERROR(prop("点数"), "未")'], f: (a) => 'if(empty(' + a[0] + '), ' + Q(a[1]) + ', format(' + a[0] + '))' },
+    { id: 'ROUNDUP', name: 'ROUNDUP（切り上げ）', en: 'ROUNDUP', cat: '表引き・集計', ret: 'number', args: [['数', 'n'], ['小数の桁', 'k', 0]],
+      desc: '指定の桁で切り上げ（0 で整数、-3 で千の位）。', ex: ['ROUNDUP(prop("金額"), -3)'], f: (a) => 'ceil(' + a[0] + ' * 10 ^ (' + a[1] + ')) / 10 ^ (' + a[1] + ')' },
+    { id: 'ROUNDDOWN', name: 'ROUNDDOWN（切り捨て）', en: 'ROUNDDOWN', cat: '表引き・集計', ret: 'number', args: [['数', 'n'], ['小数の桁', 'k', 0]],
+      desc: '指定の桁で切り捨て（保険料の 50 銭以下切り捨てなどは別）。', ex: ['ROUNDDOWN(prop("金額"), 0)'], f: (a) => 'floor(' + a[0] + ' * 10 ^ (' + a[1] + ')) / 10 ^ (' + a[1] + ')' },
+    { id: 'EOMONTH', name: 'EOMONTH（月末）', en: 'EOMONTH', cat: '表引き・集計', ret: 'date', args: [['日付', 'd'], ['何か月後', 'k', 0]],
+      desc: 'その日から n か月後の月末の日。', ex: ['EOMONTH(prop("日付"), 0)'], f: (a) => 'dateSubtract(dateAdd(parseDate(formatDate(' + a[0] + ', "YYYY-MM") + "-01"), ' + a[1] + ' + 1, "months"), 1, "days")' },
+    { id: 'DATEDIF', name: 'DATEDIF（期間）', en: 'DATEDIF', cat: '表引き・集計', ret: 'number', args: [['始め', 'd'], ['終わり', 'd'], ['単位', 's', [['years', '年'], ['months', '月'], ['days', '日']]]],
+      desc: '2 つの日付の間（満で数える）。', ex: ['DATEDIF(prop("入社"), prop("退職"), "年")'], f: (a) => 'dateBetween(' + a[1] + ', ' + a[0] + ', "' + a[2] + '")' }
+  ];
+  FXB.unshift(...FXX);
   const FX_ICO = {
     number: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M8.848 3.085c.34.06.567.384.507.724l-.61 3.466h3.42l.65-3.683a.625.625 0 0 1 1.23.216l-.61 3.467h2.435a.625.625 0 1 1 0 1.25h-2.655l-.52 2.95h2.435a.625.625 0 0 1 0 1.25h-2.655l-.65 3.684a.625.625 0 0 1-1.23-.217l.61-3.467h-3.42l-.65 3.684a.625.625 0 0 1-1.23-.217l.61-3.467H4.13a.625.625 0 1 1 0-1.25h2.605l.52-2.95H4.87a.625.625 0 0 1 0-1.25h2.605l.65-3.683a.625.625 0 0 1 .723-.507m2.578 8.39.52-2.95H8.523l-.52 2.95z"/></svg>',
     date: '<svg viewBox="0 0 20 20" style="width:16px;height:100%;display:block;fill:var(--c-icoSec);flex-shrink:0"><path d="M5.25 3.125A2.125 2.125 0 0 0 3.125 5.25v9.5c0 1.174.951 2.125 2.125 2.125h9.5a2.125 2.125 0 0 0 2.125-2.125v-9.5a2.125 2.125 0 0 0-2.125-2.125zm-.875 3.69h11.25v7.935a.875.875 0 0 1-.875.875h-9.5a.875.875 0 0 1-.875-.875z"/></svg>',
@@ -3114,6 +3156,8 @@
       let c;
       if (t === 's') c = '<select data-a="' + i + '">' + opt(x) + '</select>';
       else if (t === 'k') c = '<input data-a="' + i + '" value="' + esc(x == null ? '' : x) + '" inputmode="decimal">';
+      else if (t === 't') c = '<input data-a="' + i + '" value="' + esc(x == null ? '' : x) + '" spellcheck="false">';
+      else if (t === 'v') c = '<select data-a="' + i + '">' + opt(props.map((p) => ['prop:' + p, p])) + '<option value="txt">文字を入れる…</option><option value="num">数を入れる…</option></select>';
       else c = '<select data-a="' + i + '">' + opt(props.map((p) => ['prop:' + p, p]), 'prop:' + pick(l.slice(0, 2))) + (t === 'n' ? '<option value="num">数を入れる…</option>' : '') + '</select>';
       args += '<label>' + esc(l) + '</label>' + c;
     });
@@ -3130,6 +3174,8 @@
       let v = el ? el.value : '';
       if (t === 'k') return String(+v || 0);
       if (t === 's') return v;
+      if (t === 't') return v;
+      if (v === 'txt') { const n = prompt(l + '（文字）', ''); return '"' + String(n || '').replace(/"/g, '\\"') + '"'; }
       if (v === 'num') { const n = prompt(l + '（数）', '0'); return String(+n || 0); }
       return v.startsWith('prop:') ? 'prop("' + v.slice(5).replace(/"/g, '\\"') + '")' : '0';
     });
@@ -3153,11 +3199,15 @@
     sec = tplSec.cloneNode(false);
     sec.setAttribute('data-c38-fx', '1');
     sec.__sig = sig;
-    const head = tplSec.firstElementChild.cloneNode(true);
-    head.querySelectorAll('[role="status"], [contenteditable="false"]').forEach((x) => x.remove());
-    const ht = head.querySelector('.xamitd3') || head.firstElementChild || head;
-    ht.textContent = 'Cordivestium';
-    sec.appendChild(head);
+    /* v22: 種類ごとに見出し（Notion の段の見出しと同じ形・左にアイコン） */
+    const CAT_ICO = { '表引き・集計': 'M3.5 4.5h13v11h-13zM3.5 8h13M3.5 11.5h13M8 4.5v11', '社労士': 'M3.5 6.5h13v9h-13zM7.5 6.5V5h5v1.5M3.5 10.5h13', '暮らし': 'M3.5 9.5L10 4l6.5 5.5M5.5 8v8h9V8', '推し・記録': 'M10 16s-6-3.6-6-8a3.3 3.3 0 0 1 6-1.8A3.3 3.3 0 0 1 16 8c0 4.4-6 8-6 8z', 'マクロ': 'M11 2.5l-6 9h4.5l-1 6 6-9H10z' };
+    const mkHead = (t) => {
+      const head = tplSec.firstElementChild.cloneNode(true);
+      head.querySelectorAll('[role="status"], [contenteditable="false"]').forEach((x) => x.remove());
+      const ht = head.querySelector('.xamitd3') || head.firstElementChild || head;
+      ht.innerHTML = '<svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-inline-end:5px;vertical-align:-2px"><path d="' + (CAT_ICO[t] || CAT_ICO['マクロ']) + '"/></svg>' + esc(t);
+      return head;
+    };
     const tplIt = tplSec.querySelector('[role="menuitem"]');
     const mk = (label, ico, fn, user) => {
       const it = tplIt.cloneNode(true);
@@ -3175,7 +3225,13 @@
       it.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fxShow(dlg, fn, user, true); });
       return it;
     };
-    for (const { m, user } of shown) sec.appendChild(mk(m.name, FX_ICO[m.ret] || FX_ICO.macro, m, user));
+    let lastCat = null;
+    for (const { m, user } of shown) {
+      const cat = user ? 'マクロ' : m.cat;
+      if (cat !== lastCat) { sec.appendChild(mkHead(cat)); lastCat = cat; }
+      sec.appendChild(mk(m.name, FX_ICO[m.ret] || FX_ICO.macro, m, user));
+    }
+    if (!shown.length) sec.appendChild(mkHead('マクロ'));
     if (!q) {
       const save = mk('いまの式をマクロに', FX_ICO.plus, null, false);
       const pres = save.querySelector('[role="presentation"]'); if (pres) pres.innerHTML = '<span style="color: var(--c-texSec);">＋ いまの式をマクロとして保存</span>';

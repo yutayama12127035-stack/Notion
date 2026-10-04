@@ -7,20 +7,20 @@
 
 | # | ご依頼 | ファイル | スクリプト名 | 版 |
 |---|---|---|---|---|
-| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → 36.0.0 → 37.0.0 → 37.1.0 → 37.2.0 → 47.2.0 → 57.2.0 → **67.2.0** |
+| 1・9 | Font など見た目の一元化・次世代版／フルDBヘッダーの書体統一 | `scripts/atelier.user.js` | « No »　²⁶ _ Atelier（旧 Text Styles） | 13.0.0 → 23.0.0 → 24.0.0 → 34.0.0 → 35.0.0 → 36.0.0 → 37.0.0 → 37.1.0 → 37.2.0 → 47.2.0 → 57.2.0 → 67.2.0 → **68.2.0** |
 | 2 | タイトルの改行（テーブルビュー） | `scripts/table-title-linebreak.user.js` | « No »　³⁰ _ Table Title Line Break | 新規 1.0.0 → **1.1.0** |
-| 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → 6.2.0 → 6.3.0 → **6.4.0** |
+| 3 | Icons の色選択で動く | `icon-library.user.js` | « No »　²⁹ _ Icon Library | 5.0.0 → 5.1.0 → 6.1.0 → 6.2.0 → 6.3.0 → 6.4.0 → **7.4.0** |
 | 4 | リレーション内グルーピング（DB） | `scripts/relation-show-all.user.js` | « No »　¹⁴ _ Relation Show All | 0.47.0 → 1.47.0 → 1.48.0 → 1.49.0 → 1.50.0 → 1.51.0 → 1.52.0 → **11.52.0** |
 | 4 | 同（ページ） | `scripts/page-relation-show-all.user.js` | « No »　²³ _ Page Relation Show All | 1.8.0 → 2.8.0 → 2.9.0 → 2.10.0 → **12.10.0** |
 | 5 | 新規ビュー → 表の画像 | `scripts/image-cells.user.js` | « No »　³⁴ _ Image Cells（³¹ Atlas Views は廃止） | 新規 1.0.0 → 2.0.0 → **2.1.0** |
 | 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → 1.1.0 → 1.2.0 → **1.3.0** |
 | 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → 15.7.0 → 15.8.0 → 15.9.0 → **25.9.0** |
 | 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 **1.0.0** |
-| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → 3.2.0 → 13.2.0 → 23.2.0 → **24.2.0** |
-| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 1.0.0 → 1.1.0 → 2.0.0 → **12.0.0** |
-| 11 | 三本柱の二：見た目を厚くする | `scripts/lumiere.user.js` | « No »　³⁷ _ Lumière | 新規 1.0.0 → 11.0.0 → **12.0.0** |
-| 12 | 三本柱の三：学び・Excel の関数とマクロ | `scripts/scholar.user.js` | « No »　³⁸ _ Scholar | 新規 1.0.0 → 11.0.0 → **21.0.0** |
-| 14 | Stylus を ScriptCat に 1 本化 | `scripts/style-sheets.user.js` | « No »　³⁹ _ Style Sheets | 新規 **1.0.0** |
+| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → 3.2.0 → 13.2.0 → 23.2.0 → 24.2.0 → **25.2.0** |
+| 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 1.0.0 → 1.1.0 → 2.0.0 → 12.0.0 → **13.0.0** |
+| 11 | 三本柱の二：見た目を厚くする | `scripts/lumiere.user.js` | « No »　³⁷ _ Lumière | 新規 1.0.0 → 11.0.0 → 12.0.0 → **13.0.0** |
+| 12 | 三本柱の三：学び・Excel の関数とマクロ | `scripts/scholar.user.js` | « No »　³⁸ _ Scholar | 新規 1.0.0 → 11.0.0 → 21.0.0 → **22.0.0** |
+| 14 | Stylus を ScriptCat に 1 本化 | `scripts/style-sheets.user.js` | « No »　³⁹ _ Style Sheets | 新規 1.0.0 → **2.0.0** |
 | 13 | 題字とリレーションの見分け（お手持ちの ⁰⁹） | `scripts/primary-column-marker.user.js` | « No »　⁰⁹ _ Primary Column Marker | 1.13.6 → **11.13.6** |
 | 13 | 同（お手持ちの ¹³） | `scripts/left-edge-unifier.user.js` | « No »　¹³ _ Left-Edge Unifier | 9.3.0 → **19.3.0** |
 
@@ -35,6 +35,21 @@
 | 5 Atlas | メニューに出なかったのを修正。シアター・レコード・ポラロイド・星図を追加（v2.0.0） |
 | 6 ドラッグ | ■が逃げる・Notion が押下を先に取る・離した時にセルが開く、を修正（v1.1.0） |
 | 7 リレーション内グルーピングの線 | 項目の少ないセルでも端まで引くように（v1.48.0） |
+
+## 第12便（2026-10-04）— ビューの設定に統合・サブグループ・Stylus の突き合わせ
+
+| ご指摘・ご依頼 | 対応 |
+|---|---|
+| Orbit の名前が見切れる | 名前ごとに大きさを決め、入らない名前は 2 行にしてハイフンで切る（Asclepi-ophis）。乗せた時はこれまでどおり 1 行（³³ v25.2.0） |
+| Orbit：開く場所で挙動・位置が変わる | 選んでも輪は回さない（⋯ の設定「選んだ大分類を一番上へ回す」で前の動き）。一覧の左端の寄せは覚えて大分類ごとに揺らさない（³³ v25.2.0） |
+| DB の設定画面にも | Notion の「ビューの設定」に、Group の下「サブグループ」と、Cordivestium の段（表の見た目・縦の罫線・最後の列の右の線・縞・ボードを折り返す・1 段の列の数・ギャラリーの形・題名を表紙の上に・シートで開く・条件付き書式）。Notion の行を写して作るので見た目は Notion のまま（³⁶ v13・³⁷ v13・³⁸ v22） |
+| アイコンライブラリ：細かく分類・アイコン | 13 のグループの中をサブグループに（ミリタリー＝階級章・銃器・兵器・戦車/艦/機・装備/徽章・旗/部隊、天体＝太陽と月・惑星・黄道の星座・星座・宇宙…）。グループ・サブグループ・上の並びにアイコン（²⁹ v7.4.0） |
+| DB のアイコンは 1 行目基準 | 題字が 2 行以上（³⁰ の改行・長い題名）の時、アイコンを 1 行目の高さに。セルで上下まん中にしていても 1 行目（Atelier › 題字の列 › アイコン、既定で入。²⁶ v68.2.0） |
+| Stylus の見直し・JS と突き合わせ | ³⁹ をいまの 16 本で作り直し、各行に「対になる JS／重複」の注記。¹⁸ Screen Curtain は ²³ Details に新しい版がある重複 → 既定で切。³⁹ の幕が入っている時は ³⁷ の幕が自動で退く（³⁹ v2.0.0・³⁷ v13） |
+| サブグループ（ボード以外）が無い | ³⁶ は入っていたが入口が小さかった → ビューの設定の「サブグループ」と、左上のボタンを Notion の形に（³⁶ v13.0.0） |
+| 最終列の縦線の入切 | ³⁷「最後の列の右の線」（細部・ビューの設定）。「表を誌面に」を切っていても効く |
+| 関数：VLOOKUP など・なじませる・アイコン | VLOOKUP・XLOOKUP・INDEX・MATCH・SUMIF・COUNTIF・AVERAGEIF・MAXIFS・MINIFS・SUM・TEXTJOIN・UNIQUE・IFERROR・ROUNDUP・ROUNDDOWN・EOMONTH・DATEDIF（リレーションの先から引く Notion の式に置き換え）。一覧は種類ごとの見出し（アイコン付き）（³⁸ v22.0.0） |
+| サブグループを個別に | ビューの設定 › サブグループ › 「グループごと」：このグループはしない・このグループだけ別のプロパティで（³⁶ v13.0.0） |
 
 ## 第11便（2026-10-03）— Stylus を 1 本化・数式に統合・Atelier の再編
 
