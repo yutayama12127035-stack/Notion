@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁹ _ Icon Library
 // @namespace    https://cordivestium.local/icon-library
-// @version      6.4.0
+// @version      7.4.0
 // @description  v6.3.0: 「Notion」タブ — Notion の標準アイコンを名前からグループ分けし、Library と同じ形で一覧（押すと Notion の色で設定）。名前の自動グループ分けに階級の名前（大佐・少尉・軍曹…・general・sergeant…）も。v6.2.0: 拳銃・階級章などの既存のアイコンを正しいグループ（ミリタリーなど）へ振り分け直し・ミリタリーに 10 種追加。Notion のアイコン画面（新しい Icon の画面にも）に Library｜Import。アイコンを選ぶと Figma 風の色・見た目。24 グループに自動で振り分け（学習・形の多数決）。ウェブ横断検索（Iconify・icons8）。PNG／画像 URL をなぞって SVG に。⌃⌥I で単独の窓、⌃⌥U で取り込み。
 // @author       ユウ
 // @match        https://www.notion.so/*
@@ -135,7 +135,7 @@
 
 (function () {
   'use strict';
-  const VERSION = '6.3.0';
+  const VERSION = '7.4.0';
   const SIG_VER = '5.0.0';   // v5.1.0: 形の指紋のキャッシュの版（形の計算を変えた時だけ上げる）
   const UW = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const SVGNS = 'http://www.w3.org/2000/svg';
@@ -994,6 +994,146 @@
    *  一覧の組み立て（標準＋取り込み）
    * ============================================================ */
   /*  24 グループに並べる。標準は決まった順、取り込みはグループの中で名前順（自動ソート） */
+  /* ============================================================
+   *  v7.0.0: グループの中の細かい分類（サブグループ）と、グループ・サブグループのアイコン
+   *   名前・よみ・タグ・id を見て、最初に当たった分類へ。どれにも当たらない物は「その他」。
+   *   2 つ以上の分類に中身がある時だけ、グループの中を分けて見せる
+   * ============================================================ */
+  const GICO = {
+    basic: 'M4 4h5v5H4zM11 4h5v5h-5zM4 11h5v5H4zM11 11h5v5h-5z', arrow: 'M4 10h11M11 6l4 4-4 4', shape: 'M10 3.5l2 4 4.5.6-3.3 3.1.8 4.4L10 13.5 6 15.6l.8-4.4L3.5 8.1 8 7.5z',
+    status: 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM7 10l2 2 4-4.5', note: 'M5 3.5h10v13H5zM7.5 7h5M7.5 10h5M7.5 13h3', book: 'M3.5 5c2-1 4.5-1 6.5.5 2-1.5 4.5-1.5 6.5-.5v10.5c-2-1-4.5-1-6.5.5-2-1.5-4.5-1.5-6.5-.5zM10 5.5v10.5',
+    study: 'M2.5 8L10 4.5 17.5 8 10 11.5zM5.5 9.5v3.5c2.5 2 6.5 2 9 0V9.5', work: 'M3.5 6.5h13v9h-13zM7.5 6.5V5h5v1.5M3.5 10.5h13', money: 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM7.5 7.5L10 10l2.5-2.5M10 10v4M7.5 11h5',
+    comm: 'M4 5h12v8H9l-3.5 3v-3H4z', people: 'M10 9.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4.5 16.5a5.5 5.5 0 0 1 11 0', tech: 'M4 5h12v8H4zM2.5 15.5h15M8 13v2.5M12 13v2.5', media: 'M8 14.5V5l8-1.5v9.5M8 14.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM16 13a2 2 0 1 1-4 0 2 2 0 0 1 4 0z',
+    home: 'M3.5 9.5L10 4l6.5 5.5M5.5 8v8h9V8M8.5 16v-4h3v4', food: 'M6 3.5v5a2 2 0 0 0 4 0v-5M8 3.5v13M14 3.5c-1.5 1-2 3-2 5h2v8', vehicle: 'M3.5 12.5l1.5-5h10l1.5 5v3h-13zM6 15.5v1M14 15.5v1M3.5 12.5h13M6.5 10.5h.01M13.5 10.5h.01',
+    building: 'M4 16.5V5.5l6-2v13M10 7.5h6v9M6 8h2M6 11h2M6 14h2M12.5 10h1.5M12.5 13h1.5M2.5 16.5h15', travel: 'M10 17s-5-4.8-5-9a5 5 0 0 1 10 0c0 4.2-5 9-5 9zM10 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z',
+    hobby: 'M4 4h12v12H4zM7.5 7.5h.01M12.5 7.5h.01M10 10h.01M7.5 12.5h.01M12.5 12.5h.01', health: 'M10 16s-6-3.6-6-8a3.3 3.3 0 0 1 6-1.8A3.3 3.3 0 0 1 16 8c0 4.4-6 8-6 8zM7.5 9h1.5l1-2 1.5 4 1-2h1',
+    nature: 'M6 13.5a3.5 3.5 0 1 1 .8-6.9A4.5 4.5 0 0 1 15.5 8a3 3 0 0 1-.5 5.5zM7 16l1-1.5M11 16l1-1.5', creature: 'M10 16.5V9M10 9c0-3 2-5 5.5-5 0 3.5-2.5 5-5.5 5zM10 11.5C10 9 8 7.5 4.5 7.5c0 3 2.5 4 5.5 4',
+    sky: 'M14.5 12.5A6 6 0 0 1 7.5 5.5 6 6 0 1 0 14.5 12.5zM14 3.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z', sport: 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM10 7l2.5 1.8-1 3h-3l-1-3zM10 3.5V7M16 9l-3.5-.2M4 9l3.5-.2M7.5 15l1-3.2M12.5 15l-1-3.2',
+    season: 'M10 3v14M4 6.5l12 7M4 13.5l12-7M8.5 3.8L10 5.3l1.5-1.5M8.5 16.2L10 14.7l1.5 1.5', tools: 'M12.5 4a3.5 3.5 0 0 0-3.3 4.7L4 14l2 2 5.3-5.2A3.5 3.5 0 0 0 16 7.5l-2 2-2-2 2-2a3.5 3.5 0 0 0-1.5-1.5z',
+    military: 'M10 3l2 4.2 4.6.5-3.4 3.1 1 4.5L10 13l-4.2 2.3 1-4.5-3.4-3.1L8 7.2z', orig: 'M10 3.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5zM4 16.5h12',
+    fav: 'M10 3.5l2 4.1 4.5.6-3.3 3.1.8 4.5L10 13.6l-4 2.2.8-4.5-3.3-3.1 4.5-.6z', recent: 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM10 6.5V10l2.5 1.5', often: 'M4 15.5l4-4 3 3 5-6M12 8.5h4v4',
+    other: 'M5 10h.01M10 10h.01M15 10h.01'
+  };
+  const SUBS = {
+    sky: [
+      ['moon', '太陽と月', 'M14.5 12.5A6 6 0 0 1 7.5 5.5 6 6 0 1 0 14.5 12.5z', /太陽|日の出|日の入|月|日食|昼と夜|sun|moon/i],
+      ['planet', '惑星', 'M10 6.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM3 12c3-1 11-5 14-6', /水星|金星|火星|木星|土星|地球|惑星|planet/i],
+      ['zodiac', '星座（黄道）', 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM10 3.5v13M3.5 10h13', /(おひつじ|おうし|ふたご|かに|しし|おとめ|てんびん|さそり|いて|やぎ|みずがめ|うお)座|黄道/i],
+      ['const', '星座・星', 'M4 14l4-6 4 3 4-6M4 14h.01M8 8h.01M12 11h.01M16 5h.01', /座|星|すばる|三角|北斗|十字/i],
+      ['space', '宇宙・観測', 'M10 3.5l2 5 5 1.5-5 1.5-2 5-2-5-5-1.5 5-1.5z', /銀河|天の川|彗星|ロケット|UFO|衛星|望遠鏡|アストロラーベ|ブラックホール|オーロラ|軌道|星図|宇宙/i]
+    ],
+    shape: [
+      ['num', '数字', 'M7 5l2-1.5V16M5.5 16h7', /^\d|（丸）|（四角）|数字/],
+      ['geo', '図形', 'M4 4h5v5H4zM14 4a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM6.5 11l3 5h-6zM12 11h5v5h-5z', /円|四角|三角|ひし形|角形|半円|リング|二重丸|しずく/],
+      ['star', '星・ハート', 'M10 3.5l2 4.1 4.5.6-3.3 3.1.8 4.5L10 13.6l-4 2.2.8-4.5-3.3-3.1 4.5-.6z', /星|芒星|ハート|きらきら|想い/],
+      ['sym', '記号・飾り', 'M5 10h10M10 5v10', /十字|アスタリスク|ハッシュ|アット|無限|渦巻|波線|ジグザグ|三点|Q&A|月桂樹|紋|罫|花/]
+    ],
+    basic: [
+      ['act', '操作', 'M5 10h10M10 5v10', /プラス|マイナス|バツ|チェック|編集|コピー|ゴミ箱|更新|共有|外部リンク|ダウンロード|アップロード|検索|フィルター|並べ替え|見る|隠す/],
+      ['file', 'ファイル・整理', 'M3.5 6h5l1.5 1.5h6.5v8.5h-13z', /フォルダ|ファイル|文書|クリップ|アーカイブ|受信箱|受け取り|レイヤー/],
+      ['ui', '画面・設定', 'M4 5h12M4 10h12M4 15h12', /メニュー|グリッド|リスト|設定|調整|歯車|インフォ|注意|ヘルプ|ベル/],
+      ['mark', '印・鍵', 'M6 3.5h8v13l-4-3-4 3z', /しおり|タグ|ピン|リンク|鍵|キー|旗|きらめき|家|立方体/]
+    ],
+    arrow: [
+      ['dir', '矢印', 'M4 10h11M11 6l4 4-4 4', /^矢印/],
+      ['chev', '山形・三角', 'M7 5l5 5-5 5', /山形|三角|丸矢印/],
+      ['act', '動き', 'M5 8a5 5 0 0 1 9-2l1.5 1.5M15 12a5 5 0 0 1-9 2l-1.5-1.5', /./]
+    ],
+    status: [
+      ['prog', '進み具合', 'M3.5 10h13M3.5 10h7', /進捗|完了|未着手|進行中|止まって|中止|保留/],
+      ['prio', '優先度', 'M5 15V9M10 15V6M15 15V3.5', /優先|至急|新着/],
+      ['check', 'チェック・切替', 'M3.5 3.5h13v13h-13zM6.5 10l2.5 2.5 4.5-5', /./]
+    ],
+    note: [
+      ['write', '書く道具', 'M13 3.5l3.5 3.5-9 9H4v-3.5z', /ペン|消しゴム|定規|はさみ|マーカー/],
+      ['memo', 'メモ・やること', 'M5 3.5h10v13H5zM7.5 7h5M7.5 10h5', /ノート|付箋|メモ|チェックリスト|やること|カンバン/],
+      ['time', '予定・時間', 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM10 6.5V10l2.5 1.5', /カレンダー|予定|時計|アラーム|砂時計|タイマー/]
+    ],
+    home: [
+      ['room', '家具・部屋', 'M3.5 12v-3a1.5 1.5 0 0 1 3 0v2h7v-2a1.5 1.5 0 0 1 3 0v3zM5 12v3M15 12v3', /ソファ|ランプ|スタンド|ドア|家|鍵|キャンドル|ランタン|睡眠/],
+      ['life', '衣・洗う', 'M7 4l3 2 3-2 3.5 3-2 2V16h-9V9l-2-2z', /服|Tシャツ|ハンガー|洗濯|お風呂|香水/],
+      ['green', '植物', 'M10 16.5V9M10 9c0-3 2-5 5.5-5 0 3.5-2.5 5-5.5 5z', /植物|鉢植え/]
+    ],
+    media: [
+      ['music', '音楽', 'M8 14.5V5l8-1.5v9.5', /音楽|竪琴|ピアノ|音符|マイク|ヘッドホン|スピーカー/],
+      ['photo', '写真・映像', 'M3.5 6h3l1.5-2h4l1.5 2h3v9.5h-13zM10 8a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z', /カメラ|画像|動画|フィルム/],
+      ['ctl', '再生', 'M7 4.5l8 5.5-8 5.5z', /./]
+    ],
+    work: [
+      ['chart', 'グラフ', 'M4 16V9M8.5 16V5M13 16v-5M17 16V7', /グラフ|プレゼン/],
+      ['award', '賞・称号', 'M6.5 4h7v3.5a3.5 3.5 0 0 1-7 0zM10 11v3M7 16.5h6', /バッジ|トロフィー|メダル|王冠|リボン/],
+      ['biz', '仕事', 'M3.5 6.5h13v9h-13zM7.5 6.5V5h5v1.5', /./]
+    ],
+    military: [
+      ['rank', '階級章', 'M5 4l5 3 5-3M5 8l5 3 5-3M5 12l5 3 5-3', /階級|肩章|襟章|袖章|星章|元帥|大将|中将|少将|准将|大佐|中佐|少佐|大尉|中尉|少尉|准尉|曹長|軍曹|伍長|兵長|上等兵|等兵|(陸|海|空)(将補?|佐|尉|曹)|[一二三](陸|海|空)?(佐|尉|曹)|かいきゅう|rank|insignia|epaulette|chevron|general|colonel|lieutenant|sergeant|corporal|admiral|marshal|brigadier|star-rank/i],
+      ['arms', '銃器・刃物', 'M3.5 9.5h11l2-2M5 9.5v4h3l1-2.5M12 9.5v1.5', /拳銃|ピストル|リボルバー|ライフル|機関銃|散弾銃|小銃|銃|弾丸|弾薬|銃弾|短剣|軍刀|剣|ナイフ|けんじゅう|らいふる|たんけん|pistol|handgun|revolver|rifle|shotgun|gun|bullet|ammo|dagger|bayonet|sword|knife|machine-?gun/i],
+      ['ord', '兵器・爆発物', 'M10 4c2 2 3 4 3 6.5a3 3 0 0 1-6 0C7 8 8 6 10 4zM8.5 16.5h3', /手榴弾|手りゅう弾|ミサイル|爆弾|地雷|機雷|魚雷|大砲|砲弾|砲台|兵器|しゅりゅうだん|みさいる|ばくだん|grenade|missile|bomb|landmine|torpedo|cannon|artillery|weapon/i],
+      ['veh', '戦車・艦・機', 'M3 12h14l-1.5 3h-11zM5 12V9.5h7l2 2.5M8 9.5V7.5h3', /戦車|戦闘機|爆撃機|軍艦|戦艦|空母|駆逐艦|巡洋艦|護衛艦|揚陸艦|潜水艦|潜望鏡|ヘリ|せんしゃ|せんとうき|ぐんかん|せんすいかん|tank|fighter|jet|warship|battleship|carrier|destroyer|cruiser|frigate|submarine|periscope|helicopter|bomber/i],
+      ['gear', '装備・徽章', 'M10 3.5l5 2v4.5c0 3.5-2.2 5.8-5 7-2.8-1.2-5-3.5-5-7V5.5z', /ヘルメット|鉄帽|勲章|徽章|記章|部隊章|盾|認識票|ドッグタグ|双眼鏡|パラシュート|照準|防弾|迷彩|軍服|軍帽|軍靴|へるめっと|くんしょう|helmet|medal|badge|shield|dogtag|binocular|parachute|crosshair|target|armou?r|camo|uniform/i],
+      ['unit', '旗・部隊・施設', 'M5 16.5V3.5M5 4h9l-2 3 2 3H5', /軍旗|旗|部隊|師団|旅団|連隊|大隊|中隊|小隊|分隊|司令|参謀|幕僚|要塞|塹壕|兵舎|基地|レーダー|錨|flag|troop|battalion|regiment|platoon|squad|command|fortress|trench|barracks|base|radar|anchor/i]
+    ],
+    vehicle: [
+      ['rail', '鉄道', 'M5.5 3.5h9v10h-9zM5.5 9h9M7 16.5l1.5-3M13 16.5l-1.5-3', /電車|列車|新幹線|地下鉄|鉄道|駅|でんしゃ|train|metro|subway|rail|station/i],
+      ['car', '車・バス', 'M3.5 12.5l1.5-5h10l1.5 5v3h-13z', /車|バス|トラック|タクシー|パトカー|救急車|消防車|駐車|給油|くるま|ばす|car|bus|truck|taxi|parking|fuel/i],
+      ['air', '空', 'M10 3.5v13M3.5 11l6.5-3 6.5 3M7.5 16l2.5-1.5 2.5 1.5', /飛行機|ヘリ|ロケット|気球|空港|ひこうき|plane|airplane|helicopter|rocket|balloon|airport/i],
+      ['sea', '海', 'M3 13.5c2 1.5 4 1.5 7 0s5-1.5 7 0M5 12l1-4h8l1 4M10 8V4l3 2', /船|ヨット|ボート|フェリー|錨|港|ふね|ship|boat|yacht|sail|ferry|anchor|harbor/i],
+      ['bike', '自転車・バイク', 'M5.5 13.5a2.5 2.5 0 1 0 0 .01M14.5 13.5a2.5 2.5 0 1 0 0 .01M5.5 13.5l3-6h4l2 6M8.5 7.5L10 13.5', /自転車|バイク|スクーター|じてんしゃ|bicycle|bike|motorcycle|scooter/i]
+    ],
+    food: [
+      ['drink', '飲み物', 'M5.5 5h9l-1 11h-7zM5.5 8h9', /コーヒー|お茶|紅茶|ビール|ワイン|ジュース|ミルク|カップ|マグ|飲み|こーひー|おちゃ|coffee|tea|beer|wine|juice|milk|mug|cup|drink/i],
+      ['sweet', 'お菓子・果物', 'M4 12.5h12v4H4zM5 12.5c0-3 2.2-5 5-5s5 2 5 5M10 7.5V5', /ケーキ|クッキー|アイス|チョコ|キャンディ|お菓子|果物|りんご|いちご|ぶどう|バナナ|みかん|cake|cookie|ice|choco|candy|sweet|fruit|apple|strawberry|grape|banana/i],
+      ['meal', '料理・ごはん', 'M3.5 11h13a6.5 6.5 0 0 1-13 0zM7 8c0-1 1-1.5 1-2.5M10 8c0-1 1-1.5 1-2.5M13 8c0-1 1-1.5 1-2.5', /ラーメン|おにぎり|寿司|ごはん|料理|食事|パン|ピザ|カレー|弁当|ramen|onigiri|sushi|rice|meal|bread|pizza|curry|bento|utensil|food/i]
+    ],
+    creature: [
+      ['animal', '動物', 'M7 6.5a1.5 1.5 0 1 0 0-.01M13 6.5a1.5 1.5 0 1 0 0-.01M4.5 10a1.5 1.5 0 1 0 0-.01M15.5 10a1.5 1.5 0 1 0 0-.01M10 10c-2.5 0-4 2.5-4 4.5 0 1.5 2 1.5 4 1.5s4 0 4-1.5c0-2-1.5-4.5-4-4.5z', /猫|犬|ねこ|いぬ|うさぎ|くま|動物|足跡|肉球|cat|dog|rabbit|bear|paw|animal|fox|horse|lion/i],
+      ['bird', '鳥・魚・虫', 'M3.5 10c3-4 7-4 10 0-3 4-7 4-10 0zM13.5 10l3-2.5v5z', /鳥|魚|蝶|虫|ちょう|とり|さかな|むし|貝|羽|bird|fish|butterfly|bug|insect|shell|feather|whale|bee/i],
+      ['plant', '植物・花', 'M10 16.5V9M10 9c0-3 2-5 5.5-5 0 3.5-2.5 5-5.5 5z', /花|桜|木|葉|草|芽|サボテン|きのこ|クローバー|植物|はな|さくら|flower|sakura|tree|leaf|pine|sprout|cactus|mushroom|clover|plant/i]
+    ],
+    sport: [
+      ['ball', '球技', 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM3.5 10h13M10 3.5c2 2 2 11 0 13M10 3.5c-2 2-2 11 0 13', /サッカー|野球|バスケ|テニス|ゴルフ|バレー|ラグビー|卓球|ボール|soccer|baseball|basket|tennis|golf|volley|rugby|ping|ball/i],
+      ['body', '運動・体', 'M10 5.5a1.5 1.5 0 1 0 0-.01M7 16.5l2-5 2 2 1.5 3M6 10l3-2.5h2.5l2 2', /走|ラン|ジム|ダンベル|ヨガ|筋|水泳|泳|自転車|run|gym|dumbbell|yoga|swim|fitness|workout/i],
+      ['win', '勝負・表彰', 'M6.5 4h7v3.5a3.5 3.5 0 0 1-7 0zM10 11v3M7 16.5h6M6.5 5.5H4.5a2 2 0 0 0 2 3M13.5 5.5h2a2 2 0 0 1-2 3', /トロフィー|メダル|優勝|表彰|勝|旗|trophy|medal|win|award|flag/i]
+    ],
+    season: [
+      ['spring', '春', 'M10 7a2 2 0 1 0 0 .01M10 4v1M10 9v7', /春|桜|ひな|こどもの日|入学|卒業|はる|spring|sakura|easter/i],
+      ['summer', '夏', 'M10 6.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17', /夏|花火|海|すいか|七夕|祭|うちわ|なつ|summer|firework|beach|festival/i],
+      ['autumn', '秋', 'M10 16.5V10M10 10c-4 0-6-2.5-6-6 3.5 0 6 2 6 6zM10 10c4 0 6-2.5 6-6-3.5 0-6 2-6 6z', /秋|紅葉|ハロウィン|月見|かぼちゃ|あき|autumn|fall|halloween|pumpkin|maple/i],
+      ['winter', '冬', 'M10 3v14M4 6.5l12 7M4 13.5l12-7', /冬|雪|クリスマス|正月|門松|鏡餅|バレンタイン|ふゆ|winter|snow|christmas|newyear|valentine/i]
+    ],
+    tools: [
+      ['hand', '手道具', 'M12.5 4a3.5 3.5 0 0 0-3.3 4.7L4 14l2 2 5.3-5.2A3.5 3.5 0 0 0 16 7.5l-2 2-2-2 2-2', /ハンマー|レンチ|ドライバー|スパナ|ペンチ|のこ|ねじ|hammer|wrench|screwdriver|spanner|pliers|saw|screw|nut|bolt/i],
+      ['paint', '塗る・測る', 'M5 4h8v4H5zM13 6h2v4h-6v2M9 12v4.5', /ペンキ|はけ|ローラー|定規|メジャー|水平|paint|brush|roller|ruler|measure|level/i],
+      ['mach', '機械・電気', 'M10 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM10 3.5v2M10 14.5v2M3.5 10h2M14.5 10h2M5.5 5.5l1.5 1.5M13 13l1.5 1.5M5.5 14.5L7 13M13 7l1.5-1.5', /歯車|ギア|機械|電気|電池|プラグ|ドリル|gear|cog|machine|battery|plug|drill|electric/i]
+    ],
+    nature: [
+      ['weather', '天気', 'M6 13.5a3.5 3.5 0 1 1 .8-6.9A4.5 4.5 0 0 1 15.5 8a3 3 0 0 1-.5 5.5z', /晴|曇|雨|雪|雷|風|虹|傘|天気|はれ|くもり|あめ|ゆき|sun|cloud|rain|snow|thunder|wind|rainbow|umbrella|weather/i],
+      ['temp', '温度・水', 'M10 3.5v8M8 11.5a2.5 2.5 0 1 0 4 0V4.5a2 2 0 0 0-4 0z', /温度|水|しずく|波|氷|火|炎|temperature|thermo|water|drop|wave|ice|fire|flame/i],
+      ['land', '山・大地', 'M2.5 16l5-8 3 4.5 2-3 5 6.5z', /山|森|岩|大地|砂漠|島|火山|やま|mountain|forest|rock|desert|island|volcano/i]
+    ],
+    tech: [
+      ['device', 'デバイス', 'M4 5h12v8H4zM2.5 15.5h15', /パソコン|スマホ|タブレット|キーボード|マウス|モニター|プリンター|computer|laptop|phone|mobile|tablet|keyboard|mouse|monitor|printer|device/i],
+      ['code', 'コード・データ', 'M7.5 6L4 10l3.5 4M12.5 6L16 10l-3.5 4', /コード|プログラム|データ|サーバ|クラウド|データベース|code|program|data|server|cloud|database|terminal|bug/i],
+      ['net', '通信・電波', 'M3.5 8a9 9 0 0 1 13 0M6 10.5a5.5 5.5 0 0 1 8 0M8.5 13a2 2 0 0 1 3 0M10 15.5h.01', /wifi|電波|通信|ネット|bluetooth|アンテナ|signal|network|antenna|wireless|link/i]
+    ],
+    people: [
+      ['face', '顔・気持ち', 'M10 3.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM7.5 8.5h.01M12.5 8.5h.01M7 12c1.5 1.5 4.5 1.5 6 0', /顔|笑|泣|怒|気持ち|えがお|かお|face|smile|cry|angry|emoji|happy|sad/i],
+      ['person', '人・チーム', 'M10 9.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4.5 16.5a5.5 5.5 0 0 1 11 0', /人|ユーザー|チーム|赤ちゃん|家族|user|team|people|person|baby|family|group/i],
+      ['hand', '手・しぐさ', 'M7 10V5a1 1 0 0 1 2 0v4M9 9V4a1 1 0 0 1 2 0v5M11 9V5a1 1 0 0 1 2 0v6c0 3-2 5-4.5 5S5 14 5 12v-2a1 1 0 0 1 2 0', /手|拍手|いいね|握手|指|はくしゅ|hand|clap|like|thumb|handshake|finger|wave/i]
+    ]
+  };
+  const SUB_TXT = (x) => [x.ja, x.kana, x.tags, x.id, x.hint].filter(Boolean).join(' ');
+  function subsOf(gid, list) {
+    const defs = SUBS[gid];
+    if (!defs || list.length < 6) return null;
+    const out = defs.map((d) => ({ id: d[0], ja: d[1], ico: d[2], re: d[3], list: [] }));
+    const other = { id: 'other', ja: 'その他', ico: GICO.other, list: [] };
+    for (const x of list) { const t = SUB_TXT(x); const hit = out.find((s) => s.re.test(t)); (hit || other).list.push(x); }
+    const used = out.filter((s) => s.list.length);
+    if (used.length < 2) return null;
+    if (other.list.length) used.push(other);
+    return used;
+  }
+  const gico = (k, sz) => '<svg class="c29-gi" viewBox="0 0 20 20" width="' + (sz || 14) + '" height="' + (sz || 14) + '" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="' + (GICO[k] || k || GICO.other) + '"/></svg>';
   let ALL = [], BYID = new Map(), GROUPS = [], WORDIDX = new Map();
   const jaSort = (a, b) => (a.ja || '').localeCompare(b.ja || '', 'ja', { numeric: true });
   function rebuild() {
@@ -2094,7 +2234,14 @@
     const busy = root.querySelector('.c29-busy'), busyT = busy.querySelector('span'), busyB = busy.querySelector('button');
     let act = -1;
     const cell = (x) => `<button class="c29-cell" data-id="${esc(x.id)}" title="${esc(x.ja)}"><img alt="" src="${dataUrl(x)}"></button>`;
-    const sec = (t, list, id) => (list.length ? `<div class="c29-h"${id ? ` data-sec="${id}"` : ''}>${esc(t)}<span>${list.length}</span></div><div class="c29-grid">${list.map(cell).join('')}</div>` : '');
+    /* v7: 見出しにアイコン・グループの中はサブグループに分ける */
+    const sec = (t, list, id, ik) => {
+      if (!list.length) return '';
+      const subs = id ? subsOf(id, list) : null;
+      const h = `<div class="c29-h"${id ? ` data-sec="${id}"` : ''}>${gico(ik || id)}${esc(t)}<span>${list.length}</span></div>`;
+      if (!subs) return h + `<div class="c29-grid">${list.map(cell).join('')}</div>`;
+      return h + subs.map((sb) => `<div class="c29-sh">${gico(sb.ico, 12)}${esc(sb.ja)}<span>${sb.list.length}</span></div><div class="c29-grid">${sb.list.map(cell).join('')}</div>`).join('');
+    };
     const total = () => { foot.textContent = `${ALL.length} 個 ・ ${GROUPS.filter((g) => g.list.length).length} グループ ・ 押すと色を選べます ・ 右クリックで編集`; };
     function render() {
       root.c29.dirty = false;
@@ -2106,11 +2253,11 @@
         gnav.innerHTML = '';
       } else {
         const live = (ids) => ids.map((i) => BYID.get(i)).filter((x) => x && ALL.includes(x));
-        html += sec('お気に入り', live(P.fav));
-        html += sec('最近', live(P.recent));
-        html += sec('よく使う', ALL.filter((x) => (P.learn[x.id] || {}).n >= 3).sort((a, b) => P.learn[b.id].n - P.learn[a.id].n).slice(0, 10));
+        html += sec('お気に入り', live(P.fav), '', 'fav');
+        html += sec('最近', live(P.recent), '', 'recent');
+        html += sec('よく使う', ALL.filter((x) => (P.learn[x.id] || {}).n >= 3).sort((a, b) => P.learn[b.id].n - P.learn[a.id].n).slice(0, 10), '', 'often');
         for (const g of GROUPS) html += sec(g.ja, g.list, g.id);
-        gnav.innerHTML = GROUPS.filter((g) => g.list.length).map((g) => `<button data-g="${g.id}">${esc(g.ja)}</button>`).join('');
+        gnav.innerHTML = GROUPS.filter((g) => g.list.length).map((g) => `<button data-g="${g.id}">${gico(g.id, 12)}${esc(g.ja)}</button>`).join('');
       }
       body.innerHTML = html; act = -1; total();
     }
@@ -2992,7 +3139,12 @@
 .c29-sw button:hover { transform:scale(1.15); }
 .c29-sw button.on { box-shadow:0 0 0 2px var(--bg), 0 0 0 3.5px rgba(35,131,226,.9); }
 .c29-body { flex:1; overflow:auto; padding:2px 10px 10px; }
-.c29-h { font-size:11.5px; font-weight:500; color:var(--mut); margin:10px 2px 4px; }
+.c29-h { font-size:11.5px; font-weight:500; color:var(--mut); margin:10px 2px 4px; display:flex; align-items:center; gap:5px; }
+.c29-h .c29-gi { flex:none; opacity:.85; }
+.c29-sh { display:flex; align-items:center; gap:5px; margin:8px 2px 3px 14px; font-size:10.5px; font-weight:500; color:var(--mut); opacity:.9; }
+.c29-sh span { margin-left:2px; opacity:.65; }
+.c29-sh .c29-gi { flex:none; opacity:.75; }
+.c29-gnav button .c29-gi { vertical-align:-2px; margin-right:3px; }
 .c29-h span { margin-left:5px; opacity:.7; }
 .c29-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(34px, 1fr)); gap:2px; }
 .c29-cell { all:unset; height:34px; display:flex; align-items:center; justify-content:center; border-radius:6px; cursor:pointer; }
