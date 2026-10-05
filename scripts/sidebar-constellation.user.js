@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      51.0.0
-// @description  v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      52.0.0
+// @description  v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -18,10 +18,23 @@
 // @connect      api.anthropic.com
 // @connect      generativelanguage.googleapis.com
 // @connect      ja.wikipedia.org
+// @connect      api.groq.com
+// @connect      openrouter.ai
+// @connect      api.mistral.ai
 // @noframes
 // ==/UserScript==
 
 /*
+ * v52.0.0
+ *   ・サイドの検索窓（B.U.R.I）を押すと Notion の検索画面が開き、右の欄に B.U.R.I のホーム（あいさつ・本棚と AI の状態・最近の質問・聞いてみる）。
+ *     Enter で打った言葉をそのまま聞く。⌘⌥B の浮かぶ B.U.R.I はこれまで通り。検索タブで開かない時は ⌘K を送る。
+ *   ・一覧の先頭の段: 空の時は「何でも聞いてください」と質問の候補、文字がある時は「B.U.R.I に聞く —『…』」。MoA の人数を表示。
+ *   ・答え欄: 調べる → 仲間の下書き → まとめ の進み具合（✓/×）・見出し / 箇条書き / 太字・出典の印 [W1][N1]（押すと開く）・
+ *     「相談の中身」（仲間それぞれの下書き）・出典カード・コピー・もう一度・次に聞けそうなこと。⌂ ホーム・⚙ 設定・新しい話。
+ *   ・MoA（Mixture of Agents）: 鍵の入った無料の仲間（Gemini / Groq / OpenRouter の無料モデル / Mistral / Chrome 内蔵）が
+ *     それぞれ下書き → メインが根拠と照らして一つにまとめる。仲間が 1 人ならそのまま答える。だめな仲間は飛ばす。
+ *     Groq・OpenRouter・Mistral は鍵で使えるモデルの一覧を聞いて良いものを選ぶ（OpenRouter は無料モデルだけ）。
+ *   ・AI の設定を一新（サイドと検索画面で同じもの）: 答え方（ひとつ / 相談）・メイン・仲間ごとの鍵と ✓・まとめてつながるか試す。
  * v51.0.0
  *   ・Notion の検索画面に融合: 結果一覧の先頭に「B.U.R.I」の段（Yesterday などと同じ見た目）。答えは右のプレビュー欄に
  *     Notion のプレビューと同じカードで出す（表紙・題・出典の行・続けて聞く欄）。↑↓ でプレビューに戻り、段を押せば答えに戻る。
@@ -59,7 +72,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '51.0.0';
+  const VERSION = '52.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1846,20 +1859,44 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const gmGet = (k, d) => { try { return typeof GM_getValue === 'function' ? GM_getValue(k, d) : d; } catch (e) { return d; } };
     const gmSet = (k, v) => { try { if (typeof GM_setValue === 'function') GM_setValue(k, v); } catch (e) { /* noop */ } };
     const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false,
-      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'auto'), provider: '' };
-    /* v49: どの AI を使うか — gemini（無料・既定）/ chrome（無料・鍵なし）/ claude（有料）/ none（抜粋だけ） */
+      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'auto'), provider: '',
+      keys: {}, use: {}, moa: gmGet('c33.buri.moa', true) !== false };
+    /* v49: どの AI を使うか — v52 からは「メイン（＝まとめ役）」。gemini / groq / openrouter / mistral（無料）・chrome（無料・鍵なし）・claude（有料）・none */
     AI.provider = gmGet('c33.buri.provider', '') || (AI.key ? 'claude' : 'gemini');
     if (/^gemini-(flash-latest|2\.5-flash)$/.test(AI.gmodel)) AI.gmodel = 'auto';   // v49/v50 の既定は「おまかせ」へ
-    const PROVIDERS = [['gemini', 'Google Gemini（無料枠・おすすめ）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし・端末内）'], ['claude', 'Claude（有料・使った分だけ）'], ['none', '使わない（見つけた抜粋をつなぐだけ）']];
+    if (/^gemini-.*pro/.test(AI.gmodel)) AI.gmodel = 'pro';
+    /* v52: 仲間（MoA = Mixture of Agents）。みんなが下書き → メインが根拠と照らしてまとめる */
+    const TEAM = {
+      gemini: { name: 'Gemini', free: true, keyUrl: 'https://aistudio.google.com/apikey', ph: 'AIza…', note: 'Google。無料枠（Flash は 1 日 20 回前後・Flash-Lite は数百回）' },
+      groq: { name: 'Groq', free: true, keyUrl: 'https://console.groq.com/keys', ph: 'gsk_…', note: '速い。gpt-oss・Llama・Qwen など。無料（1 日 1,000 回前後）',
+        base: 'https://api.groq.com/openai/v1', prefer: [/gpt-oss-120b/, /llama-3\.3-70b/, /qwen/, /gpt-oss-20b/, /llama/], skip: /(whisper|tts|guard|safeguard|embed|playai|orpheus|compound|distil)/ },
+      openrouter: { name: 'OpenRouter', free: true, keyUrl: 'https://openrouter.ai/keys', ph: 'sk-or-…', note: '1 つの鍵で無料モデル多数（DeepSeek・Qwen・Llama ほか）。無料（1 日 50〜200 回）',
+        base: 'https://openrouter.ai/api/v1', freeOnly: true, prefer: [/deepseek.*(chat|v3)/, /qwen3/, /llama-3\.3-70b/, /gemma-3/, /mistral/, /deepseek/], skip: /(vision|vl-|coder|embed|guard|-r1-distill)/,
+        headers: { 'HTTP-Referer': 'https://www.notion.so', 'X-Title': 'B.U.R.I' } },
+      mistral: { name: 'Mistral', free: true, keyUrl: 'https://console.mistral.ai/api-keys', ph: '…', note: 'フランスの AI。無料の Experiment プラン（電話番号の確認が要る）',
+        base: 'https://api.mistral.ai/v1', prefer: [/^mistral-medium-latest$/, /^mistral-large-latest$/, /^mistral-small-latest$/, /^mistral-medium/, /^mistral-large/, /^mistral-small/], skip: /(embed|moderation|ocr|codestral|pixtral|voxtral|devstral|magistral|ministral)/ },
+      chrome: { name: 'Chrome 内蔵', free: true, nokey: true, note: '鍵なし・端末の中だけ。素朴なので相談役に向く' },
+      claude: { name: 'Claude', free: false, keyUrl: 'https://console.anthropic.com/settings/keys', ph: 'sk-ant-…', note: '有料（使った分だけ）。いちばん上手' }
+    };
+    const TEAM_IDS = Object.keys(TEAM);
+    for (const id of TEAM_IDS) AI.keys[id] = id === 'gemini' ? AI.gkey : id === 'claude' ? AI.key : gmGet('c33.buri.k.' + id, '');
+    AI.use = Object.assign({ gemini: true, groq: true, openrouter: true, mistral: true, chrome: false, claude: false }, gmGet('c33.buri.use', {}) || {});
+    function setKey(id, k) { AI.keys[id] = k; if (id === 'gemini') { AI.gkey = k; gmSet('c33.buri.gkey', k); gemList = null; gmSet('c33.buri.gbad', {}); } else if (id === 'claude') { AI.key = k; gmSet('c33.buri.key', k); } else { gmSet('c33.buri.k.' + id, k); oaiList[id] = null; } }
+    const PROVIDERS = [['gemini', 'Google Gemini（無料）'], ['groq', 'Groq（無料）'], ['openrouter', 'OpenRouter（無料モデル）'], ['mistral', 'Mistral（無料）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし）'], ['claude', 'Claude（有料）'], ['none', '使わない（抜粋だけ）']];
     const GEMINI_MODELS = [['auto', 'おまかせ（Flash → 回数切れなら Flash-Lite）'], ['lite', 'Flash-Lite 優先（1 日の回数がいちばん多い）'], ['pro', 'Pro を試す（無料枠では使えないことが多い → だめなら Flash）']];
     const chromeLM = () => { try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; return W.LanguageModel || (W.ai && W.ai.languageModel) || null; } catch (e) { return null; } };
-    function aiOn() {
-      if (AI.provider === 'gemini') return !!AI.gkey;
-      if (AI.provider === 'claude') return !!AI.key;
-      if (AI.provider === 'chrome') return !!chromeLM();
-      return false;
+    const ready = (id) => id === 'chrome' ? !!chromeLM() : !!(TEAM[id] && AI.keys[id]);
+    /* 相談に加わる仲間（使う ✓ かつ 鍵あり）。メインは必ず先頭 */
+    function team() {
+      const t = TEAM_IDS.filter((id) => AI.use[id] && ready(id));
+      if (ready(AI.provider) && !t.includes(AI.provider)) t.unshift(AI.provider);
+      return t.sort((a, b) => (b === AI.provider) - (a === AI.provider));
     }
-    const aiName = () => AI.provider === 'gemini' ? 'Gemini' : AI.provider === 'chrome' ? 'Chrome 内蔵 AI' : AI.provider === 'claude' ? 'Claude' : '';
+    function aiOn() { return AI.provider !== 'none' && (ready(AI.provider) || team().length > 0); }
+    const moaOn = () => AI.moa && team().length >= 2;
+    const aiName = () => moaOn() ? 'MoA（' + team().map((id) => TEAM[id].name).join('＋') + '）' : (TEAM[AI.provider] && ready(AI.provider) ? TEAM[AI.provider].name : (team()[0] ? TEAM[team()[0]].name : ''));
+    let aiProgress = null;   // 画面への進み具合の知らせ（⌘K の答え欄が使う）
+    const prog = (e) => { try { if (aiProgress) aiProgress(e); } catch (x) { /* noop */ } };
     const AI_MODELS = [['claude-opus-5-5', 'Claude Opus 5.5（既定・いちばん賢い）'], ['claude-sonnet-5-5', 'Claude Sonnet 5.5（速い）'], ['claude-haiku-4-5', 'Claude Haiku 4.5（いちばん安い）']];
     const aiHist = [];   // これまでの会話（文字だけ・後ろに足すだけ）
     function gmReq(o) {
@@ -1974,28 +2011,23 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       t += '# Notion の検索結果・本棚\n' + (sh.concat(nn).join('\n') || '（なし）') + '\n\n# Web の検索結果\n' + (ww.join('\n') || '（なし・または Web 検索を切っている）');
       return t;
     }
-    async function claude(question, ctxText) {
-      const msgs = aiHist.slice(-8).concat([{ role: 'user', content: ctxText + '\n\n# 質問\n' + question }]);
+    /* v52: どの AI も「system と会話（turns）」を渡して文章を返す同じ形にそろえる（MoA で混ぜるため） */
+    async function claudeChat(sys, turns, maxTok) {
       const r = await gmReq({
         method: 'POST', url: 'https://api.anthropic.com/v1/messages',
         headers: { 'content-type': 'application/json', 'x-api-key': AI.key, 'anthropic-version': '2023-06-01', 'anthropic-beta': 'server-side-fallback-2026-07-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-        data: JSON.stringify({ model: AI.model, max_tokens: 4000, system: SYS, messages: msgs, output_config: { effort: 'low' }, fallbacks: 'default' })
+        data: JSON.stringify({ model: AI.model, max_tokens: Math.max(1024, maxTok || 4000), system: sys, messages: turns, output_config: { effort: 'low' }, fallbacks: 'default' })
       });
       let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
       if (!j) return { err: r.err || ('応答を読めませんでした（' + r.status + '）') };
       if (j.type === 'error' || r.status >= 400) return { err: (j.error && j.error.message) || ('エラー ' + r.status) };
       if (j.stop_reason === 'refusal') return { err: 'この質問には答えられないと判断されました。' };
       const text = (j.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('').trim();
-      aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: text || '（空の返事）' });
-      return { text };
+      return text ? { text, model: j.model || AI.model } : { err: '空の返事でした' };
     }
-    /* v49: Google Gemini（無料枠）— 鍵は aistudio.google.com で無料。請求先を登録しない限り課金されない */
-    async function gemini(question, ctxText) {
-      const contents = aiHist.slice(-8).map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }))
-        .concat([{ role: 'user', parts: [{ text: ctxText + '\n\n# 質問\n' + question }] }]);
-      const r = await geminiRun({ systemInstruction: { parts: [{ text: SYS }] }, contents, generationConfig: { maxOutputTokens: 8192, temperature: 0.5 } });
-      if (r.text) aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text });
-      return r;
+    async function geminiChat(sys, turns, maxTok) {
+      const contents = turns.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }));
+      return geminiRun({ systemInstruction: { parts: [{ text: sys }] }, contents, generationConfig: { maxOutputTokens: Math.max(2048, maxTok || 8192), temperature: 0.5 } });
     }
     /* v51: 使えるモデルは鍵ごとに違う → Google に一覧を聞いて選ぶ。だめだったモデルはしばらく避ける（無料枠 0 は 1 日・回数切れは 1 分〜6 時間） */
     const GEMINI_FALLBACK = ['gemini-flash-lite-latest', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
@@ -2054,38 +2086,113 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         : quota ? '無料枠の回数に当たりました。少しおいてからもう一度どうぞ（お金はかかりません）'
         : 'Gemini から返事がありませんでした', detail: all };
     }
-    async function aiTest() {
-      if (AI.provider === 'gemini') { if (!AI.gkey) return { err: '鍵がまだ入っていません' }; return geminiRun({ contents: [{ role: 'user', parts: [{ text: '「つながりました」とだけ返してください。' }] }], generationConfig: { maxOutputTokens: 1024 } }); }
-      if (AI.provider === 'chrome') return chromeAI('「つながりました」とだけ返してください。', '');
-      if (AI.provider === 'claude') { if (!AI.key) return { err: '鍵がまだ入っていません' }; const r = await claude('「つながりました」とだけ返してください。', ''); aiHist.length = Math.max(0, aiHist.length - 2); return r; }
-      return { err: 'AI を使わない設定です' };
+    async function aiTest(id) {
+      id = id || AI.provider;
+      if (id === 'none') return { err: 'AI を使わない設定です' };
+      if (!ready(id)) return { err: id === 'chrome' ? 'この Chrome では内蔵 AI が見つかりません' : '鍵がまだ入っていません' };
+      return chat(id, 'あなたは接続テストの相手です。', [{ role: 'user', content: '「つながりました」とだけ返してください。' }], 256);
     }
     /* v49: Chrome 内蔵 AI（Prompt API / Gemini Nano）— 無料・鍵なし・端末の中だけで動く。読める量が少ないので根拠を短くして渡す */
-    let chromeSess = null, lastAiErr = '';
-    async function chromeAI(question, ctxText) {
+    let lastAiErr = '';
+    async function chromeChat(sys, turns) {
       const LM = chromeLM();
       if (!LM) return { err: 'この Chrome では内蔵 AI が使えません（新しい Chrome とある程度の性能の PC が要ります）' };
       try {
         const opt = { expectedInputs: [{ type: 'text', languages: ['ja', 'en'] }], expectedOutputs: [{ type: 'text', languages: ['ja'] }] };
-        if (typeof LM.availability === 'function') {
-          const av = await LM.availability(opt);
-          if (av === 'unavailable') return { err: 'この端末では Chrome 内蔵 AI が使えません' };
-        }
-        if (!chromeSess) chromeSess = await LM.create(Object.assign({ initialPrompts: [{ role: 'system', content: SYS }] }, opt));
-        const text = String(await chromeSess.prompt(String(ctxText).slice(0, 3500) + '\n\n# 質問\n' + question) || '').trim();
-        if (!text) return { err: '空の返事でした' };
-        aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: text });
-        return { text };
-      } catch (e) {
-        chromeSess = null;
-        return { err: (e && e.message) || 'Chrome 内蔵 AI が動きませんでした（初回はモデルのダウンロード待ちのことがあります）' };
-      }
+        if (typeof LM.availability === 'function') { const av = await LM.availability(opt); if (av === 'unavailable') return { err: 'この端末では Chrome 内蔵 AI が使えません' }; }
+        const prev = turns.slice(0, -1).slice(-4).map((m) => ({ role: m.role, content: String(m.content).slice(0, 800) }));
+        const sess = await LM.create(Object.assign({ initialPrompts: [{ role: 'system', content: sys }].concat(prev) }, opt));
+        const text = String(await sess.prompt(String(turns[turns.length - 1].content).slice(0, 4000)) || '').trim();
+        try { sess.destroy && sess.destroy(); } catch (e) { /* noop */ }
+        return text ? { text, model: 'Gemini Nano' } : { err: '空の返事でした' };
+      } catch (e) { return { err: (e && e.message) || 'Chrome 内蔵 AI が動きませんでした（初回はモデルのダウンロード待ちのことがあります）' }; }
     }
+    /* v52: OpenAI 互換の無料 AI（Groq・OpenRouter・Mistral）— 鍵で使えるモデルの一覧を聞いて、良さそうな順に試す */
+    const oaiList = {};
+    async function oaiModels(id) {
+      const T = TEAM[id];
+      if (oaiList[id]) return oaiList[id];
+      const r = await gmReq({ method: 'GET', timeout: 15000, url: T.base + '/models', headers: Object.assign({ Authorization: 'Bearer ' + AI.keys[id] }, T.headers || {}) });
+      let ids = [];
+      try {
+        const j = JSON.parse(r.text); const arr = Array.isArray(j) ? j : (j.data || j.models || []);
+        ids = arr.filter((m) => !T.freeOnly || /:free$/.test(m.id) || (m.pricing && Number(m.pricing.prompt) === 0 && Number(m.pricing.completion) === 0))
+          .filter((m) => !m.capabilities || m.capabilities.completion_chat !== false)
+          .map((m) => String(m.id || m.name)).filter((n) => n && !(T.skip && T.skip.test(n.toLowerCase())));
+      } catch (e) { /* noop */ }
+      if (r.status === 200 && ids.length) oaiList[id] = ids;
+      return ids;
+    }
+    function oaiRank(id, ids) {
+      const T = TEAM[id], out = [];
+      for (const re of T.prefer) for (const n of ids) if (re.test(n.toLowerCase()) && !out.includes(n)) out.push(n);
+      for (const n of ids) if (!out.includes(n)) out.push(n);
+      const ok = gmGet('c33.buri.m.' + id, '');
+      return [...new Set([ok && ids.includes(ok) ? ok : '', ...out].filter(Boolean))];
+    }
+    const stripThink = (t) => String(t || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+    async function oaiChat(id, sys, turns, maxTok) {
+      const T = TEAM[id];
+      const models = oaiRank(id, await oaiModels(id)).slice(0, 3);
+      if (!models.length) return { err: '使えるモデルが見つかりませんでした（鍵を確かめてください）' };
+      const fails = [];
+      for (const model of models) {
+        const r = await gmReq({ method: 'POST', timeout: 90000, url: T.base + '/chat/completions',
+          headers: Object.assign({ 'content-type': 'application/json', Authorization: 'Bearer ' + AI.keys[id] }, T.headers || {}),
+          data: JSON.stringify({ model, messages: [{ role: 'system', content: sys }].concat(turns), max_tokens: maxTok || 2000, temperature: 0.5 }) });
+        let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
+        const msg = (j && j.error && (j.error.message || j.error)) || r.err || ('HTTP ' + r.status);
+        if (r.status === 200 && j && j.choices && j.choices[0]) {
+          const text = stripThink(j.choices[0].message && j.choices[0].message.content);
+          if (text) { if (gmGet('c33.buri.m.' + id, '') !== model) gmSet('c33.buri.m.' + id, model); return { text, model }; }
+        }
+        fails.push(model + ' → ' + r.status + ' ' + String(msg).slice(0, 140));
+        if (r.status === 401 || r.status === 403) return { err: '鍵が正しくないようです', detail: fails.join('\n') };
+        if (r.status === 0) return { err: 'つながりませんでした（' + msg + '）', detail: fails.join('\n') };
+      }
+      return { err: fails.some((f) => / 429 /.test(f)) ? '無料枠の回数に当たりました' : '返事がありませんでした', detail: fails.join('\n') };
+    }
+    function chat(id, sys, turns, maxTok) {
+      if (id === 'gemini') return geminiChat(sys, turns, maxTok);
+      if (id === 'claude') return claudeChat(sys, turns, maxTok);
+      if (id === 'chrome') return chromeChat(sys, turns, maxTok);
+      if (TEAM[id] && TEAM[id].base) return oaiChat(id, sys, turns, maxTok);
+      return Promise.resolve({ err: 'AI を使わない設定です' });
+    }
+    const AGG = [
+      '',
+      '# いまの役目: まとめ役（MoA の最後の一人）',
+      '・下に、ほかの AI（仲間）が同じ質問に書いた「下書き」がある。',
+      '・下書きを根拠（Notion・本棚・Web の検索結果）と照らし合わせ、正しい点を合わせ、根拠に無いことや誤りは捨てて、ひとつの最良の答えを書く。',
+      '・下書きどうしが食い違う時は根拠に従う。根拠で決められなければ両方を示す。',
+      '・出典番号 [N1] [W2] は、根拠に本当に合うものだけを残す。',
+      '・「下書き A によると」などの舞台裏は書かない。B.U.R.I として、答えだけを話す。'
+    ].join('\n');
+    /* v52: MoA — 仲間がそれぞれ下書き → メイン（まとめ役）が根拠と照らして一つにする。仲間が 1 人なら普通に答える */
     async function askAI(question, ctxText) {
-      if (AI.provider === 'gemini') return gemini(question, ctxText);
-      if (AI.provider === 'chrome') return chromeAI(question, ctxText);
-      if (AI.provider === 'claude') return claude(question, ctxText);
-      return { err: 'AI を使わない設定です' };
+      const turns = aiHist.slice(-8).concat([{ role: 'user', content: ctxText + '\n\n# 質問\n' + question }]);
+      const t = team();
+      const done = (r, extra) => { if (r.text) aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text }); return Object.assign(r, extra || {}); };
+      if (!moaOn()) {
+        const id = ready(AI.provider) ? AI.provider : t[0];
+        prog({ k: 'draft', id, st: 'run' });
+        const r = await chat(id, SYS, turns);
+        prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
+        return done(r, { who: id });
+      }
+      t.forEach((id) => prog({ k: 'draft', id, st: 'run' }));
+      const drafts = await Promise.all(t.map((id) => chat(id, SYS, turns, 1500).then((r) => { prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err }); return Object.assign({ id }, r); })));
+      const good = drafts.filter((d) => d.text);
+      if (!good.length) return { err: drafts.map((d) => TEAM[d.id].name + ': ' + d.err).join(' / '), detail: drafts.map((d) => TEAM[d.id].name + ' → ' + (d.detail || d.err)).join('\n'), drafts };
+      if (good.length === 1) return done({ text: good[0].text, model: good[0].model }, { drafts, who: good[0].id });
+      const aggId = [AI.provider, ...good.map((d) => d.id)].find((id) => ready(id) && id !== 'chrome') || good[0].id;
+      prog({ k: 'merge', id: aggId, st: 'run' });
+      const mergeTurns = aiHist.slice(-4).concat([{ role: 'user', content: ctxText + '\n\n# 質問\n' + question + '\n\n# 仲間の下書き\n' + good.map((d, i) => '## 下書き ' + 'ABCDEFG'[i] + '\n' + d.text).join('\n\n') + '\n\n上の下書きを根拠と照らして、ひとつの最良の答えにしてください。' }]);
+      const r = await chat(aggId, SYS + '\n' + AGG, mergeTurns, 3000);
+      prog({ k: 'merge', id: aggId, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
+      if (r.text) return done({ text: r.text, model: r.model }, { drafts, who: aggId, merged: true });
+      const best = good.slice().sort((a, b) => b.text.length - a.text.length)[0];
+      return done({ text: best.text, model: best.model }, { drafts, who: best.id });
     }
     function firstSentence(s) { const t = String(s || '').replace(/\s+/g, ' ').trim(); const m = /^(.{20,160}?[。．！？!?])/.exec(t); return m ? m[1] : t.slice(0, 120) + (t.length > 120 ? '…' : ''); }
     /* v50: 「お隣の天使様 − 1」「− 2」… を「お隣の天使様（5 冊）」のようにまとめる */
@@ -2098,23 +2205,28 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     async function deep(raw, shelf, baseCards, baseChips) {
       const q = raw.replace(/(について)?(教えて|おしえて|知りたい|調べて|しらべて|って何|ってなに|とは|は\?|は？)/g, ' ').replace(/\s+/g, ' ').trim() || raw;
+      prog({ k: 'search', q });
       const [nh0, gh, kh] = await Promise.all([notionSearch(q), googleSearch(q), wikiSearch(q)]);
       const shelfSet = new Set(shelf.map((r) => nz(r.title)));
       const nh = nh0.filter((x) => !shelfSet.has(nz(x.title)));
       const wseen = new Set(), wh = [];
       for (const x of kh.concat(gh)) { if (!wseen.has(x.url)) { wseen.add(x.url); wh.push(x); } }
       wh.splice(7);
+      prog({ k: 'found', n: shelf.length + nh.length, w: wh.length });
+      const refs = { N: shelf.slice(0, 8).map((r) => ({ title: r.title, url: r.url || '' })).concat(nh.map((x) => ({ title: x.title, url: x.url }))), W: wh.map((x) => ({ title: x.title, url: x.url })) };
+      const R = (o) => Object.assign(o, { refs });
       const cards = (baseCards || []).slice();
       nh.slice(0, 4).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Notion のページ', linkLabel: 'Notion で開く' }));
       wh.slice(0, 3).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Web', linkLabel: 'Web で開く' }));
       if (!nh.length && !wh.length && !shelf.length) return reply('「' + q + '」は、Notion の中にも Web にも見つかりませんでした。言い方を変えて聞いてみてください。', [], exChips().slice(0, 2), ['notion'], q);
       if (aiOn()) {
         const r = await askAI(raw, sourcesText(nh, wh, shelf));
-        if (r.text) return reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q);
+        const moa = { drafts: (r.drafts || []).map((d) => ({ id: d.id, name: TEAM[d.id].name, model: d.model || '', text: d.text || '', err: d.err || '' })), who: r.who ? TEAM[r.who].name : '', model: r.model || '', merged: !!r.merged };
+        if (r.text) return R(Object.assign(reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q), { moa }));
         lastAiErr = r.detail || r.err || '';
-        return reply('（' + aiName() + ' はお休み中: ' + r.err + '。詳しくは「AI」→「つながるか試す」）\n\n' + plain(), cards, baseChips || [], ['notion'], q);
+        return R(Object.assign(reply('（' + aiName() + ' はお休み中: ' + r.err + '。詳しくは「AI」→「つながるか試す」）\n\n' + plain(), cards, baseChips || [], ['notion'], q), { moa }));
       }
-      return reply(plain() + (AI.provider === 'none' ? '' : '\n\n（上の「AI」で無料の Gemini の鍵を入れると、これを読んでまとめて話せます）'), cards, baseChips || [], ['notion'], q);
+      return R(reply(plain() + (AI.provider === 'none' ? '' : '\n\n（「AI」で無料の鍵を入れると、これを読んでまとめて話せます）'), cards, baseChips || [], ['notion'], q));
       function plain() {
         const t = [];
         const heads = new Set(); const good = wh.filter((x) => { if (!x.snippet || x.snippet.length < 25 || looksUrl(x.snippet.slice(0, 60))) return false; const h = nz(x.snippet).slice(0, 30); if (heads.has(h)) return false; heads.add(h); return true; });
@@ -2290,7 +2402,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; chromeSess = null; } };
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; } };
   })();
 
   /* ============================================================
@@ -2381,7 +2493,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const go = mk('button', 'cs-go', null, field); go.type = 'button'; go.innerHTML = LENS; go.setAttribute('aria-label', 'B.U.R.I に聞く');
     const input = mk('input', null, null, field);
     input.id = 'c33-search-input'; input.type = 'text'; input.autocomplete = 'off'; input.spellcheck = false;
-    input.placeholder = 'B.U.R.I';
+    input.placeholder = 'B.U.R.I に聞く・Notion を検索';
     input.setAttribute('aria-label', 'B.U.R.I'); input.setAttribute('aria-expanded', 'false'); input.setAttribute('aria-controls', 'c33-buri');
     
     const close = mk('button', 'cs-close', null, header); close.type = 'button'; close.innerHTML = MENU;
@@ -2542,12 +2654,12 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       let inp = nativeInput();
       if (!inp) {
         const t = obTabs().find((x) => /^(search|検索)/i.test(x.name));
-        if (t) obPress(t.el);
-        else {
+        if (t) { obPress(t.el); inp = await obWait(nativeInput, 900); }
+        if (!inp) {   /* 押しても開かない時は ⌘K（Windows は Ctrl+K） */
           const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
           document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', code: 'KeyK', keyCode: 75, which: 75, metaKey: mac, ctrlKey: !mac, bubbles: true, cancelable: true, composed: true }));
+          inp = await obWait(nativeInput, 1600);
         }
-        inp = await obWait(nativeInput, 1600);
       }
       if (!inp) { obToast('Notion の検索を開けませんでした。⌘K（Windows は Ctrl+K）を押してみてください。'); return false; }
       if (q) {
@@ -2612,81 +2724,116 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 
     input.addEventListener('compositionstart', () => { composing = true; });
     input.addEventListener('compositionend', () => { composing = false; });
-    input.addEventListener('focus', openPanel);
+    /* v52: サイドの検索窓を押したら Notion の検索画面（B.U.R.I 入り）を開く。⌘⌥B の浮かぶ B.U.R.I はこれまで通り */
+    const fused = () => NS.on && !floatMode;
+    input.addEventListener('focus', () => { if (fused()) nsOpenFromSide(input.value, false); else openPanel(); });
     input.addEventListener('keydown', (e) => {
       e.stopPropagation();
-      if (e.key === 'Enter') { if (e.isComposing || composing || e.keyCode === 229) return; e.preventDefault(); submit(); }
+      if (e.key === 'Enter') { if (e.isComposing || composing || e.keyCode === 229) return; e.preventDefault(); if (fused()) nsOpenFromSide(input.value, true); else submit(); }
       else if (e.key === 'Escape') { e.preventDefault(); closePanel(); input.blur(); }
     });
-    go.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (input.value.trim()) submit(); else { input.focus(); openPanel(); } });
+    go.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (fused()) { nsOpenFromSide(input.value, !!input.value.trim()); return; } if (input.value.trim()) submit(); else { input.focus(); openPanel(); } });
     close.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); closeSidebar(); });
     bImp.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); file.click(); });
     bSave.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const r = BURI.save(); addBuri({ text: r.message, cards: [], chips: [], actions: [] }); });
     bForget.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const r = BURI.forget(); addBuri({ text: r.message, cards: [], chips: [], actions: [] }); });
     bX.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); closePanel(); });
-    /* v48: AI の設定（鍵は ScriptCat の保存場所だけに置く） */
+    /* v52: AI の設定（サイドの B.U.R.I と ⌘K の答え欄の両方で使う）。鍵は ScriptCat の保存場所だけに置く */
+    function aiSettings(host, say, onDone) {
+      const A = BURI.AI, T = BURI.TEAM;
+      const box = mk('div', 'bs-card', null, host);
+      ['keydown', 'keyup', 'keypress', 'input', 'paste'].forEach((t) => box.addEventListener(t, (e) => e.stopPropagation()));
+      mk('h4', null, 'AI の設定', box);
+      mk('div', 'bs-lb', '答え方', box);
+      const seg = mk('div', 'bs-seg', null, box);
+      const s1 = mk('button', null, 'ひとつの AI で答える', seg); s1.type = 'button';
+      const s2 = mk('button', null, 'みんなで相談（MoA）', seg); s2.type = 'button';
+      let moa = A.moa;
+      const segPaint = () => { s1.classList.toggle('on', !moa); s2.classList.toggle('on', moa); segNote.textContent = moa ? '鍵の入った仲間がそれぞれ下書き → メインが根拠と照らして一つにまとめます。賢くなる代わりに、1 回の質問で（仲間の数＋1）回使います。' : 'メインの AI だけが答えます。速く、回数も 1 回だけです。'; };
+      const segNote = mk('div', 'bs-nt', '', box);
+      s1.addEventListener('click', (e) => { e.preventDefault(); moa = false; segPaint(); });
+      s2.addEventListener('click', (e) => { e.preventDefault(); moa = true; segPaint(); });
+      segPaint();
+      mk('div', 'bs-lb', 'メイン（ひとつの時に答える AI・相談の時のまとめ役）', box);
+      const pv = mk('select', 'bs-sel', null, box);
+      BURI.PROVIDERS.forEach(([v, l]) => { const o = mk('option', null, l, pv); o.value = v; if (v === A.provider) o.selected = true; });
+      mk('div', 'bs-lb', '仲間（無料の鍵は、それぞれのサイトでカード登録なしで作れます）', box);
+      const rows = {};
+      BURI.TEAM_IDS.forEach((id) => {
+        const t = T[id], r = mk('div', 'bs-row', null, box);
+        const lab = mk('label', 'bs-nmw', null, r);
+        const cb = mk('input', null, null, lab); cb.type = 'checkbox'; cb.checked = !!A.use[id];
+        mk('span', 'bs-dot' + (BURI.ready(id) ? ' set' : ''), null, lab);
+        mk('span', 'bs-nm', t.name, lab);
+        mk('span', 'bs-tag' + (t.free ? '' : ' paid'), t.free ? '無料' : '有料', lab);
+        if (t.keyUrl) { const a = mk('a', 'bs-link', '鍵を作る ↗', r); a.href = t.keyUrl; a.target = '_blank'; a.rel = 'noopener'; } else mk('span', null, '', r);
+        mk('div', 'bs-nt', t.note + (id === 'chrome' ? (BURI.chromeLM() ? '（この Chrome で使えます）' : '（この Chrome では見つかりません）') : ''), r);
+        let key = null, sel = null;
+        if (!t.nokey) {
+          const kw = mk('div', 'bs-kw', null, r);
+          key = mk('input', null, null, kw); key.type = 'password'; key.autocomplete = 'off'; key.placeholder = A.keys[id] ? '入っています（替える時だけ入力）' : t.ph;
+          const del = mk('button', 'bs-x', '×', kw); del.type = 'button'; del.title = 'この鍵を消す'; del.hidden = !A.keys[id];
+          del.addEventListener('click', (e) => { e.preventDefault(); BURI.setKey(id, ''); key.placeholder = t.ph; del.hidden = true; r.querySelector('.bs-dot').className = 'bs-dot'; });
+        }
+        if (id === 'gemini' || id === 'claude') {
+          sel = mk('select', 'bs-sel', null, r);
+          (id === 'claude' ? BURI.AI_MODELS : BURI.GEMINI_MODELS).forEach(([v, l]) => { const o = mk('option', null, l, sel); o.value = v; if (v === (id === 'claude' ? A.model : A.gmodel)) o.selected = true; });
+        }
+        rows[id] = { cb, key, sel, row: r };
+      });
+      const opts = mk('div', 'bs-opts', null, box);
+      const tog = (label, val) => { const l = mk('label', null, null, opts); const c = mk('input', null, null, l); c.type = 'checkbox'; c.checked = val; l.append(' ' + label); return c; };
+      const wc = tog('Google と Wikipedia でも調べる（無料）', A.web);
+      const nc = tog('Notion の検索（⌘K）に B.U.R.I を出す', NS.on);
+      const ac = tog('検索で「〜について教えて」「〜とは？」と打ったら自動で答える', NS.auto);
+      mk('div', 'bs-nt', '無料枠では、送った質問と見つけた抜粋がそれぞれの会社の改善に使われることがあります。鍵はこの端末の ScriptCat の中だけに保存します。', box);
+      const btns = mk('div', 'bs-btns', null, box);
+      const ok = mk('button', 'pri', '保存', btns); ok.type = 'button';
+      const ts = mk('button', null, 'つながるか試す', btns); ts.type = 'button';
+      const rs = mk('button', null, '会話を忘れる', btns); rs.type = 'button';
+      const cl = mk('button', null, '閉じる', btns); cl.type = 'button';
+      const out = mk('div', 'bs-out', BURI.lastErr() ? '前回のつまずき:\n' + BURI.lastErr() : '', box);
+      const save = () => {
+        for (const id of BURI.TEAM_IDS) {
+          const r = rows[id]; A.use[id] = r.cb.checked;
+          const k = r.key && r.key.value.trim(); if (k) { BURI.setKey(id, k); r.key.value = ''; r.key.placeholder = '入っています（替える時だけ入力）'; }
+          if (id === 'gemini' && r.sel) { A.gmodel = r.sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
+          if (id === 'claude' && r.sel) { A.model = r.sel.value; BURI.gmSet('c33.buri.model', A.model); }
+          r.row.querySelector('.bs-dot').classList.toggle('set', BURI.ready(id));
+        }
+        BURI.gmSet('c33.buri.use', A.use);
+        A.moa = moa; BURI.gmSet('c33.buri.moa', moa);
+        A.provider = pv.value; BURI.gmSet('c33.buri.provider', A.provider);
+        A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web);
+        NS.on = nc.checked; NS.auto = ac.checked; BURI.gmSet('c33.buri.ns', NS.on); BURI.gmSet('c33.buri.nsAuto', NS.auto);
+        footText();
+      };
+      ok.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation(); save();
+        const t = BURI.team();
+        say(!BURI.aiOn() ? (A.provider === 'none' ? 'AI は使わずに、見つけたものをつないで答えます。' : '保存しました。鍵がまだ入っていないので、しばらくは抜粋で答えます。')
+          : BURI.moaOn() ? t.length + ' 人で相談して答えます（' + t.map((id) => T[id].name).join('・') + '、まとめ役は ' + T[t[0]].name + '）。なんでも聞いてください。' : BURI.aiName() + ' で準備できました。なんでも聞いてください。');
+        if (onDone) onDone();
+      });
+      ts.addEventListener('click', async (e) => {
+        e.preventDefault(); e.stopPropagation(); save();
+        const ids = BURI.TEAM_IDS.filter((id) => BURI.ready(id) && (A.use[id] || id === A.provider));
+        if (!ids.length) { out.textContent = '鍵の入った仲間がいません。'; return; }
+        out.textContent = '確かめています…（' + ids.map((id) => T[id].name).join('・') + '）';
+        const res = await Promise.all(ids.map((id) => BURI.aiTest(id).then((r) => ({ id, r }))));
+        out.textContent = res.map(({ id, r }) => (r.text ? '✓ ' : '× ') + T[id].name + (r.text ? '（' + (r.model || '') + '）' : '：' + r.err + (r.detail ? '\n    ' + String(r.detail).replace(/\n/g, '\n    ') : ''))).join('\n');
+        res.forEach(({ id, r }) => { const d = rows[id].row.querySelector('.bs-dot'); d.classList.toggle('ok', !!r.text); d.classList.toggle('ng', !r.text); });
+      });
+      rs.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); BURI.aiReset(); nsConv.length = 0; say('これまでの会話を忘れました。'); });
+      cl.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (onDone) onDone(); });
+      return box;
+    }
     bAI.addEventListener('click', (e) => {
       e.preventDefault(); e.stopPropagation();
-      const A = BURI.AI;
       const m = mk('div', 'cb-msg', null, log);
       mk('div', 'cb-av', AVATAR, m);
-      const b = mk('div', 'cb-body', null, m);
-      const box = mk('div', 'cb-card', null, b);
-      mk('strong', null, 'AI の設定', box);
-      const css = 'width:100%;margin:2px 0 4px;padding:4px 6px;border:1px solid var(--ca-borSecTra);border-radius:6px;background:transparent;color:inherit;font:inherit';
-      const pv = mk('select', null, null, box); pv.style.cssText = css;
-      BURI.PROVIDERS.forEach(([v, l]) => { const o = mk('option', null, l, pv); o.value = v; if (v === A.provider) o.selected = true; });
-      const note = mk('div', 'cb-meta', null, box);
-      const link = mk('a', null, 'aistudio.google.com/apikey を開く（無料の鍵を作る）', box); link.href = 'https://aistudio.google.com/apikey'; link.target = '_blank'; link.rel = 'noopener'; link.style.cssText = 'font-size:11px;color:var(--lm-accent,#2783de)';
-      const key = mk('input', null, null, box); key.type = 'password'; key.style.cssText = css;
-      const sel = mk('select', null, null, box); sel.style.cssText = css;
-      const wl = mk('label', 'cb-meta', null, box); const wc = mk('input', null, null, wl); wc.type = 'checkbox'; wc.checked = A.web; wl.append(' Google でも調べる（検索は無料）');
-      const nl = mk('label', 'cb-meta', null, box); const nc = mk('input', null, null, nl); nc.type = 'checkbox'; nc.checked = NS.on; nl.append(' Notion の検索（⌘K）にも B.U.R.I を出す');
-      const al = mk('label', 'cb-meta', null, box); const ac = mk('input', null, null, al); ac.type = 'checkbox'; ac.checked = NS.auto; al.append(' 検索で「〜について教えて」「〜とは？」と打ったら自動で答える');
-      const nsSave = () => { NS.on = nc.checked; NS.auto = ac.checked; BURI.gmSet('c33.buri.ns', NS.on); BURI.gmSet('c33.buri.nsAuto', NS.auto); };
-      nc.addEventListener('change', nsSave); ac.addEventListener('change', nsSave);
-      const paint = () => {
-        const p = pv.value;
-        link.style.display = p === 'gemini' ? '' : 'none';
-        key.style.display = sel.style.display = (p === 'gemini' || p === 'claude') ? '' : 'none';
-        const has = p === 'gemini' ? A.gkey : A.key;
-        key.value = ''; key.placeholder = has ? '入っています（替える時だけ入力）' : (p === 'gemini' ? 'AIza…' : 'sk-ant-…');
-        sel.textContent = '';
-        (p === 'claude' ? BURI.AI_MODELS : BURI.GEMINI_MODELS).forEach(([v, l]) => { const o = mk('option', null, l, sel); o.value = v; if (v === (p === 'claude' ? A.model : A.gmodel)) o.selected = true; });
-        note.textContent = p === 'gemini' ? '無料です。Google アカウントで AI Studio を開き「API キーを作成」→ 下に貼るだけ。カード登録は不要で、請求先を登録しない限りお金はかかりません（使いすぎると少し待たされるだけ）。無料枠では、送った質問が Google の改善に使われることがあります。鍵はこの端末の ScriptCat の中だけに保存します。'
-          : p === 'chrome' ? (BURI.chromeLM() ? '無料・鍵なし。この Chrome の中の AI（Gemini Nano）で答えます。外には送りません。初回はモデルのダウンロードで少し待つことがあります。読める量が少ないので、答えは短め・素朴です。' : 'この Chrome では内蔵 AI が見つかりません（新しい Chrome・空きディスク・ある程度の性能が要ります）。選んでおくと、使えない間は抜粋モードで答えます。')
-          : p === 'claude' ? '有料（使った分だけ）。Anthropic の API キー（console.anthropic.com）。いちばん上手に話しますが、お金がかかります。'
-          : 'AI は使いません。見つけた抜粋をつないで答えます（無料・外へ送るのは Google 検索の言葉だけ）。';
-      };
-      pv.addEventListener('change', paint); paint();
-      const row = mk('div', 'cb-chips', null, box);
-      const ok = mk('button', 'cb-chip', '保存', row); ok.type = 'button';
-      const del = mk('button', 'cb-chip act', 'この鍵を消す', row); del.type = 'button';
-      const rs = mk('button', 'cb-chip act', '会話を忘れる', row); rs.type = 'button';
-      const ts = mk('button', 'cb-chip', 'つながるか試す', row); ts.type = 'button'; ts.title = '保存してから、短い言葉を 1 回だけ送って確かめます';
-      const out = mk('div', 'cb-meta', BURI.lastErr() ? '前回のつまずき:\n' + BURI.lastErr() : '', box); out.style.whiteSpace = 'pre-wrap';
-      const say = (t) => addBuri({ text: t, cards: [], chips: [], actions: [] });
-      ts.addEventListener('click', async (ev) => {
-        ev.preventDefault(); ev.stopPropagation();
-        const p = pv.value, k = key.value.trim();
-        A.provider = p; BURI.gmSet('c33.buri.provider', p);
-        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); BURI.gemReset(); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
-        if (p === 'claude') { if (k) { A.key = k; BURI.gmSet('c33.buri.key', k); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); }
-        footText(); out.textContent = '確かめています…';
-        const r = await BURI.aiTest();
-        out.textContent = r.text ? 'つながりました' + (r.model ? '（' + r.model + ' を使います）' : '') + '：' + r.text.slice(0, 40) : 'つながりませんでした：' + r.err + (r.detail ? '\n\nGoogle からの返事:\n' + r.detail : '');
-      });
-      ok.addEventListener('click', (ev) => {
-        ev.preventDefault(); ev.stopPropagation();
-        const p = pv.value, k = key.value.trim();
-        A.provider = p; BURI.gmSet('c33.buri.provider', p);
-        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); BURI.gemReset(); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
-        if (p === 'claude') { if (k) { A.key = k; BURI.gmSet('c33.buri.key', k); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); }
-        A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web); BURI.aiReset(); footText(); m.remove();
-        say(BURI.aiOn() ? BURI.aiName() + ' で準備できました。なんでも聞いてください。たとえば「東野圭吾について教えて」。' : p === 'none' ? 'AI は使わずに、見つけたものをつないで答えます。' : '設定を保存しました（' + (p === 'chrome' ? 'この Chrome では内蔵 AI が見つからないので、しばらくは抜粋で答えます' : '鍵がまだ入っていません') + '）。');
-      });
-      del.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); if (pv.value === 'claude') { A.key = ''; BURI.gmSet('c33.buri.key', ''); } else { A.gkey = ''; BURI.gmSet('c33.buri.gkey', ''); } footText(); m.remove(); say('鍵を消しました。'); });
-      rs.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); BURI.aiReset(); m.remove(); say('これまでの会話を忘れました。'); });
+      const b = mk('div', 'cb-body', null, m); b.style.flex = '1 1 auto';
+      aiSettings(b, (t) => addBuri({ text: t, cards: [], chips: [], actions: [] }), () => m.remove());
       scrollEnd();
     });
     file.addEventListener('change', () => { const f = file.files && file.files[0]; file.value = ''; importFile(f); });
@@ -2708,61 +2855,133 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }, true);
     
     /* ============================================================
-     *  v51: Notion の検索（⌘K）に B.U.R.I を「融合」
-     *   ・左の結果一覧のいちばん上に「B.U.R.I」の段（Notion の Yesterday などと同じ見た目）。クリック / Shift+Enter で聞く
-     *   ・答えは右の大きなプレビュー欄に出す（Notion のプレビューと同じカードの形）。続けて聞く欄つき・会話を覚える
-     *   ・↑↓ で結果を選び直すとプレビューに戻る。「B.U.R.I」の段を押せば答えに戻る
-     *   ・プレビュー欄を隠している時は、段のすぐ下に答えを出す
-     *   ・「〜について教えて」「〜とは？」は打ち終わって少し待つと自動で答える（設定で切れる）。同じ言葉は 2 度聞かない
+     *  v52: B.U.R.I × Notion の検索画面（⌘K / サイドの検索窓）
+     *   ・サイドの検索窓を押すと Notion の検索画面が開き、右の大きな欄に B.U.R.I のホームが出る
+     *   ・左の一覧の先頭に「B.U.R.I」の段。空の時は「最近の質問」「聞いてみる」、文字がある時は「B.U.R.I に聞く —『…』」
+     *   ・答えは右の欄に: 調べる → 仲間の下書き → まとめ の進み具合を見せ、本文は見出し・箇条書き・太字・出典の印（押すと開く）つきで出す
+     *   ・「相談の中身」で仲間それぞれの下書きを開ける。コピー・次に聞けそうなこと・続けて聞く欄
+     *   ・↑↓ で結果を選ぶと Notion のプレビューに戻り、段を押せば戻る。プレビュー欄を隠している時は段の下に出す
      * ============================================================ */
     const NS = { on: BURI.gmGet('c33.buri.ns', true) !== false, auto: BURI.gmGet('c33.buri.nsAuto', true) !== false };
     const nsCache = new Map();
+    const nsConv = [];   // 会話 [{ q, res }]（検索画面を閉じても少しの間は覚えておく）
+    let nsConvAt = 0;
     const RE_QUESTION = /(教えて|おしえて|とは|って何|ってなに|って誰|ってだれ|について|知りたい|なぜ|どうして|どうやって|おすすめ|[?？]\s*$)/u;
+    const EXAMPLES = ['東野圭吾について教えて', '本棚で未読のミステリーは？', '最近読んだ本のおすすめは？', 'ガリレオシリーズの順番は？'];
+    const hist = () => { const h = BURI.gmGet('c33.buri.hist', []); return Array.isArray(h) ? h : []; };
+    const histAdd = (q) => { const h = hist().filter((x) => x !== q); h.unshift(q); BURI.gmSet('c33.buri.hist', h.slice(0, 12)); };
     const nsStyle = mk('style'); nsStyle.id = 'c33-ns-css';
     nsStyle.textContent = `
 #c33-ns { display: flex; flex-direction: column; padding-inline: 10px; font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); }
 #c33-ns[hidden] { display: none !important; }
 #c33-ns .ns-h { display: flex; align-items: center; gap: 6px; padding: 14px 8px 6px; font-size: 12px; color: var(--c-texTer, #9b9a97); }
+#c33-ns .ns-h b { font-weight: 600; color: var(--c-texSec, #787774); }
+#c33-ns .ns-tag { margin-inline-start: auto; padding: 0 7px; border-radius: 999px; font-size: 10.5px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--c-texSec, #787774); }
 #c33-ns .ns-row { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; margin: 0; padding: 4px 8px; border: 0; border-radius: 12px; background: transparent; color: inherit; font: inherit; font-size: 14px; text-align: start; cursor: pointer; }
 #c33-ns .ns-row:hover, #c33-ns .ns-row.on { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
-#c33-ns .ns-av { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 6px; font-size: 10px; white-space: nowrap; background: color-mix(in srgb, var(--lm-accent, #2783de) 14%, transparent); color: var(--c-texSec, #555); }
+#c33-ns .ns-av { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 6px; font-size: 10px; white-space: nowrap; background: linear-gradient(135deg, color-mix(in srgb, var(--lm-accent, #2783de) 22%, transparent), color-mix(in srgb, #9b6bd8 18%, transparent)); color: var(--c-texSec, #555); }
 #c33-ns .ns-lb { flex: none; font-weight: 500; color: var(--c-texAccPri, var(--c-texPri)); }
 #c33-ns .ns-dash { flex: none; font-size: 12px; color: var(--c-texSec, #787774); }
 #c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--c-texTer, #9b9a97); }
 #c33-ns .ns-kb { flex: none; font-size: 11px; color: var(--c-texTer, #9b9a97); }
-#c33-ns .ns-ans { margin: 4px 8px 6px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--lm-accent, #2783de) 6%, transparent); max-height: 40vh; overflow-y: auto; overscroll-behavior: contain; }
+#c33-ns .ns-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 8px 6px 36px; }
+#c33-ns .ns-chips button, #c33-nsp .np-chips button { margin: 0; padding: 2px 10px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.12)); border-radius: 999px; background: transparent; color: var(--c-texSec, #787774); font: 12px/1.6 var(--c33-ui, inherit); cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-ns .ns-chips button:hover, #c33-nsp .np-chips button:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texPri, #37352f); }
+#c33-ns .ns-chips button.h::before, #c33-nsp .np-chips button.h::before { content: '↺ '; opacity: .6; }
+#c33-ns .ns-ans { margin: 4px 8px 6px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--lm-accent, #2783de) 6%, transparent); max-height: 42vh; overflow-y: auto; overscroll-behavior: contain; }
 #c33-ns .ns-ans[hidden] { display: none; }
 #c33-nsp { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; padding: 34px 14px 16px 16px; font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); }
 #c33-nsp[hidden] { display: none !important; }
 #c33-nsp .np-card { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; background: var(--c-bacPri, #fff); box-shadow: var(--c-shaOutLg, 0 8px 28px rgba(0,0,0,.14)); }
-#c33-nsp .np-cover { flex: none; position: relative; height: 72px; background: color-mix(in srgb, var(--lm-accent, #2783de) 9%, var(--c-bacSec, #f7f6f3)); }
+#c33-nsp .np-cover { flex: none; position: relative; height: 64px; background: linear-gradient(120deg, color-mix(in srgb, var(--lm-accent, #2783de) 16%, var(--c-bacSec, #f7f6f3)), color-mix(in srgb, #9b6bd8 14%, var(--c-bacSec, #f7f6f3)) 55%, color-mix(in srgb, #2e9e6a 12%, var(--c-bacSec, #f7f6f3))); background-size: 200% 100%; }
+#c33-nsp.busy .np-cover { animation: npFlow 2.4s linear infinite; }
+@keyframes npFlow { from { background-position: 0% 0; } to { background-position: 200% 0; } }
 #c33-nsp .np-badge { position: absolute; bottom: -18px; inset-inline-start: 24px; padding: 6px 10px; border-radius: 10px; font-size: 15px; background: var(--c-bacPri, #fff); box-shadow: var(--c-shaOutMd, 0 2px 8px rgba(0,0,0,.12)); }
+#c33-nsp.busy .np-badge { animation: npBob 1.2s ease-in-out infinite; }
+@keyframes npBob { 50% { transform: translateY(-3px) rotate(-3deg); } }
 #c33-nsp .np-tools { position: absolute; top: 8px; inset-inline-end: 8px; display: flex; gap: 2px; padding: 2px; border-radius: 6px; background: var(--c-bacEle, #fff); box-shadow: var(--c-shaOutMd, 0 2px 8px rgba(0,0,0,.12)); }
 #c33-nsp .np-tools button { margin: 0; padding: 2px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--c-texSec, #787774); font: 12px/20px var(--c33-ui, inherit); cursor: pointer; }
-#c33-nsp .np-tools button:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
-#c33-nsp .np-head { flex: none; padding: 28px 24px 10px; box-shadow: 0 1px 0 var(--ca-borSecTra, rgba(55,53,47,.09)); }
-html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open] #c33-buri:not(.floating) { visibility: hidden !important; }
-#c33-nsp .np-crumb { font-size: 12px; color: var(--c-texTer, #9b9a97); }
+#c33-nsp .np-tools button:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texPri, #37352f); }
+#c33-nsp .np-head { flex: none; padding: 26px 24px 10px; box-shadow: 0 1px 0 var(--ca-borSecTra, rgba(55,53,47,.09)); }
+#c33-nsp .np-crumb { font-size: 12px; color: var(--c-texTer, #9b9a97); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #c33-nsp .np-title { font-size: 20px; line-height: 24px; font-weight: 600; }
-#c33-nsp .np-log { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 24px 12px; display: flex; flex-direction: column; gap: 14px; }
-#c33-nsp .np-q { align-self: flex-end; max-width: 90%; padding: 5px 11px; border-radius: 12px; font-size: 13px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); overflow-wrap: anywhere; }
-#c33-nsp .np-a { font-size: 14px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
-#c33-nsp .np-src { display: flex; flex-direction: column; gap: 2px; margin-top: -6px; }
-#c33-nsp .np-src a { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 8px; font-size: 13px; color: var(--c-texPri, #37352f); text-decoration: none; overflow: hidden; }
-#c33-nsp .np-src a:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
-#c33-nsp .np-src a span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#c33-nsp .np-src a small { flex: none; font-size: 11px; color: var(--c-texTer, #9b9a97); }
+#c33-nsp .np-log { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 12px 24px 16px; display: flex; flex-direction: column; gap: 12px; }
+#c33-nsp .np-hello { font-size: 18px; font-weight: 600; line-height: 1.5; }
+#c33-nsp .np-sub { font-size: 12.5px; color: var(--c-texSec, #787774); line-height: 1.7; }
+#c33-nsp .np-stat { display: flex; flex-wrap: wrap; gap: 6px; }
+#c33-nsp .np-stat span, #c33-nsp .np-stat button { display: inline-flex; align-items: center; gap: 5px; margin: 0; padding: 2px 9px; border: 0; border-radius: 999px; font: 11.5px/1.7 var(--c33-ui, inherit); background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texSec, #787774); }
+#c33-nsp .np-stat button { cursor: pointer; }
+#c33-nsp .np-stat i { width: 7px; height: 7px; border-radius: 50%; background: #2e9e6a; display: inline-block; }
+#c33-nsp .np-stat i.off { background: var(--c-texTer, #c4c4c4); }
+#c33-nsp .np-sec { font-size: 11.5px; font-weight: 600; color: var(--c-texTer, #9b9a97); margin-top: 4px; }
+#c33-nsp .np-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#c33-nsp .np-q { align-self: flex-end; max-width: 90%; padding: 5px 11px; border-radius: 12px 12px 4px 12px; font-size: 13px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); overflow-wrap: anywhere; }
+#c33-nsp .np-steps { display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; border-radius: 10px; background: var(--ca-bacIntTra, rgba(55,53,47,.04)); font-size: 12px; color: var(--c-texSec, #787774); }
+#c33-nsp .np-step { display: flex; align-items: center; gap: 7px; }
+#c33-nsp .np-step i { flex: none; width: 14px; text-align: center; font-style: normal; }
+#c33-nsp .np-step.run i::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid currentColor; border-top-color: transparent; animation: npSpin .8s linear infinite; }
+#c33-nsp .np-step.ok i::before { content: '✓'; color: #2e9e6a; }
+#c33-nsp .np-step.ng i::before { content: '×'; color: #d44c47; }
+#c33-nsp .np-step small { color: var(--c-texTer, #9b9a97); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes npSpin { to { transform: rotate(360deg); } }
+#c33-nsp .np-a { font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
+#c33-nsp .np-a > * { margin: 0 0 8px; animation: npIn .35s ease-out both; }
+#c33-nsp .np-a > *:last-child { margin-bottom: 0; }
+#c33-nsp .np-a h5 { font-size: 14.5px; font-weight: 700; margin-top: 4px; }
+#c33-nsp .np-a ul, #c33-nsp .np-a ol { padding-inline-start: 1.3em; }
+#c33-nsp .np-a li { margin: 2px 0; }
+@keyframes npIn { from { opacity: 0; transform: translateY(4px); } }
+#c33-nsp .np-cite { display: inline-flex; align-items: center; margin: 0 1px; padding: 0 5px; height: 16px; border-radius: 5px; vertical-align: 2px; font-size: 10px; font-weight: 600; text-decoration: none; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); cursor: pointer; }
+#c33-nsp .np-cite.n { background: color-mix(in srgb, #2e9e6a 14%, transparent); color: #2b8a5e; }
+#c33-nsp .np-cite:hover { filter: brightness(.92); }
+#c33-nsp .np-src { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+#c33-nsp .np-src a { display: flex; flex-direction: column; gap: 1px; padding: 6px 9px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.1)); border-radius: 9px; font-size: 12px; color: var(--c-texPri, #37352f); text-decoration: none; min-width: 0; }
+#c33-nsp .np-src a:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.05)); }
+#c33-nsp .np-src a small { font-size: 10.5px; color: var(--c-texTer, #9b9a97); }
+#c33-nsp .np-src a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-acts { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11.5px; }
+#c33-nsp .np-acts button { margin: 0; padding: 0; border: 0; background: none; color: var(--c-texTer, #9b9a97); font: inherit; cursor: pointer; }
+#c33-nsp .np-acts button:hover { color: var(--c-texPri, #37352f); }
+#c33-nsp details.np-moa { font-size: 12px; color: var(--c-texSec, #787774); }
+#c33-nsp details.np-moa summary { cursor: pointer; }
+#c33-nsp details.np-moa div { margin: 6px 0 0; padding: 8px 10px; border-inline-start: 3px solid var(--ca-borSecTra, rgba(55,53,47,.16)); white-space: pre-wrap; line-height: 1.7; max-height: 220px; overflow: auto; }
+#c33-nsp details.np-moa b { color: var(--c-texPri, #37352f); }
 #c33-nsp .np-in { flex: none; display: flex; gap: 6px; padding: 10px 14px 14px; border-top: 1px solid var(--ca-borSecTra, rgba(55,53,47,.09)); }
-#c33-nsp .np-in input { flex: 1 1 auto; min-width: 0; padding: 6px 10px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.16)); border-radius: 8px; background: transparent; color: inherit; font: 14px var(--c33-ui, inherit); outline: none; }
-#c33-nsp .np-in input:focus { border-color: color-mix(in srgb, var(--lm-accent, #2783de) 60%, transparent); }
-#c33-nsp .np-in button { flex: none; margin: 0; padding: 0 12px; border: 0; border-radius: 8px; background: color-mix(in srgb, var(--lm-accent, #2783de) 14%, transparent); color: inherit; font: 13px var(--c33-ui, inherit); cursor: pointer; }
+#c33-nsp .np-in input { flex: 1 1 auto; min-width: 0; padding: 7px 11px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.16)); border-radius: 10px; background: transparent; color: inherit; font: 14px var(--c33-ui, inherit); outline: none; }
+#c33-nsp .np-in input:focus { border-color: color-mix(in srgb, var(--lm-accent, #2783de) 60%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lm-accent, #2783de) 14%, transparent); }
+#c33-nsp .np-in button { flex: none; margin: 0; padding: 0 14px; border: 0; border-radius: 10px; background: color-mix(in srgb, var(--lm-accent, #2783de) 16%, transparent); color: inherit; font: 13px var(--c33-ui, inherit); cursor: pointer; }
 #c33-ns .ns-tx { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.7; }
 #c33-ns .ns-src { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; }
 #c33-ns .ns-src a, #c33-ns .ns-src button { margin: 0; padding: 0; border: 0; background: none; font: inherit; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; cursor: pointer; }
-#c33-ns .thinking-dots, #c33-nsp .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
-#c33-ns .thinking-dots span, #c33-nsp .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-texSec, #999); animation: bounce 1.4s infinite ease-in-out both; }
-#c33-ns .thinking-dots span:nth-child(1), #c33-nsp .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
-#c33-ns .thinking-dots span:nth-child(2), #c33-nsp .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+#c33-ns .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
+#c33-ns .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-texSec, #999); animation: bounce 1.4s infinite ease-in-out both; }
+.bs-card { display: flex; flex-direction: column; gap: 7px; padding: 12px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.12)); border-radius: 12px; background: var(--c-bacPri, #fff); color: var(--c-texPri, #37352f); font: 13px/1.5 var(--c33-ui, inherit); text-align: start; }
+.bs-card h4 { margin: 0; font-size: 14px; font-weight: 700; }
+.bs-card .bs-lb { margin-top: 4px; font-size: 11.5px; font-weight: 600; color: var(--c-texSec, #787774); }
+.bs-card .bs-nt { font-size: 11px; line-height: 1.6; color: var(--c-texTer, #9b9a97); }
+.bs-card .bs-seg { display: flex; gap: 3px; padding: 3px; border-radius: 9px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+.bs-card .bs-seg button { flex: 1 1 0; margin: 0; padding: 4px 6px; border: 0; border-radius: 7px; background: transparent; color: var(--c-texSec, #787774); font: 12px var(--c33-ui, inherit); cursor: pointer; }
+.bs-card .bs-seg button.on { background: var(--c-bacPri, #fff); color: var(--c-texPri, #37352f); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.bs-card .bs-sel, .bs-card .bs-kw input { width: 100%; min-width: 0; padding: 4px 7px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.16)); border-radius: 7px; background: transparent; color: inherit; font: 12.5px var(--c33-ui, inherit); }
+.bs-card .bs-row { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; align-items: center; padding: 7px 9px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.1)); border-radius: 9px; }
+.bs-card .bs-row > .bs-nt, .bs-card .bs-row > .bs-kw, .bs-card .bs-row > .bs-sel { grid-column: 1 / -1; }
+.bs-card .bs-nmw { display: flex; align-items: center; gap: 6px; min-width: 0; cursor: pointer; }
+.bs-card .bs-nm { font-weight: 600; }
+.bs-card .bs-tag { padding: 0 6px; border-radius: 999px; font-size: 10px; background: color-mix(in srgb, #2e9e6a 14%, transparent); color: #2b8a5e; }
+.bs-card .bs-tag.paid { background: color-mix(in srgb, #d9730d 14%, transparent); color: #b5600a; }
+.bs-card .bs-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-texTer, #c4c4c4); opacity: .5; }
+.bs-card .bs-dot.set { background: #2783de; opacity: 1; }
+.bs-card .bs-dot.ok { background: #2e9e6a; opacity: 1; }
+.bs-card .bs-dot.ng { background: #d44c47; opacity: 1; }
+.bs-card .bs-link { font-size: 11.5px; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; white-space: nowrap; }
+.bs-card .bs-kw { display: flex; gap: 4px; }
+.bs-card .bs-x { flex: none; margin: 0; padding: 0 7px; border: 0; border-radius: 6px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texSec, #787774); cursor: pointer; }
+.bs-card .bs-opts { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--c-texSec, #787774); }
+.bs-card .bs-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.bs-card .bs-btns button { margin: 0; padding: 3px 12px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.14)); border-radius: 999px; background: transparent; color: inherit; font: 12.5px var(--c33-ui, inherit); cursor: pointer; }
+.bs-card .bs-btns button.pri { border-color: transparent; background: color-mix(in srgb, var(--lm-accent, #2783de) 16%, transparent); font-weight: 600; }
+.bs-card .bs-out { white-space: pre-wrap; font-size: 11.5px; line-height: 1.6; color: var(--c-texSec, #787774); }
+html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open] #c33-buri:not(.floating) { visibility: hidden !important; }
 `;
     (document.head || document.documentElement).appendChild(nsStyle);
     function nsInput() {
@@ -2776,25 +2995,34 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       return null;
     }
     const stopKeys = (el) => ['keydown', 'keyup', 'keypress', 'beforeinput', 'input', 'paste', 'copy', 'cut'].forEach((t) => el.addEventListener(t, (e) => e.stopPropagation()));
-    let nsInp = null, nsDlg = null, nsBox = null, nsPane = null, nsTimer = 0, nsSeq = 0;
-    const nsConv = [];   // この検索窓での会話 [{ q, res }]
+    let nsInp = null, nsDlg = null, nsBox = null, nsPane = null, nsTimer = 0, nsSeq = 0, nsWant = '';
     const srcLabel = (c) => c.type === 'Web' ? (/wikipedia/i.test(c.url) ? 'Wikipedia' : (() => { try { return new URL(c.url).hostname.replace(/^www\./, ''); } catch (e) { return 'Web'; } })()) : 'Notion';
+    const teamLabel = () => { const t = BURI.team(); return !BURI.aiOn() ? '抜粋モード（AI なし）' : BURI.moaOn() ? 'MoA ' + t.length + ' 人（' + t.map((id) => BURI.TEAM[id].name).join('・') + '）' : BURI.aiName(); };
+    function nsChips(host, cls, onPick) {
+      const w = mk('div', cls, null, host);
+      hist().slice(0, 4).forEach((q) => { const b = mk('button', 'h', q, w); b.type = 'button'; b.title = q; b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onPick(q); }); });
+      EXAMPLES.filter((q) => !hist().includes(q)).slice(0, Math.max(1, 5 - Math.min(4, hist().length))).forEach((q) => { const b = mk('button', null, q, w); b.type = 'button'; b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onPick(q); }); });
+      return w;
+    }
     function nsBuild() {
       const box = mk('div'); box.id = 'c33-ns'; box.hidden = true;
-      const h = mk('div', 'ns-h', null, box); mk('span', null, 'B.U.R.I', h); mk('span', null, '— 相棒に聞く', h);
+      const h = mk('div', 'ns-h', null, box); mk('b', null, 'B.U.R.I', h); mk('span', null, '— 相棒', h);
+      const tag = mk('span', 'ns-tag', '', h);
       const row = mk('button', 'ns-row', null, box); row.type = 'button';
       mk('span', 'ns-av', AVATAR, row);
-      mk('span', 'ns-lb', 'B.U.R.I に聞く', row);
+      const lb = mk('span', 'ns-lb', 'B.U.R.I に聞く', row);
       mk('span', 'ns-dash', '—', row);
       const qEl = mk('span', 'ns-q', '', row);
-      mk('span', 'ns-kb', 'Shift+↵', row);
+      const kb = mk('span', 'ns-kb', 'Shift+↵', row);
+      const chipsHost = mk('div', null, null, box);
       const ans = mk('div', 'ns-ans', null, box); ans.hidden = true;
-      box.__q = qEl; box.__ans = ans; box.__row = row;
+      Object.assign(box, { __q: qEl, __ans: ans, __row: row, __lb: lb, __kb: kb, __tag: tag, __chips: chipsHost });
       row.addEventListener('mousedown', (e) => e.preventDefault());
       row.addEventListener('click', (e) => {
         e.preventDefault(); e.stopPropagation();
         const q = nsInp ? nsInp.value.trim() : '';
-        if (nsConv.length && nsConv[nsConv.length - 1].q === q) nsShowPane(true); else nsAsk(q);
+        if (!q) { nsHome(); return; }
+        if (nsConv.length && nsConv[nsConv.length - 1].q === q && nsPane && nsPane.__view === 'chat') nsShowPane(true); else nsAsk(q);
       });
       ['pointerdown', 'mousedown'].forEach((t) => box.addEventListener(t, (e) => e.stopPropagation()));
       return box;
@@ -2805,15 +3033,18 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const cover = mk('div', 'np-cover', null, card);
       mk('div', 'np-badge', AVATAR, cover);
       const tools = mk('div', 'np-tools', null, cover);
-      const bSide = mk('button', null, 'サイドで続ける', tools); bSide.type = 'button';
-      const bNew = mk('button', null, '新しい話', tools); bNew.type = 'button';
-      const bX = mk('button', null, '×', tools); bX.type = 'button'; bX.title = 'プレビューに戻す'; bX.setAttribute('aria-label', 'プレビューに戻す');
+      const tb = (t, title, fn) => { const b = mk('button', null, t, tools); b.type = 'button'; b.title = title; b.setAttribute('aria-label', title); b.addEventListener('click', (e) => { e.preventDefault(); fn(); }); return b; };
+      tb('⌂', 'ホーム', () => nsHome());
+      tb('⚙', 'AI の設定', () => nsSettings());
+      tb('新しい話', '会話をはじめから', () => { nsConv.length = 0; BURI.aiReset(); nsHome(); });
+      tb('サイドで続ける', 'サイドの B.U.R.I で会話を続ける', () => nsToSide());
+      tb('×', 'Notion のプレビューに戻す', () => { nsShowPane(false); if (nsInp) nsInp.focus(); });
       const head = mk('div', 'np-head', null, card);
       const crumb = mk('div', 'np-crumb', '', head);
-      mk('div', 'np-title', 'B.U.R.I', head);
+      const title = mk('div', 'np-title', 'B.U.R.I', head);
       const log = mk('div', 'np-log', null, card); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite');
       const form = mk('div', 'np-in', null, card);
-      const fin = mk('input', null, null, form); fin.type = 'text'; fin.placeholder = '続けて聞く…（Enter）'; fin.setAttribute('aria-label', 'B.U.R.I に続けて聞く');
+      const fin = mk('input', null, null, form); fin.type = 'text'; fin.placeholder = 'B.U.R.I に聞く…（Enter）'; fin.setAttribute('aria-label', 'B.U.R.I に聞く');
       const fgo = mk('button', null, '聞く', form); fgo.type = 'button';
       stopKeys(p);
       ['pointerdown', 'mousedown', 'click'].forEach((t) => p.addEventListener(t, (e) => e.stopPropagation()));
@@ -2821,87 +3052,210 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       fin.addEventListener('compositionstart', () => { comp = true; });
       fin.addEventListener('compositionend', () => { comp = false; });
       const go = () => { const q = fin.value.trim(); if (!q) return; fin.value = ''; nsAsk(q, true); };
-      fin.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && !comp) { e.preventDefault(); go(); } if (e.key === 'Escape') { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); } });
+      fin.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && !comp && e.keyCode !== 229) { e.preventDefault(); go(); } if (e.key === 'Escape') { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); } });
       fgo.addEventListener('click', (e) => { e.preventDefault(); go(); });
-      bX.addEventListener('click', (e) => { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); });
-      bNew.addEventListener('click', (e) => { e.preventDefault(); nsConv.length = 0; BURI.aiReset(); log.textContent = ''; mk('div', 'np-a', 'はい、新しい話をどうぞ。', log); fin.focus(); });
-      bSide.addEventListener('click', (e) => { e.preventDefault(); nsToSide(); });
-      p.__log = log; p.__crumb = crumb; p.__fin = fin;
+      Object.assign(p, { __log: log, __crumb: crumb, __title: title, __fin: fin, __view: '' });
       return p;
     }
     function nsToSide() {
       const conv = nsConv.slice();
       if (nsInp) nsInp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true }));
-      floatMode = true; panelOpen = true; input.focus(); input.setAttribute('aria-expanded', 'true'); layout();
+      floatMode = true; panelOpen = true; input.setAttribute('aria-expanded', 'true'); layout();
       conv.forEach((c) => { addUser(c.q); addBuri(c.res); });
     }
     const asideOf = (dlg) => { const a = dlg && dlg.querySelector('aside'); if (!a) return null; const r = a.getBoundingClientRect(); return r.width > 220 && r.height > 200 && getComputedStyle(a).opacity !== '0' ? a : null; };
     function nsShowPane(show) {
-      if (!nsPane) return;
+      if (!nsPane) return false;
       const aside = asideOf(nsDlg);
       if (show && aside) {
         if (nsPane.parentElement !== aside) { if (getComputedStyle(aside).position === 'static') aside.style.setProperty('position', 'relative'); aside.appendChild(nsPane); }
-        nsPane.__crumb.textContent = '相棒 / ' + (BURI.aiOn() ? BURI.aiName() + (BURI.AI.provider === 'claude' ? '' : '（無料）') : '抜粋モード（AI なし）');
+        nsPane.__crumb.textContent = '相棒 / ' + teamLabel();
         nsPane.hidden = false;
       } else nsPane.hidden = true;
       if (nsBox) nsBox.__row.classList.toggle('on', !nsPane.hidden);
       return !nsPane.hidden;
     }
-    function nsSync() {
-      if (!nsBox || !nsInp) return;
-      const q = nsInp.value.trim();
-      nsBox.hidden = !q && nsBox.__ans.hidden && !nsConv.length;
-      nsBox.__q.textContent = q ? '「' + q + '」' : (nsConv.length ? '会話の続き' : '');
-      if (nsBox.__pend === q) return;   // 同じ言葉のまま → 待ち時間を延ばさない
-      nsBox.__pend = q; clearTimeout(nsTimer);
-      if (q && NS.auto && RE_QUESTION.test(q) && q.length >= 4 && nsBox.__last !== q) nsTimer = setTimeout(() => { if (nsInp && nsInp.value.trim() === q) nsAsk(q); }, 1300);
-    }
-    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    async function typeInto(el, text, my) {
-      for (let i = 0; i < text.length; i += 3) { if (my !== nsSeq || !el.isConnected) { el.textContent = text; return; } el.textContent = text.slice(0, i + 3); await sleep(10); }
-      el.textContent = text;
-    }
-    async function nsAsk(q, follow) {
-      q = String(q || '').trim();
-      if (!q || !nsBox) return;
-      if (!follow) nsBox.__last = q;
-      clearTimeout(nsTimer);
-      const my = ++nsSeq;
-      nsBox.hidden = false;
-      const inPane = nsShowPane(true);
-      let log, ans = nsBox.__ans;
-      if (inPane) {
-        ans.hidden = true; log = nsPane.__log;
-        mk('div', 'np-q', q, log);
-      } else { ans.hidden = false; ans.textContent = ''; log = ans; }
-      const think = mk('div', 'thinking-dots', null, log); think.append(mk('span'), mk('span'), mk('span'));
-      if (inPane) log.scrollTop = log.scrollHeight;
-      let res = !follow && nsCache.get(q);
-      if (!res) {
-        try { res = await BURI.ask(q); } catch (e) { res = { text: 'ごめんなさい、調べている途中でつまずきました。（' + String(e && e.message || e) + '）', cards: [], chips: [], actions: [] }; }
-        nsCache.set(q, res); if (nsCache.size > 30) nsCache.delete(nsCache.keys().next().value);
+    const greet = () => { const h = new Date().getHours(); return h < 5 ? 'こんばんは。夜ふかしですね' : h < 11 ? 'おはようございます' : h < 17 ? 'こんにちは' : 'こんばんは'; };
+    function nsHome() {
+      if (!nsPane || !nsShowPane(true)) return;
+      nsPane.__view = 'home'; nsPane.__title.textContent = 'B.U.R.I';
+      const log = nsPane.__log; log.textContent = '';
+      mk('div', 'np-hello', greet() + '。何を調べましょう？', log);
+      const s = BURI.state();
+      mk('div', 'np-sub', '本棚・Notion 全体・Google と Wikipedia をまとめて調べて、' + (BURI.aiOn() ? (BURI.moaOn() ? '仲間の AI と相談してから' : 'AI が') + 'わかりやすく話します。' : '見つけたものを並べます。'), log);
+      const st = mk('div', 'np-stat', null, log);
+      const sp = (t, on) => { const x = mk('span', null, null, st); mk('i', on ? '' : 'off', null, x); x.append(t); };
+      sp('本棚 ' + (s.count || 0) + ' 件', !!s.count);
+      sp(teamLabel(), BURI.aiOn());
+      sp(BURI.AI.web ? 'Web も調べる' : 'Web は調べない', BURI.AI.web);
+      const sb = mk('button', null, '⚙ 設定', st); sb.type = 'button'; sb.addEventListener('click', (e) => { e.preventDefault(); nsSettings(); });
+      if (!s.count) { const ib = mk('button', null, '本棚を取り込む', st); ib.type = 'button'; ib.addEventListener('click', (e) => { e.preventDefault(); file.click(); }); }
+      if (!BURI.aiOn()) mk('div', 'np-sub', '「⚙ 設定」で無料の鍵（Gemini・Groq・OpenRouter・Mistral）を入れると、まとめて話せるようになります。2 つ以上入れると、みんなで相談して答えます（MoA）。', log);
+      if (nsConv.length && Date.now() - nsConvAt < 30 * 60e3) {
+        mk('div', 'np-sec', 'さっきの会話', log);
+        const w = mk('div', 'np-chips', null, log);
+        const b = mk('button', 'h', '「' + nsConv[nsConv.length - 1].q + '」の続きを見る', w); b.type = 'button';
+        b.addEventListener('click', (e) => { e.preventDefault(); nsReplay(); });
       }
-      think.remove();
-      nsConv.push({ q, res });
-      const cards = (res.cards || []).filter((c) => c.url).slice(0, 7);
-      if (inPane) {
-        const a = mk('div', 'np-a', '', log);
+      mk('div', 'np-sec', hist().length ? '最近の質問・聞いてみる' : '聞いてみる', log);
+      nsChips(log, 'np-chips', (q) => nsAsk(q));
+      if (nsBox) nsBox.__row.classList.add('on');
+      nsPane.__fin.focus({ preventScroll: true });
+    }
+    function nsSettings() {
+      if (!nsPane || !nsShowPane(true)) return;
+      nsPane.__view = 'set'; nsPane.__title.textContent = 'AI の設定';
+      const log = nsPane.__log; log.textContent = '';
+      aiSettings(log, (t) => { nsPane.__crumb.textContent = '相棒 / ' + teamLabel(); nsHome(); const n = mk('div', 'np-sub', t, nsPane.__log); nsPane.__log.insertBefore(n, nsPane.__log.children[2] || null); }, () => nsHome());
+    }
+    /* 本文を読みやすく: 見出し（#・■）/ 箇条書き（・-・*・1.）/ **太字** / 出典の印 [N1][W2]（押すと開く） */
+    function richText(host, text, refs) {
+      const lines = String(text || '').replace(/\r/g, '').split('\n');
+      let list = null, para = null;
+      const inline = (el, s) => {
+        const re = /\*\*(.+?)\*\*|\[((?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*)\]/g; let i = 0, m;
+        while ((m = re.exec(s))) {
+          if (m.index > i) el.append(s.slice(i, m.index));
+          if (m[1]) mk('strong', null, m[1], el);
+          else {
+            let kind = 'N';
+            m[2].split(/\s*[,，、]\s*/).forEach((tk) => {
+              const mm = /^([NW]?)(\d+)$/.exec(tk); if (!mm) return; kind = mm[1] || kind;
+              const ref = refs && refs[kind] && refs[kind][Number(mm[2]) - 1];
+              const a = mk(ref && ref.url ? 'a' : 'span', 'np-cite' + (kind === 'N' ? ' n' : ''), kind + mm[2], el);
+              if (ref) { a.title = ref.title; if (ref.url) { a.href = ref.url; a.rel = 'noopener noreferrer'; if (!ref.url.startsWith(location.origin)) a.target = '_blank'; } }
+            });
+          }
+          i = re.lastIndex;
+        }
+        if (i < s.length) el.append(s.slice(i));
+      };
+      for (const raw of lines) {
+        const ln = raw.trim();
+        if (!ln) { list = null; para = null; continue; }
+        const h = /^(#{1,4}\s+|■\s*|【(.+)】$)/.exec(ln);
+        const li = /^([・\-*•]|\d+[.)．])\s*(.+)$/.exec(ln);
+        if (h) { list = null; para = null; inline(mk('h5', null, null, host), h[2] || ln.replace(/^(#{1,4}\s+|■\s*)/, '')); continue; }
+        if (li) { para = null; if (!list || list.tagName !== (/^\d/.test(li[1]) ? 'OL' : 'UL')) list = mk(/^\d/.test(li[1]) ? 'ol' : 'ul', null, null, host); inline(mk('li', null, null, list), li[2]); continue; }
+        list = null;
+        if (para) { para.append(mk('br')); inline(para, ln); } else { para = mk('p', null, null, host); inline(para, ln); }
+      }
+      [...host.children].forEach((el, k) => { el.style.animationDelay = Math.min(k * 70, 700) + 'ms'; });
+    }
+    function nsSteps(host) {
+      const box = mk('div', 'np-steps', null, host);
+      const rows = {};
+      const step = (key, text) => { let r = rows[key]; if (!r) { r = rows[key] = mk('div', 'np-step run', null, box); mk('i', null, null, r); r.__t = mk('span', null, '', r); r.__s = mk('small', null, '', r); } r.__t.textContent = text; return r; };
+      const set = (r, st, small) => { r.className = 'np-step ' + st; r.__s.textContent = small || ''; };
+      return {
+        box,
+        on(e) {
+          if (e.k === 'search') step('s', 'Notion・本棚・Web を調べています');
+          else if (e.k === 'found') set(step('s', '調べました'), 'ok', 'Notion・本棚 ' + e.n + ' 件 / Web ' + e.w + ' 件');
+          else if (e.k === 'draft') { const nm = BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id; const r = step('d' + e.id, nm + (BURI.moaOn() ? ' が下書き' : ' が考えています')); if (e.st !== 'run') set(r, e.st, e.st === 'ok' ? e.model : e.err); }
+          else if (e.k === 'merge') { const r = step('m', (BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id) + ' がまとめています'); if (e.st !== 'run') set(r, e.st, e.st === 'ok' ? e.model : e.err); }
+        }
+      };
+    }
+    function nsEntry(log, q, res, animate) {
+      const qEl = mk('div', 'np-q', q, log);
+      const a = mk('div', 'np-a', null, log);
+      richText(a, res.text || '', res.refs);
+      if (!animate) [...a.children].forEach((el) => { el.style.animation = 'none'; });
+      const m = res.moa;
+      if (m && m.drafts && m.drafts.length > 1) {
+        const d = mk('details', 'np-moa', null, log);
+        mk('summary', null, '相談の中身 — ' + m.drafts.map((x) => x.name + (x.text ? ' ✓' : ' ×')).join('・') + (m.merged ? ' → まとめ: ' + m.who : ''), d);
+        m.drafts.forEach((x) => { const b = mk('div', null, null, d); mk('b', null, x.name + (x.model ? '（' + x.model + '）' : ''), b); b.append('\n' + (x.text || '（' + x.err + '）')); });
+      }
+      const cards = (res.cards || []).filter((c) => c.url).slice(0, 6);
+      if (cards.length) {
         const src = mk('div', 'np-src', null, log);
         cards.forEach((c) => {
           const l = mk('a', null, null, src); l.href = c.url; l.rel = 'noopener noreferrer'; l.title = c.title;
           if (!c.url.startsWith(location.origin)) l.target = '_blank';
-          mk('small', null, c.type === 'Web' ? '🌐' : '📄', l); mk('small', null, srcLabel(c), l); mk('span', null, c.title, l);
+          mk('small', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + srcLabel(c), l); mk('span', null, c.title, l);
         });
-        await typeInto(a, res.text || '', my);
-        log.scrollTop = log.scrollHeight;
-        if (my === nsSeq) nsPane.__fin.focus({ preventScroll: true });
+      }
+      const acts = mk('div', 'np-acts', null, log);
+      const cp = mk('button', null, '⧉ コピー', acts); cp.type = 'button';
+      cp.addEventListener('click', (e) => { e.preventDefault(); try { navigator.clipboard.writeText(res.text || ''); cp.textContent = '✓ コピーしました'; setTimeout(() => { cp.textContent = '⧉ コピー'; }, 1400); } catch (x) { /* noop */ } });
+      const ag = mk('button', null, '↻ もう一度', acts); ag.type = 'button';
+      ag.addEventListener('click', (e) => { e.preventDefault(); nsCache.delete(q); nsAsk(q, true, true); });
+      const nx = [{ label: 'もっと詳しく', q: q.replace(/(について)?(教えて|おしえて)$/, '') + 'をもっと詳しく' }].concat((res.chips || []).filter((c) => c && c.q)).slice(0, 4);
+      const w = mk('div', 'np-chips', null, log);
+      const seen = new Set();
+      nx.filter((c) => !seen.has(c.label) && seen.add(c.label)).forEach((c) => { const b = mk('button', null, c.label, w); b.type = 'button'; b.addEventListener('click', (e) => { e.preventDefault(); nsAsk(c.q, true); }); });
+      return qEl;
+    }
+    function nsReplay() {
+      if (!nsPane || !nsShowPane(true)) return;
+      nsPane.__view = 'chat'; nsPane.__title.textContent = nsConv.length ? nsConv[0].q : 'B.U.R.I';
+      const log = nsPane.__log; log.textContent = '';
+      nsConv.forEach((c) => nsEntry(log, c.q, c.res, false));
+      log.scrollTop = log.scrollHeight;
+    }
+    function nsSync() {
+      if (!nsBox || !nsInp) return;
+      const q = nsInp.value.trim();
+      const empty = !q;
+      nsBox.hidden = false;
+      nsBox.__lb.textContent = empty ? '何でも聞いてください' : 'B.U.R.I に聞く';
+      nsBox.__q.textContent = empty ? '本棚・Notion・Web を調べて答えます' : '「' + q + '」';
+      nsBox.__kb.textContent = empty ? '' : 'Shift+↵';
+      nsBox.__tag.textContent = BURI.moaOn() ? 'MoA ×' + BURI.team().length : BURI.aiOn() ? BURI.aiName() : '';
+      nsBox.__tag.hidden = !nsBox.__tag.textContent;
+      if (nsBox.__chipsFor !== (empty ? 'e' : 'q')) {
+        nsBox.__chipsFor = empty ? 'e' : 'q'; nsBox.__chips.textContent = '';
+        if (empty) nsChips(nsBox.__chips, 'ns-chips', (x) => nsAsk(x));
+      }
+      if (nsBox.__pend === q) return;   // 同じ言葉のまま → 待ち時間を延ばさない
+      nsBox.__pend = q; clearTimeout(nsTimer);
+      if (q && NS.auto && RE_QUESTION.test(q) && q.length >= 4 && nsBox.__last !== q) nsTimer = setTimeout(() => { if (nsInp && nsInp.value.trim() === q) nsAsk(q); }, 1300);
+    }
+    async function nsAsk(q, follow, again) {
+      q = String(q || '').trim();
+      if (!q || !nsBox) return;
+      if (!follow) nsBox.__last = q;
+      clearTimeout(nsTimer);
+      histAdd(q);
+      const my = ++nsSeq;
+      const inPane = nsShowPane(true);
+      if (inPane) {
+        if (nsPane.__view !== 'chat') { nsPane.__view = 'chat'; nsPane.__log.textContent = ''; nsConv.forEach((c) => nsEntry(nsPane.__log, c.q, c.res, false)); }
+        nsPane.__title.textContent = nsConv.length ? nsConv[0].q : q;
+        nsPane.classList.add('busy');
+        const log = nsPane.__log;
+        mk('div', 'np-q', q, log).scrollIntoView({ block: 'end' });
+        const steps = nsSteps(log);
+        BURI.setProgress((e) => { if (my === nsSeq) { steps.on(e); log.scrollTop = log.scrollHeight; } });
+        let res = !follow && !again && nsCache.get(q);
+        if (!res) {
+          try { res = await BURI.ask(q); } catch (e) { res = { text: 'ごめんなさい、調べている途中でつまずきました。（' + String(e && e.message || e) + '）', cards: [], chips: [], actions: [] }; }
+          nsCache.set(q, res); if (nsCache.size > 30) nsCache.delete(nsCache.keys().next().value);
+        }
+        BURI.setProgress(null);
+        if (my !== nsSeq) return;
+        nsPane.classList.remove('busy');
+        steps.box.previousElementSibling.remove(); steps.box.remove();
+        if (!steps.box.childElementCount) { /* 調べずに答えた（あいさつ等） */ }
+        nsConv.push({ q, res }); nsConvAt = Date.now();
+        const qEl = nsEntry(log, q, res, true);
+        nsPane.__fin.focus({ preventScroll: true });
+        requestAnimationFrame(() => { log.scrollTop += qEl.getBoundingClientRect().top - log.getBoundingClientRect().top - 8; });
       } else {
-        const tx = mk('div', 'ns-tx', '', ans);
+        const ans = nsBox.__ans; ans.hidden = false; ans.textContent = '';
+        const think = mk('div', 'thinking-dots', null, ans); think.append(mk('span'), mk('span'), mk('span'));
+        let res = !follow && nsCache.get(q);
+        if (!res) { try { res = await BURI.ask(q); } catch (e) { res = { text: String(e && e.message || e), cards: [] }; } nsCache.set(q, res); }
+        if (my !== nsSeq) return;
+        ans.textContent = '';
+        nsConv.push({ q, res }); nsConvAt = Date.now();
+        mk('div', 'ns-tx', res.text || '', ans);
         const src = mk('div', 'ns-src', null, ans);
-        cards.slice(0, 6).forEach((c) => { const l = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); l.href = c.url; l.rel = 'noopener noreferrer'; if (!c.url.startsWith(location.origin)) l.target = '_blank'; });
+        (res.cards || []).filter((c) => c.url).slice(0, 6).forEach((c) => { const l = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); l.href = c.url; l.rel = 'noopener noreferrer'; if (!c.url.startsWith(location.origin)) l.target = '_blank'; });
         const gs = mk('button', null, 'B.U.R.I で続ける →', src); gs.type = 'button'; gs.style.fontWeight = '600';
         gs.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); nsToSide(); });
-        await typeInto(tx, res.text || '', my);
       }
     }
     function nsTick() {
@@ -2909,13 +3263,14 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const inp = nsInput();
       if (!!inp !== document.documentElement.hasAttribute('data-c33-ns-open')) document.documentElement.toggleAttribute('data-c33-ns-open', !!inp);
       if (!inp) {
-        if (nsInp) { nsInp = null; nsDlg = null; nsConv.length = 0; if (nsBox) nsBox.remove(); if (nsPane) nsPane.remove(); nsBox = nsPane = null; }
+        if (nsInp) { nsInp = null; nsDlg = null; if (nsBox) nsBox.remove(); if (nsPane) nsPane.remove(); nsBox = nsPane = null; }
         return;
       }
       const dlg = inp.closest('[role="dialog"], .notion-dialog') || inp.closest('[data-search-container="true"]');
+      let fresh = false;
       if (inp !== nsInp) {
         if (nsBox) nsBox.remove(); if (nsPane) nsPane.remove();
-        nsInp = inp; nsDlg = dlg; nsConv.length = 0; nsSeq++;
+        nsInp = inp; nsDlg = dlg; nsSeq++; fresh = true;
         nsBox = nsBuild(); nsPane = nsBuildPane();
         if (!inp.__c33ns) {
           inp.__c33ns = true;
@@ -2933,6 +3288,19 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       }
       if (nsPane && !nsPane.hidden && !asideOf(dlg)) nsShowPane(false);
       nsSync();
+      /* サイドの検索窓から来た時: ホームを出す / そのまま聞く */
+      if (fresh && nsWant) {
+        const w = nsWant; nsWant = '';
+        setTimeout(() => { if (nsInp !== inp) return; if (w === '\u0000') nsHome(); else nsAsk(w); }, 120);
+      }
+    }
+    /* サイドの検索窓（B.U.R.I）→ Notion の検索画面を開く */
+    async function nsOpenFromSide(q, askNow) {
+      q = String(q || '').trim();
+      input.value = ''; input.blur(); closePanel();
+      nsWant = askNow && q ? q : '\u0000';
+      const ok = await openNative(askNow ? q : '');
+      if (!ok) { nsWant = ''; floatMode = true; input.value = q; openPanel(); layout(); }
     }
     window.addEventListener('keydown', (e) => {
       if (!nsInp || e.target !== nsInp || e.key !== 'Enter' || e.isComposing || composing) return;
