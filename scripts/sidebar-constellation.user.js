@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      49.0.0
-// @description  v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      50.0.0
+// @description  v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -17,10 +17,18 @@
 // @connect      www.google.com
 // @connect      api.anthropic.com
 // @connect      generativelanguage.googleapis.com
+// @connect      ja.wikipedia.org
 // @noframes
 // ==/UserScript==
 
 /*
+ * v50.0.0
+ *   ・Notion の検索（⌘K）に B.U.R.I が同居。検索窓の下の「B.U.R.I に聞く」をクリック / Shift+Enter で、その場で答える。
+ *     「〜について教えて」「〜とは？」は打ち終わって少し待つと自動で答える（設定で切れる）。「B.U.R.I で続ける」で会話を引き継ぐ。
+ *   ・Gemini:「無料枠の回数を使い切りました」がすぐ出る → 無料枠が 0 のモデル（flash-latest など）に当たっていた。
+ *     2.5 Flash → 2.5 Flash-Lite → … と自動で回り、通ったモデルを覚える。「AI」→「つながるか試す」で Google からの返事をそのまま見られる。
+ *   ・Web: Google の抜粋が「amazon.jphttps://…›」のようにサイト名と URL になっていた → 本文だけを取る。Wikipedia（日本語版）も調べる。
+ *   ・抜粋モード: 巻ごとに並んでいた題名を「お隣の天使様…（5 冊）」とまとめ、本棚と Notion の重複を除く。
  * v49.0.0
  *   ・B.U.R.I の AI を「無料」で使えるように。「AI」で使う AI を選ぶ:
  *       Gemini（無料・既定）… aistudio.google.com で無料の鍵を作って貼るだけ。カード登録なし・使った分の請求なし（上限を超えたら少し待つだけ）
@@ -44,7 +52,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '49.0.0';
+  const VERSION = '50.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1831,11 +1839,11 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const gmGet = (k, d) => { try { return typeof GM_getValue === 'function' ? GM_getValue(k, d) : d; } catch (e) { return d; } };
     const gmSet = (k, v) => { try { if (typeof GM_setValue === 'function') GM_setValue(k, v); } catch (e) { /* noop */ } };
     const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false,
-      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'gemini-flash-latest'), provider: '' };
+      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'gemini-2.5-flash'), provider: '' };
     /* v49: どの AI を使うか — gemini（無料・既定）/ chrome（無料・鍵なし）/ claude（有料）/ none（抜粋だけ） */
     AI.provider = gmGet('c33.buri.provider', '') || (AI.key ? 'claude' : 'gemini');
     const PROVIDERS = [['gemini', 'Google Gemini（無料枠・おすすめ）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし・端末内）'], ['claude', 'Claude（有料・使った分だけ）'], ['none', '使わない（見つけた抜粋をつなぐだけ）']];
-    const GEMINI_MODELS = [['gemini-flash-latest', 'Gemini Flash（既定・無料枠が広い）'], ['gemini-flash-lite-latest', 'Gemini Flash-Lite（いちばん軽い・回数に強い）'], ['gemini-pro-latest', 'Gemini Pro（賢いが無料枠は少なめ）']];
+    const GEMINI_MODELS = [['gemini-2.5-flash', 'Gemini 2.5 Flash（既定・無料枠あり）'], ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite（軽い・回数に強い）'], ['gemini-flash-latest', 'Gemini Flash 最新版（無料枠が無いことも）'], ['gemini-2.5-pro', 'Gemini 2.5 Pro（賢いが無料枠は少なめ）']];
     const chromeLM = () => { try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; return W.LanguageModel || (W.ai && W.ai.languageModel) || null; } catch (e) { return null; } };
     function aiOn() {
       if (AI.provider === 'gemini') return !!AI.gkey;
@@ -1894,26 +1902,50 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         return out;
       } catch (e) { return []; }
     }
+    /* v50: Google の結果から「本文の抜粋」だけを取る（サイト名・URL・パンくずは捨てる） */
+    const looksUrl = (t) => /https?:\/\/|www\.|›|\.(?:com|jp|net|org)\b/i.test(t);
+    function gSnippet(box, title) {
+      let best = '';
+      for (const el of box.querySelectorAll('.VwiC3b, [data-sncf], .IsZvec, .s3v9rd, .lEBKkf, [style*="line-clamp"], div, span')) {
+        if (el.querySelector('h3, cite') || el.closest('cite, h3, a[href^="/url"], a[href^="http"]')) continue;
+        const t = el.textContent.replace(/\s+/g, ' ').trim();
+        if (t.length < 25 || looksUrl(t.slice(0, 60)) || t === title) continue;
+        if (t.length > best.length) best = t;
+      }
+      return best.slice(0, 300);
+    }
     async function googleSearch(q) {
       if (!AI.web) return [];
       const r = await gmReq({ method: 'GET', url: 'https://www.google.co.jp/search?q=' + encodeURIComponent(q) + '&hl=ja&num=8', headers: { 'Accept-Language': 'ja,en;q=0.8' } });
       if (!r.text) return [];
       try {
         const doc = new DOMParser().parseFromString(r.text, 'text/html');
+        doc.querySelectorAll('script, style, svg, noscript').forEach((e) => e.remove());
         const out = [], seen = new Set();
         const feat = doc.querySelector('.kno-rdesc span, .hgKElc, .LGOjhe');
-        if (feat && feat.textContent.trim()) out.push({ title: '概要（Google）', snippet: feat.textContent.trim(), url: 'https://www.google.co.jp/search?q=' + encodeURIComponent(q) });
+        if (feat && feat.textContent.trim().length > 20) out.push({ title: '概要（Google）', snippet: feat.textContent.replace(/\s+/g, ' ').trim().slice(0, 400), url: 'https://www.google.co.jp/search?q=' + encodeURIComponent(q) });
         for (const h3 of doc.querySelectorAll('a h3')) {
           const a = h3.closest('a'); let href = a && a.getAttribute('href') || '';
           const m = /[?&]q=([^&]+)/.exec(href); if (href.startsWith('/url') && m) href = decodeURIComponent(m[1]);
-          if (!/^https?:/.test(href) || /google\./.test(new URL(href).hostname)) continue;
+          if (!/^https?:/.test(href)) continue;
+          try { if (/google\./.test(new URL(href).hostname)) continue; } catch (e) { continue; }
           if (seen.has(href)) continue; seen.add(href);
-          let box = a; for (let i = 0; i < 6 && box.parentElement; i++) { box = box.parentElement; if (box.textContent.length > h3.textContent.length + 60) break; }
-          const sn = (box.querySelector('.VwiC3b, [data-sncf], [style*="-webkit-line-clamp"]') || {}).textContent || box.textContent.replace(h3.textContent, '');
-          out.push({ title: h3.textContent.trim(), snippet: String(sn).replace(/\s+/g, ' ').trim().slice(0, 300), url: href });
+          const title = h3.textContent.replace(/\s+/g, ' ').trim();
+          let box = a.closest('.MjjYud, .g, .tF2Cxc, .Gx5Zad, [data-hveid]');
+          if (!box) { box = a; for (let i = 0; i < 4 && box.parentElement; i++) box = box.parentElement; }
+          out.push({ title, snippet: gSnippet(box, title), url: href });
           if (out.length >= 6) break;
         }
         return out;
+      } catch (e) { return []; }
+    }
+    /* v50: Wikipedia（日本語版）— 無料・鍵なし・崩れにくい。人物や作品の「まずの説明」に強い */
+    async function wikiSearch(q) {
+      if (!AI.web) return [];
+      const r = await gmReq({ method: 'GET', timeout: 15000, url: 'https://ja.wikipedia.org/w/api.php?action=query&format=json&redirects=1&generator=search&gsrlimit=3&gsrsearch=' + encodeURIComponent(q) + '&prop=extracts%7Cinfo&inprop=url&exintro=1&explaintext=1&exchars=700' });
+      try {
+        const pages = Object.values(((JSON.parse(r.text) || {}).query || {}).pages || {}).sort((x, y) => (x.index || 0) - (y.index || 0));
+        return pages.filter((x) => x.extract && x.extract.length > 30).slice(0, 2).map((x) => ({ title: x.title + '（Wikipedia）', snippet: x.extract.replace(/\s+/g, ' ').trim(), url: x.fullurl || 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(x.title) }));
       } catch (e) { return []; }
     }
     const SYS = [
@@ -1953,23 +1985,50 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     async function gemini(question, ctxText) {
       const contents = aiHist.slice(-8).map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }))
         .concat([{ role: 'user', parts: [{ text: ctxText + '\n\n# 質問\n' + question }] }]);
-      const r = await gmReq({
-        method: 'POST', url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(AI.gmodel || 'gemini-flash-latest') + ':generateContent',
-        headers: { 'content-type': 'application/json', 'x-goog-api-key': AI.gkey },
-        data: JSON.stringify({ systemInstruction: { parts: [{ text: SYS }] }, contents, generationConfig: { maxOutputTokens: 2048, temperature: 0.5 } })
-      });
-      let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
-      if (r.status === 429) return { err: '無料枠の回数を使い切りました。1 分〜明日まで待つと戻ります（お金はかかりません）' };
-      if (!j) return { err: r.err || ('応答を読めませんでした（' + r.status + '）') };
-      if (j.error || r.status >= 400) return { err: (j.error && j.error.message) || ('エラー ' + r.status) };
-      const c = (j.candidates || [])[0];
-      const text = c && c.content && (c.content.parts || []).map((p) => p.text || '').join('').trim();
-      if (!text) return { err: (j.promptFeedback && j.promptFeedback.blockReason) ? 'この質問には答えられないと判断されました。' : '空の返事でした' };
-      aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: text });
-      return { text };
+      const r = await geminiRun({ systemInstruction: { parts: [{ text: SYS }] }, contents, generationConfig: { maxOutputTokens: 2048, temperature: 0.5 } });
+      if (r.text) aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text });
+      return r;
+    }
+    /* v50: 無料枠が「0」のモデルや、終わったモデルに当たったら、次のモデルへ自動で回る。うまくいったモデルを覚える */
+    const GEMINI_CHAIN = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
+    let gemLast = '';
+    async function geminiRun(body) {
+      const order = [...new Set([gmGet('c33.buri.gok', ''), AI.gmodel, ...GEMINI_CHAIN].filter(Boolean))].slice(0, 6);
+      const fails = [];
+      for (const model of order) {
+        const r = await gmReq({ method: 'POST', timeout: 60000, url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent',
+          headers: { 'content-type': 'application/json', 'x-goog-api-key': AI.gkey }, data: JSON.stringify(body) });
+        let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
+        const msg = (j && j.error && j.error.message) || r.err || ('HTTP ' + r.status);
+        if (r.status === 200 && j) {
+          const c = (j.candidates || [])[0];
+          const text = c && c.content && (c.content.parts || []).map((x) => x.text || '').join('').trim();
+          if (text) { gemLast = model; if (gmGet('c33.buri.gok', '') !== model) gmSet('c33.buri.gok', model); return { text, model }; }
+          if (j.promptFeedback && j.promptFeedback.blockReason) return { err: 'この質問には答えられないと判断されました' };
+          fails.push({ model, status: 200, msg: '空の返事' }); continue;
+        }
+        fails.push({ model, status: r.status, msg });
+        if (/API key not valid|API_KEY_INVALID/i.test(msg)) return { err: '鍵が正しくないようです。AI Studio の鍵（AIza で始まる）をもう一度貼ってください', detail: msg };
+        if (r.status === 403) return { err: 'この鍵では Gemini を使えないようです（AI Studio で作った鍵か確かめてください）', detail: msg };
+        if (/location is not supported/i.test(msg)) return { err: 'いまの接続先の地域では Gemini の無料枠が使えないようです', detail: msg };
+        if (r.status === 0) return { err: 'Google につながりませんでした（' + msg + '）', detail: msg };
+        /* 429（回数・無料枠なし）/ 404（そのモデルが無い）/ 400（そのモデルでは使えない）/ 5xx（混雑）→ 次のモデルへ */
+      }
+      const all = fails.map((f) => f.model + ' → ' + f.status + ' ' + String(f.msg).slice(0, 140)).join('\n');
+      const zero = fails.some((f) => /limit:\s*0\b|free_tier.*limit.*\b0\b/i.test(f.msg));
+      const quota = fails.some((f) => f.status === 429);
+      return { err: zero ? 'この鍵の Google プロジェクトには無料枠が付いていないようです。AI Studio で「新しいプロジェクトで API キーを作成」して貼り直してみてください（お金はかかりません）'
+        : quota ? '無料枠の回数に当たりました。1 分ほどおいてからもう一度どうぞ（お金はかかりません）'
+        : 'Gemini から返事がありませんでした', detail: all };
+    }
+    async function aiTest() {
+      if (AI.provider === 'gemini') { if (!AI.gkey) return { err: '鍵がまだ入っていません' }; return geminiRun({ contents: [{ role: 'user', parts: [{ text: '「つながりました」とだけ返してください。' }] }], generationConfig: { maxOutputTokens: 20 } }); }
+      if (AI.provider === 'chrome') return chromeAI('「つながりました」とだけ返してください。', '');
+      if (AI.provider === 'claude') { if (!AI.key) return { err: '鍵がまだ入っていません' }; const r = await claude('「つながりました」とだけ返してください。', ''); aiHist.length = Math.max(0, aiHist.length - 2); return r; }
+      return { err: 'AI を使わない設定です' };
     }
     /* v49: Chrome 内蔵 AI（Prompt API / Gemini Nano）— 無料・鍵なし・端末の中だけで動く。読める量が少ないので根拠を短くして渡す */
-    let chromeSess = null;
+    let chromeSess = null, lastAiErr = '';
     async function chromeAI(question, ctxText) {
       const LM = chromeLM();
       if (!LM) return { err: 'この Chrome では内蔵 AI が使えません（新しい Chrome とある程度の性能の PC が要ります）' };
@@ -1996,9 +2055,22 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       return { err: 'AI を使わない設定です' };
     }
     function firstSentence(s) { const t = String(s || '').replace(/\s+/g, ' ').trim(); const m = /^(.{20,160}?[。．！？!?])/.exec(t); return m ? m[1] : t.slice(0, 120) + (t.length > 120 ? '…' : ''); }
+    /* v50: 「お隣の天使様 − 1」「− 2」… を「お隣の天使様（5 冊）」のようにまとめる */
+    const baseTitle = (t) => String(t || '').replace(/\s*[−\-–—ー～~]\s*[0-9０-９.．]+\s*(巻|話)?\s*$/u, '').replace(/\s*[（(][0-9０-９]+[)）]\s*$/u, '').trim();
+    function compact(titles, n) {
+      const m = new Map();
+      for (const t of titles) { const b = baseTitle(t) || t; m.set(b, (m.get(b) || 0) + 1); }
+      const parts = [...m].map(([b, c]) => '「' + b + '」' + (c > 1 ? '（' + c + ' 冊）' : ''));
+      return parts.slice(0, n).join('・') + (parts.length > n ? ' ほか' : '');
+    }
     async function deep(raw, shelf, baseCards, baseChips) {
       const q = raw.replace(/(について)?(教えて|おしえて|知りたい|調べて|しらべて|って何|ってなに|とは|は\?|は？)/g, ' ').replace(/\s+/g, ' ').trim() || raw;
-      const [nh, wh] = await Promise.all([notionSearch(q), googleSearch(q)]);
+      const [nh0, gh, kh] = await Promise.all([notionSearch(q), googleSearch(q), wikiSearch(q)]);
+      const shelfSet = new Set(shelf.map((r) => nz(r.title)));
+      const nh = nh0.filter((x) => !shelfSet.has(nz(x.title)));
+      const wseen = new Set(), wh = [];
+      for (const x of kh.concat(gh)) { if (!wseen.has(x.url)) { wseen.add(x.url); wh.push(x); } }
+      wh.splice(7);
       const cards = (baseCards || []).slice();
       nh.slice(0, 4).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Notion のページ', linkLabel: 'Notion で開く' }));
       wh.slice(0, 3).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Web', linkLabel: 'Web で開く' }));
@@ -2006,15 +2078,18 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if (aiOn()) {
         const r = await askAI(raw, sourcesText(nh, wh, shelf));
         if (r.text) return reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q);
-        return reply(aiName() + ' につながりませんでした（' + r.err + '）。かわりに見つけたものを並べます。\n\n' + plain(), cards, baseChips || [], ['notion'], q);
+        lastAiErr = r.detail || r.err || '';
+        return reply('（' + aiName() + ' はお休み中: ' + r.err + '。詳しくは「AI」→「つながるか試す」）\n\n' + plain(), cards, baseChips || [], ['notion'], q);
       }
       return reply(plain() + (AI.provider === 'none' ? '' : '\n\n（上の「AI」で無料の Gemini の鍵を入れると、これを読んでまとめて話せます）'), cards, baseChips || [], ['notion'], q);
       function plain() {
-        let t = '';
-        if (shelf.length) t += '本棚では ' + shelf.length + ' 件：' + shelf.slice(0, 5).map((r) => '「' + r.title + '」').join('・') + '。\n';
-        if (nh.length) t += 'Notion では ' + nh.length + ' 件：' + nh.slice(0, 5).map((x) => '「' + x.title + '」').join('・') + '。\n';
-        if (wh.length) t += '\nWeb ではこう書かれています。\n' + wh.slice(0, 3).map((x, i) => '・' + firstSentence(x.snippet) + ' [W' + (i + 1) + ']').join('\n');
-        return t.trim();
+        const t = [];
+        const heads = new Set(); const good = wh.filter((x) => { if (!x.snippet || x.snippet.length < 25 || looksUrl(x.snippet.slice(0, 60))) return false; const h = nz(x.snippet).slice(0, 30); if (heads.has(h)) return false; heads.add(h); return true; });
+        if (good.length) t.push(good.slice(0, 2).map((x) => { const i = wh.indexOf(x) + 1; const s = x.snippet.split(/(?<=[。．！？])/u).slice(0, /Wikipedia/.test(x.title) ? 3 : 1).join('').slice(0, 260); return s + ' [W' + i + ']'; }).join('\n'));
+        if (shelf.length) t.push('本棚には ' + compact(shelf.map((r) => r.title), 4) + ' があります。');
+        if (nh.length) t.push('Notion では ' + compact(nh.map((x) => x.title), 5) + ' が見つかりました。');
+        if (!good.length && wh.length) t.push('Web では ' + wh.slice(0, 3).map((x) => '「' + x.title + '」').join('・') + ' が見つかりました（下のカードから開けます）。');
+        return t.join('\n\n').trim();
       }
     }
 
@@ -2182,14 +2257,14 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, aiOn, aiName, chromeLM, gmSet, aiReset: () => { aiHist.length = 0; chromeSess = null; } };
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, aiOn, aiName, chromeLM, aiTest, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; chromeSess = null; } };
   })();
 
   /* ============================================================
    *  B.U.R.I の画面（アニメーション＋Web検索＋フローティング対応版）
    * ============================================================ */
   function obSearchBoot() {
-    ['c33-search-css', 'c33-search-header', 'c33-buri', 'c33-buri-file'].forEach((id) => { const e = document.getElementById(id); if (e) e.remove(); });
+    ['c33-search-css', 'c33-search-header', 'c33-buri', 'c33-buri-file', 'c33-ns-css', 'c33-ns'].forEach((id) => { const e = document.getElementById(id); if (e) e.remove(); });
     const svgI = (p) => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
     const LENS = svgI('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/>');
     const MENU = svgI('<path d="M4 6h16M4 12h16M4 18h16"/>');
@@ -2533,6 +2608,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const key = mk('input', null, null, box); key.type = 'password'; key.style.cssText = css;
       const sel = mk('select', null, null, box); sel.style.cssText = css;
       const wl = mk('label', 'cb-meta', null, box); const wc = mk('input', null, null, wl); wc.type = 'checkbox'; wc.checked = A.web; wl.append(' Google でも調べる（検索は無料）');
+      const nl = mk('label', 'cb-meta', null, box); const nc = mk('input', null, null, nl); nc.type = 'checkbox'; nc.checked = NS.on; nl.append(' Notion の検索（⌘K）にも B.U.R.I を出す');
+      const al = mk('label', 'cb-meta', null, box); const ac = mk('input', null, null, al); ac.type = 'checkbox'; ac.checked = NS.auto; al.append(' 検索で「〜について教えて」「〜とは？」と打ったら自動で答える');
+      const nsSave = () => { NS.on = nc.checked; NS.auto = ac.checked; BURI.gmSet('c33.buri.ns', NS.on); BURI.gmSet('c33.buri.nsAuto', NS.auto); };
+      nc.addEventListener('change', nsSave); ac.addEventListener('change', nsSave);
       const paint = () => {
         const p = pv.value;
         link.style.display = p === 'gemini' ? '' : 'none';
@@ -2551,7 +2630,19 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const ok = mk('button', 'cb-chip', '保存', row); ok.type = 'button';
       const del = mk('button', 'cb-chip act', 'この鍵を消す', row); del.type = 'button';
       const rs = mk('button', 'cb-chip act', '会話を忘れる', row); rs.type = 'button';
+      const ts = mk('button', 'cb-chip', 'つながるか試す', row); ts.type = 'button'; ts.title = '保存してから、短い言葉を 1 回だけ送って確かめます';
+      const out = mk('div', 'cb-meta', BURI.lastErr() ? '前回のつまずき:\n' + BURI.lastErr() : '', box); out.style.whiteSpace = 'pre-wrap';
       const say = (t) => addBuri({ text: t, cards: [], chips: [], actions: [] });
+      ts.addEventListener('click', async (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const p = pv.value, k = key.value.trim();
+        A.provider = p; BURI.gmSet('c33.buri.provider', p);
+        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
+        if (p === 'claude') { if (k) { A.key = k; BURI.gmSet('c33.buri.key', k); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); }
+        footText(); out.textContent = '確かめています…';
+        const r = await BURI.aiTest();
+        out.textContent = r.text ? 'つながりました' + (r.model ? '（' + r.model + ' を使います）' : '') + '：' + r.text.slice(0, 40) : 'つながりませんでした：' + r.err + (r.detail ? '\n\nGoogle からの返事:\n' + r.detail : '');
+      });
       ok.addEventListener('click', (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         const p = pv.value, k = key.value.trim();
@@ -2583,6 +2674,138 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       }
     }, true);
     
+    /* ============================================================
+     *  v50: Notion の検索（⌘K）に B.U.R.I を同居させる
+     *   ・検索窓のすぐ下に「('-' 鰤)з B.U.R.I に聞く『…』」の行。クリックか Shift+Enter で、その場で答える
+     *   ・「〜について教えて」「〜とは？」のような質問っぽい言葉は、打ち終わって少し待つと自動で答える（設定で切れる）
+     *   ・答えの下に出典（Notion のページ・Web）。「B.U.R.I で続ける」で会話をサイドの B.U.R.I に引き継ぐ
+     *   ・同じ言葉は 2 度聞かない（無料枠の節約）
+     * ============================================================ */
+    const NS = { on: BURI.gmGet('c33.buri.ns', true) !== false, auto: BURI.gmGet('c33.buri.nsAuto', true) !== false };
+    const nsCache = new Map();
+    const RE_QUESTION = /(教えて|おしえて|とは|って何|ってなに|って誰|ってだれ|について|知りたい|なぜ|どうして|どうやって|おすすめ|[?？]\s*$)/u;
+    const nsStyle = mk('style'); nsStyle.id = 'c33-ns-css';
+    nsStyle.textContent = `
+#c33-ns { font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); border-bottom: 1px solid var(--ca-borSecTra, rgba(55,53,47,.09)); padding: 4px 6px 6px; }
+#c33-ns .ns-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; margin: 0; padding: 4px 8px; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+#c33-ns .ns-row:hover, #c33-ns .ns-row:focus-visible { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); outline: none; }
+#c33-ns .ns-av { flex: none; padding: 1px 7px; border-radius: 10px; font-size: 11px; white-space: nowrap; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--c-texSec, #555); }
+#c33-ns .ns-lb { flex: none; font-weight: 600; }
+#c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--c-texSec, #787774); }
+#c33-ns .ns-kb { flex: none; font-size: 11px; color: var(--c-texTer, #9b9a97); }
+#c33-ns .ns-ans { margin: 4px 8px 2px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--lm-accent, #2783de) 6%, transparent); max-height: 38vh; overflow-y: auto; overscroll-behavior: contain; }
+#c33-ns .ns-ans[hidden] { display: none; }
+#c33-ns .ns-tx { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.7; }
+#c33-ns .ns-src { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; }
+#c33-ns .ns-src a, #c33-ns .ns-src button { margin: 0; padding: 0; border: 0; background: none; font: inherit; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-ns .ns-src a:hover, #c33-ns .ns-src button:hover { text-decoration: underline; }
+#c33-ns .ns-src .ns-go { font-weight: 600; }
+#c33-ns .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
+#c33-ns .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-texSec, #999); animation: bounce 1.4s infinite ease-in-out both; }
+#c33-ns .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+#c33-ns .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+`;
+    (document.head || document.documentElement).appendChild(nsStyle);
+    function nsInput() {
+      for (const el of document.querySelectorAll('[data-search-container="true"] input, .notion-dialog[aria-label="Search Notion"] input, [role="dialog"] input[role="combobox"], [role="dialog"] input[type="text"]')) {
+        if (el.closest('#c33-search-header, #c33-buri, #c33-ns, #cordi-vs-sub')) continue;
+        if (!el.getBoundingClientRect().width) continue;
+        const dlg = el.closest('[role="dialog"], .notion-dialog, [data-search-container="true"]');
+        const hint = [el.placeholder, el.getAttribute('aria-label'), dlg && dlg.getAttribute('aria-label')].join(' ');
+        if (el.closest('[data-search-container="true"]') || /search|検索|質問|ask|探す/i.test(hint)) return el;
+      }
+      return null;
+    }
+    function nsRowOf(inp) {
+      let el = inp;
+      for (let i = 0; i < 8 && el.parentElement; i++) {
+        const par = el.parentElement;
+        if (par.matches('[role="dialog"], .notion-dialog')) break;
+        if (par.getBoundingClientRect().height > el.getBoundingClientRect().height + 24) break;
+        el = par;
+      }
+      return el;
+    }
+    let nsInp = null, nsBox = null, nsTimer = 0, nsSeq = 0;
+    function nsBuild(inp) {
+      const box = mk('div'); box.id = 'c33-ns';
+      const row = mk('button', 'ns-row', null, box); row.type = 'button';
+      mk('span', 'ns-av', AVATAR, row);
+      mk('span', 'ns-lb', 'B.U.R.I に聞く', row);
+      const qEl = mk('span', 'ns-q', '', row);
+      mk('span', 'ns-kb', 'Shift+↵', row);
+      const ans = mk('div', 'ns-ans', null, box); ans.hidden = true;
+      box.__q = qEl; box.__ans = ans;
+      row.addEventListener('mousedown', (e) => { e.preventDefault(); });
+      row.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); nsAsk(inp.value); });
+      box.addEventListener('pointerdown', (e) => e.stopPropagation());
+      return box;
+    }
+    function nsSync() {
+      if (!nsBox || !nsInp) return;
+      const q = nsInp.value.trim();
+      nsBox.hidden = !q && nsBox.__ans.hidden;
+      nsBox.__q.textContent = q ? '「' + q + '」' : '';
+      clearTimeout(nsTimer);
+      if (q && NS.auto && RE_QUESTION.test(q) && q.length >= 4 && nsBox.__last !== q) nsTimer = setTimeout(() => { if (nsInp && nsInp.value.trim() === q) nsAsk(q); }, 1300);
+    }
+    async function nsAsk(q) {
+      q = String(q || '').trim();
+      if (!q || !nsBox) return;
+      nsBox.__last = q; clearTimeout(nsTimer);
+      const my = ++nsSeq, ans = nsBox.__ans;
+      ans.hidden = false; nsBox.hidden = false; ans.textContent = '';
+      const dots = mk('div', 'thinking-dots', null, ans); dots.append(mk('span'), mk('span'), mk('span'));
+      let res = nsCache.get(q);
+      if (!res) {
+        try { res = await BURI.ask(q); } catch (e) { res = { text: 'ごめんなさい、調べている途中でつまずきました。（' + String(e && e.message || e) + '）', cards: [], chips: [], actions: [] }; }
+        nsCache.set(q, res); if (nsCache.size > 30) nsCache.delete(nsCache.keys().next().value);
+      }
+      if (my !== nsSeq || !ans.isConnected) return;
+      ans.textContent = '';
+      const tx = mk('div', 'ns-tx', '', ans);
+      const src = mk('div', 'ns-src', null, ans);
+      (res.cards || []).slice(0, 6).forEach((c) => {
+        if (!c.url) return;
+        const a = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); a.href = c.url; a.rel = 'noopener noreferrer'; a.title = c.title;
+        if (!c.url.startsWith(location.origin)) a.target = '_blank';
+      });
+      const go = mk('button', 'ns-go', 'B.U.R.I で続ける →', src); go.type = 'button';
+      go.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const inp = nsInp;
+        if (inp) inp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true }));
+        floatMode = true; panelOpen = true; input.focus(); input.setAttribute('aria-expanded', 'true'); layout();
+        addUser(q); addBuri(res);
+      });
+      const text = res.text || '';
+      for (let i = 0; i < text.length; i += 3) {
+        if (my !== nsSeq || !tx.isConnected) return;
+        tx.textContent = text.slice(0, i + 3);
+        await new Promise((r) => setTimeout(r, 10));
+      }
+      tx.textContent = text;
+    }
+    function nsTick() {
+      if (!NS.on) { if (nsBox) { nsBox.remove(); nsBox = null; nsInp = null; } return; }
+      const inp = nsInput();
+      if (!inp) { if (nsBox && !nsBox.isConnected) { nsBox = null; nsInp = null; } return; }
+      if (inp === nsInp && nsBox && nsBox.isConnected) return;
+      if (nsBox) nsBox.remove();
+      nsInp = inp; nsBox = nsBuild(inp); nsSeq++;
+      const row = nsRowOf(inp);
+      row.after(nsBox);
+      if (!inp.__c33ns) { inp.__c33ns = true; inp.addEventListener('input', nsSync); }
+      nsSync();
+    }
+    window.addEventListener('keydown', (e) => {
+      if (!nsInp || e.target !== nsInp || e.key !== 'Enter' || e.isComposing || composing) return;
+      if (!(e.shiftKey || e.altKey) || e.metaKey || e.ctrlKey) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      nsAsk(nsInp.value);
+    }, true);
+    setInterval(nsTick, 250);
+
     window.addEventListener('resize', layout);
     setInterval(layout, 150);
 
