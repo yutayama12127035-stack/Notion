@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      50.0.0
-// @description  v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      51.0.0
+// @description  v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -22,6 +22,13 @@
 // ==/UserScript==
 
 /*
+ * v51.0.0
+ *   ・Notion の検索画面に融合: 結果一覧の先頭に「B.U.R.I」の段（Yesterday などと同じ見た目）。答えは右のプレビュー欄に
+ *     Notion のプレビューと同じカードで出す（表紙・題・出典の行・続けて聞く欄）。↑↓ でプレビューに戻り、段を押せば答えに戻る。
+ *     v50 は検索窓の下（Notion の格子の中）に差し込んでいて、文字を打つと画面の段組みを崩すおそれがあった。
+ *   ・Gemini: 鍵で使えるモデルの一覧を Google に聞いて選ぶ（おまかせ = Flash → 回数切れなら Flash-Lite / Flash-Lite 優先 / Pro を試す）。
+ *     回数切れのモデルはしばらく避ける（1 日分の上限 → 6 時間・無料枠なし → 1 日）。鍵を替えると忘れる。
+ *   ・⌘K を開いている間は、サイドバーの B.U.R.I 窓を隠す（重なり防止）。
  * v50.0.0
  *   ・Notion の検索（⌘K）に B.U.R.I が同居。検索窓の下の「B.U.R.I に聞く」をクリック / Shift+Enter で、その場で答える。
  *     「〜について教えて」「〜とは？」は打ち終わって少し待つと自動で答える（設定で切れる）。「B.U.R.I で続ける」で会話を引き継ぐ。
@@ -52,7 +59,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '50.0.0';
+  const VERSION = '51.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1839,11 +1846,12 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const gmGet = (k, d) => { try { return typeof GM_getValue === 'function' ? GM_getValue(k, d) : d; } catch (e) { return d; } };
     const gmSet = (k, v) => { try { if (typeof GM_setValue === 'function') GM_setValue(k, v); } catch (e) { /* noop */ } };
     const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false,
-      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'gemini-2.5-flash'), provider: '' };
+      gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'auto'), provider: '' };
     /* v49: どの AI を使うか — gemini（無料・既定）/ chrome（無料・鍵なし）/ claude（有料）/ none（抜粋だけ） */
     AI.provider = gmGet('c33.buri.provider', '') || (AI.key ? 'claude' : 'gemini');
+    if (/^gemini-(flash-latest|2\.5-flash)$/.test(AI.gmodel)) AI.gmodel = 'auto';   // v49/v50 の既定は「おまかせ」へ
     const PROVIDERS = [['gemini', 'Google Gemini（無料枠・おすすめ）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし・端末内）'], ['claude', 'Claude（有料・使った分だけ）'], ['none', '使わない（見つけた抜粋をつなぐだけ）']];
-    const GEMINI_MODELS = [['gemini-2.5-flash', 'Gemini 2.5 Flash（既定・無料枠あり）'], ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite（軽い・回数に強い）'], ['gemini-flash-latest', 'Gemini Flash 最新版（無料枠が無いことも）'], ['gemini-2.5-pro', 'Gemini 2.5 Pro（賢いが無料枠は少なめ）']];
+    const GEMINI_MODELS = [['auto', 'おまかせ（Flash → 回数切れなら Flash-Lite）'], ['lite', 'Flash-Lite 優先（1 日の回数がいちばん多い）'], ['pro', 'Pro を試す（無料枠では使えないことが多い → だめなら Flash）']];
     const chromeLM = () => { try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; return W.LanguageModel || (W.ai && W.ai.languageModel) || null; } catch (e) { return null; } };
     function aiOn() {
       if (AI.provider === 'gemini') return !!AI.gkey;
@@ -1985,24 +1993,48 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     async function gemini(question, ctxText) {
       const contents = aiHist.slice(-8).map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }))
         .concat([{ role: 'user', parts: [{ text: ctxText + '\n\n# 質問\n' + question }] }]);
-      const r = await geminiRun({ systemInstruction: { parts: [{ text: SYS }] }, contents, generationConfig: { maxOutputTokens: 2048, temperature: 0.5 } });
+      const r = await geminiRun({ systemInstruction: { parts: [{ text: SYS }] }, contents, generationConfig: { maxOutputTokens: 8192, temperature: 0.5 } });
       if (r.text) aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text });
       return r;
     }
-    /* v50: 無料枠が「0」のモデルや、終わったモデルに当たったら、次のモデルへ自動で回る。うまくいったモデルを覚える */
-    const GEMINI_CHAIN = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
-    let gemLast = '';
+    /* v51: 使えるモデルは鍵ごとに違う → Google に一覧を聞いて選ぶ。だめだったモデルはしばらく避ける（無料枠 0 は 1 日・回数切れは 1 分〜6 時間） */
+    const GEMINI_FALLBACK = ['gemini-flash-lite-latest', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
+    let gemList = null, gemLast = '';
+    async function gemModels() {
+      if (gemList) return gemList;
+      const r = await gmReq({ method: 'GET', timeout: 15000, url: 'https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', headers: { 'x-goog-api-key': AI.gkey } });
+      try {
+        const names = (JSON.parse(r.text).models || []).filter((m) => (m.supportedGenerationMethods || []).includes('generateContent'))
+          .map((m) => String(m.name).replace(/^models\//, '')).filter((n) => /^gemini-/.test(n) && !/(image|tts|audio|live|embed|robotics|computer|native|exp|learnlm)/.test(n));
+        if (r.status === 200) gemList = names;
+        return names;
+      } catch (e) { return []; }
+    }
+    const gemVer = (n) => parseFloat((/gemini-(\d+(?:\.\d+)?)/.exec(n) || [])[1] || 0);
+    const gemKind = (n) => /pro/.test(n) ? 'pro' : /lite/.test(n) ? 'lite' : /flash/.test(n) ? 'flash' : 'other';
+    function gemRank(names, mode) {
+      const late = (n) => (/preview/.test(n) ? 1 : 0) + (/latest/.test(n) ? 2 : 0);
+      const by = (k) => names.filter((n) => gemKind(n) === k).sort((a, b) => gemVer(b) - gemVer(a) || late(a) - late(b));
+      return (mode === 'pro' ? ['pro', 'flash', 'lite'] : mode === 'lite' ? ['lite', 'flash'] : ['flash', 'lite']).flatMap(by);
+    }
+    const gemBad = () => { const b = gmGet('c33.buri.gbad', {}) || {}; return typeof b === 'object' ? b : {}; };
+    function gemMark(model, ms) { const b = gemBad(), now = Date.now(); for (const k of Object.keys(b)) if (b[k] < now) delete b[k]; b[model] = now + ms; gmSet('c33.buri.gbad', b); }
     async function geminiRun(body) {
-      const order = [...new Set([gmGet('c33.buri.gok', ''), AI.gmodel, ...GEMINI_CHAIN].filter(Boolean))].slice(0, 6);
+      const mode = /^gemini-/.test(AI.gmodel) ? 'auto' : (AI.gmodel || 'auto');
+      const bad = gemBad(), now = Date.now();
+      const listed = await gemModels();
+      const order = [...new Set([/^gemini-/.test(AI.gmodel) ? AI.gmodel : '', ...gemRank(listed, mode), ...GEMINI_FALLBACK].filter(Boolean))]
+        .filter((m) => !(bad[m] > now)).slice(0, 6);
+      if (!order.length) return { err: '使えるモデルが一時的にありません（無料枠の回数切れ）。しばらくしてからどうぞ（お金はかかりません）', detail: Object.entries(bad).map(([m, t]) => m + ' → ' + new Date(t).toLocaleTimeString() + ' まで休み').join('\n') };
       const fails = [];
       for (const model of order) {
-        const r = await gmReq({ method: 'POST', timeout: 60000, url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent',
+        const r = await gmReq({ method: 'POST', timeout: 90000, url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent',
           headers: { 'content-type': 'application/json', 'x-goog-api-key': AI.gkey }, data: JSON.stringify(body) });
         let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
         const msg = (j && j.error && j.error.message) || r.err || ('HTTP ' + r.status);
         if (r.status === 200 && j) {
           const c = (j.candidates || [])[0];
-          const text = c && c.content && (c.content.parts || []).map((x) => x.text || '').join('').trim();
+          const text = c && c.content && (c.content.parts || []).filter((x) => !x.thought).map((x) => x.text || '').join('').trim();
           if (text) { gemLast = model; if (gmGet('c33.buri.gok', '') !== model) gmSet('c33.buri.gok', model); return { text, model }; }
           if (j.promptFeedback && j.promptFeedback.blockReason) return { err: 'この質問には答えられないと判断されました' };
           fails.push({ model, status: 200, msg: '空の返事' }); continue;
@@ -2012,17 +2044,18 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         if (r.status === 403) return { err: 'この鍵では Gemini を使えないようです（AI Studio で作った鍵か確かめてください）', detail: msg };
         if (/location is not supported/i.test(msg)) return { err: 'いまの接続先の地域では Gemini の無料枠が使えないようです', detail: msg };
         if (r.status === 0) return { err: 'Google につながりませんでした（' + msg + '）', detail: msg };
-        /* 429（回数・無料枠なし）/ 404（そのモデルが無い）/ 400（そのモデルでは使えない）/ 5xx（混雑）→ 次のモデルへ */
+        if (r.status === 429) gemMark(model, /limit:\s*0\b/i.test(msg) ? 864e5 : /per\s*day|PerDay|daily/i.test(msg) ? 216e5 : 6e4);
+        else if (r.status === 404) gemMark(model, 6048e5);
       }
-      const all = fails.map((f) => f.model + ' → ' + f.status + ' ' + String(f.msg).slice(0, 140)).join('\n');
-      const zero = fails.some((f) => /limit:\s*0\b|free_tier.*limit.*\b0\b/i.test(f.msg));
+      const all = fails.map((f) => f.model + ' → ' + f.status + ' ' + String(f.msg).slice(0, 160)).join('\n');
+      const zero = fails.length && fails.every((f) => /limit:\s*0\b/i.test(f.msg));
       const quota = fails.some((f) => f.status === 429);
       return { err: zero ? 'この鍵の Google プロジェクトには無料枠が付いていないようです。AI Studio で「新しいプロジェクトで API キーを作成」して貼り直してみてください（お金はかかりません）'
-        : quota ? '無料枠の回数に当たりました。1 分ほどおいてからもう一度どうぞ（お金はかかりません）'
+        : quota ? '無料枠の回数に当たりました。少しおいてからもう一度どうぞ（お金はかかりません）'
         : 'Gemini から返事がありませんでした', detail: all };
     }
     async function aiTest() {
-      if (AI.provider === 'gemini') { if (!AI.gkey) return { err: '鍵がまだ入っていません' }; return geminiRun({ contents: [{ role: 'user', parts: [{ text: '「つながりました」とだけ返してください。' }] }], generationConfig: { maxOutputTokens: 20 } }); }
+      if (AI.provider === 'gemini') { if (!AI.gkey) return { err: '鍵がまだ入っていません' }; return geminiRun({ contents: [{ role: 'user', parts: [{ text: '「つながりました」とだけ返してください。' }] }], generationConfig: { maxOutputTokens: 1024 } }); }
       if (AI.provider === 'chrome') return chromeAI('「つながりました」とだけ返してください。', '');
       if (AI.provider === 'claude') { if (!AI.key) return { err: '鍵がまだ入っていません' }; const r = await claude('「つながりました」とだけ返してください。', ''); aiHist.length = Math.max(0, aiHist.length - 2); return r; }
       return { err: 'AI を使わない設定です' };
@@ -2257,14 +2290,14 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, aiOn, aiName, chromeLM, aiTest, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; chromeSess = null; } };
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; chromeSess = null; } };
   })();
 
   /* ============================================================
    *  B.U.R.I の画面（アニメーション＋Web検索＋フローティング対応版）
    * ============================================================ */
   function obSearchBoot() {
-    ['c33-search-css', 'c33-search-header', 'c33-buri', 'c33-buri-file', 'c33-ns-css', 'c33-ns'].forEach((id) => { const e = document.getElementById(id); if (e) e.remove(); });
+    ['c33-search-css', 'c33-search-header', 'c33-buri', 'c33-buri-file', 'c33-ns-css', 'c33-ns', 'c33-nsp'].forEach((id) => { const e = document.getElementById(id); if (e) e.remove(); });
     const svgI = (p) => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
     const LENS = svgI('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/>');
     const MENU = svgI('<path d="M4 6h16M4 12h16M4 18h16"/>');
@@ -2369,7 +2402,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const footText = () => {
       const A = BURI.AI, on = BURI.aiOn();
       foot.textContent = !on ? '本棚・Notion 全体・Google を調べて答えます。「AI」で無料の Gemini（または Chrome 内蔵 AI）を選ぶと、まとめて話せるようになります。'
-        : A.provider === 'gemini' ? '本棚・Notion・Google を調べ、Gemini（無料枠・' + A.gmodel + '）がまとめて話します。質問と抜粋が Google に送られます（無料枠では改善に使われることがあります）。'
+        : A.provider === 'gemini' ? '本棚・Notion・Google を調べ、Gemini（無料枠・' + ((BURI.GEMINI_MODELS.find((x) => x[0] === A.gmodel) || [0, A.gmodel])[1].replace(/（.*$/, '')) + (BURI.gemLast() ? '・前回 ' + BURI.gemLast() : '') + '）がまとめて話します。質問と抜粋が Google に送られます（無料枠では改善に使われることがあります）。'
         : A.provider === 'chrome' ? '本棚・Notion・Google を調べ、Chrome 内蔵 AI がこの端末の中でまとめて話します（無料・外へは送りません）。'
         : '本棚・Notion・Google を調べ、Claude（' + A.model + '・有料）がまとめて話します。質問と抜粋が Anthropic に送られます。';
     };
@@ -2637,7 +2670,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         ev.preventDefault(); ev.stopPropagation();
         const p = pv.value, k = key.value.trim();
         A.provider = p; BURI.gmSet('c33.buri.provider', p);
-        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
+        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); BURI.gemReset(); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
         if (p === 'claude') { if (k) { A.key = k; BURI.gmSet('c33.buri.key', k); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); }
         footText(); out.textContent = '確かめています…';
         const r = await BURI.aiTest();
@@ -2647,7 +2680,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         ev.preventDefault(); ev.stopPropagation();
         const p = pv.value, k = key.value.trim();
         A.provider = p; BURI.gmSet('c33.buri.provider', p);
-        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
+        if (p === 'gemini') { if (k) { A.gkey = k; BURI.gmSet('c33.buri.gkey', k); BURI.gemReset(); } A.gmodel = sel.value; BURI.gmSet('c33.buri.gmodel', A.gmodel); }
         if (p === 'claude') { if (k) { A.key = k; BURI.gmSet('c33.buri.key', k); } A.model = sel.value; BURI.gmSet('c33.buri.model', A.model); }
         A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web); BURI.aiReset(); footText(); m.remove();
         say(BURI.aiOn() ? BURI.aiName() + ' で準備できました。なんでも聞いてください。たとえば「東野圭吾について教えて」。' : p === 'none' ? 'AI は使わずに、見つけたものをつないで答えます。' : '設定を保存しました（' + (p === 'chrome' ? 'この Chrome では内蔵 AI が見つからないので、しばらくは抜粋で答えます' : '鍵がまだ入っていません') + '）。');
@@ -2675,40 +2708,66 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }, true);
     
     /* ============================================================
-     *  v50: Notion の検索（⌘K）に B.U.R.I を同居させる
-     *   ・検索窓のすぐ下に「('-' 鰤)з B.U.R.I に聞く『…』」の行。クリックか Shift+Enter で、その場で答える
-     *   ・「〜について教えて」「〜とは？」のような質問っぽい言葉は、打ち終わって少し待つと自動で答える（設定で切れる）
-     *   ・答えの下に出典（Notion のページ・Web）。「B.U.R.I で続ける」で会話をサイドの B.U.R.I に引き継ぐ
-     *   ・同じ言葉は 2 度聞かない（無料枠の節約）
+     *  v51: Notion の検索（⌘K）に B.U.R.I を「融合」
+     *   ・左の結果一覧のいちばん上に「B.U.R.I」の段（Notion の Yesterday などと同じ見た目）。クリック / Shift+Enter で聞く
+     *   ・答えは右の大きなプレビュー欄に出す（Notion のプレビューと同じカードの形）。続けて聞く欄つき・会話を覚える
+     *   ・↑↓ で結果を選び直すとプレビューに戻る。「B.U.R.I」の段を押せば答えに戻る
+     *   ・プレビュー欄を隠している時は、段のすぐ下に答えを出す
+     *   ・「〜について教えて」「〜とは？」は打ち終わって少し待つと自動で答える（設定で切れる）。同じ言葉は 2 度聞かない
      * ============================================================ */
     const NS = { on: BURI.gmGet('c33.buri.ns', true) !== false, auto: BURI.gmGet('c33.buri.nsAuto', true) !== false };
     const nsCache = new Map();
     const RE_QUESTION = /(教えて|おしえて|とは|って何|ってなに|って誰|ってだれ|について|知りたい|なぜ|どうして|どうやって|おすすめ|[?？]\s*$)/u;
     const nsStyle = mk('style'); nsStyle.id = 'c33-ns-css';
     nsStyle.textContent = `
-#c33-ns { font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); border-bottom: 1px solid var(--ca-borSecTra, rgba(55,53,47,.09)); padding: 4px 6px 6px; }
-#c33-ns .ns-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; margin: 0; padding: 4px 8px; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
-#c33-ns .ns-row:hover, #c33-ns .ns-row:focus-visible { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); outline: none; }
-#c33-ns .ns-av { flex: none; padding: 1px 7px; border-radius: 10px; font-size: 11px; white-space: nowrap; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--c-texSec, #555); }
-#c33-ns .ns-lb { flex: none; font-weight: 600; }
-#c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--c-texSec, #787774); }
+#c33-ns { display: flex; flex-direction: column; padding-inline: 10px; font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); }
+#c33-ns[hidden] { display: none !important; }
+#c33-ns .ns-h { display: flex; align-items: center; gap: 6px; padding: 14px 8px 6px; font-size: 12px; color: var(--c-texTer, #9b9a97); }
+#c33-ns .ns-row { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; margin: 0; padding: 4px 8px; border: 0; border-radius: 12px; background: transparent; color: inherit; font: inherit; font-size: 14px; text-align: start; cursor: pointer; }
+#c33-ns .ns-row:hover, #c33-ns .ns-row.on { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+#c33-ns .ns-av { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 6px; font-size: 10px; white-space: nowrap; background: color-mix(in srgb, var(--lm-accent, #2783de) 14%, transparent); color: var(--c-texSec, #555); }
+#c33-ns .ns-lb { flex: none; font-weight: 500; color: var(--c-texAccPri, var(--c-texPri)); }
+#c33-ns .ns-dash { flex: none; font-size: 12px; color: var(--c-texSec, #787774); }
+#c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--c-texTer, #9b9a97); }
 #c33-ns .ns-kb { flex: none; font-size: 11px; color: var(--c-texTer, #9b9a97); }
-#c33-ns .ns-ans { margin: 4px 8px 2px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--lm-accent, #2783de) 6%, transparent); max-height: 38vh; overflow-y: auto; overscroll-behavior: contain; }
+#c33-ns .ns-ans { margin: 4px 8px 6px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--lm-accent, #2783de) 6%, transparent); max-height: 40vh; overflow-y: auto; overscroll-behavior: contain; }
 #c33-ns .ns-ans[hidden] { display: none; }
+#c33-nsp { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; padding: 34px 14px 16px 16px; font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); }
+#c33-nsp[hidden] { display: none !important; }
+#c33-nsp .np-card { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; background: var(--c-bacPri, #fff); box-shadow: var(--c-shaOutLg, 0 8px 28px rgba(0,0,0,.14)); }
+#c33-nsp .np-cover { flex: none; position: relative; height: 72px; background: color-mix(in srgb, var(--lm-accent, #2783de) 9%, var(--c-bacSec, #f7f6f3)); }
+#c33-nsp .np-badge { position: absolute; bottom: -18px; inset-inline-start: 24px; padding: 6px 10px; border-radius: 10px; font-size: 15px; background: var(--c-bacPri, #fff); box-shadow: var(--c-shaOutMd, 0 2px 8px rgba(0,0,0,.12)); }
+#c33-nsp .np-tools { position: absolute; top: 8px; inset-inline-end: 8px; display: flex; gap: 2px; padding: 2px; border-radius: 6px; background: var(--c-bacEle, #fff); box-shadow: var(--c-shaOutMd, 0 2px 8px rgba(0,0,0,.12)); }
+#c33-nsp .np-tools button { margin: 0; padding: 2px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--c-texSec, #787774); font: 12px/20px var(--c33-ui, inherit); cursor: pointer; }
+#c33-nsp .np-tools button:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+#c33-nsp .np-head { flex: none; padding: 28px 24px 10px; box-shadow: 0 1px 0 var(--ca-borSecTra, rgba(55,53,47,.09)); }
+html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open] #c33-buri:not(.floating) { visibility: hidden !important; }
+#c33-nsp .np-crumb { font-size: 12px; color: var(--c-texTer, #9b9a97); }
+#c33-nsp .np-title { font-size: 20px; line-height: 24px; font-weight: 600; }
+#c33-nsp .np-log { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 24px 12px; display: flex; flex-direction: column; gap: 14px; }
+#c33-nsp .np-q { align-self: flex-end; max-width: 90%; padding: 5px 11px; border-radius: 12px; font-size: 13px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); overflow-wrap: anywhere; }
+#c33-nsp .np-a { font-size: 14px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+#c33-nsp .np-src { display: flex; flex-direction: column; gap: 2px; margin-top: -6px; }
+#c33-nsp .np-src a { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 8px; font-size: 13px; color: var(--c-texPri, #37352f); text-decoration: none; overflow: hidden; }
+#c33-nsp .np-src a:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+#c33-nsp .np-src a span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-src a small { flex: none; font-size: 11px; color: var(--c-texTer, #9b9a97); }
+#c33-nsp .np-in { flex: none; display: flex; gap: 6px; padding: 10px 14px 14px; border-top: 1px solid var(--ca-borSecTra, rgba(55,53,47,.09)); }
+#c33-nsp .np-in input { flex: 1 1 auto; min-width: 0; padding: 6px 10px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.16)); border-radius: 8px; background: transparent; color: inherit; font: 14px var(--c33-ui, inherit); outline: none; }
+#c33-nsp .np-in input:focus { border-color: color-mix(in srgb, var(--lm-accent, #2783de) 60%, transparent); }
+#c33-nsp .np-in button { flex: none; margin: 0; padding: 0 12px; border: 0; border-radius: 8px; background: color-mix(in srgb, var(--lm-accent, #2783de) 14%, transparent); color: inherit; font: 13px var(--c33-ui, inherit); cursor: pointer; }
 #c33-ns .ns-tx { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.7; }
 #c33-ns .ns-src { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; }
-#c33-ns .ns-src a, #c33-ns .ns-src button { margin: 0; padding: 0; border: 0; background: none; font: inherit; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#c33-ns .ns-src a:hover, #c33-ns .ns-src button:hover { text-decoration: underline; }
-#c33-ns .ns-src .ns-go { font-weight: 600; }
-#c33-ns .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
-#c33-ns .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-texSec, #999); animation: bounce 1.4s infinite ease-in-out both; }
-#c33-ns .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
-#c33-ns .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+#c33-ns .ns-src a, #c33-ns .ns-src button { margin: 0; padding: 0; border: 0; background: none; font: inherit; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; cursor: pointer; }
+#c33-ns .thinking-dots, #c33-nsp .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
+#c33-ns .thinking-dots span, #c33-nsp .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-texSec, #999); animation: bounce 1.4s infinite ease-in-out both; }
+#c33-ns .thinking-dots span:nth-child(1), #c33-nsp .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+#c33-ns .thinking-dots span:nth-child(2), #c33-nsp .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
 `;
     (document.head || document.documentElement).appendChild(nsStyle);
     function nsInput() {
       for (const el of document.querySelectorAll('[data-search-container="true"] input, .notion-dialog[aria-label="Search Notion"] input, [role="dialog"] input[role="combobox"], [role="dialog"] input[type="text"]')) {
-        if (el.closest('#c33-search-header, #c33-buri, #c33-ns, #cordi-vs-sub')) continue;
+        if (el.closest('#c33-search-header, #c33-buri, #c33-ns, #c33-nsp, #cordi-vs-sub')) continue;
         if (!el.getBoundingClientRect().width) continue;
         const dlg = el.closest('[role="dialog"], .notion-dialog, [data-search-container="true"]');
         const hint = [el.placeholder, el.getAttribute('aria-label'), dlg && dlg.getAttribute('aria-label')].join(' ');
@@ -2716,86 +2775,163 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       }
       return null;
     }
-    function nsRowOf(inp) {
-      let el = inp;
-      for (let i = 0; i < 8 && el.parentElement; i++) {
-        const par = el.parentElement;
-        if (par.matches('[role="dialog"], .notion-dialog')) break;
-        if (par.getBoundingClientRect().height > el.getBoundingClientRect().height + 24) break;
-        el = par;
-      }
-      return el;
-    }
-    let nsInp = null, nsBox = null, nsTimer = 0, nsSeq = 0;
-    function nsBuild(inp) {
-      const box = mk('div'); box.id = 'c33-ns';
+    const stopKeys = (el) => ['keydown', 'keyup', 'keypress', 'beforeinput', 'input', 'paste', 'copy', 'cut'].forEach((t) => el.addEventListener(t, (e) => e.stopPropagation()));
+    let nsInp = null, nsDlg = null, nsBox = null, nsPane = null, nsTimer = 0, nsSeq = 0;
+    const nsConv = [];   // この検索窓での会話 [{ q, res }]
+    const srcLabel = (c) => c.type === 'Web' ? (/wikipedia/i.test(c.url) ? 'Wikipedia' : (() => { try { return new URL(c.url).hostname.replace(/^www\./, ''); } catch (e) { return 'Web'; } })()) : 'Notion';
+    function nsBuild() {
+      const box = mk('div'); box.id = 'c33-ns'; box.hidden = true;
+      const h = mk('div', 'ns-h', null, box); mk('span', null, 'B.U.R.I', h); mk('span', null, '— 相棒に聞く', h);
       const row = mk('button', 'ns-row', null, box); row.type = 'button';
       mk('span', 'ns-av', AVATAR, row);
       mk('span', 'ns-lb', 'B.U.R.I に聞く', row);
+      mk('span', 'ns-dash', '—', row);
       const qEl = mk('span', 'ns-q', '', row);
       mk('span', 'ns-kb', 'Shift+↵', row);
       const ans = mk('div', 'ns-ans', null, box); ans.hidden = true;
-      box.__q = qEl; box.__ans = ans;
-      row.addEventListener('mousedown', (e) => { e.preventDefault(); });
-      row.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); nsAsk(inp.value); });
-      box.addEventListener('pointerdown', (e) => e.stopPropagation());
+      box.__q = qEl; box.__ans = ans; box.__row = row;
+      row.addEventListener('mousedown', (e) => e.preventDefault());
+      row.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const q = nsInp ? nsInp.value.trim() : '';
+        if (nsConv.length && nsConv[nsConv.length - 1].q === q) nsShowPane(true); else nsAsk(q);
+      });
+      ['pointerdown', 'mousedown'].forEach((t) => box.addEventListener(t, (e) => e.stopPropagation()));
       return box;
+    }
+    function nsBuildPane() {
+      const p = mk('div'); p.id = 'c33-nsp'; p.hidden = true;
+      const card = mk('div', 'np-card', null, p);
+      const cover = mk('div', 'np-cover', null, card);
+      mk('div', 'np-badge', AVATAR, cover);
+      const tools = mk('div', 'np-tools', null, cover);
+      const bSide = mk('button', null, 'サイドで続ける', tools); bSide.type = 'button';
+      const bNew = mk('button', null, '新しい話', tools); bNew.type = 'button';
+      const bX = mk('button', null, '×', tools); bX.type = 'button'; bX.title = 'プレビューに戻す'; bX.setAttribute('aria-label', 'プレビューに戻す');
+      const head = mk('div', 'np-head', null, card);
+      const crumb = mk('div', 'np-crumb', '', head);
+      mk('div', 'np-title', 'B.U.R.I', head);
+      const log = mk('div', 'np-log', null, card); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite');
+      const form = mk('div', 'np-in', null, card);
+      const fin = mk('input', null, null, form); fin.type = 'text'; fin.placeholder = '続けて聞く…（Enter）'; fin.setAttribute('aria-label', 'B.U.R.I に続けて聞く');
+      const fgo = mk('button', null, '聞く', form); fgo.type = 'button';
+      stopKeys(p);
+      ['pointerdown', 'mousedown', 'click'].forEach((t) => p.addEventListener(t, (e) => e.stopPropagation()));
+      let comp = false;
+      fin.addEventListener('compositionstart', () => { comp = true; });
+      fin.addEventListener('compositionend', () => { comp = false; });
+      const go = () => { const q = fin.value.trim(); if (!q) return; fin.value = ''; nsAsk(q, true); };
+      fin.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && !comp) { e.preventDefault(); go(); } if (e.key === 'Escape') { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); } });
+      fgo.addEventListener('click', (e) => { e.preventDefault(); go(); });
+      bX.addEventListener('click', (e) => { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); });
+      bNew.addEventListener('click', (e) => { e.preventDefault(); nsConv.length = 0; BURI.aiReset(); log.textContent = ''; mk('div', 'np-a', 'はい、新しい話をどうぞ。', log); fin.focus(); });
+      bSide.addEventListener('click', (e) => { e.preventDefault(); nsToSide(); });
+      p.__log = log; p.__crumb = crumb; p.__fin = fin;
+      return p;
+    }
+    function nsToSide() {
+      const conv = nsConv.slice();
+      if (nsInp) nsInp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true }));
+      floatMode = true; panelOpen = true; input.focus(); input.setAttribute('aria-expanded', 'true'); layout();
+      conv.forEach((c) => { addUser(c.q); addBuri(c.res); });
+    }
+    const asideOf = (dlg) => { const a = dlg && dlg.querySelector('aside'); if (!a) return null; const r = a.getBoundingClientRect(); return r.width > 220 && r.height > 200 && getComputedStyle(a).opacity !== '0' ? a : null; };
+    function nsShowPane(show) {
+      if (!nsPane) return;
+      const aside = asideOf(nsDlg);
+      if (show && aside) {
+        if (nsPane.parentElement !== aside) { if (getComputedStyle(aside).position === 'static') aside.style.setProperty('position', 'relative'); aside.appendChild(nsPane); }
+        nsPane.__crumb.textContent = '相棒 / ' + (BURI.aiOn() ? BURI.aiName() + (BURI.AI.provider === 'claude' ? '' : '（無料）') : '抜粋モード（AI なし）');
+        nsPane.hidden = false;
+      } else nsPane.hidden = true;
+      if (nsBox) nsBox.__row.classList.toggle('on', !nsPane.hidden);
+      return !nsPane.hidden;
     }
     function nsSync() {
       if (!nsBox || !nsInp) return;
       const q = nsInp.value.trim();
-      nsBox.hidden = !q && nsBox.__ans.hidden;
-      nsBox.__q.textContent = q ? '「' + q + '」' : '';
-      clearTimeout(nsTimer);
+      nsBox.hidden = !q && nsBox.__ans.hidden && !nsConv.length;
+      nsBox.__q.textContent = q ? '「' + q + '」' : (nsConv.length ? '会話の続き' : '');
+      if (nsBox.__pend === q) return;   // 同じ言葉のまま → 待ち時間を延ばさない
+      nsBox.__pend = q; clearTimeout(nsTimer);
       if (q && NS.auto && RE_QUESTION.test(q) && q.length >= 4 && nsBox.__last !== q) nsTimer = setTimeout(() => { if (nsInp && nsInp.value.trim() === q) nsAsk(q); }, 1300);
     }
-    async function nsAsk(q) {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    async function typeInto(el, text, my) {
+      for (let i = 0; i < text.length; i += 3) { if (my !== nsSeq || !el.isConnected) { el.textContent = text; return; } el.textContent = text.slice(0, i + 3); await sleep(10); }
+      el.textContent = text;
+    }
+    async function nsAsk(q, follow) {
       q = String(q || '').trim();
       if (!q || !nsBox) return;
-      nsBox.__last = q; clearTimeout(nsTimer);
-      const my = ++nsSeq, ans = nsBox.__ans;
-      ans.hidden = false; nsBox.hidden = false; ans.textContent = '';
-      const dots = mk('div', 'thinking-dots', null, ans); dots.append(mk('span'), mk('span'), mk('span'));
-      let res = nsCache.get(q);
+      if (!follow) nsBox.__last = q;
+      clearTimeout(nsTimer);
+      const my = ++nsSeq;
+      nsBox.hidden = false;
+      const inPane = nsShowPane(true);
+      let log, ans = nsBox.__ans;
+      if (inPane) {
+        ans.hidden = true; log = nsPane.__log;
+        mk('div', 'np-q', q, log);
+      } else { ans.hidden = false; ans.textContent = ''; log = ans; }
+      const think = mk('div', 'thinking-dots', null, log); think.append(mk('span'), mk('span'), mk('span'));
+      if (inPane) log.scrollTop = log.scrollHeight;
+      let res = !follow && nsCache.get(q);
       if (!res) {
         try { res = await BURI.ask(q); } catch (e) { res = { text: 'ごめんなさい、調べている途中でつまずきました。（' + String(e && e.message || e) + '）', cards: [], chips: [], actions: [] }; }
         nsCache.set(q, res); if (nsCache.size > 30) nsCache.delete(nsCache.keys().next().value);
       }
-      if (my !== nsSeq || !ans.isConnected) return;
-      ans.textContent = '';
-      const tx = mk('div', 'ns-tx', '', ans);
-      const src = mk('div', 'ns-src', null, ans);
-      (res.cards || []).slice(0, 6).forEach((c) => {
-        if (!c.url) return;
-        const a = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); a.href = c.url; a.rel = 'noopener noreferrer'; a.title = c.title;
-        if (!c.url.startsWith(location.origin)) a.target = '_blank';
-      });
-      const go = mk('button', 'ns-go', 'B.U.R.I で続ける →', src); go.type = 'button';
-      go.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        const inp = nsInp;
-        if (inp) inp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true }));
-        floatMode = true; panelOpen = true; input.focus(); input.setAttribute('aria-expanded', 'true'); layout();
-        addUser(q); addBuri(res);
-      });
-      const text = res.text || '';
-      for (let i = 0; i < text.length; i += 3) {
-        if (my !== nsSeq || !tx.isConnected) return;
-        tx.textContent = text.slice(0, i + 3);
-        await new Promise((r) => setTimeout(r, 10));
+      think.remove();
+      nsConv.push({ q, res });
+      const cards = (res.cards || []).filter((c) => c.url).slice(0, 7);
+      if (inPane) {
+        const a = mk('div', 'np-a', '', log);
+        const src = mk('div', 'np-src', null, log);
+        cards.forEach((c) => {
+          const l = mk('a', null, null, src); l.href = c.url; l.rel = 'noopener noreferrer'; l.title = c.title;
+          if (!c.url.startsWith(location.origin)) l.target = '_blank';
+          mk('small', null, c.type === 'Web' ? '🌐' : '📄', l); mk('small', null, srcLabel(c), l); mk('span', null, c.title, l);
+        });
+        await typeInto(a, res.text || '', my);
+        log.scrollTop = log.scrollHeight;
+        if (my === nsSeq) nsPane.__fin.focus({ preventScroll: true });
+      } else {
+        const tx = mk('div', 'ns-tx', '', ans);
+        const src = mk('div', 'ns-src', null, ans);
+        cards.slice(0, 6).forEach((c) => { const l = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); l.href = c.url; l.rel = 'noopener noreferrer'; if (!c.url.startsWith(location.origin)) l.target = '_blank'; });
+        const gs = mk('button', null, 'B.U.R.I で続ける →', src); gs.type = 'button'; gs.style.fontWeight = '600';
+        gs.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); nsToSide(); });
+        await typeInto(tx, res.text || '', my);
       }
-      tx.textContent = text;
     }
     function nsTick() {
-      if (!NS.on) { if (nsBox) { nsBox.remove(); nsBox = null; nsInp = null; } return; }
+      if (!NS.on) { document.documentElement.removeAttribute('data-c33-ns-open'); if (nsBox) { nsBox.remove(); nsBox = null; } if (nsPane) { nsPane.remove(); nsPane = null; } nsInp = null; return; }
       const inp = nsInput();
-      if (!inp) { if (nsBox && !nsBox.isConnected) { nsBox = null; nsInp = null; } return; }
-      if (inp === nsInp && nsBox && nsBox.isConnected) return;
-      if (nsBox) nsBox.remove();
-      nsInp = inp; nsBox = nsBuild(inp); nsSeq++;
-      const row = nsRowOf(inp);
-      row.after(nsBox);
-      if (!inp.__c33ns) { inp.__c33ns = true; inp.addEventListener('input', nsSync); }
+      if (!!inp !== document.documentElement.hasAttribute('data-c33-ns-open')) document.documentElement.toggleAttribute('data-c33-ns-open', !!inp);
+      if (!inp) {
+        if (nsInp) { nsInp = null; nsDlg = null; nsConv.length = 0; if (nsBox) nsBox.remove(); if (nsPane) nsPane.remove(); nsBox = nsPane = null; }
+        return;
+      }
+      const dlg = inp.closest('[role="dialog"], .notion-dialog') || inp.closest('[data-search-container="true"]');
+      if (inp !== nsInp) {
+        if (nsBox) nsBox.remove(); if (nsPane) nsPane.remove();
+        nsInp = inp; nsDlg = dlg; nsConv.length = 0; nsSeq++;
+        nsBox = nsBuild(); nsPane = nsBuildPane();
+        if (!inp.__c33ns) {
+          inp.__c33ns = true;
+          inp.addEventListener('input', nsSync);
+          inp.addEventListener('keydown', (e) => { if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && nsPane && !nsPane.hidden) nsShowPane(false); });
+        }
+      }
+      /* 置き場所: 結果一覧（listbox）の直前。Notion が一覧を描き直しても戻す */
+      const list = dlg && dlg.querySelector('[role="listbox"]');
+      if (list && list.parentElement) { if (nsBox.nextElementSibling !== list || !nsBox.isConnected) list.before(nsBox); }
+      else if (!nsBox.isConnected) {
+        let el = inp;
+        for (let i = 0; i < 8 && el.parentElement; i++) { const par = el.parentElement; if (par.matches('[role="dialog"], .notion-dialog') || par.getBoundingClientRect().height > el.getBoundingClientRect().height + 24) break; el = par; }
+        el.after(nsBox);
+      }
+      if (nsPane && !nsPane.hidden && !asideOf(dlg)) nsShowPane(false);
       nsSync();
     }
     window.addEventListener('keydown', (e) => {
