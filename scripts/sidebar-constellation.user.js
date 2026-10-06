@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      54.0.0
-// @description  v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      55.0.0
+// @description  v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,14 @@
 // ==/UserScript==
 
 /*
+ * v55.0.0（賢くする）
+ *   ・「調べて。」が「。」→「句点」を調べていた → 速い AI（Groq など）が会話を読み、本当に調べる言葉・別の角度の言葉・質問の意図を作ってから調べる。
+ *   ・「お隣の天使様について どんなお話なの」が本棚の決まり文句（あらすじは登録されていません）で終わっていた →
+ *     AI がある時は、本棚の照合は材料として渡し、AI が Notion・Web・Wikipedia と合わせて答える。
+ *   ・Wikipedia はいちばん上の記事の本文（あらすじ・作品一覧・経歴）まで読む。Google は別の角度でももう 1 回。Notion は元の言葉でも探す。
+ *   ・MoA: まとめ役（Gemini）は下書きを書かない（無料回数の節約・時間切れ防止）。下書き役には前の答えを見せず話題だけ渡す（つられた謝罪・混同を防ぐ）。
+ *     下書きが全滅したらまとめ役が自分で答える。
+ *   ・OpenRouter は強いと分かっている無料モデルだけ（Kimi K2・DeepSeek V3・Qwen3 235B・gpt-oss-120b・Llama 3.3 70B など）。
  * v54.0.0
  *   ・Z.ai が「余额不足（残高不足）」→ glm-5.3-flash は有料だった（コード 1113）。Z.ai は無料と確かめた glm-4.7-flash / glm-4.5-flash だけを使う。
  *   ・布陣を組み直し（上から優先）: Gemini（まとめ役）→ NVIDIA（Kimi K2 / DeepSeek など最大級）→ Groq（gpt-oss-120b・速い）
@@ -91,7 +99,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '54.0.0';
+  const VERSION = '55.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1896,7 +1904,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       groq: { name: 'Groq', free: true, keyUrl: 'https://console.groq.com/keys', ph: 'gsk_…', note: 'とても速い。OpenAI の gpt-oss-120b など。無料（1 日 1,000 回前後）',
         base: 'https://api.groq.com/openai/v1', prefer: [/gpt-oss-120b/, /llama-3\.3-70b/, /qwen/, /gpt-oss-20b/, /llama/], skip: /(whisper|tts|guard|safeguard|embed|playai|orpheus|compound|distil)/ },
       openrouter: { name: 'OpenRouter', free: true, keyUrl: 'https://openrouter.ai/keys', ph: 'sk-or-…', note: '無料モデルだけを使う（DeepSeek・Qwen など）。1 日 50 回（$10 を一度入れると 1,000 回）',
-        base: 'https://openrouter.ai/api/v1', freeOnly: true, prefer: [/deepseek.*(chat|v3)/, /qwen3/, /llama-3\.3-70b/, /gemma-3/, /mistral/, /deepseek/], skip: /(vision|vl-|coder|embed|guard|-r1-distill)/,
+        base: 'https://openrouter.ai/api/v1', freeOnly: true, strict: true, prefer: [/kimi-k2/, /deepseek.*(chat|v3)/, /qwen3-235b|qwen3-max|qwen3\.\d+-\d{3}b/, /gpt-oss-120b/, /llama-3\.3-70b|llama-4-maverick/, /glm-4\.\d+(-air)?(?!.*flash)/, /hermes-.*405b|nemotron.*(ultra|super)/], skip: /(vision|vl-|coder|embed|guard|-r1-distill)/,
         headers: { 'HTTP-Referer': 'https://www.notion.so', 'X-Title': 'B.U.R.I' } },
       zai: { name: 'Z.ai GLM', free: true, keyUrl: 'https://z.ai/manage-apikey/apikey-list', ph: '…', note: '中国 Zhipu の GLM。無料は glm-4.7-flash と glm-4.5-flash だけ（それ以外は有料なので使いません）。混むと待たされる',
         base: 'https://api.z.ai/api/paas/v4', fixedOnly: true, fixed: ['glm-4.7-flash', 'glm-4.5-flash'], prefer: [/glm-4\.7-flash/, /glm-4\.5-flash/], maxTok: 4096 },
@@ -2029,12 +2037,18 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       } catch (e) { return []; }
     }
     /* v50: Wikipedia（日本語版）— 無料・鍵なし・崩れにくい。人物や作品の「まずの説明」に強い */
-    async function wikiSearch(q) {
+    async function wikiSearch(q, full) {
       if (!AI.web) return [];
       const r = await gmReq({ method: 'GET', timeout: 15000, url: 'https://ja.wikipedia.org/w/api.php?action=query&format=json&redirects=1&generator=search&gsrlimit=3&gsrsearch=' + encodeURIComponent(q) + '&prop=extracts%7Cinfo&inprop=url&exintro=1&explaintext=1&exchars=700' });
       try {
         const pages = Object.values(((JSON.parse(r.text) || {}).query || {}).pages || {}).sort((x, y) => (x.index || 0) - (y.index || 0));
-        return pages.filter((x) => x.extract && x.extract.length > 30).slice(0, 2).map((x) => ({ title: x.title + '（Wikipedia）', snippet: x.extract.replace(/\s+/g, ' ').trim(), url: x.fullurl || 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(x.title) }));
+        const out = pages.filter((x) => x.extract && x.extract.length > 30).slice(0, 2).map((x) => ({ title: x.title + '（Wikipedia）', snippet: x.extract.replace(/\s+/g, ' ').trim(), url: x.fullurl || 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(x.title), wt: x.title }));
+        /* v55: いちばん上の記事は本文も読む（あらすじ・作品一覧・経歴など。冒頭だけでは答えられない質問が多い） */
+        if (full && out[0]) {
+          const r2 = await gmReq({ method: 'GET', timeout: 15000, url: 'https://ja.wikipedia.org/w/api.php?action=query&format=json&redirects=1&prop=extracts&explaintext=1&exsectionformat=plain&exchars=3500&titles=' + encodeURIComponent(out[0].wt) });
+          try { const pg = Object.values(JSON.parse(r2.text).query.pages || {})[0]; if (pg && pg.extract && pg.extract.length > out[0].snippet.length) out[0].snippet = pg.extract.replace(/\n{2,}/g, '\n').replace(/[ \t]+/g, ' ').trim(); } catch (e) { /* noop */ }
+        }
+        return out;
       } catch (e) { return []; }
     }
     const SYS = [
@@ -2047,12 +2061,13 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       '・Notion（ユーザー自身の記録）と Web の情報が食い違う時は、両方を示す。',
       '・ふだんは 3〜8 文程度。一覧を求められたら箇条書き。最後に一言だけ、次に聞けそうなことを添えてもよい。'
     ].join('\n');
-    function sourcesText(nh, wh, shelf) {
+    function sourcesText(nh, wh, shelf, hint) {
       let t = '';
       const sh = shelf.slice(0, 8).map((r, i) => '[N' + (i + 1) + '] 本棚: ' + r.title + (r.author ? '／著者 ' + r.author : '') + (r.series ? '／シリーズ ' + r.series + (r.seq ? '（' + r.seq + '）' : '') : '') + (r.status ? '／状態 ' + r.status : '') + (r.synopsis ? '／あらすじ ' + String(r.synopsis).slice(0, 200) : ''));
       const nn = nh.map((x, i) => '[N' + (sh.length + i + 1) + '] Notion: ' + x.title + (x.snippet ? '／' + x.snippet.slice(0, 240) : ''));
       const ww = wh.map((x, i) => '[W' + (i + 1) + '] ' + x.title + '／' + x.snippet + '（' + x.url + '）');
       t += '# Notion の検索結果・本棚\n' + (sh.concat(nn).join('\n') || '（なし）') + '\n\n# Web の検索結果\n' + (ww.join('\n') || '（なし・または Web 検索を切っている）');
+      if (hint) t += '\n\n# 本棚の機械的な照合の結果（参考。言い回しはまねず、中身だけ使う）\n' + String(hint).slice(0, 600);
       return t;
     }
     /* v52: どの AI も「system と会話（turns）」を渡して文章を返す同じ形にそろえる（MoA で混ぜるため） */
@@ -2175,7 +2190,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     function oaiRank(id, ids) {
       const T = TEAM[id], out = [];
       for (const re of T.prefer) for (const n of ids) if (re.test(n.toLowerCase()) && !out.includes(n)) out.push(n);
-      for (const n of ids) if (!out.includes(n)) out.push(n);
+      if (!T.strict) for (const n of ids) if (!out.includes(n)) out.push(n);   // v55: OpenRouter は強いと分かっている無料モデルだけ（小さいモデルは混乱しやすい）
       const ok = gmGet('c33.buri.m.' + id, '');
       return [...new Set([ok && ids.includes(ok) ? ok : '', ...out].filter(Boolean))];
     }
@@ -2248,25 +2263,33 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       '・出典番号 [N1] [W2] は、根拠に本当に合うものだけを残す。',
       '・「下書き A によると」などの舞台裏は書かない。B.U.R.I として、答えだけを話す。'
     ].join('\n');
-    /* v52: MoA — 仲間がそれぞれ下書き → メイン（まとめ役）が根拠と照らして一つにする。仲間が 1 人なら普通に答える */
-    async function askAI(question, ctxText) {
-      const turns = aiHist.slice(-8).concat([{ role: 'user', content: ctxText + '\n\n# 質問\n' + question }]);
+    /* v52: MoA — 仲間がそれぞれ下書き → メイン（まとめ役）が根拠と照らして一つにする。仲間が 1 人なら普通に答える
+     * v55: まとめ役は下書きを書かない（Gemini の少ない無料回数を 1 回で済ませ、遅さで時間切れにもならない）。
+     *      下書き役には前の答えを見せず「これまでの話題」だけ渡す（前の答えにつられて謝ったり混同したりしないように）。質問の意図も渡す */
+    async function askAI(question, ctxText, plan) {
+      const intent = plan && plan.intent ? '\n\n# 質問の意図（会話の流れから）\n' + plan.intent : '';
+      const userMsg = ctxText + intent + '\n\n# 質問\n' + question;
       const t = team();
       const done = (r, extra) => { if (r.text) aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text }); return Object.assign(r, extra || {}); };
       if (!moaOn()) {
-        const id = ready(AI.provider) ? AI.provider : t[0];
+        const id = ready(AI.provider) && !pBad(AI.provider) ? AI.provider : t[0];
         prog({ k: 'draft', id, st: 'run' });
-        const r = await chat(id, SYS, turns);
+        const r = await chat(id, SYS, aiHist.slice(-6).concat([{ role: 'user', content: userMsg }]));
         prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
         return done(r, { who: id });
       }
-      t.forEach((id) => prog({ k: 'draft', id, st: 'run' }));
+      const aggId = [AI.provider, ...t].find((id) => ready(id) && id !== 'chrome' && !pBad(id)) || t[0];
+      let drafters = t.filter((id) => id !== aggId);
+      if (drafters.length < 2) drafters = t.slice();
+      const topics = aiHist.filter((m) => m.role === 'user').slice(-3).map((m) => String(m.content).slice(0, 60));
+      const draftTurns = [{ role: 'user', content: (topics.length ? '（これまでの話題: ' + topics.join(' → ') + '）\n\n' : '') + userMsg }];
+      drafters.forEach((id) => prog({ k: 'draft', id, st: 'run' }));
       /* v53: 遅い仲間を待ちすぎない — 2 人そろったら最大 10 秒だけ待ち、全体は 45 秒まで。間に合わない仲間は今回は外す */
       const drafts = await new Promise((resolve) => {
-        const res = t.map((id) => ({ id, err: '時間切れ（今回は外しました）' })); let left = t.length, okN = 0, fin = false, grace = 0;
+        const res = drafters.map((id) => ({ id, err: '時間切れ（今回は外しました）' })); let left = drafters.length, okN = 0, fin = false, grace = 0;
         const end = () => { if (fin) return; fin = true; clearTimeout(grace); clearTimeout(hard); res.forEach((d) => { if (!d.text && !d.done) prog({ k: 'draft', id: d.id, st: 'ng', err: d.err }); }); resolve(res.map((d) => Object.assign({}, d))); };
         const hard = setTimeout(end, 45000);
-        t.forEach((id, i) => chat(id, SYS, turns, 1500).catch((e) => ({ err: String(e && e.message || e) })).then((r) => {
+        drafters.forEach((id, i) => chat(id, SYS, draftTurns, 1500).catch((e) => ({ err: String(e && e.message || e) })).then((r) => {
           if (fin) return;
           res[i] = Object.assign({ id, done: true }, r);
           prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
@@ -2275,16 +2298,48 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         }));
       });
       const good = drafts.filter((d) => d.text);
-      if (!good.length) return { err: drafts.map((d) => TEAM[d.id].name + ': ' + d.err).join(' / '), detail: drafts.map((d) => TEAM[d.id].name + ' → ' + (d.detail || d.err)).join('\n'), drafts };
-      if (good.length === 1) return done({ text: good[0].text, model: good[0].model }, { drafts, who: good[0].id });
-      const aggId = [AI.provider, ...good.map((d) => d.id)].find((id) => ready(id) && id !== 'chrome') || good[0].id;
+      if (!good.length) {
+        /* 下書きが全滅 → まとめ役が自分で答える */
+        prog({ k: 'draft', id: aggId, st: 'run' });
+        const r0 = await chat(aggId, SYS, aiHist.slice(-6).concat([{ role: 'user', content: userMsg }]));
+        prog({ k: 'draft', id: aggId, st: r0.text ? 'ok' : 'ng', model: r0.model, err: r0.err });
+        if (r0.text) return done(r0, { drafts, who: aggId });
+        return { err: drafts.map((d) => TEAM[d.id].name + ': ' + d.err).join(' / '), detail: drafts.map((d) => TEAM[d.id].name + ' → ' + (d.detail || d.err)).join('\n'), drafts };
+      }
       prog({ k: 'merge', id: aggId, st: 'run' });
-      const mergeTurns = aiHist.slice(-4).concat([{ role: 'user', content: ctxText + '\n\n# 質問\n' + question + '\n\n# 仲間の下書き\n' + good.map((d, i) => '## 下書き ' + 'ABCDEFG'[i] + '\n' + d.text).join('\n\n') + '\n\n上の下書きを根拠と照らして、ひとつの最良の答えにしてください。' }]);
+      const mergeTurns = aiHist.slice(-4).concat([{ role: 'user', content: userMsg + '\n\n# 仲間の下書き（' + good.length + ' 人）\n' + good.map((d, i) => '## 下書き ' + 'ABCDEFG'[i] + '\n' + d.text).join('\n\n') + '\n\n上の下書きを根拠と照らして、質問の意図にまっすぐ答える、ひとつの最良の答えにしてください。' }]);
       const r = await chat(aggId, SYS + '\n' + AGG, mergeTurns, 3000);
       prog({ k: 'merge', id: aggId, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
       if (r.text) return done({ text: r.text, model: r.model }, { drafts, who: aggId, merged: true });
       const best = good.slice().sort((a, b) => b.text.length - a.text.length)[0];
       return done({ text: best.text, model: best.model }, { drafts, who: best.id });
+    }
+    /* v55: 会話を読んで「本当に調べるべき言葉」を作る（「調べて。」「もっと詳しく」「どんなお話？」を前の話題で補う） */
+    const waitMs = (ms) => new Promise((r) => setTimeout(r, ms));
+    const PLAN_SYS = [
+      'あなたは検索係です。会話の流れを読み、利用者の「次の発言」が本当に知りたいことを、Google で検索するための独立した検索語にします。',
+      '・「調べて」「もっと詳しく」「それ」「どんな話？」などは、前の話題で補う（例: 前が「お隣の天使様」なら「お隣の天使様にいつの間にか駄目人間にされていた件 あらすじ」）。',
+      '・作品名・人名は分かる範囲で正式な名前にする。15〜40 字。',
+      '・必ず JSON だけを出力する: {"q":"検索語","alt":"別の角度の検索語（あらすじ・作品一覧・評判など。不要なら空）","intent":"利用者が知りたいことを一文で"}'
+    ].join('\n');
+    const FOLLOW = /^(調べて|しらべて|詳しく|くわしく|もっと|他に|ほかに|それ|その|あれ|この|続き|つづき|次|なんで|なぜ|どうして|本当|ほんと|じゃあ|では|で$)/u;
+    let lastTopic = '';
+    const stripQ = (raw) => String(raw || '').replace(/(について)?(教えて|おしえて|知りたい|調べて|しらべて|って何|ってなに|とは|は\?|は？)/g, ' ').replace(/[。．？?！!、,]+/g, ' ').replace(/\s+/g, ' ').trim();
+    async function planQuery(raw) {
+      const base = stripQ(raw);
+      const thin = base.replace(/[\s\p{P}\p{S}]/gu, '').length < 2 || FOLLOW.test(base);
+      let plan = { q: thin && lastTopic ? (lastTopic + ' ' + base).trim() : (base || raw), alt: '', intent: '', by: '' };
+      const pid = ['groq', 'nvidia', 'openrouter', 'gemini'].find((id) => ready(id) && !pBad(id));
+      if (pid) {
+        prog({ k: 'plan', st: 'run' });
+        const hist = aiHist.slice(-4).map((m) => (m.role === 'user' ? '利用者: ' : 'B.U.R.I: ') + String(m.content).replace(/\s+/g, ' ').slice(0, 160)).join('\n');
+        const r = await Promise.race([chat(pid, PLAN_SYS, [{ role: 'user', content: (hist ? '# これまでの会話\n' + hist + '\n\n' : '') + '# 次の発言\n' + raw }], 1200), waitMs(9000).then(() => ({ err: '時間切れ' }))]);
+        const m = r.text && /\{[\s\S]*\}/.exec(r.text);
+        if (m) { try { const j = JSON.parse(m[0]); if (j.q && String(j.q).trim()) plan = { q: String(j.q).trim().slice(0, 80), alt: String(j.alt || '').trim().slice(0, 80), intent: String(j.intent || '').trim().slice(0, 160), by: TEAM[pid].name }; } catch (e) { /* noop */ } }
+        prog({ k: 'plan', st: 'ok', q: plan.q, alt: plan.alt });
+      }
+      lastTopic = plan.q;
+      return plan;
     }
     function firstSentence(s) { const t = String(s || '').replace(/\s+/g, ' ').trim(); const m = /^(.{20,160}?[。．！？!?])/.exec(t); return m ? m[1] : t.slice(0, 120) + (t.length > 120 ? '…' : ''); }
     /* v50: 「お隣の天使様 − 1」「− 2」… を「お隣の天使様（5 冊）」のようにまとめる */
@@ -2295,15 +2350,21 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const parts = [...m].map(([b, c]) => '「' + b + '」' + (c > 1 ? '（' + c + ' 冊）' : ''));
       return parts.slice(0, n).join('・') + (parts.length > n ? ' ほか' : '');
     }
-    async function deep(raw, shelf, baseCards, baseChips) {
-      const q = raw.replace(/(について)?(教えて|おしえて|知りたい|調べて|しらべて|って何|ってなに|とは|は\?|は？)/g, ' ').replace(/\s+/g, ' ').trim() || raw;
+    let LOCAL_ONLY = false, lastCand = [];
+    async function deep(raw, shelf, baseCards, baseChips, hint) {
+      if (LOCAL_ONLY) return { __deep: true, shelf: shelf || [], cards: baseCards || [], chips: baseChips };
+      const plan = aiOn() ? await planQuery(raw) : { q: stripQ(raw) || raw, alt: '' };
+      const q = plan.q;
       prog({ k: 'search', q });
-      const [nh0, gh, kh] = await Promise.all([notionSearch(q), googleSearch(q), wikiSearch(q)]);
+      const core = stripQ(raw);
+      const [nh0, gh, kh, gh2, nh1] = await Promise.all([notionSearch(q), googleSearch(q), wikiSearch(q, true), plan.alt ? googleSearch(plan.alt) : Promise.resolve([]),
+        core && core !== q && core.length >= 2 ? notionSearch(core) : Promise.resolve([])]);
       const shelfSet = new Set(shelf.map((r) => nz(r.title)));
-      const nh = nh0.filter((x) => !shelfSet.has(nz(x.title)));
+      const nseen = new Set();
+      const nh = nh0.concat(nh1).filter((x) => !shelfSet.has(nz(x.title)) && !nseen.has(x.url) && nseen.add(x.url)).slice(0, 10);
       const wseen = new Set(), wh = [];
-      for (const x of kh.concat(gh)) { if (!wseen.has(x.url)) { wseen.add(x.url); wh.push(x); } }
-      wh.splice(7);
+      for (const x of kh.concat(gh.slice(0, 5), gh2.slice(0, 4), gh.slice(5))) { if (!wseen.has(x.url)) { wseen.add(x.url); wh.push(x); } }
+      wh.splice(9);
       prog({ k: 'found', n: shelf.length + nh.length, w: wh.length });
       const refs = { N: shelf.slice(0, 8).map((r) => ({ title: r.title, url: r.url || '' })).concat(nh.map((x) => ({ title: x.title, url: x.url }))), W: wh.map((x) => ({ title: x.title, url: x.url })) };
       const R = (o) => Object.assign(o, { refs });
@@ -2312,7 +2373,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       wh.slice(0, 3).forEach((x) => cards.push({ title: x.title, url: x.url, type: 'Web', linkLabel: 'Web で開く' }));
       if (!nh.length && !wh.length && !shelf.length) return reply('「' + q + '」は、Notion の中にも Web にも見つかりませんでした。言い方を変えて聞いてみてください。', [], exChips().slice(0, 2), ['notion'], q);
       if (aiOn()) {
-        const r = await askAI(raw, sourcesText(nh, wh, shelf));
+        const r = await askAI(raw, sourcesText(nh, wh, shelf, hint), plan);
         const moa = { drafts: (r.drafts || []).map((d) => ({ id: d.id, name: TEAM[d.id].name, model: d.model || '', text: d.text || '', err: d.err || '' })), who: r.who ? TEAM[r.who].name : '', model: r.model || '', merged: !!r.merged };
         if (r.text) return R(Object.assign(reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q), { moa }));
         lastAiErr = r.detail || r.err || '';
@@ -2408,7 +2469,21 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       });
     }
 
+    /* v55: AI がある時は、本棚の決まり文句で答えて終わらせない。本棚の照合は材料として AI に渡し、AI が Notion・Web と合わせて答える */
     async function ask(input) {
+      const raw = String(input == null ? '' : input).trim();
+      const q0 = nz(raw).replace(/[?？!！。．.、,〜~…]+/gu, ' ').replace(/\s+/gu, ' ').trim();
+      if (!aiOn() || !q0 || !records.length || RE.greet.test(q0) || RE.thanks.test(q0) || RE.help.test(q0)) return askLocal(input);
+      LOCAL_ONLY = true; lastCand = [];
+      let loc = null;
+      try { loc = await askLocal(input); } catch (e) { loc = null; } finally { LOCAL_ONLY = false; }
+      const viaDeep = !!(loc && loc.__deep);
+      const shelf = (viaDeep && loc.shelf.length ? loc.shelf : lastCand).slice(0, 8);
+      const cards = loc ? (loc.cards || []).slice(0, 4) : [];
+      const chips = loc && loc.chips && loc.chips.length ? loc.chips : null;
+      return deep(raw, shelf, cards, chips, !viaDeep && loc ? loc.text : '');
+    }
+    async function askLocal(input) {
       const raw = String(input == null ? '' : input).trim();
       const q0 = nz(raw).replace(/[?？!！。．.、,〜~…]+/gu, ' ').replace(/\s+/gu, ' ').trim();
       if (!q0) return reply('なにか聞いてください。たとえば「東野圭吾の本ある？」「ミステリーでおすすめは？」です。', [], records.length ? exChips() : []);
@@ -2470,6 +2545,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const askOne = it.next || it.prev || it.syn || it.who;
       if (!focus && (it.ref || (askOne && !has))) focus = ctx.last;
       if (!focus && askOne && has && cand.length === 1) focus = cand[0];
+      lastCand = focus ? uniq([focus].concat(cand)) : cand.slice();
 
       if (it.next || it.prev) return step(focus, it.next ? 1 : -1);
       if (it.syn) return synopsis(focus, cand, has);
@@ -3247,7 +3323,8 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       return {
         box,
         on(e) {
-          if (e.k === 'search') step('s', 'Notion・本棚・Web を調べています');
+          if (e.k === 'plan') { const r = step('p', '会話を読んで、調べる言葉を決めています'); if (e.st === 'ok') { r.__t.textContent = '調べる言葉: ' + e.q; set(r, 'ok', e.alt ? '別の角度: ' + e.alt : ''); } }
+          else if (e.k === 'search') step('s', 'Notion・本棚・Web を調べています');
           else if (e.k === 'found') set(step('s', '調べました'), 'ok', 'Notion・本棚 ' + e.n + ' 件 / Web ' + e.w + ' 件');
           else if (e.k === 'draft') { const nm = BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id; const r = step('d' + e.id, nm + (BURI.moaOn() ? ' が下書き' : ' が考えています')); if (e.st !== 'run') set(r, e.st, e.st === 'ok' ? e.model : e.err); }
           else if (e.k === 'merge') { const r = step('m', (BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id) + ' がまとめています'); if (e.st !== 'run') set(r, e.st, e.st === 'ok' ? e.model : e.err); }
