@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      52.0.0
-// @description  v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      52.1.0
+// @description  v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -25,6 +25,10 @@
 // ==/UserScript==
 
 /*
+ * v52.1.0
+ *   ・Firefox（ScriptCat）で検索窓を押しても Notion の検索画面が開かず、エラーが出ていた。
+ *     原因: 押す動作の MouseEvent に view: window を渡していた（ScriptCat の window は本物の Window ではない）。view を外し、失敗しても ⌘K で開く。
+ *     輪の設定の「サイドバーを閉じる」などの押す動作も同じ原因で失敗していたので一緒に直る。
  * v52.0.0
  *   ・サイドの検索窓（B.U.R.I）を押すと Notion の検索画面が開き、右の欄に B.U.R.I のホーム（あいさつ・本棚と AI の状態・最近の質問・聞いてみる）。
  *     Enter で打った言葉をそのまま聞く。⌘⌥B の浮かぶ B.U.R.I はこれまで通り。検索タブで開かない時は ⌘K を送る。
@@ -72,7 +76,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '52.0.0';
+  const VERSION = '52.1.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -685,13 +689,15 @@ ${icons}
   function obPress(el) {
     if (!el) return false;
     const r = el.getBoundingClientRect();
-    const o = { bubbles: true, cancelable: true, composed: true, view: window, button: 0, buttons: 1, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 };
+    /* v53: view は付けない（Firefox の ScriptCat では window が本物の Window ではなく、MouseEvent が例外を出していた） */
+    const o = { bubbles: true, cancelable: true, composed: true, button: 0, buttons: 1, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 };
     const pe = { pointerId: 1, pointerType: 'mouse', isPrimary: true };
-    try { el.dispatchEvent(new PointerEvent('pointerdown', Object.assign({}, pe, o))); } catch (e) { /* noop */ }
-    el.dispatchEvent(new MouseEvent('mousedown', o));
-    try { el.dispatchEvent(new PointerEvent('pointerup', Object.assign({}, pe, o, { buttons: 0 }))); } catch (e) { /* noop */ }
-    el.dispatchEvent(new MouseEvent('mouseup', Object.assign({}, o, { buttons: 0 })));
-    el.dispatchEvent(new MouseEvent('click', Object.assign({}, o, { buttons: 0 })));
+    const fire = (C, type, init) => { try { el.dispatchEvent(new C(type, init)); return true; } catch (e) { return false; } };
+    fire(PointerEvent, 'pointerdown', Object.assign({}, pe, o));
+    fire(MouseEvent, 'mousedown', o);
+    fire(PointerEvent, 'pointerup', Object.assign({}, pe, o, { buttons: 0 }));
+    fire(MouseEvent, 'mouseup', Object.assign({}, o, { buttons: 0 }));
+    if (!fire(MouseEvent, 'click', Object.assign({}, o, { buttons: 0 }))) { try { el.click(); } catch (e) { return false; } }
     return true;
   }
   function obWait(fn, ms, step) {
@@ -2654,7 +2660,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       let inp = nativeInput();
       if (!inp) {
         const t = obTabs().find((x) => /^(search|検索)/i.test(x.name));
-        if (t) { obPress(t.el); inp = await obWait(nativeInput, 900); }
+        if (t) { try { obPress(t.el); } catch (e) { /* noop */ } inp = await obWait(nativeInput, 900); }
         if (!inp) {   /* 押しても開かない時は ⌘K（Windows は Ctrl+K） */
           const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
           document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', code: 'KeyK', keyCode: 75, which: 75, metaKey: mac, ctrlKey: !mac, bubbles: true, cancelable: true, composed: true }));
