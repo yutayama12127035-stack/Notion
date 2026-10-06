@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      52.1.0
-// @description  v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      53.0.0
+// @description  v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -20,11 +20,20 @@
 // @connect      ja.wikipedia.org
 // @connect      api.groq.com
 // @connect      openrouter.ai
-// @connect      api.mistral.ai
+// @connect      integrate.api.nvidia.com
+// @connect      api.z.ai
+// @connect      api.cohere.com
 // @noframes
 // ==/UserScript==
 
 /*
+ * v53.0.0
+ *   ・Mistral を外した（2026 年 8 月から無料 API は月 $10 分のクレジット制になり、使い切ると止まる）。
+ *   ・無料の仲間を追加: NVIDIA（build.nvidia.com・カード不要・DeepSeek / Kimi / Qwen / Llama などの大型モデル・1 分 40 回）、
+ *     Z.ai GLM（Flash モデルだけを使う＝無料）、Cohere（試用キー・月 1,000 回・Command A）。
+ *   ・並び（優先順）: Gemini → Groq → OpenRouter → NVIDIA → Z.ai → Cohere → Chrome 内蔵 → Claude（有料）。
+ *   ・相談の人数（2〜6・全員。既定 4）。上から順に、鍵の入った仲間を人数ぶん選ぶ（メインは必ず入る）。
+ *   ・遅い仲間を待ちすぎない: 2 人の下書きがそろったら最大 10 秒、全体で 45 秒まで。間に合わない仲間は今回は外す。
  * v52.1.0
  *   ・Firefox（ScriptCat）で検索窓を押しても Notion の検索画面が開かず、エラーが出ていた。
  *     原因: 押す動作の MouseEvent に view: window を渡していた（ScriptCat の window は本物の Window ではない）。view を外し、失敗しても ⌘K で開く。
@@ -76,7 +85,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '52.1.0';
+  const VERSION = '53.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1867,10 +1876,11 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false,
       gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'auto'), provider: '',
       keys: {}, use: {}, moa: gmGet('c33.buri.moa', true) !== false };
-    /* v49: どの AI を使うか — v52 からは「メイン（＝まとめ役）」。gemini / groq / openrouter / mistral（無料）・chrome（無料・鍵なし）・claude（有料）・none */
+    /* v49: どの AI を使うか — v52 からは「メイン（＝まとめ役）」。gemini / groq / openrouter / nvidia / zai / cohere（無料）・chrome（無料・鍵なし）・claude（有料）・none */
     AI.provider = gmGet('c33.buri.provider', '') || (AI.key ? 'claude' : 'gemini');
     if (/^gemini-(flash-latest|2\.5-flash)$/.test(AI.gmodel)) AI.gmodel = 'auto';   // v49/v50 の既定は「おまかせ」へ
     if (/^gemini-.*pro/.test(AI.gmodel)) AI.gmodel = 'pro';
+    if (AI.provider === 'mistral') AI.provider = 'gemini';   // v53: Mistral は外した
     /* v52: 仲間（MoA = Mixture of Agents）。みんなが下書き → メインが根拠と照らしてまとめる */
     const TEAM = {
       gemini: { name: 'Gemini', free: true, keyUrl: 'https://aistudio.google.com/apikey', ph: 'AIza…', note: 'Google。無料枠（Flash は 1 日 20 回前後・Flash-Lite は数百回）' },
@@ -1879,16 +1889,22 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       openrouter: { name: 'OpenRouter', free: true, keyUrl: 'https://openrouter.ai/keys', ph: 'sk-or-…', note: '1 つの鍵で無料モデル多数（DeepSeek・Qwen・Llama ほか）。無料（1 日 50〜200 回）',
         base: 'https://openrouter.ai/api/v1', freeOnly: true, prefer: [/deepseek.*(chat|v3)/, /qwen3/, /llama-3\.3-70b/, /gemma-3/, /mistral/, /deepseek/], skip: /(vision|vl-|coder|embed|guard|-r1-distill)/,
         headers: { 'HTTP-Referer': 'https://www.notion.so', 'X-Title': 'B.U.R.I' } },
-      mistral: { name: 'Mistral', free: true, keyUrl: 'https://console.mistral.ai/api-keys', ph: '…', note: 'フランスの AI。無料の Experiment プラン（電話番号の確認が要る）',
-        base: 'https://api.mistral.ai/v1', prefer: [/^mistral-medium-latest$/, /^mistral-large-latest$/, /^mistral-small-latest$/, /^mistral-medium/, /^mistral-large/, /^mistral-small/], skip: /(embed|moderation|ocr|codestral|pixtral|voxtral|devstral|magistral|ministral)/ },
+      nvidia: { name: 'NVIDIA', free: true, keyUrl: 'https://build.nvidia.com/settings/api-keys', ph: 'nvapi-…', note: 'NVIDIA の無料 API（開発者登録だけ・カード不要）。DeepSeek・Kimi・Qwen・Llama など大きなモデル。1 分 40 回まで',
+        base: 'https://integrate.api.nvidia.com/v1', prefer: [/deepseek-v3/, /kimi-k2/, /qwen3-235b|qwen3\.\d+-\d{3}b|qwen3-next/, /llama-4-maverick/, /llama-3\.3-70b-instruct/, /nemotron.*(ultra|super)/, /gpt-oss-120b/, /mistral-(large|medium)/],
+        skip: /(embed|rerank|retriev|vision|-vl|vl-|guard|safety|reward|parse|clip|whisper|coder|tts|asr|riva|translate|detect|pii|deplot|kosmos|fuyu|paligemma|neva|vila|cosmos|bge|e5-|arctic|sdxl|flux|ocr|-r1|r1-|math|base$|-8b|-7b|-3b|-1b|mini)/ },
+      zai: { name: 'Z.ai GLM', free: true, keyUrl: 'https://z.ai/manage-apikey/apikey-list', ph: '…', note: '中国 Zhipu の GLM。Flash モデルは無料（1 秒 1 回ほど）。日本語も上手',
+        base: 'https://api.z.ai/api/paas/v4', onlyRe: /flash(?!x)/, fixed: ['glm-4.7-flash', 'glm-4.5-flash'], prefer: [/glm-5.*flash/, /glm-4\.7-flash/, /glm-4\.\d+-flash/, /flash/], maxTok: 4096 },
+      cohere: { name: 'Cohere', free: true, keyUrl: 'https://dashboard.cohere.com/api-keys', ph: '…', note: 'Command A（カナダ）。無料の試用キーで月 1,000 回まで',
+        cohere: true, prefer: [/^command-a-(?!.*(vision|reason|translate))/, /^command-a/, /^command-r-plus/, /^command-r/] },
       chrome: { name: 'Chrome 内蔵', free: true, nokey: true, note: '鍵なし・端末の中だけ。素朴なので相談役に向く' },
       claude: { name: 'Claude', free: false, keyUrl: 'https://console.anthropic.com/settings/keys', ph: 'sk-ant-…', note: '有料（使った分だけ）。いちばん上手' }
     };
     const TEAM_IDS = Object.keys(TEAM);
     for (const id of TEAM_IDS) AI.keys[id] = id === 'gemini' ? AI.gkey : id === 'claude' ? AI.key : gmGet('c33.buri.k.' + id, '');
-    AI.use = Object.assign({ gemini: true, groq: true, openrouter: true, mistral: true, chrome: false, claude: false }, gmGet('c33.buri.use', {}) || {});
+    AI.use = Object.assign({ gemini: true, groq: true, openrouter: true, nvidia: true, zai: true, cohere: true, chrome: false, claude: false }, gmGet('c33.buri.use', {}) || {});
+    AI.size = Number(gmGet('c33.buri.size', 4)) || 4;   // 相談の人数（まとめ役を含む）
     function setKey(id, k) { AI.keys[id] = k; if (id === 'gemini') { AI.gkey = k; gmSet('c33.buri.gkey', k); gemList = null; gmSet('c33.buri.gbad', {}); } else if (id === 'claude') { AI.key = k; gmSet('c33.buri.key', k); } else { gmSet('c33.buri.k.' + id, k); oaiList[id] = null; } }
-    const PROVIDERS = [['gemini', 'Google Gemini（無料）'], ['groq', 'Groq（無料）'], ['openrouter', 'OpenRouter（無料モデル）'], ['mistral', 'Mistral（無料）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし）'], ['claude', 'Claude（有料）'], ['none', '使わない（抜粋だけ）']];
+    const PROVIDERS = [['gemini', 'Google Gemini（無料）'], ['groq', 'Groq（無料）'], ['openrouter', 'OpenRouter（無料モデル）'], ['nvidia', 'NVIDIA（無料）'], ['zai', 'Z.ai GLM（無料）'], ['cohere', 'Cohere（無料の試用）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし）'], ['claude', 'Claude（有料）'], ['none', '使わない（抜粋だけ）']];
     const GEMINI_MODELS = [['auto', 'おまかせ（Flash → 回数切れなら Flash-Lite）'], ['lite', 'Flash-Lite 優先（1 日の回数がいちばん多い）'], ['pro', 'Pro を試す（無料枠では使えないことが多い → だめなら Flash）']];
     const chromeLM = () => { try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; return W.LanguageModel || (W.ai && W.ai.languageModel) || null; } catch (e) { return null; } };
     const ready = (id) => id === 'chrome' ? !!chromeLM() : !!(TEAM[id] && AI.keys[id]);
@@ -1896,7 +1912,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     function team() {
       const t = TEAM_IDS.filter((id) => AI.use[id] && ready(id));
       if (ready(AI.provider) && !t.includes(AI.provider)) t.unshift(AI.provider);
-      return t.sort((a, b) => (b === AI.provider) - (a === AI.provider));
+      t.sort((a, b) => (b === AI.provider) - (a === AI.provider));
+      return t.slice(0, Math.max(1, AI.size));   // v53: 多すぎると遅く・回数も減るので人数で切る（並びの順＝優先）
     }
     function aiOn() { return AI.provider !== 'none' && (ready(AI.provider) || team().length > 0); }
     const moaOn = () => AI.moa && team().length >= 2;
@@ -2113,7 +2130,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         return text ? { text, model: 'Gemini Nano' } : { err: '空の返事でした' };
       } catch (e) { return { err: (e && e.message) || 'Chrome 内蔵 AI が動きませんでした（初回はモデルのダウンロード待ちのことがあります）' }; }
     }
-    /* v52: OpenAI 互換の無料 AI（Groq・OpenRouter・Mistral）— 鍵で使えるモデルの一覧を聞いて、良さそうな順に試す */
+    /* v52: OpenAI 互換の無料 AI（Groq・OpenRouter・NVIDIA・Z.ai）— 鍵で使えるモデルの一覧を聞いて、良さそうな順に試す */
     const oaiList = {};
     async function oaiModels(id) {
       const T = TEAM[id];
@@ -2123,10 +2140,12 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       try {
         const j = JSON.parse(r.text); const arr = Array.isArray(j) ? j : (j.data || j.models || []);
         ids = arr.filter((m) => !T.freeOnly || /:free$/.test(m.id) || (m.pricing && Number(m.pricing.prompt) === 0 && Number(m.pricing.completion) === 0))
+          .filter((m) => !T.onlyRe || T.onlyRe.test(String(m.id || m.name).toLowerCase()))
           .filter((m) => !m.capabilities || m.capabilities.completion_chat !== false)
           .map((m) => String(m.id || m.name)).filter((n) => n && !(T.skip && T.skip.test(n.toLowerCase())));
       } catch (e) { /* noop */ }
       if (r.status === 200 && ids.length) oaiList[id] = ids;
+      if (!ids.length && T.fixed && r.status !== 401 && r.status !== 403) return T.fixed.slice();   // 一覧を出さない所は既知の無料モデルで
       return ids;
     }
     function oaiRank(id, ids) {
@@ -2145,7 +2164,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       for (const model of models) {
         const r = await gmReq({ method: 'POST', timeout: 90000, url: T.base + '/chat/completions',
           headers: Object.assign({ 'content-type': 'application/json', Authorization: 'Bearer ' + AI.keys[id] }, T.headers || {}),
-          data: JSON.stringify({ model, messages: [{ role: 'system', content: sys }].concat(turns), max_tokens: maxTok || 2000, temperature: 0.5 }) });
+          data: JSON.stringify({ model, messages: [{ role: 'system', content: sys }].concat(turns), max_tokens: Math.max(maxTok || 2000, T.maxTok || 0), temperature: 0.5 }) });
         let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
         const msg = (j && j.error && (j.error.message || j.error)) || r.err || ('HTTP ' + r.status);
         if (r.status === 200 && j && j.choices && j.choices[0]) {
@@ -2158,7 +2177,32 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       }
       return { err: fails.some((f) => / 429 /.test(f)) ? '無料枠の回数に当たりました' : '返事がありませんでした', detail: fails.join('\n') };
     }
+    /* v53: Cohere（試用キーは無料・月 1,000 回）— Cohere 独自の v2/chat */
+    async function cohereChat(sys, turns, maxTok) {
+      const H = { 'content-type': 'application/json', Authorization: 'Bearer ' + AI.keys.cohere, accept: 'application/json' };
+      if (!oaiList.cohere) {
+        const r = await gmReq({ method: 'GET', timeout: 15000, url: 'https://api.cohere.com/v1/models?endpoint=chat&page_size=100', headers: H });
+        try { const names = (JSON.parse(r.text).models || []).map((m) => String(m.name)).filter((n) => /^command/.test(n)); if (names.length) oaiList.cohere = names; } catch (e) { /* noop */ }
+      }
+      const models = oaiRank('cohere', oaiList.cohere || ['command-a-03-2025', 'command-r-plus-08-2024']).slice(0, 2);
+      const fails = [];
+      for (const model of models) {
+        const r = await gmReq({ method: 'POST', timeout: 90000, url: 'https://api.cohere.com/v2/chat', headers: H,
+          data: JSON.stringify({ model, messages: [{ role: 'system', content: sys }].concat(turns), max_tokens: maxTok || 2000, temperature: 0.5 }) });
+        let j = null; try { j = JSON.parse(r.text); } catch (e) { /* noop */ }
+        if (r.status === 200 && j && j.message) {
+          const text = stripThink((j.message.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('').trim());
+          if (text) { if (gmGet('c33.buri.m.cohere', '') !== model) gmSet('c33.buri.m.cohere', model); return { text, model }; }
+        }
+        const msg = (j && (j.message && typeof j.message === 'string' ? j.message : j.error)) || r.err || ('HTTP ' + r.status);
+        fails.push(model + ' → ' + r.status + ' ' + String(msg).slice(0, 140));
+        if (r.status === 401 || r.status === 403) return { err: '鍵が正しくないようです', detail: fails.join('\n') };
+        if (r.status === 0) return { err: 'つながりませんでした', detail: fails.join('\n') };
+      }
+      return { err: fails.some((f) => / 429 /.test(f)) ? '試用の回数に当たりました' : '返事がありませんでした', detail: fails.join('\n') };
+    }
     function chat(id, sys, turns, maxTok) {
+      if (id === 'cohere') return cohereChat(sys, turns, maxTok);
       if (id === 'gemini') return geminiChat(sys, turns, maxTok);
       if (id === 'claude') return claudeChat(sys, turns, maxTok);
       if (id === 'chrome') return chromeChat(sys, turns, maxTok);
@@ -2187,7 +2231,19 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         return done(r, { who: id });
       }
       t.forEach((id) => prog({ k: 'draft', id, st: 'run' }));
-      const drafts = await Promise.all(t.map((id) => chat(id, SYS, turns, 1500).then((r) => { prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err }); return Object.assign({ id }, r); })));
+      /* v53: 遅い仲間を待ちすぎない — 2 人そろったら最大 10 秒だけ待ち、全体は 45 秒まで。間に合わない仲間は今回は外す */
+      const drafts = await new Promise((resolve) => {
+        const res = t.map((id) => ({ id, err: '時間切れ（今回は外しました）' })); let left = t.length, okN = 0, fin = false, grace = 0;
+        const end = () => { if (fin) return; fin = true; clearTimeout(grace); clearTimeout(hard); res.forEach((d) => { if (!d.text && !d.done) prog({ k: 'draft', id: d.id, st: 'ng', err: d.err }); }); resolve(res.map((d) => Object.assign({}, d))); };
+        const hard = setTimeout(end, 45000);
+        t.forEach((id, i) => chat(id, SYS, turns, 1500).catch((e) => ({ err: String(e && e.message || e) })).then((r) => {
+          if (fin) return;
+          res[i] = Object.assign({ id, done: true }, r);
+          prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
+          if (r.text && ++okN === 2) grace = setTimeout(end, 10000);
+          if (--left === 0) end();
+        }));
+      });
       const good = drafts.filter((d) => d.text);
       if (!good.length) return { err: drafts.map((d) => TEAM[d.id].name + ': ' + d.err).join(' / '), detail: drafts.map((d) => TEAM[d.id].name + ' → ' + (d.detail || d.err)).join('\n'), drafts };
       if (good.length === 1) return done({ text: good[0].text, model: good[0].model }, { drafts, who: good[0].id });
@@ -2763,7 +2819,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       mk('div', 'bs-lb', 'メイン（ひとつの時に答える AI・相談の時のまとめ役）', box);
       const pv = mk('select', 'bs-sel', null, box);
       BURI.PROVIDERS.forEach(([v, l]) => { const o = mk('option', null, l, pv); o.value = v; if (v === A.provider) o.selected = true; });
-      mk('div', 'bs-lb', '仲間（無料の鍵は、それぞれのサイトでカード登録なしで作れます）', box);
+      mk('div', 'bs-lb', '相談の人数（まとめ役も入れて。多いほど賢く、そのぶん遅く・回数を使う）', box);
+      const sz = mk('select', 'bs-sel', null, box);
+      [[2, '2 人（速い）'], [3, '3 人'], [4, '4 人（おすすめ）'], [5, '5 人'], [6, '6 人'], [9, '全員']].forEach(([v, l]) => { const o = mk('option', null, l, sz); o.value = v; if (v === A.size) o.selected = true; });
+      mk('div', 'bs-lb', '仲間（上から順に優先。無料の鍵は、それぞれのサイトでカード登録なしで作れます）', box);
       const rows = {};
       BURI.TEAM_IDS.forEach((id) => {
         const t = T[id], r = mk('div', 'bs-row', null, box);
@@ -2809,6 +2868,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         }
         BURI.gmSet('c33.buri.use', A.use);
         A.moa = moa; BURI.gmSet('c33.buri.moa', moa);
+        A.size = Number(sz.value) || 4; BURI.gmSet('c33.buri.size', A.size);
         A.provider = pv.value; BURI.gmSet('c33.buri.provider', A.provider);
         A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web);
         NS.on = nc.checked; NS.auto = ac.checked; BURI.gmSet('c33.buri.ns', NS.on); BURI.gmSet('c33.buri.nsAuto', NS.auto);
@@ -3096,7 +3156,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       sp(BURI.AI.web ? 'Web も調べる' : 'Web は調べない', BURI.AI.web);
       const sb = mk('button', null, '⚙ 設定', st); sb.type = 'button'; sb.addEventListener('click', (e) => { e.preventDefault(); nsSettings(); });
       if (!s.count) { const ib = mk('button', null, '本棚を取り込む', st); ib.type = 'button'; ib.addEventListener('click', (e) => { e.preventDefault(); file.click(); }); }
-      if (!BURI.aiOn()) mk('div', 'np-sub', '「⚙ 設定」で無料の鍵（Gemini・Groq・OpenRouter・Mistral）を入れると、まとめて話せるようになります。2 つ以上入れると、みんなで相談して答えます（MoA）。', log);
+      if (!BURI.aiOn()) mk('div', 'np-sub', '「⚙ 設定」で無料の鍵（Gemini・Groq・NVIDIA・OpenRouter・Z.ai・Cohere）を入れると、まとめて話せるようになります。2 つ以上入れると、みんなで相談して答えます（MoA）。', log);
       if (nsConv.length && Date.now() - nsConvAt < 30 * 60e3) {
         mk('div', 'np-sec', 'さっきの会話', log);
         const w = mk('div', 'np-chips', null, log);

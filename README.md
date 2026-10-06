@@ -16,7 +16,7 @@
 | 6 | エクセル機能 | `scripts/sheet-engine.user.js` | « No »　³² _ Sheet Engine | 新規 1.0.0 → 1.1.0 → 1.2.0 → **1.3.0** |
 | 7 | サイドバーのグルーピング（Unsorted・編集） | `scripts/sidebar-workspace-grouper.user.js` | « No »　¹⁶ _ Sidebar Workspace Grouper | 15.5.0 → 15.6.0 → 15.7.0 → 15.8.0 → 15.9.0 → **25.9.0** |
 | 8 | グループ表示の件数の上限を外す | `scripts/endless-load.user.js` | « No »　³⁵ _ Endless Load | 新規 **1.0.0** |
-| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → 3.2.0 → 13.2.0 → 23.2.0 → 24.2.0 → 25.2.0 →（ご自身で 38.0.0）→ 48.0.0 → 49.0.0 → 50.0.0 → 51.0.0 → 52.0.0 → **52.1.0** |
+| 8 | サイドバーの大幅見直し（デザイン・階層） | `scripts/sidebar-constellation.user.js` | « No »　³³ _ Sidebar Constellation | 新規 1.0.0 → 1.1.0 → 2.1.0 → 2.2.0 → 3.0.0 → 3.1.0 → 3.2.0 → 13.2.0 → 23.2.0 → 24.2.0 → 25.2.0 →（ご自身で 38.0.0）→ 48.0.0 → 49.0.0 → 50.0.0 → 51.0.0 → 52.0.0 → 52.1.0 → **53.0.0** |
 | 10 | DB のグループのサブグループ（ボード以外のビュー） | `scripts/db-subgroups.user.js` | « No »　³⁶ _ Sub Groups | 新規 1.0.0 → 1.1.0 → 2.0.0 → 12.0.0 → **13.0.0** |
 | 11 | 三本柱の二：見た目を厚くする | `scripts/lumiere.user.js` | « No »　³⁷ _ Lumière | 新規 1.0.0 → 11.0.0 → 12.0.0 → **13.0.0** |
 | 12 | 三本柱の三：学び・Excel の関数とマクロ | `scripts/scholar.user.js` | « No »　³⁸ _ Scholar | 新規 1.0.0 → 11.0.0 → 21.0.0 → **22.0.0** |
@@ -48,6 +48,7 @@
 | Notion の検索画面に融合（追補 3） | 結果一覧の先頭に「B.U.R.I」の段（Notion の Yesterday と同じ見た目）。答えは右の大きなプレビュー欄に、Notion のプレビューと同じカードの形で出す（出典の行・続けて聞く欄・新しい話・サイドで続ける）。↑↓ でプレビューに戻る。プレビュー欄を隠している時は段の下に出す。Gemini は鍵で使えるモデルを Google に聞き、おまかせ（Flash → Flash-Lite）/ Flash-Lite 優先 / Pro を試す から選べる。回数切れのモデルはしばらく避ける（³³ v51.0.0） |
 | 検索窓から B.U.R.I 入りの検索画面・MoA（追補 4） | サイドの検索窓を押すと Notion の検索画面が開き、右の欄に B.U.R.I のホーム。答え欄を一新（進み具合・見出し / 箇条書き / 太字・押せる出典の印・相談の中身・コピー・次に聞けそうなこと）。**MoA**: 無料の仲間（Gemini・Groq・OpenRouter の無料モデル・Mistral・Chrome 内蔵）がそれぞれ下書き → メインが根拠と照らしてまとめる。AI の設定を一新（³³ v52.0.0） |
 | Firefox で検索画面が開かない（追補 5） | 原因: 押す動作の MouseEvent に `view: window` を渡していた。Firefox の ScriptCat では `window` が本物の Window ではないため例外になり、検索タブが押せず ⌘K にも回らなかった。view を外し、失敗しても ⌘K で開くように（³³ v52.1.0）。Atelier の同じ箇所も修正（v68.3.0） |
+| MoA の仲間を組み直し（追補 6） | Mistral は 2026 年 8 月から無料 API が月 $10 のクレジット制になったので外した。無料の仲間を追加: **NVIDIA**（build.nvidia.com・カード不要・DeepSeek / Kimi / Qwen / Llama など大型モデル）・**Z.ai GLM**（Flash モデルだけ＝無料）・**Cohere**（試用キー・月 1,000 回）。相談の人数（既定 4）・遅い仲間は 2 人そろってから 10 秒で打ち切り（³³ v53.0.0） |
 
 ## 第12便（2026-10-04）— ビューの設定に統合・サブグループ・Stylus の突き合わせ
 
