@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      53.0.0
-// @description  v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      54.0.0
+// @description  v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,12 @@
 // ==/UserScript==
 
 /*
+ * v54.0.0
+ *   ・Z.ai が「余额不足（残高不足）」→ glm-5.3-flash は有料だった（コード 1113）。Z.ai は無料と確かめた glm-4.7-flash / glm-4.5-flash だけを使う。
+ *   ・布陣を組み直し（上から優先）: Gemini（まとめ役）→ NVIDIA（Kimi K2 / DeepSeek など最大級）→ Groq（gpt-oss-120b・速い）
+ *     → OpenRouter（無料の DeepSeek / Qwen）→ 予備: Z.ai GLM・Cohere。相談の顔ぶれの家系が重ならないように（Gemini・Kimi・GPT-OSS・DeepSeek）。
+ *   ・失敗の種類を見分けて覚える: 有料だったモデル → 30 日使わない / 無いモデル → 7 日 / 今日の分を使い切り → 6 時間 / 混雑 → 1 分。
+ *     仲間ごと休みにして、空いた席には次の仲間が入る（相談の人数は保つ）。設定に「いま休み中」を表示。「つながるか試す」で休みを解く。
  * v53.0.0
  *   ・Mistral を外した（2026 年 8 月から無料 API は月 $10 分のクレジット制になり、使い切ると止まる）。
  *   ・無料の仲間を追加: NVIDIA（build.nvidia.com・カード不要・DeepSeek / Kimi / Qwen / Llama などの大型モデル・1 分 40 回）、
@@ -85,7 +91,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '53.0.0';
+  const VERSION = '54.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1884,33 +1890,48 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     /* v52: 仲間（MoA = Mixture of Agents）。みんなが下書き → メインが根拠と照らしてまとめる */
     const TEAM = {
       gemini: { name: 'Gemini', free: true, keyUrl: 'https://aistudio.google.com/apikey', ph: 'AIza…', note: 'Google。無料枠（Flash は 1 日 20 回前後・Flash-Lite は数百回）' },
-      groq: { name: 'Groq', free: true, keyUrl: 'https://console.groq.com/keys', ph: 'gsk_…', note: '速い。gpt-oss・Llama・Qwen など。無料（1 日 1,000 回前後）',
+      nvidia: { name: 'NVIDIA', free: true, keyUrl: 'https://build.nvidia.com/settings/api-keys', ph: 'nvapi-…', note: '★ いちばん強い無料枠。開発者登録だけ・カード不要。Kimi K2・DeepSeek・Qwen3 などの最大級モデル。1 分 40 回まで',
+        base: 'https://integrate.api.nvidia.com/v1', prefer: [/kimi-k2/, /deepseek-v3/, /qwen3-235b|qwen3\.\d+-\d{3}b|qwen3-next/, /llama-4-maverick/, /llama-3\.3-70b-instruct/, /nemotron.*(ultra|super)/, /gpt-oss-120b/, /mistral-(large|medium)/],
+        skip: /(embed|rerank|retriev|vision|-vl|vl-|guard|safety|reward|parse|clip|whisper|coder|tts|asr|riva|translate|detect|pii|deplot|kosmos|fuyu|paligemma|neva|vila|cosmos|bge|e5-|arctic|sdxl|flux|ocr|-r1|r1-|math|base$|-8b|-7b|-3b|-1b|mini)/ },
+      groq: { name: 'Groq', free: true, keyUrl: 'https://console.groq.com/keys', ph: 'gsk_…', note: 'とても速い。OpenAI の gpt-oss-120b など。無料（1 日 1,000 回前後）',
         base: 'https://api.groq.com/openai/v1', prefer: [/gpt-oss-120b/, /llama-3\.3-70b/, /qwen/, /gpt-oss-20b/, /llama/], skip: /(whisper|tts|guard|safeguard|embed|playai|orpheus|compound|distil)/ },
-      openrouter: { name: 'OpenRouter', free: true, keyUrl: 'https://openrouter.ai/keys', ph: 'sk-or-…', note: '1 つの鍵で無料モデル多数（DeepSeek・Qwen・Llama ほか）。無料（1 日 50〜200 回）',
+      openrouter: { name: 'OpenRouter', free: true, keyUrl: 'https://openrouter.ai/keys', ph: 'sk-or-…', note: '無料モデルだけを使う（DeepSeek・Qwen など）。1 日 50 回（$10 を一度入れると 1,000 回）',
         base: 'https://openrouter.ai/api/v1', freeOnly: true, prefer: [/deepseek.*(chat|v3)/, /qwen3/, /llama-3\.3-70b/, /gemma-3/, /mistral/, /deepseek/], skip: /(vision|vl-|coder|embed|guard|-r1-distill)/,
         headers: { 'HTTP-Referer': 'https://www.notion.so', 'X-Title': 'B.U.R.I' } },
-      nvidia: { name: 'NVIDIA', free: true, keyUrl: 'https://build.nvidia.com/settings/api-keys', ph: 'nvapi-…', note: 'NVIDIA の無料 API（開発者登録だけ・カード不要）。DeepSeek・Kimi・Qwen・Llama など大きなモデル。1 分 40 回まで',
-        base: 'https://integrate.api.nvidia.com/v1', prefer: [/deepseek-v3/, /kimi-k2/, /qwen3-235b|qwen3\.\d+-\d{3}b|qwen3-next/, /llama-4-maverick/, /llama-3\.3-70b-instruct/, /nemotron.*(ultra|super)/, /gpt-oss-120b/, /mistral-(large|medium)/],
-        skip: /(embed|rerank|retriev|vision|-vl|vl-|guard|safety|reward|parse|clip|whisper|coder|tts|asr|riva|translate|detect|pii|deplot|kosmos|fuyu|paligemma|neva|vila|cosmos|bge|e5-|arctic|sdxl|flux|ocr|-r1|r1-|math|base$|-8b|-7b|-3b|-1b|mini)/ },
-      zai: { name: 'Z.ai GLM', free: true, keyUrl: 'https://z.ai/manage-apikey/apikey-list', ph: '…', note: '中国 Zhipu の GLM。Flash モデルは無料（1 秒 1 回ほど）。日本語も上手',
-        base: 'https://api.z.ai/api/paas/v4', onlyRe: /flash(?!x)/, fixed: ['glm-4.7-flash', 'glm-4.5-flash'], prefer: [/glm-5.*flash/, /glm-4\.7-flash/, /glm-4\.\d+-flash/, /flash/], maxTok: 4096 },
-      cohere: { name: 'Cohere', free: true, keyUrl: 'https://dashboard.cohere.com/api-keys', ph: '…', note: 'Command A（カナダ）。無料の試用キーで月 1,000 回まで',
+      zai: { name: 'Z.ai GLM', free: true, keyUrl: 'https://z.ai/manage-apikey/apikey-list', ph: '…', note: '中国 Zhipu の GLM。無料は glm-4.7-flash と glm-4.5-flash だけ（それ以外は有料なので使いません）。混むと待たされる',
+        base: 'https://api.z.ai/api/paas/v4', fixedOnly: true, fixed: ['glm-4.7-flash', 'glm-4.5-flash'], prefer: [/glm-4\.7-flash/, /glm-4\.5-flash/], maxTok: 4096 },
+      cohere: { name: 'Cohere', free: true, keyUrl: 'https://dashboard.cohere.com/api-keys', ph: '…', note: 'Command A（カナダ）。試用キーで月 1,000 回まで。予備に',
         cohere: true, prefer: [/^command-a-(?!.*(vision|reason|translate))/, /^command-a/, /^command-r-plus/, /^command-r/] },
       chrome: { name: 'Chrome 内蔵', free: true, nokey: true, note: '鍵なし・端末の中だけ。素朴なので相談役に向く' },
       claude: { name: 'Claude', free: false, keyUrl: 'https://console.anthropic.com/settings/keys', ph: 'sk-ant-…', note: '有料（使った分だけ）。いちばん上手' }
     };
     const TEAM_IDS = Object.keys(TEAM);
     for (const id of TEAM_IDS) AI.keys[id] = id === 'gemini' ? AI.gkey : id === 'claude' ? AI.key : gmGet('c33.buri.k.' + id, '');
-    AI.use = Object.assign({ gemini: true, groq: true, openrouter: true, nvidia: true, zai: true, cohere: true, chrome: false, claude: false }, gmGet('c33.buri.use', {}) || {});
+    AI.use = Object.assign({ gemini: true, nvidia: true, groq: true, openrouter: true, zai: true, cohere: true, chrome: false, claude: false }, gmGet('c33.buri.use', {}) || {});
     AI.size = Number(gmGet('c33.buri.size', 4)) || 4;   // 相談の人数（まとめ役を含む）
-    function setKey(id, k) { AI.keys[id] = k; if (id === 'gemini') { AI.gkey = k; gmSet('c33.buri.gkey', k); gemList = null; gmSet('c33.buri.gbad', {}); } else if (id === 'claude') { AI.key = k; gmSet('c33.buri.key', k); } else { gmSet('c33.buri.k.' + id, k); oaiList[id] = null; } }
-    const PROVIDERS = [['gemini', 'Google Gemini（無料）'], ['groq', 'Groq（無料）'], ['openrouter', 'OpenRouter（無料モデル）'], ['nvidia', 'NVIDIA（無料）'], ['zai', 'Z.ai GLM（無料）'], ['cohere', 'Cohere（無料の試用）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし）'], ['claude', 'Claude（有料）'], ['none', '使わない（抜粋だけ）']];
+    function setKey(id, k) { AI.keys[id] = k; cool('c33.buri.pbad', id, 0); { const b = coolGet('c33.buri.mbad'); for (const x of Object.keys(b)) if (x.startsWith(id + ':')) delete b[x]; gmSet('c33.buri.mbad', b); } if (id === 'gemini') { AI.gkey = k; gmSet('c33.buri.gkey', k); gemList = null; gmSet('c33.buri.gbad', {}); } else if (id === 'claude') { AI.key = k; gmSet('c33.buri.key', k); } else { gmSet('c33.buri.k.' + id, k); oaiList[id] = null; } }
+    const PROVIDERS = [['gemini', 'Google Gemini（無料）'], ['nvidia', 'NVIDIA（無料・最大級モデル）'], ['groq', 'Groq（無料・速い）'], ['openrouter', 'OpenRouter（無料モデル）'], ['zai', 'Z.ai GLM（無料）'], ['cohere', 'Cohere（無料の試用）'], ['chrome', 'Chrome 内蔵 AI（無料・鍵なし）'], ['claude', 'Claude（有料）'], ['none', '使わない（抜粋だけ）']];
     const GEMINI_MODELS = [['auto', 'おまかせ（Flash → 回数切れなら Flash-Lite）'], ['lite', 'Flash-Lite 優先（1 日の回数がいちばん多い）'], ['pro', 'Pro を試す（無料枠では使えないことが多い → だめなら Flash）']];
     const chromeLM = () => { try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; return W.LanguageModel || (W.ai && W.ai.languageModel) || null; } catch (e) { return null; } };
     const ready = (id) => id === 'chrome' ? !!chromeLM() : !!(TEAM[id] && AI.keys[id]);
-    /* 相談に加わる仲間（使う ✓ かつ 鍵あり）。メインは必ず先頭 */
+    /* v54: だめだったモデル・仲間を覚えて避ける（有料だった → 30 日 / 無い → 7 日 / 回数切れ → 1 分〜6 時間）。鍵を替えると忘れる */
+    const coolGet = (k) => { const b = gmGet(k, {}) || {}; return typeof b === 'object' ? b : {}; };
+    function cool(k, key, ms) { const b = coolGet(k), now = Date.now(); for (const x of Object.keys(b)) if (b[x] < now) delete b[x]; if (ms > 0) b[key] = now + ms; else delete b[key]; gmSet(k, b); }
+    const mBad = (id, model) => (coolGet('c33.buri.mbad')[id + ':' + model] || 0) > Date.now();
+    const pBad = (id) => (coolGet('c33.buri.pbad')[id] || 0) > Date.now();
+    function failKind(status, msg) {
+      const m = String(msg || '');
+      if ((status === 429 || /rate.?limit|quota/i.test(m)) && /per.?day|daily|PerDay|RPD|tokens per day|free-models-per/i.test(m)) return 'day';   // 「1 日の無料分を使い切り（足すなら課金）」は有料扱いにしない
+      if (/余额不足|资源包|充值|insufficient|balance|credit|payment|billing|purchase|upgrade|not.{0,12}free|requires.{0,20}(paid|plan)|\b1113\b/i.test(m) || status === 402) return 'paid';
+      if (status === 404 || /not.?found|does not exist|no such model|unknown model|decommission/i.test(m)) return 'gone';
+      if (status === 429 || /rate.?limit|quota|too many|1302|1303/i.test(m)) return /per.?day|daily|PerDay|RPD|tokens per day/i.test(m) ? 'day' : 'rate';
+      if (status >= 500 || status === 0) return 'down';
+      return 'other';
+    }
+    const COOL_MS = { paid: 30 * 864e5, gone: 7 * 864e5, day: 6 * 36e5, rate: 6e4, down: 3e5, other: 0 };
+    /* 相談に加わる仲間（使う ✓ かつ 鍵あり・いま休みでない）。メインは必ず先頭。休みの仲間の分は次の仲間が入る */
     function team() {
-      const t = TEAM_IDS.filter((id) => AI.use[id] && ready(id));
+      const t = TEAM_IDS.filter((id) => AI.use[id] && ready(id) && !pBad(id));
       if (ready(AI.provider) && !t.includes(AI.provider)) t.unshift(AI.provider);
       t.sort((a, b) => (b === AI.provider) - (a === AI.provider));
       return t.slice(0, Math.max(1, AI.size));   // v53: 多すぎると遅く・回数も減るので人数で切る（並びの順＝優先）
@@ -2102,6 +2123,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         if (r.status === 429) gemMark(model, /limit:\s*0\b/i.test(msg) ? 864e5 : /per\s*day|PerDay|daily/i.test(msg) ? 216e5 : 6e4);
         else if (r.status === 404) gemMark(model, 6048e5);
       }
+      cool('c33.buri.pbad', 'gemini', fails.some((f) => f.status === 429) ? 36e5 : 0);
       const all = fails.map((f) => f.model + ' → ' + f.status + ' ' + String(f.msg).slice(0, 160)).join('\n');
       const zero = fails.length && fails.every((f) => /limit:\s*0\b/i.test(f.msg));
       const quota = fails.some((f) => f.status === 429);
@@ -2113,6 +2135,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       id = id || AI.provider;
       if (id === 'none') return { err: 'AI を使わない設定です' };
       if (!ready(id)) return { err: id === 'chrome' ? 'この Chrome では内蔵 AI が見つかりません' : '鍵がまだ入っていません' };
+      cool('c33.buri.pbad', id, 0);   // 試す時は休みを解く
       return chat(id, 'あなたは接続テストの相手です。', [{ role: 'user', content: '「つながりました」とだけ返してください。' }], 256);
     }
     /* v49: Chrome 内蔵 AI（Prompt API / Gemini Nano）— 無料・鍵なし・端末の中だけで動く。読める量が少ないので根拠を短くして渡す */
@@ -2134,6 +2157,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const oaiList = {};
     async function oaiModels(id) {
       const T = TEAM[id];
+      if (T.fixedOnly) return T.fixed.slice();   // 無料と確かめたモデルだけ（一覧に出る有料モデルは使わない）
       if (oaiList[id]) return oaiList[id];
       const r = await gmReq({ method: 'GET', timeout: 15000, url: T.base + '/models', headers: Object.assign({ Authorization: 'Bearer ' + AI.keys[id] }, T.headers || {}) });
       let ids = [];
@@ -2158,8 +2182,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const stripThink = (t) => String(t || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
     async function oaiChat(id, sys, turns, maxTok) {
       const T = TEAM[id];
-      const models = oaiRank(id, await oaiModels(id)).slice(0, 3);
-      if (!models.length) return { err: '使えるモデルが見つかりませんでした（鍵を確かめてください）' };
+      const all = oaiRank(id, await oaiModels(id));
+      const models = all.filter((m) => !mBad(id, m)).slice(0, 3);
+      if (!models.length) { cool('c33.buri.pbad', id, all.length ? 36e5 : 0); return { err: all.length ? '無料で使えるモデルがいま休み中です（しばらくして自動で戻ります）' : '使えるモデルが見つかりませんでした（鍵を確かめてください）' }; }
+      const kinds = [];
       const fails = [];
       for (const model of models) {
         const r = await gmReq({ method: 'POST', timeout: 90000, url: T.base + '/chat/completions',
@@ -2171,11 +2197,15 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
           const text = stripThink(j.choices[0].message && j.choices[0].message.content);
           if (text) { if (gmGet('c33.buri.m.' + id, '') !== model) gmSet('c33.buri.m.' + id, model); return { text, model }; }
         }
-        fails.push(model + ' → ' + r.status + ' ' + String(msg).slice(0, 140));
+        const kind = failKind(r.status, msg); kinds.push(kind);
+        fails.push(model + ' → ' + r.status + ' ' + String(msg).slice(0, 140) + (kind === 'paid' ? '（有料のモデル → 以後使いません）' : ''));
         if (r.status === 401 || r.status === 403) return { err: '鍵が正しくないようです', detail: fails.join('\n') };
-        if (r.status === 0) return { err: 'つながりませんでした（' + msg + '）', detail: fails.join('\n') };
+        if (r.status === 0) { cool('c33.buri.pbad', id, COOL_MS.down); return { err: 'つながりませんでした（' + msg + '）', detail: fails.join('\n') }; }
+        if (COOL_MS[kind]) cool('c33.buri.mbad', id + ':' + model, COOL_MS[kind]);
       }
-      return { err: fails.some((f) => / 429 /.test(f)) ? '無料枠の回数に当たりました' : '返事がありませんでした', detail: fails.join('\n') };
+      const worst = kinds.includes('day') ? 'day' : kinds.every((k) => k === 'paid') ? 'paid' : kinds.includes('rate') ? 'rate' : 'down';
+      cool('c33.buri.pbad', id, worst === 'paid' ? 36e5 : COOL_MS[worst]);
+      return { err: worst === 'paid' ? '無料で使えるモデルがありませんでした（有料のモデルは自動で外しました）' : worst === 'day' ? '今日の無料枠を使い切りました（自動で外し、明日戻ります）' : worst === 'rate' ? '混んでいます（少しして自動で戻ります）' : '返事がありませんでした', detail: fails.join('\n') };
     }
     /* v53: Cohere（試用キーは無料・月 1,000 回）— Cohere 独自の v2/chat */
     async function cohereChat(sys, turns, maxTok) {
@@ -2464,7 +2494,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; } };
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; } };
   })();
 
   /* ============================================================
@@ -2822,7 +2852,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       mk('div', 'bs-lb', '相談の人数（まとめ役も入れて。多いほど賢く、そのぶん遅く・回数を使う）', box);
       const sz = mk('select', 'bs-sel', null, box);
       [[2, '2 人（速い）'], [3, '3 人'], [4, '4 人（おすすめ）'], [5, '5 人'], [6, '6 人'], [9, '全員']].forEach(([v, l]) => { const o = mk('option', null, l, sz); o.value = v; if (v === A.size) o.selected = true; });
-      mk('div', 'bs-lb', '仲間（上から順に優先。無料の鍵は、それぞれのサイトでカード登録なしで作れます）', box);
+      mk('div', 'bs-lb', '仲間（上から順に優先。おすすめは上の 4 つ。無料の鍵は、それぞれのサイトでカード登録なしで作れます）', box);
       const rows = {};
       BURI.TEAM_IDS.forEach((id) => {
         const t = T[id], r = mk('div', 'bs-row', null, box);
@@ -2832,6 +2862,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         mk('span', 'bs-nm', t.name, lab);
         mk('span', 'bs-tag' + (t.free ? '' : ' paid'), t.free ? '無料' : '有料', lab);
         if (t.keyUrl) { const a = mk('a', 'bs-link', '鍵を作る ↗', r); a.href = t.keyUrl; a.target = '_blank'; a.rel = 'noopener'; } else mk('span', null, '', r);
+        if (BURI.resting(id)) mk('div', 'bs-nt', '（いま休み中: ' + BURI.resting(id) + ' まで。「つながるか試す」で戻せます）', r).style.color = '#b5600a';
         mk('div', 'bs-nt', t.note + (id === 'chrome' ? (BURI.chromeLM() ? '（この Chrome で使えます）' : '（この Chrome では見つかりません）') : ''), r);
         let key = null, sel = null;
         if (!t.nokey) {
@@ -3156,7 +3187,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       sp(BURI.AI.web ? 'Web も調べる' : 'Web は調べない', BURI.AI.web);
       const sb = mk('button', null, '⚙ 設定', st); sb.type = 'button'; sb.addEventListener('click', (e) => { e.preventDefault(); nsSettings(); });
       if (!s.count) { const ib = mk('button', null, '本棚を取り込む', st); ib.type = 'button'; ib.addEventListener('click', (e) => { e.preventDefault(); file.click(); }); }
-      if (!BURI.aiOn()) mk('div', 'np-sub', '「⚙ 設定」で無料の鍵（Gemini・Groq・NVIDIA・OpenRouter・Z.ai・Cohere）を入れると、まとめて話せるようになります。2 つ以上入れると、みんなで相談して答えます（MoA）。', log);
+      if (!BURI.aiOn()) mk('div', 'np-sub', '「⚙ 設定」で無料の鍵（おすすめは Gemini・NVIDIA・Groq・OpenRouter の 4 つ）を入れると、まとめて話せるようになります。2 つ以上入れると、みんなで相談して答えます（MoA）。', log);
       if (nsConv.length && Date.now() - nsConvAt < 30 * 60e3) {
         mk('div', 'np-sec', 'さっきの会話', log);
         const w = mk('div', 'np-chips', null, log);
