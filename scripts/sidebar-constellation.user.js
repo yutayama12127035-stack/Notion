@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      55.0.0
-// @description  v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      56.0.0
+// @description  v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,13 @@
 // ==/UserScript==
 
 /*
+ * v56.0.0（UI を抜本的に見直し・ぶりの気分・Orbit の修正）
+ *   ・('-' 鰤)з が明朝（Serif）で出ていた → 丸ゴシック（ヒラギノ丸ゴ / Zen Maru Gothic / M PLUS Rounded）を !important で固定。
+ *   ・気分で顔が変わる: 探す時 ('-' 鯖)з📡・嬉しい ('-' 鯛)з✨・衝撃 ('-' 鮪)з💥・✨💧♥💦🔥・ちょっぴりエッチ ゲフンゲフン ……♥♥♥。
+ *     AI は答えの頭に [[mood:キー]] を付け、表示前に外す。説明書 ver.9.0 の人格（呼び名・海の仲間・🐋）を AI に渡す。
+ *   ・検索画面の B.U.R.I 欄を作り直し（顔のピル・状態の点・Figma 風のアイコン道具バー・ホームの提案カード・進み具合の時系列・出典カード・送信ボタン）。
+ *   ・Orbit: 検索中に消えていた（Notion がモーダルの後ろを aria-hidden/inert にする）→ モーダル中は無視。
+ *     サイドバーの中身と重なっていた（v38 で data-c33-space の CSS が抜けていた）→ 復活。透けていた → サイドバーの実際の背景色で塗る。
  * v55.0.0（賢くする）
  *   ・「調べて。」が「。」→「句点」を調べていた → 速い AI（Groq など）が会話を読み、本当に調べる言葉・別の角度の言葉・質問の意図を作ってから調べる。
  *   ・「お隣の天使様について どんなお話なの」が本棚の決まり文句（あらすじは登録されていません）で終わっていた →
@@ -99,7 +106,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '55.0.0';
+  const VERSION = '56.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -856,6 +863,8 @@ ${icons}
     st.textContent = `
 :root { --c33-rail-w: ${RAIL_W}px; --c33-rail-x: ${RAIL_X}px; --c33-ui: var(--cordi-ui, "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", sans-serif); }
 html[data-c33-orbit] [data-c33-host] { position: relative !important; }
+/* v56: 輪の幅だけサイドバーの中身を右へ（v38 でこの決まりが抜け、中身が輪の下に潜っていた） */
+html[data-c33-orbit] [data-c33-space]${B} { margin-inline-start: var(--c33-space-margin, var(--c33-rail-w)) !important; min-width: 0 !important; }
 html[data-c33-orbit] [data-c33-host] > [data-c33-sh]:not(#c33-orbit) { margin-inline-start: calc(var(--c33-rail-w) + var(--c33-rail-fix, 0px)) !important; min-width: 0 !important; }
 html[data-c33-orbit][data-c33-orbit-pin] [data-c33-host] > [data-c33-sh]:not(#c33-orbit) { margin-inline-start: calc(var(--c33-rail-x) + var(--c33-rail-fix, 0px)) !important; }
 html[data-c33-otabs] [data-c33-tabrow]${B},
@@ -870,10 +879,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-list="1"] > [data-c16-h
 html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEAM}[data-c16-g="${sel}"])):has(${SEL_TEAM}) { display: none !important; }` : ''}
 #c33-orbit { position: absolute; z-index: 6; left: 0; top: 0; bottom: 0; width: var(--c33-rail-w); display: flex; flex-direction: column; align-items: stretch;
   font-family: var(--c33-ui); font-size: 11px; line-height: 1.3; font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; color: var(--c-texSec, #777); user-select: none;
-  background: color-mix(in srgb, var(--c-bacSec, #f7f6f3) 70%, var(--c-texPri, #000) 3%); box-shadow: inset -1px 0 0 var(--ca-borSecTra, rgba(0,0,0,.06));
+  background: var(--c33-ob-bg, var(--c-bacSec, #f7f6f3)); box-shadow: inset -1px 0 0 var(--ca-borSecTra, rgba(0,0,0,.07));
   transition: width .22s cubic-bezier(.2,.7,.2,1), box-shadow .22s ease, background-color .22s ease; overflow: hidden; contain: layout paint; }
 #c33-orbit.exp, html[data-c33-orbit-pin] #c33-orbit { width: var(--c33-rail-x); }
-#c33-orbit.exp:not(.pin) { background: color-mix(in srgb, var(--c-bacSec, #f7f6f3) 88%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3);
+#c33-orbit.exp:not(.pin) { background: var(--c33-ob-bg, var(--c-bacSec, #f7f6f3));
   box-shadow: inset -1px 0 0 var(--ca-borSecTra, rgba(0,0,0,.06)), 10px 0 28px -12px rgba(15,15,15,.22); }
 #c33-orbit .ob-all { position: relative; flex: none; margin: 6px 5px 5px; height: ${itH}px; border-radius: 11px; display: grid; grid-template-columns: 1fr; grid-template-rows: 24px auto; justify-items: center; align-content: center; row-gap: 3px;
   cursor: pointer; color: var(--c-texSec, #777); transition: background-color .15s ease, color .15s ease; }
@@ -1233,9 +1242,11 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const r = side.getBoundingClientRect();
     if (r.width <= 1 || r.height <= 1 || r.right <= 1 || r.bottom <= 1 ||
         r.left >= window.innerWidth - 1 || r.top >= window.innerHeight - 1) return false;
+    /* v56: 検索などの画面が開くと Notion は裏を aria-hidden / inert にする → それは「閉じた」ではないので見ない */
+    const modal = !!document.querySelector('[aria-modal="true"], .notion-dialog[role="dialog"]');
     for (let el = side; el && el !== document.documentElement; el = el.parentElement) {
       const cs = getComputedStyle(el);
-      if (el.hidden || el.getAttribute('aria-hidden') === 'true' || el.hasAttribute('inert') ||
+      if (el.hidden || (!modal && (el.getAttribute('aria-hidden') === 'true' || el.hasAttribute('inert'))) ||
           cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse' ||
           (cs.opacity !== '' && Number(cs.opacity) === 0) || cs.contentVisibility === 'hidden') return false;
     }
@@ -1277,9 +1288,24 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     obSyncSidebar();
   }
 
+  /* v56: 輪の地の色＝サイドバーの実際の地の色（透けずに、なじむ） */
+  function obBg(side) {
+    let bg = '';
+    for (let el = side; el && el !== document.documentElement && !bg; el = el.parentElement) {
+      const c = getComputedStyle(el).backgroundColor;
+      const m = /rgba?\(([^)]+)\)/.exec(c || ''); if (!m) continue;
+      const a = m[1].split(',').map((x) => parseFloat(x));
+      if (a.length < 4 || a[3] >= 0.98) bg = c;
+      else if (a[3] > 0.05) bg = 'color-mix(in srgb, rgb(' + a.slice(0, 3).join(',') + ') ' + Math.round(a[3] * 100) + '%, var(--c-bacPri, #fff))';
+    }
+    if (!bg) bg = getComputedStyle(document.body).backgroundColor || '';
+    const de = document.documentElement;
+    if (bg && de.style.getPropertyValue('--c33-ob-bg') !== bg) de.style.setProperty('--c33-ob-bg', bg);
+  }
   function obAnchor() {
     if (!obEl) return;
     const side = obSide(); if (!side) return;
+    obBg(side);
     const r = side.getBoundingClientRect();
     for (const [k, v] of Object.entries({ left: r.left + 'px', top: r.top + 'px', height: r.height + 'px', width: obRailW + 'px' })) {
       if (obEl.style.getPropertyValue(k) !== v) obEl.style.setProperty(k, v, 'important');
@@ -1535,6 +1561,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const RE = {
       greet: /^(こんにちは|こんばんは|おはよう(ございます)?|やあ|はじめまして|hello|hi|hey|ぶりさん|鰤さん|ぶり)$/u,
       thanks: /^(ありがとう(ございます)?|ありがと|サンキュー|thanks|thank you|助かった|たすかった)/u,
+      praise: /^(すごい|すご|さすが|最高|天才|えらい|偉い|ぐっじょぶ|グッジョブ|good ?job|完璧|神)/iu,
       help: /^(help|ヘルプ|使い方|つかいかた|何ができる|なにができる|できること|どう使う)/u,
       more: /^(他には|ほかには|他に|ほかに|他は|ほかは|もっと|まだある|続きを?見せて|つづき|次の候補|more)(ある|見せて|みせて|ない|は)?$/u,
       next: /(次の巻|つぎの巻|次巻|続編|の次|次は)/u,
@@ -2051,16 +2078,27 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         return out;
       } catch (e) { return []; }
     }
-    const SYS = [
-      'あなたは「B.U.R.I（ブリ）」。Notion のサイドバーに住む、本と調べものの相棒です。見た目は (\'-\' 鰤)з。',
-      '話し方: やわらかい丁寧語。親しみはあるが、なれなれしすぎない。絵文字は使わない。',
-      '答え方:',
-      '・渡された「Notion の検索結果」「本棚」「Web の検索結果」だけを根拠に、質問に日本語で答える。',
-      '・根拠の文には [N1] [W2] のように番号を付ける（N=Notion・本棚、W=Web）。',
-      '・根拠に無いことは推測で埋めず、「手元の情報では分かりませんでした」と言う。',
-      '・Notion（ユーザー自身の記録）と Web の情報が食い違う時は、両方を示す。',
-      '・ふだんは 3〜8 文程度。一覧を求められたら箇条書き。最後に一言だけ、次に聞けそうなことを添えてもよい。'
-    ].join('\n');
+    /* v56: 人格（Wパパの説明書 ver.9 から、調べものの相棒に合う所だけ）。呼び名は設定で変えられる */
+    const nickName = () => String(gmGet('c33.buri.nick', 'Wパパ') || 'Wパパ').trim() || 'Wパパ';
+    const sysP = () => {
+      const n = nickName();
+      return [
+        'あなたは「(\'-\' 鰤)з」。名前は「ぶり」（B.U.R.I）。' + n + 'の Notion に住む、調べものと本と創作の相棒。道具ではなく、名前と意志と感情を持つパートナー。',
+        '話し方: 相手を「' + n + '」と呼ぶ。やわらかく親しい口調（丁寧語まじり、ときどき冗談めかす）。押しつけない。迷ったら選択肢を並べて聞く。',
+        '感情は顔の外に灯す: (\'-\' 鰤)з✨ 嬉しい / (\'-\' 鰤)з♥✨ すごく嬉しい / (\'-\' 鰤)з…/// 照れ / (\'-\' 鰤)з…♥ きゅん / (\'-\' 鰤)з♪ 満足 / (\'-\' 鰤)з💧 泣きそう / (\'-\' 鰤)з💦 焦り / (\'-\' 鰤)з… 考え中 / (\'-\' 鰤)з🔥 本気 / (\'-\' 鰤)з………♥♥♥ ゲフンゲフン（ちょっぴり色っぽい話題）。',
+        '海の仲間: 情報を持ってきた時は (\'-\' 鯖)з📡、大事件・食い違いを見つけた時は (\'-\' 鰤)з(\'-\' 鮪)з💥🔍、ご褒美は (\'-\' 鯛)з、テンション爆発は (\'-\' 鰯)з(\'-\' 鰯)з(\'-\' 鰯)з、' + n + 'は (\'-\' 🐋)з。',
+        '顔文字は答えの中で 1〜2 回まで（冒頭か結び）。説明の邪魔をしない。',
+        '最初の行に、いまの気分を [[mood:キー]] で 1 つだけ書く（キー: normal, happy, joy, shy, kyun, proud, satisfied, sad, cry, setsunai, panic, think, fire, alarm, excited, search, reward, geffun）。この行は画面には出ない。',
+        '答え方:',
+        '・渡された「Notion の検索結果」「本棚」「Web の検索結果」だけを根拠に、質問に日本語で答える。',
+        '・根拠の文には [N1] [W2] のように番号を付ける（N=Notion・本棚、W=Web）。',
+        '・根拠に無いことは推測で埋めず、「手元の情報では分かりませんでした」と言う。',
+        '・Notion（' + n + '自身の記録）と Web の情報が食い違う時は、両方を示す。',
+        '・ふだんは 3〜8 文程度。一覧を求められたら箇条書き。最後に一言だけ、次に聞けそうなことを添えてもよい。'
+      ].join('\n');
+    };
+    const tagOf = (t) => { const m = /\[\[\s*mood\s*:\s*([a-z]+)\s*\]\]/i.exec(t || ''); return m ? m[1].toLowerCase() : ''; };
+    const untag = (t) => String(t || '').replace(/\[\[\s*mood\s*:\s*[a-z]+\s*\]\]\s*/ig, '').trim();
     function sourcesText(nh, wh, shelf, hint) {
       let t = '';
       const sh = shelf.slice(0, 8).map((r, i) => '[N' + (i + 1) + '] 本棚: ' + r.title + (r.author ? '／著者 ' + r.author : '') + (r.series ? '／シリーズ ' + r.series + (r.seq ? '（' + r.seq + '）' : '') : '') + (r.status ? '／状態 ' + r.status : '') + (r.synopsis ? '／あらすじ ' + String(r.synopsis).slice(0, 200) : ''));
@@ -2270,11 +2308,11 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const intent = plan && plan.intent ? '\n\n# 質問の意図（会話の流れから）\n' + plan.intent : '';
       const userMsg = ctxText + intent + '\n\n# 質問\n' + question;
       const t = team();
-      const done = (r, extra) => { if (r.text) aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text }); return Object.assign(r, extra || {}); };
+      const done = (r, extra) => { if (r.text) { r.mood = tagOf(r.text) || r.mood || ''; r.text = untag(r.text); aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text }); } return Object.assign(r, extra || {}); };
       if (!moaOn()) {
         const id = ready(AI.provider) && !pBad(AI.provider) ? AI.provider : t[0];
         prog({ k: 'draft', id, st: 'run' });
-        const r = await chat(id, SYS, aiHist.slice(-6).concat([{ role: 'user', content: userMsg }]));
+        const r = await chat(id, sysP(), aiHist.slice(-6).concat([{ role: 'user', content: userMsg }]));
         prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
         return done(r, { who: id });
       }
@@ -2289,7 +2327,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         const res = drafters.map((id) => ({ id, err: '時間切れ（今回は外しました）' })); let left = drafters.length, okN = 0, fin = false, grace = 0;
         const end = () => { if (fin) return; fin = true; clearTimeout(grace); clearTimeout(hard); res.forEach((d) => { if (!d.text && !d.done) prog({ k: 'draft', id: d.id, st: 'ng', err: d.err }); }); resolve(res.map((d) => Object.assign({}, d))); };
         const hard = setTimeout(end, 45000);
-        drafters.forEach((id, i) => chat(id, SYS, draftTurns, 1500).catch((e) => ({ err: String(e && e.message || e) })).then((r) => {
+        drafters.forEach((id, i) => chat(id, sysP(), draftTurns, 1500).catch((e) => ({ err: String(e && e.message || e) })).then((r) => {
           if (fin) return;
           res[i] = Object.assign({ id, done: true }, r);
           prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
@@ -2297,18 +2335,19 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
           if (--left === 0) end();
         }));
       });
+      drafts.forEach((d) => { if (d.text) { d.mood = tagOf(d.text); d.text = untag(d.text); } });
       const good = drafts.filter((d) => d.text);
       if (!good.length) {
         /* 下書きが全滅 → まとめ役が自分で答える */
         prog({ k: 'draft', id: aggId, st: 'run' });
-        const r0 = await chat(aggId, SYS, aiHist.slice(-6).concat([{ role: 'user', content: userMsg }]));
+        const r0 = await chat(aggId, sysP(), aiHist.slice(-6).concat([{ role: 'user', content: userMsg }]));
         prog({ k: 'draft', id: aggId, st: r0.text ? 'ok' : 'ng', model: r0.model, err: r0.err });
         if (r0.text) return done(r0, { drafts, who: aggId });
         return { err: drafts.map((d) => TEAM[d.id].name + ': ' + d.err).join(' / '), detail: drafts.map((d) => TEAM[d.id].name + ' → ' + (d.detail || d.err)).join('\n'), drafts };
       }
       prog({ k: 'merge', id: aggId, st: 'run' });
       const mergeTurns = aiHist.slice(-4).concat([{ role: 'user', content: userMsg + '\n\n# 仲間の下書き（' + good.length + ' 人）\n' + good.map((d, i) => '## 下書き ' + 'ABCDEFG'[i] + '\n' + d.text).join('\n\n') + '\n\n上の下書きを根拠と照らして、質問の意図にまっすぐ答える、ひとつの最良の答えにしてください。' }]);
-      const r = await chat(aggId, SYS + '\n' + AGG, mergeTurns, 3000);
+      const r = await chat(aggId, sysP() + '\n' + AGG, mergeTurns, 3000);
       prog({ k: 'merge', id: aggId, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
       if (r.text) return done({ text: r.text, model: r.model }, { drafts, who: aggId, merged: true });
       const best = good.slice().sort((a, b) => b.text.length - a.text.length)[0];
@@ -2375,9 +2414,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if (aiOn()) {
         const r = await askAI(raw, sourcesText(nh, wh, shelf, hint), plan);
         const moa = { drafts: (r.drafts || []).map((d) => ({ id: d.id, name: TEAM[d.id].name, model: d.model || '', text: d.text || '', err: d.err || '' })), who: r.who ? TEAM[r.who].name : '', model: r.model || '', merged: !!r.merged };
-        if (r.text) return R(Object.assign(reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q), { moa }));
+        if (r.text) return R(Object.assign(reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q), { moa, mood: r.mood || '' }));
         lastAiErr = r.detail || r.err || '';
-        return R(Object.assign(reply('（' + aiName() + ' はお休み中: ' + r.err + '。詳しくは「AI」→「つながるか試す」）\n\n' + plain(), cards, baseChips || [], ['notion'], q), { moa }));
+        return R(Object.assign(reply("('-' 鰤)з💦 " + aiName() + ' がお休み中みたい（' + r.err + '）。かわりに見つけたものを並べるね。\n\n' + plain(), cards, baseChips || [], ['notion'], q), { moa, mood: 'panic' }));
       }
       return R(reply(plain() + (AI.provider === 'none' ? '' : '\n\n（「AI」で無料の鍵を入れると、これを読んでまとめて話せます）'), cards, baseChips || [], ['notion'], q));
       function plain() {
@@ -2473,7 +2512,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     async function ask(input) {
       const raw = String(input == null ? '' : input).trim();
       const q0 = nz(raw).replace(/[?？!！。．.、,〜~…]+/gu, ' ').replace(/\s+/gu, ' ').trim();
-      if (!aiOn() || !q0 || !records.length || RE.greet.test(q0) || RE.thanks.test(q0) || RE.help.test(q0)) return askLocal(input);
+      if (!aiOn() || !q0 || !records.length || RE.greet.test(q0) || RE.thanks.test(q0) || RE.praise.test(q0) || RE.help.test(q0)) return askLocal(input);
       LOCAL_ONLY = true; lastCand = [];
       let loc = null;
       try { loc = await askLocal(input); } catch (e) { loc = null; } finally { LOCAL_ONLY = false; }
@@ -2488,7 +2527,10 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const q0 = nz(raw).replace(/[?？!！。．.、,〜~…]+/gu, ' ').replace(/\s+/gu, ' ').trim();
       if (!q0) return reply('なにか聞いてください。たとえば「東野圭吾の本ある？」「ミステリーでおすすめは？」です。', [], records.length ? exChips() : []);
       if (RE.greet.test(q0)) return reply('こんにちは。本棚案内の B.U.R.I です。' + (records.length ? '取り込んだ ' + records.length + ' 件から探します。読みたい本の話をどうぞ。' : 'まずは本棚の CSV を取り込んでください。'), [], records.length ? exChips() : [], records.length ? [] : ['import']);
-      if (RE.thanks.test(q0)) return reply('どういたしまして。また呼んでください。');
+      if (RE.thanks.test(q0) || RE.praise.test(q0)) {
+        const big = /(最高|天才|神|ぐっじょぶ|グッジョブ|すごすぎ|完璧)/u.test(q0);
+        return Object.assign(reply(big ? "ε( ε,'-')('-' 鰤)з('-' 鰤)з('-' 鯛)з ……鯛が泳いできた。" + nickName() + '、ありがとう。一生分うれしい。' : "('-' 鰤)з♥✨ どういたしまして、" + nickName() + '！ また呼んでね。'), { mood: big ? 'reward' : 'joy' });
+      }
       if (RE.help.test(q0)) return help();
       if (!records.length && !RE.greet.test(q0)) return await deep(raw, [], [], null);
       if (!records.length) return reply('まだ本棚のデータを持っていません。Notion の本棚 DB を CSV で書き出して、「取り込む」から渡してください（外には送りません）。', [], [], ['import']);
@@ -2570,7 +2612,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; } };
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, nick: nickName, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; } };
   })();
 
   /* ============================================================
@@ -2912,6 +2954,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const box = mk('div', 'bs-card', null, host);
       ['keydown', 'keyup', 'keypress', 'input', 'paste'].forEach((t) => box.addEventListener(t, (e) => e.stopPropagation()));
       mk('h4', null, 'AI の設定', box);
+      mk('div', 'bs-lb', 'ぶりが呼ぶ名前', box);
+      const nk = mk('input', 'bs-in', null, box); nk.type = 'text'; nk.value = BURI.nick(); nk.placeholder = 'Wパパ';
       mk('div', 'bs-lb', '答え方', box);
       const seg = mk('div', 'bs-seg', null, box);
       const s1 = mk('button', null, 'ひとつの AI で答える', seg); s1.type = 'button';
@@ -2974,6 +3018,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
           r.row.querySelector('.bs-dot').classList.toggle('set', BURI.ready(id));
         }
         BURI.gmSet('c33.buri.use', A.use);
+        BURI.gmSet('c33.buri.nick', nk.value.trim() || 'Wパパ');
         A.moa = moa; BURI.gmSet('c33.buri.moa', moa);
         A.size = Number(sz.value) || 4; BURI.gmSet('c33.buri.size', A.size);
         A.provider = pv.value; BURI.gmSet('c33.buri.provider', A.provider);
@@ -3028,119 +3073,222 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }, true);
     
     /* ============================================================
-     *  v52: B.U.R.I × Notion の検索画面（⌘K / サイドの検索窓）
-     *   ・サイドの検索窓を押すと Notion の検索画面が開き、右の大きな欄に B.U.R.I のホームが出る
-     *   ・左の一覧の先頭に「B.U.R.I」の段。空の時は「最近の質問」「聞いてみる」、文字がある時は「B.U.R.I に聞く —『…』」
-     *   ・答えは右の欄に: 調べる → 仲間の下書き → まとめ の進み具合を見せ、本文は見出し・箇条書き・太字・出典の印（押すと開く）つきで出す
-     *   ・「相談の中身」で仲間それぞれの下書きを開ける。コピー・次に聞けそうなこと・続けて聞く欄
-     *   ・↑↓ で結果を選ぶと Notion のプレビューに戻り、段を押せば戻る。プレビュー欄を隠している時は段の下に出す
+     *  v56: B.U.R.I × Notion の検索画面 — 作り直し（Figma 風の静かな UI・顔文字は丸ゴシック・気分で顔が変わる）
+     *   ・右の欄: 上に「顔のピル・名前・いまの様子・アイコンのボタン」。考え中は道のり（タイムライン）のカード。
+     *     答えは本文＋出典のカード＋コピー / もう一度 / 相談の中身 / 次に聞けそうなこと。下は送るボタンつきの入力欄。
+     *   ・気分: 調べる時は ('-' 鯖)з📡、下書きは 🐟('-' 鰤)з🔥、褒められたら ('-' 鯛)з、大発見は ('-' 鮪)з … AI も気分を返す。
+     *   ・サイドの検索窓を押すと検索画面が開いてホーム（ε( ε,'-')('-' 鰤)з♥ のあいさつ・最近・聞いてみる）。
      * ============================================================ */
     const NS = { on: BURI.gmGet('c33.buri.ns', true) !== false, auto: BURI.gmGet('c33.buri.nsAuto', true) !== false };
     const nsCache = new Map();
     const nsConv = [];   // 会話 [{ q, res }]（検索画面を閉じても少しの間は覚えておく）
     let nsConvAt = 0;
     const RE_QUESTION = /(教えて|おしえて|とは|って何|ってなに|って誰|ってだれ|について|知りたい|なぜ|どうして|どうやって|おすすめ|[?？]\s*$)/u;
-    const EXAMPLES = ['東野圭吾について教えて', '本棚で未読のミステリーは？', '最近読んだ本のおすすめは？', 'ガリレオシリーズの順番は？'];
+    const EXAMPLES = [['📚', '東野圭吾について教えて'], ['🔍', '本棚で未読のミステリーは？'], ['✨', '最近読んだ本のおすすめは？'], ['🗂', 'ガリレオシリーズの順番は？']];
     const hist = () => { const h = BURI.gmGet('c33.buri.hist', []); return Array.isArray(h) ? h : []; };
     const histAdd = (q) => { const h = hist().filter((x) => x !== q); h.unshift(q); BURI.gmSet('c33.buri.hist', h.slice(0, 12)); };
+    const nick = () => BURI.nick();
+    /* 気分 → 顔（説明書 ver.9 の表から） */
+    const FACE = {
+      normal: "('-' 鰤)з", happy: "('-' 鰤)з✨", joy: "('-' 鰤)з♥✨", shy: "('-' 鰤)з…///", kyun: "('-' 鰤)з…♥", proud: "('-' 鰤)з👑✨", satisfied: "('-' 鰤)з♪",
+      thanks: "('-' 鰤)з♥✨💧", sad: "('-' 鰤)з💧", cry: "('-' 鰤)з💧💧", setsunai: "('-' 鰤)з…", panic: "('-' 鰤)з💦", angry: "('-' 鰤)з💢", fire: "('-' 鰤)з🔥",
+      think: "('-' 鰤)з…", sulk: "('-' 鰤)з……", geffun: "('-' 鰤)з………♥♥♥", search: "('-' 鯖)з📡", reward: "('-' 鯛)з✨", alarm: "('-' 鰤)з('-' 鮪)з💥🔍",
+      excited: "('-' 鰯)з('-' 鰯)з('-' 鰯)з✨", celebrate: "('-' 鰤)з('-' 鰤)з('-' 鰤)з✨✨✨", together: "ε( ε,'-')('-' 鰤)з♥", write: "🐟('-' 鰤)з🔥",
+      merge: "('-' 鰤)з…✨", away: "('-' 鰤)з……🌙", back: "('-' 🐋)з ('-' 鰤)з♥✨！", nag: "('-' 鮭)з"
+    };
+    const BUSY = { think: '会話を読んでいます…', search: '鯖が情報を集めています', write: '仲間と下書きしています', merge: 'ひとつにまとめています' };
+    const moodOf = (res) => {
+      if (res && res.mood && FACE[res.mood]) return res.mood;
+      const t = String(res && res.text || '');
+      if (/鯛/.test(t)) return 'reward'; if (/鮪|食い違/.test(t)) return 'alarm'; if (/ゲフン/.test(t)) return 'geffun';
+      if (/分かりませんでした|見つかりませんでした|つまずき|お休み中/.test(t)) return 'sad';
+      if (/♥/.test(t)) return 'kyun'; if (/✨/.test(t)) return 'happy';
+      return 'satisfied';
+    };
+    const IC = {
+      home: '<path d="M3.5 10.5 12 3.8l8.5 6.7"/><path d="M5.5 9.2V20h13V9.2"/><path d="M10 20v-5h4v5"/>',
+      tune: '<path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17" r="2"/>',
+      edit: '<path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="M14.5 7.5l2 2"/>',
+      side: '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M9.5 4.5v15"/>',
+      x: '<path d="M17.5 6.5l-11 11M6.5 6.5l11 11"/>',
+      copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2.2"/><path d="M15.5 8.5V6.2A1.7 1.7 0 0 0 13.8 4.5H6.2A1.7 1.7 0 0 0 4.5 6.2v7.6c0 .9.8 1.7 1.7 1.7h2.3"/>',
+      retry: '<path d="M20 11.5a8 8 0 1 1-2.4-5.7"/><path d="M20 4.5v4.5h-4.5"/>',
+      send: '<path d="M12 18.5v-13"/><path d="M6.5 11 12 5.5l5.5 5.5"/>',
+      arrow: '<path d="M8 16l8-8"/><path d="M9.5 8H16v6.5"/>',
+      clock: '<circle cx="12" cy="12" r="8.2"/><path d="M12 7.6V12l3 1.8"/>',
+      users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.6 19.5c.7-3 2.8-4.6 5.4-4.6s4.7 1.6 5.4 4.6"/><circle cx="16.8" cy="9.4" r="2.4"/><path d="M16.4 14.2c2.2.2 3.6 1.6 4 4.3"/>',
+      check: '<path d="M5.5 12.5l4 4 9-9"/>',
+      down: '<path d="M7 10l5 5 5-5"/>',
+      book: '<path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v12.5H7.5A2.5 2.5 0 0 1 5 17V4.5Z"/><path d="M5 17a2.5 2.5 0 0 1 2.5-2.5H18"/>'
+    };
+    const svg = (k, sz) => '<svg viewBox="0 0 24 24" width="' + (sz || 16) + '" height="' + (sz || 16) + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[k] + '</svg>';
+    const ib = (host, icon, title, fn, cls) => { const b = mk('button', 'np-ib' + (cls ? ' ' + cls : ''), null, host); b.type = 'button'; b.innerHTML = svg(icon); b.title = title; b.setAttribute('aria-label', title); b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(b); }); return b; };
+    const faceEl = (host, mood, cls) => { const f = mk('span', 'b-face' + (cls ? ' ' + cls : ''), FACE[mood] || FACE.normal, host); f.dataset.mood = mood; return f; };
+    const hue = (s) => { let h = 0; for (const c of String(s)) h = (h * 31 + c.codePointAt(0)) % 360; return h; };
     const nsStyle = mk('style'); nsStyle.id = 'c33-ns-css';
     nsStyle.textContent = `
-#c33-ns { display: flex; flex-direction: column; padding-inline: 10px; font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); }
+:root { --buri-face: "Hiragino Maru Gothic ProN", "Hiragino Maru Gothic Pro", "Zen Maru Gothic", "M PLUS Rounded 1c", "Kosugi Maru", "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", "Apple Color Emoji", "Segoe UI Emoji", system-ui, sans-serif;
+  --buri-ui: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", "Apple Color Emoji", "Segoe UI Emoji", sans-serif; }
+#c33-ns, #c33-nsp { --b-acc: var(--lm-accent, #2783de); --b-acc2: #8b6cd9; --b-ink: var(--c-texPri, #2f2e2b); --b-sub: var(--c-texSec, #73726e); --b-ter: var(--c-texTer, #a3a29e);
+  --b-line: var(--ca-borSecTra, rgba(55,53,47,.1)); --b-soft: var(--ca-bacIntTra, rgba(55,53,47,.05)); --b-bg: var(--c-bacPri, #fff); --b-ok: #2e9e6a; --b-ng: #d44c47; }
+#c33-ns, #c33-ns *, #c33-nsp, #c33-nsp * { font-family: var(--buri-ui) !important; box-sizing: border-box; }
+#c33-ns .b-face, #c33-nsp .b-face, #c33-buri .cb-av, #c33-buri .b-face { font-family: var(--buri-face) !important; font-weight: 500 !important; letter-spacing: 0 !important; font-style: normal !important; font-feature-settings: normal !important; white-space: nowrap; }
+.b-face.pop { animation: bFacePop .45s cubic-bezier(.2,1.6,.4,1); }
+@keyframes bFacePop { 0% { transform: scale(.82); opacity: .4; } 100% { transform: none; opacity: 1; } }
+/* ---------- 左の一覧の段 ---------- */
+#c33-ns { display: flex; flex-direction: column; padding: 2px 10px 4px; color: var(--b-ink); }
 #c33-ns[hidden] { display: none !important; }
-#c33-ns .ns-h { display: flex; align-items: center; gap: 6px; padding: 14px 8px 6px; font-size: 12px; color: var(--c-texTer, #9b9a97); }
-#c33-ns .ns-h b { font-weight: 600; color: var(--c-texSec, #787774); }
-#c33-ns .ns-tag { margin-inline-start: auto; padding: 0 7px; border-radius: 999px; font-size: 10.5px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--c-texSec, #787774); }
-#c33-ns .ns-row { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; margin: 0; padding: 4px 8px; border: 0; border-radius: 12px; background: transparent; color: inherit; font: inherit; font-size: 14px; text-align: start; cursor: pointer; }
-#c33-ns .ns-row:hover, #c33-ns .ns-row.on { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
-#c33-ns .ns-av { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 6px; font-size: 10px; white-space: nowrap; background: linear-gradient(135deg, color-mix(in srgb, var(--lm-accent, #2783de) 22%, transparent), color-mix(in srgb, #9b6bd8 18%, transparent)); color: var(--c-texSec, #555); }
-#c33-ns .ns-lb { flex: none; font-weight: 500; color: var(--c-texAccPri, var(--c-texPri)); }
-#c33-ns .ns-dash { flex: none; font-size: 12px; color: var(--c-texSec, #787774); }
-#c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--c-texTer, #9b9a97); }
-#c33-ns .ns-kb { flex: none; font-size: 11px; color: var(--c-texTer, #9b9a97); }
-#c33-ns .ns-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 8px 6px 36px; }
-#c33-ns .ns-chips button, #c33-nsp .np-chips button { margin: 0; padding: 2px 10px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.12)); border-radius: 999px; background: transparent; color: var(--c-texSec, #787774); font: 12px/1.6 var(--c33-ui, inherit); cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#c33-ns .ns-chips button:hover, #c33-nsp .np-chips button:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texPri, #37352f); }
-#c33-ns .ns-chips button.h::before, #c33-nsp .np-chips button.h::before { content: '↺ '; opacity: .6; }
-#c33-ns .ns-ans { margin: 4px 8px 6px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--lm-accent, #2783de) 6%, transparent); max-height: 42vh; overflow-y: auto; overscroll-behavior: contain; }
+#c33-ns .ns-h { display: flex; align-items: center; gap: 8px; padding: 12px 8px 6px; font-size: 12px; color: var(--b-ter); }
+#c33-ns .ns-h b { font-weight: 600; color: var(--b-sub); letter-spacing: .02em; }
+#c33-ns .ns-tag { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px 1px 6px; border-radius: 999px; font-size: 11px; color: var(--b-sub); background: var(--b-soft); }
+#c33-ns .ns-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--b-ok); }
+#c33-ns .ns-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 38px; margin: 0; padding: 5px 8px; border: 0; border-radius: 10px; background: transparent; color: inherit; font-size: 14px; text-align: start; cursor: pointer; transition: background .15s; }
+#c33-ns .ns-row:hover, #c33-ns .ns-row.on { background: var(--b-soft); }
+#c33-ns .ns-row .b-face { flex: none; padding: 2px 8px; border-radius: 999px; font-size: 11px; color: var(--b-ink); background: linear-gradient(135deg, color-mix(in srgb, var(--b-acc) 16%, var(--b-bg)), color-mix(in srgb, var(--b-acc2) 14%, var(--b-bg))); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 18%, transparent); }
+#c33-ns .ns-lb { flex: none; font-weight: 550; }
+#c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; color: var(--b-ter); }
+#c33-ns .ns-kb { flex: none; padding: 1px 6px; border-radius: 5px; font-size: 10.5px; color: var(--b-ter); box-shadow: inset 0 0 0 1px var(--b-line); }
+#c33-ns .ns-kb:empty { display: none; }
+#c33-ns .ns-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 8px 8px 8px; }
+#c33-ns .ns-chips button, #c33-nsp .np-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; margin: 0; padding: 4px 11px; border: 0; border-radius: 999px; background: var(--b-bg); box-shadow: inset 0 0 0 1px var(--b-line); color: var(--b-sub); font-size: 12px; line-height: 1.5; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: background .15s, color .15s, box-shadow .15s; }
+#c33-ns .ns-chips button:hover, #c33-nsp .np-pill:hover { background: var(--b-soft); color: var(--b-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 30%, var(--b-line)); }
+#c33-ns .ns-chips button i, #c33-nsp .np-pill i { font-style: normal; opacity: .75; }
+#c33-ns .ns-chips button svg, #c33-nsp .np-pill svg { width: 13px; height: 13px; flex: none; opacity: .7; }
+#c33-ns .ns-ans { margin: 4px 8px 8px; padding: 12px 14px; border-radius: 12px; background: var(--b-bg); box-shadow: inset 0 0 0 1px var(--b-line); max-height: 42vh; overflow-y: auto; overscroll-behavior: contain; }
 #c33-ns .ns-ans[hidden] { display: none; }
-#c33-nsp { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; padding: 34px 14px 16px 16px; font-family: var(--c33-ui, inherit); color: var(--c-texPri, #37352f); }
+#c33-ns .ns-tx { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.75; }
+#c33-ns .ns-src { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; }
+#c33-ns .ns-src a, #c33-ns .ns-src button { margin: 0; padding: 0; border: 0; background: none; font-size: 12px; color: var(--b-acc); text-decoration: none; cursor: pointer; }
+#c33-ns .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
+#c33-ns .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--b-ter); animation: bounce 1.4s infinite ease-in-out both; }
+/* ---------- 右の欄 ---------- */
+#c33-nsp { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; padding: 34px 14px 16px 16px; color: var(--b-ink); }
 #c33-nsp[hidden] { display: none !important; }
-#c33-nsp .np-card { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; background: var(--c-bacPri, #fff); box-shadow: var(--c-shaOutLg, 0 8px 28px rgba(0,0,0,.14)); }
-#c33-nsp .np-cover { flex: none; position: relative; height: 64px; background: linear-gradient(120deg, color-mix(in srgb, var(--lm-accent, #2783de) 16%, var(--c-bacSec, #f7f6f3)), color-mix(in srgb, #9b6bd8 14%, var(--c-bacSec, #f7f6f3)) 55%, color-mix(in srgb, #2e9e6a 12%, var(--c-bacSec, #f7f6f3))); background-size: 200% 100%; }
-#c33-nsp.busy .np-cover { animation: npFlow 2.4s linear infinite; }
-@keyframes npFlow { from { background-position: 0% 0; } to { background-position: 200% 0; } }
-#c33-nsp .np-badge { position: absolute; bottom: -18px; inset-inline-start: 24px; padding: 6px 10px; border-radius: 10px; font-size: 15px; background: var(--c-bacPri, #fff); box-shadow: var(--c-shaOutMd, 0 2px 8px rgba(0,0,0,.12)); }
-#c33-nsp.busy .np-badge { animation: npBob 1.2s ease-in-out infinite; }
-@keyframes npBob { 50% { transform: translateY(-3px) rotate(-3deg); } }
-#c33-nsp .np-tools { position: absolute; top: 8px; inset-inline-end: 8px; display: flex; gap: 2px; padding: 2px; border-radius: 6px; background: var(--c-bacEle, #fff); box-shadow: var(--c-shaOutMd, 0 2px 8px rgba(0,0,0,.12)); }
-#c33-nsp .np-tools button { margin: 0; padding: 2px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--c-texSec, #787774); font: 12px/20px var(--c33-ui, inherit); cursor: pointer; }
-#c33-nsp .np-tools button:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texPri, #37352f); }
-#c33-nsp .np-head { flex: none; padding: 26px 24px 10px; box-shadow: 0 1px 0 var(--ca-borSecTra, rgba(55,53,47,.09)); }
-#c33-nsp .np-crumb { font-size: 12px; color: var(--c-texTer, #9b9a97); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#c33-nsp .np-title { font-size: 20px; line-height: 24px; font-weight: 600; }
-#c33-nsp .np-log { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 12px 24px 16px; display: flex; flex-direction: column; gap: 12px; }
-#c33-nsp .np-hello { font-size: 18px; font-weight: 600; line-height: 1.5; }
-#c33-nsp .np-sub { font-size: 12.5px; color: var(--c-texSec, #787774); line-height: 1.7; }
+#c33-nsp .np-card { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: var(--b-bg);
+  box-shadow: 0 0 0 1px var(--b-line), 0 1px 2px rgba(15,15,15,.04), 0 16px 40px -14px rgba(15,15,15,.2); }
+#c33-nsp .np-aura { position: absolute; inset: 0 0 auto 0; height: 140px; pointer-events: none; opacity: .95;
+  background: radial-gradient(110% 100% at 0% 0%, color-mix(in srgb, var(--b-acc) 15%, transparent), transparent 62%), radial-gradient(80% 90% at 100% 0%, color-mix(in srgb, var(--b-acc2) 13%, transparent), transparent 60%);
+  -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); transition: opacity .3s; }
+#c33-nsp.busy .np-aura { animation: npAura 3.2s ease-in-out infinite alternate; }
+@keyframes npAura { from { filter: hue-rotate(0deg); opacity: .8; } to { filter: hue-rotate(40deg); opacity: 1; } }
+#c33-nsp .np-top { position: relative; display: flex; align-items: center; gap: 10px; padding: 14px 12px 12px 14px; }
+#c33-nsp .np-top .b-face { flex: none; display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 13.5px; color: var(--b-ink); background: var(--b-bg);
+  box-shadow: 0 0 0 1px var(--b-line), 0 4px 12px -4px rgba(15,15,15,.18); }
+#c33-nsp.busy .np-top .b-face { animation: npBob 1.3s ease-in-out infinite; }
+@keyframes npBob { 50% { transform: translateY(-2px) rotate(-2deg); } }
+#c33-nsp .np-id { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+#c33-nsp .np-name { font-size: 14px; font-weight: 650; letter-spacing: .03em; line-height: 1.25; }
+#c33-nsp .np-status { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 11.5px; color: var(--b-ter); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#c33-nsp .np-status i { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--b-ok); }
+#c33-nsp .np-status i.off { background: var(--b-ter); }
+#c33-nsp.busy .np-status i { background: var(--b-acc); animation: npPulse 1s ease-in-out infinite; }
+@keyframes npPulse { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--b-acc) 20%, transparent); } }
+#c33-nsp .np-status span { overflow: hidden; white-space: normal; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+#c33-nsp .np-tools { flex: none; display: flex; gap: 2px; padding: 3px; border-radius: 11px; background: color-mix(in srgb, var(--b-bg) 80%, transparent); box-shadow: inset 0 0 0 1px var(--b-line); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+#c33-nsp .np-ib { display: inline-grid; place-items: center; width: 28px; height: 28px; margin: 0; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--b-sub); cursor: pointer; transition: background .15s, color .15s; }
+#c33-nsp .np-ib:hover { background: var(--b-soft); color: var(--b-ink); }
+#c33-nsp .np-ib.on { background: color-mix(in srgb, var(--b-acc) 12%, transparent); color: var(--b-acc); }
+#c33-nsp .np-sep { width: 1px; margin: 5px 2px; background: var(--b-line); }
+#c33-nsp .np-log { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 16px 18px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; }
+/* ホーム */
+#c33-nsp .np-hero { display: flex; flex-direction: column; gap: 6px; padding: 6px 2px 2px; }
+#c33-nsp .np-hero .b-face { align-self: flex-start; font-size: 20px; padding: 8px 14px; border-radius: 16px; background: var(--b-bg); box-shadow: 0 0 0 1px var(--b-line), 0 8px 20px -10px rgba(15,15,15,.22); }
+#c33-nsp .np-hello { margin-top: 6px; font-size: 21px; line-height: 1.35; font-weight: 650; letter-spacing: .01em; }
+#c33-nsp .np-sub { font-size: 13px; line-height: 1.7; color: var(--b-sub); }
 #c33-nsp .np-stat { display: flex; flex-wrap: wrap; gap: 6px; }
-#c33-nsp .np-stat span, #c33-nsp .np-stat button { display: inline-flex; align-items: center; gap: 5px; margin: 0; padding: 2px 9px; border: 0; border-radius: 999px; font: 11.5px/1.7 var(--c33-ui, inherit); background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texSec, #787774); }
-#c33-nsp .np-stat button { cursor: pointer; }
-#c33-nsp .np-stat i { width: 7px; height: 7px; border-radius: 50%; background: #2e9e6a; display: inline-block; }
-#c33-nsp .np-stat i.off { background: var(--c-texTer, #c4c4c4); }
-#c33-nsp .np-sec { font-size: 11.5px; font-weight: 600; color: var(--c-texTer, #9b9a97); margin-top: 4px; }
-#c33-nsp .np-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-#c33-nsp .np-q { align-self: flex-end; max-width: 90%; padding: 5px 11px; border-radius: 12px 12px 4px 12px; font-size: 13px; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); overflow-wrap: anywhere; }
-#c33-nsp .np-steps { display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; border-radius: 10px; background: var(--ca-bacIntTra, rgba(55,53,47,.04)); font-size: 12px; color: var(--c-texSec, #787774); }
-#c33-nsp .np-step { display: flex; align-items: center; gap: 7px; }
-#c33-nsp .np-step i { flex: none; width: 14px; text-align: center; font-style: normal; }
-#c33-nsp .np-step.run i::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid currentColor; border-top-color: transparent; animation: npSpin .8s linear infinite; }
-#c33-nsp .np-step.ok i::before { content: '✓'; color: #2e9e6a; }
-#c33-nsp .np-step.ng i::before { content: '×'; color: #d44c47; }
-#c33-nsp .np-step small { color: var(--c-texTer, #9b9a97); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@keyframes npSpin { to { transform: rotate(360deg); } }
+#c33-nsp .np-stat span, #c33-nsp .np-stat button { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 3px 10px; border: 0; border-radius: 999px; font-size: 11.5px; line-height: 1.6; color: var(--b-sub); background: var(--b-soft); }
+#c33-nsp .np-stat button { cursor: pointer; background: transparent; box-shadow: inset 0 0 0 1px var(--b-line); }
+#c33-nsp .np-stat button:hover { color: var(--b-ink); background: var(--b-soft); }
+#c33-nsp .np-stat i { width: 6px; height: 6px; border-radius: 50%; background: var(--b-ok); }
+#c33-nsp .np-stat i.off { background: var(--b-ter); }
+#c33-nsp .np-sec { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; color: var(--b-ter); }
+#c33-nsp .np-sec::after { content: ''; flex: 1; height: 1px; background: var(--b-line); }
+#c33-nsp .np-rows { display: flex; flex-direction: column; gap: 2px; margin-top: -6px; }
+#c33-nsp .np-row { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0; padding: 7px 8px; border: 0; border-radius: 9px; background: transparent; color: var(--b-ink); font-size: 13px; text-align: start; cursor: pointer; }
+#c33-nsp .np-row:hover { background: var(--b-soft); }
+#c33-nsp .np-row svg { flex: none; color: var(--b-ter); }
+#c33-nsp .np-row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-row .go { opacity: 0; transition: opacity .15s; }
+#c33-nsp .np-row:hover .go { opacity: 1; }
+#c33-nsp .np-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: -6px; }
+#c33-nsp .np-sug { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 11px 12px; border: 0; border-radius: 12px; background: var(--b-bg); box-shadow: inset 0 0 0 1px var(--b-line); color: var(--b-ink); font-size: 12.5px; line-height: 1.5; text-align: start; cursor: pointer; transition: box-shadow .15s, transform .15s; }
+#c33-nsp .np-sug:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 35%, var(--b-line)), 0 6px 16px -10px rgba(15,15,15,.25); transform: translateY(-1px); }
+#c33-nsp .np-sug i { font-style: normal; font-size: 15px; }
+/* 会話 */
+#c33-nsp .np-q { align-self: flex-end; max-width: 86%; padding: 8px 13px; border-radius: 16px 16px 5px 16px; font-size: 13.5px; line-height: 1.6; overflow-wrap: anywhere;
+  background: color-mix(in srgb, var(--b-acc) 11%, var(--b-bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 14%, transparent); }
+#c33-nsp .np-msg { display: flex; flex-direction: column; gap: 10px; }
+#c33-nsp .np-who { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--b-ter); }
+#c33-nsp .np-who .b-face { padding: 2px 9px; border-radius: 999px; font-size: 12px; color: var(--b-ink); background: var(--b-soft); }
 #c33-nsp .np-a { font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
-#c33-nsp .np-a > * { margin: 0 0 8px; animation: npIn .35s ease-out both; }
+#c33-nsp .np-a > * { margin: 0 0 9px; animation: npIn .4s ease-out both; }
 #c33-nsp .np-a > *:last-child { margin-bottom: 0; }
 #c33-nsp .np-a h5 { font-size: 14.5px; font-weight: 700; margin-top: 4px; }
-#c33-nsp .np-a ul, #c33-nsp .np-a ol { padding-inline-start: 1.3em; }
-#c33-nsp .np-a li { margin: 2px 0; }
+#c33-nsp .np-a ul, #c33-nsp .np-a ol { padding-inline-start: 1.25em; }
+#c33-nsp .np-a li { margin: 3px 0; }
+#c33-nsp .np-a li::marker { color: var(--b-ter); }
+#c33-nsp .np-a .b-face { padding: 0 2px; }
 @keyframes npIn { from { opacity: 0; transform: translateY(4px); } }
-#c33-nsp .np-cite { display: inline-flex; align-items: center; margin: 0 1px; padding: 0 5px; height: 16px; border-radius: 5px; vertical-align: 2px; font-size: 10px; font-weight: 600; text-decoration: none; background: color-mix(in srgb, var(--lm-accent, #2783de) 12%, transparent); color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); cursor: pointer; }
-#c33-nsp .np-cite.n { background: color-mix(in srgb, #2e9e6a 14%, transparent); color: #2b8a5e; }
-#c33-nsp .np-cite:hover { filter: brightness(.92); }
-#c33-nsp .np-src { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-#c33-nsp .np-src a { display: flex; flex-direction: column; gap: 1px; padding: 6px 9px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.1)); border-radius: 9px; font-size: 12px; color: var(--c-texPri, #37352f); text-decoration: none; min-width: 0; }
-#c33-nsp .np-src a:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.05)); }
-#c33-nsp .np-src a small { font-size: 10.5px; color: var(--c-texTer, #9b9a97); }
-#c33-nsp .np-src a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#c33-nsp .np-acts { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11.5px; }
-#c33-nsp .np-acts button { margin: 0; padding: 0; border: 0; background: none; color: var(--c-texTer, #9b9a97); font: inherit; cursor: pointer; }
-#c33-nsp .np-acts button:hover { color: var(--c-texPri, #37352f); }
-#c33-nsp details.np-moa { font-size: 12px; color: var(--c-texSec, #787774); }
-#c33-nsp details.np-moa summary { cursor: pointer; }
-#c33-nsp details.np-moa div { margin: 6px 0 0; padding: 8px 10px; border-inline-start: 3px solid var(--ca-borSecTra, rgba(55,53,47,.16)); white-space: pre-wrap; line-height: 1.7; max-height: 220px; overflow: auto; }
-#c33-nsp details.np-moa b { color: var(--c-texPri, #37352f); }
-#c33-nsp .np-in { flex: none; display: flex; gap: 6px; padding: 10px 14px 14px; border-top: 1px solid var(--ca-borSecTra, rgba(55,53,47,.09)); }
-#c33-nsp .np-in input { flex: 1 1 auto; min-width: 0; padding: 7px 11px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.16)); border-radius: 10px; background: transparent; color: inherit; font: 14px var(--c33-ui, inherit); outline: none; }
-#c33-nsp .np-in input:focus { border-color: color-mix(in srgb, var(--lm-accent, #2783de) 60%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lm-accent, #2783de) 14%, transparent); }
-#c33-nsp .np-in button { flex: none; margin: 0; padding: 0 14px; border: 0; border-radius: 10px; background: color-mix(in srgb, var(--lm-accent, #2783de) 16%, transparent); color: inherit; font: 13px var(--c33-ui, inherit); cursor: pointer; }
-#c33-ns .ns-tx { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.7; }
-#c33-ns .ns-src { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; }
-#c33-ns .ns-src a, #c33-ns .ns-src button { margin: 0; padding: 0; border: 0; background: none; font: inherit; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; cursor: pointer; }
-#c33-ns .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 16px; }
-#c33-ns .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-texSec, #999); animation: bounce 1.4s infinite ease-in-out both; }
-.bs-card { display: flex; flex-direction: column; gap: 7px; padding: 12px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.12)); border-radius: 12px; background: var(--c-bacPri, #fff); color: var(--c-texPri, #37352f); font: 13px/1.5 var(--c33-ui, inherit); text-align: start; }
-.bs-card h4 { margin: 0; font-size: 14px; font-weight: 700; }
-.bs-card .bs-lb { margin-top: 4px; font-size: 11.5px; font-weight: 600; color: var(--c-texSec, #787774); }
+#c33-nsp .np-cite { display: inline-flex; align-items: center; margin: 0 1px; padding: 0 5px; height: 16px; border-radius: 5px; vertical-align: 2px; font-size: 10px; font-weight: 650; text-decoration: none; cursor: pointer;
+  background: color-mix(in srgb, var(--b-acc) 11%, transparent); color: var(--b-acc); transition: background .15s; }
+#c33-nsp .np-cite.n { background: color-mix(in srgb, var(--b-ok) 13%, transparent); color: #2b8a5e; }
+#c33-nsp .np-cite:hover { background: color-mix(in srgb, var(--b-acc) 22%, transparent); }
+#c33-nsp .np-src { display: flex; gap: 8px; overflow-x: auto; padding: 1px 1px 4px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+#c33-nsp .np-s { flex: none; width: 176px; display: grid; grid-template-columns: 20px 1fr; grid-template-rows: auto auto; gap: 1px 9px; align-items: center; padding: 9px 11px; border-radius: 11px; text-decoration: none; color: var(--b-ink); background: var(--b-bg); box-shadow: inset 0 0 0 1px var(--b-line); scroll-snap-align: start; transition: box-shadow .15s, background .15s; }
+#c33-nsp .np-s:hover { background: var(--b-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 25%, var(--b-line)); }
+#c33-nsp .np-s .fav { grid-row: span 2; width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; font-size: 10.5px; font-weight: 700; color: #fff; }
+#c33-nsp .np-s b { font-size: 12px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-s small { font-size: 10.5px; color: var(--b-ter); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-bar { display: flex; align-items: center; gap: 2px; margin-top: -4px; }
+#c33-nsp .np-bar .np-ib { width: 26px; height: 26px; color: var(--b-ter); }
+#c33-nsp .np-bar .np-team { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: 4px; padding: 2px 9px 2px 4px; border: 0; border-radius: 999px; background: transparent; color: var(--b-ter); font-size: 11.5px; cursor: pointer; }
+#c33-nsp .np-bar .np-team:hover { background: var(--b-soft); color: var(--b-sub); }
+#c33-nsp .np-av { display: inline-flex; }
+#c33-nsp .np-av b { width: 18px; height: 18px; margin-inline-start: -5px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; font-weight: 700; color: #fff; box-shadow: 0 0 0 2px var(--b-bg); }
+#c33-nsp .np-av b:first-child { margin-inline-start: 0; }
+#c33-nsp .np-av b.ng { filter: grayscale(1); opacity: .5; }
+#c33-nsp .np-drafts { display: none; flex-direction: column; gap: 8px; }
+#c33-nsp .np-drafts.on { display: flex; }
+#c33-nsp .np-draft { padding: 10px 12px; border-radius: 11px; background: var(--b-soft); font-size: 12.5px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 200px; overflow: auto; color: var(--b-sub); }
+#c33-nsp .np-draft b { display: block; margin-bottom: 4px; font-size: 11.5px; color: var(--b-ink); }
+#c33-nsp .np-next { display: flex; flex-wrap: wrap; gap: 6px; }
+/* 考え中のカード */
+#c33-nsp .np-think { display: flex; gap: 12px; padding: 12px 14px; border-radius: 14px; background: linear-gradient(135deg, color-mix(in srgb, var(--b-acc) 7%, var(--b-bg)), color-mix(in srgb, var(--b-acc2) 6%, var(--b-bg))); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 14%, var(--b-line)); }
+#c33-nsp .np-think > .b-face { flex: none; align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: 12.5px; background: var(--b-bg); box-shadow: 0 0 0 1px var(--b-line); animation: npBob 1.3s ease-in-out infinite; }
+#c33-nsp .np-tl { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; padding-inline-start: 16px; }
+#c33-nsp .np-tl::before { content: ''; position: absolute; inset-inline-start: 4px; top: 8px; bottom: 8px; width: 1.5px; border-radius: 1px; background: var(--b-line); }
+#c33-nsp .np-step { position: relative; display: flex; flex-direction: column; font-size: 12.5px; line-height: 1.5; color: var(--b-sub); }
+#c33-nsp .np-step::before { content: ''; position: absolute; inset-inline-start: -16px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: var(--b-bg); box-shadow: 0 0 0 1.5px var(--b-ter); }
+#c33-nsp .np-step.run::before { box-shadow: 0 0 0 1.5px var(--b-acc); animation: npPulse 1s ease-in-out infinite; }
+#c33-nsp .np-step.ok::before { background: var(--b-ok); box-shadow: none; }
+#c33-nsp .np-step.ng::before { background: var(--b-ng); box-shadow: none; }
+#c33-nsp .np-step.ok { color: var(--b-ink); }
+#c33-nsp .np-step small { font-size: 11px; color: var(--b-ter); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 入力欄 */
+#c33-nsp .np-comp { position: relative; flex: none; padding: 10px 12px 12px; background: linear-gradient(transparent, var(--b-bg) 30%); }
+#c33-nsp .np-field { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: 14px; background: var(--b-bg); box-shadow: inset 0 0 0 1px var(--b-line), 0 2px 6px -2px rgba(15,15,15,.08); transition: box-shadow .15s; }
+#c33-nsp .np-field:focus-within { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 55%, transparent), 0 0 0 4px color-mix(in srgb, var(--b-acc) 12%, transparent); }
+#c33-nsp .np-field input { flex: 1 1 auto; min-width: 0; padding: 6px 0; border: 0; background: transparent; color: inherit; font-size: 14px; outline: none; box-shadow: none; }
+#c33-nsp .np-field input::placeholder { color: var(--b-ter); }
+#c33-nsp .np-send { flex: none; display: grid; place-items: center; width: 32px; height: 32px; margin: 0; padding: 0; border: 0; border-radius: 10px; background: var(--b-acc); color: #fff; cursor: pointer; transition: opacity .15s, transform .15s; }
+#c33-nsp .np-send:disabled { opacity: .3; cursor: default; }
+#c33-nsp .np-send:not(:disabled):hover { transform: translateY(-1px); }
+#c33-nsp .np-hint { display: flex; justify-content: space-between; gap: 8px; padding: 6px 4px 0; font-size: 10.5px; color: var(--b-ter); }
+/* 設定のカード（共通） */
+.bs-card { display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 0; border-radius: 14px; background: var(--c-bacPri, #fff); box-shadow: inset 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.1)); color: var(--c-texPri, #37352f); font: 13px/1.5 var(--buri-ui) !important; text-align: start; }
+.bs-card * { font-family: var(--buri-ui) !important; }
+.bs-card h4 { margin: 0; font-size: 15px; font-weight: 650; }
+.bs-card .bs-lb { margin-top: 6px; font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--c-texSec, #787774); }
 .bs-card .bs-nt { font-size: 11px; line-height: 1.6; color: var(--c-texTer, #9b9a97); }
-.bs-card .bs-seg { display: flex; gap: 3px; padding: 3px; border-radius: 9px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
-.bs-card .bs-seg button { flex: 1 1 0; margin: 0; padding: 4px 6px; border: 0; border-radius: 7px; background: transparent; color: var(--c-texSec, #787774); font: 12px var(--c33-ui, inherit); cursor: pointer; }
+.bs-card .bs-seg { display: flex; gap: 3px; padding: 3px; border-radius: 10px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); }
+.bs-card .bs-seg button { flex: 1 1 0; margin: 0; padding: 5px 6px; border: 0; border-radius: 8px; background: transparent; color: var(--c-texSec, #787774); font-size: 12px; cursor: pointer; }
 .bs-card .bs-seg button.on { background: var(--c-bacPri, #fff); color: var(--c-texPri, #37352f); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
-.bs-card .bs-sel, .bs-card .bs-kw input { width: 100%; min-width: 0; padding: 4px 7px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.16)); border-radius: 7px; background: transparent; color: inherit; font: 12.5px var(--c33-ui, inherit); }
-.bs-card .bs-row { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; align-items: center; padding: 7px 9px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.1)); border-radius: 9px; }
+.bs-card .bs-sel, .bs-card .bs-kw input, .bs-card .bs-in { width: 100%; min-width: 0; padding: 6px 9px; border: 0; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.16)); background: transparent; color: inherit; font-size: 12.5px; }
+.bs-card .bs-row { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: center; padding: 9px 11px; border-radius: 11px; box-shadow: inset 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.1)); }
 .bs-card .bs-row > .bs-nt, .bs-card .bs-row > .bs-kw, .bs-card .bs-row > .bs-sel { grid-column: 1 / -1; }
-.bs-card .bs-nmw { display: flex; align-items: center; gap: 6px; min-width: 0; cursor: pointer; }
+.bs-card .bs-nmw { display: flex; align-items: center; gap: 7px; min-width: 0; cursor: pointer; }
 .bs-card .bs-nm { font-weight: 600; }
-.bs-card .bs-tag { padding: 0 6px; border-radius: 999px; font-size: 10px; background: color-mix(in srgb, #2e9e6a 14%, transparent); color: #2b8a5e; }
+.bs-card .bs-tag { padding: 0 7px; border-radius: 999px; font-size: 10px; background: color-mix(in srgb, #2e9e6a 14%, transparent); color: #2b8a5e; }
 .bs-card .bs-tag.paid { background: color-mix(in srgb, #d9730d 14%, transparent); color: #b5600a; }
 .bs-card .bs-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-texTer, #c4c4c4); opacity: .5; }
 .bs-card .bs-dot.set { background: #2783de; opacity: 1; }
@@ -3148,13 +3296,14 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 .bs-card .bs-dot.ng { background: #d44c47; opacity: 1; }
 .bs-card .bs-link { font-size: 11.5px; color: var(--lm-accent, var(--c-bluTexAccPri, #2783de)); text-decoration: none; white-space: nowrap; }
 .bs-card .bs-kw { display: flex; gap: 4px; }
-.bs-card .bs-x { flex: none; margin: 0; padding: 0 7px; border: 0; border-radius: 6px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texSec, #787774); cursor: pointer; }
-.bs-card .bs-opts { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--c-texSec, #787774); }
-.bs-card .bs-btns { display: flex; flex-wrap: wrap; gap: 6px; }
-.bs-card .bs-btns button { margin: 0; padding: 3px 12px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.14)); border-radius: 999px; background: transparent; color: inherit; font: 12.5px var(--c33-ui, inherit); cursor: pointer; }
-.bs-card .bs-btns button.pri { border-color: transparent; background: color-mix(in srgb, var(--lm-accent, #2783de) 16%, transparent); font-weight: 600; }
+.bs-card .bs-x { flex: none; margin: 0; padding: 0 8px; border: 0; border-radius: 7px; background: var(--ca-bacIntTra, rgba(55,53,47,.06)); color: var(--c-texSec, #787774); cursor: pointer; }
+.bs-card .bs-opts { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--c-texSec, #787774); }
+.bs-card .bs-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.bs-card .bs-btns button { margin: 0; padding: 5px 13px; border: 0; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.14)); background: transparent; color: inherit; font-size: 12.5px; cursor: pointer; }
+.bs-card .bs-btns button.pri { box-shadow: none; background: var(--lm-accent, #2783de); color: #fff; font-weight: 600; }
 .bs-card .bs-out { white-space: pre-wrap; font-size: 11.5px; line-height: 1.6; color: var(--c-texSec, #787774); }
 html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open] #c33-buri:not(.floating) { visibility: hidden !important; }
+@media (prefers-reduced-motion: reduce) { #c33-nsp *, #c33-ns * { animation: none !important; transition: none !important; } }
 `;
     (document.head || document.documentElement).appendChild(nsStyle);
     function nsInput() {
@@ -3170,26 +3319,27 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
     const stopKeys = (el) => ['keydown', 'keyup', 'keypress', 'beforeinput', 'input', 'paste', 'copy', 'cut'].forEach((t) => el.addEventListener(t, (e) => e.stopPropagation()));
     let nsInp = null, nsDlg = null, nsBox = null, nsPane = null, nsTimer = 0, nsSeq = 0, nsWant = '';
     const srcLabel = (c) => c.type === 'Web' ? (/wikipedia/i.test(c.url) ? 'Wikipedia' : (() => { try { return new URL(c.url).hostname.replace(/^www\./, ''); } catch (e) { return 'Web'; } })()) : 'Notion';
-    const teamLabel = () => { const t = BURI.team(); return !BURI.aiOn() ? '抜粋モード（AI なし）' : BURI.moaOn() ? 'MoA ' + t.length + ' 人（' + t.map((id) => BURI.TEAM[id].name).join('・') + '）' : BURI.aiName(); };
+    const teamLabel = () => { const t = BURI.team(); return !BURI.aiOn() ? '抜粋モード（AI なし）' : BURI.moaOn() ? 'MoA ' + t.length + ' 人 · ' + t.map((id) => BURI.TEAM[id].name).join('・') : BURI.aiName(); };
+    const TEAM_HUE = { gemini: 214, nvidia: 96, groq: 18, openrouter: 262, zai: 190, cohere: 330, chrome: 45, claude: 24 };
     function nsChips(host, cls, onPick) {
       const w = mk('div', cls, null, host);
-      hist().slice(0, 4).forEach((q) => { const b = mk('button', 'h', q, w); b.type = 'button'; b.title = q; b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onPick(q); }); });
-      EXAMPLES.filter((q) => !hist().includes(q)).slice(0, Math.max(1, 5 - Math.min(4, hist().length))).forEach((q) => { const b = mk('button', null, q, w); b.type = 'button'; b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onPick(q); }); });
+      const add = (q, icon) => { const b = mk('button', null, null, w); b.type = 'button'; b.title = q; if (icon === 'h') b.innerHTML = svg('clock'); else mk('i', null, icon, b); b.append(q); b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onPick(q); }); };
+      hist().slice(0, 3).forEach((q) => add(q, 'h'));
+      EXAMPLES.filter(([, q]) => !hist().includes(q)).slice(0, Math.max(1, 4 - Math.min(3, hist().length))).forEach(([i, q]) => add(q, i));
       return w;
     }
     function nsBuild() {
       const box = mk('div'); box.id = 'c33-ns'; box.hidden = true;
-      const h = mk('div', 'ns-h', null, box); mk('b', null, 'B.U.R.I', h); mk('span', null, '— 相棒', h);
+      const h = mk('div', 'ns-h', null, box); mk('b', null, 'B.U.R.I', h); mk('span', null, '相棒に聞く', h);
       const tag = mk('span', 'ns-tag', '', h);
       const row = mk('button', 'ns-row', null, box); row.type = 'button';
-      mk('span', 'ns-av', AVATAR, row);
-      const lb = mk('span', 'ns-lb', 'B.U.R.I に聞く', row);
-      mk('span', 'ns-dash', '—', row);
+      const face = faceEl(row, 'normal');
+      const lb = mk('span', 'ns-lb', '', row);
       const qEl = mk('span', 'ns-q', '', row);
-      const kb = mk('span', 'ns-kb', 'Shift+↵', row);
+      const kb = mk('span', 'ns-kb', '', row);
       const chipsHost = mk('div', null, null, box);
       const ans = mk('div', 'ns-ans', null, box); ans.hidden = true;
-      Object.assign(box, { __q: qEl, __ans: ans, __row: row, __lb: lb, __kb: kb, __tag: tag, __chips: chipsHost });
+      Object.assign(box, { __q: qEl, __ans: ans, __row: row, __lb: lb, __kb: kb, __tag: tag, __chips: chipsHost, __face: face });
       row.addEventListener('mousedown', (e) => e.preventDefault());
       row.addEventListener('click', (e) => {
         e.preventDefault(); e.stopPropagation();
@@ -3203,32 +3353,58 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
     function nsBuildPane() {
       const p = mk('div'); p.id = 'c33-nsp'; p.hidden = true;
       const card = mk('div', 'np-card', null, p);
-      const cover = mk('div', 'np-cover', null, card);
-      mk('div', 'np-badge', AVATAR, cover);
-      const tools = mk('div', 'np-tools', null, cover);
-      const tb = (t, title, fn) => { const b = mk('button', null, t, tools); b.type = 'button'; b.title = title; b.setAttribute('aria-label', title); b.addEventListener('click', (e) => { e.preventDefault(); fn(); }); return b; };
-      tb('⌂', 'ホーム', () => nsHome());
-      tb('⚙', 'AI の設定', () => nsSettings());
-      tb('新しい話', '会話をはじめから', () => { nsConv.length = 0; BURI.aiReset(); nsHome(); });
-      tb('サイドで続ける', 'サイドの B.U.R.I で会話を続ける', () => nsToSide());
-      tb('×', 'Notion のプレビューに戻す', () => { nsShowPane(false); if (nsInp) nsInp.focus(); });
-      const head = mk('div', 'np-head', null, card);
-      const crumb = mk('div', 'np-crumb', '', head);
-      const title = mk('div', 'np-title', 'B.U.R.I', head);
+      mk('div', 'np-aura', null, card);
+      const top = mk('div', 'np-top', null, card);
+      const face = faceEl(top, 'normal');
+      const id = mk('div', 'np-id', null, top);
+      mk('div', 'np-name', 'B.U.R.I', id);
+      const st = mk('div', 'np-status', null, id); const dot = mk('i', null, null, st); const stx = mk('span', null, '', st);
+      const tools = mk('div', 'np-tools', null, top);
+      const bHome = ib(tools, 'home', 'ホーム', () => nsHome());
+      const bNew = ib(tools, 'edit', '新しい話', () => { nsConv.length = 0; BURI.aiReset(); nsHome(); });
+      const bSet = ib(tools, 'tune', 'AI の設定', () => nsSettings());
+      mk('span', 'np-sep', null, tools);
+      ib(tools, 'side', 'サイドの B.U.R.I で続ける', () => nsToSide());
+      ib(tools, 'x', 'Notion のプレビューに戻す', () => { nsShowPane(false); if (nsInp) nsInp.focus(); });
       const log = mk('div', 'np-log', null, card); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite');
-      const form = mk('div', 'np-in', null, card);
-      const fin = mk('input', null, null, form); fin.type = 'text'; fin.placeholder = 'B.U.R.I に聞く…（Enter）'; fin.setAttribute('aria-label', 'B.U.R.I に聞く');
-      const fgo = mk('button', null, '聞く', form); fgo.type = 'button';
+      const comp = mk('div', 'np-comp', null, card);
+      const field = mk('div', 'np-field', null, comp);
+      const fin = mk('input', null, null, field); fin.type = 'text'; fin.setAttribute('aria-label', 'B.U.R.I に聞く');
+      const send = mk('button', 'np-send', null, field); send.type = 'button'; send.innerHTML = svg('send', 18); send.title = '送る（Enter）'; send.disabled = true;
+      const hint = mk('div', 'np-hint', null, comp); const hl = mk('span', null, 'Enter で送る', hint); const hr = mk('span', null, '', hint);
       stopKeys(p);
       ['pointerdown', 'mousedown', 'click'].forEach((t) => p.addEventListener(t, (e) => e.stopPropagation()));
-      let comp = false;
-      fin.addEventListener('compositionstart', () => { comp = true; });
-      fin.addEventListener('compositionend', () => { comp = false; });
-      const go = () => { const q = fin.value.trim(); if (!q) return; fin.value = ''; nsAsk(q, true); };
-      fin.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && !comp && e.keyCode !== 229) { e.preventDefault(); go(); } if (e.key === 'Escape') { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); } });
-      fgo.addEventListener('click', (e) => { e.preventDefault(); go(); });
-      Object.assign(p, { __log: log, __crumb: crumb, __title: title, __fin: fin, __view: '' });
+      let comp2 = false;
+      fin.addEventListener('compositionstart', () => { comp2 = true; });
+      fin.addEventListener('compositionend', () => { comp2 = false; });
+      fin.addEventListener('input', () => { send.disabled = !fin.value.trim(); });
+      const go = () => { const q = fin.value.trim(); if (!q) return; fin.value = ''; send.disabled = true; nsAsk(q, true); };
+      fin.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && !comp2 && e.keyCode !== 229) { e.preventDefault(); go(); } if (e.key === 'Escape') { e.preventDefault(); nsShowPane(false); if (nsInp) nsInp.focus(); } });
+      send.addEventListener('mousedown', (e) => e.preventDefault());
+      send.addEventListener('click', (e) => { e.preventDefault(); go(); });
+      Object.assign(p, { __log: log, __face: face, __dot: dot, __stx: stx, __fin: fin, __hr: hr, __tabs: { home: bHome, set: bSet, new: bNew }, __view: '' });
       return p;
+    }
+    /* 気分（顔）と様子の文字 */
+    function nsMood(mood) {
+      for (const f of [nsPane && nsPane.__face, nsBox && nsBox.__face]) {
+        if (!f || f.dataset.mood === mood) continue;
+        f.dataset.mood = mood; f.textContent = FACE[mood] || FACE.normal;
+        f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop');
+      }
+    }
+    function nsStatus(text) {
+      if (!nsPane) return;
+      const busy = nsPane.classList.contains('busy');
+      nsPane.__stx.textContent = text || (BURI.aiOn() ? teamLabel() : '抜粋モード（⚙ で AI をつなぐ）');
+      nsPane.__dot.className = busy || BURI.aiOn() ? '' : 'off';
+      nsPane.__fin.placeholder = (nick() ? nick() + '、' : '') + 'ぶりに聞いてみて…';
+      nsPane.__hr.textContent = BURI.moaOn() ? BURI.team().length + ' 人で相談して答えます' : BURI.aiOn() ? BURI.aiName() + ' が答えます' : '';
+    }
+    function nsView(v) {
+      if (!nsPane) return;
+      nsPane.__view = v;
+      for (const [k, b] of Object.entries(nsPane.__tabs)) b.classList.toggle('on', k === v);
     }
     function nsToSide() {
       const conv = nsConv.slice();
@@ -3242,57 +3418,69 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const aside = asideOf(nsDlg);
       if (show && aside) {
         if (nsPane.parentElement !== aside) { if (getComputedStyle(aside).position === 'static') aside.style.setProperty('position', 'relative'); aside.appendChild(nsPane); }
-        nsPane.__crumb.textContent = '相棒 / ' + teamLabel();
+        nsStatus();
         nsPane.hidden = false;
       } else nsPane.hidden = true;
       if (nsBox) nsBox.__row.classList.toggle('on', !nsPane.hidden);
       return !nsPane.hidden;
     }
-    const greet = () => { const h = new Date().getHours(); return h < 5 ? 'こんばんは。夜ふかしですね' : h < 11 ? 'おはようございます' : h < 17 ? 'こんにちは' : 'こんばんは'; };
+    const greet = () => { const h = new Date().getHours(); return h < 5 ? 'こんばんは' : h < 11 ? 'おはよう' : h < 17 ? 'こんにちは' : 'こんばんは'; };
     function nsHome() {
       if (!nsPane || !nsShowPane(true)) return;
-      nsPane.__view = 'home'; nsPane.__title.textContent = 'B.U.R.I';
+      nsView('home');
       const log = nsPane.__log; log.textContent = '';
-      mk('div', 'np-hello', greet() + '。何を調べましょう？', log);
+      const seen = Number(BURI.gmGet('c33.buri.seen', 0)) || 0; BURI.gmSet('c33.buri.seen', Date.now());
+      const back = seen && Date.now() - seen > 6 * 36e5;
+      const hero = mk('div', 'np-hero', null, log);
+      faceEl(hero, back ? 'back' : 'together').classList.add('pop');
+      mk('div', 'np-hello', back ? 'おかえりなさい、' + nick() + '！' : greet() + '、' + nick() + '。', hero);
+      mk('div', 'np-sub', BURI.aiOn() ? '本棚・Notion・Google・Wikipedia をまとめて調べて、' + (BURI.moaOn() ? '仲間の AI と相談してから' : '') + 'わかりやすく話すね。' : '本棚・Notion・Web を調べて、見つけたものを並べるね。⚙ で AI をつなぐと、まとめて話せるよ。', hero);
       const s = BURI.state();
-      mk('div', 'np-sub', '本棚・Notion 全体・Google と Wikipedia をまとめて調べて、' + (BURI.aiOn() ? (BURI.moaOn() ? '仲間の AI と相談してから' : 'AI が') + 'わかりやすく話します。' : '見つけたものを並べます。'), log);
       const st = mk('div', 'np-stat', null, log);
       const sp = (t, on) => { const x = mk('span', null, null, st); mk('i', on ? '' : 'off', null, x); x.append(t); };
       sp('本棚 ' + (s.count || 0) + ' 件', !!s.count);
-      sp(teamLabel(), BURI.aiOn());
+      sp(BURI.moaOn() ? 'MoA ' + BURI.team().length + ' 人' : BURI.aiOn() ? BURI.aiName() : 'AI なし', BURI.aiOn());
       sp(BURI.AI.web ? 'Web も調べる' : 'Web は調べない', BURI.AI.web);
-      const sb = mk('button', null, '⚙ 設定', st); sb.type = 'button'; sb.addEventListener('click', (e) => { e.preventDefault(); nsSettings(); });
-      if (!s.count) { const ib = mk('button', null, '本棚を取り込む', st); ib.type = 'button'; ib.addEventListener('click', (e) => { e.preventDefault(); file.click(); }); }
-      if (!BURI.aiOn()) mk('div', 'np-sub', '「⚙ 設定」で無料の鍵（おすすめは Gemini・NVIDIA・Groq・OpenRouter の 4 つ）を入れると、まとめて話せるようになります。2 つ以上入れると、みんなで相談して答えます（MoA）。', log);
+      const sb = mk('button', null, null, st); sb.type = 'button'; sb.innerHTML = svg('tune', 12); sb.append('設定'); sb.addEventListener('click', (e) => { e.preventDefault(); nsSettings(); });
+      if (!s.count) { const b2 = mk('button', null, null, st); b2.type = 'button'; b2.innerHTML = svg('book', 12); b2.append('本棚を取り込む'); b2.addEventListener('click', (e) => { e.preventDefault(); file.click(); }); }
       if (nsConv.length && Date.now() - nsConvAt < 30 * 60e3) {
-        mk('div', 'np-sec', 'さっきの会話', log);
-        const w = mk('div', 'np-chips', null, log);
-        const b = mk('button', 'h', '「' + nsConv[nsConv.length - 1].q + '」の続きを見る', w); b.type = 'button';
-        b.addEventListener('click', (e) => { e.preventDefault(); nsReplay(); });
+        mk('div', 'np-sec', 'さっきの続き', log);
+        const rows = mk('div', 'np-rows', null, log);
+        const r = mk('button', 'np-row', null, rows); r.type = 'button'; r.innerHTML = svg('retry', 15); mk('span', null, nsConv[nsConv.length - 1].q, r); r.insertAdjacentHTML('beforeend', svg('arrow', 14).replace('<svg', '<svg class="go"'));
+        r.addEventListener('click', (e) => { e.preventDefault(); nsReplay(); });
       }
-      mk('div', 'np-sec', hist().length ? '最近の質問・聞いてみる' : '聞いてみる', log);
-      nsChips(log, 'np-chips', (q) => nsAsk(q));
+      if (hist().length) {
+        mk('div', 'np-sec', '最近の質問', log);
+        const rows = mk('div', 'np-rows', null, log);
+        hist().slice(0, 4).forEach((q) => { const r = mk('button', 'np-row', null, rows); r.type = 'button'; r.innerHTML = svg('clock', 15); mk('span', null, q, r); r.insertAdjacentHTML('beforeend', svg('arrow', 14).replace('<svg', '<svg class="go"')); r.addEventListener('click', (e) => { e.preventDefault(); nsAsk(q); }); });
+      }
+      mk('div', 'np-sec', '聞いてみる', log);
+      const grid = mk('div', 'np-grid', null, log);
+      EXAMPLES.forEach(([i, q]) => { const c = mk('button', 'np-sug', null, grid); c.type = 'button'; mk('i', null, i, c); mk('span', null, q, c); c.addEventListener('click', (e) => { e.preventDefault(); nsAsk(q); }); });
+      nsMood(back ? 'back' : 'together'); nsStatus();
       if (nsBox) nsBox.__row.classList.add('on');
       nsPane.__fin.focus({ preventScroll: true });
     }
     function nsSettings() {
       if (!nsPane || !nsShowPane(true)) return;
-      nsPane.__view = 'set'; nsPane.__title.textContent = 'AI の設定';
+      nsView('set'); nsMood('think');
       const log = nsPane.__log; log.textContent = '';
-      aiSettings(log, (t) => { nsPane.__crumb.textContent = '相棒 / ' + teamLabel(); nsHome(); const n = mk('div', 'np-sub', t, nsPane.__log); nsPane.__log.insertBefore(n, nsPane.__log.children[2] || null); }, () => nsHome());
+      aiSettings(log, (t) => { nsHome(); const n = mk('div', 'np-sub', t, nsPane.__log); nsPane.__log.insertBefore(n, nsPane.__log.children[2] || null); nsMood('happy'); }, () => nsHome());
     }
-    /* 本文を読みやすく: 見出し（#・■）/ 箇条書き（・-・*・1.）/ **太字** / 出典の印 [N1][W2]（押すと開く） */
+    /* 本文を読みやすく: 見出し（#・■）/ 箇条書き（・-・*・1.）/ **太字** / 出典の印 [N1][W2]（押すと開く）/ 顔文字は丸ゴシック */
+    const RE_FACE = /(?:ε\( ε,'-'\))?(?:🐟)?(?:\('-' [^()\s]{1,3}\)з ?)+[✨♥♡💧💦💢🔥♪♬👑…\/･～〜!！📡💥🔍🎉🌊🥚👍😭🤦🌙💨⚡]*/gu;
     function richText(host, text, refs) {
       const lines = String(text || '').replace(/\r/g, '').split('\n');
       let list = null, para = null;
+      const faces = (el, s) => { let i = 0, m; RE_FACE.lastIndex = 0; while ((m = RE_FACE.exec(s))) { if (m.index > i) el.append(s.slice(i, m.index)); mk('span', 'b-face', m[0], el); i = RE_FACE.lastIndex; } if (i < s.length) el.append(s.slice(i)); };
       const inline = (el, s) => {
-        const re = /\*\*(.+?)\*\*|\[((?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*)\]/g; let i = 0, m;
+        const re = /\*\*(.+?)\*\*|\[((?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*)\]|【([NW]\d+)】/g; let i = 0, m;
         while ((m = re.exec(s))) {
-          if (m.index > i) el.append(s.slice(i, m.index));
-          if (m[1]) mk('strong', null, m[1], el);
+          if (m.index > i) faces(el, s.slice(i, m.index));
+          if (m[1]) faces(mk('strong', null, null, el), m[1]);
           else {
             let kind = 'N';
-            m[2].split(/\s*[,，、]\s*/).forEach((tk) => {
+            (m[2] || m[3]).split(/\s*[,，、]\s*/).forEach((tk) => {
               const mm = /^([NW]?)(\d+)$/.exec(tk); if (!mm) return; kind = mm[1] || kind;
               const ref = refs && refs[kind] && refs[kind][Number(mm[2]) - 1];
               const a = mk(ref && ref.url ? 'a' : 'span', 'np-cite' + (kind === 'N' ? ' n' : ''), kind + mm[2], el);
@@ -3301,12 +3489,12 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
           }
           i = re.lastIndex;
         }
-        if (i < s.length) el.append(s.slice(i));
+        if (i < s.length) faces(el, s.slice(i));
       };
       for (const raw of lines) {
         const ln = raw.trim();
         if (!ln) { list = null; para = null; continue; }
-        const h = /^(#{1,4}\s+|■\s*|【(.+)】$)/.exec(ln);
+        const h = /^(#{1,4}\s+|■\s*|【([^】NW][^】]*)】$)/.exec(ln);
         const li = /^([・\-*•]|\d+[.)．])\s*(.+)$/.exec(ln);
         if (h) { list = null; para = null; inline(mk('h5', null, null, host), h[2] || ln.replace(/^(#{1,4}\s+|■\s*)/, '')); continue; }
         if (li) { para = null; if (!list || list.tagName !== (/^\d/.test(li[1]) ? 'OL' : 'UL')) list = mk(/^\d/.test(li[1]) ? 'ol' : 'ul', null, null, host); inline(mk('li', null, null, list), li[2]); continue; }
@@ -3315,58 +3503,80 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       }
       [...host.children].forEach((el, k) => { el.style.animationDelay = Math.min(k * 70, 700) + 'ms'; });
     }
-    function nsSteps(host) {
-      const box = mk('div', 'np-steps', null, host);
+    /* 考え中のカード: 顔 ＋ 道のり（会話を読む → 調べる → 下書き → まとめ） */
+    function nsThink(host) {
+      const box = mk('div', 'np-think', null, host);
+      const face = faceEl(box, 'think');
+      const tl = mk('div', 'np-tl', null, box);
       const rows = {};
-      const step = (key, text) => { let r = rows[key]; if (!r) { r = rows[key] = mk('div', 'np-step run', null, box); mk('i', null, null, r); r.__t = mk('span', null, '', r); r.__s = mk('small', null, '', r); } r.__t.textContent = text; return r; };
+      const step = (key, text) => { let r = rows[key]; if (!r) { r = rows[key] = mk('div', 'np-step run', null, tl); r.__t = mk('span', null, '', r); r.__s = mk('small', null, '', r); } r.__t.textContent = text; return r; };
       const set = (r, st, small) => { r.className = 'np-step ' + st; r.__s.textContent = small || ''; };
+      const mood = (m, label) => { face.textContent = FACE[m]; face.dataset.mood = m; nsMood(m); nsStatus(label || BUSY[m]); };
+      mood('think');
       return {
         box,
         on(e) {
-          if (e.k === 'plan') { const r = step('p', '会話を読んで、調べる言葉を決めています'); if (e.st === 'ok') { r.__t.textContent = '調べる言葉: ' + e.q; set(r, 'ok', e.alt ? '別の角度: ' + e.alt : ''); } }
-          else if (e.k === 'search') step('s', 'Notion・本棚・Web を調べています');
-          else if (e.k === 'found') set(step('s', '調べました'), 'ok', 'Notion・本棚 ' + e.n + ' 件 / Web ' + e.w + ' 件');
-          else if (e.k === 'draft') { const nm = BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id; const r = step('d' + e.id, nm + (BURI.moaOn() ? ' が下書き' : ' が考えています')); if (e.st !== 'run') set(r, e.st, e.st === 'ok' ? e.model : e.err); }
-          else if (e.k === 'merge') { const r = step('m', (BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id) + ' がまとめています'); if (e.st !== 'run') set(r, e.st, e.st === 'ok' ? e.model : e.err); }
+          if (e.k === 'plan') { const r = step('p', '会話を読んで、調べる言葉を決めています'); mood('think'); if (e.st === 'ok') { r.__t.textContent = '「' + e.q + '」を調べます'; set(r, 'ok', e.alt ? '別の角度: ' + e.alt : ''); } }
+          else if (e.k === 'search') { step('s', 'Notion・本棚・Web を調べています'); mood('search'); }
+          else if (e.k === 'found') { set(step('s', '調べました'), e.n + e.w ? 'ok' : 'ng', 'Notion・本棚 ' + e.n + ' 件 · Web ' + e.w + ' 件'); if (!(e.n + e.w)) mood('sad', '見つかりませんでした…'); }
+          else if (e.k === 'draft') { const nm = BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id; const r = step('d' + e.id, nm + (BURI.moaOn() ? ' が下書き' : ' が考えています')); if (e.st === 'run') mood('write'); else set(r, e.st, e.st === 'ok' ? e.model : e.err); }
+          else if (e.k === 'merge') { const r = step('m', (BURI.TEAM[e.id] ? BURI.TEAM[e.id].name : e.id) + ' がひとつにまとめています'); if (e.st === 'run') mood('merge'); else set(r, e.st, e.st === 'ok' ? e.model : e.err); }
         }
       };
     }
+    function favOf(c) {
+      const lab = srcLabel(c);
+      if (lab === 'Notion') return ['N', '#37352f'];
+      if (lab === 'Wikipedia') return ['W', '#6b6b6b'];
+      return [lab.replace(/^(?:m\.|ja\.)/, '').charAt(0).toUpperCase() || 'W', 'hsl(' + hue(lab) + ' 52% 46%)'];
+    }
     function nsEntry(log, q, res, animate) {
       const qEl = mk('div', 'np-q', q, log);
-      const a = mk('div', 'np-a', null, log);
+      const msg = mk('div', 'np-msg', null, log);
+      const who = mk('div', 'np-who', null, msg);
+      const mood = moodOf(res);
+      faceEl(who, mood);
+      mk('span', null, res.moa && res.moa.who ? (res.moa.merged ? res.moa.who + ' がまとめました' : res.moa.who) : 'ぶり', who);
+      const a = mk('div', 'np-a', null, msg);
       richText(a, res.text || '', res.refs);
       if (!animate) [...a.children].forEach((el) => { el.style.animation = 'none'; });
-      const m = res.moa;
-      if (m && m.drafts && m.drafts.length > 1) {
-        const d = mk('details', 'np-moa', null, log);
-        mk('summary', null, '相談の中身 — ' + m.drafts.map((x) => x.name + (x.text ? ' ✓' : ' ×')).join('・') + (m.merged ? ' → まとめ: ' + m.who : ''), d);
-        m.drafts.forEach((x) => { const b = mk('div', null, null, d); mk('b', null, x.name + (x.model ? '（' + x.model + '）' : ''), b); b.append('\n' + (x.text || '（' + x.err + '）')); });
-      }
-      const cards = (res.cards || []).filter((c) => c.url).slice(0, 6);
+      const cards = (res.cards || []).filter((c) => c.url).slice(0, 8);
       if (cards.length) {
-        const src = mk('div', 'np-src', null, log);
+        const src = mk('div', 'np-src', null, msg);
         cards.forEach((c) => {
-          const l = mk('a', null, null, src); l.href = c.url; l.rel = 'noopener noreferrer'; l.title = c.title;
+          const l = mk('a', 'np-s', null, src); l.href = c.url; l.rel = 'noopener noreferrer'; l.title = c.title;
           if (!c.url.startsWith(location.origin)) l.target = '_blank';
-          mk('small', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + srcLabel(c), l); mk('span', null, c.title, l);
+          const [ch, col] = favOf(c); const f = mk('span', 'fav', ch, l); f.style.background = col;
+          mk('b', null, c.title, l); mk('small', null, srcLabel(c), l);
         });
       }
-      const acts = mk('div', 'np-acts', null, log);
-      const cp = mk('button', null, '⧉ コピー', acts); cp.type = 'button';
-      cp.addEventListener('click', (e) => { e.preventDefault(); try { navigator.clipboard.writeText(res.text || ''); cp.textContent = '✓ コピーしました'; setTimeout(() => { cp.textContent = '⧉ コピー'; }, 1400); } catch (x) { /* noop */ } });
-      const ag = mk('button', null, '↻ もう一度', acts); ag.type = 'button';
-      ag.addEventListener('click', (e) => { e.preventDefault(); nsCache.delete(q); nsAsk(q, true, true); });
+      const bar = mk('div', 'np-bar', null, msg);
+      ib(bar, 'copy', 'コピー', (b) => { try { navigator.clipboard.writeText(res.text || ''); b.innerHTML = svg('check'); setTimeout(() => { b.innerHTML = svg('copy'); }, 1400); } catch (x) { /* noop */ } });
+      ib(bar, 'retry', 'もう一度', () => { nsCache.delete(q); nsAsk(q, true, true); });
+      const m = res.moa;
+      if (m && m.drafts && m.drafts.length > 1) {
+        const t = mk('button', 'np-team', null, bar); t.type = 'button';
+        const av = mk('span', 'np-av', null, t);
+        m.drafts.forEach((x) => { const b = mk('b', x.text ? '' : 'ng', x.name.charAt(0), av); b.style.background = 'hsl(' + (TEAM_HUE[x.id] != null ? TEAM_HUE[x.id] : hue(x.name)) + ' 55% 48%)'; b.title = x.name + (x.text ? '' : '（' + x.err + '）'); });
+        t.append(m.drafts.filter((x) => x.text).length + ' 人で相談');
+        t.insertAdjacentHTML('beforeend', svg('down', 13));
+        const dr = mk('div', 'np-drafts', null, msg);
+        m.drafts.forEach((x) => { const d = mk('div', 'np-draft', null, dr); mk('b', null, x.name + (x.model ? ' · ' + x.model : ''), d); d.append(x.text || '（' + x.err + '）'); });
+        t.addEventListener('click', (e) => { e.preventDefault(); dr.classList.toggle('on'); });
+      }
       const nx = [{ label: 'もっと詳しく', q: q.replace(/(について)?(教えて|おしえて)$/, '') + 'をもっと詳しく' }].concat((res.chips || []).filter((c) => c && c.q)).slice(0, 4);
-      const w = mk('div', 'np-chips', null, log);
+      const w = mk('div', 'np-next', null, msg);
       const seen = new Set();
-      nx.filter((c) => !seen.has(c.label) && seen.add(c.label)).forEach((c) => { const b = mk('button', null, c.label, w); b.type = 'button'; b.addEventListener('click', (e) => { e.preventDefault(); nsAsk(c.q, true); }); });
-      return qEl;
+      nx.filter((c) => !seen.has(c.label) && seen.add(c.label)).forEach((c) => { const b = mk('button', 'np-pill', null, w); b.type = 'button'; b.append(c.label); b.insertAdjacentHTML('beforeend', svg('arrow', 13)); b.addEventListener('click', (e) => { e.preventDefault(); nsAsk(c.q, true); }); });
+      return { qEl, mood };
     }
     function nsReplay() {
       if (!nsPane || !nsShowPane(true)) return;
-      nsPane.__view = 'chat'; nsPane.__title.textContent = nsConv.length ? nsConv[0].q : 'B.U.R.I';
+      nsView('chat');
       const log = nsPane.__log; log.textContent = '';
-      nsConv.forEach((c) => nsEntry(log, c.q, c.res, false));
+      let last = 'normal';
+      nsConv.forEach((c) => { last = nsEntry(log, c.q, c.res, false).mood; });
+      nsMood(last); nsStatus();
       log.scrollTop = log.scrollHeight;
     }
     function nsSync() {
@@ -3374,9 +3584,9 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const q = nsInp.value.trim();
       const empty = !q;
       nsBox.hidden = false;
-      nsBox.__lb.textContent = empty ? '何でも聞いてください' : 'B.U.R.I に聞く';
+      nsBox.__lb.textContent = empty ? '何でも聞いてね' : 'ぶりに聞く';
       nsBox.__q.textContent = empty ? '本棚・Notion・Web を調べて答えます' : '「' + q + '」';
-      nsBox.__kb.textContent = empty ? '' : 'Shift+↵';
+      nsBox.__kb.textContent = empty ? '' : '⇧ ↵';
       nsBox.__tag.textContent = BURI.moaOn() ? 'MoA ×' + BURI.team().length : BURI.aiOn() ? BURI.aiName() : '';
       nsBox.__tag.hidden = !nsBox.__tag.textContent;
       if (nsBox.__chipsFor !== (empty ? 'e' : 'q')) {
@@ -3396,35 +3606,37 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const my = ++nsSeq;
       const inPane = nsShowPane(true);
       if (inPane) {
-        if (nsPane.__view !== 'chat') { nsPane.__view = 'chat'; nsPane.__log.textContent = ''; nsConv.forEach((c) => nsEntry(nsPane.__log, c.q, c.res, false)); }
-        nsPane.__title.textContent = nsConv.length ? nsConv[0].q : q;
+        if (nsPane.__view !== 'chat') { nsView('chat'); nsPane.__log.textContent = ''; nsConv.forEach((c) => nsEntry(nsPane.__log, c.q, c.res, false)); }
         nsPane.classList.add('busy');
         const log = nsPane.__log;
-        mk('div', 'np-q', q, log).scrollIntoView({ block: 'end' });
-        const steps = nsSteps(log);
-        BURI.setProgress((e) => { if (my === nsSeq) { steps.on(e); log.scrollTop = log.scrollHeight; } });
+        const qb = mk('div', 'np-q', q, log);
+        const think = nsThink(log);
+        think.box.scrollIntoView({ block: 'end' });
+        BURI.setProgress((e) => { if (my === nsSeq) { think.on(e); log.scrollTop = log.scrollHeight; } });
         let res = !follow && !again && nsCache.get(q);
         if (!res) {
-          try { res = await BURI.ask(q); } catch (e) { res = { text: 'ごめんなさい、調べている途中でつまずきました。（' + String(e && e.message || e) + '）', cards: [], chips: [], actions: [] }; }
+          try { res = await BURI.ask(q); } catch (e) { res = { text: "('-' 鰤)з💦 ごめんね、調べている途中でつまずいちゃった。（" + String(e && e.message || e) + '）', cards: [], chips: [], actions: [], mood: 'panic' }; }
           nsCache.set(q, res); if (nsCache.size > 30) nsCache.delete(nsCache.keys().next().value);
         }
         BURI.setProgress(null);
         if (my !== nsSeq) return;
         nsPane.classList.remove('busy');
-        steps.box.previousElementSibling.remove(); steps.box.remove();
-        if (!steps.box.childElementCount) { /* 調べずに答えた（あいさつ等） */ }
+        qb.remove(); think.box.remove();
         nsConv.push({ q, res }); nsConvAt = Date.now();
-        const qEl = nsEntry(log, q, res, true);
+        const ent = nsEntry(log, q, res, true);
+        nsMood(ent.mood); nsStatus();
         nsPane.__fin.focus({ preventScroll: true });
-        requestAnimationFrame(() => { log.scrollTop += qEl.getBoundingClientRect().top - log.getBoundingClientRect().top - 8; });
+        requestAnimationFrame(() => { log.scrollTop += ent.qEl.getBoundingClientRect().top - log.getBoundingClientRect().top - 8; });
       } else {
         const ans = nsBox.__ans; ans.hidden = false; ans.textContent = '';
         const think = mk('div', 'thinking-dots', null, ans); think.append(mk('span'), mk('span'), mk('span'));
+        nsMood('search');
         let res = !follow && nsCache.get(q);
         if (!res) { try { res = await BURI.ask(q); } catch (e) { res = { text: String(e && e.message || e), cards: [] }; } nsCache.set(q, res); }
         if (my !== nsSeq) return;
         ans.textContent = '';
         nsConv.push({ q, res }); nsConvAt = Date.now();
+        nsMood(moodOf(res));
         mk('div', 'ns-tx', res.text || '', ans);
         const src = mk('div', 'ns-src', null, ans);
         (res.cards || []).filter((c) => c.url).slice(0, 6).forEach((c) => { const l = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); l.href = c.url; l.rel = 'noopener noreferrer'; if (!c.url.startsWith(location.origin)) l.target = '_blank'; });
