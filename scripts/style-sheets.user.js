@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁹ _ Style Sheets
 // @namespace    https://cordivestium.local/style-sheets
-// @version      2.0.0
-// @description  v2.0.0: いまの Stylus の 16 本（2026-10-04 の書き出し）に作り直し。ScriptCat の JS と突き合わせ、重複（古い幕 ¹⁸ Screen Curtain ＝ ²³ Details に新しい版）は既定で切。各行に「対になる JS」「重複」の注記。幕を使う時は ³⁷ Lumière の幕が自動で退く。新規「題字の左にアイコン（DB の行ページ）」入り。Stylus は全部オフのままで OK。
+// @version      3.0.0
+// @description  v3.0.0: 速く — 重い div:has(…) の 3 本（⁰⁸ サイドバーのボタン中央寄せ・²⁴ リレーション区画の見出し／View details・題字の左にアイコン）を、JS の印（data-c39-*）で同じ見た目に置き換え。読み込み中のスタイル計算が大きく減る（約 1.5 秒 → 0.3 秒・試験台）。16c の幕の保険を 20 秒→3 秒。v2.0.0: いまの Stylus の 16 本（2026-10-04 の書き出し）に作り直し。ScriptCat の JS と突き合わせ、重複（古い幕 ¹⁸ Screen Curtain ＝ ²³ Details に新しい版）は既定で切。各行に「対になる JS」「重複」の注記。幕を使う時は ³⁷ Lumière の幕が自動で退く。新規「題字の左にアイコン（DB の行ページ）」入り。Stylus は全部オフのままで OK。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -118,7 +118,7 @@
 "id": "n18",
 "name": "¹⁸ _ Screen Curtain",
 "on": false,
-"css": "/* =============================================================================\n   16c すりガラスの幕 ─ v1.0.9 ／ 貼り付け先: Stylus\n   -----------------------------------------------------------------------------\n   幕は1枚だけです（画面ぜんたい）。\n\n   JS側の「完全読み込み完了」の合図（html の data-c16c-open=\"1\"）を待ちます。\n   通信が遅い場合でも途中で幕が開いてしまわないよう、\n   保険の強制オープンを 8秒 から 20秒 に延長しました。\n\n   調整する数字は、下の「ここをいじって調整」の2つだけです。\n   ============================================================================= */\n\nhtml::before {\n  content: '';\n  position: fixed;\n  inset: 0;                       /* 画面の四辺いっぱい */\n  z-index: 2147483000;            /* 何よりも手前 */\n  pointer-events: none;           /* 操作は決して妨げません（見せるだけの幕です） */\n\n  /* ───── ここをいじって調整 ─────────────────────────────────────────── */\n\n  /* ① 幕の濃さ（0 に近いほど透明、1 に近いほど白く隠れる） */\n  background: rgba(249, 248, 247, 0.5);\n\n  /* ② すりガラスのぼかし具合（大きいほど向こうが見えなくなる）\n        0px にすると、ぼかし無しのただの幕になります。 */\n  -webkit-backdrop-filter: blur(6px);\n  backdrop-filter: blur(6px);\n\n  /* ──────────────────────────────────────────────────────────────── */\n\n  opacity: 1;\n  transition: opacity 0.34s ease;\n}\n\n/* ダークテーマのときは、黒いすりガラスにします */\nhtml.dark::before,\nhtml[data-theme=\"dark\"]::before {\n  background: rgba(18, 18, 18, 0.45);\n}\n\n/* JS が「完全に読み込みと仕分けが完了した」と印を付けたら、静かに開きます */\nhtml[data-c16c-open=\"1\"]::before {\n  opacity: 0;\n}\n\n/* 保険：印が付かなくても必ず開きます（v1.0.9: 8秒 -> 20秒。\n   ロードが長い環境でも、途中で勝手に開いてしまうのを防ぎます） */\nhtml:not([data-c16c-open=\"1\"])::before {\n  animation: c16c-lift 1ms linear 20s forwards;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  html::before { transition: none; }\n}\n@keyframes c16c-lift { to { opacity: 0; } }",
+"css": "/* =============================================================================\n   16c すりガラスの幕 ─ v1.0.9 ／ 貼り付け先: Stylus\n   -----------------------------------------------------------------------------\n   幕は1枚だけです（画面ぜんたい）。\n\n   JS側の「完全読み込み完了」の合図（html の data-c16c-open=\"1\"）を待ちます。\n   通信が遅い場合でも途中で幕が開いてしまわないよう、\n   保険の強制オープンを 8秒 から 20秒 に延長しました。\n\n   調整する数字は、下の「ここをいじって調整」の2つだけです。\n   ============================================================================= */\n\nhtml::before {\n  content: '';\n  position: fixed;\n  inset: 0;                       /* 画面の四辺いっぱい */\n  z-index: 2147483000;            /* 何よりも手前 */\n  pointer-events: none;           /* 操作は決して妨げません（見せるだけの幕です） */\n\n  /* ───── ここをいじって調整 ─────────────────────────────────────────── */\n\n  /* ① 幕の濃さ（0 に近いほど透明、1 に近いほど白く隠れる） */\n  background: rgba(249, 248, 247, 0.5);\n\n  /* ② すりガラスのぼかし具合（大きいほど向こうが見えなくなる）\n        0px にすると、ぼかし無しのただの幕になります。 */\n  -webkit-backdrop-filter: blur(6px);\n  backdrop-filter: blur(6px);\n\n  /* ──────────────────────────────────────────────────────────────── */\n\n  opacity: 1;\n  transition: opacity 0.34s ease;\n}\n\n/* ダークテーマのときは、黒いすりガラスにします */\nhtml.dark::before,\nhtml[data-theme=\"dark\"]::before {\n  background: rgba(18, 18, 18, 0.45);\n}\n\n/* JS が「完全に読み込みと仕分けが完了した」と印を付けたら、静かに開きます */\nhtml[data-c16c-open=\"1\"]::before {\n  opacity: 0;\n}\n\n/* 保険：印が付かなくても必ず開きます（v1.0.9: 8秒 -> 20秒。\n   ロードが長い環境でも、途中で勝手に開いてしまうのを防ぎます） */\nhtml:not([data-c16c-open=\"1\"])::before {\n  animation: c16c-lift 1ms linear 3s forwards;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  html::before { transition: none; }\n}\n@keyframes c16c-lift { to { opacity: 0; } }",
 "from": "Stylus",
 "note": "重複: ²³ Details に新しい版（16c v1.1.0）が入っている → 既定で切",
 "curtain": true
@@ -135,7 +135,7 @@
 "id": "n23",
 "name": "²³ _ Details",
 "on": true,
-"css": "/* =============================================================================\n     サイドバーのスクロールバーを非表示にする\n     （スクロールの操作自体は通常通り可能です）\n     ============================================================================= */\n\n  /* Firefox 向け */\n  .notion-sidebar-container .notion-scroller,\n  .notion-sidebar .notion-scroller,\n  nav .notion-scroller {\n    scrollbar-width: none !important;\n  }\n\n  /* Chrome / Safari / Edge 向け */\n  .notion-sidebar-container .notion-scroller::-webkit-scrollbar,\n  .notion-sidebar .notion-scroller::-webkit-scrollbar,\n  nav .notion-scroller::-webkit-scrollbar {\n    display: none !important;\n    width: 0 !important;\n    height: 0 !important;\n  }\n/* =============================================================================\n   16c 幕 ─ v1.1.0 ／ 貼り付け先: Stylus（« No »　¹⁸ _ Screen Curtain を置き換え）\n   -----------------------------------------------------------------------------\n   v1.0.9 まで: すりガラス（半透明 50% ＋ ぼかし 6px）\n     → 向こうが透けるので、並び替え・位置合わせ・書体の切り替わりが「動き」として見えていた。\n   v1.1.0:\n     ・幕は不透明（Notion の地の色と同じ色）。描き直しは一切見えない\n     ・読み込み中の合図は、画面上端の細い線がゆっくり流れるだけ（控えめ）\n     ・開く時は「幕が消える」のではなく、地の色から中身が静かに浮かび上がるフェード\n     ・JS（16c Screen Curtain v1.5.0）が「本当に整い終わった」合図（data-c16c-open=\"1\"）を出すまで開かない\n     ・保険の強制オープンは 20 秒のまま\n\n   調整する数字は「ここをいじって調整」の中だけです。\n   ============================================================================= */\n\n:root {\n  /* ───── ここをいじって調整 ─────────────────────────────────────────── */\n\n  /* ① 幕の色（Notion の地の色に合わせる。ずれると開く瞬間に色が変わって見える） */\n  --c16c-bg-light: #ffffff;\n  --c16c-bg-dark:  #191919;\n\n  /* ② 幕の不透明度（1 = 何も見えない。すりガラスに戻すなら .5 前後＋③） */\n  --c16c-alpha: 1;\n\n  /* ③ ぼかし（不透明なら効果は無い。すりガラスに戻す時だけ 6px など） */\n  --c16c-blur: 0px;\n\n  /* ④ 開く時のフェードの長さ */\n  --c16c-fade: .42s;\n\n  /* ⑤ 読み込み中の線（0 で消す） */\n  --c16c-bar-height: 2px;\n  --c16c-bar-color-light: rgba(55, 53, 47, .16);\n  --c16c-bar-color-dark:  rgba(255, 255, 255, .14);\n\n  /* ──────────────────────────────────────────────────────────────── */\n  --c16c-bg: var(--c16c-bg-light);\n  --c16c-bar: var(--c16c-bar-color-light);\n}\n\n/* ダークテーマ（Notion の印・OS の設定のどちらでも） */\nhtml.dark, html[data-theme=\"dark\"], html:has(> body.dark), html:has(> body.notion-dark-theme) {\n  --c16c-bg: var(--c16c-bg-dark);\n  --c16c-bar: var(--c16c-bar-color-dark);\n}\n@media (prefers-color-scheme: dark) {\n  html:not(:has(> body.notion-light-theme)) {\n    --c16c-bg: var(--c16c-bg-dark);\n    --c16c-bar: var(--c16c-bar-color-dark);\n  }\n}\n\n/* ---------- 幕 ---------- */\nhtml::before {\n  content: '';\n  position: fixed;\n  inset: 0;\n  z-index: 2147483000;\n  pointer-events: none;                 /* 操作は妨げない（見せるだけ） */\n  background: var(--c16c-bg);\n  opacity: var(--c16c-alpha);\n  -webkit-backdrop-filter: blur(var(--c16c-blur));\n  backdrop-filter: blur(var(--c16c-blur));\n  transition: opacity var(--c16c-fade) cubic-bezier(.2, 0, 0, 1), visibility 0s linear var(--c16c-fade);\n  visibility: visible;\n}\n\n/* ---------- 読み込み中の線（上端をゆっくり流れる） ---------- */\nhtml::after {\n  content: '';\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2147483001;\n  pointer-events: none;\n  width: 28vw;\n  height: var(--c16c-bar-height);\n  background: linear-gradient(90deg, transparent, var(--c16c-bar) 30%, var(--c16c-bar) 70%, transparent);\n  animation: c16c-bar 1.6s cubic-bezier(.45, 0, .55, 1) infinite;\n  transition: opacity .2s ease, visibility 0s linear .2s;\n  opacity: 1;\n  visibility: visible;\n}\n@keyframes c16c-bar {\n  from { transform: translateX(-30vw); }\n  to   { transform: translateX(100vw); }\n}\n\n/* ---------- 開く ---------- */\nhtml[data-c16c-open=\"1\"]::before {\n  opacity: 0;\n  visibility: hidden;\n}\nhtml[data-c16c-open=\"1\"]::after {\n  opacity: 0;\n  visibility: hidden;\n  animation: none;\n}\n\n/* 保険：印が付かなくても 20 秒で必ず開く */\nhtml:not([data-c16c-open=\"1\"])::before {\n  animation: c16c-lift 1ms linear 20s forwards;\n}\n@keyframes c16c-lift { to { opacity: 0; visibility: hidden; } }\n\n@media (prefers-reduced-motion: reduce) {\n  html::before { transition: none; }\n  html::after { animation: none; display: none; }\n}",
+"css": "/* =============================================================================\n     サイドバーのスクロールバーを非表示にする\n     （スクロールの操作自体は通常通り可能です）\n     ============================================================================= */\n\n  /* Firefox 向け */\n  .notion-sidebar-container .notion-scroller,\n  .notion-sidebar .notion-scroller,\n  nav .notion-scroller {\n    scrollbar-width: none !important;\n  }\n\n  /* Chrome / Safari / Edge 向け */\n  .notion-sidebar-container .notion-scroller::-webkit-scrollbar,\n  .notion-sidebar .notion-scroller::-webkit-scrollbar,\n  nav .notion-scroller::-webkit-scrollbar {\n    display: none !important;\n    width: 0 !important;\n    height: 0 !important;\n  }\n/* =============================================================================\n   16c 幕 ─ v1.1.0 ／ 貼り付け先: Stylus（« No »　¹⁸ _ Screen Curtain を置き換え）\n   -----------------------------------------------------------------------------\n   v1.0.9 まで: すりガラス（半透明 50% ＋ ぼかし 6px）\n     → 向こうが透けるので、並び替え・位置合わせ・書体の切り替わりが「動き」として見えていた。\n   v1.1.0:\n     ・幕は不透明（Notion の地の色と同じ色）。描き直しは一切見えない\n     ・読み込み中の合図は、画面上端の細い線がゆっくり流れるだけ（控えめ）\n     ・開く時は「幕が消える」のではなく、地の色から中身が静かに浮かび上がるフェード\n     ・JS（16c Screen Curtain v1.5.0）が「本当に整い終わった」合図（data-c16c-open=\"1\"）を出すまで開かない\n     ・保険の強制オープンは 20 秒のまま\n\n   調整する数字は「ここをいじって調整」の中だけです。\n   ============================================================================= */\n\n:root {\n  /* ───── ここをいじって調整 ─────────────────────────────────────────── */\n\n  /* ① 幕の色（Notion の地の色に合わせる。ずれると開く瞬間に色が変わって見える） */\n  --c16c-bg-light: #ffffff;\n  --c16c-bg-dark:  #191919;\n\n  /* ② 幕の不透明度（1 = 何も見えない。すりガラスに戻すなら .5 前後＋③） */\n  --c16c-alpha: 1;\n\n  /* ③ ぼかし（不透明なら効果は無い。すりガラスに戻す時だけ 6px など） */\n  --c16c-blur: 0px;\n\n  /* ④ 開く時のフェードの長さ */\n  --c16c-fade: .28s;\n\n  /* ⑤ 読み込み中の線（0 で消す） */\n  --c16c-bar-height: 2px;\n  --c16c-bar-color-light: rgba(55, 53, 47, .16);\n  --c16c-bar-color-dark:  rgba(255, 255, 255, .14);\n\n  /* ──────────────────────────────────────────────────────────────── */\n  --c16c-bg: var(--c16c-bg-light);\n  --c16c-bar: var(--c16c-bar-color-light);\n}\n\n/* ダークテーマ（Notion の印・OS の設定のどちらでも） */\nhtml.dark, html[data-theme=\"dark\"], html:has(> body.dark), html:has(> body.notion-dark-theme) {\n  --c16c-bg: var(--c16c-bg-dark);\n  --c16c-bar: var(--c16c-bar-color-dark);\n}\n@media (prefers-color-scheme: dark) {\n  html:not(:has(> body.notion-light-theme)) {\n    --c16c-bg: var(--c16c-bg-dark);\n    --c16c-bar: var(--c16c-bar-color-dark);\n  }\n}\n\n/* ---------- 幕 ---------- */\nhtml::before {\n  content: '';\n  position: fixed;\n  inset: 0;\n  z-index: 2147483000;\n  pointer-events: none;                 /* 操作は妨げない（見せるだけ） */\n  background: var(--c16c-bg);\n  opacity: var(--c16c-alpha);\n  -webkit-backdrop-filter: blur(var(--c16c-blur));\n  backdrop-filter: blur(var(--c16c-blur));\n  transition: opacity var(--c16c-fade) cubic-bezier(.2, 0, 0, 1), visibility 0s linear var(--c16c-fade);\n  visibility: visible;\n}\n\n/* ---------- 読み込み中の線（上端をゆっくり流れる） ---------- */\nhtml::after {\n  content: '';\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2147483001;\n  pointer-events: none;\n  width: 28vw;\n  height: var(--c16c-bar-height);\n  background: linear-gradient(90deg, transparent, var(--c16c-bar) 30%, var(--c16c-bar) 70%, transparent);\n  animation: c16c-bar 1.6s cubic-bezier(.45, 0, .55, 1) infinite;\n  transition: opacity .2s ease, visibility 0s linear .2s;\n  opacity: 1;\n  visibility: visible;\n}\n@keyframes c16c-bar {\n  from { transform: translateX(-30vw); }\n  to   { transform: translateX(100vw); }\n}\n\n/* ---------- 開く ---------- */\nhtml[data-c16c-open=\"1\"]::before {\n  opacity: 0;\n  visibility: hidden;\n}\nhtml[data-c16c-open=\"1\"]::after {\n  opacity: 0;\n  visibility: hidden;\n  animation: none;\n}\n\n/* 保険：印が付かなくても 3 秒で必ず開く（v2.1: 20 秒→3 秒） */\nhtml:not([data-c16c-open=\"1\"])::before {\n  animation: c16c-lift 1ms linear 3s forwards;\n}\n@keyframes c16c-lift { to { opacity: 0; visibility: hidden; } }\n\n@media (prefers-reduced-motion: reduce) {\n  html::before { transition: none; }\n  html::after { animation: none; display: none; }\n}",
 "from": "Stylus",
 "note": "幕（16c v1.1.0）＋サイドバーのスクロールバー。対: JS 16c Screen Curtain",
 "curtain": true
@@ -165,6 +165,241 @@
 "note": "Stylus の「Row Page Title Layout」の代わり"
 }
 ];
+  /* ============================================================
+   * v3.0.0: 速く — 重い「div:has(…)」を、JS が付ける印（data-c39-*）に置き換える。
+   *   div:has(…) は「画面の全部の div」を変化のたびに調べ直すため、読み込み中だけで 0.4〜0.6 秒ずつかかっていた
+   *   （⁰⁸ サイドバーのボタンの中央寄せ・²⁴ リレーション区画の見出し・View details・題字の左にアイコン）。
+   *   印を付ける場所は :has と同じ条件を JS で確かめて決めるので、見た目は同じ。
+   *   「原文のまま」に戻すには localStorage['c39.fast'] = '0'
+   * ============================================================ */
+  const FAST = (() => { try { return localStorage.getItem('c39.fast') !== '0'; } catch (e) { return true; } })();
+  /* 書式（改行・空白）の違いを気にせず、セレクタの文字列をそのまま探す */
+  const pat = (str) => {
+    let out = '';
+    for (const ch of str.trim()) {
+      if (/\s/.test(ch)) { if (!out.endsWith('\\s*')) out += '\\s*'; continue; }
+      if (ch === ')') out += (out.endsWith('\\s*') ? '' : '\\s*') + '\\)';
+      else out += ch.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&') + ((ch === '(' || ch === '>' || ch === ',') ? '\\s*' : '');
+    }
+    return new RegExp(out.replace(/(\\s\*)+/g, '\\s*'), 'g');
+  };
+  /* 詳細度（a,b,c）を元のセレクタと同じに保つ — 印は :where() で包み、足りない分を何にでも当たる :not(…) で足す */
+  const SPEC = (() => {
+    const isId = (ch) => /[\w\-\u0080-￿\\]/.test(ch);
+    const skipIdent = (s, i) => { while (i < s.length && isId(s[i])) i += s[i] === '\\' ? 2 : 1; return i; };
+    const skipPair = (s, i, open, close) => { let d = 0, q = null; for (; i < s.length; i++) { const c = s[i]; if (q) { if (c === '\\') { i++; continue; } if (c === q) q = null; continue; } if (c === '"' || c === "'") { q = c; continue; } if (c === open) d++; else if (c === close) { d--; if (d === 0) return i + 1; } } return s.length; };
+    const splitComma = (s) => { const out = []; let d = 0, q = null, st = 0; for (let i = 0; i < s.length; i++) { const c = s[i]; if (q) { if (c === '\\') { i++; continue; } if (c === q) q = null; continue; } if (c === '"' || c === "'") { q = c; continue; } if (c === '(' || c === '[') d++; else if (c === ')' || c === ']') d--; else if (c === ',' && d === 0) { out.push(s.slice(st, i)); st = i + 1; } } out.push(s.slice(st)); return out; };
+    const cmp = (x, y) => x[0] - y[0] || x[1] - y[1] || x[2] - y[2];
+    const maxOf = (list) => list.map(of).reduce((m, x) => (cmp(x, m) > 0 ? x : m), [0, 0, 0]);
+    function of(sel) {
+      const s = String(sel).trim(); let a = 0, b = 0, c = 0, i = 0;
+      while (i < s.length) {
+        const ch = s[i];
+        if (/[\s>+~,]/.test(ch)) { i++; continue; }
+        if (ch === '#') { a++; i = skipIdent(s, i + 1); continue; }
+        if (ch === '.') { b++; i = skipIdent(s, i + 1); continue; }
+        if (ch === '[') { b++; i = skipPair(s, i, '[', ']'); continue; }
+        if (ch === '*') { i++; continue; }
+        if (ch === ':') {
+          if (s[i + 1] === ':') { c++; i = skipIdent(s, i + 2); if (s[i] === '(') i = skipPair(s, i, '(', ')'); continue; }
+          const j = skipIdent(s, i + 1); const name = s.slice(i + 1, j).toLowerCase(); i = j;
+          if (s[i] === '(') {
+            const k = skipPair(s, i, '(', ')'); const arg = s.slice(i + 1, k - 1); i = k;
+            if (name === 'where') continue;
+            if (name === 'is' || name === 'not' || name === 'has' || name === 'matches' || name === '-webkit-any') { const m = maxOf(splitComma(arg)); a += m[0]; b += m[1]; c += m[2]; continue; }
+            if (/^nth-(last-)?child$/.test(name)) { b++; const o = /\sof\s/i.exec(arg); if (o) { const m = maxOf(splitComma(arg.slice(o.index + o[0].length))); a += m[0]; b += m[1]; c += m[2]; } continue; }
+            b++; continue;
+          }
+          if (/^(before|after|first-line|first-letter)$/.test(name)) { c++; continue; }
+          b++; continue;
+        }
+        if (isId(ch)) { c++; i = skipIdent(s, i); continue; }
+        i++;
+      }
+      return [a, b, c];
+    }
+    const pad = (sp, tag) => (':not(#' + tag + '-z)').repeat(sp[0]) + (':not(.' + tag + '-z)').repeat(sp[1]) + (':not(' + tag + '-z)').repeat(sp[2]);
+    /* 印のセレクタ（:where で詳細度 0）＋元と同じ詳細度の当て物 */
+    const mark = (attrSel, origText, tag) => ':where(' + attrSel + ')' + pad(of(origText), tag);
+    return { of, pad, mark };
+  })();
+  /* [探す文字列, 置き換えの形（@0 = 印・@P0 = 詳細度の当て物だけ）, [[元の塊, 印のセレクタ], …]] */
+  const ACCEL = {
+    n08: [
+      ['div:has(> [role="tablist"][aria-label="Sidebar navigation"]):has(> div [role="button"][aria-label="Search"])', '@0', [['div:has(> [role="tablist"][aria-label="Sidebar navigation"]):has(> div [role="button"][aria-label="Search"])', '[data-c39-nav="a"]']]],
+      ['> div:has([role="button"][aria-label="Search"])', '> @0', [['div:has([role="button"][aria-label="Search"])', '[data-c39-nav="s"]']]]
+    ],
+    n24: [
+      ['div:has(> div:first-child > div > [data-popup-origin="true"] > div > [data-popup-origin="true"] > [role="cell"][aria-haspopup="dialog"]):has(> div > [role="menu"])', '@0', [['div:has(> div:first-child > div > [data-popup-origin="true"] > div > [data-popup-origin="true"] > [role="cell"][aria-haspopup="dialog"]):has(> div > [role="menu"])', '[data-c39-relsec]']]],
+      ['> div:first-child > div:first-child:has([role="cell"][aria-haspopup="dialog"])', '> div:first-child > @0', [['div:first-child:has([role="cell"][aria-haspopup="dialog"])', '[data-c39-relhead]']]],
+      ['div:has(> div:only-child > [role="button"][aria-label="View/hide details"]:only-child)', '@0', [['div:has(> div:only-child > [role="button"][aria-label="View/hide details"]:only-child)', '[data-c39-vd]']]]
+    ],
+    /* v3.0: これが一番重かった — html:has(> body…) で html に変数を置くと、本文の変化のたびに「画面全体」を計算し直していた（約 1.9 秒）。
+       配色（ダーク／ライト）は JS が html の印にして渡す */
+    n23: [
+      ['html:has(> body.dark), html:has(> body.notion-dark-theme)', 'html@0', [[':has(> body.dark)', '[data-c39-dark]']]],
+      ['html:not(:has(> body.notion-light-theme))', 'html:not(:where([data-c39-light]))@P0', [[':has(> body.notion-light-theme)', '']]]
+    ],
+    t39: [
+      ['.layout:has([aria-label="View/hide details"]) div:has(> div > .notion-record-icon[aria-label="Change page icon"]):has(> div > .notion-page-block > h1[aria-roledescription="page title"])', '@0', [['.layout:has([aria-label="View/hide details"]) div:has(> div > .notion-record-icon[aria-label="Change page icon"]):has(> div > .notion-page-block > h1[aria-roledescription="page title"])', '[data-c39-tic]']]],
+      ['> div:has(> .notion-record-icon[aria-label="Change page icon"])', '> @0', [['div:has(> .notion-record-icon[aria-label="Change page icon"])', '[data-c39-tic-i]']]],
+      ['> div:has(> .notion-page-block > h1[aria-roledescription="page title"])', '> @0', [['div:has(> .notion-page-block > h1[aria-roledescription="page title"])', '[data-c39-tic-t]']]],
+      ['> div:has(> .notion-page-block > h1)', '> @0', [['div:has(> .notion-page-block > h1)', '[data-c39-tic-t]']]]
+    ]
+  };
+  const accelTo = (tmpl, parts) => tmpl.replace(/@P(\d)/g, (m, k) => SPEC.pad(SPEC.of(parts[k][0]), 'c39')).replace(/@(\d)/g, (m, k) => SPEC.mark(parts[k][1], parts[k][0], 'c39'));
+  /* v3.0: 残りの :has(…) も一般的に — 「入れ物（ダイアログ・サイドバーなど）の中の :has」は、
+     入れ物の中だけを JS が 0.15 秒おきに調べて印（data-c39h-N）を付け、CSS はその印で当てる。
+     :hover など動きのある条件を含むもの・入れ物の無いものはそのまま */
+  const HAS_LIST = [];                          // { attr, scope, sel }
+  const HAS_KEY = new Map();
+  const DYN = /:(hover|focus|focus-within|focus-visible|active|checked|target|visited|link)\b/;
+  function splitTop(str, isSep) {               // 括弧・角括弧・引用の外で区切る
+    const out = []; let d = 0, q = null, st = 0;
+    for (let i = 0; i < str.length; i++) {
+      const c = str[i];
+      if (q) { if (c === '\\') { i++; continue; } if (c === q) q = null; continue; }
+      if (c === '"' || c === "'") { q = c; continue; }
+      if (c === '(' || c === '[') d++; else if (c === ')' || c === ']') d--;
+      else if (d === 0 && isSep(c, i)) { out.push(str.slice(st, i)); st = i + 1; }
+    }
+    out.push(str.slice(st)); return out;
+  }
+  function compounds(sel) {                     // [{ text, start, end }] 子孫・>・+・~ で区切った塊
+    const res = []; let d = 0, q = null, i = 0, start = -1;
+    const push = (e) => { if (start >= 0) { res.push({ text: sel.slice(start, e), start, end: e }); start = -1; } };
+    for (; i < sel.length; i++) {
+      const c = sel[i];
+      if (q) { if (c === '\\') { i++; continue; } if (c === q) q = null; continue; }
+      if (c === '"' || c === "'") { q = c; if (start < 0) start = i; continue; }
+      if (c === '(' || c === '[') { d++; if (start < 0) start = i; continue; }
+      if (c === ')' || c === ']') { d--; continue; }
+      if (d === 0 && /[\s>+~]/.test(c)) { push(i); continue; }
+      if (start < 0) start = i;
+    }
+    push(i); return res;
+  }
+  function hasSel(sel) {
+    if (sel.indexOf(':has(') < 0 || DYN.test(sel)) return sel;
+    const cs = compounds(sel);
+    if (cs.length < 2) return sel;
+    const first = cs[0].text;
+    if (first.indexOf(':has(') >= 0 || /^(html|body|:root)\b/.test(first)) return sel;
+    let out = '', last = 0;
+    for (let k = 1; k < cs.length; k++) {
+      const c = cs[k]; if (c.text.indexOf(':has(') < 0) continue;
+      const pe = c.text.indexOf('::'); const core = pe >= 0 ? c.text.slice(0, pe) : c.text, pseudo = pe >= 0 ? c.text.slice(pe) : '';
+      const key = (sel.slice(0, c.start) + core).replace(/\s+/g, ' ').trim();
+      let ent = HAS_KEY.get(key);
+      if (!ent) { ent = { attr: 'data-c39h-' + HAS_LIST.length, scope: first.trim(), sel: key }; try { document.createDocumentFragment().querySelector(key); } catch (e) { continue; } HAS_KEY.set(key, ent); HAS_LIST.push(ent); }
+      out += sel.slice(last, c.start) + SPEC.mark('[' + ent.attr + ']', core, 'c39') + pseudo; last = c.end;
+    }
+    return out + sel.slice(last);
+  }
+  function hasAccel(css) {
+    if (css.indexOf(':has(') < 0) return css;
+    /* 1 回なめるだけ（{ と } の間の「見出し」だけを書き換える）。正規表現の後戻りで遅くならないように */
+    let out = '', last = 0, head0 = 0, q = null;
+    for (let i = 0; i < css.length; i++) {
+      const c = css[i];
+      if (q) { if (c === '\\') { i++; continue; } if (c === q) q = null; continue; }
+      if (c === '/' && css[i + 1] === '*') { const e = css.indexOf('*/', i + 2); i = e < 0 ? css.length : e + 1; continue; }
+      if (c === '"' || c === "'") { q = c; continue; }
+      if (c === '}') { head0 = i + 1; continue; }
+      if (c === ';') { head0 = i + 1; continue; }
+      if (c !== '{') continue;
+      const head = css.slice(head0, i);
+      if (!/^\s*@/.test(head) && head.indexOf(':has(') >= 0) {
+        const lead = head.match(/^\s*/)[0];
+        const sels = splitTop(head.slice(lead.length).replace(/\/\*[\s\S]*?\*\//g, ''), (ch) => ch === ',').map((x) => x.trim()).filter(Boolean);
+        out += css.slice(last, head0) + lead + sels.map(hasSel).join(',\n') + ' ';
+        last = i;
+      }
+      head0 = i + 1;
+    }
+    return out + css.slice(last);
+  }
+  const cssOf = (m) => {
+    if (!FAST) return m.css;
+    let c = m.css;
+    if (ACCEL[m.id]) for (const [find, tmpl, parts] of ACCEL[m.id]) { const to = accelTo(tmpl, parts); c = c.replace(pat(find), () => to); }
+    return hasAccel(c);
+  };
+  /* 印を付ける（:has と同じ条件を JS で） */
+  const setA = (el, k, v) => { if (el && el.getAttribute(k) !== v) el.setAttribute(k, v); };
+  function markAll() {
+    if (!FAST) return;
+    const liveK = new Map();
+    const live = { has: () => false };
+    const keep = (el, k, v) => { setA(el, k, v); let s2 = liveK.get(el); if (!s2) liveK.set(el, (s2 = new Set())); s2.add(k); };
+    if (isOnId('n08')) for (const tl of document.querySelectorAll('[role="tablist"][aria-label="Sidebar navigation"]')) {
+      const a = tl.parentElement; if (!a) continue;
+      let s = null;
+      for (const ch of a.children) if (ch !== tl && ch.tagName === 'DIV' && ch.querySelector('[role="button"][aria-label="Search"]')) { s = ch; break; }
+      if (!s) continue;
+      keep(a, 'data-c39-nav', 'a');
+      for (const ch of a.children) if (ch.tagName === 'DIV' && ch !== tl && ch.querySelector('[role="button"][aria-label="Search"]')) keep(ch, 'data-c39-nav', 's');
+    }
+    if (isOnId('n24')) {
+      for (const cell of document.querySelectorAll('[data-popup-origin="true"] > [role="cell"][aria-haspopup="dialog"]')) {
+        const v = cell.parentElement, w = v && v.parentElement, z = w && w.parentElement;
+        if (!z || z.getAttribute('data-popup-origin') !== 'true' || w.tagName !== 'DIV') continue;
+        const y = z.parentElement, x = y && y.parentElement, sec = x && x.parentElement;
+        if (!sec || y.tagName !== 'DIV' || x.tagName !== 'DIV' || sec.tagName !== 'DIV' || sec.firstElementChild !== x) continue;
+        let menu = false; for (const ch of sec.children) if (ch.tagName === 'DIV' && ch.querySelector(':scope > [role="menu"]')) { menu = true; break; }
+        if (!menu) continue;
+        keep(sec, 'data-c39-relsec', '');
+        if (x.firstElementChild && x.firstElementChild.tagName === 'DIV' && x.firstElementChild.contains(cell)) keep(x.firstElementChild, 'data-c39-relhead', '');
+      }
+      for (const b of document.querySelectorAll('[role="button"][aria-label="View/hide details"]')) {
+        const p = b.parentElement, g = p && p.parentElement;
+        if (g && p.tagName === 'DIV' && g.tagName === 'DIV' && p.childElementCount === 1 && g.childElementCount === 1) keep(g, 'data-c39-vd', '');
+      }
+    }
+    if (isOnId('t39') && document.querySelector('.layout [aria-label="View/hide details"]')) for (const h1 of document.querySelectorAll('.notion-page-block > h1[aria-roledescription="page title"]')) {
+      const pb = h1.parentElement, t = pb.parentElement, c = t && t.parentElement;
+      if (!c || t.tagName !== 'DIV' || c.tagName !== 'DIV' || !h1.closest('.layout')) continue;
+      let ic = null; for (const ch of c.children) if (ch.tagName === 'DIV' && ch.querySelector(':scope > .notion-record-icon[aria-label="Change page icon"]')) { ic = ch; break; }
+      if (!ic) continue;
+      keep(c, 'data-c39-tic', ''); keep(t, 'data-c39-tic-t', ''); keep(ic, 'data-c39-tic-i', '');
+    }
+    /* 一般の :has（入れ物の中だけを調べる） */
+    for (const ent of HAS_LIST) {
+      let scopes;
+      try { scopes = document.querySelectorAll(ent.scope); } catch (e) { continue; }
+      for (const sc of scopes) { let hits; try { hits = sc.querySelectorAll(ent.sel); } catch (e) { break; } for (const el of hits) keep(el, ent.attr, ''); }
+    }
+    /* 条件に合わなくなった印は外す */
+    const ks = ['data-c39-nav', 'data-c39-relsec', 'data-c39-relhead', 'data-c39-vd', 'data-c39-tic', 'data-c39-tic-t', 'data-c39-tic-i'].concat(HAS_LIST.map((e) => e.attr));
+    for (const el of document.querySelectorAll(ks.map((k) => '[' + k + ']').join(','))) {
+      const kept = liveK.get(el);
+      for (const k of ks) if (el.hasAttribute(k) && !(kept && kept.has(k))) el.removeAttribute(k);
+    }
+  }
+  /* 配色の印（body の class を見て html に）— ²³ の幕の色に使う */
+  function markTheme() {
+    const de = document.documentElement, b = document.body;
+    if (!de || !b) return;
+    const dark = b.classList.contains('dark') || b.classList.contains('notion-dark-theme');
+    if (dark !== de.hasAttribute('data-c39-dark')) de.toggleAttribute('data-c39-dark', dark);
+    const light = b.classList.contains('notion-light-theme');
+    if (light !== de.hasAttribute('data-c39-light')) de.toggleAttribute('data-c39-light', light);
+  }
+  if (FAST) {
+    const tw = () => {
+      if (!document.body) { if (document.documentElement) { const w = new MutationObserver(() => { if (document.body) { w.disconnect(); tw(); } }); w.observe(document.documentElement, { childList: true }); } else setTimeout(tw, 10); return; }
+      markTheme();
+      new MutationObserver(markTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    };
+    tw();
+  }
+  let markT = 0, markLast = 0;
+  const markSoon = () => {
+    if (markT) return;
+    const wait = Math.max(0, 120 - (performance.now() - markLast));
+    markT = setTimeout(() => requestAnimationFrame(() => { markT = 0; markLast = performance.now(); try { markAll(); } catch (e) { /* noop */ } }), wait);
+  };
+  const isOnId = (id) => { const m = MODS.find((x) => x.id === id); return !!(m && isOn(m)); };
   const KEY = 'c39.on';
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
@@ -178,7 +413,7 @@
     for (const m of MODS) {
       let st = els.get(m.id);
       if (!isOn(m)) { if (st) { st.remove(); els.delete(m.id); } continue; }
-      if (!st) { st = document.createElement('style'); st.id = 'c39-' + m.id; st.setAttribute('data-c39', m.name); st.textContent = m.css; els.set(m.id, st); }
+      if (!st) { st = document.createElement('style'); st.id = 'c39-' + m.id; st.setAttribute('data-c39', m.name); st.textContent = cssOf(m); els.set(m.id, st); }
       if (st.parentNode !== root) root.appendChild(st);
     }
     /* v2: 幕（16c）を ³⁹ で出している時は ³⁷ Lumière の幕を退かせる（二重の幕を防ぐ） */
@@ -203,6 +438,7 @@
     const root = document.documentElement;
     if (!root) return setTimeout(watch, 10);
     new MutationObserver(keepLast).observe(root, { childList: true });
+    if (FAST) { new MutationObserver(markSoon).observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class', 'aria-label', 'role'] }); markSoon(); }
   };
   watch();
 

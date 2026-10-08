@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
-// @version      13.0.0
-// @description  v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
+// @version      13.1.0
+// @description  v13.1.0: 速く — 幕（カーテン）の上限を 3.2→1.5 秒・ページを移る時 0.9→0.6 秒。v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -44,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '13.0.0';
+  const VERSION = '13.1.0';
   const TAG = '[³⁷ Lumière v' + VERSION + ']';
   if (window.__c37 && window.__c37.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -254,7 +254,7 @@
       schedule: false,           // 夜は自動で暗く（mode が auto の時）
       nightFrom: 19, nightTo: 6,
       hoverDelay: 450,
-      curtainMax: 3200,
+      curtainMax: 1500,   // v14: 3200→1500（速く開く）
       fab: false,                // 右下の丸いボタン（v11 から既定で出さない。上の帯の ◐ から）
       oshiColor: '#d4709a', oshiName: ''
     },
@@ -1757,7 +1757,7 @@ html:hover #lm-fab { opacity: .55; }
   const CUR = { t0: performance.now(), done: false, navT: 0, quietT: 0, mo: null };
   CSS.curtain = () => `
 html[data-lm-curtain] { background: var(--lm-bg, var(--c-bacPri, #fff)) !important; }
-html[data-lm-curtain="boot"] #notion-app { opacity: 0; animation: lm-curtain-safe .01s linear ${Math.round((+T('curtainMax') || 3200) / 1000 + 0.8)}s forwards; }
+html[data-lm-curtain="boot"] #notion-app { opacity: 0; animation: lm-curtain-safe .01s linear ${Math.round((+T('curtainMax') || 1500) / 1000 + 0.5)}s forwards; }
 html[data-lm-curtain="nav"] .notion-frame > :not(.notion-topbar):not(:has(.notion-topbar)), html[data-lm-curtain="nav"] .notion-frame .notion-scroller { opacity: 0 !important; transition: none !important; }
 html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *, html[data-lm-curtain-up] .notion-frame .notion-scroller { transition: opacity ${reduce() ? 0 : 0.2}s cubic-bezier(.2,0,0,1) !important; }
 @keyframes lm-curtain-safe { to { opacity: 1; } }`;
@@ -1771,7 +1771,7 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
       return;
     }
     document.documentElement.setAttribute('data-lm-curtain', 'boot');
-    curtainWait('boot', +T('curtainMax') || 3200);
+    curtainWait('boot', +T('curtainMax') || 1500);
   }
   const CONTENT = '.notion-frame .notion-page-content, .notion-frame .notion-collection_view-block, .notion-frame .notion-collection-view-body, .notion-frame .notion-table-view, .notion-frame .notion-board-view, .notion-frame .notion-gallery-view, .notion-frame .notion-list-view, .notion-frame .notion-calendar-view, .notion-frame .notion-timeline-view, .notion-peek-renderer .notion-page-content, .notion-login, .notion-onboarding';
   function curtainWait(kind, max) {
@@ -1817,7 +1817,7 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
     if (de.getAttribute('data-lm-curtain') === 'boot') return;
     CUR.from = location.href;
     de.setAttribute('data-lm-curtain', 'nav');
-    curtainWait('nav', 900);
+    curtainWait('nav', 600);
   }, true);
 
   /* ============================================================

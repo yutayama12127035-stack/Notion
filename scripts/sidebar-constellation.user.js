@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      57.0.0
-// @description  v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      67.0.0
+// @description  v67.0.0: B.U.R.I を大幅に強化 — 自然な日本語・出典は文の終わりに小さな番号（¹ ²）＋番号つきの出典一覧・今日の日付で「これから／もう過ぎた」を言い分け・まとめ役を選べる（既定は NVIDIA）・AI が考えた「次に聞けそうなこと」・いま開いているページの要約／質問・「〜を開いて」でページへ・Markdown でコピー（脚注つき）・これまでの答え（履歴・検索）・読み込みの速さを表示。軽く — 見回りを 0.1→0.7 秒・位置合わせを 0.15→0.45 秒（変化の時だけ）・地の色は変わった時だけ測る。v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,23 @@
 // ==/UserScript==
 
 /*
+ * v67.0.0（B.U.R.I を大幅に強化・軽く）
+ *   答えの質
+ *   ・出典の印 [W8][W9] が文の途中に入って読みにくかった → 文の終わり（句点の直後）にまとめ、画面では小さな脚注番号（¹ ²）に。
+ *     答えの下に「出典」の一覧（番号・題名・サイト）。番号は答えの中で出てきた順。
+ *   ・日本語が固い → 書き方の決まり（短い文・名詞止めや伝聞の連発をしない・舞台裏の言葉を使わない・問いかけは 1 つ）を AI に渡す。
+ *   ・今日の日付を渡す（放送日などの「これから／もう過ぎた」を正しく）。食い違いは公式を優先。
+ *   ・まとめ役を選べる（既定: NVIDIA があれば NVIDIA — いちばん強い・時間で切らない）。Gemini は下書き役に。
+ *   ・AI が考えた「次に聞けそうなこと」を答えの下のボタンに（[[next: …]]）。
+ *   新しいこと
+ *   ・いま開いているページについて: 「このページを要約して」「このページで〜」。⌘K のホームと候補にも。
+ *   ・「〜を開いて」で Notion のページへ移動（検索して一番合うもの）。
+ *   ・Markdown でコピー（出典は脚注 [^1] で）。
+ *   ・これまでの答え（履歴 40 件・検索・押すとその時の答え）。
+ *   ・ホームに「読み込み ○ 秒」（16c の幕が開くまで）。
+ *   軽く
+ *   ・サイドバーの見回り 0.1 秒 → 0.7 秒（変化の見張りはサイドバーとその親だけ）・位置合わせ 0.15 秒 → 0.45 秒（変化・スクロール時はすぐ）・
+ *     地の色はテーマが変わった時だけ測る・検索画面の見回り 0.25 → 0.4 秒。
  * v57.0.0（次世代の検索画面・学習・誤送信防止・速さ）
  *   ・顔文字がまだ明朝だった → 顔文字の要素に直接 !important で丸ゴシックを当て（どの書体指定にも負けない）、
  *     Firefox の指紋対策で Mac の書体が隠れても出るよう、ウェブ書体（Zen Maru Gothic / Zen Kaku Gothic New・jsDelivr）を読み込む。
@@ -116,7 +133,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '57.0.0';
+  const VERSION = '67.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -1267,6 +1284,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const shown = !!OB.on && obSidebarVisible(obSide());
     if (shown !== obSidebarShown) {
       obSidebarShown = shown;
+      if (window.__c33LayoutSoon) window.__c33LayoutSoon();
       if (shown) {
         obEl.style.removeProperty('display');
         obEl.style.removeProperty('pointer-events');
@@ -1284,10 +1302,13 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     return shown;
   }
   function obWatchSidebar() {
-    setInterval(obSyncSidebar, 100);
+    /* v67: 軽く — 見回りは 0.7 秒おき（以前 0.1 秒）。変化の見張りは「サイドバーそのものか、その親」の変化と、サイドバーの作り直しだけ */
+    setInterval(() => { if (!document.hidden) obSyncSidebar(); }, 700);
     let pending = false;
     const observer = new MutationObserver(records => {
-      if (records.every(r => r.target === obEl || (obEl && obEl.contains(r.target)))) return;
+      const side = obSide();
+      const hit = !side || !side.isConnected || records.some((r) => r.type === 'attributes' ? (r.target === side || (r.target.contains && r.target.contains(side))) : (r.target === document.body || (r.target.contains && r.target.contains(side) && r.target !== side && !side.contains(r.target))));
+      if (!hit) return;
       if (pending) return;
       pending = true;
       requestAnimationFrame(() => { pending = false; obSyncSidebar(); });
@@ -1299,7 +1320,12 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   }
 
   /* v56: 輪の地の色＝サイドバーの実際の地の色（透けずに、なじむ） */
+  let obBgKey = '';
   function obBg(side) {
+    /* v67: 地の色はサイドバー・テーマが変わった時だけ測り直す（毎回の祖先たどり＋getComputedStyle をやめる） */
+    const key = (side.className || '') + '|' + (document.body && document.body.className) + '|' + document.documentElement.className + '|' + (side.__c33id || (side.__c33id = Math.random()));
+    if (key === obBgKey) return;
+    obBgKey = key;
     let bg = '';
     for (let el = side; el && el !== document.documentElement && !bg; el = el.parentElement) {
       const c = getComputedStyle(el).backgroundColor;
@@ -1930,7 +1956,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const gmSet = (k, v) => { try { if (typeof GM_setValue === 'function') GM_setValue(k, v); } catch (e) { /* noop */ } };
     const AI = { key: gmGet('c33.buri.key', ''), model: gmGet('c33.buri.model', 'claude-opus-5-5'), web: gmGet('c33.buri.web', true) !== false,
       gkey: gmGet('c33.buri.gkey', ''), gmodel: gmGet('c33.buri.gmodel', 'auto'), provider: '',
-      keys: {}, use: {}, moa: gmGet('c33.buri.moa', true) !== false };
+      keys: {}, use: {}, moa: gmGet('c33.buri.moa', true) !== false,
+      agg: gmGet('c33.buri.agg', 'auto') };   // v67: まとめ役 — auto（NVIDIA があれば NVIDIA・無ければメイン）／メイン／各 AI
     /* v49: どの AI を使うか — v52 からは「メイン（＝まとめ役）」。gemini / groq / openrouter / nvidia / zai / cohere（無料）・chrome（無料・鍵なし）・claude（有料）・none */
     AI.provider = gmGet('c33.buri.provider', '') || (AI.key ? 'claude' : 'gemini');
     if (/^gemini-(flash-latest|2\.5-flash)$/.test(AI.gmodel)) AI.gmodel = 'auto';   // v49/v50 の既定は「おまかせ」へ
@@ -2103,12 +2130,21 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         '海の仲間: 情報を持ってきた時は (\'-\' 鯖)з📡、大事件・食い違いを見つけた時は (\'-\' 鰤)з(\'-\' 鮪)з💥🔍、ご褒美は (\'-\' 鯛)з、テンション爆発は (\'-\' 鰯)з(\'-\' 鰯)з(\'-\' 鰯)з、' + n + 'は (\'-\' 🐋)з。',
         '顔文字は答えの中で 1〜2 回まで（冒頭か結び）。説明の邪魔をしない。',
         '最初の行に、いまの気分を [[mood:キー]] で 1 つだけ書く（キー: normal, happy, joy, shy, kyun, proud, satisfied, sad, cry, setsunai, panic, think, fire, alarm, excited, search, reward, geffun）。この行は画面には出ない。',
+        '最後の行に、' + n + 'が次に聞きたくなりそうな短い質問を 2〜3 個、[[next: 質問 | 質問 | 質問]] の形で書く（この行も画面には出ない。15 字前後・具体的に）。',
         '答え方:',
         '・渡された「Notion の検索結果」「本棚」「Web の検索結果」だけを根拠に、質問に日本語で答える。',
-        '・根拠の文には [N1] [W2] のように番号を付ける（N=Notion・本棚、W=Web）。',
+        '・出典番号 [N1] [W2]（N=Notion・本棚、W=Web）は「文の終わり（句点の直後）」にだけ付ける。文の途中には決して入れない。1 文に 2 つまで。',
         '・根拠に無いことは推測で埋めず、「手元の情報では分かりませんでした」と言う。',
-        '・Notion（' + n + '自身の記録）と Web の情報が食い違う時は、両方を示す。',
-        '・ふだんは 3〜8 文程度。一覧を求められたら箇条書き。最後に一言だけ、次に聞けそうなことを添えてもよい。'
+        '・Notion（' + n + '自身の記録）と Web の情報が食い違う時は、両方を示す。日付などが食い違う時は、公式（放送局・出版社など）を優先し、そう言う。',
+        '・ふだんは 3〜8 文程度。一覧を求められたら箇条書き。',
+        '日本語の書き方（大事）:',
+        '・友だちに話すような自然な日本語で。翻訳調・説明書調・役所調にしない。',
+        '・1 文は短く（40〜60 字）。主語と述語をそろえる。「〜が発端」「〜に絡む闇があるらしい」のような名詞止め・伝聞の連発をしない。',
+        '・「Web 結果によると」「検索結果によると」「根拠によると」「下書き」など舞台裏の言葉は使わない。出所を言う時は「公式サイトでは」「Wikipedia には」のように具体的に。',
+        '・「〜らしい」「〜とのこと」は 1 回まで。分かっていることは言い切る。',
+        '・見つからなかった報告（「Notion には無かった」など）は、聞かれた時か、大事な時だけ一言。',
+        '・最後の問いかけは 1 つだけ、短く自然に（例:「キャストも調べようか？」）。選択肢を 4 つも並べない。',
+        '・今日の日付は「# 今日」を見る。これからの予定・もう過ぎたことを、日付で正しく言い分ける。'
       ].join('\n') + memText();
     };
     /* v57: 学習 — ぶりが覚えたこと（「覚えて：〜」で覚える・会話の話題・よく聞く著者や分類）。AI への説明に添えて、答えに活かす */
@@ -2180,7 +2216,27 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       return null;
     }
     const tagOf = (t) => { const m = /\[\[\s*mood\s*:\s*([a-z]+)\s*\]\]/i.exec(t || ''); return m ? m[1].toLowerCase() : ''; };
-    const untag = (t) => String(t || '').replace(/\[\[\s*mood\s*:\s*[a-z]+\s*\]\]\s*/ig, '').trim();
+    /* v67: 出典の印は文の途中に入れない — 文ごとに集めて句点の直後へ（同じ印は 1 つに・1 文 3 つまで） */
+    const CITE_RE = /\s*(?:\[((?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*)\]|【([NW]\d+)】)/g;
+    function fixCites(text) {
+      const grab = (str, into) => str.replace(CITE_RE, (m, a, b) => { let kind = 'N'; (a || b).split(/\s*[,，、]\s*/).forEach((tk) => { const mm = /^([NW]?)(\d+)$/.exec(tk); if (!mm) return; kind = mm[1] || kind; const k = kind + mm[2]; if (!into.includes(k)) into.push(k); }); return ''; });
+      return String(text || '').split('\n').map((line) => {
+        if (!/\[[NW]\d|【[NW]\d/.test(line)) return line;
+        const head = /^(\s*(?:[・\-*•]|\d+[.)．]|#{1,4})\s*)/.exec(line);
+        const pre = head ? head[1] : '';
+        const segs = line.slice(pre.length).split(/(?<=[。！？!?])/u).map((t) => ({ t, ids: [] }));
+        segs.forEach((sg, i) => {
+          /* 文の頭に来た印は、前の文のもの */
+          const lead = /^(?:\s*(?:\[(?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*\]|【[NW]\d+】))+/.exec(sg.t);
+          if (lead && i > 0) { grab(lead[0], segs[i - 1].ids); sg.t = sg.t.slice(lead[0].length); }
+          sg.t = grab(sg.t, sg.ids);
+        });
+        return pre + segs.map((sg) => { const t = sg.t.replace(/[ \t]+([。！？!?、，])/g, '$1').replace(/([^\x00-\x7f]) +(?=[^\x00-\x7f\s])/g, '$1'); if (!sg.ids.length) return t; const m = /^([\s\S]*?)(\s*)$/.exec(t); return m[1] + '[' + sg.ids.slice(0, 3).join(',') + ']' + m[2]; }).join('');
+      }).join('\n');
+    }
+    /* v67: AI が考えた「次に聞けそうなこと」— [[next: a | b | c]] を拾って画面のボタンに */
+    const nextOf = (t) => { const m = /\[\[\s*next\s*[:：]\s*([^\]]+)\]\]/i.exec(t || ''); return m ? m[1].split(/\s*[|｜]\s*/).map((x) => x.trim().replace(/^[「『]|[」』]$/g, '')).filter((x) => x && x.length <= 40).slice(0, 3) : []; };
+    const untag = (t) => String(t || '').replace(/\[\[\s*mood\s*:\s*[a-z]+\s*\]\]\s*/ig, '').replace(/\[\[\s*next\s*[:：][^\]]*\]\]\s*/ig, '').trim();
     function sourcesText(nh, wh, shelf, hint) {
       let t = '';
       const sh = shelf.slice(0, 8).map((r, i) => '[N' + (i + 1) + '] 本棚: ' + r.title + (r.author ? '／著者 ' + r.author : '') + (r.series ? '／シリーズ ' + r.series + (r.seq ? '（' + r.seq + '）' : '') : '') + (r.status ? '／状態 ' + r.status : '') + (r.synopsis ? '／あらすじ ' + String(r.synopsis).slice(0, 200) : ''));
@@ -2384,17 +2440,21 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       '・下に、ほかの AI（仲間）が同じ質問に書いた「下書き」がある。',
       '・下書きを根拠（Notion・本棚・Web の検索結果）と照らし合わせ、正しい点を合わせ、根拠に無いことや誤りは捨てて、ひとつの最良の答えを書く。',
       '・下書きどうしが食い違う時は根拠に従う。根拠で決められなければ両方を示す。',
-      '・出典番号 [N1] [W2] は、根拠に本当に合うものだけを残す。',
-      '・「下書き A によると」などの舞台裏は書かない。B.U.R.I として、答えだけを話す。'
+      '・出典番号 [N1] [W2] は、根拠に本当に合うものだけを残し、文の終わり（句点の直後）にまとめる。文の途中には入れない。',
+      '・「下書き A によると」「Web 結果によると」などの舞台裏は書かない。B.U.R.I として、答えだけを話す。',
+      '・下書きの言い回しはまねない。中身だけを使い、上の「日本語の書き方」で、読みやすく自然な日本語に書き直す。',
+      '・構成: いちばん知りたい答えを最初の 1〜2 文で → 補足 → 最後に短い一言（問いかけは 1 つまで）。'
     ].join('\n');
     /* v52: MoA — 仲間がそれぞれ下書き → メイン（まとめ役）が根拠と照らして一つにする。仲間が 1 人なら普通に答える
      * v55: まとめ役は下書きを書かない（Gemini の少ない無料回数を 1 回で済ませ、遅さで時間切れにもならない）。
      *      下書き役には前の答えを見せず「これまでの話題」だけ渡す（前の答えにつられて謝ったり混同したりしないように）。質問の意図も渡す */
     async function askAI(question, ctxText, plan) {
       const intent = plan && plan.intent ? '\n\n# 質問の意図（会話の流れから）\n' + plan.intent : '';
-      const userMsg = ctxText + intent + '\n\n# 質問\n' + question;
+      const now = new Date();
+      const today = '\n\n# 今日\n' + now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日（' + '日月火水木金土'[now.getDay()] + '）';
+      const userMsg = ctxText + intent + today + '\n\n# 質問\n' + question;
       const t = team();
-      const done = (r, extra) => { if (r.text) { r.mood = tagOf(r.text) || r.mood || ''; r.text = untag(r.text); aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text }); } return Object.assign(r, extra || {}); };
+      const done = (r, extra) => { if (r.text) { r.mood = tagOf(r.text) || r.mood || ''; r.next = nextOf(r.text); r.text = fixCites(untag(r.text)); aiHist.push({ role: 'user', content: question }, { role: 'assistant', content: r.text }); } return Object.assign(r, extra || {}); };
       if (!moaOn()) {
         const id = ready(AI.provider) && !pBad(AI.provider) ? AI.provider : t[0];
         prog({ k: 'draft', id, st: 'run' });
@@ -2402,7 +2462,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         prog({ k: 'draft', id, st: r.text ? 'ok' : 'ng', model: r.model, err: r.err });
         return done(r, { who: id });
       }
-      const aggId = [AI.provider, ...t].find((id) => ready(id) && id !== 'chrome' && !pBad(id)) || t[0];
+      /* v67: まとめ役は選べる。既定（auto）は NVIDIA（いちばん強い・時間で切らない）→ 無ければメイン */
+      const aggPref = AI.agg === 'main' ? [AI.provider] : AI.agg && AI.agg !== 'auto' ? [AI.agg, AI.provider] : ['nvidia', AI.provider];
+      const aggId = [...aggPref, ...t].find((id) => id && TEAM[id] && ready(id) && id !== 'chrome' && !pBad(id)) || t[0];
       let drafters = t.filter((id) => id !== aggId);
       if (drafters.length < 2) drafters = t.slice();
       const topics = aiHist.filter((m) => m.role === 'user').slice(-3).map((m) => String(m.content).slice(0, 60));
@@ -2514,7 +2576,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if (aiOn()) {
         const r = await askAI(raw, sourcesText(nh, wh, shelf, hint), plan);
         const moa = { drafts: (r.drafts || []).map((d) => ({ id: d.id, name: TEAM[d.id].name, model: d.model || '', text: d.text || '', err: d.err || '' })), who: r.who ? TEAM[r.who].name : '', model: r.model || '', merged: !!r.merged };
-        if (r.text) return R(Object.assign(reply(r.text, cards, baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q), { moa, mood: r.mood || '' }));
+        if (r.text) return R(Object.assign(reply(r.text, cards, (r.next && r.next.length ? r.next.map((x) => ({ label: x, q: x })) : null) || baseChips || [{ label: 'もっと詳しく', q: q + ' をもっと詳しく' }], ['notion'], q), { moa, mood: r.mood || '' }));
         lastAiErr = r.detail || r.err || '';
         return R(Object.assign(reply("('-' 鰤)з💦 " + aiName() + ' がお休み中みたい（' + r.err + '）。かわりに見つけたものを並べるね。\n\n' + plain(), cards, baseChips || [], ['notion'], q), { moa, mood: 'panic' }));
       }
@@ -2609,9 +2671,70 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
 
     /* v55: AI がある時は、本棚の決まり文句で答えて終わらせない。本棚の照合は材料として AI に渡し、AI が Notion・Web と合わせて答える */
+    /* v67: いま開いているページについて（要約・質問）／「〜を開いて」でページへ */
+    const RE_PAGE = /(この|今の|いまの|開いている|ひらいている)\s*(ページ|記事|ノート|メモ|本文|表|DB|データベース)|ページ(を|の)?(要約|まとめ|中身)|^(要約|まとめ)(して|て)?(ください|下さい)?[。！!]*$/u;
+    const RE_OPEN = /^(.{1,40}?)\s*(?:の(?:ページ)?を?|を|って)?\s*(?:開いて|ひらいて|開く|開け|に移動して?|へ移動して?|を表示して?|に飛んで|へ飛んで)(?:ください|下さい|ね)?[。！!]*$/u;
+    function pageContext() {
+      const frame = [...document.querySelectorAll('.notion-frame')].find((f) => !f.closest('.notion-peek-renderer')) || document.querySelector('.notion-frame');
+      if (!frame) return null;
+      const h = frame.querySelector('h1[aria-roledescription="page title"], .notion-page-block h1, h1');
+      const title = norm((h && h.textContent) || document.title.replace(/\s*[|｜]\s*Notion\s*$/, '')) || '無題';
+      const parts = [];
+      const pc = frame.querySelector('.notion-page-content');
+      if (pc) parts.push(pc.innerText);
+      [...frame.querySelectorAll('.notion-table-view, .notion-board-view, .notion-list-view, .notion-gallery-view, .notion-calendar-view')].filter((v) => !v.parentElement.closest('.notion-table-view, .notion-board-view, .notion-list-view, .notion-gallery-view')).slice(0, 2).forEach((v) => parts.push(v.innerText));
+      const body = parts.join('\n').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, 9000);
+      return { title, body, url: location.origin + location.pathname + location.search };
+    }
+    /* 中身を読まずに「開いているページがあるか・題名」だけ（⌘K を開くたびに本文を読まない＝速く） */
+    function pageHead() {
+      const frame = [...document.querySelectorAll('.notion-frame')].find((f) => !f.closest('.notion-peek-renderer'));
+      if (!frame || !frame.querySelector('.notion-page-content, .notion-table-view, .notion-board-view, .notion-list-view, .notion-gallery-view')) return null;
+      const h = frame.querySelector('h1[aria-roledescription="page title"], .notion-page-block h1, h1');
+      return { title: norm((h && h.textContent) || document.title.replace(/\s*[|｜]\s*Notion\s*$/, '')) || '無題' };
+    }
+    async function askPage(raw) {
+      const pg = pageContext();
+      if (!pg || pg.body.length < 20) return Object.assign(reply("('-' 鰤)з💧 いま開いているページの中身が読めなかったよ。ページを開いてから、もう一度聞いてね。", [], [], []), { mood: 'sad' });
+      const refs = { N: [{ title: pg.title, url: pg.url }], W: [] };
+      if (aiOn()) {
+        prog({ k: 'search', q: pg.title });
+        prog({ k: 'found', n: 1, w: 0 });
+        const r = await askAI(raw, '# いま開いているページ [N1]\nタイトル: ' + pg.title + '\n本文:\n' + pg.body, { intent: 'いま' + nickName() + 'が開いているページ「' + pg.title + '」について答える（要約なら、要点を短い箇条書き 3〜6 個＋一言）' });
+        const moa = { drafts: (r.drafts || []).map((d) => ({ id: d.id, name: TEAM[d.id].name, model: d.model || '', text: d.text || '', err: d.err || '' })), who: r.who ? TEAM[r.who].name : '', model: r.model || '', merged: !!r.merged };
+        if (r.text) return Object.assign(reply(r.text, [{ title: pg.title, url: pg.url, type: 'Notion のページ' }], (r.next && r.next.length ? r.next.map((x) => ({ label: x, q: x })) : [{ label: 'もっと短く', q: 'このページを 3 行で' }, { label: '大事な所は？', q: 'このページでいちばん大事な所は？' }]), [], pg.title), { refs, moa, mood: r.mood || 'satisfied' });
+        lastAiErr = r.detail || r.err || '';
+      }
+      const heads = pg.body.split('\n').filter((l) => l.trim()).slice(0, 8);
+      return Object.assign(reply('「' + pg.title + '」の始まりはこんな感じだよ。[N1]\n' + heads.map((l) => '・' + l.slice(0, 80)).join('\n') + (aiOn() ? '' : '\n\n（⚙ で AI をつなぐと、要約や質問に答えられます）'), [], [], [], pg.title), { refs, mood: 'think' });
+    }
+    function spaNav(url) {
+      try {
+        const u = new URL(url, location.origin);
+        if (u.origin !== location.origin) { location.assign(u.href); return; }
+        const before = location.href;
+        history.pushState(history.state, '', u.pathname + u.search + u.hash);
+        window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }));
+        const h1 = () => { const h = document.querySelector('.notion-frame h1'); return h ? h.textContent : ''; };
+        const t0 = h1();
+        setTimeout(() => { if (location.href !== before && h1() === t0) location.assign(u.href); }, 1400);
+      } catch (e) { location.assign(url); }
+    }
+    async function openCmd(raw) {
+      const m = RE_OPEN.exec(raw); if (!m) return null;
+      const term = trimP(stripQ(m[1]).replace(/^(ページ|DB|データベース)\s*/u, '')) || m[1];
+      if (term.length < 1) return null;
+      const hits = await notionSearch(term);
+      if (!hits.length) return Object.assign(reply("('-' 鰤)з💧 「" + term + '」というページは見つからなかったよ。言い方を変えてみてね。', [], [], []), { mood: 'sad' });
+      const best = hits.find((h) => nz(h.title) === nz(term)) || hits[0];
+      setTimeout(() => { try { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); } catch (e) { /* noop */ } spaNav(best.url); }, 450);
+      return Object.assign(reply("('-' 鰤)з✨ 「" + best.title + '」を開くね。', hits.slice(0, 5).map((h) => ({ title: h.title, url: h.url, type: 'Notion のページ' })), [], [], term), { mood: 'happy', opened: best.url });
+    }
     async function ask(input) {
       const raw = String(input == null ? '' : input).trim();
       const mc = memCmd(raw); if (mc) return mc;
+      if (RE_PAGE.test(raw)) return askPage(raw);
+      if (RE_OPEN.test(raw)) { const oc = await openCmd(raw); if (oc) return oc; }
       const q0 = nz(raw).replace(/[?？!！。．.、,〜~…]+/gu, ' ').replace(/\s+/gu, ' ').trim();
       if (!q0 || RE.greet.test(q0) || RE.thanks.test(q0) || RE.praise.test(q0) || RE.help.test(q0)) return askLocal(input);
       if (!aiOn() || !records.length) { const r0 = await askLocal(input); try { learnAfter(raw, lastCand); } catch (e) { /* noop */ } return r0; }
@@ -2717,6 +2840,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
     return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, nick: nickName, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); gmSet('c33.buri.ml.gemini', null); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; },
+      fixCites, pageContext, pageHead,
       mem: { get: memGet, add: (t) => memAdd(t), del: memDel, topics: topTopics, setOn: (on) => { const m = memGet(); m.on = !!on; memSet(m); }, clear: () => { memSet({ on: memGet().on, notes: [], topics: {} }); userPref = { authors: {}, tags: {} }; savePref(); }, prefs: () => ({ authors: getTopLearned('authors').slice(0, 8), tags: getTopLearned('tags').slice(0, 8) }) },
       warm: () => { try { if (ready('gemini')) gemModels(); team().forEach((id) => { if (TEAM[id] && TEAM[id].base) oaiModels(id); }); spaceId(); } catch (e) { /* noop */ } } };
   })();
@@ -3082,6 +3206,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       mk('div', 'bs-lb', 'メイン（ひとつの時に答える AI・相談の時のまとめ役）', box);
       const pv = mk('select', 'bs-sel', null, box);
       BURI.PROVIDERS.forEach(([v, l]) => { const o = mk('option', null, l, pv); o.value = v; if (v === A.provider) o.selected = true; });
+      mk('div', 'bs-lb', 'まとめ役（相談の時、下書きを一つにする AI）', box);
+      const ag = mk('select', 'bs-sel', null, box);
+      [['auto', 'おまかせ（NVIDIA があれば NVIDIA・いちばん賢い）'], ['main', 'メインと同じ']].concat(BURI.TEAM_IDS.filter((id) => id !== 'chrome').map((id) => [id, T[id].name])).forEach(([v, l]) => { const o = mk('option', null, l, ag); o.value = v; if (v === (A.agg || 'auto')) o.selected = true; });
       mk('div', 'bs-lb', '相談の人数（まとめ役も入れて。多いほど賢く、そのぶん遅く・回数を使う）', box);
       const sz = mk('select', 'bs-sel', null, box);
       [[2, '2 人（速い）'], [3, '3 人'], [4, '4 人（おすすめ）'], [5, '5 人'], [6, '6 人'], [9, '全員']].forEach(([v, l]) => { const o = mk('option', null, l, sz); o.value = v; if (v === A.size) o.selected = true; });
@@ -3136,6 +3263,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         A.moa = moa; BURI.gmSet('c33.buri.moa', moa);
         A.size = Number(sz.value) || 4; BURI.gmSet('c33.buri.size', A.size);
         A.provider = pv.value; BURI.gmSet('c33.buri.provider', A.provider);
+        A.agg = ag.value; BURI.gmSet('c33.buri.agg', A.agg);
         A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web);
         NS.on = nc.checked; NS.auto = ac.checked; BURI.gmSet('c33.buri.ns', NS.on); BURI.gmSet('c33.buri.nsAuto', NS.auto);
         NS.nx = xc.checked; BURI.gmSet('c33.buri.nx', NS.nx);
@@ -3239,6 +3367,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       brain: '<path d="M9.2 4.6a2.8 2.8 0 0 0-2.9 2.6 2.9 2.9 0 0 0-1.6 5 3 3 0 0 0 1.7 4.6 2.7 2.7 0 0 0 2.8 2.6h.6V4.7Z"/><path d="M14.8 4.6a2.8 2.8 0 0 1 2.9 2.6 2.9 2.9 0 0 1 1.6 5 3 3 0 0 1-1.7 4.6 2.7 2.7 0 0 1-2.8 2.6h-.6V4.7Z"/><path d="M9.8 9.5H8.2M14.2 9.5h1.6M9.8 14.2H8M14.2 14.2H16"/>',
       plus: '<path d="M12 5.5v13M5.5 12h13"/>',
       trash: '<path d="M5 7h14"/><path d="M9.5 7V5.2h5V7"/><path d="M7 7l.8 12h8.4L17 7"/>',
+      md: '<rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M6.5 15V9l2.5 3 2.5-3v6"/><path d="M16.5 9v6M14.5 13l2 2 2-2"/>',
+      page: '<path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5h-10A.5.5 0 0 1 7 20Z"/><path d="M14 3.5V8h4"/><path d="M9.5 12.5h5M9.5 15.5h5"/>',
       spark: '<path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1-5.1-1.9 5.1-1.9Z"/><path d="M18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7Z"/>'
     };
     const MOD = IS_MAC ? '⌘' : 'Ctrl';
@@ -3368,6 +3498,20 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-nsp .np-a li::marker { color: var(--b-ter); }
 #c33-nsp .np-a .b-face { padding: 0 2px; }
 @keyframes npIn { from { opacity: 0; transform: translateY(4px); } }
+#c33-nsp .np-fn { display: inline-flex; gap: 2px; margin-inline-start: 1px; vertical-align: super; font-size: 0; line-height: 0; }
+#c33-nsp .np-fnum { display: inline-grid; place-items: center; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 7px; font-size: 9.5px; font-weight: 700; line-height: 14px; text-decoration: none; cursor: pointer;
+  color: var(--b-acc); background: color-mix(in srgb, var(--b-acc) 10%, transparent); transition: background .15s, color .15s; }
+#c33-nsp .np-fnum.n { color: #2b8a5e; background: color-mix(in srgb, var(--b-ok) 12%, transparent); }
+#c33-nsp .np-fnum:hover { color: #fff; background: var(--b-acc); }
+#c33-nsp .np-fnum.n:hover { background: var(--b-ok); }
+#c33-nsp .np-refs { display: flex; flex-direction: column; gap: 2px; padding: 8px; border-radius: 12px; background: var(--b-soft); }
+#c33-nsp .np-refs-h { display: flex; align-items: center; gap: 6px; padding: 0 4px 4px; font-size: 11px; font-weight: 650; letter-spacing: .04em; color: var(--b-ter); }
+#c33-nsp .np-ref { display: flex; align-items: flex-start; gap: 8px; padding: 5px 6px; border-radius: 8px; color: var(--b-ink); text-decoration: none; font-size: 12.5px; line-height: 1.45; transition: background .15s; }
+#c33-nsp a.np-ref:hover { background: var(--b-bg); }
+#c33-nsp .np-ref b { flex: none; display: grid; place-items: center; min-width: 18px; height: 18px; margin-top: 1px; border-radius: 9px; font-size: 10px; font-weight: 700; color: var(--b-acc); background: color-mix(in srgb, var(--b-acc) 12%, transparent); }
+#c33-nsp .np-ref b.n { color: #2b8a5e; background: color-mix(in srgb, var(--b-ok) 14%, transparent); }
+#c33-nsp .np-ref span { min-width: 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+#c33-nsp .np-ref small { margin-inline-start: 6px; font-size: 10.5px; color: var(--b-ter); }
 #c33-nsp .np-cite { display: inline-flex; align-items: center; margin: 0 1px; padding: 0 5px; height: 16px; border-radius: 5px; vertical-align: 2px; font-size: 10px; font-weight: 650; text-decoration: none; cursor: pointer;
   background: color-mix(in srgb, var(--b-acc) 11%, transparent); color: var(--b-acc); transition: background .15s; }
 #c33-nsp .np-cite.n { background: color-mix(in srgb, var(--b-ok) 13%, transparent); color: #2b8a5e; }
@@ -3444,6 +3588,15 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 .bs-card .bs-btns button.pri { box-shadow: none; background: var(--lm-accent, #2783de); color: #fff; font-weight: 600; }
 .bs-card .bs-out { white-space: pre-wrap; font-size: 11.5px; line-height: 1.6; color: var(--c-texSec, #787774); }
 /* 覚えたこと */
+#c33-nsp .np-pagecard { display: flex; flex-direction: column; gap: 9px; margin-top: -6px; padding: 12px; border-radius: 13px; background: linear-gradient(135deg, color-mix(in srgb, var(--b-acc) 6%, var(--b-bg)), var(--b-bg)); box-shadow: inset 0 0 0 1px var(--b-line); }
+#c33-nsp .np-pt { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--b-sub); }
+#c33-nsp .np-pt b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; font-weight: 650; color: var(--b-ink); }
+#c33-nsp .np-logrow { align-items: flex-start; }
+#c33-nsp .np-logrow .b-face { flex: none; padding: 1px 7px; border-radius: 999px; font-size: 10.5px; background: var(--b-soft); }
+#c33-nsp .np-logrow span { display: flex; flex-direction: column; gap: 1px; white-space: normal; }
+#c33-nsp .np-logrow b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-logrow small { font-size: 11.5px; color: var(--b-ter); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-nsp .np-time { flex: none; font-style: normal; font-size: 11px; color: var(--b-ter); }
 #c33-nsp .np-mem { display: flex; flex-direction: column; gap: 6px; }
 #c33-nsp .np-note { display: flex; align-items: flex-start; gap: 8px; padding: 8px 8px 8px 12px; border-radius: 11px; background: var(--b-bg); box-shadow: inset 0 0 0 1px var(--b-line); font-size: 13px; line-height: 1.6; }
 #c33-nsp .np-note span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
@@ -3556,6 +3709,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
     function nsChips(host, cls, onPick) {
       const w = mk('div', cls, null, host);
       const add = (q, icon) => { const b = mk('button', null, null, w); b.type = 'button'; b.title = q; if (icon === 'h') b.innerHTML = svg('clock'); else mk('i', null, icon, b); b.append(q); b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onPick(q); }); };
+      try { if (BURI.pageHead()) add('このページを要約して', '📄'); } catch (e) { /* noop */ }
       hist().slice(0, 3).forEach((q) => add(q, 'h'));
       EXAMPLES.filter(([, q]) => !hist().includes(q)).slice(0, Math.max(1, 4 - Math.min(3, hist().length))).forEach(([i, q]) => add(q, i));
       return w;
@@ -3595,6 +3749,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const tools = mk('div', 'np-tools', null, top);
       const bHome = ib(tools, 'home', 'ホーム', () => nsHome());
       const bNew = ib(tools, 'edit', '新しい話', () => { nsConv.length = 0; BURI.aiReset(); nsHome(); });
+      const bLog = ib(tools, 'clock', 'これまでの答え（履歴）', () => nsHistory());
       const bMem = ib(tools, 'brain', 'ぶりが覚えたこと（学習）', () => nsMemory());
       const bSet = ib(tools, 'tune', 'AI の設定', () => nsSettings());
       mk('span', 'np-sep', null, tools);
@@ -3626,7 +3781,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       });
       send.addEventListener('mousedown', (e) => e.preventDefault());
       send.addEventListener('click', (e) => { e.preventDefault(); go(); });
-      Object.assign(p, { __log: log, __face: face, __dot: dot, __stx: stx, __fin: fin, __hr: hr, __grow: grow, __tabs: { home: bHome, set: bSet, new: bNew, mem: bMem }, __view: '' });
+      Object.assign(p, { __log: log, __face: face, __dot: dot, __stx: stx, __fin: fin, __hr: hr, __grow: grow, __tabs: { home: bHome, set: bSet, new: bNew, mem: bMem, log: bLog }, __view: '' });
       fontLock(p);
       return p;
     }
@@ -3686,8 +3841,21 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       sp('本棚 ' + (s.count || 0) + ' 件', !!s.count);
       sp(BURI.moaOn() ? 'MoA ' + BURI.team().length + ' 人' : BURI.aiOn() ? BURI.aiName() : 'AI なし', BURI.aiOn());
       sp(BURI.AI.web ? 'Web も調べる' : 'Web は調べない', BURI.AI.web);
+      const lms = +document.documentElement.getAttribute('data-c16c-ms') || 0;   // v67: 16c の幕が開くまでの時間（読み込みの速さ）
+      if (lms) sp('読み込み ' + (lms / 1000).toFixed(1) + ' 秒', lms <= 2000);
       const sb = mk('button', null, null, st); sb.type = 'button'; sb.innerHTML = svg('tune', 12); sb.append('設定'); sb.addEventListener('click', (e) => { e.preventDefault(); nsSettings(); });
       if (!s.count) { const b2 = mk('button', null, null, st); b2.type = 'button'; b2.innerHTML = svg('book', 12); b2.append('本棚を取り込む'); b2.addEventListener('click', (e) => { e.preventDefault(); file.click(); }); }
+      const pg = BURI.pageHead && BURI.pageHead();
+      if (pg) {
+        mk('div', 'np-sec', 'いま開いているページ', log);
+        const w = mk('div', 'np-pagecard', null, log);
+        const t = mk('div', 'np-pt', null, w); t.innerHTML = svg('page', 15); mk('b', null, pg.title, t);
+        const acts = mk('div', 'np-tags', null, w);
+        [['要約して', 'このページを要約して'], ['大事な所は？', 'このページでいちばん大事な所は？'], ['質問する…', '']].forEach(([lb, qq]) => {
+          const b = mk('button', 'np-pill', null, acts); b.type = 'button'; b.append(lb);
+          b.addEventListener('click', (e) => { e.preventDefault(); if (qq) nsAsk(qq, true); else { const f = nsPane.__fin; f.value = 'このページで、'; nsPane.__grow(); f.dispatchEvent(new Event('input')); f.focus(); } });
+        });
+      }
       if (nsConv.length && Date.now() - nsConvAt < 30 * 60e3) {
         mk('div', 'np-sec', 'さっきの続き', log);
         const rows = mk('div', 'np-rows', null, log);
@@ -3711,6 +3879,50 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       nsView('set'); nsMood('think');
       const log = nsPane.__log; log.textContent = '';
       aiSettings(log, (t) => { nsHome(); const n = mk('div', 'np-sub', t, nsPane.__log); nsPane.__log.insertBefore(n, nsPane.__log.children[2] || null); nsMood('happy'); }, () => nsHome());
+    }
+    /* v67: 履歴 — これまでの答えを 40 件まで残す（閉じても・次の日でも開ける）。中身は ScriptCat の保存場所だけ */
+    const LOG_K = 'c33.buri.log';
+    const logGet = () => { const l = BURI.gmGet(LOG_K, []); return Array.isArray(l) ? l : []; };
+    function logAdd(q, res) {
+      if (!res || !res.text || res.learned) return;
+      const trimRefs = (a) => (a || []).slice(0, 14).map((x) => ({ title: String(x.title || '').slice(0, 120), url: x.url || '' }));
+      const e = { q, at: Date.now(), text: String(res.text).slice(0, 6000), mood: res.mood || '', refs: res.refs ? { N: trimRefs(res.refs.N), W: trimRefs(res.refs.W) } : null,
+        cards: (res.cards || []).slice(0, 6).map((c) => ({ title: c.title, url: c.url, type: c.type })), chips: (res.chips || []).slice(0, 4),
+        moa: res.moa ? { who: res.moa.who, merged: res.moa.merged, model: res.moa.model, drafts: (res.moa.drafts || []).map((d) => ({ id: d.id, name: d.name, model: d.model, err: d.err, text: String(d.text || '').slice(0, 1500) })) } : null };
+      const l = logGet().filter((x) => x.q !== q || Date.now() - x.at > 6e5);
+      l.unshift(e); BURI.gmSet(LOG_K, l.slice(0, 40));
+    }
+    function nsHistory(filter) {
+      if (!nsPane || !nsShowPane(true)) return;
+      nsView('log'); nsMood('think'); nsStatus('これまでの答え');
+      const log = nsPane.__log; log.textContent = '';
+      const hero = mk('div', 'np-hero', null, log);
+      mk('div', 'np-hello', 'これまでの答え', hero);
+      const all = logGet();
+      mk('div', 'np-sub', all.length ? all.length + ' 件。押すと、その時の答えをもう一度開きます。' : 'まだありません。ぶりに聞くと、ここに残ります。', hero);
+      if (!all.length) return;
+      const box = mk('div', 'np-addm', null, log);
+      const fi = mk('input', null, null, box); fi.type = 'text'; fi.placeholder = '履歴を探す…'; fi.value = filter || ''; fi.setAttribute('aria-label', '履歴を探す');
+      const list = mk('div', 'np-rows', null, log);
+      const draw = () => {
+        list.textContent = '';
+        const k = fi.value.trim().toLowerCase();
+        let day = '';
+        all.filter((x) => !k || (x.q + ' ' + x.text).toLowerCase().includes(k)).forEach((x) => {
+          const d = new Date(x.at), dl = d.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' });
+          if (dl !== day) { day = dl; mk('div', 'np-sec', dl, list); }
+          const r = mk('button', 'np-row np-logrow', null, list); r.type = 'button';
+          faceEl(r, x.mood && FACE[x.mood] ? x.mood : 'normal');
+          const t = mk('span', null, null, r); mk('b', null, x.q, t); mk('small', null, String(x.text).replace(/\[\[[^\]]*\]\]|\[[NW]\d[^\]]*\]/g, '').replace(/\s+/g, ' ').slice(0, 70), t);
+          mk('i', 'np-time', d.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' }), r);
+          r.addEventListener('click', (e) => { e.preventDefault(); nsView('chat'); log.textContent = ''; const ent = nsEntry(log, x.q, x, true); nsMood(ent.mood); nsStatus(new Date(x.at).toLocaleString('ja-JP') + ' の答え'); });
+        });
+      };
+      fi.addEventListener('input', draw);
+      draw();
+      const btns = mk('div', 'np-tags', null, log);
+      const clr = mk('button', 'np-btn ghost', null, btns); clr.type = 'button'; clr.innerHTML = svg('trash', 14); clr.append('履歴を消す');
+      clr.addEventListener('click', (e) => { e.preventDefault(); if (clr.dataset.sure) { BURI.gmSet(LOG_K, []); nsHistory(); } else { clr.dataset.sure = '1'; clr.lastChild.textContent = 'もう一度押すと全部消えます'; } });
     }
     /* v57: 学習 — ぶりが覚えたこと（メモ・よく話す話題・よく聞く著者／分類）。見て・足して・消せる */
     function nsMemory() {
@@ -3756,7 +3968,9 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
     }
     /* 本文を読みやすく: 見出し（#・■）/ 箇条書き（・-・*・1.）/ **太字** / 出典の印 [N1][W2]（押すと開く）/ 顔文字は丸ゴシック */
     const RE_FACE = /(?:ε\( ε,'-'\))?(?:🐟)?(?:\('-' [^()\s]{1,3}\)з ?)+[✨♥♡💧💦💢🔥♪♬👑…\/･～〜!！📡💥🔍🎉🌊🥚👍😭🤦🌙💨⚡]*/gu;
-    function richText(host, text, refs) {
+    function richText(host, text, refs, cited) {
+      cited = cited || [];
+      const numOf = (k, ref) => { let i = cited.findIndex((c) => c.k === k); if (i < 0) { cited.push({ k, ref }); i = cited.length - 1; } return i + 1; };
       const lines = String(text || '').replace(/\r/g, '').split('\n');
       let list = null, para = null;
       const faces = (el, s) => { let i = 0, m; RE_FACE.lastIndex = 0; while ((m = RE_FACE.exec(s))) { if (m.index > i) el.append(s.slice(i, m.index)); mk('span', 'b-face', m[0], el); i = RE_FACE.lastIndex; } if (i < s.length) el.append(s.slice(i)); };
@@ -3766,13 +3980,19 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
           if (m.index > i) faces(el, s.slice(i, m.index));
           if (m[1]) faces(mk('strong', null, null, el), m[1]);
           else {
+            /* v67: 出典は小さな脚注番号（¹ ²）。番号は答えの中で出てきた順。下に同じ番号の出典の一覧 */
             let kind = 'N';
+            const sup = mk('sup', 'np-fn', null, el);
             (m[2] || m[3]).split(/\s*[,，、]\s*/).forEach((tk) => {
               const mm = /^([NW]?)(\d+)$/.exec(tk); if (!mm) return; kind = mm[1] || kind;
               const ref = refs && refs[kind] && refs[kind][Number(mm[2]) - 1];
-              const a = mk(ref && ref.url ? 'a' : 'span', 'np-cite' + (kind === 'N' ? ' n' : ''), kind + mm[2], el);
-              if (ref) { a.title = ref.title; if (ref.url) { a.href = ref.url; a.rel = 'noopener noreferrer'; if (!ref.url.startsWith(location.origin)) a.target = '_blank'; } }
+              if (!ref) return;
+              const n = numOf(kind + mm[2], ref);
+              const a = mk(ref.url ? 'a' : 'span', 'np-fnum' + (kind === 'N' ? ' n' : ''), String(n), sup);
+              a.title = ref.title + (ref.url ? '\n' + srcHost(ref.url) : '');
+              if (ref.url) { a.href = ref.url; a.rel = 'noopener noreferrer'; if (!ref.url.startsWith(location.origin)) a.target = '_blank'; }
             });
+            if (!sup.childNodes.length) sup.remove();
           }
           i = re.lastIndex;
         }
@@ -3811,6 +4031,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         }
       };
     }
+    const srcHost = (u) => { try { const h = new URL(u).hostname.replace(/^www\./, ''); return h.endsWith('notion.so') || h.endsWith('notion.com') || u.startsWith(location.origin) ? 'Notion' : h; } catch (e) { return ''; } };
     function favOf(c) {
       const lab = srcLabel(c);
       if (lab === 'Notion') return ['N', '#37352f'];
@@ -3826,10 +4047,22 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       mk('span', null, res.moa && res.moa.who ? (res.moa.merged ? res.moa.who + ' がまとめました' : res.moa.who) : 'ぶり', who);
       if (res.learned) { const l = mk('span', 'np-learned', null, who); l.innerHTML = svg('brain', 12); l.append('学習'); }
       const a = mk('div', 'np-a', null, msg);
-      richText(a, res.text || '', res.refs);
+      const cited = [];
+      richText(a, res.text || '', res.refs, cited);
       if (!animate) [...a.children].forEach((el) => { el.style.animation = 'none'; });
       const cards = (res.cards || []).filter((c) => c.url).slice(0, 8);
-      if (cards.length) {
+      if (cited.length) {
+        /* 出典の一覧（答えの中の番号と同じ） */
+        const box = mk('div', 'np-refs', null, msg);
+        const hd = mk('div', 'np-refs-h', null, box); hd.innerHTML = svg('book', 13); hd.append('出典 ' + cited.length);
+        cited.forEach((c, i) => {
+          const r = c.ref; const row = mk(r.url ? 'a' : 'div', 'np-ref', null, box);
+          if (r.url) { row.href = r.url; row.rel = 'noopener noreferrer'; if (!r.url.startsWith(location.origin)) row.target = '_blank'; }
+          mk('b', c.k[0] === 'N' ? 'n' : '', String(i + 1), row);
+          const t = mk('span', null, String(r.title || '').replace(/（Wikipedia）$/, ''), row);
+          mk('small', null, r.url ? srcHost(r.url) : '本棚', t);
+        });
+      } else if (cards.length) {
         const src = mk('div', 'np-src', null, msg);
         cards.forEach((c) => {
           const l = mk('a', 'np-s', null, src); l.href = c.url; l.rel = 'noopener noreferrer'; l.title = c.title;
@@ -3841,6 +4074,11 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const bar = mk('div', 'np-bar', null, msg);
       ib(bar, 'copy', 'コピー', (b) => { try { navigator.clipboard.writeText(res.text || ''); b.innerHTML = svg('check'); setTimeout(() => { b.innerHTML = svg('copy'); }, 1400); } catch (x) { /* noop */ } });
       ib(bar, 'retry', 'もう一度', () => { nsCache.delete(q); nsAsk(q, true, true); });
+      ib(bar, 'md', 'Markdown でコピー（出典つき）', (b) => {
+        const md = String(res.text || '').replace(/\[((?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*)\]/g, (m0, ids) => ids.split(/\s*[,，、]\s*/).map((k) => { const i = cited.findIndex((c) => c.k === k); return i >= 0 ? '[^' + (i + 1) + ']' : ''; }).join(''))
+          + (cited.length ? '\n\n' + cited.map((c, i) => '[^' + (i + 1) + ']: ' + (c.ref.title || '') + (c.ref.url ? ' <' + c.ref.url + '>' : '')).join('\n') : '');
+        try { navigator.clipboard.writeText('## ' + q + '\n\n' + md); b.innerHTML = svg('check'); setTimeout(() => { b.innerHTML = svg('md'); }, 1400); } catch (x) { /* noop */ }
+      });
       const m = res.moa;
       if (m && m.drafts && m.drafts.length > 1) {
         const t = mk('button', 'np-team', null, bar); t.type = 'button';
@@ -3852,7 +4090,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         m.drafts.forEach((x) => { const d = mk('div', 'np-draft', null, dr); mk('b', null, x.name + (x.model ? ' · ' + x.model : ''), d); d.append(x.text || '（' + x.err + '）'); });
         t.addEventListener('click', (e) => { e.preventDefault(); dr.classList.toggle('on'); });
       }
-      const nx = [{ label: 'もっと詳しく', q: q.replace(/(について)?(教えて|おしえて)$/, '') + 'をもっと詳しく' }].concat((res.chips || []).filter((c) => c && c.q)).slice(0, 4);
+      const nx = (res.chips || []).filter((c) => c && c.q).concat([{ label: 'もっと詳しく', q: q.replace(/(について)?(教えて|おしえて)$/, '') + 'をもっと詳しく' }]).slice(0, 4);
       const w = mk('div', 'np-next', null, msg);
       const seen = new Set();
       nx.filter((c) => !seen.has(c.label) && seen.add(c.label)).forEach((c) => { const b = mk('button', 'np-pill', null, w); b.type = 'button'; b.append(c.label); b.insertAdjacentHTML('beforeend', svg('arrow', 13)); b.addEventListener('click', (e) => { e.preventDefault(); nsAsk(c.q, true); }); });
@@ -3911,6 +4149,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         nsPane.classList.remove('busy'); document.documentElement.removeAttribute('data-c33-ns-busy');
         qb.remove(); think.box.remove();
         nsConv.push({ q, res }); nsConvAt = Date.now();
+        try { logAdd(q, res); } catch (e) { /* noop */ }
         const ent = nsEntry(log, q, res, true);
         nsMood(ent.mood); nsStatus();
         nsPane.__fin.focus({ preventScroll: true });
@@ -4043,7 +4282,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       e.preventDefault(); e.stopImmediatePropagation();
       nsAsk(nsInp.value);
     }, true);
-    setInterval(nsTick, 250);
+    setInterval(() => { if (!document.hidden) nsTick(); }, 400);
     /* v57: 速く — 検索画面が出た瞬間に B.U.R.I を入れる（250ms ごとの見回りを待たない） */
     let nsMoPend = false;
     new MutationObserver(() => {
@@ -4053,7 +4292,13 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
     }).observe(document.body || document.documentElement, { childList: true, subtree: true });
 
     window.addEventListener('resize', layout);
-    setInterval(layout, 150);
+    /* v67: 軽く — 位置合わせは 0.45 秒おき＋サイドバーの変化・スクロール・大きさの変化の時だけ（以前は 0.15 秒おきに常に） */
+    let layRaf = 0;
+    const layoutSoon = () => { if (layRaf) return; layRaf = requestAnimationFrame(() => { layRaf = 0; layout(); }); };
+    setInterval(() => { if (!document.hidden && (panelOpen || !header.hidden || floatMode)) layoutSoon(); }, 450);
+    setInterval(() => { if (!document.hidden) layoutSoon(); }, 1500);
+    document.addEventListener('scroll', layoutSoon, true);
+    window.__c33LayoutSoon = layoutSoon;
 
     BURI.restore();
     updState();

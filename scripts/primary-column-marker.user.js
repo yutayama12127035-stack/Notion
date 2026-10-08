@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　⁰⁹ _ Primary Column Marker
 // @namespace    https://cordivestium.local/
-// @version      11.13.6
-// @description  v11.13.6: 題字とリレーションを「形」で見分ける — 題字＝property-value の直下の段に「アイコン（role=button）の入れ物＋文字」、リレーション＝折り返す段（flex-wrap）の中の inline のチップ（アイコン＋名前）。今の Notion は題字の文字に data-token-index が無く、題字が先頭の列とも限らない（Medias の Index は Works が 2 列目）ため、題字をリレーションと取り違えて印を外していた。Notionの主列だけをマーク。広い検出を維持したまま、relation除外とhover差し込みUIの兄弟要素分離を行い、hover-ui-host誤付与を防ぐ版。 v1.13.6: セルが描き直されて data-token-index が消えたとき、relationLike と誤判定して適用をやめる関門を緩めた（TUNING.RELAX_RELATION_BAIL で戻せる）。
+// @version      12.0.0
+// @description  v12.0.0: 軽く — 表に関わる変化の時だけ走査し、走査は最短 160ms おき（読み込み中の JS の時間が約 1/10 に）。v11.13.6: 題字とリレーションを「形」で見分ける — 題字＝property-value の直下の段に「アイコン（role=button）の入れ物＋文字」、リレーション＝折り返す段（flex-wrap）の中の inline のチップ（アイコン＋名前）。今の Notion は題字の文字に data-token-index が無く、題字が先頭の列とも限らない（Medias の Index は Works が 2 列目）ため、題字をリレーションと取り違えて印を外していた。Notionの主列だけをマーク。広い検出を維持したまま、relation除外とhover差し込みUIの兄弟要素分離を行い、hover-ui-host誤付与を防ぐ版。 v1.13.6: セルが描き直されて data-token-index が消えたとき、relationLike と誤判定して適用をやめる関門を緩めた（TUNING.RELAX_RELATION_BAIL で戻せる）。
 // @author       Cordivestium
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -63,7 +63,7 @@
      * ============================================================
      */
 
-    const VERSION = '11.13.6';
+    const VERSION = '12.0.0';
 
     const API_NAME =
         '__cordivestiumWorksTitleTypography__';
@@ -2723,10 +2723,18 @@
 
         state.scanScheduled = true;
 
-        requestAnimationFrame(() => {
+        /*
+         * v12.0.0: 軽く — 走査は最短 160ms おき（前回から時間が空いていれば次の描画の前にすぐ）。
+         * 以前は変化のたびに毎フレーム全部の表を測り直していた（読み込み中だけで 1.5 秒）。
+         */
+        const wait = Math.max(0, 160 - (performance.now() - (state.lastScanPerf || 0)));
+        const run = () => {
             state.scanScheduled = false;
+            state.lastScanPerf = performance.now();
             scan(reason);
-        });
+        };
+        if (wait <= 0) requestAnimationFrame(run);
+        else setTimeout(() => requestAnimationFrame(run), wait);
     }
 
     function clearTimers() {
@@ -2767,6 +2775,45 @@
      * ============================================================
      */
 
+    const TABLE_SEL =
+        '.notion-table-view, .notion-collection_view-block, .notion-collection-view-body, [data-col-index], [data-testid="property-value"], .notion-table-view-header-row';
+    const IGNORE_SEL =
+        '.notion-sidebar-container, .notion-topbar, .notion-overlay-container:not(:has(.notion-table-view)), [id^="c33"], [id^="c16"], .m9, .c26-ui, [data-constellucentia-root]';
+
+    function touchesTable(node) {
+        if (!(node instanceof Element)) {
+            return false;
+        }
+        return node.matches(TABLE_SEL) || !!node.querySelector(TABLE_SEL);
+    }
+
+    function isTableMutation(mutation) {
+        const target =
+            mutation.target instanceof Element
+                ? mutation.target
+                : mutation.target && mutation.target.parentElement;
+
+        if (!target) {
+            return false;
+        }
+        if (target.closest(IGNORE_SEL)) {
+            return false;
+        }
+        if (mutation.type === 'characterData') {
+            return !!target.closest('.notion-table-view-header-row, [data-col-index], [role="columnheader"]');
+        }
+        if (target.closest(TABLE_SEL)) {
+            return mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0;
+        }
+        for (const n of mutation.addedNodes) {
+            if (touchesTable(n)) return true;
+        }
+        for (const n of mutation.removedNodes) {
+            if (touchesTable(n)) return true;
+        }
+        return false;
+    }
+
     function installObserver() {
 
         if (state.observer) {
@@ -2782,25 +2829,12 @@
                     return;
                 }
 
+                /*
+                 * v12.0.0: 表（DB のビュー）に関わる変化だけを見る。
+                 * サイドバー・上の帯・入力中の本文・他の柱の小窓などの変化では走査しない。
+                 */
                 const needsScan =
-                    mutations.some(mutation => {
-                        return (
-                            mutation.type ===
-                                'characterData' ||
-                            (
-                                mutation.type ===
-                                    'childList' &&
-                                (
-                                    mutation
-                                        .addedNodes
-                                        .length > 0 ||
-                                    mutation
-                                        .removedNodes
-                                        .length > 0
-                                )
-                            )
-                        );
-                    });
+                    mutations.some(isTableMutation);
 
                 if (needsScan) {
                     scheduleScan('mutation');
