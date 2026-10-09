@@ -167,6 +167,9 @@
   if (window.top !== window.self) return;
   const VERSION = '87.0.0';
   const TAG = '[³³ v' + VERSION + ']';
+  /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
+     ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
+  const FACE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" viewBox="0 0 3318 1448"><path d="M291 1315Q275 1325 259 1322Q243 1318 232 1302Q163 1201 124 1084Q85 966 85 837Q85 709 124 591Q163 473 232 372Q243 356 259 353Q275 350 291 360Q305 368 308 384Q310 401 301 415Q237 511 202 614Q167 716 167 837Q167 958 202 1060Q237 1163 301 1260Q310 1273 308 1290Q305 1306 291 1315ZM673 951Q657 951 644 938Q632 926 632 910Q632 893 644 880Q657 868 673 868H921Q938 868 950 880Q963 893 963 910Q963 926 950 938Q938 951 921 951ZM2315 1245Q2302 1245 2292 1236Q2282 1226 2282 1213V665Q2249 667 2242 679Q2234 691 2234 723V1096Q2234 1112 2226 1122Q2217 1131 2201 1131Q2186 1131 2176 1122Q2167 1112 2167 1096V715Q2167 671 2176 646Q2186 620 2211 608Q2236 596 2282 594V460H2176Q2162 460 2152 450Q2142 440 2142 427Q2142 413 2152 403Q2162 393 2176 393H2459Q2473 393 2483 403Q2493 413 2493 427Q2493 440 2483 450Q2473 460 2459 460H2348V594Q2397 596 2422 608Q2448 619 2458 644Q2468 670 2468 715V1030Q2468 1082 2444 1102Q2421 1122 2373 1122Q2357 1122 2348 1110V1213Q2348 1226 2338 1236Q2328 1245 2315 1245ZM1718 962Q1654 962 1625 935Q1596 908 1596 851V693Q1596 635 1625 608Q1654 582 1718 582H1734Q1742 567 1753 548Q1764 528 1771 516Q1788 484 1751 484H1703Q1681 524 1657 560Q1633 597 1613 620Q1603 632 1588 634Q1572 637 1560 627Q1549 618 1548 604Q1546 589 1555 579Q1573 559 1593 530Q1613 500 1633 466Q1653 432 1669 400Q1685 368 1694 343Q1699 327 1712 320Q1725 314 1740 319Q1754 323 1760 336Q1767 348 1762 362Q1757 375 1750 390Q1743 406 1735 423H1785Q1829 423 1848 452Q1866 481 1845 519Q1838 532 1828 551Q1817 570 1809 584Q1895 599 1895 693V851Q1895 908 1866 935Q1836 962 1772 962ZM2033 1151Q1977 1151 1956 1129Q1934 1107 1934 1048V574Q1934 530 1945 508Q1956 485 1981 477Q1986 461 1992 440Q1998 418 2004 396Q2009 375 2012 361Q2015 346 2028 338Q2040 331 2055 335Q2070 339 2077 350Q2084 362 2080 376Q2075 392 2066 420Q2057 448 2049 471Q2096 474 2114 496Q2133 518 2133 574V652Q2133 710 2109 732Q2085 754 2026 754H2000V848H2030Q2086 848 2110 869Q2135 890 2135 948V1048Q2135 1107 2113 1129Q2091 1151 2033 1151ZM2348 1063Q2357 1054 2371 1053Q2390 1051 2395 1046Q2400 1040 2400 1019V723Q2400 689 2392 678Q2384 666 2348 665ZM1565 1216Q1552 1212 1546 1200Q1539 1188 1545 1174Q1553 1154 1562 1127Q1570 1100 1578 1072Q1586 1044 1590 1024Q1594 1010 1604 1004Q1615 998 1628 1000Q1642 1003 1649 1014Q1656 1024 1654 1039Q1650 1061 1642 1090Q1634 1119 1626 1146Q1618 1173 1611 1193Q1605 1209 1592 1214Q1579 1220 1565 1216ZM1704 1218Q1691 1218 1682 1210Q1672 1201 1673 1186Q1675 1167 1676 1139Q1676 1111 1676 1082Q1677 1054 1676 1035Q1676 1021 1684 1014Q1692 1006 1704 1005Q1732 1005 1734 1034Q1735 1054 1736 1082Q1736 1110 1736 1138Q1737 1165 1736 1185Q1736 1201 1727 1210Q1718 1218 1704 1218ZM1815 1197Q1803 1199 1792 1192Q1782 1186 1780 1173Q1779 1154 1775 1128Q1771 1102 1766 1076Q1762 1050 1758 1031Q1756 1018 1763 1010Q1770 1002 1780 1000Q1791 997 1800 1002Q1810 1008 1813 1021Q1818 1039 1823 1065Q1828 1091 1832 1116Q1837 1142 1839 1161Q1841 1175 1834 1185Q1828 1195 1815 1197ZM2034 1079Q2055 1079 2062 1070Q2069 1061 2069 1042V951Q2069 929 2061 922Q2053 914 2031 914H2000V1042Q2000 1061 2006 1070Q2013 1079 2034 1079ZM1919 1160Q1907 1164 1896 1159Q1885 1154 1881 1141Q1877 1125 1869 1102Q1861 1080 1853 1058Q1845 1035 1839 1020Q1834 1008 1840 998Q1845 989 1855 985Q1866 981 1876 985Q1887 989 1892 1002Q1899 1016 1908 1038Q1916 1060 1924 1082Q1933 1104 1938 1120Q1943 1134 1937 1144Q1931 1155 1919 1160ZM2000 687H2028Q2052 687 2060 680Q2068 672 2068 650V575Q2068 553 2061 545Q2054 537 2034 537Q2014 537 2007 545Q2000 553 2000 575ZM1774 742H1833V705Q1833 674 1820 661Q1806 648 1774 647ZM1659 742H1717V647Q1686 648 1672 662Q1659 675 1659 705ZM1774 897Q1806 896 1820 882Q1833 869 1833 838V804H1774ZM1717 897V804H1659V838Q1659 869 1672 882Q1686 895 1717 897ZM2585 1315Q2570 1306 2568 1290Q2565 1273 2574 1260Q2638 1163 2674 1060Q2709 958 2709 837Q2709 716 2674 614Q2638 511 2574 415Q2565 401 2568 384Q2570 368 2585 360Q2601 350 2617 353Q2633 356 2643 372Q2712 473 2751 591Q2790 709 2790 837Q2790 966 2751 1084Q2712 1201 2643 1302Q2633 1318 2617 1322Q2601 1325 2585 1315ZM3087 1171Q3031 1171 2990 1150Q2948 1130 2923 1087Q2911 1066 2918 1050Q2926 1034 2947 1027Q2967 1021 2980 1027Q2992 1033 3009 1052Q3033 1090 3087 1090Q3139 1090 3162 1070Q3184 1049 3184 1013Q3184 981 3156 961Q3128 941 3081 941Q3034 941 3034 901Q3034 862 3081 862Q3125 862 3148 843Q3170 824 3170 796Q3170 770 3149 752Q3128 734 3087 734Q3064 734 3047 744Q3030 753 3016 770Q3000 785 2986 790Q2972 796 2953 788Q2933 778 2928 762Q2922 745 2938 726Q2966 688 3005 670Q3044 653 3087 653Q3163 653 3212 689Q3262 725 3262 793Q3262 829 3238 861Q3213 893 3176 901Q3218 908 3248 942Q3277 975 3277 1019Q3277 1094 3226 1132Q3174 1171 3087 1171ZM427 409a33 33 0 0 1 66 0v253a33 33 0 0 1 -66 0zM1102 409a33 33 0 0 1 66 0v253a33 33 0 0 1 -66 0z"/></svg>';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
   /* v77: 16c の幕に「³³ が入っている」ことを知らせる。輪・検索窓・印が置けたら html[data-c33-ready]（幕はそれまで開かない） */
   try { document.documentElement.setAttribute('data-c33-boot', VERSION); } catch (e) { /* noop */ }
@@ -2012,7 +2015,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const name = nameOf(row) || '無題';
     const gid = team.getAttribute('data-c16-g') || OB.sel || '';
     const prev = NBS.met.find((m) => m.id === id32);
-    NBS.met = [{ id: id32, gid, name, icon, at: Date.now(), fresh: !prev }].concat(NBS.met.filter((m) => m.id !== id32)).slice(0, 12);
+    NBS.met = [{ id: id32, gid, name, icon, at: Date.now(), page: (NBS.pg || {})[id32] || '' }].concat(NBS.met.filter((m) => m.id !== id32)).slice(0, 12);
+    void prev;
     nbSave();
     nbMetSig = '';
   }
@@ -2047,7 +2051,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       ic.querySelectorAll('[role="button"], [tabindex]').forEach((x) => { x.removeAttribute('role'); x.removeAttribute('tabindex'); });
       const nm = document.createElement('span'); nm.className = 'mt-n'; nm.textContent = m.name;
       const tm = document.createElement('span'); tm.className = 'mt-t'; tm.textContent = nbAgo(m.at);
-      r.title = m.name + (g ? '（' + g.label + '）' : '');
+      r.title = m.name + (g ? '（' + g.label + '）' : '') + (m.page ? '\n最後に開いたページ: ' + m.page : '');
       r.append(gl, ic, nm, tm);
       L.appendChild(r);
     }
@@ -3994,6 +3998,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       const y = Math.round(ar.top + (ar.height - 40) / 2);
       try { stellaTitle(); } catch (e) { /* noop */ }
       setS(header, 'left', x + 'px'); setS(header, 'top', y + 'px'); setS(header, 'width', w + 'px');
+      try { pillFit(); } catch (e) { /* まだ作っていない */ }
       if (!panelOpen) { panel.hidden = true; return; }
       panel.hidden = false;
       const pt = y + 40 + 6;
@@ -4080,9 +4085,9 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       const opts = mk('div', 'bs-opts', null, box);
       const tog = (label, val) => { const l = mk('label', null, null, opts); const c = mk('input', null, null, l); c.type = 'checkbox'; c.checked = val; l.append(' ' + label); return c; };
       const wc = tog('Google と Wikipedia でも調べる（無料）', A.web);
-      const nc = tog('Notion の検索（⌘K）に B.U.R.I を出す', NS.on);
-      const ac = tog('検索で「〜について教えて」「〜とは？」と打ったら自動で答える（誤送信防止のため既定は切）', NS.auto);
-      const xc = tog('Notion の検索画面を次世代の見た目にする（ガラスの板・中央へすっと出る）', NS.nx !== false);
+      const nc = { checked: false };
+      const ac = { checked: false };
+      const xc = { checked: false };
       const lc = tog('ぶりレンズ — ページの文字を選ぶと ✦（説明・要約・言い換え・訳す・続き。⌃⌥J）', NS.lens !== false);
       const oc = tog('おかえりハイライト — 前に見た時から変わった段を光らせる（⌃⌥N で次へ。覚えるのは段の指紋だけ）', NS.okaeri !== false);
       mk('div', 'bs-nt', '無料枠では、送った質問と見つけた抜粋がそれぞれの会社の改善に使われることがあります。鍵はこの端末の ScriptCat の中だけに保存します。', box);
@@ -4142,7 +4147,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       aiSettings(b, (t) => addBuri({ text: t, cards: [], chips: [], actions: [] }), () => m.remove());
       scrollEnd();
     });
-    file.addEventListener('change', () => { const f = file.files && file.files[0]; file.value = ''; importFile(f); });
+    file.addEventListener('change', () => { const f = file.files && file.files[0]; file.value = ''; npImport(f); });
     panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closePanel(); } });
     document.addEventListener('pointerdown', (e) => {
       if (!panelOpen) return;
@@ -4151,14 +4156,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       closePanel();
     }, true);
     
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.altKey && e.code === 'KeyB') {
-        e.preventDefault(); e.stopPropagation();
-        floatMode = true;
-        input.focus(); openPanel();
-        layout();
-      }
-    }, true);
+    /* v97: ⌃⌥B は新しいパネル（下の Nebius ('-' 鰤)з セクション） */
     
     /* ============================================================
      *  v56: B.U.R.I × Notion の検索画面 — 作り直し（Figma 風の静かな UI・顔文字は丸ゴシック・気分で顔が変わる）
@@ -4168,7 +4166,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
      *   ・サイドの検索窓を押すと検索画面が開いてホーム（ε( ε,'-')('-' 鰤)з♥ のあいさつ・最近・聞いてみる）。
      * ============================================================ */
     if (!BURI.gmGet('c33.buri.v57', false)) { BURI.gmSet('c33.buri.nsAuto', false); BURI.gmSet('c33.buri.v57', true); }   // v57: 一度だけ「自動で答える」を切る（誤送信防止）
-    const NS = { on: BURI.gmGet('c33.buri.ns', true) !== false, auto: BURI.gmGet('c33.buri.nsAuto', false) === true };   // v57: 誤送信防止のため、打っている途中で勝手に聞くのは既定で切る
+    const NS = { on: false, auto: false };   // v97: Notion の検索（⌘K）への同居はやめた — ⌘K は ('-' 鰤)з のパネル。純正の検索は候補の「Notion で全文検索」から   // v57: 誤送信防止のため、打っている途中で勝手に聞くのは既定で切る
     const nsCache = new Map();
     const nsConv = [];   // 会話 [{ q, res }]（検索画面を閉じても少しの間は覚えておく）
     let nsConvAt = 0;
@@ -5072,7 +5070,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       }
     }
     /* v57: Notion の検索画面に印を付けて次世代の見た目に（CSS は印にだけ効く）・画面の中央へ・聞くボタンとキーの刻印 */
-    NS.nx = BURI.gmGet('c33.buri.nx', true) !== false;
+    NS.nx = false;   // v97: 純正の検索画面は作り直さない（Notion のまま）
     let nxRO = null;
     function nxCenter(dlg) {
       if (!dlg || !dlg.isConnected || !NS.nx) return;
@@ -5737,6 +5735,836 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
     window.__c33LayoutSoon = layoutSoon;
     layoutNow = layout;
 
+    /* ============================================================
+     *  v97 Nebius ('-' 鰤)з セクション — B.U.R.I のパネル
+     *   ・ピル: 顔は SVG（目は必ずまっすぐの縦線・どの書体でも同じ）。乗せると右へ伸びて「探す・聞く ⌘K」。待機中の小さな点
+     *   ・パネル: 段階 1（上の中央・720px）／2（右に寄せたピン留め・400px）／3（本文いっぱい）。白ではなく Notion の温かい地の色・枠線なし
+     *   ・ホーム: 時間帯のあいさつ・入力欄・質問のチップ（押すと入るだけ・送らない）
+     *   ・入力: ⌘↵（Windows は Ctrl+↵）で送る・↵ と ⇧↵ は改行。変換中は何も送らない
+     *   ・候補: 打つと Notion のページの候補（所属の DB つき）。↓ で入って ↵ = DB の中でサイドピーク・⌘↵ = 新しいタブ・⇧↵ = ページだけ
+     *   ・ページを開く = 親のフル DB へ移って、サイドピークで開く。Orbit と Stella も一緒に回る（経路点灯）
+     * ============================================================ */
+    const NPK = 'c33.np.v1';
+    const NPS = Object.assign({ stage: 1, hotkey: true, day: '', drawerPin: false }, BURI.gmGet(NPK, {}) || {});
+    const npSave = () => BURI.gmSet(NPK, NPS);
+    const NMOD = IS_MAC ? '⌘' : 'Ctrl';
+    const KEYSEND = IS_MAC ? '⌘↵' : 'Ctrl+↵';
+    const isTouch = (() => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } })();
+    const faceNorm = (t) => String(t || '').replace(/\(\s*[‘’'´ʼ′`]\s*-\s*[‘’'´ʼ′`]\s*([^()\s]{1,3})\)\s*з/gu, (m0, k) => "('-' " + k + ')з');
+    const id32 = (x) => String(x || '').replace(/-/g, '').toLowerCase();
+    const dashId = (h) => { h = id32(h); return h.length === 32 ? h.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5') : h; };
+    const npLive = mk('div'); npLive.id = 'c33-np-live'; npLive.setAttribute('aria-live', 'polite'); npLive.className = 'np-sr';
+    const say = (t) => { npLive.textContent = ''; setTimeout(() => { npLive.textContent = t; }, 30); };
+
+    /* ---- ピル ---- */
+    const pill = mk('button'); pill.id = 'c33-pill'; pill.type = 'button';
+    pill.setAttribute('aria-label', "('-' 鰤)з — 探す・聞く（" + NMOD + 'K）');
+    pill.innerHTML = '<span class="pl-f" aria-hidden="true">' + FACE_SVG + '</span><span class="pl-x" aria-hidden="true"><span class="pl-t">探す・聞く</span><kbd>' + NMOD + (IS_MAC ? '' : ' ') + 'K</kbd></span><i class="pl-dot" aria-hidden="true"></i>';
+    header.insertBefore(pill, header.firstChild);
+    csFace.remove(); csHint.remove();   // v97: 文字の顔・「聞く・…」はやめた
+    pill.addEventListener('mousedown', (e) => e.preventDefault());
+    pill.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); npToggle(); });
+    /* 伸びた幅が Stella に入らない時は ⌘K だけ（文字が見切れる状態を作らない） */
+    function pillFit() {
+      const w = header.getBoundingClientRect().width;
+      pill.classList.toggle('narrow', w < 214);
+      pill.classList.toggle('tiny', w < 150);
+    }
+
+    /* ---- パネル ---- */
+    const veil = mk('div'); veil.id = 'c33-np-veil'; veil.hidden = true;
+    const np = mk('div'); np.id = 'c33-np'; np.hidden = true;
+    np.setAttribute('role', 'dialog'); np.setAttribute('aria-label', "('-' 鰤)з B.U.R.I — 探す・聞く");
+    np.innerHTML = `
+<nav class="n2-rail" aria-label="B.U.R.I のメニュー">
+  <button type="button" data-a="new" title="新しい会話">${svg('plus', 17)}</button>
+  <button type="button" data-a="find" title="探す（会話とページ）">${svgI('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/>').replace('width="18" height="18"', 'width="17" height="17"')}</button>
+  <button type="button" data-a="hist" title="これまでの会話">${svg('clock', 17)}</button>
+  <span class="n2-sp"></span>
+  <button type="button" data-a="set" title="設定（AI・本棚・覚えたこと）">${svg('tune', 17)}</button>
+</nav>
+<div class="n2-main">
+  <div class="n2-top">
+    <button type="button" data-a="pin" title="右に寄せてピン留め">${svgI('<path d="M14 3l7 7-3 1-4 4 1 4-2 2-4-4-5 5-1-1 5-5-4-4 2-2 4 1 4-4z"/>').replace('width="18" height="18"', 'width="15" height="15"')}</button>
+    <button type="button" data-a="max" title="大きく（本文いっぱい）">${svgI('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>').replace('width="18" height="18"', 'width="15" height="15"')}</button>
+    <button type="button" data-a="close" title="閉じる（esc）">${svg('x', 15)}</button>
+  </div>
+  <div class="n2-scroll">
+    <div class="n2-hero"><div class="n2-hi"></div></div>
+    <div class="n2-log" role="log" aria-live="polite"></div>
+  </div>
+  <div class="n2-compose">
+    <div class="n2-box">
+      <span class="n2-scope" hidden><i class="n2-glyph"></i><span></span></span>
+      <textarea rows="1" spellcheck="false" aria-label="B.U.R.I に聞く・Notion を探す"></textarea>
+      <button type="button" class="n2-send" aria-label="送信">${svg('send', 16)}</button>
+    </div>
+    <div class="n2-cands" role="listbox" hidden></div>
+    <div class="n2-hint" aria-live="off"></div>
+    <div class="n2-chips"></div>
+  </div>
+</div>
+<aside class="n2-drawer" hidden>
+  <div class="n2-dsearch"><input type="text" spellcheck="false" placeholder="会話とページを探す…" aria-label="会話とページを探す"></div>
+  <div class="n2-dlist"></div>
+</aside>`;
+    document.body.append(veil, np, npLive);
+    const $ = (s) => np.querySelector(s);
+    const nta = $('textarea'), sendBtn = $('.n2-send'), candsEl = $('.n2-cands'), hintEl = $('.n2-hint'), chipsEl = $('.n2-chips');
+    const logEl = $('.n2-log'), heroEl = $('.n2-hero'), hiEl = $('.n2-hi'), scrollEl = $('.n2-scroll');
+    const scopeEl = $('.n2-scope'), drawer = $('.n2-drawer'), dIn = drawer.querySelector('input'), dList = drawer.querySelector('.n2-dlist');
+    nta.placeholder = nick() + '、ぶりに聞いてみて…';
+    for (const ev of ['keydown', 'keyup', 'keypress', 'beforeinput', 'input', 'paste', 'copy', 'cut', 'pointerdown', 'mousedown', 'click', 'wheel']) np.addEventListener(ev, (e) => e.stopPropagation());
+    let npOpen = false, npBusy = false, npSeq = 0, npStageBefore3 = 1, npChat = false, npPeekWait = null;
+
+    /* ---- 段階 ---- */
+    function stageRect(st) {
+      const vw = window.innerWidth, vh = window.innerHeight;
+      if (st === 2) { const w = Math.min(400, vw - 24); return { left: vw - w - 10, top: 10, width: w, height: vh - 20 }; }
+      if (st === 3) {
+        const f = [...document.querySelectorAll('.notion-frame')].find((x) => !x.closest('.notion-peek-renderer') && x.getBoundingClientRect().width > 200);
+        const r = f ? f.getBoundingClientRect() : { left: 0, top: 0, width: vw, height: vh };
+        return { left: Math.round(r.left + 8), top: Math.round(r.top + 8), width: Math.round(r.width - 16), height: Math.round(Math.min(vh, r.height) - 16) };
+      }
+      const w = Math.min(720, vw - 32);
+      return { left: Math.round((vw - w) / 2), top: Math.round(Math.min(96, vh * 0.12)), width: w, height: null };
+    }
+    function npPlace() {
+      const st = +np.dataset.stage || 1;
+      const r = stageRect(st);
+      np.style.left = r.left + 'px'; np.style.top = r.top + 'px'; np.style.width = r.width + 'px';
+      if (r.height != null) { np.style.height = r.height + 'px'; np.style.maxHeight = ''; }
+      else { np.style.height = ''; np.style.maxHeight = Math.round(window.innerHeight * 0.8) + 'px'; }
+      veil.hidden = !npOpen || st !== 1;
+      np.querySelector('[data-a="pin"]').classList.toggle('on', st === 2);
+      np.querySelector('[data-a="max"]').classList.toggle('on', st === 3);
+    }
+    function npStage(st) {
+      const from = np.getBoundingClientRect();
+      if (st === 3 && np.dataset.stage !== '3') npStageBefore3 = +np.dataset.stage || 1;
+      np.dataset.stage = String(st);
+      if (st !== 3) { NPS.stage = st; npSave(); }
+      npPlace();
+      const to = np.getBoundingClientRect();
+      if (!nbReduce() && from.width && to.width) np.animate([{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})` }, { transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      nta.focus();
+    }
+    /* ピルの位置から広がる（どこから開いたかを目で追える） */
+    function npMorph(open) {
+      const pr = pill.getBoundingClientRect(), r = np.getBoundingClientRect();
+      if (nbReduce() || !pr.width || !r.width) return Promise.resolve();
+      const k = `translate(${pr.left - r.left}px, ${pr.top - r.top}px) scale(${pr.width / r.width}, ${pr.height / r.height})`;
+      const a = np.animate(open ? [{ transform: k, opacity: 0, borderRadius: '999px' }, { transform: 'none', opacity: 1, borderRadius: '14px' }] : [{ transform: 'none', opacity: 1 }, { transform: k, opacity: 0 }], { duration: open ? 250 : 200, easing: open ? 'cubic-bezier(.2,.85,.25,1)' : 'cubic-bezier(.5,0,.75,.2)' });
+      return a.finished.catch(() => {});
+    }
+    function npToggle() { if (npOpen) npClose(); else npOpenNow(); }
+    function npOpenNow(text) {
+      if (!npOpen) {
+        npOpen = true;
+        np.hidden = false;
+        np.dataset.stage = String(document.querySelector('.notion-peek-renderer') && NPS.stage === 2 ? 1 : NPS.stage === 2 ? 2 : 1);
+        npPlace();
+        npHome(false);
+        npMorph(true);
+        pill.classList.remove('ping');
+        pill.setAttribute('aria-expanded', 'true');
+      }
+      if (text != null) { nta.value = text; npGrow(); }
+      npScope(true);
+      requestAnimationFrame(() => { npGrow(); nta.focus(); try { nta.setSelectionRange(nta.value.length, nta.value.length); } catch (e) { /* noop */ } });
+      npCandsSoon();
+    }
+    async function npClose(why) {
+      if (!npOpen) return;
+      npOpen = false;
+      npCandsHide();
+      drawerShow(false);
+      if (np.dataset.stage === '3') np.dataset.stage = String(npStageBefore3);
+      veil.hidden = true;
+      await npMorph(false);
+      if (npOpen) return;
+      np.hidden = true;
+      pill.setAttribute('aria-expanded', 'false');
+      if (why !== 'nav') pill.focus({ preventScroll: true });
+    }
+
+    /* ---- ホーム ---- */
+    function npGreet() {
+      const h = new Date().getHours(), nm = nick() || 'Wパパ', day = new Date().toDateString();
+      if (NPS.day !== day) { NPS.day = day; npSave(); return 'おかえり、' + nm; }
+      return (h >= 5 && h < 10 ? 'おはよう、' : h >= 10 && h < 17 ? 'おかえり、' : h >= 17 && h < 23 ? 'おつかれさま、' : '遅くまでおつかれさま、') + nm;
+    }
+    function npHome(reset) {
+      if (reset) { npChat = false; logEl.textContent = ''; }
+      np.classList.toggle('chat', npChat);
+      if (!npChat) { hiEl.textContent = npGreet(); hiEl.classList.remove('bye'); }
+      npChips();
+      npHint();
+    }
+    function npChips() {
+      chipsEl.textContent = '';
+      if (npChat) return;
+      const pt = (() => { try { return pageTitle(); } catch (e) { return ''; } })();
+      const list = [];
+      if (pt) list.push(pt + 'を要約して');
+      for (const q of hist()) { if (list.length >= 4) break; if (q && !list.includes(q) && q.length <= 40) list.push(q); }
+      list.forEach((q, i) => {
+        const b = mk('button', 'n2-chip', q, chipsEl); b.type = 'button'; b.style.setProperty('--i', String(i));
+        b.addEventListener('click', () => { nta.value = q; npGrow(); nta.focus(); nta.setSelectionRange(q.length, q.length); npCandsHide(); });
+      });
+    }
+    function kbd(t) { return '<kbd>' + t + '</kbd>'; }
+    let listMode = false, listIx = -1;
+    function npHint() {
+      hintEl.innerHTML = listMode
+        ? kbd('↵') + ' DBで開く · ' + kbd(KEYSEND) + ' 新しいタブ · ' + kbd('⇧↵') + ' ページだけ · ' + kbd('esc') + ' 入力に戻る'
+        : (isTouch ? '送るボタンで送る · ' + kbd('↵') + ' で改行' : kbd(KEYSEND) + ' で送る · ' + kbd('↵') + ' で改行');
+    }
+
+    /* ---- 範囲のチップ（いまの惑星の中だけ） ---- */
+    let scopeGid = '';
+    function npScope(reset) {
+      if (reset) scopeGid = OB.on ? OB.sel || '' : '';
+      const g = scopeGid ? obGroups().find((x) => x.gid === scopeGid) : null;
+      scopeEl.hidden = !g;
+      if (g) { obIcPaint(scopeEl.firstElementChild, g); scopeEl.lastElementChild.textContent = g.label + '内'; scopeEl.title = g.label + ' の中だけを探します（⌫ で外す）'; }
+    }
+
+    /* ---- 入力欄 ---- */
+    function npGrow() {
+      nta.style.height = 'auto';
+      const lh = parseFloat(getComputedStyle(nta).lineHeight) || 21;
+      nta.style.height = Math.min(nta.scrollHeight, lh * 8 + 4) + 'px';
+      nta.style.overflowY = nta.scrollHeight > lh * 8 + 4 ? 'auto' : 'hidden';
+      sendBtn.classList.toggle('on', !!nta.value.trim());
+    }
+    let imeGuard = false;
+    nta.addEventListener('compositionend', () => { imeGuard = true; requestAnimationFrame(() => { imeGuard = false; }); });
+    nta.addEventListener('input', () => { npGrow(); if (listMode) listOut(); npCandsSoon(); });
+    nta.addEventListener('keydown', (e) => {
+      if (e.isComposing || e.keyCode === 229 || imeGuard) return;   // 変換中・変換を確定した直後の ↵ は何もしない
+      const mod = IS_MAC ? e.metaKey : e.ctrlKey;
+      if (listMode) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); listMove(e.key === 'ArrowDown' ? 1 : -1); return; }
+        if (e.key === 'Enter') { e.preventDefault(); listPick(listIx, mod ? 'tab' : e.shiftKey ? 'page' : 'peek'); return; }
+        if (e.key === 'Escape') { e.preventDefault(); listOut(); return; }
+        if (e.key.length === 1 || e.key === 'Backspace') listOut();
+      }
+      if (e.key === 'Enter') {
+        if (mod) { e.preventDefault(); npSend(); }
+        return;   // ↵ と ⇧↵ は改行（送らない）
+      }
+      if (e.key === 'ArrowDown' && !candsEl.hidden && nta.selectionStart === nta.value.length && nta.selectionEnd === nta.value.length) { e.preventDefault(); listIn(); return; }
+      if (e.key === 'ArrowUp' && !nta.value) { const h = hist(); if (h[0]) { e.preventDefault(); nta.value = h[0]; npGrow(); nta.setSelectionRange(nta.value.length, nta.value.length); } return; }
+      if (e.key === 'Backspace' && !nta.value && scopeGid) { e.preventDefault(); scopeGid = ''; npScope(); npCandsSoon(); return; }
+      if (e.key === 'Escape') { e.preventDefault(); npEsc(); }
+    });
+    sendBtn.addEventListener('click', () => { if (npBusy) npStop(); else npSend(); });
+    sendBtn.addEventListener('mousedown', (e) => e.preventDefault());
+
+    /* ---- 候補（Notion のページ） ---- */
+    let candT = 0, candSeq = 0, cands = [];
+    function npCandsSoon() { clearTimeout(candT); candT = setTimeout(npCands, 150); }
+    function npCandsHide() { candsEl.hidden = true; candsEl.textContent = ''; cands = []; listOut(); }
+    const REG = () => { const m = new Map(); for (const [k, v] of Object.entries(NBS.reg || {})) m.set(k, v); return m; };
+    function regScan() {
+      const side = obSide(); if (!side) return;
+      NBS.reg = NBS.reg || {};
+      let ch = false;
+      for (const t of side.querySelectorAll(SEL_TEAM + '[data-c33-team]')) {
+        const team = t.getAttribute('data-c16-k') || '', gid = t.getAttribute('data-c16-g') || '';
+        for (const r of t.querySelectorAll('[data-c33-kind="db"], [data-c33-kind="page"]')) {
+          const id = id32(idOf(r)); if (!id) continue;
+          const o = NBS.reg[id] || {};
+          const name = nameOf(r);
+          if (o.name !== name || o.team !== team || o.gid !== gid || o.kind !== r.getAttribute('data-c33-kind')) { NBS.reg[id] = { name, team, gid, kind: r.getAttribute('data-c33-kind') }; ch = true; }
+        }
+      }
+      if (ch) nbSave();
+    }
+    async function npSearch(q, limit) {
+      const sp = await npSpace();
+      if (!sp) return { list: [], rm: {} };
+      const headers = { 'Content-Type': 'application/json' }; const u = activeUser(); if (u) headers['x-notion-active-user-header'] = u;
+      const body = { type: 'BlocksInSpace', query: q, spaceId: sp, limit: limit || 20, source: 'quick_find_input_change', sort: { field: 'relevance' },
+        filters: { isDeletedOnly: false, excludeTemplates: true, navigableBlockContentOnly: true, requireEditPermissions: false, includePublicPagesWithoutExplicitAccess: false, ancestors: [], createdBy: [], editedBy: [], lastEditedTime: {}, createdTime: {}, inTeams: [] } };
+      const r = await fetch(location.origin + '/api/v3/search', { method: 'POST', credentials: 'same-origin', headers, body: JSON.stringify(body) });
+      if (!r.ok) return { list: [], rm: {} };
+      const j = await r.json();
+      return { list: j.results || [], rm: j.recordMap || {} };
+    }
+    let npSpaceId = '';
+    async function npSpace() {
+      if (npSpaceId) return npSpaceId;
+      const ids = Object.keys(NBS.reg || {}).slice(0, 1).map(dashId);
+      const m = /([0-9a-f]{32})/i.exec(location.pathname); if (m) ids.push(dashId(m[1]));
+      if (ids.length) { try { const recs = await getRecords('block', ids); for (const b of recs.values()) if (b.space_id) return (npSpaceId = b.space_id); } catch (e) { /* noop */ } }
+      try { const r = await fetch(location.origin + '/api/v3/getSpaces', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}' }); const j = r.ok ? await r.json() : {}; for (const v of Object.values(j || {})) { const sp = v && v.space && Object.keys(v.space)[0]; if (sp) return (npSpaceId = sp); } } catch (e) { /* noop */ }
+      return '';
+    }
+    const recVal = (n) => n && (n.value && n.value.value ? n.value.value : n.value);
+    /* 親のフル DB を探す（ページの親 → … 最大 5 段）。見つけた対応は覚えておく */
+    async function parentDbOf(pageId, seed) {
+      const key = id32(pageId);
+      NBS.par = NBS.par || {};
+      const c = NBS.par[key];
+      if (c && Date.now() - c.at < 7 * 864e5) return c;
+      let id = dashId(pageId), out = { at: Date.now(), plain: true };
+      for (let i = 0; i < 6; i++) {
+        let b = seed && seed[id] ? seed[id] : null;
+        if (!b) { const m = await getRecords('block', [id]); b = m.get(id); }
+        if (!b) { out = { at: Date.now(), err: i === 0 ? 'none' : '' , plain: i !== 0 }; break; }
+        if (i === 0 && b.alive === false) { out = { at: Date.now(), err: 'trash' }; break; }
+        if (b.type === 'collection_view_page') { out = i === 0 ? { at: Date.now(), self: true, db: id32(id) } : { at: Date.now(), db: id32(id), deep: true }; break; }
+        if (b.parent_table === 'collection') {
+          const cm = await getRecords('collection', [b.parent_id]); const col = cm.get(b.parent_id);
+          const dbb = col && col.parent_table === 'block' ? id32(col.parent_id) : '';
+          out = { at: Date.now(), db: dbb, coll: id32(b.parent_id), name: col && col.name ? plainName(col.name) : '' };
+          if (i > 0) out.deep = true;
+          break;
+        }
+        if (b.parent_table !== 'block') break;
+        id = b.parent_id;
+      }
+      if (!out.err) { NBS.par[key] = out; nbSave(); }
+      return out;
+    }
+    const plainName = (v) => (Array.isArray(v) ? v.map((s) => (Array.isArray(s) ? s[0] : '')).join('') : String(v || ''));
+    async function npCands() {
+      const q = nta.value.trim();
+      const my = ++candSeq;
+      if (!npOpen || !q || q.length > 60 || q.includes('\n')) { npCandsHide(); return; }
+      regScan();
+      let res;
+      try { res = await npSearch(q, 20); } catch (e) { res = { list: [], rm: {} }; }
+      if (my !== candSeq || !npOpen) return;
+      const blocks = (res.rm && res.rm.block) || {};
+      const seed = {}; for (const [k, v] of Object.entries(blocks)) { const x = recVal(v); if (x) seed[k] = x; }
+      const reg = NBS.reg || {};
+      const items = [];
+      for (const it of res.list) {
+        const b = seed[it.id]; if (!b) continue;
+        const title = plainName(b.properties && b.properties.title) || '無題';
+        let par = null;
+        try { par = await parentDbOf(it.id, seed); } catch (e) { par = { plain: true }; }
+        if (my !== candSeq) return;
+        const dbId = par && (par.self ? id32(it.id) : par.db);
+        const rg = dbId ? reg[dbId] : null;
+        items.push({ id: id32(it.id), title, icon: b.format && b.format.page_icon, par, rg, dbName: rg ? rg.name : par && par.name ? par.name : '' });
+      }
+      const sel = scopeGid;
+      let list = sel ? items.filter((x) => x.rg && x.rg.gid === sel) : items;
+      list = list.sort((a, b) => ((b.rg && b.rg.gid === OB.sel) ? 1 : 0) - ((a.rg && a.rg.gid === OB.sel) ? 1 : 0)).slice(0, 6);
+      cands = list;
+      candsEl.textContent = '';
+      list.forEach((x, i) => {
+        const r = mk('div', 'n2-cand', null, candsEl); r.setAttribute('role', 'option'); r.id = 'c33-np-c' + i; r.__x = x;
+        const ic = mk('span', 'n2-ci', null, r);
+        if (x.icon && /^(\/|https?:|attachment:)/.test(x.icon)) { const im = mk('img', null, null, ic); im.alt = ''; im.src = /^attachment:/.test(x.icon) ? '/image/' + encodeURIComponent(x.icon) + '?table=block&id=' + dashId(x.id) + '&cache=v2' : x.icon; }
+        else if (x.icon) ic.textContent = x.icon; else ic.innerHTML = svg('page', 15);
+        mk('span', 'n2-ct', x.title, r);
+        const meta = mk('span', 'n2-cm', null, r);
+        if (x.rg && x.rg.gid) { const g = obGroups().find((y) => y.gid === x.rg.gid); if (g) { const gl = mk('i', 'n2-glyph', null, meta); obIcPaint(gl, g); gl.style.color = 'oklch(58% .13 ' + nbHueOf(g.gid) + ')'; } }
+        meta.append(x.par && x.par.self ? (x.rg ? x.rg.team + ' · DB' : 'DB') : x.dbName ? (x.rg ? x.rg.team + ' / ' : '') + x.dbName : 'ページ');
+        r.addEventListener('mousedown', (e) => e.preventDefault());
+        r.addEventListener('click', (e) => listPick(i, (IS_MAC ? e.metaKey : e.ctrlKey) ? 'tab' : e.shiftKey ? 'page' : 'peek'));
+        r.addEventListener('mousemove', () => { if (listMode && listIx !== i) { listIx = i; listPaint(); } });
+      });
+      const full = mk('div', 'n2-cand n2-full', null, candsEl); full.setAttribute('role', 'option'); full.id = 'c33-np-c' + list.length;
+      mk('span', 'n2-ci', null, full).innerHTML = svgI('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/>').replace('width="18" height="18"', 'width="15" height="15"');
+      mk('span', 'n2-ct', 'Notion で全文検索', full); mk('span', 'n2-cm', '「' + q.slice(0, 24) + '」', full);
+      full.addEventListener('mousedown', (e) => e.preventDefault());
+      full.addEventListener('click', () => npNative(q));
+      candsEl.hidden = false;
+      if (listMode) listPaint();
+    }
+    function listIn() { if (candsEl.hidden || !candsEl.children.length) return; listMode = true; listIx = 0; listPaint(); npHint(); }
+    function listOut() { if (!listMode) return; listMode = false; listIx = -1; listPaint(); npHint(); }
+    function listMove(d) { const n = candsEl.children.length; if (!n) return; const k = listIx + d; if (k < 0) { listOut(); return; } listIx = Math.min(n - 1, k); listPaint(); }
+    function listPaint() {
+      [...candsEl.children].forEach((r, i) => r.classList.toggle('act', listMode && i === listIx));
+      if (listMode && candsEl.children[listIx]) { nta.setAttribute('aria-activedescendant', candsEl.children[listIx].id); candsEl.children[listIx].scrollIntoView({ block: 'nearest' }); }
+      else nta.removeAttribute('aria-activedescendant');
+    }
+    function listPick(i, mode) {
+      const el = candsEl.children[i]; if (!el) return;
+      if (el.classList.contains('n2-full')) { npNative(nta.value.trim()); return; }
+      npGo(el.__x.id, mode, el);
+    }
+    /* Notion 純正の検索へ（全文検索）— 入れた文字を渡す */
+    let npBypass = false;
+    async function npNative(q) {
+      await npClose('nav');
+      npBypass = true;
+      try { await openNative(q); } finally { setTimeout(() => { npBypass = false; }, 400); }
+    }
+
+    /* ---- ページを開く: 親のフル DB へ移って、サイドピークで（Orbit と Stella も一緒に） ---- */
+    const curPath = () => { const m = /([0-9a-f]{32})(?:[?#]|$)/i.exec(location.pathname); return m ? m[1].toLowerCase() : ''; };
+    async function npGo(pageId, mode, rowEl) {
+      let par;
+      try { par = await parentDbOf(pageId); } catch (e) { par = { plain: true }; }
+      if (par.err) { if (rowEl) { const m = rowEl.querySelector('.n2-cm'); if (m) { m.textContent = '開けませんでした'; m.classList.add('ng'); } } return; }
+      const reg = NBS.reg || {};
+      const dbId = par.self ? id32(pageId) : par.db || '';
+      const rg = dbId ? reg[dbId] : null;
+      let url;
+      if (mode === 'page' || (!dbId)) url = '/' + id32(pageId);
+      else {
+        const v = (NBS.view || {})[dbId];
+        url = '/' + dbId + (v ? '?v=' + v : '') + (par.self ? '' : (v ? '&' : '?') + 'p=' + id32(pageId) + '&pm=s');
+      }
+      if (mode === 'tab') { window.open(location.origin + url, '_blank', 'noopener'); return; }   // パネル・Orbit・Stella はそのまま
+      const st = np.dataset.stage;
+      npClose('nav');
+      if (st === '2' && !par.self && dbId && mode !== 'page') npAwaitPeek();
+      if (rg && rg.gid && OB.on && mode !== 'page') {
+        if (rg.gid !== OB.sel) { const i = obItemEls.findIndex((el) => el.__gid === rg.gid); if (i >= 0) obJump(i); obSelect(rg.gid); }
+        nbOpenTeam(dbId);
+      } else if (!dbId || !rg) obToast('このページは Stella の星座に入っていません');
+      npSpa(url, par.self || !dbId || mode === 'page' ? 'page' : 'peek', id32(pageId), dbId);
+      const ttl = rowEl && rowEl.__x ? rowEl.__x.title : '';
+      if (dbId && ttl && !par.self) { NBS.pg = NBS.pg || {}; NBS.pg[dbId] = ttl; nbSave(); }
+      if (ttl) say((rg ? rg.name + ' の中で' : '') + '「' + ttl + '」を開きました');
+    }
+    /* 画面の中で移る（再読み込みしない）。移れなかった時だけ読み込み直す */
+    function npSpa(url, kind, pageId, dbId) {
+      const u = new URL(url, location.origin);
+      const sameDb = dbId && curPath() === dbId;
+      try {
+        history.pushState(history.state, '', u.pathname + u.search);
+        window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }));
+      } catch (e) { location.assign(u.href); return; }
+      const t0 = Date.now();
+      const ok = () => kind === 'peek' ? !!document.querySelector('.notion-peek-renderer') && curPath() === dbId : curPath() === (kind === 'page' ? pageId : dbId);
+      const tick = () => {
+        if (ok()) { if (kind === 'peek') { npFlashRow(pageId); npPeekFocus(); } return; }
+        if (Date.now() - t0 > (sameDb ? 1800 : 2600)) { if (location.pathname + location.search === u.pathname + u.search) location.assign(u.href); return; }
+        setTimeout(tick, 120);
+      };
+      setTimeout(tick, 150);
+    }
+    /* ページ移動で閉じた時は、フォーカスをサイドピークの中のページへ */
+    function npPeekFocus() {
+      setTimeout(() => {
+        const pk = document.querySelector('.notion-peek-renderer');
+        const t = pk && (pk.querySelector('[contenteditable="true"][placeholder], h1[contenteditable="true"], [data-content-editable-root]') || pk);
+        if (!t) return;
+        if (!t.hasAttribute('tabindex') && !t.isContentEditable) t.setAttribute('tabindex', '-1');
+        try { t.focus({ preventScroll: true }); } catch (e) { /* noop */ }
+      }, 250);
+    }
+    /* 一覧の中のその行を、見える所まで動かして、ふわっと光らせる（今のビューで見えていない時は何もしない） */
+    function npFlashRow(pageId) {
+      const f = [...document.querySelectorAll('.notion-frame')].find((x) => !x.closest('.notion-peek-renderer'));
+      const row = f && f.querySelector('.notion-collection-item[data-block-id="' + dashId(pageId) + '"], [data-block-id="' + dashId(pageId) + '"].notion-page-block');
+      if (!row) return;
+      try { row.scrollIntoView({ block: 'nearest', behavior: nbReduce() ? 'auto' : 'smooth' }); } catch (e) { /* noop */ }
+      if (nbReduce()) return;
+      row.classList.remove('c33-np-flash'); void row.offsetWidth; row.classList.add('c33-np-flash');
+      setTimeout(() => row.classList.remove('c33-np-flash'), 900);
+    }
+    /* ピン留めのパネルとサイドピークは重ねない — ピルへ縮め、サイドピークが閉じたら戻す */
+    function npAwaitPeek() {
+      clearInterval(npPeekWait);
+      let seen = false;
+      npPeekWait = setInterval(() => {
+        const pk = !!document.querySelector('.notion-peek-renderer');
+        if (pk) seen = true;
+        else if (seen) { clearInterval(npPeekWait); npPeekWait = null; if (!npOpen) { NPS.stage = 2; npOpenNow(); } }
+      }, 400);
+      setTimeout(() => { if (npPeekWait && !seen) { clearInterval(npPeekWait); npPeekWait = null; } }, 8000);
+    }
+    /* 移った先の DB のチームスペースが畳まれていたら開く（Stella の経路点灯のため） */
+    function nbOpenTeam(dbId) {
+      setTimeout(() => {
+        const side = obSide(); if (!side) return;
+        const a = side.querySelector('a[href*="' + dbId + '"]');
+        if (a) return;
+        const rg = (NBS.reg || {})[dbId]; if (!rg) return;
+        const t = [...side.querySelectorAll(SEL_TEAM + '[data-c33-team]')].find((x) => x.getAttribute('data-c16-k') === rg.team);
+        const b = t && t.querySelector(':scope > ' + SEL_TEAM_BTN);
+        if (b && b.getAttribute('aria-expanded') === 'false') obPress(b);
+      }, 220);
+    }
+    /* いま見ている DB のビューを覚える（次に開く時はそのビューで） */
+    let npLastHref = '';
+    setInterval(() => {
+      if (location.href === npLastHref) return;
+      npLastHref = location.href;
+      const pid = curPath(), v = new URLSearchParams(location.search).get('v');
+      if (pid && v && (NBS.reg || {})[pid]) { NBS.view = NBS.view || {}; if (NBS.view[pid] !== id32(v)) { NBS.view[pid] = id32(v); nbSave(); } }
+    }, 700);
+
+    /* ---- 送る・答え ---- */
+    function npSend() {
+      if (npBusy) return;
+      const q = nta.value.trim();
+      if (!q) { if (!nbReduce()) sendBtn.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-3px)' }, { transform: 'translateX(3px)' }, { transform: 'translateX(-2px)' }, { transform: 'none' }], { duration: 280 }); return; }
+      nta.value = ''; npGrow(); npCandsHide();
+      npAsk(q);
+    }
+    function npStop() { if (!npBusy) return; npSeq++; npBusy = false; npBusyPaint(); const t = logEl.querySelector('.n2-think'); if (t) { t.classList.add('stop'); t.querySelector('.n2-th-t').textContent = '止めました'; } BURI.setProgress(null); }
+    function npBusyPaint() { sendBtn.classList.toggle('stop', npBusy); sendBtn.innerHTML = npBusy ? '<i class="n2-sq"></i>' : svg('send', 16); sendBtn.setAttribute('aria-label', npBusy ? '止める' : '送信 ' + KEYSEND); sendBtn.title = npBusy ? '止める' : '送信 ' + KEYSEND; }
+    async function npAsk(q) {
+      histAdd(q);
+      if (!npChat) { npChat = true; hiEl.classList.add('bye'); np.classList.add('chat'); chipsEl.textContent = ''; }
+      const my = ++npSeq;
+      npBusy = true; npBusyPaint();
+      mk('div', 'n2-q', q, logEl);
+      const th = npThink();
+      logEl.appendChild(th.el);
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+      BURI.setProgress((e) => { if (my === npSeq) th.on(e); });
+      let ask = q;
+      if (scopeGid && BURI.aiOn()) { const g = obGroups().find((x) => x.gid === scopeGid); if (g) ask = q + '\n（探す範囲のヒント: ' + g.label + ' の中）'; }
+      let res;
+      try { res = await BURI.ask(ask); } catch (e) { res = { text: "('-' 鰤)з💦 ごめんね、調べている途中でつまずいちゃった。（" + String(e && e.message || e) + '）', cards: [], chips: [] }; }
+      if (my !== npSeq) return;
+      BURI.setProgress(null);
+      await th.done();
+      if (my !== npSeq) return;
+      th.el.remove();
+      npBusy = false; npBusyPaint();
+      try { logAdd(q, res); } catch (e) { /* noop */ }
+      npEntry(res, q, true);
+      if (!npOpen) { pill.classList.remove('ping'); void pill.offsetWidth; pill.classList.add('ping'); }
+    }
+    /* MoA の相談: 小さな顔のまわりを、相談している AI の数だけ衛星が回る → まとめる時に中心へ集まって溶ける */
+    function npThink() {
+      const n = Math.max(1, Math.min(9, BURI.moaOn() ? BURI.team().length : 1));
+      const el = mk('div', 'n2-think');
+      const orb = mk('div', 'n2-orb', null, el);
+      mk('span', 'n2-orbf', null, orb).innerHTML = FACE_SVG;
+      for (let i = 0; i < n; i++) { const s = mk('i', 'n2-sat', null, orb); s.style.setProperty('--a', (360 / n * i) + 'deg'); s.style.setProperty('--d', (2.2 + (i % 3) * 0.5) + 's'); s.style.setProperty('--r', (22 + (i % 2) * 6) + 'px'); }
+      const t = mk('div', 'n2-th-t', '調べています…', el);
+      return {
+        el,
+        on(e) {
+          if (e.k === 'plan') t.textContent = '会話を読んでいます…';
+          else if (e.k === 'search') t.textContent = 'Notion・本棚・Web を調べています…';
+          else if (e.k === 'found') t.textContent = '見つけたものを読んでいます…';
+          else if (e.k === 'draft') t.textContent = n > 1 ? 'みんなで相談しています…' : '考えています…';
+          else if (e.k === 'merge') { el.classList.add('merge'); t.textContent = 'ひとつにまとめています…'; }
+        },
+        done() { if (nbReduce()) return Promise.resolve(); el.classList.add('merge'); return new Promise((r) => setTimeout(r, 380)); }
+      };
+    }
+    const sameOriginPage = (u) => { try { const x = new URL(u, location.origin); if (x.origin !== location.origin) return ''; const m = /([0-9a-f]{32})(?:[?#]|$)/i.exec(x.pathname); return m ? m[1].toLowerCase() : ''; } catch (e) { return ''; } };
+    function npEntry(res, q, animate) {
+      const msg = mk('div', 'n2-a', null, logEl);
+      const body = mk('div', 'n2-body', null, msg);
+      const cited = [];
+      richText(body, faceNorm(res.text || ''), res.refs, cited);
+      if (!animate || nbReduce()) [...body.children].forEach((el) => { el.style.animation = 'none'; });
+      /* 参考にした情報（折りたたみ） */
+      const refs = cited.length ? cited.map((c) => c.ref) : (res.cards || []).filter((c) => c.url).slice(0, 8);
+      if (refs.length) {
+        const det = mk('details', 'n2-refs', null, msg);
+        mk('summary', null, '参考にした情報 ' + refs.length, det);
+        refs.forEach((r, i) => {
+          const a = mk('a', 'n2-ref', null, det); a.href = r.url || '#'; a.rel = 'noopener noreferrer';
+          mk('b', null, String(i + 1), a);
+          const pid = r.url ? sameOriginPage(r.url) : '';
+          if (pid) { const ic = mk('span', 'n2-ri', null, a); ic.dataset.pid = pid; }
+          mk('span', null, String(r.title || '').replace(/（Wikipedia）$/, ''), a); mk('small', null, r.url ? srcHost(r.url) : '本棚', a);
+          if (r.url && !r.url.startsWith(location.origin)) a.target = '_blank';
+        });
+        /* Notion のページには、そのページのアイコンをそのまま */
+        const want = [...det.querySelectorAll('.n2-ri[data-pid]')];
+        if (want.length) getRecords('block', want.map((x) => dashId(x.dataset.pid))).then((m) => {
+          for (const x of want) { const bl = m.get(dashId(x.dataset.pid)); const ic = bl && bl.format && bl.format.page_icon; if (!ic) continue; if (/^(\/|https?:|attachment:)/.test(ic)) { const im = mk('img', null, null, x); im.alt = ''; im.src = /^attachment:/.test(ic) ? '/image/' + encodeURIComponent(ic) + '?table=block&id=' + dashId(x.dataset.pid) + '&cache=v2' : ic; } else x.textContent = ic; }
+        }).catch(() => {});
+      }
+      const bar = mk('div', 'n2-bar', null, msg);
+      ib(bar, 'copy', 'コピー', (b) => { try { navigator.clipboard.writeText(res.text || ''); b.innerHTML = svg('check'); setTimeout(() => { b.innerHTML = svg('copy'); }, 1400); } catch (x) { /* noop */ } });
+      ib(bar, 'retry', 'もう一度', () => { npAsk(q); });
+      const nx = (res.chips || []).filter((c) => c && c.q).slice(0, 3);
+      if (nx.length) {
+        const w = mk('div', 'n2-next', null, msg);
+        nx.forEach((c) => { const b = mk('button', 'n2-chip', c.label, w); b.type = 'button'; b.addEventListener('click', () => { nta.value = c.q; npGrow(); nta.focus(); }); });
+      }
+      requestAnimationFrame(() => { scrollEl.scrollTop += msg.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top - 60; });
+      return msg;
+    }
+    /* 答えの中の Notion のページは、ページ移動（親の DB ＋ サイドピーク）で開く */
+    np.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (!a || !np.contains(a) || a.closest('.n2-cand')) return;
+      const pid = sameOriginPage(a.getAttribute('href'));
+      if (!pid) return;
+      e.preventDefault();
+      npGo(pid, (IS_MAC ? e.metaKey : e.ctrlKey) ? 'tab' : e.shiftKey ? 'page' : 'peek', null);
+    }, true);
+
+    /* ---- 引き出し（履歴と検索） ---- */
+    let drawerOn = false, dT = 0, dSeq = 0;
+    function drawerShow(on, focusSearch) {
+      drawerOn = !!on;
+      drawer.hidden = !on;
+      np.classList.toggle('drawer', drawerOn);
+      if (on) { drawDrawer(); if (focusSearch) setTimeout(() => dIn.focus(), 30); }
+    }
+    function bucket(at) {
+      const d0 = new Date(); d0.setHours(0, 0, 0, 0);
+      const t = d0.getTime();
+      return at >= t ? '今日' : at >= t - 864e5 ? '昨日' : at >= t - 7 * 864e5 ? '過去7日間' : 'それ以前';
+    }
+    async function drawDrawer() {
+      const k = dIn.value.trim();
+      const my = ++dSeq;
+      dList.textContent = '';
+      const all = logGet().filter((x) => !k || (x.q + ' ' + x.text).toLowerCase().includes(k.toLowerCase()));
+      if (k) mk('div', 'n2-dh', '会話', dList);
+      let last = '';
+      all.slice(0, 40).forEach((x) => {
+        const b = bucket(x.at);
+        if (!k && b !== last) { last = b; mk('div', 'n2-dh', b, dList); }
+        const r = mk('button', 'n2-di', null, dList); r.type = 'button';
+        mk('b', null, x.q, r); mk('small', null, faceNorm(String(x.text)).replace(/\[[NW]\d[^\]]*\]/g, '').replace(/\s+/g, ' ').slice(0, 60), r);
+        r.addEventListener('click', () => { drawerShow(false); if (!npChat) { npChat = true; np.classList.add('chat'); hiEl.classList.add('bye'); chipsEl.textContent = ''; } logEl.textContent = ''; mk('div', 'n2-q', x.q, logEl); npEntry(x, x.q, false); nta.focus(); });
+      });
+      if (!all.length) mk('div', 'n2-de', k ? '会話は見つかりませんでした' : 'まだ会話はありません', dList);
+      if (!k) return;
+      const ph = mk('div', 'n2-dh', 'ページ', dList);
+      const wait = mk('div', 'n2-de', '探しています…', dList);
+      let res;
+      try { res = await npSearch(k, 12); } catch (e) { res = { list: [], rm: {} }; }
+      if (my !== dSeq) return;
+      wait.remove();
+      const blocks = (res.rm && res.rm.block) || {};
+      const seed = {}; for (const [kk, v] of Object.entries(blocks)) { const xv = recVal(v); if (xv) seed[kk] = xv; }
+      let n = 0;
+      for (const it of res.list) {
+        const b = seed[it.id]; if (!b) continue;
+        let par = null; try { par = await parentDbOf(it.id, seed); } catch (e) { par = { plain: true }; }
+        if (my !== dSeq) return;
+        const rg = par && (par.self ? (NBS.reg || {})[id32(it.id)] : par.db ? (NBS.reg || {})[par.db] : null);
+        const r = mk('button', 'n2-di', null, dList); r.type = 'button';
+        mk('b', null, plainName(b.properties && b.properties.title) || '無題', r);
+        mk('small', null, par && par.self ? 'DB' : rg ? rg.team + ' / ' + rg.name : par && par.name ? par.name : 'ページ', r);
+        r.addEventListener('click', (e) => { npGo(id32(it.id), (IS_MAC ? e.metaKey : e.ctrlKey) ? 'tab' : e.shiftKey ? 'page' : 'peek', null); });
+        if (++n >= 8) break;
+      }
+      if (!n) { ph.after(mk('div', 'n2-de', 'ページは見つかりませんでした')); }
+    }
+    dIn.addEventListener('input', () => { clearTimeout(dT); dT = setTimeout(drawDrawer, 180); });
+    dIn.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); drawerShow(false); nta.focus(); } });
+    np.addEventListener('pointerdown', (e) => { if (drawerOn && !drawer.contains(e.target) && !e.target.closest('.n2-rail')) drawerShow(false); }, true);
+
+    /* ---- 設定（AI・本棚・覚えたこと） ---- */
+    function npSettings() {
+      drawerShow(false);
+      if (!npChat) { npChat = true; np.classList.add('chat'); hiEl.classList.add('bye'); chipsEl.textContent = ''; }
+      logEl.textContent = '';
+      const box = mk('div', 'n2-set', null, logEl);
+      aiSettings(box, (t) => { const m = mk('div', 'n2-a', null, logEl); mk('div', 'n2-body', faceNorm(t), m); }, () => { box.remove(); npHome(true); });
+      const more = mk('div', 'bs-card', null, box);
+      mk('h4', null, '本棚と覚えたこと', more);
+      const row = mk('div', 'bs-btns', null, more);
+      const imp = mk('button', null, '本棚を取り込む（CSV / JSON）', row); imp.type = 'button';
+      imp.addEventListener('click', (e) => { e.preventDefault(); file.click(); });
+      const hk = mk('label', null, null, more); const hc = mk('input', null, null, hk); hc.type = 'checkbox'; hc.checked = NPS.hotkey !== false; hk.append(' ' + NMOD + 'K で このパネルを開く（切ると Notion の検索のまま）');
+      hc.addEventListener('change', () => { NPS.hotkey = hc.checked; npSave(); });
+      const notes = (BURI.mem && BURI.mem.get && BURI.mem.get().notes) || [];
+      if (notes.length) {
+        mk('div', 'bs-lb', '覚えたこと（' + notes.length + '）', more);
+        notes.slice(0, 20).forEach((n, i) => { const r = mk('div', 'bs-nt', null, more); r.append((typeof n === 'string' ? n : n.t || '') + ' '); const x = mk('button', 'bs-x', '×', r); x.type = 'button'; x.title = '忘れる'; x.addEventListener('click', (e) => { e.preventDefault(); try { BURI.mem.del(i); } catch (er) { /* noop */ } r.remove(); }); });
+      }
+      scrollEl.scrollTop = 0;
+    }
+
+    /* ---- 操作 ---- */
+    np.querySelector('.n2-rail').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-a]'); if (!b) return;
+      const a = b.dataset.a;
+      if (a === 'new') { drawerShow(false); BURI.aiReset(); npHome(true); nta.value = ''; npGrow(); nta.focus(); }
+      else if (a === 'find') drawerShow(!drawerOn || document.activeElement !== dIn, true);
+      else if (a === 'hist') { dIn.value = ''; drawerShow(!drawerOn); }
+      else if (a === 'set') npSettings();
+    });
+    np.querySelector('.n2-top').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-a]'); if (!b) return;
+      const a = b.dataset.a, st = +np.dataset.stage || 1;
+      if (a === 'close') npClose();
+      else if (a === 'pin') npStage(st === 2 ? 1 : 2);
+      else if (a === 'max') npStage(st === 3 ? npStageBefore3 : 3);
+    });
+    /* esc は 1 段ずつ: 引き出し → 候補 → 大きく → 閉じる */
+    function npEsc() {
+      if (drawerOn) { drawerShow(false); nta.focus(); return; }
+      if (listMode) { listOut(); return; }
+      if (!candsEl.hidden) { npCandsHide(); return; }
+      if (np.dataset.stage === '3') { npStage(npStageBefore3); return; }
+      npClose();
+    }
+    np.addEventListener('keydown', (e) => { if (e.key === 'Escape' && e.target !== nta && e.target !== dIn) { e.preventDefault(); npEsc(); } });
+    veil.addEventListener('pointerdown', (e) => { e.preventDefault(); npClose(); });
+    window.addEventListener('resize', () => { if (npOpen) npPlace(); pillFit(); });
+    /* ⌘K（Windows は Ctrl+K）— 本文で文字を選んでいる時は Notion のリンク（⌘K）のまま */
+    window.addEventListener('keydown', (e) => {
+      if (npBypass || NPS.hotkey === false) return;
+      if (!(IS_MAC ? e.metaKey : e.ctrlKey) || e.altKey || e.shiftKey || e.code !== 'KeyK') return;
+      const ae = document.activeElement, sel = document.getSelection();
+      if (ae && ae.closest && ae.closest('[contenteditable="true"]') && sel && !sel.isCollapsed && !np.contains(ae)) return;
+      if (ae && ae.closest && ae.closest('[role="dialog"]:not(#c33-np)') && !np.contains(ae)) return;
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      npToggle();
+    }, true);
+    /* ⌃⌥B（前からの呼び方）もこのパネル */
+    document.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.altKey && e.code === 'KeyB') { e.preventDefault(); e.stopPropagation(); npOpenNow(); } }, true);
+    npHint(); pillFit(); npBusyPaint();
+    np.dataset.stage = String(NPS.stage === 2 ? 2 : 1);
+    const npStyle = mk('style'); npStyle.id = 'c33-np-css';
+    npStyle.textContent = `
+@property --n2r { syntax: '<length>'; inherits: false; initial-value: 22px; }
+#c33-pill, #c33-np { --neb-h: var(--neb-ht); transition: --neb-h 1.2s cubic-bezier(.4,0,.2,1);
+  --acc: oklch(58% .13 var(--neb-h)); --acc-ink: oklch(45% .13 var(--neb-h)); --acc-soft: oklch(64% .12 var(--neb-h) / .13); }
+:is(body.dark, html[data-atx-dark], html[data-c39-dark]) :is(#c33-pill, #c33-np) { --acc: oklch(74% .12 var(--neb-h)); --acc-ink: oklch(85% .1 var(--neb-h)); --acc-soft: oklch(70% .12 var(--neb-h) / .17); }
+#c33-search-header .cs-close { margin-inline-start: auto; }
+/* ピル — 顔は SVG */
+#c33-pill { position: relative; flex: none; display: inline-flex; align-items: center; height: 30px; padding: 0 11px; margin: 0; border: 0; border-radius: 999px; cursor: pointer; color: var(--c-texPri, #37352f);
+  background: color-mix(in oklch, var(--acc) 9%, var(--c-bacPri, #fff)); box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--acc) 17%, transparent);
+  transition: --neb-h 1.2s cubic-bezier(.4,0,.2,1), box-shadow .2s ease, transform .25s cubic-bezier(.3,1.5,.5,1); }
+#c33-pill:hover, #c33-pill[aria-expanded="true"] { box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--acc) 30%, transparent), 0 6px 16px -9px var(--acc); }
+#c33-pill:active { transform: scale(.95); }
+#c33-pill:focus-visible { outline: 2px solid color-mix(in oklch, var(--acc) 50%, transparent); outline-offset: 2px; }
+#c33-pill .pl-f { display: inline-flex; height: 15px; }
+#c33-pill .pl-f svg { height: 15px; width: auto; display: block; fill: currentColor; }
+#c33-pill .pl-x { display: inline-flex; align-items: center; gap: 6px; max-width: 0; margin-inline-start: 0; overflow: hidden; opacity: 0; white-space: nowrap; font: 500 11.5px/1 var(--c33-ui); color: var(--c-texSec, #787774);
+  transition: max-width .2s cubic-bezier(.2,.8,.2,1), opacity .16s ease, margin .2s ease; }
+#c33-pill:is(:hover, :focus-visible) .pl-x { max-width: 128px; opacity: 1; margin-inline-start: 8px; }
+#c33-pill.narrow .pl-t { display: none; }
+#c33-pill.tiny .pl-x { display: none; }
+#c33-pill kbd, #c33-np kbd { display: inline-block; font: 600 10px/1 var(--c33-ui); padding: 3px 5px; border-radius: 5px; color: inherit; background: color-mix(in oklch, var(--c-texPri, #37352f) 5%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--c-texPri, #37352f) 9%, transparent), inset 0 -1px 0 color-mix(in oklch, var(--c-texPri, #37352f) 12%, transparent); }
+#c33-pill .pl-dot { position: absolute; right: 6px; bottom: 5px; width: 3px; height: 3px; border-radius: 50%; background: var(--acc); animation: plBreath 3.4s ease-in-out infinite; }
+#c33-pill.ping .pl-dot { animation: plPing 1.2s ease-out 1, plBreath 3.4s ease-in-out 1.2s infinite; }
+@keyframes plBreath { 50% { opacity: .2; } }
+@keyframes plPing { 0% { transform: scale(2.2); box-shadow: 0 0 0 0 var(--acc); } 100% { transform: scale(1); box-shadow: 0 0 0 10px transparent; } }
+/* パネル */
+#c33-np { --bg: #f9f8f6; --fg: var(--c-texPri, #37352f); --sub: rgba(55,53,47,.64); --ter: rgba(55,53,47,.44); --line: rgba(55,53,47,.08); --hov: rgba(55,53,47,.05); --field: rgba(255,255,255,.62);
+  position: fixed; z-index: 2147482000; display: flex; overflow: hidden; border-radius: 14px; background: var(--bg); color: var(--fg);
+  box-shadow: 0 26px 64px rgba(15,15,15,.08), 0 4px 16px rgba(15,15,15,.05); font: 14px/1.6 var(--c33-ui); font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; transform-origin: 0 0; }
+:is(body.dark, html[data-atx-dark], html[data-c39-dark]) #c33-np { --bg: #262523; --fg: rgba(255,255,255,.9); --sub: rgba(255,255,255,.62); --ter: rgba(255,255,255,.42); --line: rgba(255,255,255,.08); --hov: rgba(255,255,255,.055); --field: rgba(255,255,255,.035);
+  box-shadow: 0 26px 64px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.25); }
+#c33-np[hidden], #c33-np-veil[hidden], #c33-np [hidden] { display: none !important; }
+#c33-np *, #c33-np *::before, #c33-np *::after { box-sizing: border-box; }
+#c33-np-veil { position: fixed; inset: 0; z-index: 2147481999; background: transparent; -webkit-backdrop-filter: blur(1.5px); backdrop-filter: blur(1.5px); }
+#c33-np button { font: inherit; color: inherit; }
+#c33-np .n2-rail { width: 44px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; }
+#c33-np .n2-rail button, #c33-np .n2-top button { width: 30px; height: 30px; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--ter); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s, color .15s; }
+#c33-np .n2-rail button:hover, #c33-np .n2-top button:hover { background: var(--hov); color: var(--fg); }
+#c33-np .n2-top button.on { color: var(--acc-ink); background: var(--acc-soft); }
+#c33-np .n2-sp { flex: 1; }
+#c33-np .n2-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; max-height: inherit; }
+#c33-np .n2-top { position: absolute; top: 8px; right: 8px; display: flex; gap: 2px; z-index: 2; }
+#c33-np .n2-top button { width: 28px; height: 28px; }
+#c33-np .n2-scroll { flex: 0 0 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 30px; scrollbar-width: thin; }
+#c33-np.chat .n2-scroll { flex: 1 1 auto; }
+#c33-np[data-stage="1"].chat { height: 80vh; }
+#c33-np .n2-hero { padding: 72px 0 22px; text-align: center; transition: opacity .25s ease, padding .3s ease; }
+#c33-np .n2-hi { font: 600 24px/1.35 var(--c33-ui); letter-spacing: .01em; animation: n2Up .45s cubic-bezier(.2,.8,.2,1) backwards; }
+#c33-np.chat .n2-hero { display: none; }
+#c33-np .n2-log { display: flex; flex-direction: column; padding: 46px 0 6px; }
+#c33-np:not(.chat) .n2-log { display: none; }
+#c33-np .n2-compose { flex: none; padding: 0 30px 18px; }
+#c33-np:not(.chat) .n2-compose { padding-bottom: 30px; }
+#c33-np .n2-box { display: flex; align-items: flex-end; gap: 8px; padding: 9px 9px 9px 14px; border-radius: 14px; background: var(--field); box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s ease; flex-wrap: wrap; }
+#c33-np .n2-box:focus-within { box-shadow: inset 0 0 0 1px var(--line), inset 0 -1.5px 0 var(--acc); }
+#c33-np textarea { flex: 1 1 200px; min-width: 0; min-height: calc(1.55em + 10px); resize: none; border: 0; outline: 0; margin: 0; padding: 5px 0; background: transparent; font: inherit; font-size: 14.5px; line-height: 1.55; color: inherit; overflow-y: hidden; }
+#c33-np textarea::placeholder { color: var(--ter); }
+#c33-np .n2-send { flex: none; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; background: color-mix(in oklch, var(--fg) 16%, transparent); transition: background .2s ease, transform .15s ease; }
+#c33-np .n2-send.on, #c33-np .n2-send.stop { background: var(--acc); }
+#c33-np .n2-send:active { transform: scale(.92); }
+#c33-np .n2-sq { width: 10px; height: 10px; border-radius: 2px; background: currentColor; }
+#c33-np .n2-scope { flex: none; align-self: center; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px 0 7px; border-radius: 999px; font-size: 11.5px; white-space: nowrap; color: var(--acc-ink); background: var(--acc-soft); }
+#c33-np .n2-glyph { width: 12px; height: 12px; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; line-height: 1; font-style: normal; }
+#c33-np .n2-hint { margin-top: 7px; padding-inline-start: 4px; font-size: 11px; color: var(--ter); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#c33-np .n2-hint kbd { margin-inline-end: 2px; }
+#c33-np .n2-chips, #c33-np .n2-next { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; justify-content: center; }
+#c33-np .n2-next { justify-content: flex-start; margin-top: 8px; }
+#c33-np .n2-chip { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 6px 12px; border: 0; border-radius: 999px; background: var(--hov); color: var(--sub); font-size: 12.5px; line-height: 1.3; cursor: pointer;
+  transition: background .15s, color .15s; animation: n2Up .35s ease backwards; animation-delay: calc(var(--i, 0) * 50ms + 100ms); }
+#c33-np .n2-chip:hover { background: var(--acc-soft); color: var(--acc-ink); }
+#c33-np .n2-cands { margin-top: 6px; padding: 4px; border-radius: 12px; background: var(--bg); box-shadow: 0 8px 26px rgba(15,15,15,.07), inset 0 0 0 1px var(--line); max-height: 306px; overflow-y: auto; animation: n2Up .16s ease; }
+#c33-np .n2-cand { display: flex; align-items: center; gap: 9px; min-height: 36px; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+#c33-np .n2-cand:hover, #c33-np .n2-cand.act { background: var(--acc-soft); }
+#c33-np .n2-ci { width: 20px; height: 20px; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; color: var(--ter); }
+#c33-np .n2-ci img { width: 18px; height: 18px; object-fit: cover; border-radius: 3px; display: block; }
+#c33-np .n2-ct { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+#c33-np .n2-cm { flex: 0 1 auto; max-width: 52%; display: inline-flex; align-items: center; gap: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; color: var(--ter); }
+#c33-np .n2-cm.ng { color: #c4554d; }
+#c33-np .n2-full .n2-ct { color: var(--sub); }
+#c33-np .n2-q { align-self: flex-end; max-width: 80%; margin: 16px 0 12px auto; padding: 8px 13px; border-radius: 14px 14px 4px 14px; background: var(--acc-soft); white-space: pre-wrap; overflow-wrap: anywhere; animation: n2Up .25s ease; }
+#c33-np .n2-a { margin: 2px 0 18px; }
+#c33-np .n2-body { font-size: 14.5px; line-height: 1.8; overflow-wrap: anywhere; }
+#c33-np .n2-body p { margin: 0 0 .75em; animation: n2Up .45s ease backwards; }
+#c33-np .n2-body :is(ul, ol) { margin: 0 0 .75em; padding-inline-start: 1.3em; animation: n2Up .45s ease backwards; }
+#c33-np .n2-body li { margin: .18em 0; }
+#c33-np .n2-body h5 { margin: 1.1em 0 .4em; font-size: 14.5px; font-weight: 650; animation: n2Up .45s ease backwards; }
+#c33-np .n2-body a { color: var(--acc-ink); }
+#c33-np .np-fn { font-size: .68em; line-height: 0; vertical-align: super; margin-inline-start: 1px; }
+#c33-np .np-fnum { display: inline-block; min-width: 1.4em; margin: 0 1px; padding: 0 3px; border-radius: 4px; text-align: center; color: var(--acc-ink); background: var(--acc-soft); text-decoration: none; font-weight: 600; }
+#c33-np .b-face { font-family: "SF Mono", Menlo, Consolas, monospace !important; font-size: .92em; letter-spacing: 0; white-space: nowrap; }
+#c33-np .n2-refs { margin-top: 4px; font-size: 12px; color: var(--ter); }
+#c33-np .n2-refs summary { cursor: pointer; width: fit-content; padding: 2px 6px; margin-inline-start: -6px; border-radius: 6px; list-style: none; }
+#c33-np .n2-refs summary::before { content: "▸ "; } #c33-np .n2-refs[open] summary::before { content: "▾ "; }
+#c33-np .n2-refs summary:hover { background: var(--hov); color: var(--sub); }
+#c33-np .n2-ref { display: flex; align-items: baseline; gap: 8px; padding: 3px 4px; border-radius: 6px; color: var(--sub); text-decoration: none; }
+#c33-np .n2-ref:hover { background: var(--hov); }
+#c33-np .n2-ref b { flex: none; min-width: 1.3em; text-align: center; color: var(--acc-ink); }
+#c33-np .n2-ri { flex: none; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1; }
+#c33-np .n2-ri:empty { display: none; }
+#c33-np .n2-ri img { width: 15px; height: 15px; object-fit: cover; border-radius: 3px; }
+#c33-np .n2-ref span:not(.n2-ri) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-np .n2-ref small { flex: none; font-size: 10.5px; }
+#c33-np .n2-bar { display: flex; gap: 2px; margin-top: 4px; }
+#c33-np .np-ib { width: 28px; height: 28px; padding: 0; border: 0; border-radius: 7px; background: none; color: var(--ter); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+#c33-np .np-ib:hover { background: var(--hov); color: var(--fg); }
+/* MoA の衛星 */
+#c33-np .n2-think { display: flex; align-items: center; gap: 12px; margin: 6px 0 14px; animation: n2Up .25s ease; }
+#c33-np .n2-orb { position: relative; width: 64px; height: 64px; flex: none; }
+#c33-np .n2-orbf { position: absolute; left: 50%; top: 50%; width: 30px; transform: translate(-50%, -50%); display: flex; color: var(--fg); }
+#c33-np .n2-orbf svg { width: 30px; height: auto; display: block; fill: currentColor; }
+#c33-np .n2-sat { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 6px var(--acc);
+  --n2r: var(--r, 22px); transform: rotate(var(--a)) translateX(var(--n2r)); animation: n2Orbit var(--d, 2.4s) linear infinite; transition: --n2r .38s cubic-bezier(.5,0,.75,0), opacity .38s ease; }
+@keyframes n2Orbit { from { transform: rotate(var(--a)) translateX(var(--n2r)); } to { transform: rotate(calc(var(--a) + 360deg)) translateX(var(--n2r)); } }
+#c33-np .n2-think.merge .n2-sat { --n2r: 0px; opacity: 0; }
+#c33-np .n2-think.stop .n2-sat { animation-play-state: paused; opacity: .3; }
+#c33-np .n2-th-t { font-size: 13px; color: var(--sub); }
+/* 引き出し */
+#c33-np .n2-drawer { position: absolute; left: 44px; top: 0; bottom: 0; width: 260px; z-index: 3; display: flex; flex-direction: column; background: var(--bg); box-shadow: 10px 0 26px rgba(15,15,15,.06); animation: n2Drawer .2s cubic-bezier(.2,.8,.2,1); }
+#c33-np .n2-drawer[hidden] { display: none; }
+@keyframes n2Drawer { from { transform: translateX(-14px); opacity: 0; } }
+#c33-np .n2-dsearch { padding: 12px 10px 6px; }
+#c33-np .n2-dsearch input { width: 100%; height: 34px; padding: 0 11px; border: 0; border-radius: 9px; outline: 0; background: var(--hov); font: inherit; font-size: 13px; color: inherit; }
+#c33-np .n2-dsearch input:focus { box-shadow: inset 0 -1.5px 0 var(--acc); }
+#c33-np .n2-dlist { flex: 1; overflow-y: auto; padding: 2px 8px 14px; }
+#c33-np .n2-dh { padding: 10px 8px 4px; font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--ter); }
+#c33-np .n2-di { display: block; width: 100%; padding: 6px 8px; border: 0; border-radius: 8px; background: none; text-align: left; cursor: pointer; }
+#c33-np .n2-di:hover { background: var(--hov); }
+#c33-np .n2-di b { display: block; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-np .n2-di small { display: block; font-size: 11px; color: var(--ter); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-np .n2-de { padding: 8px; font-size: 12px; color: var(--ter); }
+#c33-np .n2-set { padding-top: 4px; }
+#c33-np .n2-set .bs-card { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 6px 0 !important; }
+.np-sr { position: fixed; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; left: -9px; top: 0; }
+.c33-np-flash { animation: n2Flash .6s ease-out; }
+@keyframes n2Flash { 0% { box-shadow: inset 0 0 0 999px oklch(64% .13 var(--neb-ht, 212) / .2); } 100% { box-shadow: inset 0 0 0 999px transparent; } }
+@keyframes n2Up { from { opacity: 0; transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) { #c33-np *, #c33-pill, #c33-pill * { animation: none !important; transition: none !important; } }`;
+    document.head.appendChild(npStyle);
+    function npImport(f) {
+      npOpenNow();
+      if (!f) return;
+      f.text().then((text) => {
+        const r = BURI.importText(text, f.name);
+        updState();
+        if (!npChat) { npChat = true; np.classList.add('chat'); }
+        const m = mk('div', 'n2-a', null, logEl); mk('div', 'n2-body', r.message, m);
+      }).catch((e) => { obToast('ファイルを読めませんでした。' + String(e && e.message || e)); });
+    }
+
     BURI.restore();
     updState();
 
@@ -5753,8 +6581,9 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
       forget: () => { const r = BURI.forget(); updState(); return r; },
       clear: () => { const r = BURI.clear(); updState(); return r; },
       state: () => BURI.state(),
-      open() { input.focus(); openPanel(); return true; },
-      close() { closePanel(); return true; }
+      open() { npOpenNow(); return true; },
+      close() { npClose(); return true; },
+      panel: () => ({ open: npOpen, stage: np.dataset.stage, chat: npChat })
     };
     layout();
   }
