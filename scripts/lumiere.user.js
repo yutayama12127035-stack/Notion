@@ -2,7 +2,7 @@
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
 // @version      13.3.0
-// @description  v13.2.0: 起動の幕は、16c（幕の合図）が動いていればその合図（各柱が整った）で開く — 時計（1.5 秒）では開けない。CSS の保険も 16c がある時は 9 秒。v13.1.0: 速く — 幕（カーテン）の上限を 3.2→1.5 秒・ページを移る時 0.9→0.6 秒。v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
+// @description  v13.3.0: ★遊び心（トグルの三角がばねのように回る・チェックがぽんと弾む・ページのアイコンが揺れる・タブやボタンが押すと少し沈む・画像がふわっと出る）。速く — CSS を最後へ移すのは他の CSS が後ろに来た時だけ・読み進みの線はスクロールした時だけ測る。v13.2.0: 起動の幕は、16c（幕の合図）が動いていればその合図（各柱が整った）で開く — 時計（1.5 秒）では開けない。CSS の保険も 16c がある時は 9 秒。v13.1.0: 速く — 幕（カーテン）の上限を 3.2→1.5 秒・ページを移る時 0.9→0.6 秒。v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -44,7 +44,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '13.1.0';
+  const VERSION = '13.3.0';
   const TAG = '[³⁷ Lumière v' + VERSION + ']';
   if (window.__c37 && window.__c37.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -212,6 +212,7 @@
     ['scrollbar', '画面', 'スクロールバー', '細く・配色に合わせた色に', true],
     ['selection', '画面', '選択とカーソル', '文字を選んだ時の色・入力の縦棒をアクセント色に', true],
     ['motion', '画面', '動き', 'ページを開いた時にふわっと出る・乗せた時の動きを滑らかに（「動きを減らす」設定の端末では止める）', true],
+    ['play', '画面', '遊び心', 'トグルの三角がばねのように回る・チェックがぽんと弾む・ページのアイコンが乗せると揺れる・タブやボタンが押すと少し沈む・画像がふわっと出る（「動きを減らす」端末では止める）', true],
     ['progress', '画面', '読み進み具合', '画面の上端に、今どこまで読んだかの細い線', true],
     ['coverAccent', '画面', '表紙からアクセント', 'ページの表紙（またはアイコン）の色を読み取って、そのページのアクセント色にする', false],
     ['genCover', '誌面', '表紙の無いページに飾り', '表紙を付けていないページの上部に、配色から作った淡い模様（光のにじみ・波・方眼・紙片）を敷く。ページの題名から模様が決まるので、ページごとに少しずつ違う', true],
@@ -748,6 +749,34 @@ html :focus-visible${B} { outline-color: var(--lm-accent-line) !important; }`;
 @keyframes lm-in { from { opacity: 0; transform: translateY(${(6 * k).toFixed(1)}px); } to { opacity: 1; transform: none; } }
 html .notion-frame .layout-content${B}, html .notion-peek-renderer .notion-page-content${B} { animation: lm-in ${(0.42 * k).toFixed(2)}s cubic-bezier(.2,.8,.2,1) both; }
 html .notion-sidebar-container [role="treeitem"]${B}, html .notion-sidebar-container [data-inp-target]${B} { transition: background .18s ease, color .18s ease; }`;
+  };
+
+  /* v13.3: 遊び心 — 押したくなる小さな動き */
+  CSS.play = () => {
+    if (reduce()) return '';
+    return `
+@keyframes lm-pop { 0% { transform: scale(.3); opacity: 0; } 60% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes lm-wiggle { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-9deg) scale(1.06); } 45% { transform: rotate(7deg) scale(1.06); } 70% { transform: rotate(-3deg); } }
+@keyframes lm-bob { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-3px) rotate(-6deg); } 70% { transform: translateY(1px); } }
+@keyframes lm-imgin { from { opacity: 0; transform: scale(.985); filter: blur(4px); } }
+@keyframes lm-glow { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lm-accent) 45%, transparent); } 100% { box-shadow: 0 0 0 9px transparent; } }
+/* トグルの三角: ばねのように回る・押すと縮む */
+html ${SCOPE} .notion-list-item-box-left [role="button"] svg${B}, html ${SCOPE} [role="button"][aria-expanded] > svg[class*="arrowCaret"]${B} { transition: transform .4s cubic-bezier(.3,1.65,.45,1) !important; }
+html ${SCOPE} .notion-list-item-box-left [role="button"]${B}:active svg { scale: .8; }
+/* チェック: 付けた瞬間にぽんと弾み、輪が広がる（表のチェックボックスも） */
+html ${SCOPE} .notion-to_do-block .notion-list-item-box-left${B} svg.check, html ${SCOPE} [data-testid="property-value"]${B} svg.check { animation: lm-pop .42s cubic-bezier(.3,1.7,.45,1); transform-origin: center; }
+html ${SCOPE} .notion-to_do-block .notion-list-item-box-left${B} div:has(> svg.check) { animation: lm-glow .6s ease-out; border-radius: 50%; }
+/* ページのアイコン: 乗せると揺れる・コールアウトのアイコンは跳ねる */
+html .notion-frame .notion-record-icon:is([style*="height: 78px"], [style*="height: 72px"], [style*="height: 124px"], [style*="height: 140px"])${B}:hover { animation: lm-wiggle .7s cubic-bezier(.3,1.4,.5,1); }
+html ${SCOPE} .notion-callout-block .notion-record-icon${B}:hover { animation: lm-bob .6s cubic-bezier(.3,1.4,.5,1); }
+/* ビューのタブ・上の帯・道具の段のボタン: 乗せると浮き、押すと沈む */
+html ${SCOPE} .notion-collection-view-tab-button${B} { transition: transform .22s cubic-bezier(.3,1.6,.5,1); }
+html ${SCOPE} .notion-collection-view-tab-button${B}:hover { transform: translateY(-1px); }
+html ${SCOPE} .notion-collection-view-tab-button${B}:active { transform: translateY(1px) scale(.97); }
+html .notion-topbar [role="button"]${B}, html ${SCOPE} [role="button"]:is([aria-label="Filter"], [aria-label="フィルター"], [aria-label="Sort"], [aria-label="並べ替え"], [aria-label="Search"], [aria-label="検索"])${B} { transition: transform .16s cubic-bezier(.3,1.6,.5,1), background .15s; }
+html .notion-topbar [role="button"]${B}:active, html ${SCOPE} [role="button"]:is([aria-label="Filter"], [aria-label="フィルター"], [aria-label="Sort"], [aria-label="並べ替え"], [aria-label="Search"], [aria-label="検索"])${B}:active { transform: scale(.92); }
+/* 画像: ふわっと出る */
+html ${SCOPE} .notion-image-block img${B} { animation: lm-imgin .55s cubic-bezier(.2,.8,.2,1) backwards; }`;
   };
 
   /* ---- v1.0 追加: 誌面の飾り ---- */
