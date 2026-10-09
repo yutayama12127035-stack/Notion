@@ -357,7 +357,7 @@
     const rows = rowsOf(team);
     { const n = rows.filter((r) => !bulletSlot(r)).length; setAttr(btn, 'data-c33-n', n ? String(n) : ''); if (!n) btn.removeAttribute('data-c33-n'); }   // v87: Stella の件数
     team.toggleAttribute('data-c33-empty', !rows.length);   // v87: 中身を畳んだチームは Stella で薄いカードに
-    if (!rows.length) { if (P.tree) alignTree(team, btn, []); return; }
+    if (!rows.length) { if (nbOn()) nbTeam(team, btn, []); else if (P.tree) alignTree(team, btn, []); return; }
     const info = rows.map((r) => ({ r, pad: padOf(r), slot: bulletSlot(r) }));
     const pagePads = info.filter((x) => !x.slot).map((x) => x.pad);
     const minPad = pagePads.length ? Math.min(...pagePads) : Math.min(...info.map((x) => x.pad));
@@ -416,7 +416,7 @@
       ST.rows++;
       if (isDb) ST.dbs++;
     }
-    if (P.tree) alignTree(team, btn, info); else if (P.alignViews) alignViews(info);
+    if (nbOn()) nbTeam(team, btn, info); else if (P.tree) alignTree(team, btn, info); else if (P.alignViews) alignViews(info);
   }
   const cssPx = (n) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(n)) || 0;
   function realIcon(el) {
@@ -540,6 +540,7 @@
       }
       /* 位置合わせ（読む→書く）はまとめてここで。次のコマに回すと 1 コマだけ「ずれた姿」が見える */
       while (frameJobs.length) { try { frameJobs.shift()(); } catch (e) { ST.lastError = String(e && e.stack || e); } }
+      try { nbSync(); } catch (e) { ST.lastError = 'stella: ' + String(e && e.stack || e); }
     } finally { inScan = false; }
     readyCheck();
   }
@@ -1059,44 +1060,13 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   box-shadow: var(--c-shaOutMd, 0 8px 28px rgba(0,0,0,.16)); font: 12.5px/1.55 var(--c33-ui); font-feature-settings: "palt" 1; opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
 #c33-ob-toast.on { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { #c33-orbit, #c33-orbit .ob-it, #c33-orbit .ob-all { transition: none !important; } }
-/* ============================================================
- * v87 Stella（星図）— 輪（Orbit）の右。2 つ合わせて Nebius
- *   チームスペースは大分類の色の淡いカード、題名は小文字のまま、行は UI の書体。
- *   いま開いているページは色の帯と、静かに瞬く星の印。分類を替えるとカードがふわっと出る
- * ============================================================ */
-html[data-c33-stella] {
-  --c33-item-font: var(--c33-ui); --c33-item-size: 13.5px; --c33-item-weight: 500; --c33-item-track: .003em; --c33-item-h: 30px; --c33-item-color: var(--c-texPri, #37352f);
-  --c33-view-font: var(--c33-ui); --c33-view-size: 12.5px; --c33-view-weight: 450; --c33-view-track: .003em; --c33-view-h: 26px;
-  --c33-team-font: var(--c33-ui); --c33-team-size: 12.5px; --c33-team-weight: 650; --c33-team-track: .01em; --c33-team-color: var(--c-texPri, #37352f); --c33-team-case: none;
-  --c33-team-gap: 0px; --c33-cur-weight: 650; --c33-radius: 9px;
-}
-html[data-c33-stella][data-c33-osel] .notion-sidebar-container .notion-outliner-team-header-container > .notion-outliner-team-header[role="button"] { display: none !important; }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team]${B} {
-  width: auto !important; max-width: none !important; box-sizing: border-box !important; align-self: stretch !important; margin: 0 8px 10px 4px !important; padding: 4px 4px 6px !important; border-radius: 14px !important;
-  background: color-mix(in srgb, var(--c33-tint, #9b9a97) 7%, var(--c33-ob-bg, var(--c-bacSec, #f7f6f3))) !important;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 16%, transparent), 0 1px 2px rgba(15,15,15,.03) !important;
-  transition: box-shadow .25s ease !important; animation: c33StellaIn .5s cubic-bezier(.16,1,.3,1) both; }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team][data-c33-empty]${B} { padding: 2px 4px !important; margin-bottom: 6px !important; background: transparent !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 12%, transparent) !important; }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team]:hover${B} { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 30%, transparent), 0 8px 22px -14px color-mix(in srgb, var(--c33-tint, #9b9a97) 70%, transparent) !important; }
-@keyframes c33StellaIn { from { opacity: 0; transform: translateY(7px); } }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B} { position: relative !important; border-radius: 10px !important; }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} .notion-record-icon${B} { border-radius: 7px !important; background: color-mix(in srgb, var(--c33-tint, #9b9a97) 18%, transparent) !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 24%, transparent) !important; }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}[data-c33-n]${B}::after { content: attr(data-c33-n); position: absolute; right: 8px; top: 50%; transform: translateY(-50%); min-width: 18px; height: 16px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; font: 650 10px/16px var(--c33-ui); text-align: center; letter-spacing: 0; color: color-mix(in srgb, var(--c33-tint, #9b9a97) 75%, var(--c-texSec, #787774)); background: color-mix(in srgb, var(--c33-tint, #9b9a97) 13%, transparent); pointer-events: none; transition: opacity .15s ease; }
-html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}:hover${B}::after { opacity: 0; }
-html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B} { border-radius: 9px !important; transition: background-color .15s ease, box-shadow .15s ease !important; animation: c33StellaRow .45s ease both; animation-delay: calc(var(--c33-ri, 0) * 26ms + 70ms); }
-@keyframes c33StellaRow { from { opacity: 0; } }
-html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind]:hover${B} { background: color-mix(in srgb, var(--c33-tint, #9b9a97) 11%, transparent) !important; }
-html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind] > :first-child .notion-record-icon${B} { transition: scale .3s cubic-bezier(.3,1.7,.5,1), rotate .3s cubic-bezier(.3,1.7,.5,1); }
-html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind]:hover > :first-child .notion-record-icon${B} { scale: 1.14; rotate: -6deg; }
-html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur]${B} { background: color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 15%, transparent) !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 26%, transparent) !important; }
-html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur]${B}::after { content: ''; flex: none; width: 6px; height: 6px; margin-inline: auto 9px; border-radius: 50%; background: var(--c33-tint, var(--lm-accent, #2783de)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 22%, transparent); animation: c33Star 2.6s ease-in-out infinite; }
-@keyframes c33Star { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 8%, transparent); transform: scale(1.15); } }
 /* 輪の遊び: 乗せると小さく弾む・選ぶとぽんと出る */
 #c33-orbit .ob-it .ob-ic, #c33-orbit .ob-all .ob-ic { transition: scale .3s cubic-bezier(.3,1.7,.5,1), rotate .3s cubic-bezier(.3,1.7,.5,1); }
 #c33-orbit .ob-it:hover .ob-ic, #c33-orbit .ob-all:hover .ob-ic { scale: 1.12; rotate: -5deg; }
 #c33-orbit .ob-it.sel .ob-ic { animation: c33ObPop .5s cubic-bezier(.3,1.7,.5,1); }
 @keyframes c33ObPop { 0% { scale: .8; } 60% { scale: 1.16; } 100% { scale: 1; } }
-@media (prefers-reduced-motion: reduce) { html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team], html[data-c33-stella] .notion-sidebar-container [data-c33-kind], html[data-c33-stella] [data-c33-cur]::after, #c33-orbit .ob-it.sel .ob-ic { animation: none !important; } }`;
+@media (prefers-reduced-motion: reduce) { #c33-orbit .ob-it.sel .ob-ic { animation: none !important; } }`;
+    if (OB.on && OB.stella !== false) { nbCss(); nbWire(); nbLayoutSoon(); } else nbRemove();
   }
 
   /* ============================================================
@@ -1326,6 +1296,7 @@ html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-t
       paint(el, v.y, src.__gid);
     });
     if (obAllEl) obAllEl.classList.toggle('sel', !OB.sel);
+    nbOrbitMoved();
   }
 
   function obGlide() {
@@ -1370,12 +1341,14 @@ html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-t
     try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; if (W.__c16 && W.__c16.toggle) W.__c16.toggle(gid); } catch (e) { /* noop */ }
   }
   function obSelect(gid) {
+    const prev = OB.sel;
     OB.sel = gid || '';
     obUnfold(OB.sel);
     obSave();
-    obCss();
-    schedule(0);
-    obFixSoon(60);
+    obLay();
+    /* v97 Stella: 前の星座が子午線へ縮んで消えてから（0.15 秒）入れ替える。Orbit 自身の動きはそのまま */
+    const apply = () => { obCss(); schedule(0); obFixSoon(60); nbAfterSelect(); };
+    if (nbBeforeSelect(prev, OB.sel)) setTimeout(apply, 150); else apply();
     obPopClose();
   }
 
@@ -1481,6 +1454,7 @@ html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-t
       if (obEl.style.getPropertyValue(k) !== v) obEl.style.setProperty(k, v, 'important');
     }
     obReserveSpace(side, r);
+    nbLayoutSoon();
   }
   function obReserveSpace(side, r) {
     const sc = obScroller(); if (!sc) return;
@@ -1561,7 +1535,7 @@ html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-t
       const cur = parseFloat(de.style.getPropertyValue('--c33-top-dy')) || 0;
       const ab = obAllEl.getBoundingClientRect().bottom;
       const st = sc.getBoundingClientRect().top - cur;
-      const dy = Math.max(0, Math.round(ab - st + 6 + (de.hasAttribute('data-c33-stella') ? 46 : 0)));   // v87: Stella の見出しの分
+      const dy = Math.max(0, Math.round(ab - st + (de.hasAttribute('data-c33-stella') ? 16 : 6)));   // v97: Stella は見出しを置かず、上の帯の 20px 下から
       if (Math.abs(dy - obLastDy) >= 1) {
         obLastDy = dy;
         de.style.setProperty('--c33-top-dy', dy + 'px');
@@ -1696,6 +1670,624 @@ html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-t
         obFixSoon(0);
       } catch (e) {}
     }, 2000);
+  }
+
+  /* ============================================================
+   *  Nebius · Stella（星図）— v97
+   *   Orbit（輪）で選んだ惑星の内側を、子午線（Meridian）・光脈（Lumen）・光暈（Halo）で描く星図。
+   *   ・Notion のアイコンはそのまま（形・色・絵柄を変えない・隠さない）。光はアイコンの後ろ・周りの別の層だけ
+   *   ・線は 2 種類だけ: 子午線（Orbit の右端の 1 本・動かない）と、子午線から各チームスペースへ伸びる光脈
+   *   ・上に見出しは置かない（どの惑星かは Orbit と、子午線の接点の光で伝える）
+   *   ・惑星ごとに色相を 1 つ（--neb-h）。輪を回すと 1.2 秒で次の色へ流れる
+   *   ・DB を開くと、接点から光の粒が子午線 → 光脈 → その DB のアイコンへ走り、火花が散る（経路点灯）
+   *   ・下に Meteora（最近開いた DB・惑星をまたいで 4 件）
+   *   Orbit の見た目・動き・構造には手を加えない（選んだ時と回した時の「知らせ」を受け取るだけ）
+   * ============================================================ */
+  const NB_LS = 'c33.neb.v1';
+  const NBS = Object.assign({ last: {}, counts: {}, fresh: {}, met: [] }, (() => { try { return JSON.parse(localStorage.getItem(NB_LS) || '{}') || {}; } catch (e) { return {}; } })());
+  let nbSaveT = 0;
+  const nbSave = () => { clearTimeout(nbSaveT); nbSaveT = setTimeout(() => { try { localStorage.setItem(NB_LS, JSON.stringify(NBS)); } catch (e) { /* noop */ } }, 200); };
+  const nbOn = () => !!(OB.on && OB.stella !== false);
+  const nbReduce = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+  const nbHash = (s) => { let h = 0; for (const c of String(s)) h = (h * 31 + c.codePointAt(0)) >>> 0; return h; };
+  const NX = 'html[data-c33][data-c33-stella] .notion-sidebar-container';
+  const NT_ = NX + ' ' + SEL_TEAM + '[data-c33-team]';
+  const NHB = NT_ + ' > ' + SEL_TEAM_BTN;
+  const NROW = NT_ + ' [data-c33-kind]:not([data-c33-kind="view"])';
+  const NICON = NROW + ' > :first-child .notion-record-icon';
+
+  /* ---- 惑星の色相 ---- */
+  const nbHueMap = new Map();
+  let nbHueSig = '', nbHueCur = null;
+  function nbHueOf(gid) {
+    if (nbHueSig !== obSig) { nbHueMap.clear(); nbHueSig = obSig; }
+    if (!gid) return 212;
+    if (nbHueMap.has(gid)) return nbHueMap.get(gid);
+    const gs = obGroups();
+    const i = gs.findIndex((g) => g.gid === gid);
+    let h = null;
+    const m = gs[i] && /rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?/.exec(gs[i].tint || '');
+    if (m && (m[4] == null || +m[4] > 0.2)) {
+      const [r, g, b] = [m[1], m[2], m[3]].map((x) => x / 255);
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+      if (d > 0.12) { let k = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h = Math.round((k * 60 + 360) % 360); }
+    }
+    if (h == null) h = Math.round(((i < 0 ? nbHash(gid) % 97 : i) * 137.508 + 205) % 360);   // 隣の惑星と色がぶつからない黄金角
+    nbHueMap.set(gid, h);
+    return h;
+  }
+  function nbHue(gid, now) {
+    let h = nbHueOf(gid);
+    if (nbHueCur != null) { while (h - nbHueCur > 180) h -= 360; while (nbHueCur - h > 180) h += 360; }   // 近い向きへ回る
+    nbHueCur = h;
+    const de = document.documentElement;
+    if (now) de.setAttribute('data-neb-hnow', '');
+    de.style.setProperty('--neb-ht', String(h));
+    if (now) requestAnimationFrame(() => requestAnimationFrame(() => de.removeAttribute('data-neb-hnow')));
+  }
+
+  /* ---- 層: 子午線（body・固定）・星空（サイドバーの中・中身の後ろ）・粒と火花（body） ---- */
+  let nbMer = null, nbSky = null, nbSkyHost = null, nbEmptyEl = null, nbMetEl = null;
+  let nbMx = 0, nbCy = 0, nbGap = 0, nbShow = false;
+  function nbEnsure() {
+    if (!nbMer || !nbMer.isConnected) {
+      nbMer = document.createElement('div'); nbMer.id = 'c33-neb-mer'; nbMer.setAttribute('aria-hidden', 'true');
+      nbMer.innerHTML = '<i class="nm-seg"></i><i class="nm-glow"></i>';
+      document.body.appendChild(nbMer);
+    }
+    const sc = obScroller();
+    let host = sc && sc.parentElement;
+    while (host && host !== document.body && getComputedStyle(host).display === 'contents') host = host.parentElement;   // 箱の無い入れ物（display: contents）は飛ばす
+    if (host && (!nbSky || nbSkyHost !== host || !nbSky.isConnected)) {
+      if (nbSky) nbSky.remove();
+      if (nbSkyHost && nbSkyHost !== host) nbSkyHost.removeAttribute('data-neb-skyhost');
+      nbSkyHost = host; host.setAttribute('data-neb-skyhost', '');
+      nbSky = document.createElement('div'); nbSky.id = 'c33-neb-sky'; nbSky.setAttribute('aria-hidden', 'true');
+      nbSky.innerHTML = '<i class="sk sk1"></i><i class="sk sk2"></i><i class="sk sk3"></i>';
+      host.insertBefore(nbSky, host.firstChild);
+    }
+  }
+  function nbRemove() {
+    [nbMer, nbSky, nbEmptyEl, nbMetEl].forEach((e) => { if (e) e.remove(); });
+    nbMer = nbSky = nbEmptyEl = nbMetEl = null;
+    if (nbSkyHost) nbSkyHost.removeAttribute('data-neb-skyhost');
+    nbSkyHost = null;
+    const de = document.documentElement;
+    ['data-neb-path', 'data-neb-out'].forEach((a) => de.removeAttribute(a));
+  }
+  /* 子午線の位置 — Orbit の右端の 1 画素（Orbit 自身の境界線と同じ画素に重ねる）・画素の境目に丸める */
+  let nbLayR = 0;
+  function nbLayoutSoon() { if (!nbLayR) nbLayR = requestAnimationFrame(() => { nbLayR = 0; nbLayout(); }); }
+  function nbLayout() {
+    if (!nbOn()) { if (nbMer || nbSky) nbRemove(); return; }
+    const side = obSide();
+    nbShow = !!(obEl && obEl.isConnected && obEl.style.display !== 'none' && side && obSidebarVisible(side));
+    nbEnsure();
+    if (!nbMer) return;
+    nbMer.hidden = !nbShow;
+    if (nbSky) nbSky.hidden = !nbShow;
+    if (!nbShow) return;
+    const dpr = window.devicePixelRatio || 1;
+    const rr = obEl.getBoundingClientRect(), sr = side.getBoundingClientRect();
+    nbMx = Math.round((rr.right - 1) * dpr) / dpr;
+    nbMer.style.left = nbMx + 'px'; nbMer.style.top = sr.top + 'px'; nbMer.style.height = sr.height + 'px';
+    const sc = obScroller();
+    if (sc) {
+      const cr = sc.getBoundingClientRect();
+      /* 光脈の根元 = 子午線。チームスペースの箱の左端から子午線までの距離（¹⁶ の入れ物の分の字下げも含む） */
+      const t0 = nbVisibleTeams(side).find((t) => t.getBoundingClientRect().width) || null;
+      const left = t0 ? t0.getBoundingClientRect().left : cr.left;
+      const gap = Math.max(0, Math.round((left - (nbMx + 1)) * dpr) / dpr);
+      if (gap !== nbGap) { nbGap = gap; document.documentElement.style.setProperty('--neb-gap', gap + 'px'); }
+      if (nbSky && nbSkyHost) {
+        const hr = nbSkyHost.getBoundingClientRect();
+        nbSky.style.left = Math.round(cr.left - hr.left) + 'px'; nbSky.style.top = Math.round(cr.top - hr.top) + 'px';
+        nbSky.style.width = Math.round(cr.width) + 'px'; nbSky.style.height = Math.round(cr.height) + 'px';
+      }
+    }
+    nbContact();
+    nbSeg();
+  }
+  /* 接点 — Orbit で選んでいる惑星と同じ高さ（選んでいない時は ALL の高さ） */
+  function nbContact() {
+    if (!nbMer || !nbShow) return;
+    let el = null;
+    if (OB.sel) { for (const it of obWheelEl ? obWheelEl.querySelectorAll('.ob-it.sel') : []) { if (it.style.display === 'none') continue; const r = it.getBoundingClientRect(); if (r.height && (!el || Math.abs(r.top - nbCy) < Math.abs(el.getBoundingClientRect().top - nbCy))) el = it; } }
+    if (!el) el = OB.sel ? null : obAllEl;
+    const top = parseFloat(nbMer.style.top) || 0;
+    if (el) { const r = el.getBoundingClientRect(); nbCy = r.top + r.height / 2; nbMer.style.setProperty('--neb-cy', Math.round(nbCy - top) + 'px'); nbMer.toggleAttribute('data-off', false); }
+    else nbMer.toggleAttribute('data-off', true);
+  }
+  /* 灯った経路のうち、子午線の区間（接点 → いま光っているチームの光脈の根元） */
+  let nbLitTeam = null;
+  function nbSeg() {
+    if (!nbMer || !nbShow) return;
+    const seg = nbMer.firstElementChild;
+    const top = parseFloat(nbMer.style.top) || 0, h = parseFloat(nbMer.style.height) || 0;
+    if (!nbLitTeam || !nbLitTeam.isConnected || nbMer.hasAttribute('data-off')) { nbMer.style.setProperty('--neb-sh', '0px'); return; }
+    const b = nbLitTeam.querySelector(SEL_TEAM_BTN);
+    const br = b && b.getBoundingClientRect();
+    if (!br || !br.height) { nbMer.style.setProperty('--neb-sh', '0px'); return; }
+    const ly = Math.max(0, Math.min(h, br.bottom + 1 - top)), cy = nbCy - top;
+    nbMer.style.setProperty('--neb-s0', Math.round(Math.min(ly, cy)) + 'px');
+    nbMer.style.setProperty('--neb-sh', Math.round(Math.abs(ly - cy)) + 'px');
+    void seg;
+  }
+
+  /* ---- Orbit からの知らせ（見た目は変えない） ---- */
+  let nbLastOff = null, nbLastT = 0, nbShootAt = 0, nbSkyY = 0;
+  function nbOrbitMoved() {
+    if (!nbOn() || !nbShow) return;
+    nbContact(); nbSeg();
+    const now = performance.now();
+    if (nbLastOff != null && nbSky) {
+      const d = obOff - nbLastOff, dt = Math.max(8, now - nbLastT);
+      nbSkyY = (nbSkyY - d * 0.22) % 4096;
+      nbSky.style.setProperty('--neb-sky-y', nbSkyY.toFixed(1) + 'px');
+      if (Math.abs(d / dt) > 1.6 && now - nbShootAt > 1400 && !nbReduce()) { nbShootAt = now; nbShoot(d > 0 ? 1 : -1); }
+    }
+    nbLastOff = obOff; nbLastT = now;
+  }
+  function nbShoot(dir) {
+    if (!nbSky) return;
+    const s = document.createElement('i'); s.className = 'nb-shoot';
+    const w = nbSky.clientWidth || 200, h = nbSky.clientHeight || 400;
+    const x0 = w * (0.45 + Math.random() * 0.5), y0 = h * (0.08 + Math.random() * 0.5);
+    nbSky.appendChild(s);
+    const dx = -80 - Math.random() * 60, dy = (dir > 0 ? -1 : 1) * (36 + Math.random() * 40);
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    s.animate([{ transform: `translate(${x0}px, ${y0}px) rotate(${ang}deg) scaleX(.2)`, opacity: 0 }, { offset: 0.2, opacity: 1 }, { transform: `translate(${x0 + dx}px, ${y0 + dy}px) rotate(${ang}deg) scaleX(1)`, opacity: 0 }], { duration: 760, easing: 'cubic-bezier(.2,.6,.3,1)' }).onfinish = () => s.remove();
+  }
+  /* 惑星を替える: 光脈が子午線へ縮んで消え、中身が回った向きへ 12px ずれて消える → 新しい惑星の光脈が伸び、星がこぼれ出る */
+  function nbBeforeSelect(prev, next) {
+    if (!nbOn() || !nbShow || prev === next || nbReduce()) return false;
+    const ids = obItemEls.map((el) => el.__gid);
+    const a = ids.indexOf(prev), b = ids.indexOf(next);
+    const de = document.documentElement;
+    de.style.setProperty('--neb-out-y', (a >= 0 && b >= 0 && b < a ? 12 : -12) + 'px');
+    de.setAttribute('data-neb-out', '');
+    return true;
+  }
+  function nbAfterSelect() {
+    document.documentElement.removeAttribute('data-neb-out');
+    nbHue(OB.sel);
+    nbCurKey = '';   // 経路点灯をやり直す（前回その惑星で選んでいた DB を復元）
+    nbLayoutSoon();
+  }
+
+  /* ---- チームスペース（星座）ごとの印 — scanTeam から（Stella の時は位置合わせの代わりに） ---- */
+  function nbTeam(team, btn, info) {
+    for (const m of team.querySelectorAll('[data-c33-mv]')) { if (m.style.getPropertyValue('margin-inline-start')) m.style.removeProperty('margin-inline-start'); m.removeAttribute('data-c33-mv'); }
+    const key = team.getAttribute('data-c16-k') || norm((btn.querySelector('[id]') || btn).textContent);
+    const open = btn.getAttribute('aria-expanded') !== 'false';
+    const tops = info.filter((x) => !x.slot && (x.r.getAttribute('data-c33-lvl') || '0') === '0');
+    let n = open ? tops.length : (NBS.counts[key] != null ? NBS.counts[key] : null);
+    if (open && NBS.counts[key] !== n) { NBS.counts[key] = n; nbSave(); }
+    if (n == null) btn.removeAttribute('data-neb-n'); else setAttr(btn, 'data-neb-n', String(Math.min(5, n)));
+    if (n != null && n > 5) setAttr(btn, 'data-neb-more', String(n)); else btn.removeAttribute('data-neb-more');
+    btn.toggleAttribute('data-neb-none', n === 0);
+    for (const x of info) { if (x.slot) continue; setVar(x.r, '--neb-lv', x.r.getAttribute('data-c33-lvl') || '0'); }
+    team.setAttribute('data-neb', '');
+  }
+
+  /* ---- 選んだ DB・経路点灯・Meteora・新しさ ---- */
+  let nbCurKey = '', nbPathAt = 0;
+  function nbVisibleTeams(side) {
+    const sel = OB.sel;
+    return [...side.querySelectorAll(SEL_TEAM + '[data-c33-team]')].filter((t) => !sel || t.getAttribute('data-c16-g') === sel);
+  }
+  function nbSync() {
+    if (!nbOn()) { if (nbMer || nbSky || nbMetEl) nbRemove(); return; }
+    const side = obSide(); if (!side) return;
+    if (nbHueCur == null) nbHue(OB.sel, true);
+    const teams = nbVisibleTeams(side);
+    teams.forEach((t, i) => setVar(t, '--neb-ti', String(Math.min(i, 12))));
+    /* いま開いているページが、この惑星の星（DB・ページ）なら経路を灯す。無ければ、前回この惑星で選んでいた星を思い出す */
+    let cur = null;
+    for (const t of teams) { const r = t.querySelector('[data-c33-kind][data-c33-cur]:not([data-c33-kind="view"])'); if (r) { cur = r; break; } }
+    if (!cur) for (const t of teams) { const r = t.querySelector('[data-c33-kind="view"][data-c33-cur]'); if (r) { const up = r.closest('[data-block-id]'); const db = up && up.querySelector(':scope > a [data-c33-kind], :scope > [role="treeitem"] [data-c33-kind]'); cur = db || null; if (cur) break; } }
+    for (const r of side.querySelectorAll('[data-neb-mem]')) if (r !== cur) r.removeAttribute('data-neb-mem');
+    let mem = false;
+    if (!cur && OB.sel && NBS.last[OB.sel]) {
+      const id32 = NBS.last[OB.sel];
+      for (const t of teams) { const a = t.querySelector('a[href*="' + id32 + '"] [data-c33-kind]'); if (a) { cur = a; mem = true; break; } }
+    }
+    if (cur && mem) cur.setAttribute('data-neb-mem', '');
+    const team = cur ? cur.closest(SEL_TEAM) : null;
+    for (const t of side.querySelectorAll(SEL_TEAM + '[data-neb-lit]')) if (t !== team) t.removeAttribute('data-neb-lit');
+    for (const t of side.querySelectorAll(SEL_TEAM + '[data-neb-has]')) if (t !== team) t.removeAttribute('data-neb-has');
+    const de = document.documentElement;
+    const id = cur ? (idOf(cur) || '').replace(/-/g, '') : '';
+    const key = (OB.sel || '*') + '|' + id + '|' + (mem ? 'm' : 'c');
+    if (cur && team) {
+      team.setAttribute('data-neb-has', '');
+      de.setAttribute('data-neb-path', '');
+      nbLitTeam = team;
+      if (key !== nbCurKey) {
+        const fly = !mem && nbCurKey !== '' && nbShow && !nbReduce();
+        nbCurKey = key;
+        if (!mem && id) { if (OB.sel) { NBS.last[OB.sel] = id; nbSave(); } nbMeteoraAdd(cur, team, id); }
+        if (fly) nbFly(cur, team); else { team.setAttribute('data-neb-lit', ''); nbSeg(); }
+      } else if (!team.hasAttribute('data-neb-lit') && performance.now() - nbPathAt > 700) team.setAttribute('data-neb-lit', '');
+    } else {
+      nbCurKey = key; nbLitTeam = null;
+      de.removeAttribute('data-neb-path');
+      nbSeg();
+    }
+    nbEmpty(side, teams);
+    nbMeteora(side);
+    nbFresh(teams);
+    nbLayoutSoon();
+  }
+  /* 経路点灯: 接点 → 子午線を縦に → 光脈の根元で右へ → 光脈を灯しながら右へ → その星のアイコンへ落ちる（約 0.5 秒） */
+  function nbFly(row, team) {
+    const btn = team.querySelector(SEL_TEAM_BTN);
+    const ic = row.querySelector('.notion-record-icon') || row.firstElementChild;
+    if (!btn || !ic || !nbMer) { team.setAttribute('data-neb-lit', ''); return; }
+    nbContact();
+    const br = btn.getBoundingClientRect(), ir = ic.getBoundingClientRect();
+    const ly = br.bottom + 1, ix = ir.left + ir.width / 2, iy = ir.top + ir.height / 2;
+    const pts = [[nbMx + 0.5, nbCy], [nbMx + 0.5, ly], [ix, ly], [ix, ir.top - 3]];
+    const len = []; let tot = 0;
+    for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); len.push(l); tot += l; }
+    if (!tot) { team.setAttribute('data-neb-lit', ''); return; }
+    const off = [0]; let acc = 0; len.forEach((l) => { acc += l; off.push(acc / tot); });
+    const dur = 520;
+    const p = document.createElement('i'); p.className = 'c33-neb-pt'; p.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(p);
+    nbPathAt = performance.now();
+    team.removeAttribute('data-neb-lit');
+    nbLitTeam = team;
+    nbMer.setAttribute('data-grow', '');
+    nbSeg();
+    setTimeout(() => { nbMer && nbMer.removeAttribute('data-grow'); }, 30);
+    setTimeout(() => team.setAttribute('data-neb-lit', ''), Math.round(off[1] * dur));
+    const a = p.animate(pts.map(([x, y], k) => ({ transform: `translate(${x}px, ${y}px)`, offset: off[k] })), { duration: dur, easing: 'cubic-bezier(.45,.05,.35,1)' });
+    a.onfinish = () => { p.remove(); nbSparks(ix, iy, ir.width); };
+  }
+  function nbSparks(cx, cy, w) {
+    const n = 8 + Math.floor(Math.random() * 5);
+    for (let i = 0; i < n; i++) {
+      const ang = (i / n) * Math.PI * 2 + Math.random() * 0.45;
+      const r0 = w / 2 + 3, r1 = r0 + 9 + Math.random() * 11;
+      const s = document.createElement('i'); s.className = 'c33-neb-sp'; s.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(s);
+      s.animate([{ transform: `translate(${cx + Math.cos(ang) * r0}px, ${cy + Math.sin(ang) * r0}px) scale(1)`, opacity: 1 }, { transform: `translate(${cx + Math.cos(ang) * r1}px, ${cy + Math.sin(ang) * r1}px) scale(.2)`, opacity: 0 }], { duration: 480 + Math.random() * 260, easing: 'cubic-bezier(.2,.7,.3,1)' }).onfinish = () => s.remove();
+    }
+  }
+  /* 星座がまだ無い惑星 */
+  function nbEmpty(side, teams) {
+    const need = !!(OB.sel && !teams.length && nbShow);
+    if (!need) { if (nbEmptyEl) { nbEmptyEl.remove(); nbEmptyEl = null; } return; }
+    const root = side.querySelector('#c16-root');
+    if (!root) return;
+    if (!nbEmptyEl) { nbEmptyEl = document.createElement('div'); nbEmptyEl.id = 'c33-neb-empty'; nbEmptyEl.innerHTML = '<i class="ne-l"></i><i class="ne-c"></i><span>まだ星座がありません</span>'; }
+    if (nbEmptyEl.previousElementSibling !== root) root.after(nbEmptyEl);
+  }
+  /* 最近更新の瞬き（24 時間以内）・7 日以上更新の無い星は少し沈む — 10 分ごとに Notion に聞く（DB の中でいちばん新しく編集されたページ） */
+  let nbFreshBusy = false;
+  async function nbFresh(teams) {
+    const now = Date.now();
+    const rows = [];
+    for (const t of teams) for (const r of t.querySelectorAll('[data-c33-kind="db"], [data-c33-kind="page"]')) { const id = idOf(r); if (id) rows.push({ r, id }); }
+    for (const { r, id } of rows) {
+      const f = NBS.fresh[id];
+      const at = f && f.at;
+      r.toggleAttribute('data-neb-fresh', !!(at && now - at < 864e5));
+      r.toggleAttribute('data-neb-stale', !!(at && now - at > 6048e5));
+    }
+    if (nbFreshBusy) return;
+    const need = rows.filter(({ id }) => !NBS.fresh[id] || now - NBS.fresh[id].chk > 6e5).slice(0, 6);
+    if (!need.length) return;
+    nbFreshBusy = true;
+    try {
+      const recs = await getRecords('block', need.map((x) => x.id));
+      for (const { id } of need) {
+        const b = recs.get(id);
+        let at = b ? Math.max(b.last_edited_time || 0, 0) : 0;
+        if (b && (b.type === 'collection_view_page' || b.type === 'collection_view')) {
+          try {
+            const headers = { 'Content-Type': 'application/json' }; const u = activeUser(); if (u) headers['x-notion-active-user-header'] = u;
+            const body = { type: 'BlocksInSpace', query: '', spaceId: b.space_id, limit: 1, source: 'quick_find_input_change', sort: { field: 'lastEdited', direction: 'desc' }, filters: { isDeletedOnly: false, excludeTemplates: true, navigableBlockContentOnly: true, requireEditPermissions: false, includePublicPagesWithoutExplicitAccess: false, ancestors: [id], createdBy: [], editedBy: [], lastEditedTime: {}, createdTime: {}, inTeams: [] } };
+            const r = await fetch(location.origin + '/api/v3/search', { method: 'POST', credentials: 'same-origin', headers, body: JSON.stringify(body) });
+            const j = r.ok ? await r.json() : null;
+            const hit = j && j.results && j.results[0];
+            const n = hit && j.recordMap && j.recordMap.block && j.recordMap.block[hit.id];
+            const v = n && (n.value && n.value.value ? n.value.value : n.value);
+            if (v && v.last_edited_time) at = Math.max(at, v.last_edited_time);
+          } catch (e) { /* noop */ }
+        }
+        NBS.fresh[id] = { at: at || 0, chk: Date.now() };
+      }
+      nbSave();
+    } catch (e) { for (const { id } of need) if (!NBS.fresh[id]) NBS.fresh[id] = { at: 0, chk: Date.now() }; nbSave(); }
+    finally { nbFreshBusy = false; }
+  }
+
+  /* ---- Meteora（流星）— 最近開いた星を 4 件、惑星をまたいで ---- */
+  function nbMeteoraAdd(row, team, id32) {
+    const ic = row.querySelector('.notion-record-icon');
+    let icon = ic ? ic.outerHTML : '';
+    if (icon.length > 6000) icon = '';
+    const name = nameOf(row) || '無題';
+    const gid = team.getAttribute('data-c16-g') || OB.sel || '';
+    const prev = NBS.met.find((m) => m.id === id32);
+    NBS.met = [{ id: id32, gid, name, icon, at: Date.now(), fresh: !prev }].concat(NBS.met.filter((m) => m.id !== id32)).slice(0, 12);
+    nbSave();
+    nbMetSig = '';
+  }
+  let nbMetSig = '';
+  const nbAgo = (at) => { const m = Math.max(0, Math.round((Date.now() - at) / 60000)); return m < 1 ? 'いま' : m < 60 ? m + '分前' : m < 1440 ? Math.round(m / 60) + '時間前' : Math.round(m / 1440) + '日前'; };
+  function nbMeteora(side) {
+    const root = side.querySelector('#c16-root');
+    const list = NBS.met.slice(0, 4);
+    if (!root || !list.length || !nbShow) { if (nbMetEl) { nbMetEl.remove(); nbMetEl = null; } return; }
+    if (!nbMetEl) {
+      nbMetEl = document.createElement('section'); nbMetEl.id = 'c33-meteora'; nbMetEl.setAttribute('aria-label', 'Meteora — 最近開いた星');
+      nbMetEl.innerHTML = '<div class="mt-h"><i>Meteora</i><small>Recent</small></div><div class="mt-l" role="list"></div>';
+      nbMetEl.addEventListener('click', (e) => { const row = e.target.closest('.mt-r'); if (row) { e.preventDefault(); e.stopPropagation(); nbGo(row.__m); } });
+      nbMetEl.addEventListener('keydown', (e) => { const row = e.target.closest('.mt-r'); if (row && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); nbGo(row.__m); } });
+    }
+    const anchor = nbEmptyEl && nbEmptyEl.isConnected ? nbEmptyEl : root;
+    if (nbMetEl.previousElementSibling !== anchor) anchor.after(nbMetEl);
+    const sig = list.map((m) => m.id + m.at).join('|') + '|' + Math.floor(Date.now() / 60000);
+    if (sig === nbMetSig) return;
+    nbMetSig = sig;
+    const gs = obGroups();
+    const L = nbMetEl.lastElementChild;
+    const old = new Set([...L.children].map((r) => r.__m && r.__m.id));
+    L.textContent = '';
+    for (const m of list) {
+      const r = document.createElement('div'); r.className = 'mt-r'; r.setAttribute('role', 'listitem'); r.tabIndex = 0; r.__m = m;
+      if (!old.has(m.id) && old.size) r.classList.add('new');
+      const g = gs.find((x) => x.gid === m.gid);
+      const gl = document.createElement('span'); gl.className = 'mt-g'; gl.setAttribute('aria-hidden', 'true');
+      if (g) { obIcPaint(gl, g); gl.style.color = 'oklch(58% .13 ' + nbHueOf(m.gid) + ')'; gl.title = g.label; }
+      const ic = document.createElement('span'); ic.className = 'mt-i'; ic.innerHTML = m.icon || '';
+      ic.querySelectorAll('[role="button"], [tabindex]').forEach((x) => { x.removeAttribute('role'); x.removeAttribute('tabindex'); });
+      const nm = document.createElement('span'); nm.className = 'mt-n'; nm.textContent = m.name;
+      const tm = document.createElement('span'); tm.className = 'mt-t'; tm.textContent = nbAgo(m.at);
+      r.title = m.name + (g ? '（' + g.label + '）' : '');
+      r.append(gl, ic, nm, tm);
+      L.appendChild(r);
+    }
+  }
+  /* Meteora から: Orbit をその惑星まで回して、その星を開く */
+  function nbGo(m) {
+    if (!m) return;
+    const i = obItemEls.findIndex((el) => el.__gid === m.gid);
+    if (m.gid && m.gid !== OB.sel && i >= 0) { obJump(i); obSelect(m.gid); }
+    setTimeout(() => {
+      const a = document.querySelector('.notion-sidebar-container a[href*="' + m.id + '"]');
+      if (a) obPress(a); else location.assign('/' + m.id);
+    }, m.gid !== OB.sel ? 180 : 0);
+  }
+
+  /* ---- 星座を畳む: DB の行がアイコンごと光脈へ吸い込まれる（0.2 秒）→ Notion の畳む ---- */
+  let nbPass = false;
+  function nbClick(e) {
+    if (nbPass || !nbOn() || e.button !== 0) return;
+    const btn = e.target.closest && e.target.closest(SEL_TEAM_BTN);
+    if (!btn || !btn.closest(SEL_TEAM + '[data-c33-team]')) return;
+    if (e.target.closest('[role="button"]') !== btn) return;   // ＋・… は Notion のまま
+    if (btn.getAttribute('aria-expanded') !== 'true' || nbReduce()) return;
+    const team = btn.closest(SEL_TEAM);
+    const rows = [...team.querySelectorAll('[data-c33-kind]')];
+    if (!rows.length) return;
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    const ly = btn.getBoundingClientRect().bottom;
+    rows.forEach((r) => r.style.setProperty('--neb-up', Math.max(0, Math.round(r.getBoundingClientRect().top - ly + 8)) + 'px'));
+    team.setAttribute('data-neb-closing', '');
+    setTimeout(() => {
+      team.removeAttribute('data-neb-closing');
+      rows.forEach((r) => r.style.removeProperty('--neb-up'));
+      nbPass = true;
+      try { obPress(btn); } finally { nbPass = false; }
+    }, 200);
+  }
+  /* ---- 行に乗せた時: 光脈が「ここへ行く道」を先に見せる・名前が入り切らない時は全文 ---- */
+  let nbHovTeam = null;
+  function nbOver(e) {
+    if (!nbOn()) return;
+    const row = e.target.closest && e.target.closest('[data-c33-kind]');
+    const team = row ? row.closest(SEL_TEAM + '[data-c33-team]') : null;
+    if (team !== nbHovTeam) { if (nbHovTeam) nbHovTeam.removeAttribute('data-neb-hov'); nbHovTeam = team; if (team) team.setAttribute('data-neb-hov', ''); }
+    if (row) { const n = nameEl(row); if (n && n.scrollWidth > n.clientWidth + 1 && !row.title) row.title = norm(n.textContent); }
+  }
+  /* ---- キーボード: ↑↓ で星と星座を移動・← で畳む・→ で開く・Enter で開く（Notion のまま） ---- */
+  function nbItems(side) {
+    const out = [];
+    for (const t of nbVisibleTeams(side)) {
+      const b = t.querySelector(':scope > ' + SEL_TEAM_BTN); if (b) out.push(b);
+      for (const a of t.querySelectorAll('[role="treeitem"]')) { if (a.getBoundingClientRect().height) out.push(a); }
+    }
+    if (nbMetEl) out.push(...nbMetEl.querySelectorAll('.mt-r'));
+    return out;
+  }
+  function nbKey(e) {
+    if (!nbOn() || e.altKey || e.metaKey || e.ctrlKey) return;
+    if (!/^(ArrowUp|ArrowDown|ArrowLeft|ArrowRight)$/.test(e.key)) return;
+    const side = obSide(); const a = document.activeElement;
+    if (!side || !a || !side.contains(a) && !(nbMetEl && nbMetEl.contains(a))) return;
+    const items = nbItems(side);
+    const i = items.findIndex((x) => x === a || x.contains(a));
+    if (i < 0) return;
+    e.preventDefault(); e.stopPropagation();
+    const cur = items[i];
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { const n = items[i + (e.key === 'ArrowDown' ? 1 : -1)]; if (n) { n.focus({ preventScroll: false }); n.scrollIntoView({ block: 'nearest' }); } return; }
+    if (cur.matches(SEL_TEAM_BTN)) {
+      const open = cur.getAttribute('aria-expanded') === 'true';
+      if ((e.key === 'ArrowLeft' && open) || (e.key === 'ArrowRight' && !open)) obPress(cur);
+    }
+  }
+  let nbWired = false;
+  function nbWire() {
+    if (nbWired) return;
+    nbWired = true;
+    document.addEventListener('click', nbClick, true);
+    document.addEventListener('pointerover', nbOver, true);
+    document.addEventListener('keydown', nbKey, true);
+    window.addEventListener('resize', nbLayoutSoon);
+    document.addEventListener('scroll', (e) => { if (nbOn() && nbLitTeam && e.target && e.target.nodeType === 1 && e.target.matches('[data-c33-topfix]')) { nbSeg(); } }, true);
+    try { new ResizeObserver(nbLayoutSoon).observe(document.documentElement); } catch (e) { /* noop */ }
+  }
+
+  function nbCss() {
+    let st = document.getElementById('c33-neb-css');
+    if (st) return;
+    st = document.createElement('style'); st.id = 'c33-neb-css';
+    st.textContent = `
+@property --neb-h { syntax: '<number>'; inherits: true; initial-value: 212; }
+@property --neb-lit { syntax: '<number>'; inherits: false; initial-value: 0; }
+html { --neb-ht: 212; }
+/* 色: 惑星の色相から（OKLCH なので、どの色相でも明るさがそろう） */
+html[data-c33-stella] .notion-sidebar-container, #c33-neb-mer, .c33-neb-pt, .c33-neb-sp, #c33-neb-empty {
+  --neb-h: var(--neb-ht); transition: --neb-h 1.2s cubic-bezier(.4,0,.2,1);
+  --neb-acc: oklch(62% .13 var(--neb-h)); --neb-ink: oklch(45% .13 var(--neb-h)); --neb-glow: oklch(70% .15 var(--neb-h) / .6);
+  --neb-halo: oklch(74% .12 var(--neb-h) / .30); --neb-halo2: oklch(72% .14 var(--neb-h) / .5);
+  --neb-la: oklch(60% .07 var(--neb-h) / .5); --neb-lb: oklch(60% .05 var(--neb-h) / .04); --neb-dot: oklch(56% .09 var(--neb-h) / .62);
+  --neb-band: oklch(70% .12 var(--neb-h) / .16); --neb-star: oklch(58% .07 var(--neb-h) / .42);
+  --neb-bg: var(--c33-ob-bg, var(--c-bacSec, #f7f6f3)); --neb-mer: var(--ca-borSecTra, rgba(55,53,47,.09));
+  --c33-cur-weight: 650; --c33-cur-color: var(--neb-ink);
+}
+html[data-neb-hnow] .notion-sidebar-container, html[data-neb-hnow] #c33-neb-mer { transition: none !important; }
+:is(body.dark, html[data-atx-dark], html[data-c39-dark]) :is(.notion-sidebar-container, #c33-neb-mer, .c33-neb-pt, .c33-neb-sp, #c33-neb-empty) {
+  --neb-acc: oklch(76% .12 var(--neb-h)); --neb-ink: oklch(86% .09 var(--neb-h)); --neb-glow: oklch(80% .13 var(--neb-h) / .6);
+  --neb-halo: oklch(72% .12 var(--neb-h) / .28); --neb-halo2: oklch(76% .13 var(--neb-h) / .5);
+  --neb-la: oklch(78% .07 var(--neb-h) / .45); --neb-lb: oklch(78% .05 var(--neb-h) / .04); --neb-dot: oklch(80% .08 var(--neb-h) / .6);
+  --neb-band: oklch(70% .12 var(--neb-h) / .18); --neb-star: oklch(90% .04 var(--neb-h) / .55);
+}
+html[data-c33-stella] {
+  --c33-item-font: var(--c33-ui); --c33-item-size: 14px; --c33-item-weight: 400; --c33-item-track: .002em; --c33-item-h: 30px; --c33-item-color: var(--c-texPri, #37352f);
+  --c33-icon-size: 18px; --c33-icon-gap: 8px; --c33-icon-dx: 0px; --c33-icon-dy: 0px; --c33-text-dy: 0px;
+  --c33-view-font: var(--c33-ui); --c33-view-size: 12.5px; --c33-view-weight: 400; --c33-view-track: .003em; --c33-view-h: 26px;
+  --c33-team-font: var(--c33-ui); --c33-team-size: 15px; --c33-team-weight: 600; --c33-team-track: .005em; --c33-team-color: var(--c-texPri, #37352f); --c33-team-case: none;
+  --c33-team-gap: 0px; --c33-team-after: 0px; --c33-radius: 0px;
+}
+/* 上に見出しを置かない — Notion の「Teamspaces」の段も（惑星を選んでいる時） */
+html[data-c33-stella][data-c33-osel] .notion-sidebar-container .notion-outliner-team-header-container > .notion-outliner-team-header[role="button"]${B} { display: none !important; }
+/* 子午線より左に枠線・スクロールバーを出さない（線の位置が動かない） */
+html[data-c33-stella] .notion-sidebar-container [data-c33-topfix]${B} { scrollbar-width: none !important; border-inline-start: 0 !important; box-shadow: none !important; }
+html[data-c33-stella] .notion-sidebar-container [data-c33-topfix]${B}::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+html[data-c33-stella] .notion-sidebar-container [data-neb-skyhost]${B} { position: relative !important; isolation: isolate !important; }
+/* 星座（チームスペース） */
+${NT_}${B} { margin: 0 0 28px !important; padding: 0 !important; background: none !important; box-shadow: none !important; border-radius: 0 !important; position: relative !important; width: auto !important; animation: none !important; }
+${NHB}${B} { position: relative !important; box-sizing: border-box !important; width: 100% !important; height: 30px !important; min-height: 30px !important; margin: 0 !important; padding-inline: 12px 14px !important; border-radius: 0 !important; background: transparent !important; overflow: visible !important; outline: none !important;
+  animation: nebFade .3s ease backwards; animation-delay: calc(var(--neb-ti, 0) * 60ms); }
+${NHB} [data-c33-mv]${B}, ${NHB} :is(div, span)${B} { background: transparent !important; }
+${NHB} .notion-record-icon${B} { width: 20px !important; height: 20px !important; position: relative !important; isolation: isolate; transition: scale .25s cubic-bezier(.3,1.6,.5,1); }
+${NHB} .notion-record-icon :is(img, svg)${B} { width: 20px !important; height: 20px !important; }
+${NHB} div[style*="min-width: 20px"]${B} { margin-inline-end: 8px !important; }
+${NHB} .notion-record-icon${B}::before { content: ""; position: absolute; inset: -10px; z-index: -1; border-radius: 50%; pointer-events: none; background: radial-gradient(closest-side, var(--neb-halo), transparent); opacity: 0; transition: opacity .4s ease; }
+${NT_}[data-neb-has] > ${SEL_TEAM_BTN} .notion-record-icon${B}::before { opacity: 1; }
+${NHB}:hover .notion-record-icon${B} { scale: 1.08; }
+/* 光脈 — 子午線に根元を持つ 1px の横線。右へ行くほど薄く、右端に星の数の点 */
+${NHB}${B}::before { content: "" !important; position: absolute !important; display: block !important; left: calc(-1 * var(--neb-gap, 0px)) !important; right: 14px !important; top: calc(100% - 1px) !important; height: 1px !important; pointer-events: none !important;
+  background: linear-gradient(90deg, var(--neb-acc), color-mix(in oklch, var(--neb-acc) 20%, transparent)) left center / calc(var(--neb-lit) * 100%) 100% no-repeat, linear-gradient(90deg, var(--neb-la), var(--neb-lb)) !important;
+  transform-origin: left center; opacity: 1; transition: --neb-lit .24s cubic-bezier(.3,.7,.3,1), opacity .35s ease, transform .15s ease-in;
+  animation: nebLumen .25s cubic-bezier(.3,.8,.3,1) backwards; animation-delay: calc(var(--neb-ti, 0) * 60ms); }
+${NT_}[data-neb-lit] > ${SEL_TEAM_BTN}${B}::before { --neb-lit: 1; }
+${NT_}[data-neb-hov] > ${SEL_TEAM_BTN}${B}::before { --neb-lit: .55; }
+${NT_}[data-neb-lit][data-neb-hov] > ${SEL_TEAM_BTN}${B}::before { --neb-lit: 1; }
+html[data-neb-path] ${NT_}:not([data-neb-lit]):not([data-neb-hov]) > ${SEL_TEAM_BTN}${B}::before { opacity: .4; }
+${NHB}[data-neb-n]${B}::after { content: attr(data-neb-more) !important; position: absolute !important; right: 14px !important; top: calc(100% - 4px) !important; height: 10px !important; display: block !important;
+  width: auto !important; min-width: calc(var(--neb-dn, 1) * 6px - 3px) !important; padding: 0 0 0 calc(var(--neb-dn, 1) * 6px + 2px) !important; box-sizing: border-box !important; pointer-events: none !important;
+  font: 600 9px/10px var(--c33-ui) !important; letter-spacing: 0 !important; color: var(--neb-dot) !important; text-align: left !important; border-radius: 0 !important; transform: none !important;
+  background: repeating-linear-gradient(90deg, var(--neb-dot) 0 3px, transparent 3px 6px) left center / calc(var(--neb-dn, 1) * 6px - 3px) 3px no-repeat !important; transition: opacity .15s ease; }
+${NHB}[data-neb-more]${B}::after { padding-left: 33px !important; }
+${NHB}[data-neb-n="1"]${B} { --neb-dn: 1; } ${NHB}[data-neb-n="2"]${B} { --neb-dn: 2; } ${NHB}[data-neb-n="3"]${B} { --neb-dn: 3; } ${NHB}[data-neb-n="4"]${B} { --neb-dn: 4; } ${NHB}[data-neb-n="5"]${B} { --neb-dn: 5; }
+${NHB}[data-neb-none]${B}::after { content: "星なし" !important; background: none !important; padding: 0 !important; font-weight: 500 !important; }
+${NHB}:is(:hover, :focus-within)${B}::after { opacity: 0; }
+${NHB}:focus-visible${B} { background: linear-gradient(90deg, var(--neb-band), transparent 80%) !important; }
+/* 星（フル DB・ページ） — 1 段だけ字下げ。アイコンの左端はチームスペース名の書き出しにそろえる */
+${NT_} [role="tree"]${B} { margin-top: 5px !important; }
+${NT_} :is(a[role="treeitem"], [data-block-id])${B} { margin: 0 !important; padding: 0 !important; border-radius: 0 !important; background: transparent !important; }
+${NROW}${B}${B} { position: relative !important; height: 30px !important; min-height: 30px !important; padding-inline: calc(40px + var(--neb-lv, 0) * 16px) 14px !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important;
+  transition: opacity .35s ease, translate .2s ease-in, scale .2s ease-in, background-color .2s ease;
+  animation: nebRowIn .32s cubic-bezier(.2,.8,.3,1) backwards; animation-delay: calc(var(--neb-ti, 0) * 60ms + 250ms + var(--c33-ri, 0) * 40ms); }
+${NROW} > :first-child${B} { position: relative !important; width: 18px !important; min-width: 18px !important; height: 18px !important; margin-inline: 0 8px !important; }
+${NICON}${B} { position: relative !important; isolation: isolate; overflow: visible !important; transition: scale .25s cubic-bezier(.3,1.6,.5,1); }
+${NICON}${B}::before { content: ""; position: absolute; inset: -9px; z-index: -1; border-radius: 50%; pointer-events: none; background: radial-gradient(closest-side, var(--neb-halo), transparent); opacity: 0; transition: opacity .35s ease; }
+${NICON}${B}::after { content: ""; position: absolute; inset: -2px; z-index: -1; border-radius: 50%; pointer-events: none; box-shadow: 0 0 0 1px var(--neb-acc); opacity: 0; }
+${NROW} > :nth-child(2)${B} { transition: translate .22s cubic-bezier(.3,1.4,.5,1); min-width: 0 !important; }
+${NROW}:hover .notion-record-icon${B}, ${NROW}:focus-within .notion-record-icon${B} { scale: 1.15; }
+${NROW}:hover .notion-record-icon${B}::before, ${NROW}:focus-within .notion-record-icon${B}::before { opacity: .8; }
+${NROW}:hover > :nth-child(2)${B}, ${NROW}:focus-within > :nth-child(2)${B} { translate: 2px 0; }
+${NT_} a[role="treeitem"]:focus-visible${B} { outline: none !important; }
+${NT_} a[role="treeitem"]:focus-visible > [data-c33-kind]${B}${B} { background: linear-gradient(90deg, var(--neb-band), transparent 75%) !important; }
+/* ＋・… は名前を押しのけず、右にうっすら重ねる（名前が見切れない） */
+${NROW} > :nth-child(n+3)${B} { position: absolute !important; inset-inline-end: 8px !important; top: 0 !important; bottom: 0 !important; height: auto !important; display: flex !important; align-items: center !important; gap: 2px;
+  padding-inline-start: 22px !important; background: linear-gradient(90deg, transparent, var(--neb-bg) 45%) !important; opacity: 0; transition: opacity .15s ease; pointer-events: none; }
+${NROW}:hover > :nth-child(n+3)${B} { opacity: .78; pointer-events: auto; }
+/* 選んでいる星: 光暈・2.4 秒ごとの波紋・テーマ色の太字・左から消える帯（四角い枠や塗りは使わない） */
+${NROW}[data-c33-cur]${B}${B} { background: linear-gradient(90deg, var(--neb-band), transparent 85%) !important; }
+${NROW}[data-c33-cur] .notion-record-icon${B}::before { background: radial-gradient(closest-side, var(--neb-halo2), transparent); opacity: 1; }
+${NROW}[data-c33-cur] .notion-record-icon${B}::after { animation: nebRipple 2.4s ease-out infinite; }
+${NROW}[data-neb-mem] .notion-record-icon${B}::before { opacity: .6; }
+/* 新しさ: 24 時間以内に更新 → 右上に小さな光がゆっくり瞬く／7 日以上更新なし → 少し沈む */
+${NROW}[data-neb-fresh]${B}${B}::after { content: "" !important; position: absolute !important; display: block !important; left: calc(40px + var(--neb-lv, 0) * 16px + 15px) !important; top: 5px !important; width: 3px !important; height: 3px !important; border-radius: 50% !important;
+  background: var(--neb-acc) !important; box-shadow: 0 0 4px 1px var(--neb-glow) !important; pointer-events: none !important; animation: nebTwinkle 3.2s ease-in-out infinite !important; }
+${NROW}[data-neb-stale]:not([data-c33-cur]):not(:hover)${B} { opacity: .56; }
+/* ビュー（DB の下の行）はもう一段だけ */
+${NT_} [data-c33-kind="view"]${B}${B} { padding-inline-start: calc(66px + var(--neb-lv, 0) * 16px) !important; border-radius: 0 !important; animation: nebRowIn .3s ease backwards; }
+/* 畳む: DB の行がアイコンごと光脈へ吸い込まれる */
+${NT_}[data-neb-closing] [data-c33-kind]${B}${B} { translate: 0 calc(-1 * var(--neb-up, 0px)) !important; scale: .92; opacity: 0 !important; transition: translate .2s cubic-bezier(.5,0,.8,.4), scale .2s ease-in, opacity .18s ease-in !important; }
+/* 惑星を替える時 */
+html[data-neb-out] ${NT_}${B} { opacity: 0 !important; translate: 0 var(--neb-out-y, -12px); transition: opacity .15s ease-in, translate .15s ease-in !important; }
+html[data-neb-out] ${NHB}${B}::before { transform: scaleX(0); }
+@keyframes nebLumen { from { transform: scaleX(0); } }
+@keyframes nebFade { from { opacity: 0; } }
+@keyframes nebRowIn { from { opacity: 0; translate: 0 -6px; } }
+@keyframes nebRipple { 0% { transform: scale(.85); opacity: .75; } 70% { opacity: 0; } 100% { transform: scale(2.3); opacity: 0; } }
+@keyframes nebTwinkle { 0%, 100% { opacity: .35; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.15); } }
+/* 子午線 — Orbit の右端の 1 画素。上から下まで 1 本。選んだ惑星の高さだけ、かすかに光る */
+#c33-neb-mer { position: fixed; z-index: 7; width: 1px; pointer-events: none; background: var(--neb-mer); }
+#c33-neb-mer[hidden] { display: none !important; }
+#c33-neb-mer .nm-glow { position: absolute; left: -1px; width: 3px; height: 44px; top: calc(var(--neb-cy, 0px) - 22px); border-radius: 3px; background: linear-gradient(to bottom, transparent, var(--neb-glow) 45%, var(--neb-glow) 55%, transparent); transition: top .45s cubic-bezier(.3,.8,.3,1), opacity .3s; }
+#c33-neb-mer[data-off] .nm-glow { opacity: 0; }
+#c33-neb-mer .nm-seg { position: absolute; left: 0; width: 1px; top: var(--neb-s0, 0px); height: var(--neb-sh, 0px); background: var(--neb-acc); opacity: 0; transition: opacity .35s ease, top .3s ease, height .3s ease; }
+html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
+#c33-neb-mer[data-grow] .nm-seg { transition: none; }
+/* 粒と火花（アイコンの上には重ねない — 粒はアイコンの手前で止まり、火花はアイコンの外側から散る） */
+.c33-neb-pt { position: fixed; left: -3px; top: -3px; width: 6px; height: 6px; z-index: 8; pointer-events: none; border-radius: 50%; background: var(--neb-acc); box-shadow: 0 0 6px 2px var(--neb-glow), 0 0 14px 4px var(--neb-halo); }
+.c33-neb-sp { position: fixed; left: -1.5px; top: -1.5px; width: 3px; height: 3px; z-index: 8; pointer-events: none; border-radius: 50%; background: var(--neb-acc); box-shadow: 0 0 4px 1px var(--neb-glow); }
+/* 星空 — ごく淡く。アイコンの列（左の 64px）の後ろには描かない */
+#c33-neb-sky { position: absolute; z-index: -1; pointer-events: none; overflow: hidden; contain: strict;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 64px, #000 104px); mask-image: linear-gradient(90deg, transparent 0, transparent 64px, #000 104px); }
+#c33-neb-sky[hidden] { display: none !important; }
+#c33-neb-sky .sk { position: absolute; left: 0; right: 0; top: -600px; bottom: -600px; background-repeat: repeat; will-change: transform; }
+#c33-neb-sky .sk1 { background-image: radial-gradient(circle at 23px 31px, var(--neb-star) 0 .8px, transparent 1.3px), radial-gradient(circle at 81px 97px, var(--neb-star) 0 .7px, transparent 1.2px), radial-gradient(circle at 140px 52px, var(--neb-star) 0 1px, transparent 1.6px); background-size: 173px 139px;
+  transform: translateY(calc(var(--neb-sky-y, 0px) * .5)); animation: nebSky 7s ease-in-out infinite alternate; }
+#c33-neb-sky .sk2 { background-image: radial-gradient(circle at 47px 12px, var(--neb-star) 0 .7px, transparent 1.2px), radial-gradient(circle at 118px 140px, var(--neb-star) 0 .9px, transparent 1.4px), radial-gradient(circle at 190px 70px, var(--neb-star) 0 .6px, transparent 1.1px); background-size: 211px 191px;
+  transform: translateY(var(--neb-sky-y, 0px)); animation: nebSky 9s ease-in-out -3s infinite alternate; }
+#c33-neb-sky .sk3 { background-image: radial-gradient(circle at 70px 88px, var(--neb-star) 0 1.2px, transparent 1.9px); background-size: 263px 241px; opacity: .8;
+  transform: translateY(calc(var(--neb-sky-y, 0px) * 1.6)); animation: nebSky 5s ease-in-out -1s infinite alternate; }
+@keyframes nebSky { from { opacity: .35; } to { opacity: 1; } }
+#c33-neb-sky .nb-shoot { position: absolute; left: 0; top: 0; width: 56px; height: 1px; transform-origin: 0 50%; background: linear-gradient(90deg, var(--neb-star), transparent); }
+/* 星座がまだ無い惑星 */
+#c33-neb-empty { order: 9998; position: relative; display: flex; align-items: center; gap: 8px; height: 40px; margin: 2px 0 26px; padding-inline-start: 0; white-space: nowrap; overflow: hidden; color: var(--c-texTer, #9b9a97); font: 500 11.5px/1 var(--c33-ui); }
+#c33-neb-empty .ne-l { width: 22px; flex: none; height: 1px; margin-inline-start: calc(-1 * var(--neb-gap, 0px)); background: linear-gradient(90deg, var(--neb-la), var(--neb-lb)); transform-origin: left; animation: nebLumen .3s ease backwards; }
+#c33-neb-empty .ne-c { width: 14px; height: 14px; border-radius: 50%; border: 1px dashed var(--neb-dot); flex: none; animation: nebFade .4s ease .2s backwards; }
+/* Meteora（流星）— 最近開いた星 */
+#c33-meteora { order: 9999; margin: 6px 0 24px; padding: 0 14px 0 12px; font-family: var(--c33-ui); animation: nebFade .4s ease .3s backwards; }
+#c33-meteora .mt-h { display: flex; align-items: baseline; gap: 8px; height: 26px; color: var(--c-texSec, #787774); }
+#c33-meteora .mt-h i { font: italic 500 14px/1 "Cormorant Garamond", "Baskerville", "Georgia", serif; letter-spacing: .02em; color: var(--c-texPri, #37352f); }
+#c33-meteora .mt-h small { font: 500 10px/1 var(--c33-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--c-texTer, #a5a29a); }
+#c33-meteora .mt-r { position: relative; display: flex; align-items: center; gap: 6px; height: 28px; padding-inline-start: 0; cursor: pointer; border-radius: 0; color: var(--c-texPri, #37352f); outline: none; transition: background-color .2s ease; }
+#c33-meteora .mt-r:hover, #c33-meteora .mt-r:focus-visible { background: linear-gradient(90deg, var(--neb-band), transparent 80%); }
+#c33-meteora .mt-r.new { animation: nebMeteor .6s cubic-bezier(.2,.8,.3,1) backwards; }
+@keyframes nebMeteor { from { opacity: 0; transform: translate(40px, -18px); } }
+#c33-meteora .mt-g { flex: none; width: 12px; height: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; line-height: 1; }
+#c33-meteora .mt-i { flex: none; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; }
+#c33-meteora .mt-i .notion-record-icon { width: 18px !important; height: 18px !important; margin: 0 !important; }
+#c33-meteora .mt-i :is(img, svg) { width: 18px !important; height: 18px !important; max-width: none; }
+#c33-meteora .mt-n { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+#c33-meteora .mt-t { flex: none; font-size: 10.5px; color: var(--c-texTer, #a5a29a); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  ${NHB}${B}, ${NHB}${B}::before, ${NROW}${B}${B}, ${NT_} [data-c33-kind="view"]${B}${B}, ${NICON}${B}::after, ${NROW}[data-neb-fresh]${B}${B}::after, #c33-neb-sky .sk, #c33-meteora, #c33-meteora .mt-r.new, #c33-neb-empty * { animation: none !important; }
+  html[data-c33-stella] .notion-sidebar-container, #c33-neb-mer, #c33-neb-mer *, ${NROW}${B}${B}, ${NHB}${B}::before { transition: none !important; }
+}`;
+    (document.head || document.documentElement).appendChild(st);
   }
 
   /* ============================================================
@@ -3395,9 +3987,7 @@ html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-t
       const w = Math.floor(sr.right - x - 8);
       if (w < 70 || !ar.height) { header.hidden = true; panel.hidden = true; csTitle.hidden = true; return; }
       /* Stella の見出しは「すべて」の段のすぐ下（その分、サイドバーの中身を下げる — obFixLayout） */
-      { const on = document.documentElement.hasAttribute('data-c33-stella');
-        csTitle.hidden = !on;
-        if (on) { setS(csTitle, 'left', x + 'px'); setS(csTitle, 'top', Math.round(ar.bottom + 4) + 'px'); setS(csTitle, 'width', w + 'px'); } }
+      csTitle.hidden = true;   // v97: Stella の上には見出しを置かない（惑星は Orbit と子午線の接点で伝える）
       header.hidden = false;
       const ph = w < 220 ? '検索・ぶりに聞く' : 'B.U.R.I に聞く・Notion を検索';   // v77: 狭いサイドバーで見切れない
       if (input.placeholder !== ph) input.placeholder = ph;
