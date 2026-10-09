@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
-// @version      11.52.0
+// @version      11.53.0
 // @description  v1.52.0: 本物の Notion で確かめて修正 — 旧 API（syncRecordValues）が 403 になる所では今の syncRecordValuesMain を使う。閲覧だけのボード（列の見出しに掴む所が無い）でも列を見分ける。v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。ボードビュー: リレーションで分けたボードの列（本 1 冊ごと）を、シリーズ（グループ）ごとに隣どうしへ並べ替え（見た目だけ）、シリーズの最初の列の上に名前とアイコン、境目に縦線。名前のクリックで題名とアイコン・右クリックでサブグループ。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
@@ -1082,11 +1082,11 @@ const VERSION = '11.52.0';
       '/* セクション間の横区切り線: 全幅で見出しの下線より少し濃い1本。 */',
       '/* v1.48.0: 線を必ずセルの端まで（wrap と、それを包む要素を全幅に） */',
       '[data-cordi13-on] { width: 100% !important; min-width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }',
-      '[data-testid="property-value"] :has(> [data-cordi13-on]), [data-testid="property-value"] :has(> * > [data-cordi13-on]) { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }',
+      '[data-testid="property-value"] [data-cordi13-up] { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }',
       '[data-cordi13-on] > :is(.cordi13-sec-head, .cordi13-sec-gap, .cordi13-sec-div) { grid-column: 1 / -1 !important; flex: 0 0 100% !important; width: 100% !important; justify-self: stretch !important; align-self: stretch !important; }',
       '/* v1.50.0: 中身が行より高い時に上へはみ出して列の見出しと重ならないよう、縦中央そろえは safe（はみ出す時は上そろえ） */',
-      '.notion-table-view-cell [data-testid="property-value"]:has([data-cordi13-on]) { align-items: safe center !important; justify-content: safe center !important; overflow: hidden !important; }',
-      '.notion-table-view-cell [data-testid="property-value"]:has([data-cordi13-on]) > div { align-self: safe center !important; }',
+      '.notion-table-view-cell [data-testid="property-value"][data-cordi13-pv] { align-items: safe center !important; justify-content: safe center !important; overflow: hidden !important; }',
+      '.notion-table-view-cell [data-testid="property-value"][data-cordi13-pv] > div { align-self: safe center !important; }',
       '/* v1.49.0: 線は ::after で描き、幅はセルの右端までの実測値（--c13-lw） */',
       '[data-cordi13-on] > .cordi13-sec-head, [data-cordi13-on] > .cordi13-sec-div { position: relative !important; border-bottom-color: transparent !important; overflow: visible !important; }',
       '[data-cordi13-on] > .cordi13-sec-head::after, [data-cordi13-on] > .cordi13-sec-div::after { content: "" !important; position: absolute !important; left: 0 !important; bottom: -1px !important; height: 0 !important; width: var(--c13-lw, 100%) !important; pointer-events: none !important; }',
@@ -2593,6 +2593,8 @@ const VERSION = '11.52.0';
 
     wrap.style.setProperty('position', 'relative', 'important');   // ＋ボタンの基準（v0.28.0）
     wrap.setAttribute('data-cordi13-on', '1');                     // v0.43.0: 書体CSSの詳細度アンカー
+    /* v11.53: 入れ物にも印（CSS の :has(…) をやめる — Notion が表を描き直すたびに、セルごとに中を調べ直していた） */
+    { const pv = wrap.closest('[data-testid="property-value"]'); if (pv) { if (!pv.hasAttribute('data-cordi13-pv')) pv.setAttribute('data-cordi13-pv', '1'); for (let a = wrap.parentElement, i = 0; a && a !== pv && i < 2; a = a.parentElement, i++) if (!a.hasAttribute('data-cordi13-up')) a.setAttribute('data-cordi13-up', '1'); } }
     const frag = document.createDocumentFragment();
     /* v0.35.0: 3件以上は「1行パイプ」表示（〇〇〇〇｜〇〇〇〇｜〇〇〇〇）。
        シリーズ見出しもグリッドも使わず、値だけを1行に並べて縦線で区切る。 */

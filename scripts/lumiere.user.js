@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
-// @version      13.2.0
+// @version      13.3.0
 // @description  v13.2.0: 起動の幕は、16c（幕の合図）が動いていればその合図（各柱が整った）で開く — 時計（1.5 秒）では開けない。CSS の保険も 16c がある時は 9 秒。v13.1.0: 速く — 幕（カーテン）の上限を 3.2→1.5 秒・ページを移る時 0.9→0.6 秒。v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -1032,8 +1032,8 @@ html [data-lm-bw-v] + div[style*="clear: both"]${B} { display: none !important; 
       if (progScroller) progScroller.removeEventListener('scroll', progress);
       progScroller = sc;
       if (sc) sc.addEventListener('scroll', progress, { passive: true });
+      requestAnimationFrame(progress);   // v13.3: 見回り（0.7 秒おき）のたびに測らない — 測るのはスクロールと入れ物が替わった時だけ
     }
-    progress();
   }
   function progress() {
     if (!progEl) return;
@@ -2103,7 +2103,10 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
     /* 上の帯は Notion がよく作り直す → すぐ置き直す */
     new MutationObserver(() => { if (!document.getElementById('cordi-b-lm') || !document.getElementById('cordi-b-lm').isConnected) lmDock(); }).observe(document.body, { childList: true, subtree: true });
     new MutationObserver(() => tick()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
-    new MutationObserver(() => { const st = document.getElementById('lm-css'); if (st && document.head && document.head.lastElementChild !== st) document.head.appendChild(st); }).observe(document.head, { childList: true });
+    /* v13.3: 後ろに「よその」スタイルが来た時だけ最後へ（柱どうし・スクリプトの足す <div> などでは動かさない — 動かすたびに画面全体のスタイルを計算し直していた） */
+    const ours = (n) => /^(c\d|lm-|atelier|cordi|constellucentia|s38|zz|c26|c33|c16|c36|c34|c30|c14|c23|c39)/.test(n.id || '') || (n.tagName === 'LINK' && (n.rel !== 'stylesheet' || /fontsource|jsdelivr/.test(n.href || '')));
+    const foreignAfter = (el) => { for (let n = el.nextElementSibling; n; n = n.nextElementSibling) if ((n.tagName === 'STYLE' || n.tagName === 'LINK') && !ours(n)) return true; return false; };
+    new MutationObserver(() => { const st = document.getElementById('lm-css'); if (st && document.head && st.parentNode === document.head && foreignAfter(st)) document.head.appendChild(st); }).observe(document.head, { childList: true });
     setInterval(tick, 700);
     setTimeout(coverAccent, 1500);
   };

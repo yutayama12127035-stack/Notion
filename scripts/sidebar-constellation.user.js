@@ -349,6 +349,8 @@
     setAttr(team, 'data-c33-team', '1');
     const teamPad = parseFloat(getComputedStyle(btn).paddingInlineStart) || 8;
     const rows = rowsOf(team);
+    { const n = rows.filter((r) => !bulletSlot(r)).length; setAttr(btn, 'data-c33-n', n ? String(n) : ''); if (!n) btn.removeAttribute('data-c33-n'); }   // v87: Stella の件数
+    team.toggleAttribute('data-c33-empty', !rows.length);   // v87: 中身を畳んだチームは Stella で薄いカードに
     if (!rows.length) { if (P.tree) alignTree(team, btn, []); return; }
     const info = rows.map((r) => ({ r, pad: padOf(r), slot: bulletSlot(r) }));
     const pagePads = info.filter((x) => !x.slot).map((x) => x.pad);
@@ -402,6 +404,7 @@
       if (x.db) { if (!KNOWN_DB[dbKey]) { KNOWN_DB[dbKey] = 1; saveDb(); } }
       const isDb = x.db || !!KNOWN_DB[dbKey];
       setAttr(r, 'data-c33-kind', isDb ? 'db' : 'page');
+      setVar(r, '--c33-ri', String(Math.min(14, info.indexOf(x))));   // v87: Stella の行がふわっと出る順
       setAttr(r, 'data-c33-lvl', String(Math.round(level / 12)));
       if (x.id && curPage() === x.id.replace(/-/g, '')) setAttr(r, 'data-c33-cur', '1'); else if (r.hasAttribute('data-c33-cur')) r.removeAttribute('data-c33-cur');
       ST.rows++;
@@ -609,7 +612,7 @@ html[data-c33] #c16-root .c16-cnt${B} { min-width: 18px; height: 16px; padding: 
 html[data-c33] ${SEL_TEAM}[data-c33-team]${B} { margin-top: var(--c33-team-gap) !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B} { margin-bottom: var(--c33-team-after) !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B},
-html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} :is(div, span):not(:has(svg, img))${B} { font-family: var(--c33-team-font) !important; font-size: var(--c33-team-size) !important; font-weight: var(--c33-team-weight) !important; letter-spacing: var(--c33-team-track) !important; text-transform: uppercase !important; color: var(--c33-team-color) !important; }
+html[data-c33] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} :is(div, span):not(:has(svg, img))${B} { font-family: var(--c33-team-font) !important; font-size: var(--c33-team-size) !important; font-weight: var(--c33-team-weight) !important; letter-spacing: var(--c33-team-track) !important; text-transform: var(--c33-team-case, uppercase) !important; color: var(--c33-team-color) !important; }
 html[data-c33] ${SEL_TEAM}[data-c33-team][data-c33-tpad] ${SEL_TEAM_BTN}${B} { padding-inline-start: var(--c33-tpad) !important; }
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B},
 html[data-c33][data-c33-nobg] ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B}:is(:hover, :focus, :focus-visible, [aria-selected="true"], [aria-current]),
@@ -952,6 +955,7 @@ ${icons}
     de.toggleAttribute('data-c33-orbit', !!OB.on);
     de.toggleAttribute('data-c33-otabs', !!(OB.on && OB.tabs !== false));
     de.toggleAttribute('data-c33-ows', !!(OB.on && OB.ws !== false));
+    de.toggleAttribute('data-c33-stella', !!(OB.on && OB.stella !== false));   // v87: Stella（右の星図）
     if (OB.on && OB.fix && !de.style.getPropertyValue('--c33-rail-fix')) de.style.setProperty('--c33-rail-fix', OB.fix + 'px');
     if (OB.on && OB.topDy && !de.style.getPropertyValue('--c33-top-dy')) de.style.setProperty('--c33-top-dy', OB.topDy + 'px');
     const hw = obHost ? obHost.getBoundingClientRect().width : 0;
@@ -992,7 +996,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-orbit .ob-all .ob-lb { font-size: 9.5px; font-weight: 700; letter-spacing: .1em; }
 #c33-orbit.exp .ob-all .ob-lb, html[data-c33-orbit-pin] #c33-orbit .ob-all .ob-lb { font-size: 12px; letter-spacing: .12em; }
 #c33-orbit .ob-wheel { position: relative; flex: 1; overflow: hidden; perspective: 640px;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 10px, #000 calc(100% - 46px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 10px, #000 calc(100% - 46px), transparent 100%); }
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6px, #000 calc(100% - 46px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 6px, #000 calc(100% - 46px), transparent 100%); }
 #c33-orbit .ob-it { position: absolute; left: 5px; right: 5px; top: 0; height: ${itH}px; border-radius: 11px; display: grid; grid-template-columns: 1fr; grid-template-rows: 24px auto; justify-items: center; align-content: center; row-gap: 3px;
   cursor: pointer; transform-origin: 50% 0; will-change: transform, opacity; transition: background-color .15s ease, color .15s ease; }
 #c33-orbit.exp .ob-it, html[data-c33-orbit-pin] #c33-orbit .ob-it { grid-template-columns: 26px 1fr auto; grid-template-rows: 1fr; justify-items: start; align-items: center; column-gap: 9px; padding: 0 10px 0 9px; }
@@ -1048,7 +1052,45 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-ob-toast { position: fixed; z-index: 2147483300; left: 16px; bottom: 76px; max-width: 280px; padding: 10px 14px; border-radius: 12px; background: var(--c-bacEle, #fff); color: var(--c-texPri, #333);
   box-shadow: var(--c-shaOutMd, 0 8px 28px rgba(0,0,0,.16)); font: 12.5px/1.55 var(--c33-ui); font-feature-settings: "palt" 1; opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
 #c33-ob-toast.on { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { #c33-orbit, #c33-orbit .ob-it, #c33-orbit .ob-all { transition: none !important; } }`;
+@media (prefers-reduced-motion: reduce) { #c33-orbit, #c33-orbit .ob-it, #c33-orbit .ob-all { transition: none !important; } }
+/* ============================================================
+ * v87 Stella（星図）— 輪（Orbit）の右。2 つ合わせて Nebius
+ *   チームスペースは大分類の色の淡いカード、題名は小文字のまま、行は UI の書体。
+ *   いま開いているページは色の帯と、静かに瞬く星の印。分類を替えるとカードがふわっと出る
+ * ============================================================ */
+html[data-c33-stella] {
+  --c33-item-font: var(--c33-ui); --c33-item-size: 13.5px; --c33-item-weight: 500; --c33-item-track: .003em; --c33-item-h: 30px; --c33-item-color: var(--c-texPri, #37352f);
+  --c33-view-font: var(--c33-ui); --c33-view-size: 12.5px; --c33-view-weight: 450; --c33-view-track: .003em; --c33-view-h: 26px;
+  --c33-team-font: var(--c33-ui); --c33-team-size: 12.5px; --c33-team-weight: 650; --c33-team-track: .01em; --c33-team-color: var(--c-texPri, #37352f); --c33-team-case: none;
+  --c33-team-gap: 0px; --c33-cur-weight: 650; --c33-radius: 9px;
+}
+html[data-c33-stella][data-c33-osel] .notion-sidebar-container .notion-outliner-team-header-container > .notion-outliner-team-header[role="button"] { display: none !important; }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team]${B} {
+  width: auto !important; max-width: none !important; box-sizing: border-box !important; align-self: stretch !important; margin: 0 8px 10px 4px !important; padding: 4px 4px 6px !important; border-radius: 14px !important;
+  background: color-mix(in srgb, var(--c33-tint, #9b9a97) 7%, var(--c33-ob-bg, var(--c-bacSec, #f7f6f3))) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 16%, transparent), 0 1px 2px rgba(15,15,15,.03) !important;
+  transition: box-shadow .25s ease !important; animation: c33StellaIn .5s cubic-bezier(.16,1,.3,1) both; }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team][data-c33-empty]${B} { padding: 2px 4px !important; margin-bottom: 6px !important; background: transparent !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 12%, transparent) !important; }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team]:hover${B} { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 30%, transparent), 0 8px 22px -14px color-mix(in srgb, var(--c33-tint, #9b9a97) 70%, transparent) !important; }
+@keyframes c33StellaIn { from { opacity: 0; transform: translateY(7px); } }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}${B} { position: relative !important; border-radius: 10px !important; }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN} .notion-record-icon${B} { border-radius: 7px !important; background: color-mix(in srgb, var(--c33-tint, #9b9a97) 18%, transparent) !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, #9b9a97) 24%, transparent) !important; }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}[data-c33-n]${B}::after { content: attr(data-c33-n); position: absolute; right: 8px; top: 50%; transform: translateY(-50%); min-width: 18px; height: 16px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; font: 650 10px/16px var(--c33-ui); text-align: center; letter-spacing: 0; color: color-mix(in srgb, var(--c33-tint, #9b9a97) 75%, var(--c-texSec, #787774)); background: color-mix(in srgb, var(--c33-tint, #9b9a97) 13%, transparent); pointer-events: none; transition: opacity .15s ease; }
+html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] ${SEL_TEAM_BTN}:hover${B}::after { opacity: 0; }
+html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind]${B} { border-radius: 9px !important; transition: background-color .15s ease, box-shadow .15s ease !important; animation: c33StellaRow .45s ease both; animation-delay: calc(var(--c33-ri, 0) * 26ms + 70ms); }
+@keyframes c33StellaRow { from { opacity: 0; } }
+html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind]:hover${B} { background: color-mix(in srgb, var(--c33-tint, #9b9a97) 11%, transparent) !important; }
+html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind] > :first-child .notion-record-icon${B} { transition: scale .3s cubic-bezier(.3,1.7,.5,1), rotate .3s cubic-bezier(.3,1.7,.5,1); }
+html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind]:hover > :first-child .notion-record-icon${B} { scale: 1.14; rotate: -6deg; }
+html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur]${B} { background: color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 15%, transparent) !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 26%, transparent) !important; }
+html[data-c33][data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team] [data-c33-kind][data-c33-cur]${B}::after { content: ''; flex: none; width: 6px; height: 6px; margin-inline: auto 9px; border-radius: 50%; background: var(--c33-tint, var(--lm-accent, #2783de)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 22%, transparent); animation: c33Star 2.6s ease-in-out infinite; }
+@keyframes c33Star { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c33-tint, var(--lm-accent, #2783de)) 8%, transparent); transform: scale(1.15); } }
+/* 輪の遊び: 乗せると小さく弾む・選ぶとぽんと出る */
+#c33-orbit .ob-it .ob-ic, #c33-orbit .ob-all .ob-ic { transition: scale .3s cubic-bezier(.3,1.7,.5,1), rotate .3s cubic-bezier(.3,1.7,.5,1); }
+#c33-orbit .ob-it:hover .ob-ic, #c33-orbit .ob-all:hover .ob-ic { scale: 1.12; rotate: -5deg; }
+#c33-orbit .ob-it.sel .ob-ic { animation: c33ObPop .5s cubic-bezier(.3,1.7,.5,1); }
+@keyframes c33ObPop { 0% { scale: .8; } 60% { scale: 1.16; } 100% { scale: 1; } }
+@media (prefers-reduced-motion: reduce) { html[data-c33-stella] .notion-sidebar-container ${SEL_TEAM}[data-c33-team], html[data-c33-stella] .notion-sidebar-container [data-c33-kind], html[data-c33-stella] [data-c33-cur]::after, #c33-orbit .ob-it.sel .ob-ic { animation: none !important; } }`;
   }
 
   /* ============================================================
@@ -1092,6 +1134,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   let obSpaceEl = null, obSpaceKey = '', obCopies = [];
   let obLabelFont = 'inherit';
   let obDockSelection = false;
+  let obWheelT = 0;
+  const OB_PAD = 8;
   const obStep = () => Math.max(30, OB.itemH || 54);
   const obFitCx = document.createElement('canvas').getContext('2d');
 
@@ -1162,6 +1206,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       /* v48: 向き — 指を上へ動かすと輪も上へ（逆にしたい時は 設定 › スクロールの向き） */
       if (d) { obNudge((OB.wheelRev !== false ? -1 : 1) * d * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? obStep() : 1)); }
+      /* v87: 指を離したら、いちばん近い段にぴたっと止める（途中で止まって枠が半分隠れない） */
+      clearTimeout(obWheelT);
+      obWheelT = setTimeout(() => { const s = obStep(); obTarget = Math.round(obTarget / s) * s; obIx = obMod(Math.round(obTarget / s), obItemEls.length); obTopGid = obItemEls[obIx] ? obItemEls[obIx].__gid : ''; obGlide(); }, 130);
     }, { passive: false });
     rail.appendChild(wh); obWheelEl = wh;
     const ft = document.createElement('div'); ft.className = 'ob-ft';
@@ -1247,7 +1294,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const paint = (el, y, gid) => {
       const visible = y > -step && y < H + step;
       el.style.display = visible ? '' : 'none';
-      el.style.transform = 'translateY(' + y.toFixed(3) + 'px)';
+      el.style.transform = 'translateY(' + (y + OB_PAD).toFixed(3) + 'px)';   // v87: 上に余白 — 選んだ枠が上のぼかしで見切れない
       el.style.opacity = '';
       el.style.zIndex = '1';
       el.classList.toggle('top', y >= 0 && y < step);
@@ -1508,7 +1555,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const cur = parseFloat(de.style.getPropertyValue('--c33-top-dy')) || 0;
       const ab = obAllEl.getBoundingClientRect().bottom;
       const st = sc.getBoundingClientRect().top - cur;
-      const dy = Math.max(0, Math.round(ab - st + 6));
+      const dy = Math.max(0, Math.round(ab - st + 6 + (de.hasAttribute('data-c33-stella') ? 46 : 0)));   // v87: Stella の見出しの分
       if (Math.abs(dy - obLastDy) >= 1) {
         obLastDy = dy;
         de.style.setProperty('--c33-top-dy', dy + 'px');
@@ -1550,7 +1597,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     obPopRow(pop, { t: 'ALL — 全部を出す', sub: gs.length ? gs.length + ' 分類' : '', on: !OB.sel, fn: () => { obSelect(''); } });
     gs.forEach((g) => obPopRow(pop, { t: g.label, sub: g.cnt ? g.cnt + ' 件' : '', ico: g, on: OB.sel === g.gid, fn: () => { obSelect(g.gid); } }));
     HR();
-    H('輪（Orbit）');
+    H('Nebius — 輪（Orbit）と星図（Stella）');
+    obPopRow(pop, { t: '星図（Stella）の見た目', sub: OB.stella !== false ? '色のカード・星の印・ふわっと出る' : 'Notion に近い見た目', on: OB.stella !== false, fn: () => { OB.stella = OB.stella === false; obSave(); obCss(); obFixLayout(true); obSettings(anchor); } });
     obPopRow(pop, { t: '輪をしまう／出す', sub: OB.on ? 'いま出ています' : 'いま閉じています', key: '⌃⌥O', fn: () => { obPopClose(); obToggle(); } });
     obPopRow(pop, { t: 'スクロールの向きを逆に', sub: OB.wheelRev !== false ? '指を上へ → 輪も上へ' : '指を上へ → 輪は下へ（Mac のナチュラルと同じ）', on: OB.wheelRev !== false, fn: () => { OB.wheelRev = OB.wheelRev === false; obSave(); obSettings(anchor); } });
     obPopRow(pop, { t: '上の段（Home など）を隠す', on: OB.tabs !== false, fn: () => { OB.tabs = OB.tabs === false; obSave(); obCss(); obSettings(anchor); } });
@@ -2976,7 +3024,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const style = document.createElement('style');
     style.id = 'c33-search-css';
     style.textContent = `
-#c33-search-header { position: fixed; z-index: 1001; display: flex; gap: 6px; align-items: center; height: 36px; box-sizing: border-box; margin: 0; padding: 0; color: var(--c-texPri, #37352f); font: 12px/1.4 var(--c33-ui); border-radius: 18px; transition: box-shadow 0.2s ease; }
+#c33-search-header { position: fixed; z-index: 1001; display: flex; gap: 8px; align-items: center; height: 40px; box-sizing: border-box; margin: 0; padding: 0; color: var(--c-texPri, #37352f); font: 12px/1.4 var(--c33-ui); border-radius: 18px; transition: box-shadow 0.2s ease; }
 #c33-search-header[hidden], #c33-buri[hidden] { display: none !important; }
 #c33-search-header *, #c33-buri * { box-sizing: border-box; }
 #c33-search-header .cs-field { display: flex; align-items: center; flex: 1 1 auto; min-width: 0; height: 36px; margin: 0; padding: 0 10px 0 4px; gap: 2px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.14)); border-radius: 18px; background: var(--c-bacPri, #fff); cursor: text; }
@@ -3017,6 +3065,32 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-buri .cb-chip.act { border-style: dashed; }
 #c33-buri .cb-foot { flex: none; padding: 6px 10px; border-top: 1px solid var(--ca-borSecTra, rgba(0,0,0,.06)); font-size: 10.5px; color: var(--c-texTer, #999); }
 
+/* v87 Nebius の見出し: ('-' 鰤)з のピル ＋ 大分類の名前（浮かぶ B.U.R.I の時だけ文字の窓） */
+#c33-search-header:not(.floating) .cs-field { display: none !important; }
+#c33-search-header.floating .cs-face, #c33-search-header.floating .cs-title { display: none !important; }
+#c33-search-header .cs-face { flex: none; display: inline-flex; align-items: center; height: 30px; margin: 0; padding: 0 11px; border: 0; border-radius: 999px; cursor: pointer; color: var(--c-texPri, #37352f);
+  background: color-mix(in srgb, var(--lm-accent, #2783de) 9%, var(--c-bacPri, #fff)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lm-accent, #2783de) 18%, transparent), 0 3px 10px -6px rgba(15,15,30,.3);
+  transition: transform .25s cubic-bezier(.3,1.6,.5,1), box-shadow .2s ease; }
+#c33-search-header .cs-face .b-face { font-size: 12.5px; line-height: 1; font-weight: 500; letter-spacing: 0; white-space: nowrap; }
+#c33-search-header .cs-face:hover { transform: translateY(-1px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lm-accent, #2783de) 30%, transparent), 0 8px 18px -8px color-mix(in srgb, var(--lm-accent, #2783de) 55%, transparent); }
+#c33-search-header .cs-face:hover .b-face { display: inline-block; animation: csSwim 1.1s ease-in-out infinite; }
+#c33-search-header .cs-face:active { transform: scale(.94); }
+@keyframes csSwim { 0%, 100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-1.5px) rotate(-3deg); } 75% { transform: translateX(1.5px) rotate(3deg); } }
+#c33-search-header .cs-hint { flex: 1 1 auto; min-width: 0; font: 500 11.5px/1 var(--c33-ui); color: var(--c-texTer, #a5a29a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .9; }
+#c33-search-header.floating .cs-hint { display: none !important; }
+#c33-stella-head { position: fixed; z-index: 1001; display: flex; align-items: center; gap: 9px; height: 40px; padding: 0 10px 0 6px; box-sizing: border-box; pointer-events: none; color: var(--c-texPri, #37352f); }
+#c33-stella-head[hidden] { display: none !important; }
+#c33-stella-head .sh-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 0%, transparent); }
+#c33-stella-head .sh-dot { box-shadow: 0 0 0 3px rgba(255,255,255,.7), 0 0 0 5px color-mix(in srgb, var(--c-texPri, #37352f) 6%, transparent); }
+#c33-stella-head .sh-tx { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+#c33-stella-head b { font: 650 15px/1.15 var(--c33-ui); letter-spacing: .01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#c33-stella-head small { font: 500 10.5px/1.2 var(--c33-ui); color: var(--c-texTer, #a5a29a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#c33-stella-head.swap { animation: csTitleIn .45s cubic-bezier(.16,1,.3,1); }
+#c33-stella-head.swap .sh-dot { animation: csDotPop .5s cubic-bezier(.3,1.7,.5,1); }
+@keyframes csTitleIn { from { opacity: 0; transform: translateY(6px); } }
+@keyframes csDotPop { 0% { transform: scale(.4); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { #c33-search-header .cs-face:hover .b-face, #c33-stella-head.swap, #c33-stella-head.swap .sh-dot { animation: none; } }
+
 /* --- アニメーション関連 --- */
 #c33-search-header.floating { left: 50% !important; transform: translateX(-50%) !important; width: 600px !important; max-width: 90vw !important; top: 15vh !important; box-shadow: var(--c-shaOutMd, 0 12px 36px rgba(0,0,0,.18)) !important; }
 #c33-buri.floating { left: 50% !important; transform: translateX(-50%) !important; width: 600px !important; max-width: 90vw !important; top: calc(15vh + 46px) !important; max-height: 60vh !important; }
@@ -3052,6 +3126,37 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     input.setAttribute('aria-label', 'B.U.R.I'); input.setAttribute('aria-expanded', 'false'); input.setAttribute('aria-controls', 'c33-buri');
     
     const close = mk('button', 'cs-close', null, header); close.type = 'button'; close.innerHTML = MENU;
+    /* v87 Nebius: サイドでは検索窓を出さず、('-' 鰤)з のピル（押すと ⌘K の B.U.R.I）と、輪で選んだ大分類の名前（Stella の見出し）。
+       文字を打つ窓は ⌃⌥B の浮かぶ B.U.R.I の時だけ */
+    const csFace = mk('button', 'cs-face'); csFace.type = 'button'; csFace.title = 'B.U.R.I に聞く・Notion を検索（⌘K）'; csFace.setAttribute('aria-label', 'B.U.R.I に聞く');
+    const csFx = mk('span', 'b-face cs-fx', "('-' 鰤)з", csFace); csFx.style.setProperty('font-family', 'var(--buri-face)', 'important');
+    const csHint = mk('span', 'cs-hint', '聞く・探す'); csHint.setAttribute('aria-hidden', 'true');
+    header.insertBefore(csFace, field); header.insertBefore(csHint, field);
+    /* Stella の見出し（2 段目）: 大分類の名前・色の点・件数。サイドバーの幅いっぱい */
+    const csTitle = mk('div'); csTitle.id = 'c33-stella-head'; csTitle.hidden = true;
+    const csDot = mk('i', 'sh-dot', null, csTitle); const csTx = mk('div', 'sh-tx', null, csTitle); const csT1 = mk('b', null, '', csTx); const csT2 = mk('small', null, '', csTx);
+    document.body.appendChild(csTitle);
+    csFace.addEventListener('mouseenter', () => { csFx.textContent = "('-' 鰤)з♪"; });
+    csFace.addEventListener('mouseleave', () => { csFx.textContent = "('-' 鰤)з"; });
+    csFace.addEventListener('mousedown', (e) => e.preventDefault());
+    csFace.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); csFx.textContent = "('-' 鰤)з✨"; if (NS.on && !floatMode) nsOpenFromSide('', false); else { floatMode = true; input.focus(); openPanel(); layout(); } });
+    let csKey = '';
+    function stellaTitle() {
+      const side = obSide(); if (!side) return;
+      const sel = OB.on ? OB.sel : '';
+      let label = 'All';
+      if (sel) { const l = document.querySelector('#c16-root .c16-sec[data-c16-g="' + CSS.escape(sel) + '"] .c16-lbl'); if (l) label = norm(l.textContent) || label; }
+      const teams = side.querySelectorAll(SEL_TEAM + (sel ? '[data-c16-g="' + CSS.escape(sel) + '"]' : '[data-c33-team]'));
+      let pages = 0; for (const t of teams) { const b = t.querySelector(SEL_TEAM_BTN); pages += +((b && b.getAttribute('data-c33-n')) || 0); }
+      const sub = teams.length ? teams.length + ' チーム' + (pages ? ' · ' + pages + ' ページ' : '') : 'チームスペースなし';
+      let tint = ''; for (const t of teams) { const v = t.style.getPropertyValue('--c33-tint'); if (v && !/^rgba\([^)]*,\s*0\)$|transparent/.test(v.trim())) { tint = v; break; } }
+      const k = label + '|' + sub + '|' + tint;
+      if (k === csKey) return;
+      csDot.style.background = tint || 'var(--lm-accent, #2783de)';
+      const swap = csKey && csKey.split('|')[0] !== label;
+      csKey = k; csT1.textContent = label; csT2.textContent = sub; csTitle.title = label + '（' + sub + '）';
+      if (swap) { csTitle.classList.remove('swap'); void csTitle.offsetWidth; csTitle.classList.add('swap'); }
+    }
     close.setAttribute('aria-label', 'サイドバーを閉じる'); close.title = 'サイドバーを閉じる（⌘\\）';
 
     const panel = mk('div');
@@ -3267,6 +3372,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         close.hidden = true;
         header.classList.add('floating');
         panel.classList.add('floating');
+        csTitle.hidden = true;
         if (!panelOpen) { panel.hidden = true; return; }
         panel.hidden = false;
         return;
@@ -3277,19 +3383,24 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const side = obSide(), all = obAllEl;
       watchSide(side);
       const show = !!(OB.on && obEl && obEl.isConnected && obEl.style.display !== 'none' && all && all.isConnected && obSidebarVisible(side));
-      if (!show) { header.hidden = true; panel.hidden = true; return; }
+      if (!show) { header.hidden = true; panel.hidden = true; csTitle.hidden = true; return; }
       const sr = side.getBoundingClientRect(), ar = all.getBoundingClientRect();
       const x = Math.round((obEl.getBoundingClientRect().left || sr.left) + obRailW + 8);
       const w = Math.floor(sr.right - x - 8);
-      if (w < 70 || !ar.height) { header.hidden = true; panel.hidden = true; return; }
+      if (w < 70 || !ar.height) { header.hidden = true; panel.hidden = true; csTitle.hidden = true; return; }
+      /* Stella の見出しは「すべて」の段のすぐ下（その分、サイドバーの中身を下げる — obFixLayout） */
+      { const on = document.documentElement.hasAttribute('data-c33-stella');
+        csTitle.hidden = !on;
+        if (on) { setS(csTitle, 'left', x + 'px'); setS(csTitle, 'top', Math.round(ar.bottom + 4) + 'px'); setS(csTitle, 'width', w + 'px'); } }
       header.hidden = false;
       const ph = w < 220 ? '検索・ぶりに聞く' : 'B.U.R.I に聞く・Notion を検索';   // v77: 狭いサイドバーで見切れない
       if (input.placeholder !== ph) input.placeholder = ph;
-      const y = Math.round(ar.top + (ar.height - 36) / 2);
+      const y = Math.round(ar.top + (ar.height - 40) / 2);
+      try { stellaTitle(); } catch (e) { /* noop */ }
       setS(header, 'left', x + 'px'); setS(header, 'top', y + 'px'); setS(header, 'width', w + 'px');
       if (!panelOpen) { panel.hidden = true; return; }
       panel.hidden = false;
-      const pt = y + 36 + 6;
+      const pt = y + 40 + 6;
       const pw = Math.max(200, Math.min(Math.max(w, 340), window.innerWidth - x - 12));
       setS(panel, 'left', x + 'px'); setS(panel, 'top', pt + 'px'); setS(panel, 'width', pw + 'px');
       setS(panel, 'max-height', Math.max(180, Math.min(620, window.innerHeight - pt - 12)) + 'px');

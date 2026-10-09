@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁶ _ Sub Groups
 // @namespace    https://cordivestium.local/sub-groups
-// @version      13.0.0
+// @version      14.0.0
 // @description  データベースの「グループ」（Group by）を、ボードビュー以外（表・リスト・ギャラリー）でもサブグループに分ける。Notion の標準ではサブグループはボードだけ。グループの中を、もう 1 つのプロパティ（セレクト・ステータス・マルチセレクト・チェックボックス・日付・人・リレーション・テキスト・数値など）の値ごとに見出しを付けて並べ分け、見出しのクリックで畳む。ビューごとに覚える。グループ分けしていないビューでも使える（ビュー全体をサブグループに分ける）。見た目だけで、Notion のデータや並び順は変えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -13,6 +13,12 @@
 // ==/UserScript==
 
 /*
+ * v14.0.0（2026-10-09）— 「サブグループ」がメインのグループより上に出ていた・表の続きに見えていた、を作り直し
+ *   ・「⊞ サブグループ」はビューの先頭（＝メインのグループの見出しより上）に差し込んでいた → Notion の上の道具の段
+ *     （フィルター・並べ替え・検索の並び）の左端に、同じ形のボタンとして置く。使っている間はプロパティの名前も出す
+ *   ・サブグループを「表の延長」でなく「段」に: 色の帯の見出し（色の札・アイコン・件数）、行の左に色の線、段の間にすき間。
+ *     見出しに小さな集計 — チェック（読了など）があれば「✓ 3/10」と細い進み具合、評価・点数・score などの数があれば「★ 平均」
+ *   ・見出しを開く／畳む時の小さな動き
  * v13.0.0（2026-10-04）
  *   ・Notion の「ビューの設定」（View settings）の「Group」のすぐ下に「サブグループ」の行。押すと Notion と同じ形の小メニューで
  *     プロパティ・並び・畳む／開く・グループごとの設定（このグループはサブグループにしない／このグループだけ別のプロパティで）。
@@ -372,19 +378,38 @@
     else sp.textContent = v;
     return sp;
   }
-  function makeHead(view, kind, cfg, def, k, n, closed, ic) {
+  /* v14: 見出しの小さな集計 — チェック（読了など）と、評価・点数の平均。値は行の記録（API の控え）から読むだけ */
+  const SCORE_RE = /score|rating|評価|点数|得点|スコア|星|★|おすすめ度|満足/i;
+  function statOf(coll, list) {
+    if (!coll || !coll.schema) return null;
+    let cb = '', num = '';
+    for (const [pid, d] of Object.entries(coll.schema)) { if (!cb && d.type === 'checkbox') cb = pid; if (!num && d.type === 'number' && SCORE_RE.test(d.name || '')) num = pid; }
+    if (!cb && !num) return null;
+    let done = 0, sum = 0, cnt = 0;
+    for (const x of list) { const r = rec('block', x.id); const p = (r && r.properties) || {}; if (cb && plain(p[cb]) === 'Yes') done++; if (num) { const v = parseFloat(plain(p[num])); if (isFinite(v)) { sum += v; cnt++; } } }
+    return { cb: cb ? coll.schema[cb].name : '', done, n: list.length, num: num && cnt ? coll.schema[num].name : '', avg: cnt ? sum / cnt : 0 };
+  }
+  function makeHead(view, kind, cfg, def, k, n, closed, ic, st) {
     const h = document.createElement('div');
     h.className = 'c36-sh';
     h.setAttribute('data-c36-kind', kind);
     h.setAttribute('contenteditable', 'false');
+    h.toggleAttribute('data-closed', !!closed);
     h.__c36 = { view, k };
-    const tg = document.createElement('span'); tg.className = 'c36-tg'; tg.textContent = closed ? '▸' : '▾';
+    const tg = document.createElement('span'); tg.className = 'c36-tg'; tg.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12"><path d="M4.5 6l3.5 4 3.5-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const lb = document.createElement('span'); lb.className = 'c36-lb'; lb.textContent = k || '（' + (def.name || '') + ' なし）';
     const bg = chipColor(def, k);
     if (bg && k) { lb.classList.add('c36-chip'); lb.style.background = bg; }
-    const ct = document.createElement('span'); ct.className = 'c36-ct'; ct.textContent = String(n);
+    h.style.setProperty('--c36-tint', bg && k ? bg : 'var(--c36-accent)');
+    const ct = document.createElement('span'); ct.className = 'c36-ct'; ct.textContent = n + ' 件';
     const ie = k ? iconEl(ic) : null;
     if (ie) h.append(tg, ie, lb, ct); else h.append(tg, lb, ct);
+    if (st) {
+      const box = document.createElement('span'); box.className = 'c36-stat';
+      if (st.cb) { const s = document.createElement('span'); s.className = 'c36-done'; s.title = st.cb + '：' + st.done + ' / ' + st.n; s.innerHTML = '<i><b style="width:' + Math.round(st.n ? st.done / st.n * 100 : 0) + '%"></b></i>'; s.append('✓ ' + st.done + '/' + st.n); box.appendChild(s); }
+      if (st.num) { const s = document.createElement('span'); s.className = 'c36-avg'; s.title = st.num + 'の平均'; s.textContent = '★ ' + (Math.round(st.avg * 10) / 10); box.appendChild(s); }
+      h.appendChild(box);
+    }
     return h;
   }
   const SIG = new WeakMap();   // body → 署名（同じなら描き直さない）
@@ -431,9 +456,11 @@
       }
       const order = sortKeys(groups.keys(), def, cfg, nums);
       const closed = cfg.closed || {};
+      const stats = new Map(); for (const k of order) stats.set(k, statOf(coll, groups.get(k)));
+      const stSig = order.map((k) => { const s = stats.get(k); return s ? s.done + '/' + Math.round(s.avg * 10) : ''; }).join(',');
       const sig = key + '#' + pid + '#' + (cfg.rev ? 1 : 0) + '#' + order.map((k) => k + ':' + (icons.get(k) ? String(icons.get(k).v).slice(0, 40) : '') + ':' + (closed[k] ? 'c' : 'o') + ':' + groups.get(k).map((x) => x.id).join(',')).join('|');
       const units0 = new Set(units.map((x) => x.unit));
-      if (units[0].unit.classList.contains('notion-collection-result-wrapper')) { layoutVirtual(view, kind, cfg, def, body, order, groups, icons, closed, sig); continue; }
+      if (units[0].unit.classList.contains('notion-collection-result-wrapper')) { layoutVirtual(view, kind, cfg, def, body, order, groups, icons, closed, sig + '#' + stSig, stats); continue; }
       /* 入れ物の作り（flex／grid）をそろえる */
       const cs = getComputedStyle(body);
       if (!/grid/.test(cs.display)) {
@@ -447,20 +474,21 @@
         ch.style.setProperty('order', seen ? '1000000' : '-1', 'important');
         ch.setAttribute('data-c36-o', '1');
       }
-      if (SIG.get(body) === sig && body.querySelector(':scope > .c36-sh')) {
+      if (SIG.get(body) === sig + '#' + stSig && body.querySelector(':scope > .c36-sh')) {
         /* 署名が同じでも Notion が行の style を描き直すことがあるので order だけ当て直す */
         let o = 0;
         for (const k of order) { o += 1; for (const x of groups.get(k)) { o += 1; if (x.unit.style.order !== String(o)) x.unit.style.setProperty('order', String(o), 'important'); } }
         continue;
       }
-      SIG.set(body, sig);
+      SIG.set(body, sig + '#' + stSig);
       for (const old of body.querySelectorAll(':scope > .c36-sh')) old.remove();
       let o = 0;
       for (const k of order) {
         const list = groups.get(k);
         const isClosed = !!closed[k];
         o += 1;
-        const h = makeHead(view, kind, cfg, def, k, list.length, isClosed, icons.get(k));
+        const h = makeHead(view, kind, cfg, def, k, list.length, isClosed, icons.get(k), stats.get(k));
+        const tint = h.style.getPropertyValue('--c36-tint');
         h.style.setProperty('order', String(o), 'important');
         body.appendChild(h);
         ST.heads++;
@@ -468,6 +496,7 @@
           o += 1;
           x.unit.style.setProperty('order', String(o), 'important');
           x.unit.setAttribute('data-c36-u', '1');
+          x.unit.style.setProperty('--c36-tint', tint);   // v14: 行の左の色の線
           x.unit.toggleAttribute('data-c36-hide', isClosed);
         }
       }
@@ -479,7 +508,7 @@
      行の位置は Notion が style に毎回書くので、CSS（!important）で上書きする。見出しは入れ物の中に絶対位置で置く */
   const VB = new WeakMap(); let VBN = 0;
   const VCSS = new Map();   // 番号 → CSS
-  const HEAD_H = 36;
+  const HEAD_H = 42, GAP_H = 12;   // v14: 見出しの帯の高さ・段の間のすき間
   function vcssFlush() {
     let st = document.getElementById('c36-vcss');
     if (!st) { st = document.createElement('style'); st.id = 'c36-vcss'; (document.head || document.documentElement).appendChild(st); }
@@ -487,7 +516,7 @@
     if (st.textContent !== t) st.textContent = t;
   }
   const RSO = typeof ResizeObserver === 'function' ? new ResizeObserver(() => soon()) : null;
-  function layoutVirtual(view, kind, cfg, def, body, order, groups, icons, closed, sig) {
+  function layoutVirtual(view, kind, cfg, def, body, order, groups, icons, closed, sig, stats) {
     let n = VB.get(body);
     if (!n) { n = ++VBN; VB.set(body, n); }
     body.setAttribute('data-c36-body', 'virt');
@@ -497,19 +526,22 @@
     const fsig = sig + '#' + hs.join(',');
     if (SIG.get(body) === fsig && body.querySelector(':scope > .c36-sh') && VCSS.has(n)) return;
     SIG.set(body, fsig);
-    for (const old of body.querySelectorAll(':scope > .c36-sh')) old.remove();
+    for (const old of body.querySelectorAll(':scope > .c36-sh, :scope > .c36-line')) old.remove();
     const sel = '[data-c36-b="' + n + '"]';
     const rules = [];
-    let y = 0;
+    let y = 0, first = true;
     for (const k of order) {
       const list = groups.get(k);
       const isClosed = !!closed[k];
-      const h = makeHead(view, kind, cfg, def, k, list.length, isClosed, icons.get(k));
+      if (!first) y += GAP_H;
+      first = false;
+      const h = makeHead(view, kind, cfg, def, k, list.length, isClosed, icons.get(k), stats && stats.get(k));
       h.classList.add('c36-vh');
       h.style.transform = 'translateY(' + y + 'px)';
       body.appendChild(h);
       ST.heads++;
       y += HEAD_H;
+      const y0 = y;
       for (const x of list) {
         const i = x.unit.getAttribute('data-index');
         const one = sel + ' > .notion-collection-result-wrapper[data-index="' + i + '"]';
@@ -517,6 +549,8 @@
         rules.push(one + '{transform:translateY(' + y + 'px) !important;}');
         y += x.unit.offsetHeight;
       }
+      /* 行の左の色の線（この段の行の高さだけ） */
+      if (!isClosed && y > y0) { const ln = document.createElement('div'); ln.className = 'c36-line'; ln.setAttribute('contenteditable', 'false'); ln.style.transform = 'translateY(' + y0 + 'px)'; ln.style.height = (y - y0) + 'px'; ln.style.setProperty('--c36-tint', h.style.getPropertyValue('--c36-tint')); body.appendChild(ln); }
     }
     rules.push(sel + '{height:' + Math.max(y, 0) + 'px !important;}');
     VCSS.set(n, rules.join('\n'));
@@ -528,31 +562,53 @@
     b.removeAttribute('data-c36-b');
     b.removeAttribute('data-c36-body');
     SIG.delete(b);
-    for (const h of b.querySelectorAll(':scope > .c36-sh')) h.remove();
+    for (const h of b.querySelectorAll(':scope > .c36-sh, :scope > .c36-line')) h.remove();
     for (const u of b.querySelectorAll(':scope > [data-c36-u], :scope > [data-c36-o]')) {
-      u.style.removeProperty('order'); u.removeAttribute('data-c36-u'); u.removeAttribute('data-c36-o'); u.removeAttribute('data-c36-hide');
+      u.style.removeProperty('order'); u.style.removeProperty('--c36-tint'); u.removeAttribute('data-c36-u'); u.removeAttribute('data-c36-o'); u.removeAttribute('data-c36-hide');
     }
   }
   function clearView(view) {
     for (const b of view.querySelectorAll('[data-c36-body]')) clearBody(b);
   }
 
-  /* 左上の「⊞ サブグループ」 */
-  function bar(view, kind, key, show) {
-    let el = view.querySelector(':scope > .c36-bar');
-    if (!P.bar || !show) { if (el) el.remove(); return; }
-    const cfg = VIEWS[key];
-    const label = 'サブグループ' + (active(cfg) ? '：' + (cfg.prop ? cfg.name || '' : 'グループごと') : '');
-    if (!el) {
-      el = document.createElement('div');
-      el.className = 'c36-bar';
-      el.setAttribute('contenteditable', 'false');
-      el.addEventListener('mousedown', (e) => e.stopPropagation(), true);
-      el.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openMenu(view, el); });
-      view.insertBefore(el, view.firstChild);
+  /* v14: 「⊞ サブグループ」は Notion の上の道具の段（フィルター・並べ替え・検索）の左端に。見つからない時は出さない（ビューの設定から使える） */
+  const TOOL_SEL = ['Filter', 'フィルター', 'Sort', '並べ替え', 'Search', '検索'].map((l) => '[role="button"][aria-label="' + l + '"]').join(', ');
+  function toolbarOf(view) {
+    let host = view;
+    for (let i = 0; i < 9 && host && host !== document.body; i++, host = host.parentElement) {
+      const btn = host.querySelector(TOOL_SEL);
+      if (!btn) continue;
+      for (let row = btn.parentElement, j = 0; row && row !== host.parentElement && j < 7; row = row.parentElement, j++) {
+        const st = row.getAttribute('style') || '';
+        if (/display:\s*flex/.test(st) && /justify-content:\s*(flex-)?end/.test(st)) return row;
+      }
+      return btn.parentElement && btn.parentElement.parentElement;
     }
-    if (el.textContent !== label) el.innerHTML = '<span class="c36-bi">' + SUB_ICO + '</span><span></span>', el.lastChild.textContent = label;
-    el.toggleAttribute('data-on', active(cfg));
+    return null;
+  }
+  function bar(view, kind, key, show) {
+    for (const old of view.querySelectorAll(':scope > .c36-bar')) old.remove();   // v13 までの置き場所（ビューの先頭）は使わない
+    const row = P.bar && show ? toolbarOf(view) : null;
+    let el = view.__c36tb;
+    if (!row) { if (el) { el.remove(); view.__c36tb = null; } return; }
+    const cfg = VIEWS[key];
+    const on = active(cfg);
+    const label = on ? (cfg.prop ? cfg.name || '' : 'グループごと') : '';
+    if (!el) {
+      el = row.querySelector(':scope > .c36-tb') || document.createElement('div');
+      el.className = 'c36-tb';
+      el.setAttribute('role', 'button'); el.tabIndex = 0;
+      el.setAttribute('contenteditable', 'false');
+      el.innerHTML = '<span class="c36-bi">' + SUB_ICO + '</span><span class="c36-bl"></span>';
+      el.addEventListener('mousedown', (e) => e.stopPropagation(), true);
+      el.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openMenu(el.__view || view, el); });
+      view.__c36tb = el;
+    }
+    el.__view = view;
+    if (el.parentElement !== row) row.insertBefore(el, row.firstChild);
+    const lb = el.querySelector('.c36-bl'); if (lb && lb.textContent !== label) lb.textContent = label;
+    el.title = on ? 'サブグループ：' + label + '（押すと変える）' : 'サブグループ — グループの中をさらに分ける（ボード以外でも）';
+    el.toggleAttribute('data-on', on);
     el.setAttribute('data-c36-kind', kind);
   }
 
@@ -877,7 +933,7 @@
     value: (ctx) => { const v = ctx.view; if (!v) return ''; const bid = blockOf(v); const c = bid && VIEWS[v.getAttribute('data-c36-key') || keyOf(v, bid)]; if (!active(c)) return 'なし'; const n = c.groups ? Object.values(c.groups).filter((x) => x).length : 0; return (c.prop ? c.name || '' : 'グループごと') + (n ? '・個別 ' + n : ''); },
     onClick: (ctx) => { const v = ctx.view; if (!v) return; VS.sub(ctx, 'サブグループ', (api) => buildMenu(api, v)); }
   }]);
-  document.addEventListener('mousedown', (e) => { const m = document.getElementById('c36-menu'); if (m && !m.contains(e.target) && !(e.target.closest && e.target.closest('.c36-bar'))) closeMenu(); }, true);
+  document.addEventListener('mousedown', (e) => { const m = document.getElementById('c36-menu'); if (m && !m.contains(e.target) && !(e.target.closest && e.target.closest('.c36-bar, .c36-tb'))) closeMenu(); }, true);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); }, true);
 
   /* 見出し: クリックで畳む、右クリックでメニュー */
@@ -891,6 +947,7 @@
     if (!cfg) return;
     cfg.closed = cfg.closed || {};
     if (cfg.closed[k]) delete cfg.closed[k]; else cfg.closed[k] = 1;
+    h.toggleAttribute('data-closed', !!cfg.closed[k]);   // v14: 矢印をその場で回す
     saveV(); run();
   }, true);
   document.addEventListener('mousedown', (e) => { if (e.target.closest && e.target.closest('.c36-sh')) e.stopPropagation(); }, true);
@@ -935,22 +992,48 @@
 [data-c36-body="tcol"] { align-items: flex-start !important; }
 [data-c36-body="tcol"] > * { min-width: 100%; }
 [data-c36-hide] { display: none !important; }
+/* v14: サブグループは「段」— 色の帯の見出し（表の行には見えない）＋行の左の色の線＋段の間のすき間 */
+:root { --c36-accent: var(--lm-accent, #2783de); }
 .c36-sh {
-  display: flex; align-items: center; gap: 7px; box-sizing: border-box;
-  margin: var(--c36-top) 0 var(--c36-bottom); padding: 3px 6px 4px var(--c36-indent);
-  font-family: var(--c36-font); font-size: var(--c36-size); font-weight: var(--c36-weight); color: var(--c36-color);
-  border-bottom: 1px solid var(--c36-line); cursor: pointer; user-select: none; line-height: 1.5;
+  --c36-tint: var(--c36-accent);
+  display: flex; align-items: center; gap: 8px; box-sizing: border-box;
+  margin: calc(var(--c36-top) + 4px) 0 6px; padding: 5px 12px 5px 8px;
+  font-family: var(--cordi-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif); font-size: 13px; font-weight: 650; color: var(--c-texPri, #37352f);
+  border-radius: 11px; cursor: pointer; user-select: none; line-height: 1.4;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c36-tint) 16%, var(--c-bacPri, #fff)), color-mix(in srgb, var(--c36-tint) 4%, var(--c-bacPri, #fff)) 70%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c36-tint) 22%, transparent), inset 4px 0 0 var(--c36-tint);
+  transition: box-shadow .2s ease, filter .2s ease; animation: c36HeadIn .4s cubic-bezier(.16,1,.3,1) both;
 }
-.c36-sh:hover { background: var(--c-bacHov, rgba(55,53,47,.06)); }
-[data-c36-body="tcol"] > .c36-sh { position: sticky; inset-inline-start: 0; width: max-content; min-width: min(100%, 320px); border-bottom: 0; box-shadow: inset 0 -1px 0 var(--c36-line); }
-[data-c36-body="virt"] > .c36-sh.c36-vh { position: absolute; top: 0; inset-inline-start: 0; width: 100%; height: ${HEAD_H}px; margin: 0; padding-top: 10px; padding-bottom: 2px; padding-inline-start: calc(8px + var(--c36-indent)); z-index: 2; background: transparent; }
+.c36-sh:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c36-tint) 40%, transparent), inset 4px 0 0 var(--c36-tint), 0 6px 18px -12px color-mix(in srgb, var(--c36-tint) 70%, transparent); }
+@keyframes c36HeadIn { from { opacity: 0; transform: translateY(4px); } }
+[data-c36-body="virt"] > .c36-sh.c36-vh { animation: none; }
+[data-c36-body="tcol"] > .c36-sh { position: sticky; inset-inline-start: 0; width: max-content; min-width: min(100%, 420px); }
+[data-c36-body="virt"] > .c36-sh.c36-vh { position: absolute; top: 0; inset-inline-start: 0; width: min(100%, 760px); height: ${HEAD_H - 6}px; margin: 3px 0 0; padding-top: 0; padding-bottom: 0; padding-inline-start: 10px; z-index: 2; }
 [data-c36-body="grid"] > .c36-sh { grid-column: 1 / -1; margin-bottom: 0; }
-.c36-sh .c36-tg { width: 12px; font-size: 10px; opacity: .7; flex: none; }
+[data-c36-body] > [data-c36-u]:not([data-c36-body="grid"] > *) { box-shadow: inset 3px 0 0 color-mix(in srgb, var(--c36-tint, transparent) 70%, transparent); }
+[data-c36-body="virt"] > .c36-line { position: absolute; top: 0; inset-inline-start: 0; width: 3px; border-radius: 3px; z-index: 2; pointer-events: none; background: linear-gradient(var(--c36-tint), color-mix(in srgb, var(--c36-tint) 25%, transparent)); }
+.c36-sh .c36-tg { width: 16px; height: 16px; display: inline-grid; place-items: center; flex: none; color: color-mix(in srgb, var(--c36-tint) 70%, var(--c-texSec, #787774)); transition: transform .25s cubic-bezier(.3,1.5,.5,1); }
+.c36-sh[data-closed] .c36-tg { transform: rotate(-90deg); }
+.c36-sh .c36-stat { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 10px; font-size: 11.5px; font-weight: 600; color: var(--c-texSec, #787774); white-space: nowrap; }
+.c36-sh .c36-done { display: inline-flex; align-items: center; gap: 6px; }
+.c36-sh .c36-done i { display: inline-block; width: 42px; height: 5px; border-radius: 3px; overflow: hidden; background: color-mix(in srgb, var(--c36-tint) 18%, transparent); }
+.c36-sh .c36-done b { display: block; height: 100%; border-radius: 3px; background: var(--c36-tint); animation: c36Fill .9s cubic-bezier(.16,1,.3,1) both; }
+@keyframes c36Fill { from { width: 0 !important; } }
+.c36-sh .c36-avg { color: #c98a10; }
+@media (prefers-reduced-motion: reduce) { .c36-sh, .c36-sh .c36-done b { animation: none !important; } .c36-sh .c36-tg { transition: none; } }
+/* v14: 上の道具の段（フィルター・並べ替えの並び）のボタン */
+.c36-tb { display: inline-flex; align-items: center; gap: 5px; height: 28px; margin-inline-end: 2px; padding: 0 6px; border-radius: 6px; flex: none; cursor: pointer; user-select: none;
+  font: 500 13px/28px var(--cordi-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif); color: var(--c-icoSec, rgba(55,53,47,.55)); transition: background .15s ease, color .15s ease; }
+.c36-tb:hover { background: var(--c-bacHov, rgba(55,53,47,.08)); color: var(--c-texPri, #37352f); }
+.c36-tb[data-on] { color: var(--c-bluTex, #2383e2); }
+.c36-tb .c36-bi { width: 18px; height: 18px; display: inline-flex; } .c36-tb .c36-bi svg { width: 18px; height: 18px; }
+.c36-tb .c36-bl:empty { display: none; }
+.c36-tb .c36-bl { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .c36-sh .c36-ic { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; flex: none; font-size: 14px; line-height: 1; }
 .c36-sh .c36-ic img { width: 18px; height: 18px; object-fit: cover; border-radius: 3px; display: block; }
 .c36-sh .c36-lb { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60ch; }
 .c36-sh .c36-chip { padding: 0 6px; border-radius: 3px; font-weight: 500; color: var(--c-texPri, #37352f); }
-.c36-sh .c36-ct { color: var(--c36-count); font-weight: 400; }
+.c36-sh .c36-ct { padding: 0 7px; border-radius: 999px; font-size: 11px; font-weight: 650; line-height: 18px; color: color-mix(in srgb, var(--c36-tint) 65%, var(--c-texSec, #787774)); background: color-mix(in srgb, var(--c36-tint) 14%, transparent); }
 .c36-bar {
   display: inline-flex; align-items: center; gap: 4px; height: 24px; margin: 4px 0 2px; padding: 0 7px 0 5px; border-radius: 6px;
   font: 500 12.5px/24px var(--cordi-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif); color: var(--c-texSec, rgba(55,53,47,.65));
@@ -1005,7 +1088,7 @@
   }
   let t = 0;
   const soon = () => { if (!t) t = setTimeout(() => { t = 0; run(); }, 250); };
-  const ours = (n) => n.nodeType === 1 && (n.hasAttribute('data-cordi-vs-row') || n.hasAttribute('data-cordi-vs-sec') || n.id === 'cordi-vs-sub' || n.classList.contains('c36-sh') || n.classList.contains('c36-bar') || n.id === 'c36-menu' || n.id === 'c36-css' || n.id === 'c36-vcss');
+  const ours = (n) => n.nodeType === 1 && (n.hasAttribute('data-cordi-vs-row') || n.hasAttribute('data-cordi-vs-sec') || n.id === 'cordi-vs-sub' || n.classList.contains('c36-sh') || n.classList.contains('c36-line') || n.classList.contains('c36-tb') || n.classList.contains('c36-bar') || n.id === 'c36-menu' || n.id === 'c36-css' || n.id === 'c36-vcss');
   function boot() {
   new MutationObserver((ms) => {
     for (const m of ms) {

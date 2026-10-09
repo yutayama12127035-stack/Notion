@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      69.1.0
+// @version      69.2.0
 // @description  v69.1.0: 文字メニューに「ぶりに聞く」（³³ のぶりレンズ — 説明・要約・言い換え・訳す・続き）。v69.0.0: 速く — 重い :has(…)（フルDBの題字の行・行ページの題字・カードの題名・グループ見出し・リレーションのチップ・説明文・html:has(> body.dark)）を JS の印（data-atx-*）に置き換え。見た目は同じ（計算後のスタイルを全部比べて差 0）・詳細度も元のまま。読み込み中のスタイル計算が約 2.1 秒 → 0.03 秒（試験台・Atelier だけ）。元に戻すには localStorage['atelier.fast']='0'。v68.3.0: Firefox で「押す」動作が例外になる（MouseEvent の view）のを修正。v67.2.0: 組は英語・中は日本語に再編（Database は タイトル→リレーション→セル…）・重複の整理・外を押したら閉じる・動き・パネル自体の見た目（書体・大きさ・色・詰め具合）・全項目にアイコン。v47.2.0: 書体がきちんと当たるように — Notion の CSP は Google Fonts を通さないため、jsDelivr（Fontsource）から読み込むウェブ書体 39 種（しっぽり明朝・Zen オールド明朝・Noto Serif JP・BIZ UDP明朝・Klee One・Cormorant Garamond・EB Garamond・Playfair ほか）を追加。端末に入っていなくても当たる。表の「題字」と「リレーション」を形で見分ける（題字＝その行のページ、リレーション＝別 DB へのチップ）。題字の列の書体・大きさ・太さ・行の高さ・アイコンが ⁰⁹ の印なしでも効く。素のリレーションのチップの書式（新しい区画）。見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -4053,7 +4053,7 @@ html.c26-painting .notion-page-content, html.c26-painting .notion-page-content *
     if (document.getElementById(UI_STYLE_ID)) return;
     const st = document.createElement('style');
     st.id = UI_STYLE_ID;
-    st.textContent = `
+    st.textContent = atFast(`   // v69.2: html:has(> body.dark) → html[data-atx-dark]（Notion が DOM を変えるたびに画面全体を測り直していた）
 #c26-pop, .c26-panel, #c26-fab, .c26-toast, #c26-trigger {
   --c26-bg: #fff; --c26-fg: rgb(55,53,47); --c26-sub: rgba(55,53,47,.5); --c26-faint: rgba(55,53,47,.35);
   --c26-line: rgba(55,53,47,.09); --c26-hover: rgba(55,53,47,.08); --c26-press: rgba(55,53,47,.16);
@@ -4466,7 +4466,7 @@ html:not([data-c26-content]) #c26-fab { display: none; }
 .c26-btn-pri { background: rgb(35,131,226) !important; color: #fff !important; border-color: transparent !important; font-weight: 500; }
 .c26-savest { flex-basis: 100%; font-size: 11px; color: var(--c26-sub); }
 .c26-foot { padding: 8px 12px; border-top: 1px solid var(--c26-line); display: flex; gap: 6px; flex-wrap: wrap; }
-`;
+`);
     (document.head || document.documentElement).appendChild(st);
   }
 
@@ -5021,13 +5021,15 @@ html[data-c26-dock] #c26-fab { display: none !important; }`;
    * layout rules. There is no global reset for Notion elements.
    */
 
-  :where(
+  /* v69.2: :where() の中は速い除外（祖先の索引）が効かず、画面じゅうの要素で祖先をたどっていた → 層（@layer）に入れて
+     「どの指定にも負ける」ことはそのまま、速い除外が効く形に */
+  @layer cordi-reset {
     [data-constellucentia-root],
     [data-constellucentia-root] *,
     [data-constellucentia-component],
-    [data-constellucentia-component] *
-  ) {
-    box-sizing: border-box;
+    [data-constellucentia-component] * {
+      box-sizing: border-box;
+    }
   }
 
   /**
@@ -8040,6 +8042,9 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
   const P_DESC = ':is(div[contenteditable="true"][data-constellucentia-full-db-description-aligned="true"], [data-constellucentia-full-db-description-aligned="true"]:not(:has(h1)) div[contenteditable="true"]):not(:has(h1)):not(h1 *)';
   /* [探す文字列, 置き換えの形（@0 = 印・元と同じ詳細度）, [[元の塊, 印], …]]。長い（文脈つきの）ものから先に */
   const AT_ACCEL = [
+    /* v69.2: タブ列の「すべての子孫」— role 属性はどこにでもあるので速い除外が効かない → タブ列に印（data-atx-tl）を付けて当てる */
+    ['[role="tablist"] *', '[data-atx-tl] *', []],
+    ['[role="tablist"] > div > div[style*="contents"] [role="button"]', '[data-atx-tl] > div > div[style*="contents"] [role="button"]', []],
     ['html:has(> body.dark)', 'html@0', [[':has(> body.dark)', '[data-atx-dark]']]],
     [P_DBT, '@0', [[P_DBT, '[data-atx-dbt]']]],
     [P_RPT + ' > ' + P_RPI, '@0 > @1', [[P_RPT, '[data-atx-rpt]'], [P_RPI, '[data-atx-rpt-i]']]],
@@ -8062,11 +8067,12 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     for (const [re, to] of AT_ACCEL) css = css.replace(re, () => to);
     return css;
   }
-  const ATX = ['data-atx-dbt', 'data-atx-rpt', 'data-atx-rpt-i', 'data-atx-rpt-t', 'data-atx-card', 'data-atx-cardt', 'data-atx-grph', 'data-atx-grpi', 'data-atx-grpt', 'data-atx-relpv', 'data-atx-relwrap', 'data-atx-relchip', 'data-atx-desc'];
+  const ATX = ['data-atx-tl', 'data-atx-dbt', 'data-atx-rpt', 'data-atx-rpt-i', 'data-atx-rpt-t', 'data-atx-card', 'data-atx-cardt', 'data-atx-grph', 'data-atx-grpi', 'data-atx-grpt', 'data-atx-relpv', 'data-atx-relwrap', 'data-atx-relchip', 'data-atx-desc'];
   function atMarkAll() {
     const live = new Set();
     const mark = (el, k, v) => { if (!el) return; if (el.getAttribute(k) !== (v || '')) el.setAttribute(k, v || ''); live.add(el); };
     const kids = (el) => [...el.children];
+    for (const tl of document.querySelectorAll('[role="tablist"]')) mark(tl, 'data-atx-tl');
     /* フルDBのタイトル行: 直下にアイコン、その隣の div の中にページの題字 */
     for (const ic of document.querySelectorAll('.notion-record-icon[role="button"][aria-label="Change page icon"]')) {
       const p = ic.parentElement, nx = ic.nextElementSibling;
@@ -8375,9 +8381,21 @@ html[data-c05-full="1"] .notion-collection_view_page-block:has(> [role="button"]
     if (!which || which === 'rules') { const s = atStyle(AT_IDS.rules); const c = atFast(atRulesCss()); if (s.textContent !== c) s.textContent = c; }
   }
   /* <head> ができたら、Stylus より後ろへ（同じ強さの規則は後ろが勝つ） */
+  /* 柱（Cordivestium の各スクリプト）のスタイルか — 柱どうしの順番は気にしない */
+  function cordiForeignAfter(el) {
+    for (let n = el.nextElementSibling; n; n = n.nextElementSibling) {
+      if (n.tagName !== 'STYLE' && n.tagName !== 'LINK') continue;
+      if (n.tagName === 'LINK' && n.rel !== 'stylesheet') continue;
+      if (/^(c\d|lm-|atelier|cordi|constellucentia|s38|zz|c26|c33|c16|c36|c34|c30|c14|c23|c39)/.test(n.id || '')) continue;
+      if (n.tagName === 'LINK' && /fontsource|jsdelivr/.test(n.href || '')) continue;
+      return true;
+    }
+    return false;
+  }
   function atKeepLast() {
     if (!document.head) return;
-    for (const id of [AT_IDS.base, AT_IDS.tokens, AT_IDS.rules]) { const s = document.getElementById(id); if (s && s.nextElementSibling && s.parentNode === document.head) document.head.appendChild(s); else if (s && s.parentNode !== document.head) document.head.appendChild(s); }
+    /* v69.2: 後ろに「よその」スタイル（Notion・ほかの拡張）がある時だけ動かす。柱どうしで最後を取り合うと、そのたびに画面全体のスタイルを計算し直す */
+    for (const id of [AT_IDS.base, AT_IDS.tokens, AT_IDS.rules]) { const s = document.getElementById(id); if (!s) continue; if (s.parentNode !== document.head) { document.head.appendChild(s); continue; } if (cordiForeignAfter(s)) document.head.appendChild(s); }
   }
 
   /* ---------- 旧 ¹² Group Header Typography の印と開閉（¹² が動いている時は何もしない） ---------- */
