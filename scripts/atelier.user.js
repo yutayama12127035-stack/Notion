@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²⁶ _ Atelier
 // @namespace    https://cordivestium.local/text-styles
-// @version      69.0.0
-// @description  v69.0.0: 速く — 重い :has(…)（フルDBの題字の行・行ページの題字・カードの題名・グループ見出し・リレーションのチップ・説明文・html:has(> body.dark)）を JS の印（data-atx-*）に置き換え。見た目は同じ（計算後のスタイルを全部比べて差 0）・詳細度も元のまま。読み込み中のスタイル計算が約 2.1 秒 → 0.03 秒（試験台・Atelier だけ）。元に戻すには localStorage['atelier.fast']='0'。v68.3.0: Firefox で「押す」動作が例外になる（MouseEvent の view）のを修正。v67.2.0: 組は英語・中は日本語に再編（Database は タイトル→リレーション→セル…）・重複の整理・外を押したら閉じる・動き・パネル自体の見た目（書体・大きさ・色・詰め具合）・全項目にアイコン。v47.2.0: 書体がきちんと当たるように — Notion の CSP は Google Fonts を通さないため、jsDelivr（Fontsource）から読み込むウェブ書体 39 種（しっぽり明朝・Zen オールド明朝・Noto Serif JP・BIZ UDP明朝・Klee One・Cormorant Garamond・EB Garamond・Playfair ほか）を追加。端末に入っていなくても当たる。表の「題字」と「リレーション」を形で見分ける（題字＝その行のページ、リレーション＝別 DB へのチップ）。題字の列の書体・大きさ・太さ・行の高さ・アイコンが ⁰⁹ の印なしでも効く。素のリレーションのチップの書式（新しい区画）。見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
+// @version      69.1.0
+// @description  v69.1.0: 文字メニューに「ぶりに聞く」（³³ のぶりレンズ — 説明・要約・言い換え・訳す・続き）。v69.0.0: 速く — 重い :has(…)（フルDBの題字の行・行ページの題字・カードの題名・グループ見出し・リレーションのチップ・説明文・html:has(> body.dark)）を JS の印（data-atx-*）に置き換え。見た目は同じ（計算後のスタイルを全部比べて差 0）・詳細度も元のまま。読み込み中のスタイル計算が約 2.1 秒 → 0.03 秒（試験台・Atelier だけ）。元に戻すには localStorage['atelier.fast']='0'。v68.3.0: Firefox で「押す」動作が例外になる（MouseEvent の view）のを修正。v67.2.0: 組は英語・中は日本語に再編（Database は タイトル→リレーション→セル…）・重複の整理・外を押したら閉じる・動き・パネル自体の見た目（書体・大きさ・色・詰め具合）・全項目にアイコン。v47.2.0: 書体がきちんと当たるように — Notion の CSP は Google Fonts を通さないため、jsDelivr（Fontsource）から読み込むウェブ書体 39 種（しっぽり明朝・Zen オールド明朝・Noto Serif JP・BIZ UDP明朝・Klee One・Cormorant Garamond・EB Garamond・Playfair ほか）を追加。端末に入っていなくても当たる。表の「題字」と「リレーション」を形で見分ける（題字＝その行のページ、リレーション＝別 DB へのチップ）。題字の列の書体・大きさ・太さ・行の高さ・アイコンが ⁰⁹ の印なしでも効く。素のリレーションのチップの書式（新しい区画）。見た目を、ひとつの場所で — 旧 Text Styles の統合版。v37: 表のセルの中の位置（中央寄せなど）が実物の Notion で効かなかったのを作り直し（セルの中身の箱を見つけて直接そろえる・題字はアイコンと文字をまとめて動かす）・個別登録（このセルだけ）にも中身の位置・ギャラリー／ボードのカードの題名がアイコンから大きく右へずれる崩れを防ぐ・リレーションのサブグループの見た目（--c13-sub-*）。v36: すべての設定に動く説明（乗せると、その設定が何をどう動かすかを小さなアニメーションで）・表のセルの中の位置（すべての列／題字・リレーション・画像・文字など列の種類ごとに、左・中央・右と上・中央・下）・サイドバーの段々の開始位置のずらし・パネルの書体（Cormorant Garamond・しっぽり明朝・Zen 角ゴシック New）。v35: 全部の設定に「どこが変わるか」の説明・動く見本図（リレーション・サイドバー・本文・表のセル）・乗せた設定が当たる要素だけを光らせて数を表示・数は ↑↓／⇧／⌥ で細かく・範囲の外の値も・各場所に「細部」（文字・アイコン・位置・間隔・形の全部）・リレーションのグループの空きを 1 つずつ分解・個別登録（このセルだけ／この行だけ／この列だけ／この 1 つだけ）と位置・アイコン・間隔・形まで・表の画像（³⁴）の設定。v34: パネルを作り直し（検索・組ごとの枠・線の見えるスライダー・乗せると当たる所が光る）。Notion の画面の要素を一通り洗い出し、本文と段落（段落の上下の間隔・字下げ・両端揃え・ページの幅）・見出し・リスト・引用とコールアウト・コード／区切り線／表・リンク・ページのタイトルとアイコン・プロパティ・タブと列見出し・表のセル・カード・サイドバー（行・ビュー・ワークスペース）・上の帯とメニューまで、文字・アイコン（大きさ・文字との間・上下左右）・位置・間隔・形を調整できるように。次世代の道具: コマンドパレット・分割ビュー・縦書きリーダー・マーカー一覧・付箋・スニペット・タイプライター・進み具合のレール・ページごとの見た目。v24: ²⁶ のメニューに Atelier と道具（どこでも書式・目次・フォーカスモード・文字数と読了時間）を統合。①本文を Word のように（文字を選ぶと ²⁶ のメニュー: 書体・サイズ・太さ・字間・段落・コールアウト・引用・テンプレート） ②Atelier（⌃⌥A・「Aa」の右クリック）: 旧 Stylus の Typography 系（⁰⁰ ⁰¹ ¹³ ¹⁴ ¹⁵ ¹⁶ ¹⁷ ²¹ ²⁵）と ¹² ⁰⁶ を内蔵し、フルDBタイトル・説明・ヘッダー（タブ・列見出しは既定で Serif に統一）・題字列・リレーション・グループ見出し・行ページ・通常ページ・サイドバーの書式を一か所で ③どこでも書式: Notion では変えられない所（リレーション・プロパティ名・ボタン・ツールバー…）も、画面でクリックして書体・大きさ・色などを当てる ④テーマの保存・切り替え・書き出し。設定はこのブラウザだけ。メニュー: 文字を選ぶ／⌃⌥F ／ 本文の設定: ⌃⌥S ／ Atelier: ⌃⌥A。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -1854,6 +1854,7 @@
         '<button class="m9-tb" data-cordi="s38.calc" title="選んだ式を計算して後ろに足す（⌃⌥=）">' + ICO_PL.fx + '<span>計算</span></button>' +
         '<button class="m9-tb" data-cordi="s38.dictation" title="選んだ文で書き取り">' + ICO_PL.pen + '<span>書き取り</span></button>' +
       '</div>' +
+      '<div class="m9-buri"><button class="m9-tb" data-cordi="c33.lens" title="ぶりレンズ — 選んだ所を説明・要約・言い換え・訳す・続きを書く（⌃⌥J）">' + ICO_PL.spark + '<span>ぶりに聞く</span><small>説明・要約・言い換え・訳す</small></button></div>' +
       '</div>' +
       '<div class="m9-div"></div>' +
       '<div class="m9-foot"><button class="m9-row m9-cmt" data-n="comment">' + '<span class="m9-ic">' + ICO.comment + '</span><span class="m9-lab">コメント</span></button>' +
@@ -3817,6 +3818,12 @@ html[data-c26-bm]:not(.c26-native) [role="dialog"]:has([role="option"] svg.dupli
 .m9-pl small { font-size: 10.5px; color: var(--m9-sub); }
 html:not([data-cordi-lm]) .m9-pl[data-p="lm"], html:not([data-cordi-s38]) .m9-pl[data-p="s38"], html:not([data-c33]) .m9-pl[data-p="c33"], html:not([data-cordi-s38]) .m9-learn { display: none !important; }
 .m9-learn { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 0 4px 4px; }
+/* v69.1: ³³ B.U.R.I のぶりレンズ（³³ が入っている時だけ） */
+html:not([data-c33-boot]) .m9-buri { display: none !important; }
+.m9-buri { padding: 0 4px 4px; }
+.m9-buri .m9-tb { width: 100%; height: 30px; justify-content: flex-start; gap: 7px; padding: 0 9px; font-size: 12px; font-weight: 600; white-space: nowrap; color: var(--lm-accent, #2783de); }
+.m9-buri .m9-tb small { margin-inline-start: auto; font-size: 10.5px; font-weight: 400; color: var(--m9-fg); opacity: .6; overflow: hidden; text-overflow: ellipsis; }
+.m9-buri .m9-tb svg { width: 15px; height: 15px; flex: none; }
 .m9-learn .m9-tb { width: 100%; height: 28px; gap: 3px; padding: 0 2px; font-size: 11.5px; white-space: nowrap; color: var(--m9-fg); }
 .m9-learn .m9-tb svg { width: 14px; height: 14px; }
 .m9-attools .m9-atb::after { content: "⌃⌥A"; margin-left: auto; font: 10.5px/1 -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0; color: var(--m9-ico); opacity: .7; }
@@ -9326,6 +9333,7 @@ ${DEMO_CSS}
     speak: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h2.5L10 5v10l-3.5-3H4z"/><path d="M13 7.5a3.5 3.5 0 0 1 0 5"/></svg>',
     fx: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M9 4.5c-1.6 0-2.2.9-2.5 2.6L5 15.5M4 9h5M11 9l4.5 5M15.5 9L11 14"/></svg>',
     pen: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l1-3.5L13.5 4l2.5 2.5L7.5 15z"/></svg>',
+    spark: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"><path d="M10 3l1.6 4.4L16 9l-4.4 1.6L10 15l-1.6-4.4L4 9l4.4-1.6Z"/><path d="M15.4 13.4l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6Z"/></svg>',
     aa: '<svg viewBox="0 0 20 20" fill="currentColor"><text x="10" y="14.6" text-anchor="middle" font-size="12.5" font-family="Hiragino Mincho ProN, Georgia, serif" font-weight="600">Aa</text></svg>'
   };
   function syncToolButtons() {

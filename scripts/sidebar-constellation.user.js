@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      67.0.0
-// @description  v67.0.0: B.U.R.I を大幅に強化 — 自然な日本語・出典は文の終わりに小さな番号（¹ ²）＋番号つきの出典一覧・今日の日付で「これから／もう過ぎた」を言い分け・まとめ役を選べる（既定は NVIDIA）・AI が考えた「次に聞けそうなこと」・いま開いているページの要約／質問・「〜を開いて」でページへ・Markdown でコピー（脚注つき）・これまでの答え（履歴・検索）・読み込みの速さを表示。軽く — 見回りを 0.1→0.7 秒・位置合わせを 0.15→0.45 秒（変化の時だけ）・地の色は変わった時だけ測る。v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      77.0.0
+// @description  v77.0.0: Next Notion — ★ぶりレンズ（ページの文字を選ぶと ✦。説明・要約・言い換え・訳す・続きを書く・自由に聞く。置き換え／下に入れる／コピー。⌃⌥J）★おかえりハイライト（前に見た時から変わった段がうっすら光る。↑↓ で移動・ぶりに要約・⌘K でも「前回から変わった所」。⌃⌥N）。描き直しを見せない — サイドバーの印・輪・検索窓を同じコマで置く（以前は 80ms〜2 秒遅れて上書きが見えていた）・準備ができたら html[data-c33-ready]（16c の幕の合図）。顔はいつも 1 つ（ホームの大きな顔・答えごとの顔をやめた）。検索画面は窓の幅に合わせて 3 段（広い・中・狭い＝ぶりが画面いっぱい）＋欄の中も幅に合わせて詰める。v67.0.0: B.U.R.I を大幅に強化 — 自然な日本語・出典は文の終わりに小さな番号（¹ ²）＋番号つきの出典一覧・今日の日付で「これから／もう過ぎた」を言い分け・まとめ役を選べる（既定は NVIDIA）・AI が考えた「次に聞けそうなこと」・いま開いているページの要約／質問・「〜を開いて」でページへ・Markdown でコピー（脚注つき）・これまでの答え（履歴・検索）・読み込みの速さを表示。軽く — 見回りを 0.1→0.7 秒・位置合わせを 0.15→0.45 秒（変化の時だけ）・地の色は変わった時だけ測る。v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,32 @@
 // ==/UserScript==
 
 /*
+ * v77.0.0（Next Notion — 目玉 2 つ・描き直しを見せない・窓の幅に合わせる）
+ *   目玉 ① ぶりレンズ
+ *   ・ページの文字を選ぶと、選んだ所の下に小さな ✦（Notion の書式の帯は上に出るので重ならない）。押すと
+ *     説明・要約・言い換え・訳す（日本語⇄英語を自動で）・続きを書く・自由に聞く（⌘↵）。答えはその場のカードに。
+ *   ・「置き換える」「下に入れる」は Notion の貼り付けとして入れる（箇条書き・太字もそのまま段に・⌘Z で戻せる）。
+ *     入らなかった時はコピーして知らせる。⌘K で続ける（B.U.R.I の会話へ）。⌃⌥J で今の選択に。²⁶ の文字メニューにも「ぶりに聞く」。
+ *   ・AI は相談せず、速い仲間から 1 人（Groq → Gemini → メイン → …、だめなら次・3 人まで）。BURI.quick。
+ *   目玉 ② おかえりハイライト
+ *   ・ページごとに「最後に見た姿」を覚える（段の ID と文字の指紋だけ。本文は保存しない・150 ページまで・この端末の中）。
+ *   ・次に開いた時、変わった段（青）・新しい段（緑）を左の細い線と淡い光で。下の札に「おかえりなさい。2 日前から 3 か所」
+ *     ↑↓ で移動（⌃⌥N）・ぶりに要約・✓ で消す。⌘K でも「前回から変わった所を教えて」。ホームのページの札にも「変わった所」。
+ *   ・見ている間の自分の書き換えは、その場で覚え直すので光らない。日付・ページの言及の文字は指紋に入れない。
+ *   描き直しを見せない
+ *   ・サイドバーの印付けは「変化を見た次の描画の前」（以前 80ms 後）。変わったチームスペースだけ。位置合わせも同じコマで。
+ *   ・サイドバーが出た・作り直された瞬間に輪・余白・検索窓を置く（以前は 2 秒ごとの見回り待ちで、素の姿の上から上書きが見えた）。
+ *   ・検索窓の位置は「すべって動く」アニメをやめ、サイドバーの大きさが変わった瞬間（ResizeObserver）に置き直す（0.45 秒の見回りをやめた）。
+ *   ・³⁷ の幕で #notion-app が透明な間も「サイドバーは見えている」と扱う（以前は幕が開いてから輪を置いていた）。
+ *   ・準備ができたら html[data-c33-ready]、起動したら html[data-c33-boot] — 16c の幕はこれを待つ。¹⁶ の字下げが落ち着いた瞬間にも置き直す。
+ *   顔は 1 つ・窓の幅
+ *   ・ホームの大きな顔・答えごとの顔・考え中の顔をやめ、上のピルの顔だけに（小さく）。一覧の段の顔も、欄が開いている間は ✦ に。
+ *   ・検索画面: 窓の幅で 3 段（l ≥ 1100・m ≥ 760・s）。幅は比率（clamp）。欄が開いている間は右の欄を広く。
+ *     狭い時は右の欄をしまい、ぶりが検索画面いっぱいに（solo）。欄の中は container queries で詰める（名前・区切り・2 列 → 1 列）。
+ *   そのほか
+ *   ・²⁶ Atelier の文字メニューの「Orbit」が効いていなかった（³³ が cordi:run を聞いていなかった）→ 直した。
+ *   ・答えの行頭の「**太字**」を箇条書きと間違えていた → 直した。
+ *
  * v67.0.0（B.U.R.I を大幅に強化・軽く）
  *   答えの質
  *   ・出典の印 [W8][W9] が文の途中に入って読みにくかった → 文の終わり（句点の直後）にまとめ、画面では小さな脚注番号（¹ ²）に。
@@ -133,9 +159,11 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '67.0.0';
+  const VERSION = '77.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   if (window.__c33 && window.__c33.version) { console.warn(TAG, '旧版が動いています'); return; }
+  /* v77: 16c の幕に「³³ が入っている」ことを知らせる。輪・検索窓・印が置けたら html[data-c33-ready]（幕はそれまで開かない） */
+  try { document.documentElement.setAttribute('data-c33-boot', VERSION); } catch (e) { /* noop */ }
 
   const LS = 'c33.prefs.v1';
   const LS_DB = 'c33.db.v1';
@@ -146,6 +174,10 @@
   try { KNOWN_DB = JSON.parse(localStorage.getItem(LS_DB) || '{}') || {}; } catch (e) { KNOWN_DB = {}; }
   const saveDb = () => { try { localStorage.setItem(LS_DB, JSON.stringify(KNOWN_DB)); } catch (e) { /* noop */ } };
   const ST = { scans: 0, rows: 0, views: 0, dbs: 0, lastError: '' };
+  /* v77: 同じコマで — 印付け（scan）の中で頼まれた位置合わせは、次のコマに回さずその場で（描画の前に）済ませる */
+  let inScan = false;
+  const frameJobs = [];
+  const inFrame = (fn) => { if (inScan) frameJobs.push(fn); else requestAnimationFrame(fn); };
 
   const SEL_TEAM = '.notion-outliner-team-container';
   const SEL_TEAM_BTN = '.notion-outliner-team[role="button"]';
@@ -284,7 +316,7 @@
   const curView = () => (new URLSearchParams(location.search).get('v') || '').replace(/-/g, '').toLowerCase();
   function curPage() { const m = /([0-9a-f]{32})(?:[?#]|$)/i.exec(location.pathname) || /([0-9a-f]{32})/i.exec(location.pathname); return m ? m[1].toLowerCase() : ''; }
   function alignViews(info) {
-    requestAnimationFrame(() => {
+    inFrame(() => {
       for (const x of info) {
         if (!x.view || !x.dbRow) continue;
         const t = nameEl(x.dbRow.r);
@@ -428,7 +460,7 @@
   let STAR_DX = null;
   try { const v = parseFloat(localStorage.getItem(LS_STAR)); if (isFinite(v)) STAR_DX = v; } catch (e) { /* noop */ }
   function alignTree(team, btn, info) {
-    requestAnimationFrame(() => {
+    inFrame(() => {
       if (!btn.isConnected) return;
       const de = document.documentElement;
       const g = team.getAttribute('data-c16-g');
@@ -469,31 +501,63 @@
       obFixSoon();
     });
   }
+  const dirtyTeams = new Set();
+  let dirtyAll = true;
   function scan() {
-    if (!P.on) return;
-    ST.scans++; ST.rows = 0; ST.views = 0; ST.dbs = 0;
+    if (!P.on) { readyCheck(); return; }
     document.documentElement.setAttribute('data-c33', P.flat ? 'flat' : 'nest');
     document.documentElement.toggleAttribute('data-c33-nobg', P.noBg !== false);
     document.documentElement.toggleAttribute('data-c33-tree', P.tree !== false);
     installCss();
     const scope = document.querySelector('nav.notion-sidebar-container, .notion-sidebar-container, .notion-sidebar');
     if (!scope) return;
-    for (const t of scope.querySelectorAll(SEL_TEAM)) {
-      if (t.closest('[role="dialog"]')) continue;
-      try { scanTeam(t); } catch (e) { ST.lastError = String(e && e.stack || e); }
-    }
-    for (const sec of scope.querySelectorAll('#c16-root .c16-sec')) {
-      const ico = sec.querySelector('.c16-ico');
-      if (!ico) continue;
-      const c = getComputedStyle(ico).backgroundColor;
-      const g = sec.getAttribute('data-c16-g');
-      if (c && g) for (const t of scope.querySelectorAll(SEL_TEAM + '[data-c16-g="' + g + '"]')) setVar(t, '--c33-tint', c);
-    }
+    const full = dirtyAll || !ST.scans;
+    dirtyAll = false;
+    const teams = full ? [...scope.querySelectorAll(SEL_TEAM)] : [...dirtyTeams].filter((t) => t.isConnected && scope.contains(t));
+    dirtyTeams.clear();
+    if (full) { ST.scans++; ST.rows = 0; ST.views = 0; ST.dbs = 0; ST.fullAt = Date.now(); } else ST.part = (ST.part || 0) + 1;
+    inScan = true;
+    try {
+      for (const t of teams) {
+        if (t.closest('[role="dialog"]')) continue;
+        try { scanTeam(t); } catch (e) { ST.lastError = String(e && e.stack || e); }
+      }
+      if (full) for (const sec of scope.querySelectorAll('#c16-root .c16-sec')) {
+        const ico = sec.querySelector('.c16-ico');
+        if (!ico) continue;
+        const c = getComputedStyle(ico).backgroundColor;
+        const g = sec.getAttribute('data-c16-g');
+        if (c && g) for (const t of scope.querySelectorAll(SEL_TEAM + '[data-c16-g="' + g + '"]')) setVar(t, '--c33-tint', c);
+      }
+      /* 位置合わせ（読む→書く）はまとめてここで。次のコマに回すと 1 コマだけ「ずれた姿」が見える */
+      while (frameJobs.length) { try { frameJobs.shift()(); } catch (e) { ST.lastError = String(e && e.stack || e); } }
+    } finally { inScan = false; }
+    readyCheck();
   }
-  let schedT = 0;
+  /* v77: 変化を見たら、次の描画の前（requestAnimationFrame）に印を付ける。以前は 80ms 待っていたので、Notion の素の姿が数コマ見えていた */
+  let schedT = 0, schedR = 0;
   function schedule(ms) {
-    if (schedT) return;
-    schedT = setTimeout(() => { schedT = 0; requestAnimationFrame(scan); }, ms == null ? 80 : ms);
+    if (ms != null) dirtyAll = true;
+    if (ms) { if (!schedT) schedT = setTimeout(() => { schedT = 0; schedule(0); }, ms); return; }
+    if (schedR) return;
+    schedR = requestAnimationFrame(() => { schedR = 0; scan(); });
+  }
+  /* v77: 準備完了の印 — サイドバーに印が付き、輪が置け、検索窓の位置が決まったら html[data-c33-ready]（16c の幕の合図） */
+  let readyDone = false, layDone = false;
+  function readyCheck() {
+    if (readyDone) return;
+    try {
+      const side = document.querySelector('nav.notion-sidebar-container, .notion-sidebar-container, .notion-sidebar');
+      if (!side) return;
+      if (P.on) {
+        if (!ST.scans) return;
+        const teams = side.querySelectorAll(SEL_TEAM);
+        if (teams.length && ![...teams].some((t) => t.hasAttribute('data-c33-team'))) return;
+      }
+      if (OB.on && obSidebarShown !== false && (!obEl || !obEl.isConnected || !layDone)) return;
+      readyDone = true;
+      document.documentElement.setAttribute('data-c33-ready', '1');
+    } catch (e) { /* noop */ }
   }
 
   /* ============================================================
@@ -599,16 +663,23 @@ ${icons}
    *  起動
    * ============================================================ */
   const mo = new MutationObserver((recs) => {
+    let hit = false;
     for (const r of recs) {
       const t = r.target;
-      if (t.nodeType === 1 && t.closest && t.closest('.notion-sidebar-container, .notion-sidebar, nav')) { schedule(); return; }
+      if (t.nodeType !== 1 || !t.closest || !t.closest('.notion-sidebar-container, .notion-sidebar, nav')) continue;
+      const team = t.closest(SEL_TEAM);
+      if (team) dirtyTeams.add(team); else dirtyAll = true;
+      hit = true;
     }
+    if (hit) schedule();
   });
   mo.observe(document.body, { childList: true, subtree: true });
+  /* v77: ¹⁶ の字下げが落ち着いた瞬間に置き直す（幕が開く前に。後で 2px 動くのを見せない） */
+  new MutationObserver(() => schedule(0)).observe(document.documentElement, { attributes: true, attributeFilter: ['data-c16-settled'] });
   window.addEventListener('resize', () => schedule(120));
   document.addEventListener('atelier-change', () => schedule(60));
-  schedule(300);
-  setTimeout(() => schedule(0), 1500);
+  schedule(0);
+  setTimeout(() => { if (!ST.fullAt || Date.now() - ST.fullAt > 1000) schedule(0); }, 1500);   // 保険（直前に全部見直していれば省く）
 
   /* ============================================================
    *  Orbit
@@ -1271,11 +1342,14 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         r.left >= window.innerWidth - 1 || r.top >= window.innerHeight - 1) return false;
     /* v56: 検索などの画面が開くと Notion は裏を aria-hidden / inert にする → それは「閉じた」ではないので見ない */
     const modal = !!document.querySelector('[aria-modal="true"], .notion-dialog[role="dialog"]');
-    for (let el = side; el && el !== document.documentElement; el = el.parentElement) {
+    /* v77: 幕（³⁷ Lumière の #notion-app の透明・²¹ の幕）で透明なのは「閉じた」ではない — 幕の裏でも輪と検索窓を置いておく */
+    const de = document.documentElement;
+    const veiled = de.hasAttribute('data-lm-curtain') || de.hasAttribute('data-c21-veil') || de.getAttribute('data-c16c-open') === '0';
+    for (let el = side; el && el !== de; el = el.parentElement) {
       const cs = getComputedStyle(el);
       if (el.hidden || (!modal && (el.getAttribute('aria-hidden') === 'true' || el.hasAttribute('inert'))) ||
           cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse' ||
-          (cs.opacity !== '' && Number(cs.opacity) === 0) || cs.contentVisibility === 'hidden') return false;
+          (!veiled && cs.opacity !== '' && Number(cs.opacity) === 0) || cs.contentVisibility === 'hidden') return false;
     }
     return true;
   }
@@ -1284,7 +1358,6 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const shown = !!OB.on && obSidebarVisible(obSide());
     if (shown !== obSidebarShown) {
       obSidebarShown = shown;
-      if (window.__c33LayoutSoon) window.__c33LayoutSoon();
       if (shown) {
         obEl.style.removeProperty('display');
         obEl.style.removeProperty('pointer-events');
@@ -1298,9 +1371,11 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         obEl.setAttribute('inert', '');
         obPopClose();
       }
+      if (layoutNow) layoutNow();   // v77: 検索窓も同じコマで（以前は次のコマ）
     }
     return shown;
   }
+  let layoutNow = null;
   function obWatchSidebar() {
     /* v67: 軽く — 見回りは 0.7 秒おき（以前 0.1 秒）。変化の見張りは「サイドバーそのものか、その親」の変化と、サイドバーの作り直しだけ */
     setInterval(() => { if (!document.hidden) obSyncSidebar(); }, 700);
@@ -1311,7 +1386,13 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if (!hit) return;
       if (pending) return;
       pending = true;
-      requestAnimationFrame(() => { pending = false; obSyncSidebar(); });
+      requestAnimationFrame(() => {
+        pending = false;
+        /* v77: サイドバーが現れた・作り直された → このコマで輪・余白・検索窓を置く（Notion の素の姿を見せない） */
+        if (OB.on && (!obEl || !obEl.isConnected || !obHost || !obHost.isConnected) && obHostPick()) { try { obApply(true, true); } catch (e) { /* noop */ } }
+        else obSyncSidebar();
+        schedule();
+      });
     });
     observer.observe(document.body, { subtree: true, childList: true, attributes: true,
       attributeFilter: ['style', 'class', 'hidden', 'aria-hidden', 'inert'] });
@@ -1383,6 +1464,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       obMarkRows();
       obFill();
       obFixLayout(true);
+      if (layoutNow) layoutNow();
       if (!quiet) obToast('大分類の輪を出しました（⌃⌥O でしまう・⌃⌥, で Settings）');
     } else {
       obSidebarShown = null;
@@ -1435,6 +1517,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     if (obSetBtn) obSetBtn.toggleAttribute('data-away', !obAtHome());
     obLay();
+    if (layoutNow) layoutNow();
   }
 
   function obPopClose() {
@@ -2510,6 +2593,37 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const best = good.slice().sort((a, b) => b.text.length - a.text.length)[0];
       return done({ text: best.text, model: best.model }, { drafts, who: best.id });
     }
+    /* v77: ひと言 AI（ぶりレンズ・おかえり要約）— 相談はせず、速い順に 1 人だけ。つまずいたら次の仲間（3 人まで） */
+    async function quick(sys, user, maxTok) {
+      const order = [];
+      for (const id of ['groq', 'gemini', AI.provider, 'nvidia', 'openrouter', 'zai', 'cohere', 'claude', 'chrome', ...team()]) {
+        if (!id || order.includes(id) || !TEAM[id] || !ready(id) || pBad(id)) continue;
+        if (!AI.use[id] && id !== AI.provider) continue;
+        order.push(id);
+      }
+      let last = '';
+      for (const id of order.slice(0, 3)) {
+        const r = await chat(id, sys, [{ role: 'user', content: user }], maxTok || 900).catch((e) => ({ err: String(e && e.message || e) }));
+        if (r && r.text) return { text: fixCites(untag(r.text)).trim(), who: id, name: TEAM[id].name, model: r.model || '' };
+        last = TEAM[id].name + ': ' + ((r && r.err) || '答えが空でした');
+      }
+      return { err: last || 'AI がつながっていません（⚙ で鍵を入れてください）' };
+    }
+    /* v77: おかえりハイライトの「前回から変わった所」を ⌘K でも聞ける */
+    let deltaFn = null;
+    const RE_DELTA = /(前回|前に見た|この前|留守|いない間|離れてた|見てない間).{0,12}(変わ|増え|更新|書き換)|(変わった|増えた|更新された)(所|ところ|点|段|部分)/u;
+    async function askDelta(raw) {
+      const p = deltaFn && deltaFn();
+      if (!p) return Object.assign(reply("('-' 鰤)з♪ このページは、前に見た時から変わった所は見つからなかったよ。", [], [], []), { mood: 'satisfied' });
+      const url = location.origin + location.pathname + location.search;
+      const refs = { N: [{ title: p.title, url }], W: [] };
+      const ctx = '# いま開いているページ [N1]\nタイトル: ' + p.title + '\n\n# ' + nickName() + 'が前に見た時（' + p.since + '）から、変わった・増えた段\n' + p.items.map((x) => (x.kind === 'new' ? '［新しい段］' : '［書き換わった段］') + x.text).join('\n');
+      if (aiOn()) {
+        const r = await askAI(raw, ctx, { intent: '前に見た時から、このページの何が変わったのかを知りたい（大事な変化から短く）' });
+        if (r.text) return Object.assign(reply(r.text, [{ title: p.title, url, type: 'Notion のページ' }], (r.next || []).map((x) => ({ label: x, q: x })), [], raw), { refs, mood: r.mood || 'back', moa: r.drafts ? { drafts: (r.drafts || []).map((d) => ({ id: d.id, name: TEAM[d.id].name, model: d.model || '', text: d.text || '', err: d.err || '' })), who: r.who ? TEAM[r.who].name : '', model: r.model || '', merged: !!r.merged } : null });
+      }
+      return Object.assign(reply("('-' 🐋)з ('-' 鰤)з♥ おかえりなさい。" + p.since + 'から ' + p.items.length + ' か所 変わっているよ。[N1]\n' + p.items.slice(0, 8).map((x) => '・' + (x.kind === 'new' ? '（新）' : '') + x.text.slice(0, 80)).join('\n'), [], [], [], raw), { refs, mood: 'back' });
+    }
     /* v55: 会話を読んで「本当に調べるべき言葉」を作る（「調べて。」「もっと詳しく」「どんなお話？」を前の話題で補う） */
     const waitMs = (ms) => new Promise((r) => setTimeout(r, ms));
     const PLAN_SYS = [
@@ -2733,6 +2847,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     async function ask(input) {
       const raw = String(input == null ? '' : input).trim();
       const mc = memCmd(raw); if (mc) return mc;
+      if (deltaFn && RE_DELTA.test(raw)) return askDelta(raw);
       if (RE_PAGE.test(raw)) return askPage(raw);
       if (RE_OPEN.test(raw)) { const oc = await openCmd(raw); if (oc) return oc; }
       const q0 = nz(raw).replace(/[?？!！。．.、,〜~…]+/gu, ' ').replace(/\s+/gu, ' ').trim();
@@ -2839,7 +2954,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
-    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, nick: nickName, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); gmSet('c33.buri.ml.gemini', null); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; },
+    return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, nick: nickName, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); gmSet('c33.buri.ml.gemini', null); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; }, quick, setDelta: (f) => { deltaFn = f; },
       fixCites, pageContext, pageHead,
       mem: { get: memGet, add: (t) => memAdd(t), del: memDel, topics: topTopics, setOn: (on) => { const m = memGet(); m.on = !!on; memSet(m); }, clear: () => { memSet({ on: memGet().on, notes: [], topics: {} }); userPref = { authors: {}, tags: {} }; savePref(); }, prefs: () => ({ authors: getTopLearned('authors').slice(0, 8), tags: getTopLearned('tags').slice(0, 8) }) },
       warm: () => { try { if (ready('gemini')) gemModels(); team().forEach((id) => { if (TEAM[id] && TEAM[id].base) oaiModels(id); }); spaceId(); } catch (e) { /* noop */ } } };
@@ -2861,7 +2976,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     const style = document.createElement('style');
     style.id = 'c33-search-css';
     style.textContent = `
-#c33-search-header { position: fixed; z-index: 1001; display: flex; gap: 6px; align-items: center; height: 36px; box-sizing: border-box; margin: 0; padding: 0; color: var(--c-texPri, #37352f); font: 12px/1.4 var(--c33-ui); border-radius: 18px; transition: box-shadow 0.2s ease, left 0.2s ease, top 0.2s ease, width 0.2s ease; }
+#c33-search-header { position: fixed; z-index: 1001; display: flex; gap: 6px; align-items: center; height: 36px; box-sizing: border-box; margin: 0; padding: 0; color: var(--c-texPri, #37352f); font: 12px/1.4 var(--c33-ui); border-radius: 18px; transition: box-shadow 0.2s ease; }
 #c33-search-header[hidden], #c33-buri[hidden] { display: none !important; }
 #c33-search-header *, #c33-buri * { box-sizing: border-box; }
 #c33-search-header .cs-field { display: flex; align-items: center; flex: 1 1 auto; min-width: 0; height: 36px; margin: 0; padding: 0 10px 0 4px; gap: 2px; border: 1px solid var(--ca-borSecTra, rgba(55,53,47,.14)); border-radius: 18px; background: var(--c-bacPri, #fff); cursor: text; }
@@ -3131,7 +3246,22 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       addBuri({ text: r.message, cards: [], chips: g.chips || [], actions: r.ok ? [] : ['import'] });
     }
 
+    /* v77: サイドバーの大きさが変わった瞬間（ResizeObserver＝描画の前）に輪と検索窓を置き直す。0.45 秒ごとの見回りはやめた */
+    let laySide = null, layRO = null;
+    function watchSide(side) {
+      if (side === laySide) return;
+      laySide = side;
+      try {
+        if (!layRO) layRO = new ResizeObserver(() => { if (OB.on && obEl && obEl.isConnected) obAnchor(); layout0(); });
+        layRO.disconnect();
+        if (side) layRO.observe(side);
+      } catch (e) { /* noop */ }
+    }
     function layout() {
+      layout0();
+      if (!floatMode && (!OB.on || obEl)) { layDone = true; readyCheck(); }
+    }
+    function layout0() {
       if (floatMode) {
         header.hidden = false;
         close.hidden = true;
@@ -3145,6 +3275,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       panel.classList.remove('floating');
       close.hidden = false;
       const side = obSide(), all = obAllEl;
+      watchSide(side);
       const show = !!(OB.on && obEl && obEl.isConnected && obEl.style.display !== 'none' && all && all.isConnected && obSidebarVisible(side));
       if (!show) { header.hidden = true; panel.hidden = true; return; }
       const sr = side.getBoundingClientRect(), ar = all.getBoundingClientRect();
@@ -3152,6 +3283,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const w = Math.floor(sr.right - x - 8);
       if (w < 70 || !ar.height) { header.hidden = true; panel.hidden = true; return; }
       header.hidden = false;
+      const ph = w < 220 ? '検索・ぶりに聞く' : 'B.U.R.I に聞く・Notion を検索';   // v77: 狭いサイドバーで見切れない
+      if (input.placeholder !== ph) input.placeholder = ph;
       const y = Math.round(ar.top + (ar.height - 36) / 2);
       setS(header, 'left', x + 'px'); setS(header, 'top', y + 'px'); setS(header, 'width', w + 'px');
       if (!panelOpen) { panel.hidden = true; return; }
@@ -3243,6 +3376,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       const nc = tog('Notion の検索（⌘K）に B.U.R.I を出す', NS.on);
       const ac = tog('検索で「〜について教えて」「〜とは？」と打ったら自動で答える（誤送信防止のため既定は切）', NS.auto);
       const xc = tog('Notion の検索画面を次世代の見た目にする（ガラスの板・中央へすっと出る）', NS.nx !== false);
+      const lc = tog('ぶりレンズ — ページの文字を選ぶと ✦（説明・要約・言い換え・訳す・続き。⌃⌥J）', NS.lens !== false);
+      const oc = tog('おかえりハイライト — 前に見た時から変わった段を光らせる（⌃⌥N で次へ。覚えるのは段の指紋だけ）', NS.okaeri !== false);
       mk('div', 'bs-nt', '無料枠では、送った質問と見つけた抜粋がそれぞれの会社の改善に使われることがあります。鍵はこの端末の ScriptCat の中だけに保存します。', box);
       const btns = mk('div', 'bs-btns', null, box);
       const ok = mk('button', 'pri', '保存', btns); ok.type = 'button';
@@ -3267,6 +3402,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
         A.web = wc.checked; BURI.gmSet('c33.buri.web', A.web);
         NS.on = nc.checked; NS.auto = ac.checked; BURI.gmSet('c33.buri.ns', NS.on); BURI.gmSet('c33.buri.nsAuto', NS.auto);
         NS.nx = xc.checked; BURI.gmSet('c33.buri.nx', NS.nx);
+        NS.lens = lc.checked; BURI.gmSet('c33.buri.lens', NS.lens);
+        NS.okaeri = oc.checked; BURI.gmSet('c33.buri.okaeri', NS.okaeri);
+        document.documentElement.toggleAttribute('data-c33-ok-off', !NS.okaeri);
         footText();
       };
       ok.addEventListener('click', (e) => {
@@ -3373,7 +3511,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     };
     const MOD = IS_MAC ? '⌘' : 'Ctrl';
     const svg = (k, sz) => '<svg viewBox="0 0 24 24" width="' + (sz || 16) + '" height="' + (sz || 16) + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[k] + '</svg>';
-    const ib = (host, icon, title, fn, cls) => { const b = mk('button', 'np-ib' + (cls ? ' ' + cls : ''), null, host); b.type = 'button'; b.innerHTML = svg(icon); b.title = title; b.setAttribute('aria-label', title); b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(b); }); return b; };
+    const ib = (host, icon, title, fn, cls) => { const b = mk('button', 'np-ib' + (cls ? ' ' + cls : ''), null, host); b.type = 'button'; b.dataset.k = icon; b.innerHTML = svg(icon); b.title = title; b.setAttribute('aria-label', title); b.addEventListener('mousedown', (e) => e.preventDefault()); b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(b); }); return b; };
     /* v57: 顔文字は、ほかのどんな書体の指定にも負けないよう要素に直接（!important）丸ゴシックを当てる。
        Firefox の「指紋対策」で Mac の丸ゴシックが使えない時のために、ウェブ書体（Zen Maru Gothic）も読み込む */
     const FACE_FONT = 'var(--buri-face)', UI_FONT = 'var(--buri-ui)';
@@ -3415,6 +3553,9 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-ns .ns-row:hover, #c33-ns .ns-row.on { background: var(--b-soft); }
 #c33-ns .ns-row .b-face { flex: none; padding: 2px 8px; border-radius: 999px; font-size: 11px; color: var(--b-ink); background: linear-gradient(135deg, color-mix(in srgb, var(--b-acc) 16%, var(--b-bg)), color-mix(in srgb, var(--b-acc2) 14%, var(--b-bg))); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 18%, transparent); }
 #c33-ns .ns-lb { flex: none; font-weight: 550; }
+#c33-ns .ns-spark { display: none; flex: none; place-items: center; width: 28px; height: 24px; border-radius: 999px; color: var(--b-acc); background: color-mix(in srgb, var(--b-acc) 10%, transparent); }
+#c33-ns .ns-row.on .b-face { display: none; }
+#c33-ns .ns-row.on .ns-spark { display: inline-grid; }
 #c33-ns .ns-q { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; color: var(--b-ter); }
 #c33-ns .ns-kb { flex: none; padding: 1px 6px; border-radius: 5px; font-size: 10.5px; color: var(--b-ter); box-shadow: inset 0 0 0 1px var(--b-line); }
 #c33-ns .ns-kb:empty { display: none; }
@@ -3441,8 +3582,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-nsp.busy .np-aura { animation: npAura 3.2s ease-in-out infinite alternate; }
 @keyframes npAura { from { filter: hue-rotate(0deg); opacity: .8; } to { filter: hue-rotate(40deg); opacity: 1; } }
 #c33-nsp .np-top { position: relative; display: flex; align-items: center; gap: 10px; padding: 14px 12px 12px 14px; }
-#c33-nsp .np-top .b-face { flex: none; display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 13.5px; color: var(--b-ink); background: var(--b-bg);
-  box-shadow: 0 0 0 1px var(--b-line), 0 4px 12px -4px rgba(15,15,15,.18); }
+#c33-nsp .np-top .b-face { flex: none; display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; line-height: 1; color: var(--b-ink); background: var(--b-bg);
+  box-shadow: 0 0 0 1px var(--b-line), 0 3px 10px -5px rgba(15,15,15,.2); }
 #c33-nsp.busy .np-top .b-face { animation: npBob 1.3s ease-in-out infinite; }
 @keyframes npBob { 50% { transform: translateY(-2px) rotate(-2deg); } }
 #c33-nsp .np-id { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
@@ -3461,8 +3602,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-nsp .np-log { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 16px 18px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; }
 /* ホーム */
 #c33-nsp .np-hero { display: flex; flex-direction: column; gap: 6px; padding: 6px 2px 2px; }
-#c33-nsp .np-hero .b-face { align-self: flex-start; font-size: 20px; padding: 8px 14px; border-radius: 16px; background: var(--b-bg); box-shadow: 0 0 0 1px var(--b-line), 0 8px 20px -10px rgba(15,15,15,.22); }
-#c33-nsp .np-hello { margin-top: 6px; font-size: 21px; line-height: 1.35; font-weight: 650; letter-spacing: .01em; }
+#c33-nsp .np-hello { margin-top: 2px; font-size: 21px; line-height: 1.35; font-weight: 650; letter-spacing: .01em; }
 #c33-nsp .np-sub { font-size: 13px; line-height: 1.7; color: var(--b-sub); }
 #c33-nsp .np-stat { display: flex; flex-wrap: wrap; gap: 6px; }
 #c33-nsp .np-stat span, #c33-nsp .np-stat button { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 3px 10px; border: 0; border-radius: 999px; font-size: 11.5px; line-height: 1.6; color: var(--b-sub); background: var(--b-soft); }
@@ -3488,7 +3628,8 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   background: color-mix(in srgb, var(--b-acc) 11%, var(--b-bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 14%, transparent); }
 #c33-nsp .np-msg { display: flex; flex-direction: column; gap: 10px; }
 #c33-nsp .np-who { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--b-ter); }
-#c33-nsp .np-who .b-face { padding: 2px 9px; border-radius: 999px; font-size: 12px; color: var(--b-ink); background: var(--b-soft); }
+#c33-nsp .np-wic { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 7px; color: var(--b-acc); background: color-mix(in srgb, var(--b-acc) 10%, transparent); }
+#c33-nsp .np-wic svg { width: 12px; height: 12px; }
 #c33-nsp .np-a { font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
 #c33-nsp .np-a > * { margin: 0 0 9px; animation: npIn .4s ease-out both; }
 #c33-nsp .np-a > *:last-child { margin-bottom: 0; }
@@ -3537,7 +3678,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-nsp .np-next { display: flex; flex-wrap: wrap; gap: 6px; }
 /* 考え中のカード */
 #c33-nsp .np-think { display: flex; gap: 12px; padding: 12px 14px; border-radius: 14px; background: linear-gradient(135deg, color-mix(in srgb, var(--b-acc) 7%, var(--b-bg)), color-mix(in srgb, var(--b-acc2) 6%, var(--b-bg))); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 14%, var(--b-line)); }
-#c33-nsp .np-think > .b-face { flex: none; align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: 12.5px; background: var(--b-bg); box-shadow: 0 0 0 1px var(--b-line); animation: npBob 1.3s ease-in-out infinite; }
+#c33-nsp .np-orb { flex: none; align-self: flex-start; width: 10px; height: 10px; margin: 5px 2px 0; border-radius: 50%; background: linear-gradient(135deg, var(--b-acc), var(--b-acc2)); box-shadow: 0 0 0 4px color-mix(in srgb, var(--b-acc) 14%, transparent); animation: npPulse 1.1s ease-in-out infinite; }
 #c33-nsp .np-tl { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; padding-inline-start: 16px; }
 #c33-nsp .np-tl::before { content: ''; position: absolute; inset-inline-start: 4px; top: 8px; bottom: 8px; width: 1.5px; border-radius: 1px; background: var(--b-line); }
 #c33-nsp .np-step { position: relative; display: flex; flex-direction: column; font-size: 12.5px; line-height: 1.5; color: var(--b-sub); }
@@ -3618,6 +3759,35 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
 #c33-nsp .np-learned { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--b-ok); }
 /* 欄が出る時 */
 #c33-nsp:not([hidden]) .np-card { animation: npCardIn .5s cubic-bezier(.16,1,.3,1) both; }
+/* v77: 欄の幅に合わせる（窓を半分にしても、同じ大きさ・比率のまま押し込まない） */
+#c33-nsp { container: buri / inline-size; }
+#c33-nsp[data-solo] { padding: 10px 12px 12px; }
+@container buri (max-width: 480px) {
+  #c33-nsp .np-id { display: none; }
+  #c33-nsp .np-tools { margin-inline-start: auto; }
+}
+@container buri (max-width: 600px) {
+  #c33-nsp .np-top { gap: 8px; padding: 10px 8px 8px 12px; }
+  #c33-nsp .np-log { padding: 4px 12px 14px; gap: 14px; }
+  #c33-nsp .np-hello { font-size: 18px; }
+  #c33-nsp .np-sub { font-size: 12.5px; line-height: 1.65; }
+  #c33-nsp .np-comp { padding: 8px 8px 10px; }
+  #c33-nsp .np-s { width: 150px; }
+  #c33-nsp .np-a { font-size: 13.5px; line-height: 1.8; }
+}
+@container buri (max-width: 420px) {
+  #c33-nsp .np-top .b-face { height: 26px; padding: 0 8px; font-size: 11.5px; }
+  #c33-nsp .np-tools { gap: 0; padding: 2px; }
+  #c33-nsp .np-tools .np-ib { width: 26px; height: 26px; }
+  #c33-nsp .np-tools .np-sep, #c33-nsp .np-tools .np-ib[data-k="side"] { display: none; }
+  #c33-nsp .np-grid { grid-template-columns: 1fr; }
+  #c33-nsp .np-hint > span:last-child { display: none; }
+  #c33-nsp .np-q { max-width: 92%; }
+}
+@container buri (max-width: 340px) {
+  #c33-nsp .np-top { flex-wrap: wrap; }
+  #c33-nsp .np-tools { width: 100%; justify-content: space-between; }
+}
 @keyframes npCardIn { from { opacity: 0; transform: translateX(16px) scale(.975); } }
 #c33-nsp .np-log > * { animation: npIn .45s cubic-bezier(.16,1,.3,1) both; }
 
@@ -3636,11 +3806,20 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   box-shadow: 0 0 0 1px var(--nx-line), 0 1px 0 0 rgba(255,255,255,.6) inset, 0 3px 8px rgba(15,15,25,.05), 0 40px 110px -24px rgba(15,15,35,.45) !important; }
 .notion-dialog[data-c33-nx]::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
   background: radial-gradient(55% 34% at 12% 0%, color-mix(in srgb, var(--nx-acc) 12%, transparent), transparent 72%), radial-gradient(45% 30% at 92% 0%, color-mix(in srgb, var(--nx-acc2) 11%, transparent), transparent 70%); }
-.notion-dialog[data-c33-nx][data-c33-nx-wide] > div { width: min(1180px, calc(100vw - 56px)) !important; }
-.notion-dialog[data-c33-nx][data-c33-nx-wide] { height: min(720px, calc(100vh - 56px)) !important; }
-.notion-dialog[data-c33-nx][data-c33-nx-wide] > div { height: 100% !important; }
-.notion-dialog[data-c33-nx][data-c33-nx-wide] [data-c33-nx-list] { width: auto !important; flex: 1 1 auto !important; min-width: 0; }
-.notion-dialog[data-c33-nx][data-c33-nx-wide] [data-c33-nx-aside] { width: min(480px, 44%) !important; }
+.notion-dialog[data-c33-nx], .notion-dialog[data-c33-nx] > div { max-width: calc(100vw - 24px) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-wide] > div { width: min(1180px, max(640px, 88vw), calc(100vw - 24px)) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-wide], .notion-dialog[data-c33-nx-solo] { height: min(720px, max(420px, 86vh), calc(100vh - 24px)) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-wide] > div, .notion-dialog[data-c33-nx-solo] > div { height: 100% !important; }
+.notion-dialog[data-c33-nx] [data-c33-nx-list] { width: auto !important; flex: 1 1 auto !important; min-width: 0; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="l"] [data-c33-nx-aside] { width: clamp(380px, 42%, 520px) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="m"] [data-c33-nx-aside] { width: clamp(280px, 40%, 400px) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="s"] [data-c33-nx-aside] { display: none !important; }
+.notion-dialog[data-c33-nx-solo] [data-c33-nx-aside] { visibility: hidden !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="l"][data-c33-nx-pane] [data-c33-nx-aside] { width: clamp(440px, 50%, 600px) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="m"][data-c33-nx-pane] [data-c33-nx-aside] { width: clamp(380px, 50%, 480px) !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="s"] [data-c33-nx-head] input { font-size: 16px !important; }
+.notion-dialog[data-c33-nx][data-c33-nx-size="s"] #c33-nx-keys { display: none !important; }
+[data-c33-nx-host] { position: relative !important; }
 [data-c33-nx-veil] { background: color-mix(in srgb, #0d0d18 20%, transparent) !important; -webkit-backdrop-filter: blur(6px) saturate(1.15); backdrop-filter: blur(6px) saturate(1.15); animation: c33NxVeil .4s ease both; }
 /* 上の検索欄 */
 .notion-dialog[data-c33-nx] [data-c33-nx-head] { position: relative; padding: 8px 8px 6px; }
@@ -3720,6 +3899,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const tag = mk('span', 'ns-tag', '', h);
       const row = mk('button', 'ns-row', null, box); row.type = 'button';
       const face = faceEl(row, 'normal');
+      const spark = mk('i', 'ns-spark', null, row); spark.innerHTML = svg('spark', 15);   // v77: 欄が開いている間は顔の代わり
       const lb = mk('span', 'ns-lb', '', row);
       const qEl = mk('span', 'ns-q', '', row);
       const kb = mk('span', 'ns-kb', '', row);
@@ -3813,14 +3993,28 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       conv.forEach((c) => { addUser(c.q); addBuri(c.res); });
     }
     const asideOf = (dlg) => { const a = dlg && dlg.querySelector('aside'); if (!a) return null; const r = a.getBoundingClientRect(); return r.width > 220 && r.height > 200 && getComputedStyle(a).opacity !== '0' ? a : null; };
+    /* v77: 欄の置き場所。右の欄が 340px 以上あればそこ、無い・狭い時は一覧の場所いっぱい（solo） */
+    function paneHost(dlg) {
+      if (!dlg) return null;
+      const aside = asideOf(dlg);
+      const dw = (dlg.firstElementChild || dlg).getBoundingClientRect().width;
+      if (aside && window.innerWidth >= 760 && dw >= 800) return { el: aside, solo: false };
+      const lb = dlg.querySelector('[role="listbox"]');
+      const sc = dlg.querySelector('[data-c33-nx-list]') || (lb && lb.closest('.notion-scroller, [class*="scroller"]'));
+      const body = sc && sc.parentElement;
+      if (body && body !== dlg && body.getBoundingClientRect().width > 200) return { el: body, solo: true };
+      return aside ? { el: aside, solo: false } : null;
+    }
     function nsShowPane(show) {
       if (!nsPane) return false;
-      const aside = asideOf(nsDlg);
-      if (show && aside) {
-        if (nsPane.parentElement !== aside) { if (getComputedStyle(aside).position === 'static') aside.style.setProperty('position', 'relative'); aside.appendChild(nsPane); }
+      const h = show ? paneHost(nsDlg) : null;
+      if (h) {
+        if (nsPane.parentElement !== h.el) { if (getComputedStyle(h.el).position === 'static') h.el.setAttribute('data-c33-nx-host', ''); h.el.appendChild(nsPane); }
+        nsPane.toggleAttribute('data-solo', h.solo);
         nsStatus();
         nsPane.hidden = false;
       } else nsPane.hidden = true;
+      if (nsDlg) { nsDlg.toggleAttribute('data-c33-nx-solo', !nsPane.hidden && !!(h && h.solo)); nsDlg.toggleAttribute('data-c33-nx-pane', !nsPane.hidden && !!(h && !h.solo)); }
       if (nsBox) nsBox.__row.classList.toggle('on', !nsPane.hidden);
       return !nsPane.hidden;
     }
@@ -3831,8 +4025,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const log = nsPane.__log; log.textContent = '';
       const seen = Number(BURI.gmGet('c33.buri.seen', 0)) || 0; BURI.gmSet('c33.buri.seen', Date.now());
       const back = seen && Date.now() - seen > 6 * 36e5;
-      const hero = mk('div', 'np-hero', null, log);
-      faceEl(hero, back ? 'back' : 'together').classList.add('pop');
+      const hero = mk('div', 'np-hero', null, log);   // v77: 顔は上の 1 つだけ（ここに大きな顔は出さない）
       mk('div', 'np-hello', back ? 'おかえりなさい、' + nick() + '！' : greet() + '、' + nick() + '。', hero);
       mk('div', 'np-sub', BURI.aiOn() ? '本棚・Notion・Google・Wikipedia をまとめて調べて、' + (BURI.moaOn() ? '仲間の AI と相談してから' : '') + 'わかりやすく話すね。' : '本棚・Notion・Web を調べて、見つけたものを並べるね。⚙ で AI をつなぐと、まとめて話せるよ。', hero);
       const s = BURI.state();
@@ -3851,7 +4044,8 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         const w = mk('div', 'np-pagecard', null, log);
         const t = mk('div', 'np-pt', null, w); t.innerHTML = svg('page', 15); mk('b', null, pg.title, t);
         const acts = mk('div', 'np-tags', null, w);
-        [['要約して', 'このページを要約して'], ['大事な所は？', 'このページでいちばん大事な所は？'], ['質問する…', '']].forEach(([lb, qq]) => {
+        const dn = (typeof okPack === 'function' && okPack()) ? okPack().items.length : 0;
+        [...(dn ? [['変わった所（' + dn + '）', '前回から変わった所を教えて']] : []), ['要約して', 'このページを要約して'], ['大事な所は？', 'このページでいちばん大事な所は？'], ['質問する…', '']].forEach(([lb, qq]) => {
           const b = mk('button', 'np-pill', null, acts); b.type = 'button'; b.append(lb);
           b.addEventListener('click', (e) => { e.preventDefault(); if (qq) nsAsk(qq, true); else { const f = nsPane.__fin; f.value = 'このページで、'; nsPane.__grow(); f.dispatchEvent(new Event('input')); f.focus(); } });
         });
@@ -3931,7 +4125,6 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const log = nsPane.__log; log.textContent = '';
       const M = BURI.mem, m = M.get(), n = nick();
       const hero = mk('div', 'np-hero', null, log);
-      faceEl(hero, 'proud').classList.add('pop');
       mk('div', 'np-hello', 'ぶりが覚えたこと', hero);
       mk('div', 'np-sub', n + 'との会話から少しずつ覚えて、次の答えに活かすよ。「覚えて：〜」「忘れて：〜」と話しかけても大丈夫。', hero);
       const sw = mk('div', 'np-switch', null, log);
@@ -4002,7 +4195,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         const ln = raw.trim();
         if (!ln) { list = null; para = null; continue; }
         const h = /^(#{1,4}\s+|■\s*|【([^】NW][^】]*)】$)/.exec(ln);
-        const li = /^([・\-*•]|\d+[.)．])\s*(.+)$/.exec(ln);
+        const li = /^([・•]|[-*](?=\s)|\d+[.)．])\s*(.+)$/.exec(ln);   // v77: 「**太字**」で始まる行を箇条書きと間違えない
         if (h) { list = null; para = null; inline(mk('h5', null, null, host), h[2] || ln.replace(/^(#{1,4}\s+|■\s*)/, '')); continue; }
         if (li) { para = null; if (!list || list.tagName !== (/^\d/.test(li[1]) ? 'OL' : 'UL')) list = mk(/^\d/.test(li[1]) ? 'ol' : 'ul', null, null, host); inline(mk('li', null, null, list), li[2]); continue; }
         list = null;
@@ -4013,12 +4206,12 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
     /* 考え中のカード: 顔 ＋ 道のり（会話を読む → 調べる → 下書き → まとめ） */
     function nsThink(host) {
       const box = mk('div', 'np-think', null, host);
-      const face = faceEl(box, 'think');
+      mk('i', 'np-orb', null, box);   // v77: 顔は欄の上の 1 つだけ（ここは小さな光）
       const tl = mk('div', 'np-tl', null, box);
       const rows = {};
       const step = (key, text) => { let r = rows[key]; if (!r) { r = rows[key] = mk('div', 'np-step run', null, tl); r.__t = mk('span', null, '', r); r.__s = mk('small', null, '', r); } r.__t.textContent = text; return r; };
       const set = (r, st, small) => { r.className = 'np-step ' + st; r.__s.textContent = small || ''; };
-      const mood = (m, label) => { face.textContent = FACE[m]; face.dataset.mood = m; nsMood(m); nsStatus(label || BUSY[m]); };
+      const mood = (m, label) => { nsMood(m); nsStatus(label || BUSY[m]); };
       mood('think');
       return {
         box,
@@ -4043,7 +4236,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       const msg = mk('div', 'np-msg', null, log);
       const who = mk('div', 'np-who', null, msg);
       const mood = moodOf(res);
-      faceEl(who, mood);
+      const wic = mk('i', 'np-wic', null, who); wic.innerHTML = svg('spark', 12); wic.dataset.mood = mood;   // v77: 顔は欄の上の 1 つだけ
       mk('span', null, res.moa && res.moa.who ? (res.moa.merged ? res.moa.who + ' がまとめました' : res.moa.who) : 'ぶり', who);
       if (res.learned) { const l = mk('span', 'np-learned', null, who); l.innerHTML = svg('brain', 12); l.append('学習'); }
       const a = mk('div', 'np-a', null, msg);
@@ -4164,7 +4357,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         ans.textContent = '';
         nsConv.push({ q, res }); nsConvAt = Date.now();
         nsMood(moodOf(res));
-        mk('div', 'ns-tx', res.text || '', ans);
+        mk('div', 'ns-tx', String(res.text || '').replace(/\s*(?:\[(?:[NW]\d+)(?:\s*[,，、]\s*[NW]?\d+)*\]|【[NW]\d+】)/g, ''), ans);   // v77: 置き場所が無い時の控え — 出典の印は外す
         const src = mk('div', 'ns-src', null, ans);
         (res.cards || []).filter((c) => c.url).slice(0, 6).forEach((c) => { const l = mk('a', null, (c.type === 'Web' ? '🌐 ' : '📄 ') + c.title, src); l.href = c.url; l.rel = 'noopener noreferrer'; if (!c.url.startsWith(location.origin)) l.target = '_blank'; });
         const gs = mk('button', null, 'B.U.R.I で続ける →', src); gs.type = 'button'; gs.style.fontWeight = '600';
@@ -4184,12 +4377,21 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       if (Math.abs(want - nat) < 2) return;
       dlg.style.setProperty('top', Math.round((parseFloat(cs.top) || 0) + want - nat) + 'px', 'important');
     }
+    /* v77: 窓の幅で 3 段（l ≥ 1100 / m ≥ 760 / s）。s は右の欄をしまい、ぶりは検索画面いっぱいに出す */
+    function nxSize(dlg) {
+      if (!dlg || !dlg.isConnected) return;
+      const vw = window.innerWidth;
+      const sz = vw >= 1100 ? 'l' : vw >= 760 ? 'm' : 's';
+      if (dlg.getAttribute('data-c33-nx-size') !== sz) dlg.setAttribute('data-c33-nx-size', sz);
+      const wide = sz !== 's' && !!dlg.querySelector('aside');
+      if (wide !== dlg.hasAttribute('data-c33-nx-wide')) dlg.toggleAttribute('data-c33-nx-wide', wide);
+    }
     function nxMark(dlg, inp) {
       if (!dlg || !NS.nx) return;
       if (!dlg.hasAttribute('data-c33-nx')) {
         dlg.setAttribute('data-c33-nx', '');
         nxCenter(dlg);
-        try { if (nxRO) nxRO.disconnect(); nxRO = new ResizeObserver(() => nxCenter(dlg)); nxRO.observe(dlg); } catch (e) { /* noop */ }
+        try { if (nxRO) nxRO.disconnect(); nxRO = new ResizeObserver(() => { nxSize(dlg); nxCenter(dlg); if (nsPane && !nsPane.hidden) nsShowPane(true); }); nxRO.observe(dlg); } catch (e) { /* noop */ }
         let a = dlg.parentElement;
         for (let i = 0; i < 6 && a && a !== document.body; i++, a = a.parentElement) {
           const r = a.getBoundingClientRect();
@@ -4212,8 +4414,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       if (sc && !sc.hasAttribute('data-c33-nx-list')) sc.setAttribute('data-c33-nx-list', '');
       const aside = dlg.querySelector('aside');
       if (aside && !aside.hasAttribute('data-c33-nx-aside')) aside.setAttribute('data-c33-nx-aside', '');
-      const wide = !!asideOf(dlg) && window.innerWidth >= 900;
-      if (wide !== dlg.hasAttribute('data-c33-nx-wide')) dlg.toggleAttribute('data-c33-nx-wide', wide);
+      nxSize(dlg);
       const foot = cont && cont.lastElementChild;
       if (foot && foot !== head && !foot.contains(inp) && foot.querySelector('ul')) {
         if (!foot.hasAttribute('data-c33-nx-foot')) foot.setAttribute('data-c33-nx-foot', '');
@@ -4253,7 +4454,7 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
         for (let i = 0; i < 8 && el.parentElement; i++) { const par = el.parentElement; if (par.matches('[role="dialog"], .notion-dialog') || par.getBoundingClientRect().height > el.getBoundingClientRect().height + 24) break; el = par; }
         el.after(nsBox);
       }
-      if (nsPane && !nsPane.hidden && !asideOf(dlg)) nsShowPane(false);
+      if (nsPane && !nsPane.hidden && (!nsPane.isConnected || (dlg && !dlg.contains(nsPane)))) nsShowPane(true);
       nxMark(dlg, inp);
       nsSync();
       /* サイドの検索窓から来た時: ホームを出す / そのまま聞く */
@@ -4291,14 +4492,543 @@ html[data-c33-ns-open] #c33-search-header:not(.floating), html[data-c33-ns-open]
       queueMicrotask(() => { nsMoPend = false; if (document.querySelector('[data-search-container="true"], .notion-dialog[aria-label="Search Notion"]')) nsTick(); });
     }).observe(document.body || document.documentElement, { childList: true, subtree: true });
 
+    /* ============================================================
+     *  v77 目玉 ①: ぶりレンズ — 文字を選ぶと、選んだ所の下に小さな ✦。
+     *   説明・要約・言い換え・訳す（日本語⇄英語）・続きを書く・自由に聞く。答えはその場のカードに（顔は 1 つ）。
+     *   置き換える／下に入れる（Notion の貼り付けとして入れる＝⌘Z で戻せる）／コピー／⌘K で続ける。⌃⌥J で今の選択に。
+     *  v77 目玉 ②: おかえりハイライト — 前に見た時から変わった段が、うっすら光る。
+     *   ページごとに「最後に見た姿」を覚え（段の ID と文字の指紋だけ。本文は保存しない）、次に開いた時に比べる。
+     *   自分の書き換えは見ている間に覚え直すので光らない。下の札で ↑↓ 移動・ぶりに要約・見た（消す）。⌃⌥N で次へ。
+     * ============================================================ */
+    Object.assign(IC, {
+      bulb: '<path d="M9.5 18h5M10.5 21h3"/><path d="M12 3.2a5.8 5.8 0 0 0-3.5 10.4c.7.6 1 1.3 1 2.1v.3h5v-.3c0-.8.3-1.5 1-2.1A5.8 5.8 0 0 0 12 3.2Z"/>',
+      list: '<path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/><circle cx="5" cy="6.5" r=".9"/><circle cx="5" cy="12" r=".9"/><circle cx="5" cy="17.5" r=".9"/>',
+      swap: '<path d="M4.5 8.5h13l-3.5-3.5"/><path d="M19.5 15.5h-13l3.5 3.5"/>',
+      lang: '<path d="M4 5.5h9M8.5 4v1.5c0 4-2.2 7-5 8.5"/><path d="M6.2 9.5c1.2 2 3 3.4 5 4.2"/><path d="M12.5 20l4-9 4 9M14 16.8h5"/>',
+      pen: '<path d="M14.5 5.5l4 4L9 19H5v-4Z"/><path d="M13 7l4 4"/>',
+      below: '<path d="M5 5h14M5 9.5h9"/><path d="M12 13v7M8.5 16.5 12 20l3.5-3.5"/>',
+      repl: '<path d="M4.5 7h9M4.5 12h6"/><path d="M14.5 14.5l3.5-3.5 3.5 3.5M18 11v8.5"/>',
+      up: '<path d="M7 14.5l5-5 5 5"/>',
+      dn: '<path d="M7 9.5l5 5 5-5"/>'
+    });
+    NS.lens = BURI.gmGet('c33.buri.lens', true) !== false;
+    NS.okaeri = BURI.gmGet('c33.buri.okaeri', true) !== false;
+    const fxCss = mk('style'); fxCss.id = 'c33-fx-css';
+    fxCss.textContent = `
+#c33-lens, #c33-lens-card, #c33-ok { --b-acc: var(--lm-accent, #2783de); --b-acc2: #8b6cd9; --b-ink: var(--c-texPri, #2f2e2b); --b-sub: var(--c-texSec, #73726e); --b-ter: var(--c-texTer, #a3a29e);
+  --b-line: var(--ca-borSecTra, rgba(55,53,47,.1)); --b-soft: var(--ca-bacIntTra, rgba(55,53,47,.05)); --b-bg: var(--c-bacEle, var(--c-bacPri, #fff)); --b-ok: #2e9e6a; box-sizing: border-box; }
+#c33-lens *, #c33-lens-card *, #c33-ok * { box-sizing: border-box; font-family: var(--buri-ui) !important; }
+#c33-lens-card .b-face { font-family: var(--buri-face) !important; }
+#c33-lens[hidden], #c33-lens-card[hidden], #c33-ok[hidden] { display: none !important; }
+/* ✦ — 選んだ所の下に小さく（Notion の書式の帯は上に出るので重ならない） */
+#c33-lens { position: fixed; z-index: 1002; display: inline-flex; align-items: center; gap: 5px; height: 26px; margin: 0; padding: 0 10px 0 8px; border: 0; border-radius: 999px; cursor: pointer;
+  font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--b-acc); background: var(--b-bg);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--b-acc) 22%, var(--b-line)), 0 6px 18px -8px rgba(15,15,30,.35); animation: c33LensIn .22s cubic-bezier(.16,1,.3,1) both; }
+#c33-lens:hover { background: color-mix(in srgb, var(--b-acc) 8%, var(--b-bg)); }
+@keyframes c33LensIn { from { opacity: 0; transform: translateY(-4px) scale(.94); } }
+/* カード */
+#c33-lens-card { position: fixed; z-index: 2147483200; width: min(460px, calc(100vw - 24px)); max-height: min(70vh, 620px); display: flex; flex-direction: column; overflow: hidden; border-radius: 14px; color: var(--b-ink); font-size: 13.5px; line-height: 1.7;
+  background: var(--b-bg); box-shadow: 0 0 0 1px var(--b-line), 0 18px 48px -16px rgba(15,15,30,.38), 0 2px 6px rgba(15,15,30,.06); animation: c33CardIn .32s cubic-bezier(.16,1,.3,1) both; }
+@keyframes c33CardIn { from { opacity: 0; transform: translateY(6px) scale(.98); } }
+#c33-lens-card .lc-top { display: flex; align-items: center; gap: 8px; padding: 10px 8px 6px 12px; }
+#c33-lens-card .lc-top .b-face { flex: none; padding: 3px 9px; border-radius: 999px; font-size: 12px; line-height: 1.2; background: var(--b-soft); }
+#c33-lens-card.busy .lc-top .b-face { animation: npBob 1.3s ease-in-out infinite; }
+#c33-lens-card .lc-ttl { font-size: 13px; font-weight: 650; }
+#c33-lens-card .lc-who { flex: 1; min-width: 0; font-size: 11px; color: var(--b-ter); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-lens-card .lc-ib { flex: none; display: grid; place-items: center; width: 28px; height: 28px; margin: 0; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--b-sub); cursor: pointer; }
+#c33-lens-card .lc-ib:hover { background: var(--b-soft); color: var(--b-ink); }
+#c33-lens-card .lc-src { margin: 0 12px 8px; padding: 6px 10px; border-radius: 8px; font-size: 12px; line-height: 1.6; color: var(--b-sub); background: var(--b-soft); box-shadow: inset 2px 0 0 color-mix(in srgb, var(--b-acc) 45%, transparent);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; }
+#c33-lens-card .lc-acts { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 10px 8px; }
+#c33-lens-card .lc-act { display: inline-flex; align-items: center; gap: 5px; margin: 0; padding: 4px 10px 4px 8px; border: 0; border-radius: 999px; background: transparent; color: var(--b-sub); font-size: 12px; cursor: pointer; box-shadow: inset 0 0 0 1px var(--b-line); transition: background .15s, color .15s, box-shadow .15s; }
+#c33-lens-card .lc-act:hover { background: var(--b-soft); color: var(--b-ink); }
+#c33-lens-card .lc-act.on { color: var(--b-acc); background: color-mix(in srgb, var(--b-acc) 9%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 30%, transparent); }
+#c33-lens-card .lc-act svg { flex: none; }
+#c33-lens-card .lc-out { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin: 0 12px; padding: 10px 2px 4px; border-top: 1px solid var(--b-line); font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
+#c33-lens-card .lc-out[hidden] { display: none; }
+#c33-lens-card .lc-out > * { margin: 0 0 8px; animation: npIn .4s ease-out both; }
+#c33-lens-card .lc-out > *:last-child { margin-bottom: 0; }
+#c33-lens-card .lc-out h5 { font-size: 14px; font-weight: 700; }
+#c33-lens-card .lc-out ul, #c33-lens-card .lc-out ol { padding-inline-start: 1.2em; }
+#c33-lens-card .lc-out li { margin: 2px 0; }
+#c33-lens-card .lc-out .lc-err { color: var(--b-sub); font-size: 13px; }
+#c33-lens-card .lc-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 8px 10px 4px; }
+#c33-lens-card .lc-tools[hidden] { display: none; }
+#c33-lens-card .lc-tool { display: inline-flex; align-items: center; gap: 5px; margin: 0; padding: 5px 10px 5px 8px; border: 0; border-radius: 8px; background: transparent; color: var(--b-sub); font-size: 12px; cursor: pointer; }
+#c33-lens-card .lc-tool:hover:not(:disabled) { background: var(--b-soft); color: var(--b-ink); }
+#c33-lens-card .lc-tool.pri { color: #fff; background: var(--b-acc); font-weight: 600; }
+#c33-lens-card .lc-tool.pri:hover:not(:disabled) { color: #fff; background: color-mix(in srgb, var(--b-acc) 86%, #000); }
+#c33-lens-card .lc-tool:disabled { opacity: .4; cursor: default; }
+#c33-lens-card .lc-tool[hidden] { display: none; }
+#c33-lens-card .lc-ask { display: flex; align-items: flex-end; gap: 6px; margin: 6px 10px 10px; padding: 4px 4px 4px 12px; border-radius: 11px; box-shadow: inset 0 0 0 1px var(--b-line); }
+#c33-lens-card .lc-ask:focus-within { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-acc) 55%, transparent), 0 0 0 3px color-mix(in srgb, var(--b-acc) 12%, transparent); }
+#c33-lens-card .lc-ask textarea { flex: 1; min-width: 0; height: 28px; max-height: 120px; margin: 0; padding: 4px 0; border: 0; outline: 0; resize: none; background: transparent; color: inherit; font-size: 13px; line-height: 20px; }
+#c33-lens-card .lc-go { flex: none; display: grid; place-items: center; width: 28px; height: 28px; margin: 0; padding: 0; border: 0; border-radius: 8px; background: var(--b-acc); color: #fff; cursor: pointer; }
+#c33-lens-card .lc-go:disabled { opacity: .3; cursor: default; }
+#c33-lens-card .thinking-dots { display: inline-flex; gap: 4px; align-items: center; height: 18px; }
+#c33-lens-card .thinking-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--b-ter); animation: bounce 1.4s infinite ease-in-out both; }
+#c33-lens-card .thinking-dots span:nth-child(1) { animation-delay: -.32s; } #c33-lens-card .thinking-dots span:nth-child(2) { animation-delay: -.16s; }
+#c33-lens-card[data-mode="okaeri"] .lc-acts, #c33-lens-card[data-mode="okaeri"] .lc-ask { display: none; }
+/* おかえりハイライト */
+html:not([data-c33-ok-off]) [data-c33-ok] { border-radius: 6px; box-shadow: inset 3px 0 0 var(--okc); background-image: linear-gradient(90deg, color-mix(in srgb, var(--okc) 9%, transparent), transparent 80%); animation: c33OkIn 2.4s ease-out both; }
+[data-c33-ok="new"] { --okc: #2e9e6a; }
+[data-c33-ok="chg"] { --okc: var(--lm-accent, #2783de); }
+html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3s ease-out; }
+@keyframes c33OkIn { 0% { background-color: color-mix(in srgb, var(--okc) 20%, transparent); } 100% { background-color: transparent; } }
+@keyframes c33OkPulse { 0% { background-color: color-mix(in srgb, var(--okc) 26%, transparent); } 100% { background-color: transparent; } }
+#c33-ok { position: fixed; z-index: 1003; bottom: 22px; display: flex; align-items: center; gap: 4px; width: max-content; max-width: min(760px, calc(100vw - 24px)); height: 40px; padding: 0 6px 0 12px; border-radius: 999px; color: var(--b-ink); font-size: 12.5px;
+  background: color-mix(in srgb, var(--b-bg) 92%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.6); backdrop-filter: blur(16px) saturate(1.6);
+  box-shadow: 0 0 0 1px var(--b-line), 0 14px 36px -14px rgba(15,15,30,.4); transform: translateX(-50%); animation: c33OkBar .45s cubic-bezier(.16,1,.3,1) both; }
+@keyframes c33OkBar { from { opacity: 0; transform: translate(-50%, 12px); } }
+#c33-ok .ok-ic { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--b-acc), var(--b-acc2)); }
+#c33-ok .ok-t { min-width: 0; padding: 0 6px 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c33-ok .ok-t b { font-weight: 650; }
+#c33-ok .ok-n { flex: none; min-width: 34px; font-size: 11px; color: var(--b-ter); text-align: center; font-variant-numeric: tabular-nums; }
+#c33-ok button { flex: none; display: inline-flex; align-items: center; gap: 5px; height: 30px; margin: 0; padding: 0 8px; border: 0; border-radius: 999px; background: transparent; color: var(--b-sub); font-size: 12px; cursor: pointer; }
+#c33-ok button:hover { background: var(--b-soft); color: var(--b-ink); }
+#c33-ok button[hidden] { display: none; }
+#c33-ok button.ok-sum { color: var(--b-acc); font-weight: 600; }
+#c33-ok button.ok-ib { width: 30px; padding: 0; justify-content: center; }
+@media (max-width: 640px) { #c33-ok .ok-t span { display: none; } }
+@media (prefers-reduced-motion: reduce) { #c33-lens, #c33-lens-card, #c33-ok, [data-c33-ok] { animation: none !important; } }`;
+    (document.head || document.documentElement).appendChild(fxCss);
+    const toast = (msg) => { try { obToast(msg); } catch (e) { /* noop */ } };
+    const isJa = (s) => { const t = String(s).replace(/\s/g, ''); return (t.match(/[぀-ヿ㐀-鿿]/g) || []).length > t.length * 0.2; };
+    const ago = (at) => { const m = Math.max(1, Math.round((Date.now() - at) / 60000)); return m < 60 ? m + ' 分前' : m < 60 * 24 ? Math.round(m / 60) + ' 時間前' : m < 60 * 24 * 45 ? Math.round(m / 1440) + ' 日前' : Math.round(m / 43200) + ' か月前'; };
+    const mainFrame = () => [...document.querySelectorAll('.notion-frame')].find((f) => !f.closest('.notion-peek-renderer')) || null;
+    const pageTitle = () => { const f = mainFrame(); const h = f && f.querySelector('h1[aria-roledescription="page title"], .notion-page-block h1, h1'); return norm((h && h.textContent) || document.title.replace(/\s*[|｜]\s*Notion\s*$/, '')) || ''; };
+
+    /* ---------- ぶりレンズ ---------- */
+    const LENS_ACTS = [['explain', '説明', 'bulb'], ['summary', '要約', 'list'], ['rewrite', '言い換え', 'swap'], ['translate', '訳す', 'lang'], ['continue', '続き', 'pen']];
+    const LZ = { sel: null, cur: null, seq: 0, result: '', act: '' };
+    let lensBtn = null, lensCard = null, lensT = 0;
+    function lensSelection() {
+      const sel = window.getSelection && window.getSelection();
+      if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
+      const text = String(sel).replace(/[ \t]+\n/g, '\n').trim();
+      if (text.length < 2 || text.length > 8000) return null;
+      const r = sel.getRangeAt(0);
+      const node = r.commonAncestorContainer.nodeType === 1 ? r.commonAncestorContainer : r.commonAncestorContainer.parentElement;
+      if (!node || !node.closest || node.closest('#c33-lens, #c33-lens-card, #c33-ok, #c33-nsp, #c33-ns, #c33-buri, #c33-search-header, #c33-orbit, input, textarea, .notion-dialog[aria-label="Search Notion"]')) return null;
+      const frame = node.closest('.notion-frame, .notion-peek-renderer');
+      if (!frame) return null;
+      const el = (n) => (n.nodeType === 1 ? n : n.parentElement);
+      return { range: r.cloneRange(), text, root: el(r.startContainer).closest('[contenteditable="true"]'), block: el(r.startContainer).closest('[data-block-id]'), endLeaf: el(r.endContainer).closest('[data-content-editable-leaf="true"], [contenteditable="true"]'), frame };
+    }
+    function lensBtnEl() {
+      if (lensBtn && lensBtn.isConnected) return lensBtn;
+      lensBtn = mk('button'); lensBtn.id = 'c33-lens'; lensBtn.type = 'button'; lensBtn.hidden = true;
+      lensBtn.innerHTML = svg('spark', 14); mk('span', null, 'ぶり', lensBtn);
+      lensBtn.title = 'ぶりレンズ — 説明・要約・言い換え・訳す・続きを書く（⌃⌥J）';
+      lensBtn.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); });   // 選んだ文字を消さない
+      lensBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); lensOpen(); });
+      document.body.appendChild(lensBtn);
+      fontLock(lensBtn);
+      return lensBtn;
+    }
+    function lensWatch() {
+      clearTimeout(lensT);
+      if (lensBtn && !lensBtn.hidden) { const s0 = window.getSelection(); if (!s0 || s0.isCollapsed) lensBtn.hidden = true; }
+      lensT = setTimeout(() => {
+        if (!NS.lens || (lensCard && !lensCard.hidden)) return;
+        const s = lensSelection();
+        const b = lensBtnEl();
+        if (!s) { b.hidden = true; LZ.sel = null; return; }
+        const rs = s.range.getClientRects();
+        const last = rs.length ? rs[rs.length - 1] : s.range.getBoundingClientRect();
+        if (!last || (!last.width && !last.height)) { b.hidden = true; return; }
+        LZ.sel = s;
+        b.hidden = false;
+        const bw = b.offsetWidth || 64, bh = b.offsetHeight || 26;
+        let x = Math.min(window.innerWidth - bw - 10, Math.max(10, last.right - bw / 2));
+        let y = last.bottom + 8;
+        if (y + bh > window.innerHeight - 8) y = Math.max(8, (rs[0] || last).top - bh - 46);
+        b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
+      }, 280);
+    }
+    document.addEventListener('selectionchange', lensWatch);
+    window.addEventListener('scroll', () => { if (lensBtn && !lensBtn.hidden) lensBtn.hidden = true; if (lensCard && !lensCard.hidden && LZ.cur && LZ.cur.range) lensPos(); }, true);
+    function lensCardEl() {
+      if (lensCard && lensCard.isConnected) return lensCard;
+      const c = mk('div'); c.id = 'c33-lens-card'; c.hidden = true; c.setAttribute('role', 'dialog'); c.setAttribute('aria-label', 'ぶりレンズ');
+      const top = mk('div', 'lc-top', null, c);
+      const face = faceEl(top, 'normal');
+      const ttl = mk('b', 'lc-ttl', 'ぶりレンズ', top);
+      const who = mk('span', 'lc-who', '', top);
+      const x = mk('button', 'lc-ib', null, top); x.type = 'button'; x.innerHTML = svg('x', 15); x.title = '閉じる（esc）';
+      x.addEventListener('click', (e) => { e.preventDefault(); lensClose(); });
+      const src = mk('div', 'lc-src', '', c);
+      const acts = mk('div', 'lc-acts', null, c);
+      const btn = {};
+      LENS_ACTS.forEach(([k, lb, ic]) => { const b = mk('button', 'lc-act', null, acts); b.type = 'button'; b.dataset.k = k; b.innerHTML = svg(ic, 14); mk('span', null, lb, b); btn[k] = b; b.addEventListener('click', (e) => { e.preventDefault(); lensRun(k); }); });
+      const out = mk('div', 'lc-out', null, c); out.hidden = true; out.setAttribute('aria-live', 'polite');
+      const tools = mk('div', 'lc-tools', null, c); tools.hidden = true;
+      const tool = (ic, lb, fn, cls) => { const b = mk('button', 'lc-tool' + (cls ? ' ' + cls : ''), null, tools); b.type = 'button'; b.innerHTML = svg(ic, 14); mk('span', null, lb, b); b.addEventListener('click', (e) => { e.preventDefault(); fn(); }); return b; };
+      const tRep = tool('repl', '置き換える', () => lensInsert('replace'), 'pri');
+      const tBelow = tool('below', '下に入れる', () => lensInsert('below'));
+      tool('copy', 'コピー', () => lensCopy());
+      tool('retry', 'もう一度', () => lensRun(LZ.act, LZ.q));
+      tool('arrow', '⌘K で続ける', () => { const cur = LZ.cur; lensClose(); if (cur) nsOpenFromSide('「' + cur.text.slice(0, 300) + '」について、もっと詳しく教えて', false); });
+      const ask = mk('div', 'lc-ask', null, c);
+      const ta = mk('textarea', null, null, ask); ta.rows = 1; ta.placeholder = 'この部分について聞く…（' + MOD + '+Enter）'; ta.setAttribute('aria-label', 'この部分について聞く');
+      const go = mk('button', 'lc-go', null, ask); go.type = 'button'; go.innerHTML = svg('send', 15); go.disabled = true; go.title = '聞く（' + MOD + '+Enter）';
+      const send = () => { const q = ta.value.trim(); if (!q) return; ta.value = ''; go.disabled = true; ta.style.height = '28px'; lensRun('ask', q); };
+      ta.addEventListener('input', () => { go.disabled = !ta.value.trim(); ta.style.height = '28px'; ta.style.height = Math.min(120, Math.max(28, ta.scrollHeight)) + 'px'; });
+      ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); send(); } if (e.key === 'Escape') { e.preventDefault(); lensClose(); } });
+      go.addEventListener('click', (e) => { e.preventDefault(); send(); });
+      stopKeys(c);
+      ['pointerdown', 'mousedown'].forEach((t) => c.addEventListener(t, (e) => { e.stopPropagation(); if (t === 'mousedown' && !e.target.closest('textarea, .lc-out')) e.preventDefault(); }));
+      c.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); lensClose(); } });
+      document.body.appendChild(c);
+      fontLock(c);
+      Object.assign(c, { __face: face, __ttl: ttl, __who: who, __src: src, __out: out, __btn: btn, __tools: tools, __rep: tRep, __below: tBelow, __ta: ta });
+      lensCard = c;
+      return c;
+    }
+    function lensMood(m) { const f = lensCard && lensCard.__face; if (!f || f.dataset.mood === m) return; f.dataset.mood = m; f.textContent = FACE[m] || FACE.normal; f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop'); }
+    function lensPos() {
+      const c = lensCard; if (!c || c.hidden) return;
+      const cur = LZ.cur;
+      const w = c.offsetWidth || 460, h = c.offsetHeight || 220;
+      let x, y;
+      const r = cur && cur.range && cur.range.startContainer.isConnected ? cur.range.getBoundingClientRect() : null;
+      if (r && (r.width || r.height) && r.bottom > 0 && r.top < window.innerHeight) {
+        x = Math.min(window.innerWidth - w - 12, Math.max(12, r.left));
+        y = r.bottom + 10;
+        if (y + h > window.innerHeight - 12) y = r.top - h - 10 >= 12 ? r.top - h - 10 : Math.max(12, window.innerHeight - h - 12);
+      } else if (cur && cur.at) { x = Math.min(window.innerWidth - w - 12, Math.max(12, cur.at.x - w / 2)); y = Math.max(12, Math.min(window.innerHeight - h - 12, cur.at.y)); }
+      else { x = (window.innerWidth - w) / 2; y = Math.max(12, (window.innerHeight - h) / 2); }
+      c.style.left = Math.round(x) + 'px'; c.style.top = Math.round(y) + 'px';
+    }
+    /* 開く: act があればすぐ聞く。text だけの時（Atelier の文字メニュー・おかえり要約）は置き換え／下に入れるは出さない */
+    function lensOpen(act, text, opt) {
+      opt = opt || {};
+      const s = text ? null : (lensSelection() || LZ.sel);
+      const t = text || (s && s.text);
+      if (!t) { toast('まず、ページの文字を選んでください（それから ⌃⌥J）'); return; }
+      LZ.cur = s ? Object.assign({}, s) : { text: t, range: null, at: opt.at || null };
+      LZ.result = '';
+      if (lensBtn) lensBtn.hidden = true;
+      const c = lensCardEl();
+      c.dataset.mode = opt.mode || 'lens';
+      c.__ttl.textContent = opt.title || 'ぶりレンズ';
+      c.__who.textContent = '';
+      c.__src.textContent = opt.src || (t.length > 220 ? t.slice(0, 220) + '…' : t);
+      c.__btn.translate.querySelector('span').textContent = isJa(t) ? '英訳' : '和訳';
+      Object.values(c.__btn).forEach((b) => b.classList.remove('on'));
+      c.__out.hidden = true; c.__out.textContent = ''; c.__tools.hidden = true;
+      const canPut = !!(s && s.root && s.root.isConnected);
+      c.__rep.hidden = !canPut; c.__below.hidden = !canPut;   // 選んだ所が無い時（文字だけ渡された・おかえり要約）は出さない
+      c.__rep.title = canPut ? '選んだ所を、この答えに置き換える（⌘Z で戻せる）' : '選んだ所が分からないので使えません（コピーしてください）';
+      lensMood('normal');
+      c.hidden = false;
+      lensPos();
+      if (act) lensRun(act, opt.q, opt.job);
+    }
+    function lensClose() {
+      LZ.seq++;
+      if (lensCard) { lensCard.hidden = true; lensCard.classList.remove('busy'); }
+      LZ.cur = null;
+    }
+    function lensContext(cur) {
+      const ctx = { title: pageTitle(), around: '' };
+      const b = cur && cur.block && cur.block.isConnected ? cur.block : null;
+      if (b) {
+        const parts = [];
+        let p = b.previousElementSibling; for (let i = 0; p && i < 2; p = p.previousElementSibling) if (p.matches('[data-block-id]')) { parts.unshift(p.innerText); i++; }
+        parts.push(b.innerText);
+        let n = b.nextElementSibling; for (let i = 0; n && i < 2; n = n.nextElementSibling) if (n.matches('[data-block-id]')) { parts.push(n.innerText); i++; }
+        ctx.around = parts.join('\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, 1800);
+      }
+      return ctx;
+    }
+    const LENS_SYS = () => [
+      'あなたは「ぶり」（B.U.R.I）。' + BURI.nick() + 'の Notion で、選ばれた文章を手伝う相棒。',
+      '・出力は「頼まれた中身」だけ。前置き（「はい」「以下は〜です」）・あいさつ・締めの一言・顔文字・[[ ]] の印・出典番号は書かない。',
+      '・日本語は、友だちに話すような自然な日本語で。翻訳調・説明書調にしない。1 文は短く（40〜60 字）。',
+      '・箇条書きと **太字** は使ってよい。見出し（#）は使わない。',
+      '・分からないことは推測で埋めず、「ここだけでは分かりません」と言う。'
+    ].join('\n');
+    function lensJob(act, text, q) {
+      const tgt = isJa(text) ? '英語' : '日本語';
+      return {
+        explain: '選んだ部分を、前後の文脈をふまえて、やさしく説明して。むずかしい言葉は言い換える。3〜6 文。',
+        summary: '選んだ部分を要約して。大事な点を 2〜4 個の短い箇条書きで。',
+        rewrite: '選んだ部分を、意味を変えずに、読みやすく自然な文に書き直して。書き直した文だけを出す（説明はつけない）。元が英語なら自然な英語に。',
+        translate: '選んだ部分を自然な' + tgt + 'に訳して。訳文だけを出す（説明はつけない）。',
+        continue: '選んだ部分の続きを、同じ文体・同じ調子・同じ言語で 2〜4 文書いて。続きの文だけを出す（選んだ部分はくり返さない）。',
+        ask: '選んだ部分について、次の質問に答えて: ' + (q || '')
+      }[act] || '';
+    }
+    async function lensRun(act, q, job) {
+      const c = lensCard, cur = LZ.cur; if (!c || !cur) return;
+      const my = ++LZ.seq;
+      LZ.act = act; LZ.q = q || ''; LZ.job = job || LZ.job;
+      const jb = LZ.job;
+      Object.values(c.__btn).forEach((b) => b.classList.toggle('on', b.dataset.k === act));
+      const name = (LENS_ACTS.find((x) => x[0] === act) || [])[1];
+      if (name) c.__ttl.textContent = act === 'translate' ? c.__btn.translate.textContent : name;
+      else if (act === 'ask') c.__ttl.textContent = '聞く';
+      c.__out.hidden = false; c.__out.textContent = ''; c.__tools.hidden = true; c.__who.textContent = '';
+      const dots = mk('div', 'thinking-dots', null, c.__out); dots.append(mk('span'), mk('span'), mk('span'));
+      c.classList.add('busy'); lensMood(act === 'continue' ? 'write' : act === 'okaeri' ? 'search' : 'think');
+      lensPos();
+      if (!BURI.aiOn()) {
+        c.classList.remove('busy'); c.__out.textContent = '';
+        mk('div', 'lc-err', 'AI がまだつながっていません。⌘K の B.U.R.I → 設定（⚙）で、無料の Gemini などの鍵を入れると使えます。', c.__out);
+        lensMood('sad'); return;
+      }
+      const ctx = lensContext(cur);
+      const user = act === 'okaeri' ? jb : '# ページ\n' + (ctx.title || '（題名なし）') + (ctx.around ? '\n\n# 前後の文脈（参考）\n' + ctx.around : '') + '\n\n# 選んだ部分\n' + cur.text + '\n\n# 頼みごと\n' + lensJob(act, cur.text, q);
+      const r = await BURI.quick(LENS_SYS(), user, act === 'summary' ? 600 : 1100);
+      if (my !== LZ.seq) return;
+      c.classList.remove('busy'); c.__out.textContent = '';
+      if (!r.text) { mk('div', 'lc-err', 'うまく答えられませんでした。（' + (r.err || '不明') + '）', c.__out); lensMood('sad'); lensPos(); return; }
+      LZ.result = r.text;
+      richText(c.__out, r.text, null, []);
+      c.__who.textContent = r.name ? r.name + (r.model ? ' · ' + String(r.model).replace(/^models\//, '').slice(0, 28) : '') : '';
+      c.__tools.hidden = false;
+      lensMood(act === 'continue' ? 'satisfied' : act === 'okaeri' ? 'back' : 'happy');
+      lensPos();
+    }
+    /* 答えを Notion に入れる: Notion の「貼り付け」として渡す（Markdown の箇条書き・太字もそのまま段になる）。効かない時はコピー */
+    const plainOf = (t) => String(t || '').replace(/\r/g, '').trim();
+    function lensSelectRange(cur, mode) {
+      if (!cur || !cur.range || !cur.root || !cur.root.isConnected) return false;
+      try { cur.root.focus({ preventScroll: true }); } catch (e) { /* noop */ }
+      const sel = window.getSelection(); if (!sel) return false;
+      sel.removeAllRanges();
+      if (mode === 'below') {
+        const leaf = cur.endLeaf && cur.endLeaf.isConnected ? cur.endLeaf : cur.root;
+        const r = document.createRange(); r.selectNodeContents(leaf); r.collapse(false); sel.addRange(r);
+      } else sel.addRange(cur.range);
+      return true;
+    }
+    function pasteInto(text) {
+      const sel = window.getSelection();
+      const n = sel && sel.anchorNode; const target = n ? (n.nodeType === 1 ? n : n.parentElement) : document.activeElement;
+      if (!target) return false;
+      try {
+        const dt = new DataTransfer(); dt.setData('text/plain', text);
+        const ev = new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true, composed: true });
+        target.dispatchEvent(ev);
+        return true;
+      } catch (e) { return false; }
+    }
+    async function lensInsert(mode) {
+      const cur = LZ.cur, text = plainOf(LZ.result);
+      if (!text) return;
+      const pc = (cur && cur.block && cur.block.closest('.notion-page-content')) || (cur && cur.frame) || document.querySelector('.notion-page-content');
+      const sig = () => (pc ? pc.textContent.length + ':' + pc.querySelectorAll('[data-block-id]').length : '');
+      if (!lensSelectRange(cur, mode)) { await lensCopy(true); return; }
+      const s0 = sig();
+      if (mode === 'below') {
+        /* 段の終わりで Enter（新しい段）→ そこに貼る */
+        const a = window.getSelection().anchorNode; const t = a && (a.nodeType === 1 ? a : a.parentElement);
+        try { t && t.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true, cancelable: true })); } catch (e) { /* noop */ }
+        await waitMs(80);
+      }
+      const s1 = sig();
+      pasteInto(mode === 'below' && s1 === s0 ? '\n' + text : text);
+      await waitMs(320);
+      if (sig() !== s1) { lensClose(); toast(mode === 'below' ? '下に入れました（⌘Z で元に戻せます）' : '置き換えました（⌘Z で元に戻せます）'); return; }
+      try { if (document.execCommand('insertText', false, (mode === 'below' ? '\n' : '') + text)) { await waitMs(200); if (sig() !== s1) { lensClose(); toast('入れました（⌘Z で元に戻せます）'); return; } } } catch (e) { /* noop */ }
+      await lensCopy(true);
+    }
+    const waitMs = (ms) => new Promise((r) => setTimeout(r, ms));
+    async function lensCopy(fallback) {
+      const text = plainOf(LZ.result); if (!text) return;
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
+        try { const ta = mk('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0'; document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch (x) { ok = false; }
+      }
+      toast(ok ? (fallback ? 'ここには直接入れられなかったので、コピーしました（⌘V で貼れます）' : 'コピーしました') : 'コピーできませんでした');
+      if (ok && fallback) lensClose();
+    }
+    document.addEventListener('pointerdown', (e) => {
+      if (lensCard && !lensCard.hidden && !lensCard.contains(e.target) && !(lensBtn && lensBtn.contains(e.target)) && !(okBar && okBar.contains(e.target))) lensClose();
+    }, true);
+
+    /* ---------- おかえりハイライト ---------- */
+    const OK_IDX = 'c33.ok.idx', OK_PFX = 'c33.ok.', OK_MAX_PAGES = 150, OK_MAX_BLOCKS = 1500;
+    const OK = { page: '', base: null, seen: new Set(), map: new Map(), marks: [], i: -1, arrive: 0, dirty: false };
+    let okBar = null;
+    const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); };
+    const okKey = (id) => id.replace(/-/g, '').slice(0, 12);
+    function okLoad(pid) { try { const o = JSON.parse(localStorage.getItem(OK_PFX + pid) || 'null'); return o && o.b ? o : null; } catch (e) { return null; } }
+    function okStore(pid) {
+      if (!pid || !OK.map.size) return;
+      const b = Object.assign({}, OK.base ? OK.base.b : {});
+      for (const [k, h] of OK.map) b[k] = h;
+      const keys = Object.keys(b); if (keys.length > OK_MAX_BLOCKS) keys.slice(0, keys.length - OK_MAX_BLOCKS).forEach((k) => delete b[k]);
+      const rec = { at: Date.now(), t: pageTitle().slice(0, 80), b };
+      try {
+        localStorage.setItem(OK_PFX + pid, JSON.stringify(rec));
+        let idx = []; try { idx = JSON.parse(localStorage.getItem(OK_IDX) || '[]') || []; } catch (e) { idx = []; }
+        idx = idx.filter((x) => x !== pid); idx.unshift(pid);
+        idx.slice(OK_MAX_PAGES).forEach((x) => { try { localStorage.removeItem(OK_PFX + x); } catch (e) { /* noop */ } });
+        localStorage.setItem(OK_IDX, JSON.stringify(idx.slice(0, OK_MAX_PAGES)));
+      } catch (e) { /* 入りきらない時は覚えない */ }
+      OK.dirty = false;
+    }
+    /* 段ごとの「指紋」: 自分の文字（入れ子の段は除く）＋チェックの状態。画像は場所の URL の末尾 */
+    /* 「今日」「昨日」のように日がたつと変わる日付・ページの言及の文字は、指紋に入れない（中身が変わっていないのに光らないように） */
+    function ownText(leaf) {
+      let s = '';
+      const w = document.createTreeWalker(leaf, NodeFilter.SHOW_TEXT);
+      let n;
+      while ((n = w.nextNode())) { const p = n.parentElement; if (p && p !== leaf && p.closest('[class*="mention"], [class*="Mention"]') && leaf.contains(p.closest('[class*="mention"], [class*="Mention"]'))) continue; s += n.nodeValue; }
+      return s;
+    }
+    function okScan() {
+      const f = mainFrame(); const pc = f && f.querySelector('.notion-page-content');
+      if (!pc) return null;
+      const out = [];
+      for (const el of pc.querySelectorAll('[data-block-id]')) {
+        const id = el.getAttribute('data-block-id'); if (!id) continue;
+        let t = null;
+        const leaf = el.querySelector('[data-content-editable-leaf="true"]');
+        if (leaf && leaf.closest('[data-block-id]') === el) t = ownText(leaf);
+        else if (el.matches('.notion-image-block')) { const im = el.querySelector('img'); t = 'img:' + String(im && im.getAttribute('src') || '').split('?')[0].slice(-48); }
+        if (t == null) continue;
+        const ck = el.querySelector('[role="checkbox"], input[type="checkbox"]');
+        if (ck && ck.closest('[data-block-id]') === el) t += '|' + (ck.getAttribute('aria-checked') || (ck.checked ? 'true' : 'false'));
+        out.push({ id, el, h: fnv(norm(t)) });
+      }
+      return { pc, list: out };
+    }
+    function okRun() {
+      if (!NS.okaeri) return;
+      const pid = curPage();
+      if (pid !== OK.page) {
+        if (OK.page && OK.dirty) okStore(OK.page);
+        okClear(true);
+        OK.page = pid; OK.base = pid ? okLoad(pid) : null; OK.seen = new Set(); OK.map = new Map(); OK.arrive = 0;
+      }
+      if (!pid || document.hidden) return;
+      const s = okScan(); if (!s || !s.list.length) return;
+      if (!OK.arrive) OK.arrive = Date.now();
+      /* 着いてから 4 秒の間に描かれた段だけを比べる（その後に増えた段は、自分で書いたもの＝光らせない） */
+      const fresh = Date.now() - OK.arrive < 4000;
+      const base = OK.base && Date.now() - OK.base.at > 90 * 1000 ? OK.base : null;
+      const add = [];
+      for (const x of s.list) {
+        const k = okKey(x.id);
+        if (OK.map.get(k) !== x.h) { OK.map.set(k, x.h); OK.dirty = true; }
+        if (OK.seen.has(k)) continue;
+        OK.seen.add(k);
+        if (!fresh || !base) continue;
+        const old = base.b[k];
+        if (old === x.h) continue;
+        add.push({ el: x.el, kind: old ? 'chg' : 'new' });
+      }
+      if (add.length) {
+        const total = s.list.length;
+        const many = OK.marks.length + add.length > Math.max(14, total * 0.6);
+        if (!many) add.forEach((m) => m.el.setAttribute('data-c33-ok', m.kind));
+        OK.marks = OK.marks.concat(add);
+        okBarShow(base.at, many);
+      }
+      if (OK.dirty && !OK.saveT) OK.saveT = setTimeout(() => { OK.saveT = 0; if (OK.page === pid && !document.hidden) okStore(pid); }, fresh ? 5000 : 15000);
+    }
+    function okClear(silent) {
+      OK.marks.forEach((m) => { if (m.el.isConnected) { m.el.removeAttribute('data-c33-ok'); m.el.classList.remove('c33-ok-now'); } });
+      OK.marks = []; OK.i = -1;
+      if (okBar) okBar.hidden = true;
+      if (!silent && OK.page) okStore(OK.page);
+    }
+    function okBarEl() {
+      if (okBar && okBar.isConnected) return okBar;
+      const b = mk('div'); b.id = 'c33-ok'; b.hidden = true; b.setAttribute('role', 'status');
+      const ic = mk('span', 'ok-ic', null, b); ic.innerHTML = svg('spark', 13);
+      const t = mk('span', 'ok-t', null, b);
+      const up = mk('button', 'ok-ib', null, b); up.type = 'button'; up.innerHTML = svg('up', 16); up.title = '前の変わった所';
+      const n = mk('span', 'ok-n', '', b);
+      const dn = mk('button', 'ok-ib', null, b); dn.type = 'button'; dn.innerHTML = svg('dn', 16); dn.title = '次の変わった所（⌃⌥N）';
+      const sum = mk('button', 'ok-sum', null, b); sum.type = 'button'; sum.innerHTML = svg('spark', 13); sum.append('ぶりに要約'); sum.title = '変わった所を、ぶりが短くまとめる';
+      const x = mk('button', 'ok-ib', null, b); x.type = 'button'; x.innerHTML = svg('check', 15); x.title = '見た（光を消す）';
+      up.addEventListener('click', (e) => { e.preventDefault(); okGo(-1); });
+      dn.addEventListener('click', (e) => { e.preventDefault(); okGo(1); });
+      sum.addEventListener('click', (e) => { e.preventDefault(); okSummary(); });
+      x.addEventListener('click', (e) => { e.preventDefault(); okClear(); });
+      ['pointerdown', 'mousedown'].forEach((ty) => b.addEventListener(ty, (e) => e.stopPropagation()));
+      document.body.appendChild(b);
+      fontLock(b);
+      Object.assign(b, { __t: t, __n: n });
+      okBar = b;
+      return b;
+    }
+    function okBarShow(at, many) {
+      const b = okBarEl();
+      const n = OK.marks.length;
+      const nw = OK.marks.filter((m) => m.kind === 'new').length;
+      b.__t.innerHTML = '';
+      mk('span', null, 'おかえりなさい。', b.__t);
+      mk('b', null, ago(at), b.__t);
+      b.__t.append(many ? ' から大きく書き換わっています' : ' から ');
+      if (!many) { mk('b', null, n + ' か所', b.__t); b.__t.append(nw && nw < n ? ' 変わりました（新しい段 ' + nw + '）' : nw === n ? ' 増えました' : ' 変わりました'); }
+      b.__n.textContent = many ? '' : (OK.i >= 0 ? OK.i + 1 : 0) + ' / ' + n;
+      b.querySelectorAll('.ok-ib').forEach((x, i) => { if (i < 2) x.hidden = many; });
+      const f = mainFrame(); const fr = f ? f.getBoundingClientRect() : { left: 0, width: window.innerWidth };
+      b.style.left = Math.round(fr.left + fr.width / 2) + 'px';
+      b.hidden = false;
+    }
+    function okGo(d) {
+      const live = OK.marks.filter((m) => m.el.isConnected && m.el.hasAttribute('data-c33-ok'));
+      if (!live.length) return;
+      OK.i = ((OK.i < 0 && d < 0 ? 0 : OK.i) + d + live.length) % live.length;
+      const el = live[OK.i].el;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      el.classList.remove('c33-ok-now'); void el.offsetWidth; el.classList.add('c33-ok-now');
+      if (okBar) okBar.__n.textContent = (OK.i + 1) + ' / ' + live.length;
+    }
+    /* 変わった所の中身（いま画面にある文字）— ぶりの要約と、⌘K の「前回から変わった所」に使う */
+    function okPack() {
+      if (!OK.marks.length || !OK.base) return null;
+      const items = OK.marks.filter((m) => m.el.isConnected).slice(0, 40).map((m) => ({ kind: m.kind, text: norm(m.el.innerText).slice(0, 400) })).filter((x) => x.text);
+      if (!items.length) return null;
+      return { title: pageTitle(), since: ago(OK.base.at), items };
+    }
+    function okSummary() {
+      const p = okPack(); if (!p) { toast('まとめる変わった所がありません'); return; }
+      const job = '# ページ\n' + (p.title || '（題名なし）') + '\n\n# ' + BURI.nick() + 'が前に見た時（' + p.since + '）から、変わった・増えた段\n' +
+        p.items.map((x) => (x.kind === 'new' ? '［新しい段］' : '［書き換わった段］') + x.text).join('\n') +
+        '\n\n# 頼みごと\n前に見た時から何が変わったのかを、' + BURI.nick() + 'に短く伝えて。大事な変化から 2〜5 個の箇条書き。最初に一文で全体の様子（例:「予定が 2 つ増えて、締め切りが動いたよ」）。';
+      const r = okBar && !okBar.hidden ? okBar.getBoundingClientRect() : null;
+      lensOpen('okaeri', p.items.map((x) => x.text).join('\n'), { mode: 'okaeri', title: 'おかえり — 変わった所', src: p.since + 'から ' + p.items.length + ' か所', job, at: r ? { x: r.left + r.width / 2, y: r.top - 340 } : null });
+    }
+    BURI.setDelta(okPack);
+    let okT = 0;
+    const okSoon = () => { if (okT || !NS.okaeri) return; okT = setTimeout(() => { okT = 0; try { okRun(); } catch (e) { /* noop */ } }, !OK.arrive || Date.now() - OK.arrive < 4000 ? 600 : 3000); };
+    new MutationObserver((recs) => { for (const r of recs) { const t = r.target; if (t.nodeType === 1 && t.closest && t.closest('.notion-page-content')) { okSoon(); return; } } }).observe(document.body, { childList: true, subtree: true, characterData: false });
+    setInterval(() => { if (!document.hidden && NS.okaeri) { if (curPage() !== OK.page) okSoon(); else if (OK.dirty && !OK.saveT) okStore(OK.page); } }, 1500);
+    document.addEventListener('visibilitychange', () => { if (document.hidden && OK.page && OK.dirty) okStore(OK.page); });
+    window.addEventListener('pagehide', () => { if (OK.page && OK.dirty) okStore(OK.page); });
+    window.addEventListener('resize', () => { if (okBar && !okBar.hidden && OK.base) okBarShow(OK.base.at, OK.marks.length && !OK.marks[0].el.hasAttribute('data-c33-ok')); });
+    okSoon();
+
+    /* キー: ⌃⌥J ぶりレンズ ／ ⌃⌥N 次の変わった所 */
+    document.addEventListener('keydown', (e) => {
+      if (!((e.metaKey || e.ctrlKey) && e.altKey)) return;
+      if (e.code === 'KeyJ') { e.preventDefault(); e.stopPropagation(); lensOpen(); }
+      else if (e.code === 'KeyN' && OK.marks.length) { e.preventDefault(); e.stopPropagation(); okGo(1); }
+    }, true);
+    /* 柱どうしの呼び出し（²⁶ Atelier の文字メニューの「ぶり」「Orbit」） */
+    document.addEventListener('cordi:run', (e) => {
+      let d = {}; try { d = typeof e.detail === 'string' ? JSON.parse(e.detail) : (e.detail || {}); } catch (x) { d = {}; }
+      if (d.id === 'c33.lens') { const s = lensSelection(); if (s) { LZ.sel = s; lensOpen(); } else lensOpen(null, d.text || '', { at: d.x != null ? { x: d.x, y: d.y + 8 } : null }); }
+      else if (d.id === 'c33.orbit') obToggle();
+      else if (d.id === 'c33.okaeri') { if (OK.marks.length) okGo(1); else toast('前に見た時から変わった所はありません'); }
+    });
+
     window.addEventListener('resize', layout);
     /* v67: 軽く — 位置合わせは 0.45 秒おき＋サイドバーの変化・スクロール・大きさの変化の時だけ（以前は 0.15 秒おきに常に） */
     let layRaf = 0;
     const layoutSoon = () => { if (layRaf) return; layRaf = requestAnimationFrame(() => { layRaf = 0; layout(); }); };
-    setInterval(() => { if (!document.hidden && (panelOpen || !header.hidden || floatMode)) layoutSoon(); }, 450);
-    setInterval(() => { if (!document.hidden) layoutSoon(); }, 1500);
+    setInterval(() => { if (!document.hidden) layoutSoon(); }, 2000);   // 保険だけ（ふだんは変化の瞬間に置き直す）
     document.addEventListener('scroll', layoutSoon, true);
     window.__c33LayoutSoon = layoutSoon;
+    layoutNow = layout;
 
     BURI.restore();
     updState();

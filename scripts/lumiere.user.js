@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁷ _ Lumière
 // @namespace    https://cordivestium.local/lumiere
-// @version      13.1.0
-// @description  v13.1.0: 速く — 幕（カーテン）の上限を 3.2→1.5 秒・ページを移る時 0.9→0.6 秒。v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
+// @version      13.2.0
+// @description  v13.2.0: 起動の幕は、16c（幕の合図）が動いていればその合図（各柱が整った）で開く — 時計（1.5 秒）では開けない。CSS の保険も 16c がある時は 9 秒。v13.1.0: 速く — 幕（カーテン）の上限を 3.2→1.5 秒・ページを移る時 0.9→0.6 秒。v12.0.0: ボードを画面内で折り返す・縦の罫線・ホバーカードの作り直し・題字の Open ボタンの見切れを修正・表紙のセルのボタンを消す。Notion の「見た目」を厚くする柱（²⁶ Atelier ＝文字、³⁸ Scholar ＝学び・計算 と並ぶ三本柱の一つ）。Notion の配色変数（--c-bacPri など 742 個）を丸ごと差し替える配色（紙・羊皮紙・墨・夜の書斎・青磁・桜・美術館…明暗それぞれ）と、表を「Excel のマス目」から「誌面」に（縦線を消す・行を浮かせる・見出しを小さな大文字に）、ギャラリーを「表紙が主役」に（コメントのボタンが表紙を隠さない・浮き上がり・題名を表紙の上に）、ボードを「レーン」に、見出し・コールアウト・引用・トグル・コード・区切り線・箇条書き・チェックボックス・画像・ブックマーク・選択肢のチップ・上の帯・タブ・スクロールバー・選択の色・動き・読み進み具合・表紙の色から取るアクセント まで、モジュールごとに入切。⌃⌥V でパネル。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -1758,6 +1758,7 @@ html:hover #lm-fab { opacity: .55; }
   CSS.curtain = () => `
 html[data-lm-curtain] { background: var(--lm-bg, var(--c-bacPri, #fff)) !important; }
 html[data-lm-curtain="boot"] #notion-app { opacity: 0; animation: lm-curtain-safe .01s linear ${Math.round((+T('curtainMax') || 1500) / 1000 + 0.5)}s forwards; }
+html[data-lm-curtain="boot"][data-c16c-open="0"] #notion-app { animation-delay: 9s; }
 html[data-lm-curtain="nav"] .notion-frame > :not(.notion-topbar):not(:has(.notion-topbar)), html[data-lm-curtain="nav"] .notion-frame .notion-scroller { opacity: 0 !important; transition: none !important; }
 html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *, html[data-lm-curtain-up] .notion-frame .notion-scroller { transition: opacity ${reduce() ? 0 : 0.2}s cubic-bezier(.2,0,0,1) !important; }
 @keyframes lm-curtain-safe { to { opacity: 1; } }`;
@@ -1789,6 +1790,10 @@ html[data-lm-curtain-up] #notion-app, html[data-lm-curtain-up] .notion-frame > *
       const ready = kind === 'nav' ? ((location.href !== CUR.from && !!document.querySelector(CONTENT)) || (now - start > 450 && location.href === CUR.from)) : !!document.querySelector(CONTENT);
       const quiet = now - last > (kind === 'nav' ? 110 : 170);
       const busy = de.hasAttribute('data-c16-veil');
+      /* v13.2: 16c（幕の合図）が動いていれば、起動の幕はその合図（各柱が整った）で開く。時計では開けない */
+      const c16c = kind === 'boot' ? de.getAttribute('data-c16c-open') : null;
+      if (c16c === '0' && now - start < 9000) { CUR.quietT = setTimeout(check, 40); return; }
+      if (c16c === '1') { curtainUp(); return; }
       if ((ready && fontsOk && quiet && !busy) || now - start > max) { curtainUp(); return; }
       CUR.quietT = setTimeout(check, 40);
     };
