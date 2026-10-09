@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      87.0.0
-// @description  v87.0.0: Nebius — 輪（Orbit）と右の星図（Stella）を合わせた新しいサイドバー。Stella: チームを色の札のカード（チームの色・右上に件数・中の行が順にふわっと出る・今のページに ★・乗せるとアイコンが少し回る）＋上に「輪で選んだ大分類」の見出し。サイドの検索窓をやめて ('-' 鰤)з のピル（押すと ⌘K の B.U.R.I）— 文字の見切れが無い。Orbit: 選んだ色の枠が上のぼかしで見切れていた → 上に余白・ホイールを止めると一番近い段にぴたっと止まる。v77.0.0: Next Notion — ★ぶりレンズ（ページの文字を選ぶと ✦。説明・要約・言い換え・訳す・続きを書く・自由に聞く。置き換え／下に入れる／コピー。⌃⌥J）★おかえりハイライト（前に見た時から変わった段がうっすら光る。↑↓ で移動・ぶりに要約・⌘K でも「前回から変わった所」。⌃⌥N）。描き直しを見せない — サイドバーの印・輪・検索窓を同じコマで置く（以前は 80ms〜2 秒遅れて上書きが見えていた）・準備ができたら html[data-c33-ready]（16c の幕の合図）。顔はいつも 1 つ（ホームの大きな顔・答えごとの顔をやめた）。検索画面は窓の幅に合わせて 3 段（広い・中・狭い＝ぶりが画面いっぱい）＋欄の中も幅に合わせて詰める。v67.0.0: B.U.R.I を大幅に強化 — 自然な日本語・出典は文の終わりに小さな番号（¹ ²）＋番号つきの出典一覧・今日の日付で「これから／もう過ぎた」を言い分け・まとめ役を選べる（既定は NVIDIA）・AI が考えた「次に聞けそうなこと」・いま開いているページの要約／質問・「〜を開いて」でページへ・Markdown でコピー（脚注つき）・これまでの答え（履歴・検索）・読み込みの速さを表示。軽く — 見回りを 0.1→0.7 秒・位置合わせを 0.15→0.45 秒（変化の時だけ）・地の色は変わった時だけ測る。v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      97.0.0
+// @description  v97.0.0: Nebius 第 2 世代 — Stella を本物の星図に（Orbit の右端に 1 本の子午線・チームスペースは星座（子午線から伸びる光脈と、先の DB の数の点）・選んだ DB に光暈と 2.4 秒の波紋・選ぶと子午線 → 光脈 → アイコンへ光の粒が走って火花・惑星ごとの色相が 1.2 秒で流れる・淡い星空と流れ星・最近の Meteora）。('-' 鰤)з セクション（B.U.R.I）— SVG の顔のピル（乗せると「探す・聞く ⌘K」）・中央 720px → 右に留める 400px → 大きく の 3 段の窓・枠線の無い温かいオフホワイト・時間で変わる「おかえり、Wパパ」・候補は親のフル DB 付き・開くと親のフル DB へ移ってサイドピーク（Orbit と Stella も連動）・⌘↵ で送る／↵ で改行（変換中は送らない）。⁴¹ Telescopium との連絡口（nebius:req）・Stella の細い列（52px・乗せると元の幅で重なる・ピン留め）。アクセント色に青を使わない。v87.0.0: Nebius — 輪（Orbit）と右の星図（Stella）を合わせた新しいサイドバー。Stella: チームを色の札のカード（チームの色・右上に件数・中の行が順にふわっと出る・今のページに ★・乗せるとアイコンが少し回る）＋上に「輪で選んだ大分類」の見出し。サイドの検索窓をやめて ('-' 鰤)з のピル（押すと ⌘K の B.U.R.I）— 文字の見切れが無い。Orbit: 選んだ色の枠が上のぼかしで見切れていた → 上に余白・ホイールを止めると一番近い段にぴたっと止まる。v77.0.0: Next Notion — ★ぶりレンズ（ページの文字を選ぶと ✦。説明・要約・言い換え・訳す・続きを書く・自由に聞く。置き換え／下に入れる／コピー。⌃⌥J）★おかえりハイライト（前に見た時から変わった段がうっすら光る。↑↓ で移動・ぶりに要約・⌘K でも「前回から変わった所」。⌃⌥N）。描き直しを見せない — サイドバーの印・輪・検索窓を同じコマで置く（以前は 80ms〜2 秒遅れて上書きが見えていた）・準備ができたら html[data-c33-ready]（16c の幕の合図）。顔はいつも 1 つ（ホームの大きな顔・答えごとの顔をやめた）。検索画面は窓の幅に合わせて 3 段（広い・中・狭い＝ぶりが画面いっぱい）＋欄の中も幅に合わせて詰める。v67.0.0: B.U.R.I を大幅に強化 — 自然な日本語・出典は文の終わりに小さな番号（¹ ²）＋番号つきの出典一覧・今日の日付で「これから／もう過ぎた」を言い分け・まとめ役を選べる（既定は NVIDIA）・AI が考えた「次に聞けそうなこと」・いま開いているページの要約／質問・「〜を開いて」でページへ・Markdown でコピー（脚注つき）・これまでの答え（履歴・検索）・読み込みの速さを表示。軽く — 見回りを 0.1→0.7 秒・位置合わせを 0.15→0.45 秒（変化の時だけ）・地の色は変わった時だけ測る。v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,29 @@
 // ==/UserScript==
 
 /*
+ * v97.0.0（Nebius 第 2 世代 — Stella の星図・('-' 鰤)з セクション・Telescopium との連絡口）
+ *   ■ Stella（右の星図）— 仕様書 1 のとおりに作り直し。Orbit は変えない
+ *   ・Orbit の右端に 1 本の子午線。選んだ惑星の高さに接点の光。見出しは無し
+ *   ・チームスペースは星座: アイコン 20px・名前 15px。子午線から光脈が右へ伸びて薄れ、先に DB の数の点（5 つまで・それより多い時は 5 つ＋数・無い時は「星なし」）
+ *   ・DB の行は 30px・アイコン 18px（チーム名とそろう）。乗せるとアイコン ×1.15・名前が 2px 右へ・光暈
+ *   ・選んだ DB: 光暈・2.4 秒の波紋・名前はアクセント色の太字・帯。24 時間以内に更新 → 瞬く点、7 日更新が無い → 少し沈む
+ *   ・選ぶと、子午線 → 光脈 → アイコンへ光の粒が約 0.5 秒で走り、8〜12 の火花
+ *   ・惑星を回すと、光脈が引っ込み、中身が ±12px ずれ、新しい光脈が伸びる（0.25 秒・60ms ずつ）。行は 40ms ずつ
+ *   ・惑星ごとの色相が 1.2 秒で流れる。淡い星空（視差）と流れ星。最近開いた DB の Meteora（4 件・惑星の印）
+ *   ・キーボード（↑↓・←→・Enter）・動きを減らす設定。Notion のアイコンは置き換えない・染めない・隠さない
+ *   ■ ('-' 鰤)з セクション（B.U.R.I）— 仕様書 2
+ *   ・ピル: SVG の顔（目は U+0027）。乗せると「探す・聞く ⌘K」へ伸びる。右下に 3px の待機の点
+ *   ・窓は 3 段: 画面中央 720px → 右に留める 400px → 大きく。枠線の無い温かいオフホワイト・状態の札は無し
+ *   ・ホーム: 時間で変わるあいさつ（その日初めては「おかえり、Wパパ」）・入力欄・ひと押しのチップ
+ *   ・候補はページ名と親のフル DB。「Notion で全文検索」の段と、範囲のチップ。↵ DB で開く／⌘↵ 新しいタブ／⇧↵ ページだけ
+ *   ・開く: 親のフル DB へ（再読み込みせず）→ サイドピーク。Orbit がその惑星へ回り、Stella が経路点灯。一覧のその行が 0.6 秒光る
+ *   ・答え: MoA の仲間は衛星の点で。左に 44px の帯と 260px の引き出し（履歴・検索）。esc は 1 段ずつ戻る
+ *   ・⌘↵（Ctrl+↵）で送る・↵ で改行・変換中はどのキーでも送らない
+ *   ■ ほか
+ *   ・⁴¹ Telescopium との連絡口: document の CustomEvent 'nebius:req' → 'nebius:res'（JSON）。status・quick・multi（MoA の仲間に同時に）・open
+ *   ・Stella の細い列（html[data-neb-narrow]・52px）: DB のアイコンだけ縦に。乗せて 0.3 秒で元の幅が本文の上に重なる。一番下のピンで固定
+ *   ・設定に「Telescopium」の段（⁴¹ が描く）
+ *   ・アクセント色に青を使わない（OKLCH の青の帯は青緑か菫へ寄せる。既定の色相も 212 → 190）
  * v87.0.0（Nebius — 輪（Orbit）＋ 星図（Stella））
  *   ・Stella: 右のパネル（チームとページの一覧）を Orbit に似合う星図に — チームは色の札のカード（チームの色から）、右上に件数、
  *     中の行は順にふわっと出る、今のページに ★、乗せるとアイコンが少し回る。上に「輪で選んだ大分類」の見出し（色の点・名前・数）
@@ -165,7 +188,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '87.0.0';
+  const VERSION = '97.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -1702,9 +1725,16 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   /* ---- 惑星の色相 ---- */
   const nbHueMap = new Map();
   let nbHueSig = '', nbHueCur = null;
+  /* 青はアクセント色に使わない（仕様 2・3）。OKLCH の青の帯（200〜285）を、青緑か菫へ寄せる */
+  function nbNoBlue(h) {
+    h = ((h % 360) + 360) % 360;
+    if (h >= 200 && h < 242) return Math.round(178 + (h - 200) * 0.38);
+    if (h >= 242 && h < 285) return Math.round(292 + (h - 242) * 0.3);
+    return h;
+  }
   function nbHueOf(gid) {
     if (nbHueSig !== obSig) { nbHueMap.clear(); nbHueSig = obSig; }
-    if (!gid) return 212;
+    if (!gid) return 190;
     if (nbHueMap.has(gid)) return nbHueMap.get(gid);
     const gs = obGroups();
     const i = gs.findIndex((g) => g.gid === gid);
@@ -1716,6 +1746,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if (d > 0.12) { let k = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h = Math.round((k * 60 + 360) % 360); }
     }
     if (h == null) h = Math.round(((i < 0 ? nbHash(gid) % 97 : i) * 137.508 + 205) % 360);   // 隣の惑星と色がぶつからない黄金角
+    h = nbNoBlue(h);
     nbHueMap.set(gid, h);
     return h;
   }
@@ -1790,6 +1821,7 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
     }
     nbContact();
     nbSeg();
+    nbNarrowSync();
   }
   /* 接点 — Orbit で選んでいる惑星と同じ高さ（選んでいない時は ALL の高さ） */
   function nbContact() {
@@ -2124,10 +2156,34 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
       if ((e.key === 'ArrowLeft' && open) || (e.key === 'ArrowRight' && !open)) obPress(cur);
     }
   }
+  /* 細い列: 乗せて 0.3 秒で元の幅（本文は押しのけない）・離れて 0.3 秒で戻る。下のピンで「いつも元の幅」 */
+  let nbPeekT = 0, nbPinB = null;
+  function nbNarrowSync() {
+    const de = document.documentElement;
+    const narrow = de.hasAttribute('data-neb-narrow');
+    de.toggleAttribute('data-neb-pinned', !!NBS.pinned);
+    if (!narrow) { de.removeAttribute('data-neb-peek'); if (nbPinB) nbPinB.hidden = true; return; }
+    if (!nbPinB) {
+      nbPinB = document.createElement('button'); nbPinB.id = 'c33-neb-pinb'; nbPinB.type = 'button';
+      nbPinB.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-3 1-4 4 1 4-2 2-4-4-5 5-1-1 5-5-4-4 2-2 4 1 4-4z"/></svg>';
+      nbPinB.title = 'Stella をいつも元の幅にする（ピン留め）';
+      nbPinB.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); NBS.pinned = true; nbSave(); de.toggleAttribute('data-neb-pinned', true); de.removeAttribute('data-neb-narrow'); obToast('Stella を元の幅に固定しました（⁴¹ Telescopium は 2 段目から譲ります）'); });
+      document.body.appendChild(nbPinB);
+    }
+    const side = obSide(); const r = side && side.getBoundingClientRect();
+    nbPinB.hidden = !r || !r.width;
+    if (r) { nbPinB.style.left = Math.round(nbMx + 1 + (52 - 30) / 2) + 'px'; nbPinB.style.top = Math.round(r.bottom - 44) + 'px'; }
+  }
+  function nbPeekOn(on) {
+    clearTimeout(nbPeekT);
+    nbPeekT = setTimeout(() => { const de = document.documentElement; if (!de.hasAttribute('data-neb-narrow')) return; if (de.hasAttribute('data-neb-peek') === on) return; de.toggleAttribute('data-neb-peek', on); nbLayoutSoon(); try { if (window.__c33LayoutSoon) window.__c33LayoutSoon(); } catch (e) { /* noop */ } }, 300);
+  }
   let nbWired = false;
   function nbWire() {
     if (nbWired) return;
     nbWired = true;
+    try { new MutationObserver(() => { nbNarrowSync(); nbLayoutSoon(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-neb-narrow'] }); } catch (e) { /* noop */ }
+    document.addEventListener('pointerover', (e) => { if (!document.documentElement.hasAttribute('data-neb-narrow')) return; const inSide = e.target.closest && (e.target.closest('.notion-sidebar-container, #c33-orbit, #c33-search-header, #c33-neb-pinb')); nbPeekOn(!!inSide); }, true);
     document.addEventListener('click', nbClick, true);
     document.addEventListener('pointerover', nbOver, true);
     document.addEventListener('keydown', nbKey, true);
@@ -2139,11 +2195,12 @@ html[data-c33-orbit] .notion-sidebar-container [data-c16-arm]:not(:has(${SEL_TEA
   function nbCss() {
     let st = document.getElementById('c33-neb-css');
     if (st) return;
+    const NAR = (sel) => sel.replace('html[data-c33][data-c33-stella]', 'html[data-c33][data-c33-stella][data-neb-narrow]:not([data-neb-peek])');
     st = document.createElement('style'); st.id = 'c33-neb-css';
     st.textContent = `
-@property --neb-h { syntax: '<number>'; inherits: true; initial-value: 212; }
+@property --neb-h { syntax: '<number>'; inherits: true; initial-value: 190; }
 @property --neb-lit { syntax: '<number>'; inherits: false; initial-value: 0; }
-html { --neb-ht: 212; }
+html { --neb-ht: 190; }
 /* 色: 惑星の色相から（OKLCH なので、どの色相でも明るさがそろう） */
 html[data-c33-stella] .notion-sidebar-container, #c33-neb-mer, .c33-neb-pt, .c33-neb-sp, #c33-neb-empty {
   --neb-h: var(--neb-ht); transition: --neb-h 1.2s cubic-bezier(.4,0,.2,1);
@@ -2239,6 +2296,24 @@ ${NT_}[data-neb-closing] [data-c33-kind]${B}${B} { translate: 0 calc(-1 * var(--
 /* 惑星を替える時 */
 html[data-neb-out] ${NT_}${B} { opacity: 0 !important; translate: 0 var(--neb-out-y, -12px); transition: opacity .15s ease-in, translate .15s ease-in !important; }
 html[data-neb-out] ${NHB}${B}::before { transform: scaleX(0); }
+/* v97 視野の第 1 段（⁴¹ Telescopium が本文の幅を空けたい時）: Stella を 52px の細い列に — アイコンだけを縦に。乗せると元の幅で本文の上に重なる */
+html[data-neb-narrow] nav.notion-sidebar-container${B}, html[data-neb-narrow] .notion-sidebar-container${B} { width: calc(var(--c33-rail-w, 88px) + 52px) !important; min-width: 0 !important; transition: width .25s cubic-bezier(.3,.8,.3,1) !important; }
+html[data-neb-narrow][data-neb-peek] nav.notion-sidebar-container${B}, html[data-neb-narrow][data-neb-peek] .notion-sidebar-container${B} { overflow: visible !important; position: relative !important; z-index: 5 !important; }   /* 本文（z 1）より上・Orbit（z 6）より下 */
+html[data-neb-narrow][data-neb-peek] .notion-sidebar-container .notion-sidebar${B} { width: var(--neb-full-w, 280px) !important; min-width: var(--neb-full-w, 280px) !important; background: var(--c33-ob-bg, var(--c-bacSec, #f7f6f3)) !important; box-shadow: 14px 0 30px -12px rgba(15,15,15,.22) !important; animation: nebPeek .25s cubic-bezier(.2,.8,.2,1); }
+@keyframes nebPeek { from { clip-path: inset(0 calc(100% - var(--c33-rail-w, 88px) - 52px) 0 0); } to { clip-path: inset(0 0 0 0); } }
+${NAR(NHB)}${B} { height: 0 !important; min-height: 0 !important; padding: 0 !important; overflow: hidden !important; opacity: 0; }
+${NAR(NHB)}${B}::before { transform: scaleX(0); }
+${NAR(NT_)}${B} { margin-bottom: 16px !important; }
+${NAR(NT_)} [role="tree"]${B} { margin-top: 0 !important; }
+${NAR(NROW)}${B}${B} { padding-inline: 17px 0 !important; }
+${NAR(NROW)} > :not(:first-child)${B} { opacity: 0 !important; pointer-events: none !important; }
+${NAR(NT_)} [data-c33-kind="view"]${B}${B} { display: none !important; }
+html[data-neb-narrow]:not([data-neb-peek]) :is(#c33-meteora, #c33-neb-empty, #c33-neb-sky) { display: none !important; }
+html[data-neb-narrow]:not([data-neb-peek]) #c33-search-header .cs-close { display: none !important; }
+${NROW} > :nth-child(2)${B} { transition: translate .22s cubic-bezier(.3,1.4,.5,1), opacity .25s ease !important; }
+#c33-neb-pinb { position: fixed; z-index: 8; width: 30px; height: 30px; border: 0; border-radius: 8px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; color: var(--c-icoSec, #91918e); }
+#c33-neb-pinb:hover { background: var(--ca-bacIntTra, rgba(0,0,0,.05)); color: var(--c-texPri, #37352f); }
+#c33-neb-pinb[hidden] { display: none !important; }
 @keyframes nebLumen { from { transform: scaleX(0); } }
 @keyframes nebFade { from { opacity: 0; } }
 @keyframes nebRowIn { from { opacity: 0; translate: 0 -6px; } }
@@ -3244,7 +3319,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       return done({ text: best.text, model: best.model }, { drafts, who: best.id });
     }
     /* v77: ひと言 AI（ぶりレンズ・おかえり要約）— 相談はせず、速い順に 1 人だけ。つまずいたら次の仲間（3 人まで） */
-    async function quick(sys, user, maxTok) {
+    async function quick(sys, user, maxTok, raw) {
       const order = [];
       for (const id of ['groq', 'gemini', AI.provider, 'nvidia', 'openrouter', 'zai', 'cohere', 'claude', 'chrome', ...team()]) {
         if (!id || order.includes(id) || !TEAM[id] || !ready(id) || pBad(id)) continue;
@@ -3254,10 +3329,17 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       let last = '';
       for (const id of order.slice(0, 3)) {
         const r = await chat(id, sys, [{ role: 'user', content: user }], maxTok || 900).catch((e) => ({ err: String(e && e.message || e) }));
-        if (r && r.text) return { text: fixCites(untag(r.text)).trim(), who: id, name: TEAM[id].name, model: r.model || '' };
+        if (r && r.text) return { text: raw ? String(r.text).trim() : fixCites(untag(r.text)).trim(), who: id, name: TEAM[id].name, model: r.model || '' };
         last = TEAM[id].name + ': ' + ((r && r.err) || '答えが空でした');
       }
       return { err: last || 'AI がつながっていません（⚙ で鍵を入れてください）' };
+    }
+    /* v97: 相談（Telescopium のレンズ）— 鍵の入った仲間のうち n 人に同じ問いを同時に出し、それぞれの答えをそのまま返す */
+    async function multi(sys, user, maxTok, n) {
+      const ids = [];
+      for (const id of [...team(), AI.provider, 'groq', 'gemini', 'nvidia', 'openrouter']) { if (id && !ids.includes(id) && TEAM[id] && ready(id) && !pBad(id) && (AI.use[id] || id === AI.provider)) ids.push(id); }
+      const pick = ids.slice(0, Math.max(1, n || 3));
+      return Promise.all(pick.map((id) => chat(id, sys, [{ role: 'user', content: user }], maxTok || 1200).then((r) => ({ id, name: TEAM[id].name, text: r && r.text ? String(r.text).trim() : '', err: r && r.err || '' })).catch((e) => ({ id, name: TEAM[id].name, text: '', err: String(e && e.message || e) }))));
     }
     /* v77: おかえりハイライトの「前回から変わった所」を ⌘K でも聞ける */
     let deltaFn = null;
@@ -3605,7 +3687,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
     
     // 内部名を「ask」に統一し、外部公開名「answer」にマッピング
     return { ask, answer: ask, importText, save, forget, clear, restore, state, FIELD, isRead: (r) => stHit(r, '読了'), count: () => records.length, AI, AI_MODELS, PROVIDERS, GEMINI_MODELS, TEAM, TEAM_IDS, team, ready, setKey, nick: nickName, resting: (id) => { const t = coolGet('c33.buri.pbad')[id] || 0; return t > Date.now() ? new Date(t).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''; }, moaOn, setProgress: (f) => { aiProgress = f; }, aiOn, aiName, chromeLM, aiTest, gemLast: () => gemLast || gmGet('c33.buri.gok', ''), gemReset: () => { gemList = null; gmSet('c33.buri.gbad', {}); gmSet('c33.buri.ml.gemini', null); }, lastErr: () => lastAiErr, gmSet, gmGet, aiReset: () => { aiHist.length = 0; }, quick, setDelta: (f) => { deltaFn = f; },
-      fixCites, pageContext, pageHead,
+      fixCites, pageContext, pageHead, multi,
       mem: { get: memGet, add: (t) => memAdd(t), del: memDel, topics: topTopics, setOn: (on) => { const m = memGet(); m.on = !!on; memSet(m); }, clear: () => { memSet({ on: memGet().on, notes: [], topics: {} }); userPref = { authors: {}, tags: {} }; savePref(); }, prefs: () => ({ authors: getTopLearned('authors').slice(0, 8), tags: getTopLearned('tags').slice(0, 8) }) },
       warm: () => { try { if (ready('gemini')) gemModels(); team().forEach((id) => { if (TEAM[id] && TEAM[id].base) oaiModels(id); }); spaceId(); } catch (e) { /* noop */ } } };
   })();
@@ -3986,7 +4068,7 @@ html[data-neb-path] #c33-neb-mer .nm-seg { opacity: .7; }
       watchSide(side);
       const show = !!(OB.on && obEl && obEl.isConnected && obEl.style.display !== 'none' && all && all.isConnected && obSidebarVisible(side));
       if (!show) { header.hidden = true; panel.hidden = true; csTitle.hidden = true; return; }
-      const sr = side.getBoundingClientRect(), ar = all.getBoundingClientRect();
+      const sr = (document.documentElement.hasAttribute('data-neb-peek') && side.querySelector('.notion-sidebar') || side).getBoundingClientRect(), ar = all.getBoundingClientRect();
       const x = Math.round((obEl.getBoundingClientRect().left || sr.left) + obRailW + 8);
       const w = Math.floor(sr.right - x - 8);
       if (w < 70 || !ar.height) { header.hidden = true; panel.hidden = true; csTitle.hidden = true; return; }
@@ -6371,6 +6453,10 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
         mk('div', 'bs-lb', '覚えたこと（' + notes.length + '）', more);
         notes.slice(0, 20).forEach((n, i) => { const r = mk('div', 'bs-nt', null, more); r.append((typeof n === 'string' ? n : n.t || '') + ' '); const x = mk('button', 'bs-x', '×', r); x.type = 'button'; x.title = '忘れる'; x.addEventListener('click', (e) => { e.preventDefault(); try { BURI.mem.del(i); } catch (er) { /* noop */ } r.remove(); }); });
       }
+      /* v97: ほかの柱（⁴¹ Telescopium）の設定の段。空の箱を置いて知らせ、誰も描かなければ片付ける */
+      const ext = mk('div', 'bs-card n2-ext', null, box); ext.id = 'c33-np-set-ext';
+      try { document.dispatchEvent(new CustomEvent('nebius:settings', { detail: ext.id })); } catch (e) { /* noop */ }
+      if (!ext.childNodes.length) ext.remove();
       scrollEl.scrollTop = 0;
     }
 
@@ -6550,7 +6636,7 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
 #c33-np .n2-set .bs-card { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 6px 0 !important; }
 .np-sr { position: fixed; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; left: -9px; top: 0; }
 .c33-np-flash { animation: n2Flash .6s ease-out; }
-@keyframes n2Flash { 0% { box-shadow: inset 0 0 0 999px oklch(64% .13 var(--neb-ht, 212) / .2); } 100% { box-shadow: inset 0 0 0 999px transparent; } }
+@keyframes n2Flash { 0% { box-shadow: inset 0 0 0 999px oklch(64% .13 var(--neb-ht, 190) / .2); } 100% { box-shadow: inset 0 0 0 999px transparent; } }
 @keyframes n2Up { from { opacity: 0; transform: translateY(5px); } }
 @media (prefers-reduced-motion: reduce) { #c33-np *, #c33-pill, #c33-pill * { animation: none !important; transition: none !important; } }`;
     document.head.appendChild(npStyle);
@@ -6564,6 +6650,21 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
         const m = mk('div', 'n2-a', null, logEl); mk('div', 'n2-body', r.message, m);
       }).catch((e) => { obToast('ファイルを読めませんでした。' + String(e && e.message || e)); });
     }
+
+    /* v97: Nebius の連絡口（⁴¹ Telescopium など、ほかの柱から JSON の CustomEvent で） */
+    document.addEventListener('nebius:req', async (ev) => {
+      let m = null; try { m = JSON.parse(ev.detail); } catch (e) { return; }
+      if (!m || !m.id) return;
+      const reply = (o) => document.dispatchEvent(new CustomEvent('nebius:res', { detail: JSON.stringify(Object.assign({ id: m.id }, o)) }));
+      try {
+        if (m.k === 'status') reply({ aiOn: BURI.aiOn(), team: BURI.aiOn() ? (BURI.moaOn() ? BURI.team().length : 1) : 0, hue: nbHueCur, nick: nick() });
+        else if (m.k === 'quick') reply(await BURI.quick(String(m.sys || ''), String(m.user || ''), m.max || 900, !!m.raw));
+        else if (m.k === 'multi') reply({ list: await BURI.multi(String(m.sys || ''), String(m.user || ''), m.max || 1200, m.n || 3) });
+        else if (m.k === 'open') { npGo(String(m.pid || ''), m.mode || 'peek', null); reply({ ok: true }); }
+        else reply({ err: 'unknown' });
+      } catch (e) { reply({ err: String(e && e.message || e) }); }
+    });
+    document.documentElement.setAttribute('data-nebius', VERSION);
 
     BURI.restore();
     updState();
