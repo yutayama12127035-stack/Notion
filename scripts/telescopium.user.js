@@ -845,7 +845,7 @@
 
   /* 行に 0.4 秒: 長文の全文と、畳んだ列の値のカード（行の高さは変えない） */
   let hovIt = null, hovT = 0;
-  function cardHide() { clearTimeout(hovT); const d = document.getElementById('tl-card'); if (d) d.remove(); }
+  function cardHide() { clearTimeout(hovT); const d = document.getElementById('tl-card'); if (d) d.remove(); tipHide(); }
   function onRowOver(e) {
     if (!CTX || !FS.plan || MAP.on) return;
     const it = e.target.closest && e.target.closest(SEL.item);
@@ -855,8 +855,13 @@
     if (hovIt) { const me = hovIt; hovT = setTimeout(() => { if (hovIt === me) cardShow(me); }, 400); }
   }
   function cardShow(it) {
+    if (!it.isConnected) return;
+    /* 意味で選んだ行は、行に乗せて 0.4 秒で理由も出す（✦ の上は Notion の「開く」が重なることがあるので） */
+    const st = LZ.cur, hid = it.getAttribute('data-block-id');
+    const hit = st && st.hits && st.key === lensKey() ? st.hits.get(hid) : null;
+    if (hit && hit.why) { const star = it.querySelector('.tl-star'); const tc = textColOf(it); if (star || tc) tipShow(star || tc, '✦ ' + hit.why); }
     const p = FS.plan;
-    if (!p || !it.isConnected) return;
+    if (!p) return;
     const longCi = p.longCis.find((ci) => { const v = it.querySelector(SEL.cell + '[data-col-index="' + ci + '"] ' + SEL.value); return v && v.hasAttribute('data-tl-clip'); });
     const folded = FS.cols.filter((x) => p.folded.has(x.pid)).map((x) => ({ name: x.name, v: x.type === 'file' ? '' : norm((cellOf(it, x.ci) || {}).textContent || '') })).filter((x) => x.v);
     if (longCi == null && !folded.length) return;
@@ -1512,7 +1517,7 @@
     const s = el.querySelector('.tl-star');
     if (s) s.__why = h.why;
   }
-  document.addEventListener('pointerover', (e) => { const s = e.target.closest && e.target.closest('.tl-star, .tl-mstar'); if (s && s.__why) tipShow(s, s.__why); else if (!(e.target.closest && e.target.closest('#tl-tip'))) tipHide(); }, true);
+  document.addEventListener('pointerover', (e) => { const s = e.target.closest && e.target.closest('.tl-star, .tl-mstar'); if (s && s.__why) tipShow(s, s.__why); else if (!(e.target.closest && e.target.closest('#tl-tip, ' + SEL.item))) tipHide(); }, true);
   document.addEventListener('focusin', (e) => { const s = e.target.closest && e.target.closest('.tl-star'); if (s && s.__why) tipShow(s, s.__why); }, true);
 
   /* 条件のチップ（× で外す・押して直す）と「12 / 48」・☆ */
