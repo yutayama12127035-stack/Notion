@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      124.0.0
-// @description  v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      134.0.0
+// @description  v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -26,6 +26,23 @@
 // @noframes
 // ==/UserScript==
 
+/*
+ * v134.0.0（Caelum III — 角・輪・上の帯を、ひとつの格子に）
+ *   ・B.U.R.I（鰤）の段を惑星（.ob-it）と同じ格子に: 印の段 24px（鰤は 30×24）・行間 3px・名前は惑星と同じ Baskerville 600 10px
+ *     （v124 は印 22px・名前 8.5px の字間あき大文字で、惑星の段と大きさが合っていなかった）。Settings の印も 24px
+ *   ・Orbit の滑らかスクロール: 輪の追いかけを「0.28 ずつ近づく」から、ばね（臨界減衰・行きすぎない）に。
+ *     回し終えて 110ms で、回した向きの段へ（1 段に満たない回しでも 1 段）。ノッチのあるマウスは 1 ノッチ＝1 段。設定で元に戻せる
+ *   ・Zenith を左へ: 計器の台（#cordi-dock）は DOM の置き場所を変えずに（三本柱が台を置き直し合わないよう）、見た目だけ行の左の内側へ。
+ *     置き場所はいまの位置からの差で決め、変わった時だけ書く（見張りが回り続けない）。パンくずは右へ寄せ、台の幅だけ左を空ける
+ *   ・上の帯の Notion の部分: Share（文字あり）・リンク・お気に入り・…（印だけ）を、計器と同じ「印＋名前」に（名前は aria-label から）。
+ *     Edited … は斜体の Baskerville、パンくずは Baskerville、区切りの / は小さな四芒星。窓が 1000px 以下なら印だけ
+ *   ・Next Notion の 9 つの箱（見た目だけ。押すと何をする箱かのカード「準備中」）— ラカイユが南天に置いた道具の星座 14 のうち、
+ *     まだ使っていない 9 つ（Caelum・Telescopium も同じ仲間）:
+ *       Pyxis 羅針盤座＝行き先の羅針盤／Horologium 振子時計座＝時の振り子／Reticulum レチクル座＝つながりの網／
+ *       Microscopium 顕微鏡座＝精読／Sculptor 彫刻室座＝型／Pictor 画架座＝絵／Antlia ポンプ座＝汲み上げ（取り込み・書き出し）／
+ *       Circinus コンパス座＝割り付け／Octans 八分儀座＝天測（全体を一目で）。それぞれに名前にちなんだ動き
+ *   ・設定: Zenith を左に・Notion のボタンも計器の形に・滑らかスクロール。コンソール: __c33.left / native / smooth(true / false)
+ */
 /*
  * v124.0.0（Caelum II — 左辺と上辺を、ページそのものの上に）
  *   ・上の帯が消えていた（v114 の不具合）: 入口の枠の印を「上の帯の最初の子の子」と決め打ちしていたため、包みが 1 枚多い
@@ -245,7 +262,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '124.0.0';
+  const VERSION = '134.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -11062,7 +11079,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
   }
 
   /* 3) B.U.R.I の印: 右を向いた鰤。目は四芒星（くり抜き）、口から星の泡、背に金の側線、尾は二股 */
-  const FISH124 = '<svg class="c124-fish" viewBox="0 1.5 24 19" aria-hidden="true">'
+  const FISH124 = '<svg class="c124-fish" viewBox="0.6 1.6 23.4 18.2" aria-hidden="true">'
     + '<defs><linearGradient id="c124fg" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="var(--c124-f1,#d76f5c)"/><stop offset=".55" stop-color="var(--c124-f2,#e2954a)"/><stop offset="1" stop-color="var(--c124-f3,#e7b955)"/></linearGradient>'
     + '<mask id="c124fm" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path d="' + star124(17.2, 11.05, 1.75) + '" fill="#000"/><path d="M19.25 13.05Q19.9 13.2 20.45 12.75" fill="none" stroke="#000" stroke-width=".6" stroke-linecap="round"/></mask></defs>'
     + '<g class="f-swim"><path class="f-tail" d="M5.6 12.3L1.2 7.9Q3.1 10.4 2.9 12.3Q3.1 14.3 1.2 16.8Z" fill="url(#c124fg)"/>'
@@ -11196,7 +11213,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
   let zpop124 = null;
   function zpopClose124() {
     if (zpop124) { zpop124.remove(); zpop124 = null; }
-    for (const id of ['c124-z-live', 'c124-z-more']) { const b = document.getElementById(id); if (b && b.getAttribute('aria-expanded') !== 'false') b.setAttribute('aria-expanded', 'false'); }
+    for (const b of document.querySelectorAll('#c124-z-live, #c124-z-more, [data-c134-box]')) if (b.getAttribute('aria-expanded') !== 'false') b.setAttribute('aria-expanded', 'false');
   }
   function zpopOpen124(anchor, html, onClick) {
     zpopClose124();
@@ -11220,12 +11237,12 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
   document.addEventListener('pointerdown', (e) => {
     if (!zpop124) return;
     const t = e.target;
-    if (zpop124.contains(t) || (t.closest && t.closest('#c124-z-live, #c124-z-more'))) return;
+    if (zpop124.contains(t) || (t.closest && t.closest('#c124-z-live, #c124-z-more, [data-c134-box]'))) return;
     zpopClose124();
   }, true);
   document.addEventListener('keydown', (e) => {
     if (!zpop124 || e.key !== 'Escape') return;
-    const a = document.querySelector('#c124-z-live[aria-expanded="true"], #c124-z-more[aria-expanded="true"]');
+    const a = document.querySelector('#c124-z-live[aria-expanded="true"], #c124-z-more[aria-expanded="true"], [data-c134-box][aria-expanded="true"]');
     zpopClose124();
     if (a) a.focus({ preventScroll: true });
     e.stopPropagation();
@@ -11300,7 +11317,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
     tiles.sort((a, b) => ord(a) - ord(b));
     const rs = getComputedStyle(row);
     const rowW = row.clientWidth - (parseFloat(rs.paddingLeft) || 0) - (parseFloat(rs.paddingRight) || 0);
-    const others = acts.getBoundingClientRect().width - dock.getBoundingClientRect().width;
+    const others = acts.getBoundingClientRect().width - (zenLeft134() ? 0 : dock.getBoundingClientRect().width);   // v134: 台を左へ出した時、台は acts の幅に入っていない
     const crumb = row.querySelector('.notion-topbar-breadcrumb-region > *');
     const reserve = Math.max(120, Math.min(260, crumb ? crumb.scrollWidth + 12 : 200));
     const avail = rowW - others - reserve - 16;
@@ -11323,6 +11340,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
     }
     if (dock.getAttribute('data-c124-zen') !== mode) dock.setAttribute('data-c124-zen', mode);
     if (more) { const on = show < tiles.length; if (more.hasAttribute('data-c124-on') !== on) more.toggleAttribute('data-c124-on', on); }
+    zenPlace134(dock, row);
   }
 
   function zenButton124(id, order, onClick) {
@@ -11365,7 +11383,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
       while (ref && ref.parentElement !== acts) ref = ref.parentElement;
       acts.insertBefore(dock, ref || acts.firstChild);
     }
-    const live = zenButton124('c124-z-live', 8, livePop124);
+    const live = zenButton124('c124-z-live', 6, livePop124);
     if (!live.querySelector('.c124-zdot')) { const d = document.createElement('span'); d.className = 'c124-zdot'; d.setAttribute('aria-hidden', 'true'); live.appendChild(d); }
     if (live.parentElement !== dock) dock.appendChild(live);
     const more = zenButton124('c124-z-more', 99, morePop124);
@@ -11707,7 +11725,327 @@ ${S}[data-c124-zenith] [data-c124-banner] {
   window.addEventListener('resize', zenSoon124, { passive: true });
 
 
-  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124 }, ZK124) }) };
+  /* C134 CAELUM III（v134.0.0）— 角・輪・上の帯を、ひとつの格子に
+   * ・B.U.R.I（鰤）の段を惑星と同じ格子に: 印の段 24px・名前は惑星と同じ Baskerville 600 10px。Settings の印も 24px
+   * ・Orbit の滑らかスクロール: 輪の追いかけをばね（臨界減衰）に。回し終えたら回した向きの段へ「カチッ」と止まる。
+   *   マウスのノッチ 1 つ＝1 段（1 段に満たない回しでも、回した向きへ 1 段）
+   * ・Zenith を左へ: 計器の台を上の帯の左（B.U.R.I の角のすぐ右）へ。パンくず（いまどこを開いているか）は右へ寄せる
+   * ・上の帯の Notion のボタン（Share・リンク・お気に入り・…）も、計器と同じ「印＋名前」の形に。「Edited …」は斜体の Baskerville、
+   *   パンくずの区切りは小さな四芒星
+   * ・Next Notion の 9 つの箱（見た目だけ。働きはこれから）: ラカイユが南天に置いた「道具の星座」14 のうち、まだ使っていない 9 つ —
+   *   Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans（Caelum・Telescopium も同じ仲間）
+   */
+  const ZK134 = { left: true, ntv: true, smooth: true, key: 'c33.zenith134.v1' };
+  try {
+    const v = JSON.parse(localStorage.getItem(ZK134.key) || 'null');
+    if (v) for (const k of ['left', 'ntv', 'smooth']) if (typeof v[k] === 'boolean') ZK134[k] = v[k];
+  } catch (e) { /* noop */ }
+  function zkSave134() {
+    try { localStorage.setItem(ZK134.key, JSON.stringify({ left: ZK134.left, ntv: ZK134.ntv, smooth: ZK134.smooth })); } catch (e) { /* noop */ }
+  }
+  function flags134() {
+    const zen = root104.hasAttribute('data-c124-zenith');
+    flag124('data-c134-left', !!(zen && ZK134.left));
+    flag124('data-c134-ntv', !!(zen && ZK134.ntv));
+  }
+  function zenLeft134() { return !!(ZK134.left && root104.hasAttribute('data-c124-zenith')); }
+  const S134 = S124 + ':not(#c134a):not(#c134b)';
+
+  /* 1) 滑らかスクロール: ばねで追いかけ、回し終えたら段へ */
+  const reduce134 = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+  const glideBefore134 = obGlide;
+  let vel134 = 0, last134 = 0;
+  obGlide = function() {
+    if (obRaf) return;
+    if (!ZK134.smooth || reduce134()) { vel134 = 0; glideBefore134(); return; }
+    last134 = performance.now();
+    const tick = (now) => {
+      const dt = Math.min(0.034, Math.max(0.004, (now - last134) / 1000));
+      last134 = now;
+      const d = obTarget - obOff;
+      if (Math.abs(d) < 0.3 && Math.abs(vel134) < 6) { obOff = obTarget; vel134 = 0; obRaf = 0; obLay(); return; }
+      const K = 240, C = 2 * Math.sqrt(K);   // 臨界減衰: 行きすぎて戻る揺れがなく、最後はぴたりと止まる
+      vel134 += (K * d - C * vel134) * dt;
+      obOff += vel134 * dt;
+      obLay();
+      obRaf = requestAnimationFrame(tick);
+    };
+    obRaf = requestAnimationFrame(tick);
+  };
+  let wheelT134 = 0, wheel0134 = null;
+  function wheel134(e) {
+    if (!ZK134.smooth || !e.target || !e.target.closest || !e.target.closest('.ob-wheel')) return;
+    e.preventDefault();
+    e.stopPropagation();   // 元の輪の受け口（130ms で丸めるだけ）には渡さない
+    if (!obItemEls.length) return;
+    const s = obStep();
+    const raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!raw) return;
+    /* ノッチのあるマウス（行単位・または 120 刻みの大きな一歩）は、1 ノッチ＝1 段 */
+    const wd = Math.abs(e.wheelDeltaY || e.wheelDelta || 0);
+    const notch = e.deltaMode === 1 || (Math.abs(raw) >= 40 && Number.isInteger(raw) && wd > 0 && wd % 120 === 0);
+    const d = notch ? Math.sign(raw) * s : raw * (e.deltaMode === 2 ? s : 1);
+    if (wheel0134 == null) wheel0134 = Math.round(obTarget / s) * s;
+    obNudge((OB.wheelRev !== false ? -1 : 1) * d);
+    clearTimeout(wheelT134);
+    wheelT134 = setTimeout(() => {
+      const st = obStep(), g0 = wheel0134;
+      wheel0134 = null;
+      if (g0 == null) return;
+      const tr = obTarget - g0;
+      let k = obTarget / st;
+      k = tr > 0.5 ? Math.floor(k + 0.65) : tr < -0.5 ? Math.ceil(k - 0.65) : Math.round(k);
+      if (Math.abs(tr) > 0.5 && Math.round(k * st) === Math.round(g0)) k += Math.sign(tr);   // 1 段に満たない回しでも、回した向きへ 1 段
+      obTarget = k * st;
+      obIx = obMod(k, obItemEls.length);
+      obTopGid = obItemEls[obIx] ? obItemEls[obIx].__gid : '';
+      obGlide();
+    }, 110);
+  }
+  const buildBefore134 = obBuild;
+  obBuild = function() {
+    const rail = buildBefore134();
+    if (rail && !rail.__c134) {
+      rail.__c134 = true;
+      rail.addEventListener('wheel', wheel134, { capture: true, passive: false });
+    }
+    return rail;
+  };
+
+  /* 2) Next Notion の 9 つの箱（見た目だけ。働きはこれから） */
+  const ST134 = (cx, cy, r) => '<path d="' + star124(cx, cy, r) + '"/>';
+  const NINE134 = [
+    { k: 'pyxis', name: 'Pyxis', jp: '羅針盤座', role: '行き先の羅針盤', m: 'needle', c: ['#4aa6c4', '#2e6f9e'], d: ['#86cbe2', '#6da2d0'],
+      desc: 'どのページからでも、最近・よく行く・次に行く所へ。戻る・進むの道のりも一本の航跡に。',
+      svg: '<circle cx="11.6" cy="12.6" r="8.3" fill="none" stroke="#000" stroke-width="1.5"/><path d="M11.6 5.6L13.7 12.6H9.5Z"/><path d="M9.5 12.6H13.7L11.6 19.6Z" opacity=".45"/><circle cx="11.6" cy="12.6" r="1.05" fill="#000"/>' + ST134(19.8, 4.2, 2.4) },
+    { k: 'horologium', name: 'Horologium', jp: '振子時計座', role: '時の振り子', m: 'pendulum', c: ['#cf9f55', '#9a6b35'], d: ['#ecc888', '#cfa268'],
+      desc: '締め切り・リマインダー・ページの時間旅行（いつ・何が・どう変わったか）を、全ページで。',
+      svg: '<rect x="6.2" y="2.6" width="11" height="18.8" rx="2.6" fill="none" stroke="#000" stroke-width="1.5"/><circle cx="11.7" cy="8" r="3" fill="none" stroke="#000" stroke-width="1.3"/><path d="M11.7 6.5V8L12.8 8.7" fill="none" stroke="#000" stroke-width="1" stroke-linecap="round"/><path d="M11.7 11.2V16.6" stroke="#000" stroke-width="1.1"/><circle cx="11.7" cy="17.4" r="1.6"/>' + ST134(20.2, 4.2, 2.3) },
+    { k: 'reticulum', name: 'Reticulum', jp: 'レチクル座', role: 'つながりの網', m: 'net', c: ['#8592dc', '#4f5bb0'], d: ['#b4bcf0', '#8e98dc'],
+      desc: 'このページを指すページ・言及・関連を網で見る。全ページの星図の上で、いまいる所から辿る。',
+      svg: '<circle cx="11.6" cy="12.8" r="7.6" fill="none" stroke="#000" stroke-width="1.4"/><path d="M11.6 3.2V9.6M11.6 16V22.4M2 12.8H8.4M14.8 12.8H21.2" stroke="#000" stroke-width="1.3"/><circle cx="6.3" cy="7.5" r="1.5"/><circle cx="17" cy="18.1" r="1.5"/><circle cx="5.6" cy="17.6" r="1.2"/>' + ST134(20, 4.2, 2.3) },
+    { k: 'microscopium', name: 'Microscopium', jp: '顕微鏡座', role: '精読', m: 'zoom', c: ['#6fba7e', '#3f8a5a'], d: ['#9fdcab', '#79bd8c'],
+      desc: '文字数・読む時間・見出しの骨組み。切れたリンクや表記ゆれも、ページごとに点検する。',
+      svg: '<path d="M5.2 21H18.6" stroke="#000" stroke-width="1.8" stroke-linecap="round"/><path d="M8.6 16.4H14.6" stroke="#000" stroke-width="1.6" stroke-linecap="round"/><path d="M15.2 8.6C18.4 10.8 18.2 16.2 13.6 18.6" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round"/><g transform="rotate(-32 11 9)"><rect x="9.3" y="2.6" width="3.6" height="9.6" rx="1"/><rect x="9.9" y="12.6" width="2.4" height="2.2" rx=".5"/></g>' + ST134(19.6, 4, 2.3) },
+    { k: 'sculptor', name: 'Sculptor', jp: '彫刻室座', role: '型', m: 'chisel', c: ['#cf9172', '#a0614a'], d: ['#ebb69c', '#cf9278'],
+      desc: 'どのページも型から整える。ブロックの組み直し、骨組みからページを起こす。',
+      svg: '<circle cx="11.6" cy="7.6" r="3.4"/><path d="M5.8 17.8C6.1 13.8 8.5 12.4 11.6 12.4C14.7 12.4 17.1 13.8 17.4 17.8Z"/><rect x="7" y="18.8" width="9.2" height="2.6" rx=".8"/>' + ST134(19.6, 4.2, 2.4) },
+    { k: 'pictor', name: 'Pictor', jp: '画架座', role: '絵', m: 'paint', c: ['#e4889f', '#b75478'], d: ['#f4b2c3', '#dc88a6'],
+      desc: '表紙・アイコン・挿絵・図を、ページの言葉から描く。',
+      svg: '<rect x="4.4" y="3.6" width="14.4" height="10.6" rx="1.4" fill="none" stroke="#000" stroke-width="1.5"/><path d="M6.6 12.2L9.8 8.6L12.2 10.8L14 9.2L16.6 12.2Z"/><path d="M9.2 14.2L6.6 21.4M14 14.2L16.6 21.4M11.6 14.2V19.6" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>' + ST134(20.4, 3.4, 2.2) },
+    { k: 'antlia', name: 'Antlia', jp: 'ポンプ座', role: '汲み上げ', m: 'pump', c: ['#55bccb', '#2f8a9e'], d: ['#8fdbe6', '#6cb7ca'],
+      desc: 'Web・ファイル・ほかのアプリから汲み上げて取り込み、PDF・Markdown へ書き出す。バックアップも。',
+      svg: '<path d="M8 2.8H15.2M11.6 2.8V6.6" stroke="#000" stroke-width="1.5" stroke-linecap="round"/><rect x="7.2" y="6.6" width="8.8" height="14.6" rx="2" fill="none" stroke="#000" stroke-width="1.5"/><path d="M7.8 14.2Q9.7 12.8 11.6 14.2T15.4 14.2V20.4H7.8Z"/>' + ST134(19.8, 4.4, 2.3) },
+    { k: 'circinus', name: 'Circinus', jp: 'コンパス座', role: '割り付け', m: 'arc', c: ['#a08ed0', '#6c5ca8'], d: ['#c7b9ef', '#a597d8'],
+      desc: '幅・段組・余白・印刷の割り付けを、全ページで同じ物差しに。',
+      svg: '<circle cx="11.6" cy="3.8" r="1.7"/><path d="M11 5.4L6.4 20.6M12.2 5.4L16.8 20.6" stroke="#000" stroke-width="1.7" stroke-linecap="round"/><path d="M8.2 13.6H15" stroke="#000" stroke-width="1.1"/><path d="M4.2 17.6Q11.6 23.6 19 17.6" fill="none" stroke="#000" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="1.6 1.4"/>' + ST134(19.8, 4.6, 2.3) },
+    { k: 'octans', name: 'Octans', jp: '八分儀座', role: '天測', m: 'pole', c: ['#6a90d0', '#3a5a9e'], d: ['#9fbcec', '#7c9ad6'],
+      desc: 'ワークスペース全体を一目で — 今日・進み具合・目標。八分儀座は天の南極、すべてが巡る中心。',
+      svg: '<path d="M4.4 19.6H19.6M4.4 19.6L15.2 8.8" stroke="#000" stroke-width="1.6" stroke-linecap="round"/><path d="M19.6 19.6A15.2 15.2 0 0 0 15.2 8.8" fill="none" stroke="#000" stroke-width="1.6"/><path d="M17.9 13.2L19.2 12.6M19 16L20.4 15.8" stroke="#000" stroke-width="1.1" stroke-linecap="round"/><circle cx="4.4" cy="19.6" r="1.6"/>' + ST134(19.8, 3.8, 2.4) }
+  ];
+  NINE134.forEach((b, i) => {
+    const id = 'c134-z-' + b.k;
+    b.id = id;
+    b.order = 10 + i;
+    ZIC124[b.k] = svgUrl124(b.svg);
+    ZMETA124[id] = { name: b.name, m: b.m, ic: b.k, c: b.c, d: b.d };
+  });
+  /* 9 つの箱の動き（名前にちなんで） */
+  Object.assign(MOT124, {
+    needle: ['1.2s', 'ease-out', '0%,100%{transform:none}20%{transform:rotate(-28deg)}45%{transform:rotate(16deg)}65%{transform:rotate(-7deg)}82%{transform:rotate(3deg)}', `
+@1 { --y0: -11px; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .6s ease .75s both; }`],
+    pendulum: ['1.4s', 'ease-in-out', '0%,100%{transform:none}20%{transform:rotate(12deg)}45%{transform:rotate(-9deg)}68%{transform:rotate(5deg)}85%{transform:rotate(-2deg)}', `
+@I { transform-origin: 50% 8%; }
+@B::before { width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 1px solid rgba(201,154,82,.8); -webkit-mask: conic-gradient(#000 var(--c124-a), transparent 0); mask: conic-gradient(#000 var(--c124-a), transparent 0); animation: c124-draw 1.4s linear both, c124-hold 1.4s ease both; }`],
+    net: ['1s', 'ease', '0%,100%{transform:none}40%{transform:scale(1.08)}', `
+@B::before { width: 30px; height: 1px; margin: -.5px 0 0 -15px; border-radius: 0; background: #6d79cc; animation: c134-linex .9s ease-out both; }
+@B::after { width: 1px; height: 30px; margin: -15px 0 0 -.5px; border-radius: 0; background: #6d79cc; animation: c134-liney .9s ease-out .08s both; }
+@1, @2, @3 { width: 4px; height: 4px; margin: -2px 0 0 -2px; background: #6d79cc; animation: c124-pop .55s ease .35s both; }
+@1 { --x0: -9px; --y0: -7px; } @2 { --x0: 9px; --y0: -6px; animation-delay: .45s; } @3 { --x0: 3px; --y0: 9px; animation-delay: .55s; }`],
+    zoom: ['1s', 'ease', '0%,100%{transform:none}35%{transform:scale(1.14)}60%{transform:scale(.97)}', `
+@B::before { width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 1.3px solid #4f9e66; z-index: -1; animation: c134-lens .9s ease-out both; }`],
+    chisel: ['.9s', 'ease-out', '0%,100%{transform:none}18%{transform:rotate(-10deg)}30%{transform:rotate(4deg) translateY(1px)}48%{transform:rotate(-6deg)}60%{transform:rotate(3deg) translateY(1px)}', `
+@1, @2, @3 { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 1px; background: #c98a6b; animation: c124-spark .7s ease-out .25s both; }
+@1 { --x: -11px; --y: -10px; } @2 { --x: 10px; --y: -12px; background: #d8b49c; animation-delay: .28s; } @3 { --x: 12px; --y: -6px; animation-delay: .55s; }`],
+    paint: ['1.1s', 'ease', '0%,100%{transform:none}30%{transform:rotate(-6deg)}60%{transform:rotate(4deg)}', `
+@1, @2, @3 { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; animation: c124-pop .6s ease .2s both; }
+@1 { --x0: -10px; --y0: -8px; background: #e0809a; } @2 { --y0: -12px; background: #f0c05a; animation-delay: .32s; } @3 { --x0: 10px; --y0: -8px; background: #6fb0e0; animation-delay: .44s; }
+@B::after { width: 22px; height: 1.6px; margin: -.8px 0 0 -11px; --y0: 11px; border-radius: 1px; background: linear-gradient(90deg, #e0809a, #f0c05a, #6fb0e0); transform-origin: 0 50%; animation: c124-ink 1s ease-out .1s both; }`],
+    pump: ['1.1s', 'ease-in-out', '0%,100%{transform:none}20%{transform:scaleY(.88) translateY(1.5px)}40%{transform:none}60%{transform:scaleY(.9) translateY(1px)}80%{transform:none}', `
+@1, @2, @3 { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; background: #4fb7c4; --y0: 2px; animation: c124-fly .9s ease-out .2s both; }
+@1 { --x0: -2px; --x: -3px; --y: -14px; } @2 { --x0: 2px; --x: 3px; --y: -16px; animation-delay: .45s; } @3 { --x: 0px; --y: -12px; width: 2px; height: 2px; animation-delay: .65s; }`],
+    arc: ['1.3s', 'ease-in-out', '0%,100%{transform:none}30%{transform:rotate(-18deg)}70%{transform:rotate(18deg)}', `
+@I { transform-origin: 50% 14%; }
+@B::before { width: 28px; height: 28px; margin: -14px 0 0 -14px; border: 1.1px dashed #8a78c4; -webkit-mask: conic-gradient(from 135deg, #000 var(--c124-a), transparent 0); mask: conic-gradient(from 135deg, #000 var(--c124-a), transparent 0); animation: c124-draw 1.2s ease-in-out both, c124-hold 1.3s ease both; }`],
+    pole: ['1.4s', 'ease', '0%,100%{transform:none}40%{transform:rotate(-10deg)}', `
+@B::before { width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 1px solid #5a7fc2; z-index: -1; animation: c124-ring 1.1s ease-out both; }
+@1 { --x0: -7px; --y0: 7px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .8s ease .3s both; }`]
+  });
+  function nineCard134(b, box) {
+    if (zpop124 && b.getAttribute('aria-expanded') === 'true') { zpopClose124(); return; }
+    zpopOpen124(b,
+      '<div class="hd"><i class="mi" data-for="' + esc124(box.id) + '"></i><b>' + esc124(box.name) + '</b><span>' + esc124(box.jp + ' · ' + box.role) + '</span></div>'
+      + '<p class="c134-desc">' + esc124(box.desc) + '</p>'
+      + '<p class="c134-soon"><i></i>準備中 — 箱だけ先に置きました</p>',
+      () => {});
+  }
+  function nineEnsure134(dock) {
+    for (const box of NINE134) {
+      let b = document.getElementById(box.id);
+      if (!b) {
+        b = zenButton124(box.id, box.order, (el) => nineCard134(el, box));
+        b.setAttribute('data-c134-box', box.k);
+        b.setAttribute('aria-haspopup', 'dialog');
+        b.title = box.name + '（' + box.jp + '）— ' + box.role + '（準備中）';
+      }
+      if (b.parentElement !== dock) dock.appendChild(b);
+      zenTag124(b);
+    }
+  }
+
+  /* 3) Zenith を左へ・パンくずを右へ・Notion のボタンも計器の形に */
+  const NT_NAME134 = { 'share': 'Share', 'copy link': 'Link', 'favorite': 'Favorite', 'remove from favorites': 'Favorite', 'actions': 'More', 'more': 'More', 'comments': 'Comments', 'updates': 'Updates', 'リンクをコピー': 'Link', 'お気に入り': 'Favorite', 'お気に入りに追加': 'Favorite', 'お気に入りから削除': 'Favorite', 'アクション': 'More', 'その他': 'More', 'コメント': 'Comments', '更新': 'Updates' };
+  function nativeMark134(acts) {
+    for (const b of acts.querySelectorAll('[role="button"]')) {
+      if (b.closest('#cordi-dock')) continue;
+      const text = (b.textContent || '').replace(/\s+/g, ' ').trim();
+      if (/^(edited|last edited|updated|編集|最終更新)/i.test(text)) { if (!b.hasAttribute('data-c134-ed')) b.setAttribute('data-c134-ed', ''); continue; }
+      const al = String(b.getAttribute('aria-label') || '').trim();
+      if (text || !al || !b.querySelector('svg')) continue;   // 文字のあるボタン（Share）は文字をそのまま名前に
+      const name = NT_NAME134[al.toLowerCase()] || NT_NAME134[al] || (al.length > 10 ? al.slice(0, 9) + '…' : al);
+      if (b.getAttribute('data-c134-nt') !== name) b.setAttribute('data-c134-nt', name);
+    }
+  }
+  function zenPlace134(dock, row) {
+    if (!row.hasAttribute('data-c134-row')) row.setAttribute('data-c134-row', '');
+    const acts = dock.parentElement;
+    if (acts && ZK134.ntv) nativeMark134(acts);
+    if (!zenLeft134()) return;
+    /* 台はいまの位置（left: --c134-dx）から差を足して、行の左の内側へ（書き込むのは変わった時だけ — 見張りが回り続けない） */
+    const r = dock.getBoundingClientRect(), rr = row.getBoundingClientRect();
+    if (!r.width || !rr.width) return;
+    const pl = parseFloat(getComputedStyle(row).paddingLeft) || 0;
+    const cx = parseFloat(dock.style.getPropertyValue('--c134-dx')) || 0;
+    const cy = parseFloat(dock.style.getPropertyValue('--c134-dy')) || 0;
+    const dx = Math.round(cx + (rr.left + pl - r.left));
+    const dy = Math.round(cy + (rr.top + (rr.height - r.height) / 2 - r.top));
+    if (Math.abs(dx - cx) >= 1) dock.style.setProperty('--c134-dx', dx + 'px');
+    if (Math.abs(dy - cy) >= 1) dock.style.setProperty('--c134-dy', dy + 'px');
+    const w = Math.ceil(r.width) + 'px';
+    if (row.style.getPropertyValue('--c134-dockw') !== w) row.style.setProperty('--c134-dockw', w);
+  }
+  const zenRunBefore134 = zenRun124;
+  zenRun124 = function() {
+    flags134();
+    zenRunBefore134();
+    flags134();
+    const dock = document.getElementById('cordi-dock');
+    const on = root104.hasAttribute('data-c124-zenith');
+    if (!on) {
+      for (const box of NINE134) { const e = document.getElementById(box.id); if (e) e.remove(); }
+      return;
+    }
+    if (!dock || !dock.isConnected) return;
+    nineEnsure134(dock);
+    zenFit124();
+  };
+
+  /* 4) 見た目 */
+  const cssBefore134 = nbCss;
+  nbCss = function() {
+    cssBefore134();
+    if (document.getElementById('c134-caelum-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c134-caelum-css';
+    const S = S134;
+    const O = S + ' #c33-orbit';
+    const L = S + '[data-c124-zenith][data-c134-left]';
+    const N = S + '[data-c124-zenith][data-c134-ntv]';
+    const NB = `${N} .notion-topbar-action-buttons :is(.notion-topbar-share-menu, [data-c134-nt])`;
+    style.textContent = `
+/* ── B.U.R.I（鰤）の段を、惑星と同じ格子に ── */
+${O} .ob-all[data-c124-m="swim"] { grid-template-rows: 24px auto !important; row-gap: 3px !important; align-content: center !important; }
+${O} .ob-all[data-c124-m="swim"] .ob-ic { width: 30px !important; height: 24px !important; }
+${O} .ob-all[data-c124-m="swim"] .ob-lb {
+  font: 600 10px/1.2 var(--c104-serif) !important; letter-spacing: .03em !important; text-indent: .03em !important; text-transform: none !important;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 74%, transparent) !important; opacity: 1 !important;
+}
+${O} .ob-all[data-c124-m="swim"]:hover .ob-lb { color: var(--nb-text, var(--c-texPri, #37352f)) !important; }
+${O} .ob-all[data-c124-m="swim"][data-unread]::before { left: calc(50% + 15px) !important; top: 3px !important; }
+${O} .ob-ft .ob-set { grid-template-rows: 24px auto !important; row-gap: 3px !important; }
+${O} .ob-ft .ob-set .ob-ic { width: 24px !important; height: 24px !important; }
+
+/* ── Zenith を左へ（B.U.R.I の角のすぐ右）。パンくずは右へ ── */
+${L} #cordi-dock[data-c124-zen] { position: absolute !important; left: var(--c134-dx, 0px) !important; top: var(--c134-dy, 0px) !important; margin: 0 !important; z-index: 2 !important; }
+${L} [data-c134-row] { position: relative; }
+${L} [data-c134-row] .notion-topbar-breadcrumb-region { padding-inline-start: calc(var(--c134-dockw, 0px) + 14px) !important; justify-content: flex-end !important; box-sizing: border-box !important; }
+${L} [data-c134-row] .notion-topbar-breadcrumb-region > * { margin-inline-start: auto; }
+
+/* ── 上の帯の Notion の部分も、この世界の書体と印に ── */
+${N} .notion-topbar .shadow-cursor-breadcrumb { font-family: var(--c104-serif, Baskerville, serif) !important; font-weight: 600 !important; letter-spacing: .01em; }
+${N} .notion-topbar .shadow-cursor-breadcrumb > span[aria-hidden="true"] { font-size: 0 !important; width: 14px !important; color: transparent !important; }
+${N} .notion-topbar .shadow-cursor-breadcrumb > span[aria-hidden="true"]::before {
+  content: ""; display: block; width: 6px; height: 6px; clip-path: var(--c124-star);
+  background: color-mix(in srgb, #c9a24c 80%, var(--c-texSec, #787774));
+}
+${N} .notion-topbar-action-buttons [data-c134-ed] { font: italic 500 12.5px/1.2 var(--c104-serif, Baskerville, serif) !important; color: var(--c-texSec, #8a8780) !important; }
+${NB} {
+  display: grid !important; grid-template-rows: 18px auto !important; grid-template-columns: auto !important; justify-items: center !important; align-content: center !important; row-gap: 3px !important; gap: 3px 0 !important;
+  width: auto !important; min-width: 40px !important; height: 40px !important; padding: 0 6px !important; border-radius: 10px !important;
+  font: 600 9.5px/1.1 var(--c104-serif, Baskerville, serif) !important; letter-spacing: .02em !important; white-space: nowrap !important;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 74%, transparent) !important;
+  box-shadow: none !important; border: 0 !important; background: transparent;
+}
+${NB} > svg { grid-area: 1 / 1 !important; width: 18px !important; height: 18px !important; margin: 0 !important; fill: color-mix(in srgb, var(--c-icoPri, #37352f) 72%, transparent) !important; color: color-mix(in srgb, var(--c-icoPri, #37352f) 72%, transparent) !important; }
+${NB}::after { grid-area: 2 / 1; }
+${N} .notion-topbar-action-buttons [data-c134-nt]::after { content: attr(data-c134-nt); }
+${NB}:hover { background: var(--ca-bacIntTra, rgba(55,53,47,.06)) !important; color: var(--nb-text, var(--c-texPri, #37352f)) !important; }
+${N} .notion-topbar-action-buttons .notion-topbar-favorite-button[data-c134-nt] > svg { fill: color-mix(in srgb, #c9a24c 80%, var(--c-icoPri, #37352f)) !important; }
+@media (max-width: 1000px) {
+  ${NB} { grid-template-rows: 18px !important; min-width: 30px !important; width: 30px !important; height: 30px !important; padding: 0 !important; border-radius: 8px !important; font-size: 0 !important; }
+  ${NB}::after { content: none !important; }
+  ${N} .notion-topbar-action-buttons [data-c134-ed] { display: none !important; }
+}
+
+/* ── 9 つの箱のカード ── */
+#c124-zpop .c134-desc { margin: 2px 8px 6px; font-size: 12.5px; line-height: 1.6; color: var(--c-texPri, #37352f); }
+#c124-zpop .c134-soon { display: flex; align-items: center; gap: 6px; margin: 0; padding: 7px 8px 3px; border-top: 1px solid var(--c124-line); color: var(--c-texSec, #787774); font-size: 11.5px; }
+#c124-zpop .c134-soon i { width: 7px; height: 7px; clip-path: var(--c124-star); background: #c9a24c; }
+
+@keyframes c134-linex { 0% { transform: scaleX(0); opacity: .9; } 50% { transform: scaleX(1); opacity: .9; } 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes c134-liney { 0% { transform: scaleY(0); opacity: .9; } 50% { transform: scaleY(1); opacity: .9; } 100% { transform: scaleY(1); opacity: 0; } }
+@keyframes c134-lens { 0% { transform: scale(1.4); opacity: 0; } 40% { opacity: .85; } 100% { transform: scale(.85); opacity: 0; } }
+`;
+    (document.head || root104).appendChild(style);
+  };
+
+  /* 5) 設定 */
+  document.addEventListener('nebius:settings', (e) => {
+    const box = document.getElementById(String(e.detail || ''));
+    if (!box) return;
+    const add = (text, key) => {
+      const l = document.createElement('label');
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = ZK134[key];
+      l.append(c, ' ' + text);
+      c.addEventListener('change', () => zenSet134(key, c.checked));
+      box.appendChild(l);
+    };
+    add('Zenith を上の帯の左に（パンくずは右へ）', 'left');
+    add('上の帯の Notion のボタンも計器の形に', 'ntv');
+    add('Orbit の滑らかスクロール（回し終えたら段へカチッと）', 'smooth');
+  });
+  function zenSet134(key, on) {
+    ZK134[key] = !!on;
+    zkSave134();
+    flags134();
+    zenSoon124();
+    return ZK134[key];
+  }
+
+
+  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124 }, ZK124) }) };
   obBoot();
   obSearchBoot();
 })();
