@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      188.0.0
-// @description  v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      189.0.0
+// @description  v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,21 @@
 // ==/UserScript==
 
 /*
+ * v189.0.0（題字は見える下辺で線に・チームスペースのアイコンの小窓・一覧の終わりの区切り・選んだ行の地）
+ *   ・DB の題字: 187・188 は「アイコン＋題字の段の下端（＝アイコンの箱の下端）」を B.U.R.I の線にそろえていたので、本物の Notion では
+ *     箱の中の余白の分だけ、アイコンの絵はおよそ 6px・Medias の字はおよそ 10px 線より上に浮いていた（青い破線より上）。
+ *     → 字は字の並びの線（ベースライン。和文の字は字の面の下端）、アイコンは絵が描かれている所の下端を測り、その下辺を線に沿わせる。
+ *       絵と字の並びの線の差（本物でおよそ 4px）は、アイコンを translate でそろえる（Notion のアイコンは差し替えない・色も変えない・10px まで）。
+ *       <img> の絵の下端は同じ絵を小さな canvas に描いて読む（結果は c33.ink189.v1 に覚える。読めない画像は箱の下端のまま）
+ *   ・Catalogus で選んでいるチームスペースのアイコンを押すと、すぐ Notion のアイコンの小窓ではなく、まず 2 択の小窓
+ *     （チームスペース設定・ページを追加）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。
+ *     ページを追加は 184 と同じ。小窓はアイコンから線が伸び → ぽんと開き → 2 つが順に出る（歯車は回って・＋ は弾んで・乗せると衛星が回る・
+ *     押すと輪が広がる）。Esc・外を押す・ホイールで閉じる。New の小窓はそのまま（アイコンを変える もそのまま）。コンソール: __c33.teamSet()
+ *   ・一覧の最後の「＋ ページを追加」はやめ（上の小窓へ）、一覧の終わりの区切りを Master の下の細罫と同じ真ん中の軸に。始まりに菱形・
+ *     終わりに四芒星（アシンメトリー）。一覧が出るたびに 菱形 → 線が左から引かれる → 星が灯る。ふだんはときどき光の粒が渡り、着くと星がまたたく
+ *   ・開いているページの地: 187.1 の外へ淡く消える光は右の 3 割ほどが塗られず幅と合っていなかった → 列の幅いっぱい（上の区切り線と同じ
+ *     左端 → 右端）。色は同じ淡さで、左に淡い光を重ねる
+ *
  * v188.0.0（Catalogus に戻す・項目の字）
  *   ・187 で開いた Notion のサイドバーが開いたまま残り（Notion はサイドバーの開け閉めを覚える）、187.1 を入れても Catalogus に戻らなかった。
  *     → 188 を入れた最初の 1 回だけ、Notion のサイドバーが開いていたら閉じる（Orbit の輪の設定の「サイドバーを閉じる」と同じ閉じ方。
@@ -459,7 +474,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '188.0.0';
+  const VERSION = '189.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -1173,7 +1188,7 @@ ${icons}
   const SET_ITEM = /^(settings|設定)(?![a-z])|settings\s*&\s*members|設定とメンバー/i;
   function obMenuItem(re) {
     for (const el of document.querySelectorAll('[role="menuitem"], [role="option"], [role="dialog"] [role="button"], .notion-overlay-container [role="button"]')) {
-      if (el.closest('#c33-ob-set, #c33-orbit')) continue;
+      if (el.closest('#c33-ob-set, #c189-tpop, #c33-orbit')) continue;
       const tx = norm(el.getAttribute('aria-label') || el.textContent);
       if (re.test(tx) && el.getBoundingClientRect().width) return el;
     }
@@ -1182,7 +1197,7 @@ ${icons}
 
   /* v187: 押して開いた層（Notion のメニュー・小窓）。³³ 自身のものは数えない */
   const LAYER_SEL = '[role="menu"], [role="dialog"], [role="listbox"], .notion-overlay-container > *';
-  const obLayers = () => [...document.querySelectorAll(LAYER_SEL)].filter((el) => !el.closest('#c33-ob-set, #c33-orbit, #c164-cat') && el.getBoundingClientRect().width > 0);
+  const obLayers = () => [...document.querySelectorAll(LAYER_SEL)].filter((el) => !el.closest('#c33-ob-set, #c189-tpop, #c33-orbit, #c164-cat') && el.getBoundingClientRect().width > 0);
   /* 開いた層の中で、字が合ういちばん内側の要素 → 押せる箱（role の付いていない項目も拾う） */
   function obItemIn(roots, re) {
     let best = null;
@@ -1235,7 +1250,7 @@ ${icons}
     if (d) return d;
     let best = null, area = 0;
     for (const x of document.querySelectorAll('[role="dialog"]')) {
-      if (before.has(x) || x.closest('#c33-ob-set, #c164-cat, #c33-orbit, .notion-media-menu')) continue;
+      if (before.has(x) || x.closest('#c33-ob-set, #c189-tpop, #c164-cat, #c33-orbit, .notion-media-menu')) continue;
       const r = x.getBoundingClientRect();
       if (r.width < 480 || r.height < 300 || r.width * r.height <= area) continue;
       best = x; area = r.width * r.height;
@@ -12138,6 +12153,154 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
 @1 { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; --x0: 9px; --y0: -9px; animation: c124-pop .55s ease .45s both; }`]
   });
 
+  /* v189: 題字は「見えている下辺」で線に乗せる — 字は字の並びの線（ベースライン）、アイコンは絵が描かれている所の下端。
+   * 187 は段の下端（アイコンの箱の下端）を線にそろえたので、本物の Notion ではアイコンの箱の中の余白と題字の行の下の余白の分だけ、
+   * 絵はおよそ 6px・字はおよそ 10px 線から浮いて見えた（青い破線より上）。
+   * 字: 題字の字の箱（Range の矩形 ＝ 書体の上下の高さ）の下端から、同じ書体の下の高さ（canvas の measureText）を引いた所。
+   * アイコン: <img> は同じ絵を小さな canvas に同じ置き方で描いて、透明でない最後の行（結果は src ごとに覚える）・<svg> は形の矩形・
+   * 絵文字は字と同じ測り方。測れない絵（ほかのサイトの画像など）は箱の下端のまま。
+   * 絵の下端と字の並びの線の差（本物の Notion でおよそ 4px）は、アイコンを translate で動かしてそろえる（Notion のアイコンは差し替えない・
+   * 色も変えない・DOM も動かさない。動かす量は 10px まで） */
+  const INK189 = { key: 'c33.ink189.v1', mem: null, miss: new Set(), busy: new Set(), cx: null };
+  function inkMem189() {
+    if (INK189.mem) return INK189.mem;
+    let m = null;
+    try { m = JSON.parse(localStorage.getItem(INK189.key) || 'null'); } catch (e) { m = null; }
+    INK189.mem = m && typeof m === 'object' ? m : {};
+    return INK189.mem;
+  }
+  function hash189(s) {
+    let h = 5381;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36) + '.' + s.length.toString(36);
+  }
+  function font189(el, text) {
+    if (!INK189.cx) INK189.cx = document.createElement('canvas').getContext('2d');
+    const cs = getComputedStyle(el);
+    INK189.cx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+    const m = INK189.cx.measureText(text || 'Hg');
+    return { a: m.fontBoundingBoxAscent, d: m.fontBoundingBoxDescent, ad: m.actualBoundingBoxDescent, cs };
+  }
+  /* 字のいちばん下の行の矩形と、その字の親（書体を読む） */
+  function lastLine189(h) {
+    const rg = document.createRange();
+    const w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    let best = null, host = null, text = '';
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      if (!/\S/.test(n.nodeValue) || !n.parentElement || (h.classList.contains('notion-record-icon') ? false : n.parentElement.closest('.notion-record-icon'))) continue;
+      rg.selectNodeContents(n);
+      for (const r of rg.getClientRects()) if (r.height > 2 && r.width > 0 && (!best || r.bottom > best.bottom)) { best = r; host = n.parentElement; text = n.nodeValue; }
+    }
+    return best ? { r: best, host, text } : null;
+  }
+  /* 字の並びの線（いちばん下の行）。和文の字（かな・漢字）は字の面の下端が並びの線より少し下にあるので、その字の下端に。
+   * 字が無い（Untitled の空の題字）時は、1 行の箱の半分の行間から */
+  const CJK189 = /[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]/g;
+  function base189(h) {
+    if (!h || !h.isConnected) return null;
+    const ln = lastLine189(h);
+    if (ln) {
+      const m = font189(ln.host);
+      if (!(m.d > 0 && m.d < ln.r.height)) return null;
+      const bl = ln.r.bottom - Math.round(m.d);
+      const cjk = (ln.text.match(CJK189) || []).join('');
+      if (!cjk) return bl;
+      const ad = font189(ln.host, cjk).ad;
+      return ad > 0 && ad < m.d + 1 ? bl + Math.round(ad * 2) / 2 : bl;
+    }
+    const m = font189(h);
+    const r = h.getBoundingClientRect();
+    if (!(m.a > 0) || !(r.height > 2)) return null;
+    const lh = parseFloat(m.cs.lineHeight);
+    const box = Math.round(m.a) + Math.round(m.d);
+    return r.top + (parseFloat(m.cs.paddingTop) || 0) + (parseFloat(m.cs.borderTopWidth) || 0) + ((lh > 0 ? lh : box) - box) / 2 + Math.round(m.a);
+  }
+  /* <img> の絵の下端を、箱の高さに対する割合で（object-fit も同じに描く）。結果は src ごとに覚える（localStorage・120 件まで） */
+  function scan189(img, k) {
+    if (INK189.busy.has(k) || INK189.miss.has(k)) return;
+    INK189.busy.add(k);
+    const r = img.getBoundingClientRect();
+    const fit = getComputedStyle(img).objectFit;
+    const src = img.currentSrc || img.src;
+    const im = new Image();
+    let t = 0;
+    const done = (v) => {
+      clearTimeout(t);
+      INK189.busy.delete(k);
+      if (v == null) { INK189.miss.add(k); return; }   // 測れない絵は覚えない（次に開いた時にもう一度）
+      const m = inkMem189();
+      m[k] = v;
+      const ks = Object.keys(m);
+      if (ks.length > 120) delete m[ks[0]];
+      try { localStorage.setItem(INK189.key, JSON.stringify(m)); } catch (e) { /* noop */ }
+      zenSoon124();
+    };
+    t = setTimeout(() => done(null), 4000);
+    im.onerror = () => done(null);
+    im.onload = () => {
+      try {
+        const ch = 128, cw = Math.max(16, Math.min(512, Math.round(ch * (r.width / r.height || 1))));
+        const c = document.createElement('canvas');
+        c.width = cw; c.height = ch;
+        const g = c.getContext('2d', { willReadFrequently: true });
+        const nw = im.naturalWidth, nh = im.naturalHeight, R = nw > 0 && nh > 0 ? nw / nh : cw / ch;
+        let dw = cw, dh = ch;
+        if (Math.abs(R / (cw / ch) - 1) > 0.02 && /contain|scale-down|cover/.test(fit)) {
+          const wide = cw / ch > R;
+          if (fit === 'cover' ? wide : !wide) { dw = cw; dh = cw / R; } else { dh = ch; dw = ch * R; }
+        }
+        g.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+        const px = g.getImageData(0, 0, cw, ch).data;
+        for (let y = ch - 1; y >= 0; y--) {
+          for (let x = 0; x < cw; x++) if (px[(y * cw + x) * 4 + 3] > 40) return done(Math.round((y + 1) / ch * 1000) / 1000);
+        }
+        done(null);
+      } catch (e) { done(null); }   // ほかのサイトの画像（読めない）は箱の下端のまま
+    };
+    try {
+      if (/^https?:/i.test(src) && new URL(src, location.href).origin !== location.origin) im.crossOrigin = 'anonymous';
+    } catch (e) { /* noop */ }
+    im.src = src;
+  }
+  /* アイコンの絵の下端（いま描かれている位置）。まだ測っている途中は null */
+  function iconInk189(ic) {
+    if (!ic || !ic.isConnected) return null;
+    let img = null, area = 0;
+    for (const x of ic.querySelectorAll('img')) {
+      const q = x.getBoundingClientRect();
+      if (q.width > 4 && q.height > 4 && q.width * q.height > area) { img = x; area = q.width * q.height; }
+    }
+    if (img) {
+      const q = img.getBoundingClientRect();
+      const cs = getComputedStyle(img);
+      const top = q.top + (parseFloat(cs.borderTopWidth) || 0) + (parseFloat(cs.paddingTop) || 0);
+      const h = q.bottom - (parseFloat(cs.borderBottomWidth) || 0) - (parseFloat(cs.paddingBottom) || 0) - top;
+      const src = img.currentSrc || img.src;
+      if (!src || !(h > 4)) return q.bottom;
+      const k = hash189(src) + '|' + cs.objectFit + '|' + (q.width / q.height).toFixed(2);
+      const f = inkMem189()[k];
+      if (typeof f === 'number') return top + f * h;
+      if (INK189.miss.has(k)) return q.bottom;
+      scan189(img, k);
+      return null;
+    }
+    const svg = ic.querySelector('svg');
+    if (svg) {
+      const sr = svg.getBoundingClientRect();
+      if (!(sr.height > 4)) return null;
+      let b = -Infinity;
+      for (const s of svg.querySelectorAll('path, circle, ellipse, rect, polygon, polyline, line, use, text')) {
+        const q = s.getBoundingClientRect();
+        if (q.width + q.height > 0.5 && q.bottom > b) b = q.bottom;
+      }
+      return b > -Infinity ? Math.min(b, sr.bottom) : sr.bottom;
+    }
+    /* 絵文字（字のアイコン）: 字の矩形の下端 − 書体の下の高さ ＋ その字の絵の下の高さ */
+    const ln = lastLine189(ic);
+    if (!ln || !(ln.r.height > 4)) return null;
+    const m = font189(ln.host, ln.text.trim() || 'H');
+    return m.d > 0 && m.d < ln.r.height && Math.abs(m.ad) < ln.r.height ? ln.r.bottom - Math.round(m.d) + m.ad : ln.r.bottom;
+  }
   /* 4) DB: 見出しの幅を枠の中に・題字の高さ・左のゆとり（印は書くのは変わった時だけ） */
   function db154() {
     const frame = mainFrame154();
@@ -12146,6 +12309,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       if (sc && (old === sc || sc.contains(old))) continue;
       old.removeAttribute('data-c154-db'); old.removeAttribute('data-c154-hrow'); old.removeAttribute('data-c154-hwrap'); old.removeAttribute('data-c174-drop');
     }
+    for (const old of document.querySelectorAll('[data-c189-ic]')) if (!sc || !sc.contains(old)) old.removeAttribute('data-c189-ic');
     if (!sc || !root104.hasAttribute('data-c114-caelum')) return;
     const blk = sc.querySelector('.notion-collection_view_page-block');
     const isDb = !!(blk && !blk.closest('.notion-page-content'));
@@ -12183,17 +12347,32 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     if (!drop && row.hasAttribute('data-c174-drop')) row.removeAttribute('data-c174-drop');
     const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
     let v = '24px';
+    let icdy = 0;
+    const ic0 = title && title.querySelector('.notion-record-icon');
+    for (const o of sc.querySelectorAll('[data-c189-ic]')) if (o !== ic0) o.removeAttribute('data-c189-ic');
     if (fold) {
       const sr = sc.getBoundingClientRect();
       const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
       const wr = wrap.getBoundingClientRect();
       const wrapOff = wr.top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
       /* 箱の中身の上端（padding の内側）→ 段の下端。padding を変えても中身ごと動くので、この差は変わらない */
-      const ic = title && title.querySelector('.notion-record-icon');
+      /* v189: 下端 = 題字の字の並びの線（ベースライン）。字の並びの線が取れない時は v187 のまま（アイコンの箱の下端） */
+      const ic = ic0;
       const ir = ic && ic.getBoundingClientRect();
+      const h1 = (title && title.querySelector('h1')) || row.querySelector('h1') || (title && title.querySelector('[contenteditable="true"]'));
+      const bl = base189(h1);
       let foot;
-      if (ir && ir.height > 4) foot = ir.bottom;
+      if (bl != null) foot = bl;
+      else if (ir && ir.height > 4) foot = ir.bottom;
       else { const tb = (title || row).getBoundingClientRect(); foot = tb.bottom - (parseFloat(getComputedStyle(title || row).paddingBottom) || 0); }
+      /* v189: アイコンの絵の下端を字の並びの線にそろえる量（いま動かしている分を戻した、元の位置から測る。測っている途中は今のまま） */
+      const tr = ic && ic.hasAttribute('data-c189-ic') ? String(getComputedStyle(ic).translate || '').split(/\s+/) : [];
+      const was = tr.length > 1 ? parseFloat(tr[1]) || 0 : 0;
+      icdy = was;
+      if (ic && bl != null) {
+        const ink = iconInk189(ic);
+        if (ink != null) { const d = Math.round((bl - (ink - was)) * 2) / 2; icdy = Math.abs(d) <= 10 ? d : 0; }
+      } else icdy = 0;
       foot -= wr.top + (parseFloat(getComputedStyle(wrap).paddingTop) || 0);
       /* v185: 帯を開いている間（と開け閉めの途中）は、本文の枠が帯の高さだけ margin-top で下がっている。その分を引いた「畳んだ時の枠の上端」で
        * 測るので、開け閉めで値が変わらない（題字は本文と一緒に場所ごと下がり、閉じれば線の高さに戻る。開いた後・閉じた後に跳ねない） */
@@ -12204,6 +12383,10 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       v = (on >= 0 ? Math.min(240, Math.round(on)) : Math.max(6, Math.min(240, Math.round(base)))) + 'px';
     }
     if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
+    if (ic0 && icdy) { if (!ic0.hasAttribute('data-c189-ic')) ic0.setAttribute('data-c189-ic', ''); }
+    else if (ic0 && ic0.hasAttribute('data-c189-ic')) ic0.removeAttribute('data-c189-ic');
+    const dyv = icdy ? icdy + 'px' : '';
+    if (wrap.style.getPropertyValue('--c189-icdy') !== dyv) { if (dyv) wrap.style.setProperty('--c189-icdy', dyv); else wrap.style.removeProperty('--c189-icdy'); }
     /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
     const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
     const ic = title && title.querySelector('.notion-record-icon');
@@ -12388,6 +12571,8 @@ ${S}[data-c154-hbar] ${FR} .notion-scroller::-webkit-scrollbar:horizontal { heig
 /* ── ページの上の段（Add cover・Hide description…）は Folio へ。段の場所も詰める（DOM はそのまま） ── */
 ${S}[data-c154-folio] ${FR} .notion-page-controls { height: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 ${S}[data-c154-folio] ${FR} [data-c154-hwrap] { padding-top: var(--c154-dbtop, 24px) !important; }
+/* v189: 題字のアイコンの絵の下端を字の並びの線にそろえる（測った量だけ。Notion のアイコンはそのまま） */
+${S}[data-c154-folio] ${FR} [data-c154-hwrap] [data-c189-ic] { translate: 0 var(--c189-icdy, 0px); }
 
 /* ── DB の新しい定位置: 左にサイドカーの分のゆとり ── */
 ${S}[data-c154-gut] ${FR} .notion-scroller[data-c154-db] { padding-inline-start: var(--c154-gut, ${GUT154}px) !important; }
@@ -12845,6 +13030,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       K164.shown = on;
       el.toggleAttribute('data-vis', on);
       el.toggleAttribute('inert', !on);
+      if (!on && tpopOpen189()) tpopClose189(false);
       if (on) { el.setAttribute('data-enter', ''); clearTimeout(el.__enterT); el.__enterT = setTimeout(() => el.removeAttribute('data-enter'), 900); }
       flag124('data-c164-cat', on);
     }
@@ -12922,13 +13108,13 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       b.className = 'ct-open';
       b.textContent = '開いて読む';
       frag.appendChild(b);
-      frag.appendChild(add184('page', 1));
+      frag.appendChild(end189(1));
       return { frag, kind: 'closed' };
     }
     if (!t.rows.length) {
       if (asked && Date.now() - asked < 4000) { frag.appendChild(note164('<span class="ct-dots"></span>読み込み中')); return { frag, kind: 'loading' }; }
       frag.appendChild(note164('このチームスペースには、ページがありません'));
-      frag.appendChild(add184('page', 1));
+      frag.appendChild(end189(1));
       return { frag, kind: 'empty' };
     }
     const cur = curPage();
@@ -12951,7 +13137,8 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       a.append(ic, nm);
       frag.appendChild(a);
     });
-    frag.appendChild(add184('page', t.rows.length));
+    /* v189: 終わりは区切りの線だけ（「＋ ページを追加」は、チームスペースのアイコンを押すと出る小窓へ） */
+    frag.appendChild(end189(t.rows.length));
     return { frag, kind: 'rows' };
   }
   function listEdges164() {
@@ -12985,8 +13172,8 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       e.classList.toggle('on', on);
       e.setAttribute('aria-pressed', on ? 'true' : 'false');
       e.tabIndex = on ? 0 : -1;
-      const ic = e.firstElementChild;   // C186: 選んでいるチームスペースのアイコンは、押すと変えられる
-      if (on !== ic.hasAttribute('title')) { if (on) ic.title = 'アイコンを変える'; else ic.removeAttribute('title'); }
+      const ic = e.firstElementChild;   // C189: 選んでいるチームスペースのアイコンは、押すと小窓（チームスペース設定・ページを追加）
+      if (on !== ic.hasAttribute('title')) { if (on) ic.title = 'チームスペース設定・ページを追加'; else ic.removeAttribute('title'); }
     });
     const hs = K164.els.map((e) => e.offsetHeight);
     const contentH = swap ? K164.meas.offsetHeight : (K164.listIn.offsetHeight || 0);
@@ -13362,7 +13549,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
   const lab184 = (b) => norm(b.getAttribute('aria-label') || b.getAttribute('data-tooltip') || b.getAttribute('title') || '');
   function plusIn184(host, re, loose) {
     if (!host || !host.isConnected) return null;
-    const bs = [...host.querySelectorAll('[role="button"], button')].filter((b) => b !== host && !b.closest('#c164-cat, #c33-ob-set, #c33-orbit'));
+    const bs = [...host.querySelectorAll('[role="button"], button')].filter((b) => b !== host && !b.closest('#c164-cat, #c33-ob-set, #c189-tpop, #c33-orbit'));
     const hit = bs.find((b) => re.test(lab184(b)) || re.test(norm(b.textContent)));
     if (hit) return hit;
     if (!loose) return null;
@@ -13432,7 +13619,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     }
     return { text: best, host };
   }
-  const modal184 = () => [...document.querySelectorAll('[role="dialog"]')].find((d) => !d.closest('#c33-ob-set, #c164-cat') && !d.querySelector('[id^="settings-tab-"]') && d.getBoundingClientRect().width > 120) || null;
+  const modal184 = () => [...document.querySelectorAll('[role="dialog"]')].find((d) => !d.closest('#c33-ob-set, #c189-tpop, #c164-cat') && !d.querySelector('[id^="settings-tab-"]') && d.getBoundingClientRect().width > 120) || null;
   /* v187: 本物の Notion で「チームスペースを作る」を押すと、ワークスペースのメニュー（Upgrade・Settings・Add members…）が
    * Orbit・Catalogus の上に開いたまま残っていた（見出しの「＋」が見つからず設定へ回り、メニューの「Settings」を拾えずに終わっていた）。
    * → 見出しの「＋」は Notion のサイドバーが閉じていれば開いてからもう一度探す。押して開いたメニュー・小窓のうち、作成の画面に
@@ -13512,7 +13699,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       if (!scope) continue;
       const ctx = [...scope.querySelectorAll('.notion-outliner-team-context-menu-button')].find((b) => !pageSide186(b, host));
       if (ctx) return ctx.matches('[role="button"], button') ? ctx : ctx.querySelector('[role="button"], button') || ctx;
-      const bs = [...scope.querySelectorAll('[role="button"], button')].filter((b) => b !== host && !b.contains(host) && !pageSide186(b, host) && !b.closest('#c164-cat, #c33-ob-set, #c33-orbit'));
+      const bs = [...scope.querySelectorAll('[role="button"], button')].filter((b) => b !== host && !b.contains(host) && !pageSide186(b, host) && !b.closest('#c164-cat, #c33-ob-set, #c189-tpop, #c33-orbit'));
       const hit = bs.find((b) => MORE_RE186.test(lab184(b)))
         || bs.find((b) => !b.querySelector('[role="button"], button') && b.querySelector('svg[class*="dots" i], svg[class*="ellipsis" i], svg[class*="more" i]'));
       if (hit) return hit;
@@ -13526,7 +13713,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     try { el.dispatchEvent(new MouseEvent('contextmenu', o)); return true; } catch (e) { return false; }
   }
   /* 「⋯」→ 無ければ右クリック。設定の項目・何かのメニュー（押す前に無かった項目）・何も出ない、を分けて返す */
-  const items186 = () => [...document.querySelectorAll('[role="menuitem"], [role="option"]')].filter((el) => !el.closest('#c33-ob-set, #c33-orbit, #c164-cat') && el.getBoundingClientRect().width);
+  const items186 = () => [...document.querySelectorAll('[role="menuitem"], [role="option"]')].filter((el) => !el.closest('#c33-ob-set, #c189-tpop, #c33-orbit, #c164-cat') && el.getBoundingClientRect().width);
   async function teamMenu186(get) {
     const host = get();
     if (!host) return { item: null, menu: null };
@@ -13554,7 +13741,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
   function setDialog186(before) {
     let best = null, area = 0;
     for (const d of document.querySelectorAll('[role="dialog"]')) {
-      if (before.has(d) || d.closest('#c33-ob-set, #c164-cat, #c33-orbit') || d.closest('.notion-media-menu')) continue;
+      if (before.has(d) || d.closest('#c33-ob-set, #c189-tpop, #c164-cat, #c33-orbit') || d.closest('.notion-media-menu')) continue;
       const r = d.getBoundingClientRect();
       if (r.width < 320 || r.width * r.height <= area) continue;
       best = d; area = r.width * r.height;
@@ -13581,33 +13768,38 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     };
     return bs.find((b) => leaf(b) && same(b)) || bs.find((b) => leaf(b) && b.querySelector('.notion-record-icon')) || null;
   }
+  /* 1) そのチームスペースのメニュー → Teamspace settings → 2) 設定の窓。{ d, how, before } か { d: null, why }（C189 の「チームスペース設定」も使う） */
+  async function tset186(t) {
+    const get = () => teamHost184(t);
+    let r = await teamMenu186(get);
+    if (!r.item && !r.menu && await sideOpen184()) r = await teamMenu186(get);   // v187.1 から sideOpen184 は何もしない
+    if (!r.item) {
+      if (r.menu) esc186(r.menu);
+      return { d: null, why: r.menu ? 'no-settings' : 'not-found' };
+    }
+    const before = new Set(document.querySelectorAll('[role="dialog"]'));
+    obPress(r.item);
+    const d = await obWait(() => setDialog186(before), 2000);
+    return d ? { d, how: r.how, before } : { d: null, why: 'no-dialog', how: r.how };
+  }
   async function teamIcon186(t) {
     if (!t || K184.busy) return false;
     K184.busy = true;
     const box = K164.els[K164.sel] && K164.teams && K164.teams[K164.sel] && K164.teams[K164.sel].key === t.key ? K164.els[K164.sel].firstElementChild : null;
     if (box) box.setAttribute('data-busy', '');
     try {
-      const get = () => teamHost184(t);
-      /* 1) そのチームスペースのメニュー → Teamspace settings（見つからなければ Notion のサイドバーを開いてもう一度） */
-      let r = await teamMenu186(get);
-      if (!r.item && !r.menu && await sideOpen184()) r = await teamMenu186(get);
-      if (!r.item) {
-        if (r.menu) esc186(r.menu);
-        note184('icon:' + t.name, r.menu ? 'no-settings' : 'not-found');
-        obToast(r.menu
+      const s = await tset186(t);
+      if (!s.d) {
+        note184('icon:' + t.name, s.why === 'no-dialog' ? s.how + ':no-dialog' : s.why);
+        obToast(s.why === 'no-settings'
           ? '「' + t.name + '」のメニューに Teamspace settings がありませんでした（チームスペースの管理者でないと出ません）。'
-          : '「' + t.name + '」のメニューが見つかりませんでした。Notion のサイドバーで「' + t.name + '」の「⋯」→ Teamspace settings のアイコンから変えられます。');
+          : s.why === 'not-found'
+            ? '「' + t.name + '」のメニューが見つかりませんでした。Notion のサイドバーで「' + t.name + '」の「⋯」→ Teamspace settings のアイコンから変えられます。'
+            : '「' + t.name + '」の設定が開きませんでした。Notion のサイドバーの「⋯」→ Teamspace settings から変えられます。');
         return false;
       }
-      /* 2) 設定の窓 → アイコンのボタン（General のタブに無ければ General へ） */
-      const before = new Set(document.querySelectorAll('[role="dialog"]'));
-      obPress(r.item);
-      const d = await obWait(() => setDialog186(before), 2000);
-      if (!d) {
-        note184('icon:' + t.name, r.how + ':no-dialog');
-        obToast('「' + t.name + '」の設定が開きませんでした。Notion のサイドバーの「⋯」→ Teamspace settings から変えられます。');
-        return false;
-      }
+      /* 設定の窓 → アイコンのボタン（General のタブに無ければ General へ） */
+      const d = s.d, before = s.before, r = { how: s.how };
       const cur = () => setDialog186(before) || d;
       let ib = await obWait(() => iconBtn186(cur(), t), 1500);
       if (!ib) {
@@ -13649,6 +13841,243 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
 `;
     (document.head || root104).appendChild(style);
   };
+  /* ── C189: チームスペースのアイコンを押すと、2 択の小窓（チームスペース設定・ページを追加） ──
+   * 186 は Catalogus で選んでいるチームスペースのアイコンを押すと、すぐ Notion のアイコンの小窓が開いた。→ まずこの小窓を出し、
+   * 「チームスペース設定」は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）、「ページを追加」は 184 の
+   * 一覧の最後にあった「＋ ページを追加」と同じ働き（その行はやめ、一覧の終わりは区切りの線だけにした）。
+   * 小窓は ³³ のもの（Notion の DOM は使わない）。アイコンから細い線が伸び → 小窓がぽんと開き → 2 つが順に出る（歯車は回って、＋ は弾んで）。
+   * 乗せると印のまわりを小さな衛星が回り、押すと輪が広がってから次へ。Esc・外を押す・ホイールで閉じる。New の小窓はそのまま */
+  const GEAR_SVG189 = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 1.6l1.05 1.7 1.95-.5.45 1.95 1.9.65-.55 1.92L14.4 8.6l-1.6 1.2.3 1.98-1.98.2-.85 1.82L8.4 13l-1.7 1.05-.65-1.9-1.98-.1.12-2-1.7-1.05 1.05-1.7-.85-1.82 1.92-.55.2-1.98 1.95.45z" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.1" fill="none" stroke="currentColor" stroke-width="1.25"/></svg>';
+  const K189 = { pop: null, t: null, ic: null, off: null };
+  const tpopOpen189 = () => !!(K189.pop && K189.pop.hasAttribute('data-on'));
+  function tpopClose189(back) {
+    const p = K189.pop;
+    if (!p || !p.hasAttribute('data-on')) return;
+    p.removeAttribute('data-on');
+    p.setAttribute('data-out', '');
+    clearTimeout(p.__t);
+    p.__t = setTimeout(() => p.removeAttribute('data-out'), still164() ? 0 : 190);
+    const ic = K189.ic;
+    if (K189.off) { K189.off(); K189.off = null; }
+    K189.t = null; K189.ic = null;
+    if (ic) {
+      ic.removeAttribute('data-c189-open');
+      const h = ic.closest('.ct-t');
+      if (h) h.setAttribute('aria-expanded', 'false');
+      if (back && h && h.isConnected) h.focus({ preventScroll: true });
+    }
+    leaveSoon164();
+  }
+  function tpopBuild189() {
+    const p = document.createElement('div');
+    p.id = 'c189-tpop';
+    p.innerHTML = '<i class="tp-ln"><b></b></i><div class="tp-card" role="menu"><div class="tp-h"><span class="tp-n"></span><i class="tp-st"></i></div>'
+      + '<button type="button" role="menuitem" class="tp-b" data-a="set"><span class="tp-ic">' + GEAR_SVG189 + '</span><span class="tp-t">チームスペース設定<small>アイコン・名前を変える</small></span></button>'
+      + '<button type="button" role="menuitem" class="tp-b" data-a="page"><span class="tp-ic">' + PLUS_SVG184 + '</span><span class="tp-t">ページを追加<small>新しいページが開く</small></span></button></div>';
+    p.addEventListener('click', (e) => {
+      const b = e.target.closest('.tp-b');
+      if (!b) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const t = K189.t, a = b.getAttribute('data-a');
+      if (!t || p.hasAttribute('data-go')) return;
+      p.setAttribute('data-go', a);
+      b.setAttribute('data-hit', '');
+      setTimeout(() => {
+        b.removeAttribute('data-hit');
+        p.removeAttribute('data-go');
+        tpopClose189(false);
+        if (a === 'set') teamSet189(t); else addPage184(t);
+      }, still164() ? 0 : 240);
+    });
+    p.addEventListener('keydown', (e) => {
+      if (e.isComposing || e.keyCode === 229) return;
+      const bs = [...p.querySelectorAll('.tp-b')];
+      const i = bs.indexOf(document.activeElement);
+      if (e.key === 'Escape') tpopClose189(true);
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') bs[(i + (e.key === 'ArrowDown' ? 1 : bs.length - 1)) % bs.length].focus();
+      else if (e.key === 'Home' || e.key === 'End') bs[e.key === 'Home' ? 0 : bs.length - 1].focus();
+      else if (e.key === 'Tab') tpopClose189(false);
+      else return;
+      if (e.key !== 'Tab') { e.preventDefault(); e.stopPropagation(); }
+    });
+    document.body.appendChild(p);
+    return p;
+  }
+  function tpop189(t, ic) {
+    if (!t || !ic || !ic.isConnected) return;
+    if (tpopOpen189() && K189.t && K189.t.key === t.key) { tpopClose189(false); return; }
+    tpopClose189(false);
+    if (newMenuOpen164()) obPopClose();
+    let p = K189.pop;
+    if (!p || !p.isConnected) p = K189.pop = tpopBuild189();
+    K189.t = t;
+    K189.ic = ic;
+    p.querySelector('.tp-n').textContent = t.name;
+    p.querySelector('.tp-card').setAttribute('aria-label', t.name + ' — チームスペース設定・ページを追加');
+    const tint = K164.el ? getComputedStyle(K164.el).getPropertyValue('--c164-tint').trim() : '';
+    p.style.setProperty('--tint', tint || '#8c857b');
+    clearTimeout(p.__t);
+    p.removeAttribute('data-out');
+    p.removeAttribute('data-on');
+    void p.offsetWidth;                // 開くたびに動きを最初から
+    p.setAttribute('data-on', '');
+    /* 置き場所: Catalogus の右。見出し（チームスペースの名前）の段の高さがアイコンの真ん中にくる。線はアイコンの右端から小窓の左端まで */
+    const a = ic.getBoundingClientRect(), cr = K164.el.getBoundingClientRect();
+    const card = p.querySelector('.tp-card');
+    const pw = card.offsetWidth || 204, ph = card.offsetHeight || 120;
+    const cy = a.top + a.height / 2;
+    const x = Math.round(Math.max(8, Math.min(innerWidth - pw - 8, cr.right + 14)));
+    const y = Math.round(Math.max(8, Math.min(innerHeight - ph - 8, cy - 18)));
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    p.style.setProperty('--gap', Math.max(0, Math.round(x - a.right - 5)) + 'px');
+    p.style.setProperty('--ly', Math.round(cy - y) + 'px');
+    ic.setAttribute('data-c189-open', '');
+    const h = ic.closest('.ct-t');
+    if (h) { h.setAttribute('aria-haspopup', 'menu'); h.setAttribute('aria-expanded', 'true'); }
+    /* 外を押す・ホイール・窓の大きさ → 閉じる（アイコンをもう一度押すのは click164 が閉じる） */
+    const down = (e) => { if (!p.contains(e.target) && !(K189.ic && K189.ic.contains(e.target))) tpopClose189(false); };
+    const wheel = (e) => { if (!p.contains(e.target)) tpopClose189(false); };
+    const size = () => tpopClose189(false);
+    window.addEventListener('pointerdown', down, true);
+    window.addEventListener('wheel', wheel, { capture: true, passive: true });
+    window.addEventListener('resize', size);
+    K189.off = () => {
+      window.removeEventListener('pointerdown', down, true);
+      window.removeEventListener('wheel', wheel, { capture: true, passive: true });
+      window.removeEventListener('resize', size);
+    };
+    p.querySelector('.tp-b').focus({ preventScroll: true });
+  }
+  /* チームスペース設定: Notion のそのチームスペースの「⋯」→ Teamspace settings の窓を開くだけ（アイコン・名前は窓の中で変える） */
+  async function teamSet189(t) {
+    if (!t || K184.busy) return false;
+    K184.busy = true;
+    const box = K164.els[K164.sel] && K164.teams && K164.teams[K164.sel] && K164.teams[K164.sel].key === t.key ? K164.els[K164.sel].firstElementChild : null;
+    if (box) box.setAttribute('data-busy', '');
+    try {
+      const s = await tset186(t);
+      note184('set:' + t.name, s.d ? s.how + ':dialog' : s.why === 'no-dialog' ? s.how + ':no-dialog' : s.why);
+      if (s.d) { obToast('「' + t.name + '」の設定を開きました。アイコン・名前はこの窓で変えられます（Catalogus にもそのまま映ります）。'); return true; }
+      obToast(s.why === 'no-settings'
+        ? '「' + t.name + '」のメニューに Teamspace settings がありませんでした（チームスペースの管理者でないと出ません）。'
+        : s.why === 'not-found'
+          ? '「' + t.name + '」のメニューが見つかりませんでした。Notion のサイドバーで「' + t.name + '」の「⋯」→ Teamspace settings から開けます。'
+          : '「' + t.name + '」の設定が開きませんでした。Notion のサイドバーの「⋯」→ Teamspace settings から開けます。');
+      return false;
+    } finally {
+      K184.busy = false;
+      if (box) box.removeAttribute('data-busy');
+    }
+  }
+  /* 一覧の終わりの区切り（v189）: Master の下の細罫と同じ真ん中の軸に。始まりに菱形・終わりに四芒星（アシンメトリー）。
+   * 一覧が出るたびに 菱形 → 線が左から引かれる → 星が灯る。ふだんはときどき光の粒が線を渡り、着くと星がまたたく */
+  function end189(i) {
+    const e = document.createElement('i');
+    e.className = 'ct-end';
+    e.setAttribute('aria-hidden', 'true');
+    e.style.setProperty('--i', String(Math.min(6, i)));
+    e.innerHTML = '<b></b><s></s>';
+    return e;
+  }
+  const cssBefore189 = nbCss;
+  nbCss = function() {
+    cssBefore189();
+    if (document.getElementById('c189-css')) return;
+    const S = S164;
+    const ON = S + '[data-c124-motion]';
+    const T = 'var(--c164-tint, #8c857b)';
+    const style = document.createElement('style');
+    style.id = 'c189-css';
+    style.textContent = `
+/* ── C189: 一覧の終わりの区切り（真ん中・菱形 → 線 → 四芒星） ── */
+#c164-cat .ct-end { position: relative; left: -.5px; display: block; width: 34px; height: 7px; margin: 10px auto 2px; pointer-events: none; }
+#c164-cat .ct-end::before { content: ""; position: absolute; left: 5px; right: 6px; top: 3px; height: 1px; border-radius: 1px; transform-origin: 0 50%;
+  background: linear-gradient(90deg, color-mix(in srgb, ${T} 85%, transparent), color-mix(in srgb, ${T} 32%, transparent)); }
+#c164-cat .ct-end > b { position: absolute; left: 0; top: 1.5px; width: 4px; height: 4px; background: ${T}; opacity: .9; transform: rotate(45deg); }
+#c164-cat .ct-end::after { content: ""; position: absolute; right: 0; top: 0; width: 7px; height: 7px; background: ${T}; opacity: .7;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+#c164-cat .ct-end > s { position: absolute; left: 4px; top: 2px; width: 3px; height: 3px; border-radius: 50%; background: ${T}; opacity: 0;
+  box-shadow: 0 0 4px 1px color-mix(in srgb, ${T} 55%, transparent); }
+${ON} #c164-cat .ct-list .ct-end > b { animation: c189-dia 300ms cubic-bezier(.3,1.6,.5,1) calc(var(--c164-d0, 60ms) + var(--i, 0) * 24ms) backwards; }
+${ON} #c164-cat .ct-list .ct-end::before { animation: c189-draw 460ms cubic-bezier(.22,.8,.24,1) calc(var(--c164-d0, 60ms) + var(--i, 0) * 24ms + 120ms) backwards; }
+${ON} #c164-cat .ct-list .ct-end::after { animation: c189-star 420ms cubic-bezier(.3,1.5,.5,1) calc(var(--c164-d0, 60ms) + var(--i, 0) * 24ms + 480ms) backwards, c189-tw 7s ease-in-out 1.4s infinite; }
+${ON} #c164-cat .ct-list .ct-end > s { animation: c189-glint 7s ease-in-out 1.4s infinite; }
+@keyframes c189-dia { from { opacity: 0; transform: rotate(45deg) scale(0); } }
+@keyframes c189-draw { from { transform: scaleX(0); opacity: .4; } }
+@keyframes c189-star { from { opacity: 0; transform: scale(0) rotate(-90deg); } }
+@keyframes c189-glint { 0%, 2% { opacity: 0; transform: none; } 6% { opacity: .95; } 22% { opacity: .95; transform: translateX(21px); } 26%, 100% { opacity: 0; transform: translateX(23px); } }
+@keyframes c189-tw { 0%, 21% { transform: none; opacity: .7; } 27% { transform: scale(1.55) rotate(45deg); opacity: 1; } 38%, 100% { transform: rotate(90deg); opacity: .7; } }
+
+/* ── C189: 開いているページの地は列の幅いっぱい（上の区切り線と同じ左端 → 右端）。色は 187.1 と同じ淡さ・左に淡い光 ── */
+#c164-cat .ct-r[aria-current] { isolation: isolate; }
+#c164-cat .ct-r[aria-current]::after { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: -3px; right: -2px; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 120% at 30% 50%, color-mix(in srgb, ${T} 9%, transparent), transparent 72%),
+    linear-gradient(90deg, color-mix(in srgb, ${T} 15%, color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 3.5%, transparent)), color-mix(in srgb, ${T} 11%, color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 2.5%, transparent))); }
+
+/* ── C189: チームスペースのアイコン → 2 択の小窓 ── */
+#c164-cat .ct-t.on > .ct-ic[data-c189-open]::after { opacity: 1; transform: none; }
+${ON} #c164-cat .ct-t.on > .ct-ic[data-c189-open] > * { animation: c189-bob 460ms cubic-bezier(.3,1.6,.5,1) both; }
+@keyframes c189-bob { 0% { transform: none; } 35% { transform: scale(1.16) rotate(-6deg); } 70% { transform: scale(.96) rotate(2deg); } 100% { transform: none; } }
+#c189-tpop { position: fixed; z-index: 104; display: none; left: 0; top: 0; --tint: #8c857b; --gap: 0px; --ly: 18px; }
+#c189-tpop[data-on], #c189-tpop[data-out] { display: block; }
+#c189-tpop[data-out] { pointer-events: none; }
+#c189-tpop .tp-ln { position: absolute; right: 100%; top: var(--ly); width: var(--gap); height: 1px; transform-origin: 0 50%;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--tint) 80%, transparent), color-mix(in srgb, var(--tint) 35%, transparent)); }
+#c189-tpop .tp-ln > b { position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; background: var(--tint); transform: rotate(45deg); }
+#c189-tpop .tp-card { box-sizing: border-box; width: 204px; padding: 5px; border-radius: 12px; background: var(--c-bacEle, #fff); color: var(--c-texPri, #37352f);
+  box-shadow: var(--c-shaOutMd, 0 8px 28px rgba(0,0,0,.16)), 0 0 0 1px var(--ca-borSecTra, rgba(0,0,0,.06));
+  font: 13px/1.35 var(--c33-ui); font-feature-settings: "palt" 1; -webkit-font-smoothing: antialiased; transform-origin: 0 var(--ly); }
+#c189-tpop .tp-h { display: flex; align-items: center; gap: 6px; padding: 6px 8px 5px 9px; font: 600 11px/1.3 var(--c164-serif, ${SERIF164}); letter-spacing: .02em;
+  color: color-mix(in srgb, var(--c-texPri, #37352f) 62%, transparent); }
+#c189-tpop .tp-n { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c189-tpop .tp-st { flex: none; width: 7px; height: 7px; background: var(--tint); clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); opacity: .8; }
+#c189-tpop .tp-b { position: relative; display: flex; align-items: center; gap: 10px; width: 100%; margin: 0; padding: 7px 8px; border: 0; border-radius: 9px; background: none;
+  color: inherit; font: inherit; text-align: left; cursor: pointer; outline: none; transition: background-color .15s ease; }
+#c189-tpop .tp-b:hover, #c189-tpop .tp-b:focus-visible { background: color-mix(in srgb, var(--tint) 13%, transparent); }
+#c189-tpop .tp-b:focus-visible { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 70%, transparent); }
+#c189-tpop .tp-ic { position: relative; flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: color-mix(in srgb, var(--tint) 17%, transparent); color: color-mix(in srgb, var(--tint) 62%, var(--c-texPri, #37352f)); }
+#c189-tpop .tp-ic svg { display: block; width: 15px; height: 15px; transition: transform .55s cubic-bezier(.3,1.6,.5,1); }
+#c189-tpop .tp-ic::before { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--tint); opacity: 0; pointer-events: none; }
+#c189-tpop .tp-ic::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--tint);
+  opacity: 0; transform: rotate(0deg) translateX(16px); transition: opacity .2s ease; pointer-events: none; }
+#c189-tpop .tp-t { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 600; }
+#c189-tpop .tp-t small { display: block; margin-top: 1px; font-size: 10.5px; font-weight: 400; color: var(--c-texTer, #999); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c189-tpop .tp-b:hover .tp-ic::after, #c189-tpop .tp-b:focus-visible .tp-ic::after { opacity: .9; }
+#c189-tpop .tp-b[data-a="set"]:hover .tp-ic svg, #c189-tpop .tp-b[data-a="set"]:focus-visible .tp-ic svg { transform: rotate(90deg); }
+#c189-tpop .tp-b[data-a="page"]:hover .tp-ic svg, #c189-tpop .tp-b[data-a="page"]:focus-visible .tp-ic svg { transform: rotate(90deg) scale(1.12); }
+${ON} #c189-tpop[data-on] .tp-ln { animation: c189-line 240ms cubic-bezier(.22,.8,.24,1) both; }
+${ON} #c189-tpop[data-on] .tp-ln > b { animation: c189-dia 300ms cubic-bezier(.3,1.6,.5,1) both; }
+${ON} #c189-tpop[data-on] .tp-card { animation: c189-pop 460ms cubic-bezier(.3,1.35,.5,1) 110ms both; }
+${ON} #c189-tpop[data-on] .tp-st { animation: c189-star 420ms cubic-bezier(.3,1.5,.5,1) 380ms backwards, c189-twk 2.6s ease-in-out 900ms infinite; }
+${ON} #c189-tpop[data-on] .tp-b { animation: c189-opt 420ms cubic-bezier(.3,1.45,.5,1) both; animation-delay: 210ms; }
+${ON} #c189-tpop[data-on] .tp-b + .tp-b { animation-delay: 280ms; }
+${ON} #c189-tpop[data-on] .tp-b[data-a="set"] .tp-ic svg { animation: c189-spin 760ms cubic-bezier(.22,.8,.24,1) 250ms backwards; }
+${ON} #c189-tpop[data-on] .tp-b[data-a="page"] .tp-ic svg { animation: c189-plus 620ms cubic-bezier(.3,1.5,.5,1) 330ms backwards; }
+${ON} #c189-tpop .tp-b:hover .tp-ic::after, ${ON} #c189-tpop .tp-b:focus-visible .tp-ic::after { animation: c189-orbit 1.6s linear infinite; }
+${ON} #c189-tpop .tp-b[data-hit] .tp-ic::before { animation: c189-ring 260ms ease-out both; }
+${ON} #c189-tpop[data-on] .tp-b[data-hit], ${ON} #c189-tpop[data-on] .tp-b + .tp-b[data-hit] { animation: c189-press 240ms ease both; }
+${ON} #c189-tpop[data-out] .tp-card { animation: c189-out 180ms ease both; }
+${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both; }
+@keyframes c189-line { from { transform: scaleX(0); } }
+@keyframes c189-pop { 0% { opacity: 0; transform: translateX(-12px) scale(.7) rotate(-2deg); } 100% { opacity: 1; transform: none; } }
+@keyframes c189-opt { 0% { opacity: 0; transform: translateX(-10px) rotate(-4deg); } 100% { opacity: 1; transform: none; } }
+@keyframes c189-spin { from { transform: rotate(-220deg) scale(.4); } }
+@keyframes c189-plus { 0% { transform: scale(0) rotate(-90deg); } 70% { transform: scale(1.25) rotate(8deg); } 100% { transform: none; } }
+@keyframes c189-twk { 0%, 100% { transform: none; opacity: .8; } 50% { transform: scale(.6) rotate(45deg); opacity: .45; } }
+@keyframes c189-orbit { from { transform: rotate(0deg) translateX(16px); } to { transform: rotate(360deg) translateX(16px); } }
+@keyframes c189-ring { 0% { opacity: .7; transform: none; } 100% { opacity: 0; transform: scale(1.9); } }
+@keyframes c189-press { 0% { transform: none; } 40% { transform: scale(.96); } 100% { transform: none; } }
+@keyframes c189-out { to { opacity: 0; transform: translateX(-6px) scale(.92); } }
+@media (prefers-reduced-motion: reduce) {
+  #c164-cat .ct-end, #c164-cat .ct-end *, #c164-cat .ct-end::before, #c164-cat .ct-end::after, #c189-tpop *, #c189-tpop *::before, #c189-tpop *::after, #c164-cat .ct-t > .ct-ic > * { animation: none !important; transition: none !important; }
+}
+`;
+    (document.head || root104).appendChild(style);
+  };
   window.addEventListener('pointerdown', (e) => {
     K164.newWas = !!(K164.newb && e.target && K164.newb.contains(e.target) && newMenuOpen164());
   }, true);
@@ -13679,8 +14108,8 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     if (ad) { if (ad.getAttribute('data-act') === 'team') newTeam184(); else addPage184(K164.teams && K164.teams[K164.sel]); return; }
     if (e.target.closest('.ct-open')) { expand164(K164.teams && K164.teams[K164.sel]); return; }
     const t = e.target.closest('.ct-t');
-    /* C186: 選んでいるチームスペースのアイコン → アイコンを変える（ほかのチームスペースのアイコンは今まで通り、押すと選ぶ） */
-    if (t && e.target.closest('.ct-t > .ct-ic') && K164.els.indexOf(t) === K164.sel) { teamIcon186(K164.teams && K164.teams[K164.sel]); return; }
+    /* C189: 選んでいるチームスペースのアイコン → 2 択の小窓（チームスペース設定・ページを追加）。ほかのチームスペースのアイコンは今まで通り、押すと選ぶ */
+    if (t && e.target.closest('.ct-t > .ct-ic') && K164.els.indexOf(t) === K164.sel) { tpop189(K164.teams && K164.teams[K164.sel], t.firstElementChild); return; }
     if (t) {
       const k = K164.els.indexOf(t);
       if (k >= 0 && k !== K164.sel) selectTo164(k);
@@ -13734,7 +14163,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
   function leaveSoon164() {
     clearTimeout(K164.leaveT);
     K164.leaveT = setTimeout(() => {
-      if (K164.inside || K164.onPlanet || newMenuOpen164()) return;
+      if (K164.inside || K164.onPlanet || newMenuOpen164() || tpopOpen189()) return;
       const a = document.activeElement;
       if (a && K164.el && K164.el.contains(a)) return;
       if (a && a.closest && a.closest('#c33-orbit .ob-it') && a.matches(':focus-visible')) return;
@@ -13962,8 +14391,7 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
 #c164-cat .ct-r:hover::before, #c164-cat .ct-r:focus-visible::before { opacity: .55; transform: none; }
 #c164-cat .ct-r[aria-current]::before { opacity: 1; transform: none; }
 /* v187: 開いているページは太字にせず（ほかの行と同じ太さ）、行の地を淡く色付けて示す */
-/* v187.1: 地は Orbit の選んだ惑星と同じ作り（惑星の色 18% から外へ淡く消える光。箱の縁は見せない）。惑星の色が取れない時も淡い光は残る */
-#c164-cat .ct-r[aria-current] { background: radial-gradient(ellipse 66% 130% at 38% 50%, color-mix(in srgb, var(--c164-tint, #8c857b) 18%, color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 4%, transparent)), transparent 72%); }
+/* v189: 地は列の幅いっぱい（C189 の ::after。v187.1 の外へ淡く消える光は、右の 3 割ほどが塗られず幅と合っていなかった） */
 #c164-cat .ct-r[aria-current] .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); }
 #c164-cat .ct-note { padding: 6px 4px 2px; font-size: 11px; line-height: 1.5; text-align: center; color: var(--c164-ink3); overflow-wrap: break-word; }
 #c164-cat .ct-dots { display: block; margin: 2px auto 5px; width: 18px; height: 4px;
@@ -14798,6 +15226,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
 
   window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), catalogus: (on) => (on == null ? CAT164.on : set164('on', on)), hscroll: () => hscroll164(), dbzoom: (v) => dbzoom174(v), dbfit: (v) => dbfit184(v), addPage: () => addPage184(K164.teams && K164.teams[K164.sel]), newTeam: () => newTeam184(), adds: () => K184.log.slice(), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }), catalogus: { on: CAT164.on, open: CAT164.open, shown: K164.shown, why: K164.why, prev: K164.prev, asked: Object.keys(K164.req), rest: K164.rest, gid: K164.gid, room: K164.G.room || null, teams: (K164.teams || []).map((t) => t.name + (t.open ? '（' + t.rows.length + '）' : '（閉）')), sel: K164.sel, broken: K164.broken }, dbzoom: dbzoom174(), dbfit: dbfit184() }) };
   window.__c33.teamIcon = () => teamIcon186(K164.teams && K164.teams[K164.sel]);   // C186
+  window.__c33.teamSet = () => teamSet189(K164.teams && K164.teams[K164.sel]);     // C189
 
   /* v188: 187 は「チームスペースを作る」で Notion のサイドバーを開き、開いたまま残した。Notion はサイドバーの開け閉めを覚えるので、
    * 187.1 を入れ直しても開いたままで、Catalogus の場所に Notion のサイドバーが出続けた（元に戻らない）。
