@@ -12852,7 +12852,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     px164(L, '--h', listH + 'px');
     L.style.transition = quick ? 'none' : '';
     /* チームスペースの位置 */
-    let y = listTop + listH + (N > 1 ? 10 : 0);
+    let y = listTop + listH + (N > 1 ? 16 : 0);   // ゆとり: 一覧の終わり → 次のチームスペースも少し離す（10 → 16px）
     const gen = (K164.gen = (K164.gen || 0) + 1);
     order.forEach((k, p) => {
       const e = K164.els[k];
@@ -13612,21 +13612,22 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
 #c164-cat .ct-list[data-up] { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16px); mask-image: linear-gradient(to bottom, transparent, #000 16px); }
 #c164-cat .ct-list[data-down] { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); }
 #c164-cat .ct-list[data-up][data-down] { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 18px), transparent); }
-#c164-cat .ct-in { box-sizing: border-box; width: 100%; padding: 1px 2px 8px 3px; transition: opacity 110ms ease; }
+/* ゆとり: 一覧は見出しの細罫から少し離して始め、行は 30px ごと（字 12px・行間 1.4・上下 6.5px）。左の細い印 → 行の印も 6px 空ける */
+#c164-cat .ct-in { box-sizing: border-box; width: 100%; padding: 6px 2px 10px 3px; transition: opacity 110ms ease; }
 #c164-cat .ct-meas { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
 #c164-cat .ct-list[data-out] .ct-in { opacity: 0; }
 #c164-cat .ct-r {
   position: relative; display: flex; align-items: flex-start; gap: 5px; box-sizing: border-box; width: 100%;
-  padding: 4px 2px 4px calc(4px + var(--lv, 0) * 7px); border-radius: 5px; color: inherit; text-decoration: none; outline: none; cursor: pointer;
+  padding: 6.5px 2px 6.5px calc(8px + var(--lv, 0) * 7px); border-radius: 5px; color: inherit; text-decoration: none; outline: none; cursor: pointer;
 }
 #c164-cat .ct-r { gap: var(--c164-rgap, 9px); }   /* v174: アイコンの右端 → 名前の字の左端を実測でおよそ 10px（gap 9px ＋ 字の左の余白） */
 #c164-cat .ct-r .ct-ic { width: 14px; height: 14px; margin-top: 1.5px; }
 #c164-cat .ct-r .ct-ic[data-txt] { font-size: 12.5px; }
 #c164-cat .ct-rn {
-  min-width: 0; flex: 1; font-size: 12px; font-weight: 400; line-height: 1.32; color: var(--c164-ink2);
+  min-width: 0; flex: 1; font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--c164-ink2);
   overflow-wrap: break-word; word-break: normal; line-break: strict; hyphens: auto; transition: color .18s ease, transform .18s ease;
 }
-#c164-cat .ct-r::before { content: ""; position: absolute; left: 0; top: 6px; height: 11px; width: 1.5px; border-radius: 1px; background: var(--c164-tint, #8c857b); opacity: 0; transform: scaleY(.3); transition: opacity .18s ease, transform .22s ease; }
+#c164-cat .ct-r::before { content: ""; position: absolute; left: 0; top: 9.5px; height: 11px; width: 1.5px; border-radius: 1px; background: var(--c164-tint, #8c857b); opacity: 0; transform: scaleY(.3); transition: opacity .18s ease, transform .22s ease; }
 #c164-cat .ct-r:hover .ct-rn, #c164-cat .ct-r:focus-visible .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); transform: translateX(1px); }
 #c164-cat .ct-r:hover::before, #c164-cat .ct-r:focus-visible::before { opacity: .55; transform: none; }
 #c164-cat .ct-r[aria-current]::before { opacity: 1; transform: none; }
@@ -13639,14 +13640,14 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
 #c164-cat .ct-open:hover { background: color-mix(in srgb, var(--c164-tint, #8c857b) 24%, transparent); }
 /* v184: 「＋ ページを追加」「＋ チームスペースを作る」— 行と同じ格子（印 14px・字 12px）。いつもは淡く、乗せると行と同じ濃さ。上に短い細罫 */
 #c164-cat .ct-add {
-  position: relative; display: flex; align-items: flex-start; gap: var(--c164-rgap, 9px); box-sizing: border-box; width: 100%; margin: 6px 0 0; padding: 7px 2px 4px 4px;
+  position: relative; display: flex; align-items: flex-start; gap: var(--c164-rgap, 9px); box-sizing: border-box; width: 100%; margin: 10px 0 0; padding: 11px 2px 6.5px 8px;
   border: 0; border-radius: 5px; background: none; color: var(--c164-ink3); font: inherit; text-align: left; cursor: pointer; outline: none; transition: color .18s ease;
 }
-#c164-cat .ct-add::before { content: ""; position: absolute; left: 4px; top: 0; width: 14px; height: 1px; background: var(--c164-tint, #8c857b); opacity: .45; transition: width .3s cubic-bezier(.22,.8,.24,1), opacity .2s ease; }
+#c164-cat .ct-add::before { content: ""; position: absolute; left: 8px; top: 0; width: 14px; height: 1px; background: var(--c164-tint, #8c857b); opacity: .45; transition: width .3s cubic-bezier(.22,.8,.24,1), opacity .2s ease; }
 #c164-cat .ct-note + .ct-add, #c164-cat .ct-open + .ct-add { margin-top: 10px; }
 #c164-cat .ct-add .ct-ic { width: 14px; height: 14px; margin-top: 1.5px; }
 #c164-cat .ct-add .ct-ic svg { transition: transform .45s cubic-bezier(.3,1.4,.5,1); }
-#c164-cat .ct-an { min-width: 0; flex: 1; font-size: 12px; line-height: 1.32; overflow-wrap: break-word; transition: transform .18s ease; }
+#c164-cat .ct-an { min-width: 0; flex: 1; font-size: 12px; line-height: 1.4; overflow-wrap: break-word; transition: transform .18s ease; }
 #c164-cat .ct-add:hover, #c164-cat .ct-add:focus-visible { color: var(--nb-text, var(--c-texPri, #37352f)); }
 #c164-cat .ct-add:hover::before, #c164-cat .ct-add:focus-visible::before { width: 28px; opacity: .8; }
 #c164-cat .ct-add:hover .ct-an, #c164-cat .ct-add:focus-visible .ct-an { transform: translateX(1px); }
