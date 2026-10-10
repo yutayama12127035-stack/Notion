@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      154.0.0
-// @description  v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      164.0.0
+// @description  v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -26,6 +26,42 @@
 // @noframes
 // ==/UserScript==
 
+/*
+ * v164.0.0（Caelum VI — Catalogus: Orbit の右の第２列、地平線、子午線の星の粒）
+ *   ・Catalogus（新しい第２列）: Orbit で惑星 → Catalogus でその惑星のチームスペース → その中の DB・ページ。
+ *     ・幅は Orbit と同じ（測る。あなたの画面では 97px — 境界線・内側の余白もこの中）。左は Orbit の右の端、上は Orbit の先頭の段
+ *       （B.U.R.I の横ではない）、下は Orbit の下の端。本文は押し出さない・transform もかけない（DB の定位置で空けた 128px の中に入る）
+ *     ・地は本文と同じ紙（本文の枠の色と地紋を測って共通の変数 --c164-paper / --c164-grain に。ライト・ダーク・Atelier の切り替えで測り直す）。
+ *       カード・影・強い色面・目立つ角丸は使わない。色は惑星の色を、短い罫・細い線・選んだ行の印にだけ
+ *     ・チームスペース: 元のアイコン（Notion のサイドバーの画像の src・絵文字・SVG の形をそのまま写す。色を変えない・型抜きしない）・名前・
+ *       名前の下の短い細罫（選んでいる時）。DB・ページ: 元のアイコンと名前。入れ子は少し字下げ。いま開いているページには惑星の色の細い印
+ *     ・循環: 選んだチームスペースが先頭、その中身だけ開く。残りはアイコンと名前で待つ。元の並び（¹⁶ の順）のまま、末尾の次は先頭。
+ *       先頭から抜けるものは上へ抜けて下から戻る（逆回しは逆）— 長い距離を横切らない。自動では回らない。
+ *       ホイール（チームスペースの所・ノッチ 1 つ＝1 段・Orbit と同じ向き）・クリック・↑↓・下の ‹ ›。連打・逆回し・動いている途中の操作でも、
+ *       状態は 1 つ（選んでいる番号）で、見た目はそこへ収まる
+ *     ・中身が多い時は一覧の中だけでスクロール（上下の端は淡く消える）。1 回の回しは始めた所で決める: 一覧で始めたら一覧だけ（端に着いても
+ *       循環へ引き継がない）、チームスペースの所で始めたら回し続ける。⌘/Ctrl のホイール（拡大）と横の身ぶりは妨げない
+ *     ・長い名前: 97px の中で全文を読む。欧文の 1 語が入らない時だけ字を 1 段（12 → 11px）下げて単語の途中で切らない。
+ *       それでも入らない長い英数字だけ必要な所で折り返す。和文は自然な位置で。末尾のぼかし・常時の … は使わない。名前は書き換えない
+ *     ・惑星に乗せると見本（0.13 秒とどまったら。本文へは移らない。別の惑星を素早く横切っただけでは変えない）。押すと固定（先頭の DB へは
+ *       勝手に移らない）。いちばん上で選ばれている惑星をもう一度押すと畳む。Esc でも畳む。Orbit → Catalogus へ動いても閉じない（0.32 秒の猶予）。
+ *       操作中・フォーカス中は出したまま。旧ホバーカード（282px の小窓・C101）は取り除いた（二重表示なし・見張りも消した）
+ *     ・出どころ: 子午線の上を、惑星（子午線の星）からチームスペースの段まで惑星の色の細い線、境界の小さな菱形、印への短い線。
+ *       押して惑星が先頭に来ると、惑星とチームスペースの印の真ん中が同じ高さにそろい、線はまっすぐ横に（位置は実測から）
+ *     ・状態: 読み込み中（¹⁶ がまだ並べていない・開いて読んでいる）・閉じている（Notion のサイドバーで畳まれていて中身が無い — 固定している時は
+ *       選んで 0.45 秒で Notion の開くボタンを押して読む。「開いて読む」でも）・空（中身が無い）を分けて書く。作り物の中身で埋めない
+ *     ・DB・ページを押すと、ID で既存の道（nbGo: 惑星を合わせて、¹⁶ の畳みを解いて、Notion のサイドバーのリンクを押す）で開く。
+ *       ⌘/Ctrl・Shift・中ボタンはブラウザーのまま（新しいタブ）
+ *     ・幅が足りない時（本文のいちばん左 − Orbit の右 < 列の幅＋つまみの分 24px（ページは 44px））は列を休ませる。本文に重ねない・字を縮めない
+ *     ・開いたまま読み込んだ時は、³³ の準備完了の印（幕の合図）より前に描く。読めない時はその機能だけ止めて、原因を 1 度だけ記録
+ *   ・地平線: B.U.R.I の下と Settings の上の横線を、子午線と同じ考え方で作り直す（端が淡く消える・子午線との継ぎ目の菱形・Catalogus の端の小さな星）。
+ *     Catalogus が出ると地平線もその端まで伸びる。帯を開くと継ぎ目から右へ光が渡る。19 秒に 1 回の金の光は、地平線を渡って継ぎ目で折れ、子午線を降りる
+ *   ・子午線の目盛り: 定規のような 3px の横線をやめ、線に通した小さな星の粒に（輪と一緒に回る・9 秒ごとに惑星の色の光がゆっくり降りる）
+ *   ・B.U.R.I に乗せた時の吹き出しは出さない（名前と近道は読み上げ用の名前にだけ）
+ *   ・上の帯の More が 2 つ: 入りきらない計器の箱を Others に（星の小さな群れの印・隠れている数を小さく添える）。Notion の ⋯ は More のまま
+ *   ・横スクロール: 本文の枠でバーが見えていたら、その枠にも印を付けて隠す。__c33.hscroll() で、どの要素が何 px はみ出しているかを一覧
+ *   ・設定（('-' 鰤)з パネルの ⚙ →「Caelum」）に Catalogus。コンソール: __c33.catalogus(true|false) ／ __c33.hscroll() ／ __c33.status().catalogus
+ */
 /*
  * v154.0.0（Caelum V — 子午線、B.U.R.I に畳む上の帯、DB の新しい定位置）
  *   ・子午線: Orbit と本文のあいだの縦の区切り。地の色はそのまま、線は Notion の文字色の 19%（ダークは 21%）。
@@ -316,7 +352,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '154.0.0';
+  const VERSION = '164.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -9081,15 +9117,9 @@ ${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
   const logged101 = new Set();
   const reservations101 = new Map();
 
-  let card101 = null;
-  let anchor101 = null;
-  let current101 = '';
-  let pinned101 = false;
-  let hoverTimer101 = 0;
-  let closeTimer101 = 0;
+  /* v164: 旧ホバーカード（282px の小窓）は Catalogus（C164 の第２列）に置き換えたため、カードの状態は持たない */
   let layoutRAF101 = 0;
   let scanRAF101 = 0;
-  let userSelection101 = null;
   let faceSVG101 = '';
   let signature101 = '';
 
@@ -9120,33 +9150,6 @@ ${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
     if (className) el.className = className;
     if (text != null) el.textContent = text;
     return el;
-  }
-
-  function target101(event) {
-    return event.target instanceof Element ? event.target : null;
-  }
-
-  function id101(value) {
-    const match = String(value || '').match(
-      /[a-f0-9]{8}-?[a-f0-9]{4}-?[a-f0-9]{4}-?[a-f0-9]{4}-?[a-f0-9]{12}/i
-    );
-    return match ? match[0].replace(/-/g, '').toLowerCase() : '';
-  }
-
-  function group101(gid) {
-    if (gid === SOL101)
-      return { gid, label: 'Sol', tint: '#b19762' };
-
-    if (!gid)
-      return { gid: '', label: 'All', tint: '#8c857b' };
-
-    try {
-      return obGroups().find(g => g.gid === gid) ||
-        { gid, label: 'Catalogus', tint: '#8c857b' };
-    } catch (error) {
-      log101('group', '惑星情報の取得を休みます。');
-      return { gid, label: 'Catalogus', tint: '#8c857b' };
-    }
   }
 
   /*
@@ -9215,7 +9218,6 @@ ${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
           el => el.__gid === SOL101
         );
         if (position >= 0) obJump(position);
-        closeCard101();
       }, true);
     }
 
@@ -9308,160 +9310,7 @@ ${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
     header.appendChild(badge);
   }
 
-  /*
-   * Native DOMと取得済みregistryから読む。
-   * id32/nbGoなど、存在・スコープ未確認の関数は使わない。
-   */
-  function records101(gid) {
-    const records = new Map();
-    const side = obSide();
-
-    if (side) {
-      const teams = side.querySelectorAll(
-        '[data-c33-team][data-c16-g]'
-      );
-
-      for (const team of teams) {
-        const teamGid = team.getAttribute('data-c16-g') || '';
-        if (gid && teamGid !== gid) continue;
-
-        const teamText = team.querySelector('[data-c98-name="team"]');
-        const teamName = teamText
-          ? teamText.textContent.trim()
-          : team.getAttribute('data-c16-k') || '';
-
-        const rows = team.querySelectorAll(
-          '[data-c33-kind="db"],[data-c33-kind="page"]'
-        );
-
-        for (const row of rows) {
-          try {
-            const link = row.matches('a[href]')
-              ? row
-              : row.querySelector('a[href]');
-
-            let rawId = row.getAttribute('data-c98-id') || '';
-
-            if (!rawId && typeof idOf === 'function')
-              rawId = idOf(row);
-
-            const id = id101(rawId || (link && link.href));
-            if (!id) continue;
-
-            const nameNode = row.querySelector('[data-c98-name]');
-            const name = nameNode
-              ? nameNode.textContent.trim()
-              : typeof nameOf === 'function'
-                ? nameOf(row)
-                : row.textContent.trim();
-
-            let href = new URL('/' + id, location.origin).href;
-
-            if (link) {
-              const candidate = new URL(link.href, location.href);
-              if (candidate.origin === location.origin)
-                href = candidate.href;
-            }
-
-            records.set(id, {
-              id, href,
-              name: name || 'Untitled',
-              team: teamName,
-              kind: row.getAttribute('data-c33-kind') || 'page'
-            });
-          } catch (error) {
-            log101('row', '読み取れない行は一覧から除外しました。');
-          }
-        }
-      }
-    }
-
-    const registry =
-      typeof NBS !== 'undefined' && NBS.reg ? NBS.reg : {};
-
-    for (const [rawId, entry] of Object.entries(registry)) {
-      if (!entry || (gid && entry.gid !== gid)) continue;
-
-      const id = id101(rawId);
-      if (!id || records.has(id)) continue;
-
-      records.set(id, {
-        id,
-        href: new URL('/' + id, location.origin).href,
-        name: entry.name || 'Untitled',
-        team: entry.team || '',
-        kind: entry.kind || 'page'
-      });
-    }
-
-    return [...records.values()].sort((a, b) =>
-      a.team.localeCompare(b.team) ||
-      a.name.localeCompare(b.name)
-    );
-  }
-
-  function makeCard101() {
-    if (card101) return card101;
-
-    card101 = node101('section', 'c101-card');
-    card101.id = 'c101-card';
-    card101.hidden = true;
-    card101.setAttribute('aria-label', 'Catalogus');
-    document.body.appendChild(card101);
-
-    card101.addEventListener('pointerenter', () => {
-      clearTimeout(closeTimer101);
-      clearTimeout(hoverTimer101);
-    });
-
-    card101.addEventListener('pointerleave', () => {
-      if (!pinned101) scheduleClose101();
-    });
-
-    return card101;
-  }
-
-  function placeCard101() {
-    if (!card101 || card101.hidden || !obEl) return;
-
-    const rail = obEl.getBoundingClientRect();
-    const anchor = anchor101 && anchor101.isConnected
-      ? anchor101.getBoundingClientRect()
-      : rail;
-
-    const width = Math.max(160, Math.min(282, innerWidth - 16));
-    card101.style.width = width + 'px';
-
-    const bounds = card101.getBoundingClientRect();
-
-    card101.style.left = Math.round(Math.max(
-      8, Math.min(rail.right + 8, innerWidth - bounds.width - 8)
-    )) + 'px';
-
-    card101.style.top = Math.round(Math.max(
-      8, Math.min(anchor.top - 5, innerHeight - bounds.height - 8)
-    )) + 'px';
-  }
-
-  function closeCard101() {
-    clearTimeout(hoverTimer101);
-    clearTimeout(closeTimer101);
-
-    if (card101) card101.hidden = true;
-    pinned101 = false;
-    anchor101 = null;
-  }
-
-  function scheduleClose101() {
-    clearTimeout(closeTimer101);
-    closeTimer101 = setTimeout(() => {
-      if (!pinned101) closeCard101();
-    }, 300);
-  }
-
   function openBuri101() {
-    closeCard101();
-
     if (typeof C98.openPanel === 'function') {
       C98.openPanel();
       requestAnimationFrame(putFaceInside101);
@@ -9471,252 +9320,14 @@ ${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
     log101('buri-link', 'B.U.R.Iの接続準備を待っています。');
   }
 
-  /*
-   * 非表示のまま内容を完成させ、最後に表示。
-   * データ取得が失敗しても、タイトルと説明を残す。
-   */
-  function showCard101(gid, anchor, pin, keyboard) {
-    clearTimeout(closeTimer101);
-    clearTimeout(hoverTimer101);
-
-    const card = makeCard101();
-    const group = group101(gid);
-    const fragment = document.createDocumentFragment();
-
-    const head = node101('header', 'c101-head');
-    const titles = node101('div', 'c101-titles');
-    const overline = node101(
-      'div', 'c101-overline',
-      gid === SOL101 ? 'SOL · ASSISTANT' : 'ORBIT · CATALOGUS'
-    );
-    const title = node101(
-      'h2', 'c101-title',
-      gid === SOL101 ? 'B.U.R.I' : group.label
-    );
-    const close = node101('button', 'c101-close', '×');
-
-    close.type = 'button';
-    close.setAttribute('aria-label', '閉じる');
-    close.addEventListener('click', closeCard101);
-
-    titles.append(overline, title);
-    head.append(titles, close);
-    fragment.appendChild(head);
-
-    const body = node101('div', 'c101-body');
-
-    if (gid === SOL101) {
-      body.appendChild(node101(
-        'p', 'c101-description',
-        'Bridging Understanding, Reasoning & Interaction'
-      ));
-      body.appendChild(node101(
-        'p', 'c101-empty',
-        'ここからB.U.R.Iを開きます。中の構成は、次の段階で整えます。'
-      ));
-
-      const open = node101('button', 'c101-action', 'B.U.R.Iを開く');
-      open.type = 'button';
-      open.addEventListener('click', openBuri101);
-      body.appendChild(open);
-    } else {
-      let entries = [];
-
-      try {
-        entries = records101(gid);
-      } catch (error) {
-        log101('records', '一覧の読取に失敗したため、案内を表示します。');
-      }
-
-      if (!entries.length) {
-        body.appendChild(node101(
-          'p', 'c101-empty',
-          '取得済みの項目はまだありません。' +
-          'チームスペースを開くと、この星表に反映されます。'
-        ));
-      } else {
-        let previousTeam = null;
-
-        for (const entry of entries) {
-          if (entry.team !== previousTeam) {
-            previousTeam = entry.team;
-
-            if (entry.team)
-              body.appendChild(node101(
-                'div', 'c101-team', entry.team
-              ));
-          }
-
-          const link = node101('a', 'c101-entry');
-          link.href = entry.href;
-
-          const mark = node101(
-            'span', 'c101-entry-mark',
-            entry.kind === 'db' ? '·' : '–'
-          );
-          mark.setAttribute('aria-hidden', 'true');
-
-          link.append(
-            mark,
-            node101('span', 'c101-entry-name', entry.name)
-          );
-          link.addEventListener('click', closeCard101);
-          body.appendChild(link);
-        }
-      }
-    }
-
-    fragment.appendChild(body);
-    fragment.appendChild(node101(
-      'footer', 'c101-footer',
-      pin ? '項目を選んで開く · Escで閉じる' : 'クリックで選択 · Escで閉じる'
-    ));
-
-    card.replaceChildren(fragment);
-    card.style.setProperty('--c101-tint', group.tint || '#8c857b');
-    card.setAttribute('role', pin ? 'dialog' : 'region');
-    card.setAttribute('aria-modal', 'false');
-
-    current101 = gid;
-    anchor101 = anchor;
-    pinned101 = !!pin;
-    card.hidden = false;
-    placeCard101();
-
-    if (keyboard) {
-      const focus = card.querySelector('.c101-entry,.c101-action');
-      (focus || close).focus({ preventScroll: true });
-    }
-  }
-
   const selectBefore101 = obSelect;
   obSelect = function(gid) {
     if (gid === SOL101) {
-      userSelection101 = null;
       openBuri101();
       return;
     }
-
-    const user = userSelection101;
-    userSelection101 = null;
-    const result = selectBefore101(gid);
-
-    if (user && user.gid === (gid || '')) {
-      requestAnimationFrame(() => {
-        showCard101(gid || '', user.anchor, true, user.keyboard);
-      });
-    }
-
-    return result;
+    return selectBefore101(gid);
   };
-
-  document.addEventListener('pointerover', event => {
-    const target = target101(event);
-    const item = target && target.closest(
-      '#c33-orbit .ob-it,#c33-orbit .ob-all'
-    );
-
-    if (!item || !OB.on || pinned101) return;
-    if (event.relatedTarget instanceof Node &&
-        item.contains(event.relatedTarget)) return;
-
-    clearTimeout(closeTimer101);
-    clearTimeout(hoverTimer101);
-
-    const gid = item.getAttribute('data-c33-gid') || '';
-
-    hoverTimer101 = setTimeout(() => {
-      if (item.isConnected && OB.on && !pinned101)
-        showCard101(gid, item, false, false);
-    }, 150);
-  }, true);
-
-  document.addEventListener('pointerout', event => {
-    const target = target101(event);
-    const item = target && target.closest(
-      '#c33-orbit .ob-it,#c33-orbit .ob-all'
-    );
-
-    if (!item) return;
-    if (event.relatedTarget instanceof Node &&
-        item.contains(event.relatedTarget)) return;
-
-    clearTimeout(hoverTimer101);
-    if (!pinned101) scheduleClose101();
-  }, true);
-
-  document.addEventListener('focusin', event => {
-    const target = target101(event);
-    const item = target && target.closest(
-      '#c33-orbit .ob-it,#c33-orbit .ob-all'
-    );
-
-    if (!item || pinned101) return;
-
-    showCard101(
-      item.getAttribute('data-c33-gid') || '',
-      item, false, false
-    );
-  }, true);
-
-  document.addEventListener('click', event => {
-    const target = target101(event);
-    if (!target) return;
-
-    const item = target.closest('#c33-orbit .ob-it');
-
-    if (item) {
-      const gid = item.getAttribute('data-c33-gid') || '';
-
-      if (gid === SOL101) {
-        closeCard101();
-        return;
-      }
-
-      userSelection101 = {
-        gid,
-        anchor: item,
-        keyboard: event.detail === 0
-      };
-
-      queueMicrotask(() => { userSelection101 = null; });
-      return;
-    }
-
-    const all = target.closest('#c33-orbit .ob-all');
-    if (all) {
-      setTimeout(() => showCard101('', all, true, false), 0);
-      return;
-    }
-
-    if (card101 && !card101.contains(target)) closeCard101();
-  }, true);
-
-  document.addEventListener('keydown', event => {
-    if (event.isComposing || event.keyCode === 229) return;
-
-    if (event.key === 'Escape' && card101 && !card101.hidden) {
-      const anchor = anchor101;
-      closeCard101();
-      if (anchor && anchor.isConnected)
-        anchor.focus({ preventScroll: true });
-      event.preventDefault();
-      return;
-    }
-
-    const target = target101(event);
-    const item = target && target.closest('#c33-orbit .ob-it');
-
-    if (!item || !['Enter', ' '].includes(event.key)) return;
-
-    userSelection101 = {
-      gid: item.getAttribute('data-c33-gid') || '',
-      anchor: item,
-      keyboard: true
-    };
-
-    queueMicrotask(() => { userSelection101 = null; });
-  }, true);
 
   /*
    * 三本線は意味ラベル、または明確な三本線形状で識別。
@@ -9898,7 +9509,6 @@ ${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
       requestReserve101();
     }
 
-    if (!OB.on) closeCard101();
     return result;
   };
 
@@ -9965,139 +9575,7 @@ ${W} #c33-np .c101-panel-face svg {
   height: 18px;
 }
 
-${W} #c101-card {
-  position: fixed !important;
-  z-index: 2147482000 !important;
-  box-sizing: border-box !important;
-  max-height: min(440px,calc(100vh - 16px));
-  overflow: auto;
-  overscroll-behavior: contain;
-  padding: 18px 18px 12px !important;
-  border: 1px solid
-    color-mix(in srgb,var(--nb-text,#37352f) 12%,transparent);
-  border-radius: 7px;
-  background: var(--nb-paper,var(--c-bacSec,#f7f6f3));
-  color: var(--nb-text,var(--c-texPri,#37352f));
-  box-shadow: 0 3px 8px #00000005,0 14px 36px #0000000c;
-  font: 400 14px/1.55 var(--c99-serif);
-  animation: c101Reveal .13s ease-out;
-}
-${W} #c101-card[hidden] { display: none !important; }
-${W} #c101-card .c101-head {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid
-    color-mix(in srgb,var(--c101-tint,#8c857b) 30%,transparent);
-}
-${W} #c101-card .c101-titles { min-width: 0; }
-${W} #c101-card .c101-overline {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font: 500 8px/1.5 system-ui,sans-serif;
-  letter-spacing: .16em;
-  opacity: .58;
-}
-${W} #c101-card .c101-overline::before {
-  content: "";
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--c101-tint,#8c857b);
-}
-${W} #c101-card .c101-title {
-  margin: 5px 0 0;
-  font: 500 21px/1.2 var(--c99-serif);
-  letter-spacing: .005em;
-  overflow-wrap: anywhere;
-}
-${W} #c101-card .c101-close {
-  flex: 0 0 22px;
-  width: 22px;
-  height: 22px;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: inherit;
-  opacity: .45;
-  cursor: pointer;
-  font: 16px/22px system-ui,sans-serif;
-}
-${W} #c101-card .c101-body { padding-block: 7px 9px; }
-${W} #c101-card .c101-team {
-  margin: 12px 0 4px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .025em;
-  opacity: .6;
-  overflow-wrap: anywhere;
-}
-${W} #c101-card .c101-entry {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-  padding: 7px 3px;
-  border-radius: 3px;
-  color: inherit;
-  text-decoration: none;
-}
-${W} #c101-card .c101-entry-mark {
-  flex: 0 0 9px;
-  color: var(--c101-tint,#8c857b);
-  text-align: center;
-}
-${W} #c101-card .c101-entry-name {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-${W} #c101-card .c101-entry:hover {
-  background: color-mix(in srgb,var(--c101-tint,#8c857b) 7%,transparent);
-}
-${W} #c101-card .c101-empty {
-  margin: 10px 0;
-  font-size: 12px;
-  line-height: 1.85;
-  opacity: .65;
-}
-${W} #c101-card .c101-description {
-  margin: 8px 0;
-  font: 400 11px/1.6 var(--c99-serif);
-  opacity: .7;
-}
-${W} #c101-card .c101-action {
-  width: 100%;
-  margin-top: 5px;
-  padding: 9px 10px;
-  border: 1px solid
-    color-mix(in srgb,var(--c101-tint,#b19762) 30%,transparent);
-  border-radius: 4px;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font: 400 13px/1.5 var(--c99-serif);
-}
-${W} #c101-card .c101-footer {
-  border-top: 1px solid
-    color-mix(in srgb,var(--nb-text,#37352f) 8%,transparent);
-  padding-top: 9px;
-  font: 400 9px/1.5 system-ui,sans-serif;
-  letter-spacing: .015em;
-  opacity: .45;
-}
-${W} #c101-card a:focus-visible,
-${W} #c101-card button:focus-visible {
-  outline: 1px solid var(--c101-tint,#8c857b);
-  outline-offset: 2px;
-}
-@keyframes c101Reveal {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
 @media (prefers-reduced-motion: reduce) {
-  ${W} #c101-card,
   ${W} #c33-orbit .c101-sol .ob-ic {
     animation: none !important;
   }
@@ -10123,15 +9601,7 @@ ${W} #c101-card button:focus-visible {
 
   observer101.observe(de101, { childList: true, subtree: true });
 
-  window.addEventListener('resize', () => {
-    requestReserve101();
-    placeCard101();
-  }, { passive: true });
-
-  window.addEventListener('scroll', placeCard101, {
-    passive: true,
-    capture: true
-  });
+  window.addEventListener('resize', requestReserve101, { passive: true });
 
 
   
@@ -10871,11 +10341,9 @@ ${W}[data-c99-orbit-visible] .notion-open-sidebar {
     };
     tile.addEventListener('click', open, true);
     tile.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') open(e); }, true);
-    const tip = () => C98.tipShow(tile, ["B.U.R.I ('-' 鰤)з — " + (root104.hasAttribute('data-c154-fold') ? '押すと相棒 ' : '相棒に聞く ') + (IS_MAC ? '⌘K' : 'Ctrl+K'), BURI_NAME114].concat(C98.status === 'error' && C98.error ? [C98.error] : []));
-    tile.addEventListener('pointerenter', tip);
-    tile.addEventListener('pointerleave', C98.tipHide);
-    tile.addEventListener('focus', tip);
-    tile.addEventListener('blur', C98.tipHide);
+    /* v164: 乗せた時の吹き出しは出さない（邪魔で、帯と重なる）。名前と近道は読み上げ用の名前にだけ持たせる */
+    tile.setAttribute('aria-label', "B.U.R.I ('-' 鰤)з — " + BURI_NAME114 + '（相棒に聞く ' + (IS_MAC ? '⌘K' : 'Ctrl+K') + '）');
+    tile.removeAttribute('title');
   }
   const buildBefore114 = obBuild;
   obBuild = function() {
@@ -11179,7 +10647,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
     lm: svgUrl124('<path d="M11.5 5.2L18.6 17.6H4.4Z" fill="none" stroke="#000" stroke-width="1.7" stroke-linejoin="round"/><path d="M1.2 13.6L8.6 11.9" stroke="#000" stroke-width="1.3" stroke-linecap="round"/><path d="M14.6 11.6L22.6 9.4M14.9 12.4L22.6 12.6M15.2 13.2L22.4 15.8" stroke="#000" stroke-width="1.2" stroke-linecap="round"/><path d="' + star124(19.6, 3.6, 2.4) + '"/>'),
     s38: svgUrl124('<path d="M2.6 7.4C5.6 6.2 8.8 6.5 11.3 8.2V20.2C8.8 18.7 5.6 18.4 2.6 19.4Z"/><path d="M12.7 8.2C15.2 6.5 18.4 6.2 21.4 7.4V19.4C18.4 18.4 15.2 18.7 12.7 20.2Z"/><path d="' + star124(17.6, 3.3, 2.4) + '"/>'),
     live: svgUrl124('<g fill="none" stroke="#000" stroke-linecap="round"><circle cx="10.8" cy="13.4" r="7.6" stroke-width="1.6"/><ellipse cx="10.8" cy="13.4" rx="3.3" ry="7.6" stroke-width="1.15"/><path d="M3.4 11.2H18.2M3.4 15.6H18.2" stroke-width="1.1"/></g><path d="' + star124(19.9, 4.2, 2.5) + '"/>'),
-    more: svgUrl124('<circle cx="5" cy="13" r="1.9"/><circle cx="12" cy="13" r="1.9"/><circle cx="19" cy="13" r="1.9"/><path d="' + star124(19.4, 5, 2.1) + '"/>')
+    more: svgUrl124('<path d="' + star124(7, 15, 4.2) + '"/><path d="' + star124(16.5, 9, 3.4) + '"/><path d="' + star124(17.6, 18.6, 2.3) + '"/><circle cx="6.4" cy="5.6" r="1.1"/>')   // v164: 星の小さな群れ（Notion の ⋯ と見分ける）
   };
   /* 名前・動き・印・色（明るい地 / 暗い地） */
   const ZMETA124 = {
@@ -11187,7 +10655,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
     'cordi-b-lm': { name: 'Lumière', m: 'prism', ic: 'lm', c: ['#e8ab3e', '#d06e2e'], d: ['#f3c56a', '#e99a5a'] },
     'cordi-b-s38': { name: 'Scholar', m: 'idea', ic: 's38', c: ['#4aa79a', '#2f7a8c'], d: ['#7fcfc2', '#5fa9bb'] },
     'c124-z-live': { name: 'Live', m: 'broadcast', ic: 'live', c: ['#4a9be0', '#3368b8'], d: ['#86bff0', '#6d9be0'] },
-    'c124-z-more': { name: 'More', m: 'twinkle', ic: 'more', c: ['#8f8a81', '#6b665e'], d: ['#c4beb4', '#a29c92'] }
+    'c124-z-more': { name: 'Others', m: 'twinkle', ic: 'more', c: ['#8f8a81', '#6b665e'], d: ['#c4beb4', '#a29c92'] }
   };
   function zenName124(b) {
     if (b.id === 'c124-z-live') return live124.on ? 'Live' : 'Publish';
@@ -11370,7 +10838,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
     const ord = (b) => parseFloat(b.style.getPropertyValue('--cd-o')) || 5;
     tiles.sort((a, b) => ord(a) - ord(b));
     /* v144: 計器はみな同じ幅（いちばん長い名前で決める）— 印の間隔がきっちり等間隔になる。Notion のボタンも同じ幅 */
-    const names = tiles.map((b) => b.getAttribute('data-c124-name') || '').concat(['More'],
+    const names = tiles.map((b) => b.getAttribute('data-c124-name') || '').concat(['Others'],
       [...acts.querySelectorAll('[data-c134-nt]')].map((b) => b.getAttribute('data-c134-nt') || ''),
       [...acts.querySelectorAll('.notion-topbar-share-menu')].map((b) => (b.textContent || '').trim()));
     const W = Math.max(48, Math.ceil(Math.max(0, ...names.map(zenLabelW124))) + 14);
@@ -11451,7 +10919,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
     if (!live.querySelector('.c124-zdot')) { const d = document.createElement('span'); d.className = 'c124-zdot'; d.setAttribute('aria-hidden', 'true'); live.appendChild(d); }
     if (live.parentElement !== dock) dock.appendChild(live);
     const more = zenButton124('c124-z-more', 99, morePop124);
-    more.title = '入りきらない計器';
+    more.title = 'Others — 入りきらない計器';
     if (more.parentElement !== dock) dock.appendChild(more);
     for (const b of dock.querySelectorAll(':scope > .cd-b')) zenTag124(b);
     liveUpdate124();
@@ -12423,31 +11891,6 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     const bar = mainBar154();
     return !!((bar && bar.querySelector('[aria-expanded="true"]')) || document.getElementById('c124-zpop'));
   }
-  /* B.U.R.I に乗せた時の「一覧の小窓」（ALL の頃の名残）: 畳んでいる時は出さない — 乗せるのは帯を開くため。惑星はこれまでどおり */
-  const card101Before154 = showCard101;
-  showCard101 = function(gid, anchor, pin, keyboard) {
-    if (!pin && anchor && anchor === obAllEl && root104.hasAttribute('data-c154-fold')) return undefined;
-    return card101Before154(gid, anchor, pin, keyboard);
-  };
-  /* B.U.R.I の吹き出し: 畳んでいる時は帯にかぶらないよう、B.U.R.I の下に（帯を使う間は出ないよう 1.3 秒待って） */
-  let tip154 = 0;
-  const tipBefore154 = C98.tipShow;
-  C98.tipShow = function(anchor, lines, delay) {
-    if (!(anchor && anchor === obAllEl && root104.hasAttribute('data-c154-fold'))) return tipBefore154.call(this, anchor, lines, delay);
-    clearTimeout(tip154);
-    tip154 = setTimeout(() => {
-      tipBefore154.call(this, anchor, lines, 0);
-      setTimeout(() => {
-        const tip = C98.tipElement;
-        if (!tip || tip.hidden || !anchor.isConnected) return;
-        const r = anchor.getBoundingClientRect();
-        tip.style.left = Math.round(Math.max(8, r.left + 4)) + 'px';
-        tip.style.top = Math.round(r.bottom + 8) + 'px';
-      }, 0);
-    }, 1300);
-  };
-  const tipHideBefore154 = C98.tipHide;
-  C98.tipHide = function(...args) { clearTimeout(tip154); return tipHideBefore154.apply(this, args); };
 
   /* 3) Folio — ページの上の段（Add cover・Hide description など）を上の帯の計器に。押すと Notion の元のボタンを押す */
   const RX_FOLIO154 = [
@@ -12734,9 +12177,15 @@ ${S}[data-c154-mer] #c154-mer {
 ${FO} #c154-mer .m-cap { opacity: 0; transition: opacity ${OPEN_T}; }
 #c154-mer .m-line { left: 10px; width: 1px; top: var(--mt); bottom: 0; background: linear-gradient(to bottom, var(--mc), var(--mc) calc(100% - var(--mf)), transparent); }
 #c154-mer .m-tick {
-  left: 7px; width: 3px; top: var(--mt); bottom: var(--mf);
-  background: linear-gradient(to bottom, transparent calc(50% - .5px), var(--mc) calc(50% - .5px), var(--mc) calc(50% + .5px), transparent calc(50% + .5px)) 0 var(--c154-ph, 0px) / 3px var(--c154-step, 62px) repeat-y;
+  /* v164: 段ごとの目盛りは定規の線をやめ、線に通した小さな星の粒に（輪と一緒に回る・ゆっくり光が降りる） */
+  left: 8px; width: 5px; top: var(--mt); bottom: var(--mf);
+  background: radial-gradient(circle at 50% 50%, var(--mk) 0 1.05px, color-mix(in srgb, var(--mk) 35%, transparent) 1.5px, transparent 2.3px) 0 var(--c154-ph, 0px) / 5px var(--c154-step, 62px) repeat-y;
   -webkit-mask: linear-gradient(to bottom, transparent, #000 24px, #000 calc(100% - 24px), transparent); mask: linear-gradient(to bottom, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+#c154-mer .m-tick::after {
+  content: ""; position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--tint) 80%, #fff) 0 1.1px, transparent 2.4px) 0 var(--c154-ph, 0px) / 5px var(--c154-step, 62px) repeat-y;
+  -webkit-mask: linear-gradient(to bottom, transparent 0, #000 70px, transparent 140px) 0 0 / 100% 200% no-repeat; mask: linear-gradient(to bottom, transparent 0, #000 70px, transparent 140px) 0 0 / 100% 200% no-repeat;
 }
 #c154-mer .m-node { left: 8px; width: 5px; height: 5px; background: var(--mk); transform: rotate(45deg); box-shadow: 0 0 0 1.5px var(--c-bacPri, #fff); }
 #c154-mer .m-node.n1 { top: calc(var(--mt) - 3px); transition: opacity ${SHUT_T}; }
@@ -12750,11 +12199,14 @@ ${FO} #c154-mer .m-node.n1 { opacity: 0; transition: opacity ${OPEN_T}; }
 #c154-mer[data-move] :is(.m-glint, .m-halo, .m-star) { transition: transform .5s cubic-bezier(.22,1,.36,1), opacity .3s ease, background-color .4s ease; }
 #c154-mer[data-off] :is(.m-glint, .m-halo, .m-star) { opacity: 0; }
 #c154-mer .m-shoot { left: 10px; width: 1px; top: 0; height: 130px; opacity: 0; background: linear-gradient(to bottom, transparent, rgba(201,162,76,.7) 70%, transparent); }
-${ON}[data-c154-mer] #c154-mer .m-shoot { animation: c154-shoot 19s linear 4s infinite; }
+${ON}[data-c154-mer][data-c164-sky] #c154-mer .m-shoot { animation: c154-shoot 19s linear 4s infinite; }
+${ON}[data-c154-mer] #c154-mer .m-tick::after { opacity: .9; animation: c164-bead 9s ease-in-out 1.5s infinite; }
+@keyframes c164-bead { 0% { -webkit-mask-position: 0 -140px; mask-position: 0 -140px; } 100% { -webkit-mask-position: 0 calc(100vh + 140px); mask-position: 0 calc(100vh + 140px); } }
 ${ON}[data-c154-mer] #c154-mer .m-star::before { animation: c154-twk 5.5s ease-in-out infinite; }
 ${DARK} #c154-mer { --mc: color-mix(in srgb, var(--nb-text, var(--c-texPri, #e6e6e4)) 21%, transparent); }
 ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent, rgba(240,207,126,.6) 70%, transparent); }
-@keyframes c154-shoot { 0% { transform: translateY(-140px); opacity: 0; } 1.5% { opacity: 1; } 13% { transform: translateY(var(--c154-run, 100vh)); opacity: 0; } 100% { transform: translateY(var(--c154-run, 100vh)); opacity: 0; } }
+/* v164: 金の光は地平線を渡ってから（C164 の .h-shoot）、継ぎ目で折れてここを降りる */
+@keyframes c154-shoot { 0%, 3.7% { transform: translateY(calc(var(--mt) - 128px)); opacity: 0; } 4.3% { opacity: 1; } 16% { transform: translateY(var(--c154-run, 100vh)); opacity: 0; } 100% { transform: translateY(var(--c154-run, 100vh)); opacity: 0; } }
 @keyframes c154-twk { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.3) rotate(45deg); } }
 @media (prefers-reduced-motion: reduce) { #c154-mer * { animation: none !important; transition: none !important; } }
 `;
@@ -12791,7 +12243,1131 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     return ZK154[key];
   }
 
-  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }) }) };
+
+  /* C164 CAELUM VI（v164.0.0）— Catalogus: Orbit の右の第２列（チームスペースの輪と、その中の目録）・地平線・子午線の星
+   * ・役割: Orbit で惑星を選ぶ → Catalogus でその惑星のチームスペースを選ぶ → その中の DB・ページを開く
+   * ・幅は Orbit と同じ（測った値。あなたの画面では 97px）。境界線・内側の余白もこの幅の中。始まりは B.U.R.I の横ではなく、
+   *   Orbit の先頭の段（いちばん上の惑星）と同じ高さ。地は本文と同じ紙（色と地紋を測って共通の変数 --c164-paper / --c164-grain に）
+   * ・チームスペースが循環する: 選んだものが先頭、その中身だけ開く。残りはアイコンと名前で待つ。末尾の次は先頭・先頭の前は末尾。
+   *   動きは見える（先頭から出たものは上へ抜けて下から戻る＝長い距離を横切らない）。自動では回らない
+   * ・操作: チームスペースの所のホイール（ノッチ 1 つ＝1 段・Orbit と同じ向き）・クリック・↑↓・下の ‹ ›。
+   *   中身の一覧は一覧の中だけでスクロールし、端に着いても循環へ引き継がない。⌘/Ctrl のホイール（拡大）と横の身ぶりは妨げない
+   * ・惑星に乗せると見本（本文へは移らない）、押すと固定（先頭の DB へ勝手に移らない）。いちばん上で選ばれている惑星をもう一度押すと畳む
+   * ・DB・ページは ID で、既存の道（nbGo: 惑星を合わせてから Notion のサイドバーのリンクを押す）で開く。⌘/Ctrl＋クリックは新しいタブ
+   * ・どの惑星から出ているかは、子午線の上を惑星からチームスペースの段まで走る細い色線と、境界の小さな菱形で示す（実際の位置から）
+   * ・幅が足りない時は列を休ませる（本文に重ねない・字を縮めない）。データが読めない所は、作り物で埋めずに状態を書く
+   * ・Notion の DOM は動かさない・複製しない・消さない（読むだけ。アイコンは元の画像の src・絵文字・SVG の形を写す）
+   * ・地平線: B.U.R.I の下と Settings の上の横線を、子午線と同じ考え方で（端が淡く消える・継ぎ目の菱形・列の端の小さな星・
+   *   帯を開くと光が右へ渡る・金の光は地平線を渡ってから子午線を降りる）。子午線の目盛りは定規の線をやめ、星の粒に
+   */
+  const S164 = S154 + ':not(#c164a):not(#c164b)';
+  const CK164 = 'c33.catalogus164.v1';
+  const CAT164 = (() => {
+    let v = {};
+    try { v = JSON.parse(localStorage.getItem(CK164) || '{}') || {}; } catch (e) { v = {}; }
+    return { on: v.on !== false, open: !!v.open, team: v.team && typeof v.team === 'object' ? v.team : {} };
+  })();
+  let catSaveT164 = 0;
+  function catSave164() {
+    clearTimeout(catSaveT164);
+    catSaveT164 = setTimeout(() => { try { localStorage.setItem(CK164, JSON.stringify(CAT164)); } catch (e) { /* noop */ } }, 120);
+  }
+  const seen164 = new Set();
+  function log164(key, msg) { if (seen164.has(key)) return; seen164.add(key); console.info('[³³ Catalogus]', msg); }
+  const id164 = (v) => { const m = /[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}/i.exec(String(v || '')); return m ? m[0].replace(/-/g, '').toLowerCase() : ''; };
+  const PAGE_RX164 = /(?:^|\s)notion-(?:page|collection_view_page)-block(?:\s|$)/;
+  const K164 = {
+    el: null, body: null, list: null, listIn: null, meas: null, foot: null, pos: null, link: null, hz: null,
+    gid: '', prev: '', prevEl: null, intentT: 0, leaveT: 0, inside: false, onPlanet: false,
+    teams: null, els: [], sel: 0, sig: '', listKey: '', shown: false, rest: false, broken: false,
+    G: { ok: false }, raf: 0, refT: 0, acc: 0, accT: 0, lastStep: 0, swapT: 0,
+    req: {}, mo: null, side: null, paperKey: '', sky: false
+  };
+
+  /* ── 1) 読む（Notion のサイドバーから。¹⁶ が付けた惑星の印 data-c16-g と並び順を使う） ── */
+  function icon164(holder) {
+    const ic = holder && holder.querySelector('.notion-record-icon');
+    if (!ic) return null;
+    const img = ic.querySelector('img');
+    if (img) {
+      const src = img.currentSrc || img.src || '';
+      if (!src) return null;
+      /* Notion の絵文字は透明な画像＋背景の一枚絵で描く。背景も写さないと空になる */
+      const st = img.style, bg = {};
+      if (st.backgroundImage && st.backgroundImage !== 'none')
+        for (const k of ['backgroundImage', 'backgroundSize', 'backgroundPosition', 'backgroundRepeat', 'backgroundColor']) if (st[k]) bg[k] = st[k];
+      return { t: 'img', v: src, bg: Object.keys(bg).length ? bg : null };
+    }
+    const svg = ic.querySelector('svg');
+    if (svg) return { t: 'svg', v: svg.outerHTML };
+    const tx = norm(ic.textContent);
+    return tx ? { t: 'txt', v: tx.slice(0, 8) } : null;
+  }
+  const iconSig164 = (ic) => !ic ? '-' : ic.t + ':' + (ic.t === 'svg' ? ic.v.length + '.' + nbHash(ic.v) : ic.v) + (ic.bg ? '|' + ic.bg.backgroundPosition : '');
+  function label164(el, fallback) {
+    const ids = el && el.getAttribute('aria-labelledby');
+    const t = ids && document.getElementById(ids.split(/\s+/)[0]);
+    const s = norm(t ? t.textContent : fallback ? fallback.textContent : '');
+    return s.slice(0, 200);
+  }
+  function rows164(team) {
+    const out = [];
+    const blocks = [...team.querySelectorAll('[data-block-id]')].filter((b) => PAGE_RX164.test(b.className));
+    if (blocks.length) {
+      blocks.forEach((b, i) => {
+        const id = id164(b.getAttribute('data-block-id'));
+        if (!id) return;
+        const row = b.querySelector('[data-inp-target="sidebar-page-item"]') || b;
+        const a = b.querySelector('a[href]');
+        let lv = 0, top = b;
+        for (let p = b.parentElement; p && p !== team; p = p.parentElement)
+          if (p.hasAttribute('data-block-id') && PAGE_RX164.test(p.className)) { lv++; top = p; }
+        const unit = top.closest('[data-c16-unit]');
+        const o = unit && team.contains(unit) ? parseFloat(unit.style.order) : NaN;
+        out.push({ id, name: label164(a, nameEl(row) || row) || 'Untitled', kind: /collection_view/.test(b.className) ? 'db' : 'page', lv, ic: icon164(row), o: isNaN(o) ? 0 : o, top, i });
+      });
+    } else {
+      /* 予備: ³³ の行の印から */
+      [...team.querySelectorAll('[data-c33-kind="db"], [data-c33-kind="page"]')].forEach((r, i) => {
+        const id = id164(r.getAttribute('data-c98-id') || idOf(r));
+        if (!id) return;
+        out.push({ id, name: nameOf(r) || 'Untitled', kind: r.getAttribute('data-c33-kind'), lv: Math.min(3, parseInt(r.getAttribute('data-c33-lvl') || '0', 10) || 0), ic: icon164(r), o: 0, top: r, i });
+      });
+    }
+    const first = new Map();
+    for (const x of out) if (!first.has(x.top)) first.set(x.top, x.i);
+    out.sort((a, b) => a.o - b.o || first.get(a.top) - first.get(b.top) || a.i - b.i);
+    return out.map(({ id, name, kind, lv, ic }) => ({ id, name, kind, lv, ic }));
+  }
+  function teams164(gid) {
+    const side = obSide();
+    if (!side || !side.querySelector(SEL_TEAM + '[data-c16-g]')) return null;   // ¹⁶ がまだ並べていない＝読み込み中
+    const ord = (t) => { const a = t.closest('[data-c16-arm]'); const o = a ? parseFloat(a.style.order) : NaN; return isNaN(o) ? 1e6 : o; };
+    return [...side.querySelectorAll(SEL_TEAM + '[data-c16-g="' + CSS.escape(gid) + '"]')]
+      .map((t, i) => [t, i, ord(t)]).sort((x, y) => x[2] - y[2] || x[1] - y[1])
+      .map(([t]) => {
+        const btn = t.querySelector(SEL_TEAM_BTN) || t.querySelector('.notion-outliner-team');
+        const tagged = btn && btn.querySelector('[data-c98-name="team"]');
+        const name = (btn && label164(btn)) || (tagged && (tagged.getAttribute('data-c98-fullname') || norm(tagged.textContent))) || t.getAttribute('data-c16-k') || '';
+        return { key: t.getAttribute('data-c16-k') || name, name: name || 'Teamspace', ic: icon164(btn), open: !btn || btn.getAttribute('aria-expanded') !== 'false', rows: rows164(t), btn };
+      });
+  }
+  const sig164 = (teams) => !teams ? 'loading' : teams.map((t) => t.key + '|' + t.name + '|' + iconSig164(t.ic) + '|' + (t.open ? 1 : 0) + '|' + t.rows.map((r) => r.id + ':' + r.name + ':' + r.kind + r.lv + ':' + iconSig164(r.ic)).join(',')).join('#');
+
+  /* ── 2) 写す（アイコンは元の形のまま。色を変えない・型抜きしない・隠さない） ── */
+  function paintIcon164(box, ic) {
+    box.textContent = '';
+    box.removeAttribute('data-txt');
+    if (!ic) { box.setAttribute('data-none', ''); return; }
+    box.removeAttribute('data-none');
+    if (ic.t === 'img') {
+      const im = document.createElement('img');
+      im.alt = '';
+      im.decoding = 'async';
+      im.draggable = false;
+      im.referrerPolicy = 'same-origin';
+      if (ic.bg) Object.assign(im.style, ic.bg);
+      im.src = ic.v;
+      box.appendChild(im);
+    } else if (ic.t === 'svg') {
+      try {
+        const doc = new DOMParser().parseFromString(ic.v, 'image/svg+xml');
+        const sv = doc.documentElement;
+        if (!sv || sv.nodeName.toLowerCase() !== 'svg' || doc.querySelector('parsererror')) throw new Error('svg');
+        sv.querySelectorAll('script, foreignObject').forEach((n) => n.remove());
+        for (const n of [sv, ...sv.querySelectorAll('*')])
+          for (const a of [...n.attributes]) if (/^on/i.test(a.name) || /^\s*javascript:/i.test(a.value)) n.removeAttribute(a.name);
+        box.appendChild(document.importNode(sv, true));
+      } catch (e) { box.setAttribute('data-none', ''); log164('svg', '形を読めないアイコンは空けておきます（代わりの印は作りません）。'); }
+    } else {
+      box.textContent = ic.v;
+      box.setAttribute('data-txt', '');
+    }
+  }
+  function lang164(el, text) {
+    /* 欧文だけの名前は英語の綴りで分けて折り返す（途中で切る時は - を付ける）。和文は自然な位置で */
+    const latin = /^[\x20-\x7eÀ-ɏ’‘'".,·-]+$/.test(text) && /[a-z]/i.test(text);
+    if (latin) { if (el.lang !== 'en') el.lang = 'en'; } else if (el.hasAttribute('lang')) el.removeAttribute('lang');
+  }
+
+  /* 欧文の 1 語が幅に入らない時だけ、字を 1 段（12 → 11px・名前は 11.5 → 10.5px）下げて単語の途中で切らない。
+   * それでも入らない長い英数字の列だけ、必要な所で折り返す。和文は自然な位置で折るので触らない */
+  function fit164(root) {
+    for (const n of root.querySelectorAll('.ct-rn, .ct-nm')) {
+      n.removeAttribute('data-fit');
+      const words = (n.textContent || '').match(/[A-Za-z\u00c0-\u024f0-9’'_.-]{6,}/g);
+      if (!words) continue;
+      const cs = getComputedStyle(n);
+      const avail = n.clientWidth;
+      if (!avail) continue;
+      const team = n.classList.contains('ct-nm');   // チームスペースの名前は、選んだ時の大きさ（700・11.5px）で測る
+      const fs = team ? 11.5 : parseFloat(cs.fontSize) || 12;
+      obFitCx.font = (team ? 'normal 700 ' : cs.fontStyle + ' ' + cs.fontWeight + ' ') + fs + 'px ' + cs.fontFamily;
+      const ls = parseFloat(cs.letterSpacing) || 0;
+      const w = Math.max(...words.map((x) => obFitCx.measureText(x).width + ls * x.length));
+      if (w <= avail + .5) continue;
+      if (w * (fs - 1) / fs <= avail + .5) n.setAttribute('data-fit', '');
+    }
+  }
+
+  /* ── 3) 測る（窓・Orbit・本文の位置。変わった時だけ書く） ── */
+  function sky164() {
+    return !!(!K164.broken && OB.on && obEl && obEl.isConnected && obWheelEl &&
+      root104.hasAttribute('data-c114-caelum') && root104.hasAttribute('data-c99-orbit-visible') &&
+      root104.hasAttribute('data-c104-native-closed'));
+  }
+  const active164 = () => CAT164.on && sky164();
+  function room164(G) {
+    /* 本文のいちばん左（DB は見出しの段の中身、ページは最初のブロックと題字）。DB の行の左のつまみ・ブロックのつまみの分も空ける */
+    const fr = mainFrame154();
+    if (!fr) return { ok: true, left: NaN };
+    let left = Infinity, db = false;
+    /* 横にスクロールしていても、スクロールしていない時の位置で比べる（貼り付いている要素はそのまま） */
+    const at = (el) => {
+      const r = el.getBoundingClientRect();
+      if (!r.width) return Infinity;
+      let x = r.left;
+      for (let p = el; p && p !== fr; p = p.parentElement) {
+        if (getComputedStyle(p).position === 'sticky') return x;
+        if (p.parentElement && p.parentElement.scrollLeft) x += p.parentElement.scrollLeft;
+      }
+      return x;
+    };
+    const hrow = fr.querySelector('[data-c154-hrow]');
+    if (hrow) { left = Math.min(left, at(hrow) + (parseFloat(getComputedStyle(hrow).paddingInlineStart) || 0)); db = true; }
+    const cv = !hrow && fr.querySelector('.notion-collection_view_page-block');
+    if (cv) { left = Math.min(left, at(cv)); db = true; }
+    const pc = fr.querySelector('.notion-page-content');
+    if (pc) {
+      for (const b of [...pc.querySelectorAll(':scope > [data-block-id]')].slice(0, 4)) left = Math.min(left, at(b));
+      const h1 = fr.querySelector('h1');
+      if (h1) left = Math.min(left, at(h1));
+    }
+    if (!isFinite(left)) return { ok: true, left: NaN };
+    const need = G.width + (db ? 24 : 44);
+    return { ok: left - G.left >= need, left: Math.round(left), need };
+  }
+  /* 書体: Orbit の惑星の名前に実際に当たっている書体（計算済みの値）を使う。取れない・汎用の書体しか無い時は候補の明朝へ */
+  const SERIF164 = '"EB Garamond", "Cormorant Garamond", Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif';
+  function font164() {
+    const lb = obEl && obEl.querySelector('.ob-it .ob-lb, .ob-all .ob-lb');
+    let f = lb ? getComputedStyle(lb).fontFamily : '';
+    if (!f || /^\s*(?:inherit|initial|sans-serif|system-ui|-apple-system|BlinkMacSystemFont|Inter|Arial|Helvetica)\b/i.test(f)) f = SERIF164;
+    else if (!/Mincho|Noto Serif JP|明朝/.test(f)) f = f.replace(/,\s*serif\s*$/i, '') + ', "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif';
+    set104('--c164-serif', f);
+  }
+  function paper164() {
+    const fr = mainFrame154() || document.querySelector('.notion-frame');
+    let node = fr, color = '', img = 'none', size = 'auto';
+    while (node && node !== document.documentElement) {
+      const cs = getComputedStyle(node);
+      if (img === 'none' && cs.backgroundImage && cs.backgroundImage !== 'none' && !/gradient/.test(cs.backgroundImage)) { img = cs.backgroundImage; size = cs.backgroundSize; }
+      const c = cs.backgroundColor;
+      if (c && c !== 'transparent' && !/rgba\([^)]*,\s*0\)$/.test(c)) { color = c; break; }
+      node = node.parentElement;
+    }
+    if (!color) color = getComputedStyle(document.body).backgroundColor || '';
+    const key = color + '|' + img.length + '|' + size;
+    if (key === K164.paperKey) return;
+    K164.paperKey = key;
+    if (color) set104('--c164-paper', color); else root104.style.removeProperty('--c164-paper');
+    set104('--c164-grain', img);
+    set104('--c164-grain-size', size);
+  }
+  function geom164() {
+    const G = K164.G;
+    G.ok = false;
+    const r = obEl.getBoundingClientRect();
+    if (r.width < 40 || r.height < 240) return;
+    const ft = obEl.querySelector('.ob-ft');
+    const it = obItemEls.find((e) => e.style.display !== 'none') || obItemEls[0];
+    const ic = it && it.querySelector('.ob-ic');
+    G.left = r.right;
+    G.width = Math.round(r.width);
+    G.wt = obWheelEl.offsetTop;
+    G.top = r.top + G.wt;
+    G.bottom = r.bottom;
+    G.footH = ft ? ft.offsetHeight : 62;
+    G.bodyH = Math.max(0, G.bottom - G.footH - G.top);
+    G.icTop = ic ? ic.offsetTop : 5;
+    G.icH = ic ? ic.offsetHeight : 24;
+    G.icY = OB_PAD + G.icTop + G.icH / 2;          // 先頭の段の惑星の印の真ん中（輪の上端から）
+    G.wheelH = obWheelEl.clientHeight;
+    G.mt = parseFloat(root104.style.getPropertyValue('--c104-top')) || G.wt || 62;
+    const room = room164(G);
+    G.room = room;
+    if (K164.rest !== !room.ok) {
+      K164.rest = !room.ok;
+      if (K164.rest) log164('rest', '本文の左に Catalogus の幅（' + G.width + 'px＋つまみの分）が無いため、列を休ませます（本文に重ねない・字を縮めない）。');
+    }
+    G.ok = true;
+  }
+
+  /* ── 4) 組み立て（自分の要素だけ。作るのは 1 回、見張りも 1 回だけ付ける） ── */
+  function build164() {
+    if (K164.el && K164.el.isConnected) return K164.el;
+    if (K164.el) K164.el.remove();
+    const el = document.createElement('aside');
+    el.id = 'c164-cat';
+    el.setAttribute('aria-label', 'Catalogus');
+    el.innerHTML = '<div class="ct-body"><div class="ct-list" role="group"><div class="ct-in"></div></div></div>' +
+      '<div class="ct-foot"><button type="button" class="ct-step" data-d="-1" aria-label="前のチームスペース"><i></i></button>' +
+      '<span class="ct-pos" aria-live="polite"></span>' +
+      '<button type="button" class="ct-step" data-d="1" aria-label="次のチームスペース"><i></i></button></div>' +
+      '<div class="ct-meas ct-in" aria-hidden="true"></div>';
+    document.body.appendChild(el);
+    K164.el = el;
+    K164.body = el.querySelector('.ct-body');
+    K164.list = el.querySelector('.ct-list');
+    K164.listIn = K164.list.firstElementChild;
+    K164.foot = el.querySelector('.ct-foot');
+    K164.pos = el.querySelector('.ct-pos');
+    K164.meas = el.querySelector('.ct-meas');
+    K164.els = [];
+    K164.listKey = '';
+    el.addEventListener('wheel', wheel164, { passive: false });
+    el.addEventListener('click', click164);
+    el.addEventListener('keydown', key164);
+    el.addEventListener('pointerenter', () => { K164.inside = true; clearTimeout(K164.leaveT); });
+    el.addEventListener('pointerleave', () => { K164.inside = false; leaveSoon164(); });
+    el.addEventListener('focusout', (e) => { if (!el.contains(e.relatedTarget)) leaveSoon164(); });
+    K164.list.addEventListener('scroll', listEdges164, { passive: true });
+    return el;
+  }
+  function overlays164() {
+    if (!K164.link || !K164.link.isConnected) {
+      K164.link = document.createElement('div');
+      K164.link.id = 'c164-link';
+      K164.link.setAttribute('aria-hidden', 'true');
+      K164.link.innerHTML = '<i class="k-v"></i><i class="k-h"></i><i class="k-d"></i>';
+      document.body.appendChild(K164.link);
+    }
+    if (!K164.hz || !K164.hz.isConnected) {
+      K164.hz = document.createElement('div');
+      K164.hz.id = 'c164-hz';
+      K164.hz.setAttribute('aria-hidden', 'true');
+      K164.hz.innerHTML = '<i class="h-top"></i><i class="h-bot"></i><i class="h-end e1"></i><i class="h-end e2"></i><i class="h-sweep"></i><i class="h-shoot"></i>';
+      document.body.appendChild(K164.hz);
+    }
+    /* 金の光は、地平線を渡ってから子午線を降りる — 2 つの動きを同じ瞬間に始める */
+    if (!K164.sky && mer154 && mer154.isConnected) { K164.sky = true; requestAnimationFrame(() => flag124('data-c164-sky', true)); }
+  }
+  function px164(el, k, v) { if (el.style.getPropertyValue(k) !== v) el.style.setProperty(k, v); }
+
+  /* ── 5) 地平線（B.U.R.I の下・Settings の上） ── */
+  function horizon164() {
+    const hz = K164.hz, G = K164.G;
+    if (!hz) return;
+    const on = !!(G.ok && ZK154.mer && obEl);
+    hz.hidden = !on;
+    flag124('data-c164-hz', on);
+    if (!on) return;
+    const r = obEl.getBoundingClientRect();
+    const cat = K164.shown && !K164.rest;
+    px164(hz, 'left', '0px');
+    px164(hz, 'top', Math.round(r.top) + 'px');
+    px164(hz, 'height', Math.round(r.height) + 'px');
+    px164(hz, '--hx', (Math.round(r.right * 2) / 2) + 'px');              // 子午線との継ぎ目
+    px164(hz, '--hw', (Math.round(r.right * 2) / 2 + (cat ? G.width : 0)) + 'px');
+    px164(hz, '--ht', (G.mt - 1) + 'px');
+    px164(hz, '--hb', Math.round(r.height - G.footH) + 'px');
+    hz.toggleAttribute('data-cat', cat);
+  }
+
+  /* ── 6) 描く ── */
+  function show164(on) {
+    const el = K164.el;
+    if (!el) { K164.shown = false; horizon164(); link164(); return; }
+    if (!on && el.contains(document.activeElement)) {
+      const back = K164.prevEl || [...obItemEls].find((e) => e.__gid === K164.gid);
+      K164.quiet = true;
+      if (back && back.isConnected) back.focus({ preventScroll: true }); else document.activeElement.blur();
+      K164.quiet = false;
+    }
+    if (on !== K164.shown) {
+      K164.shown = on;
+      el.toggleAttribute('data-vis', on);
+      el.toggleAttribute('inert', !on);
+      if (on) { el.setAttribute('data-enter', ''); clearTimeout(el.__enterT); el.__enterT = setTimeout(() => el.removeAttribute('data-enter'), 900); }
+      flag124('data-c164-cat', on);
+    }
+    horizon164();
+    link164();
+  }
+  function note164(html) {
+    const d = document.createElement('div');
+    d.className = 'ct-note';
+    d.innerHTML = html;
+    return d;
+  }
+  function render164(gid, teams, sig) {
+    const el = build164();
+    const fresh = gid !== K164.gid;
+    K164.gid = gid;
+    K164.sig = sig;
+    const g = obGroups().find((x) => x.gid === gid) || {};
+    px164(el, '--c164-tint', g.tint || '#8c857b');
+    el.setAttribute('aria-label', 'Catalogus — ' + (g.label || ''));
+    el.setAttribute('data-g', gid);
+    const curKey0 = !fresh && K164.teams && K164.teams[K164.sel] ? K164.teams[K164.sel].key : null;
+    K164.teams = teams;
+    const ts = teams || [];
+    const curKey = curKey0;
+    /* チームスペースの要素: 鍵で使い回す（作り直さない＝動きが見える） */
+    const old = new Map(K164.els.map((e) => [e.__k, e]));
+    const els = ts.map((t, k) => {
+      let e = fresh ? null : old.get(t.key);
+      if (!e) {
+        e = document.createElement('div');
+        e.className = 'ct-t';
+        e.setAttribute('role', 'button');
+        e.innerHTML = '<span class="ct-ic"></span><span class="ct-nm"></span><i class="ct-rule"></i>';
+        e.__k = t.key;
+        e.__p = -1;
+        e.style.setProperty('--p', String(k));
+        K164.body.insertBefore(e, K164.list);
+      } else old.delete(t.key);
+      const s = iconSig164(t.ic);
+      if (e.__ic !== s) { paintIcon164(e.firstElementChild, t.ic); e.__ic = s; }
+      const nm = e.children[1];
+      if (nm.textContent !== t.name) nm.textContent = t.name;
+      lang164(nm, t.name);
+      e.setAttribute('aria-label', t.name + '（' + (t.open ? t.rows.length + ' 件' : '閉じています') + '）');
+      return e;
+    });
+    for (const e of old.values()) e.remove();
+    if (fresh) for (const e of K164.body.querySelectorAll(':scope > .ct-t')) if (!els.includes(e)) e.remove();
+    for (const e of els) fit164(e);
+    K164.els = els;
+    if (fresh) K164.listKey = '';
+    let sel = curKey != null ? ts.findIndex((t) => t.key === curKey) : -1;
+    if (sel < 0) sel = ts.findIndex((t) => t.key === CAT164.team[gid]);
+    K164.sel = Math.max(0, sel);
+    if (fresh) {
+      el.setAttribute('data-enter', '');
+      clearTimeout(el.__enterT);
+      el.__enterT = setTimeout(() => el.removeAttribute('data-enter'), 900);
+    }
+    lay164(0, fresh);
+  }
+
+  /* 一覧（選んだチームスペースの中身）: 測る箱で組んで高さを出し、帯の動きと一緒に開く */
+  function listNodes164(t) {
+    const frag = document.createDocumentFragment();
+    if (K164.teams == null) { frag.appendChild(note164('<span class="ct-dots"></span>読み込み中')); return { frag, kind: 'loading' }; }
+    if (!t) { frag.appendChild(note164('この惑星には、まだチームスペースがありません')); return { frag, kind: 'none' }; }
+    const asked = K164.req[t.key];
+    if (!t.open && !t.rows.length) {
+      if (asked && Date.now() - asked < 4000) { frag.appendChild(note164('<span class="ct-dots"></span>読み込み中')); return { frag, kind: 'loading' }; }
+      frag.appendChild(note164('Notion のサイドバーで畳まれていて、中身はまだ読めていません'));
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ct-open';
+      b.textContent = '開いて読む';
+      frag.appendChild(b);
+      return { frag, kind: 'closed' };
+    }
+    if (!t.rows.length) {
+      if (asked && Date.now() - asked < 4000) { frag.appendChild(note164('<span class="ct-dots"></span>読み込み中')); return { frag, kind: 'loading' }; }
+      frag.appendChild(note164('このチームスペースには、ページがありません'));
+      return { frag, kind: 'empty' };
+    }
+    const cur = curPage();
+    t.rows.forEach((r, i) => {
+      const a = document.createElement('a');
+      a.className = 'ct-r';
+      a.href = new URL('/' + r.id, location.origin).href;
+      a.setAttribute('data-id', r.id);
+      a.setAttribute('data-kind', r.kind);
+      a.style.setProperty('--lv', String(Math.min(2, r.lv)));
+      a.style.setProperty('--i', String(Math.min(14, i)));
+      if (cur && cur === r.id) a.setAttribute('aria-current', 'page');
+      const ic = document.createElement('span');
+      ic.className = 'ct-ic';
+      paintIcon164(ic, r.ic);
+      const nm = document.createElement('span');
+      nm.className = 'ct-rn';
+      nm.textContent = r.name;
+      lang164(nm, r.name);
+      a.append(ic, nm);
+      frag.appendChild(a);
+    });
+    return { frag, kind: 'rows' };
+  }
+  function listEdges164() {
+    const l = K164.list;
+    if (!l) return;
+    l.toggleAttribute('data-up', l.scrollTop > 2);
+    l.toggleAttribute('data-down', l.scrollTop + l.clientHeight < l.scrollHeight - 2);
+  }
+
+  /* 並べる: 先頭（選んだもの）→ 一覧 → 待っているもの。先頭から抜けるものは上へ抜けて下から戻る（逆も同じ） */
+  const MOVE164 = '340ms cubic-bezier(.22,.8,.24,1)';
+  function still164() { return nbReduce() || !root104.hasAttribute('data-c124-motion'); }
+  function lay164(dir, fresh) {
+    const N = K164.els.length, G = K164.G, el = K164.el;
+    if (!el || !G.ok) return;
+    const s = K164.sel, t = K164.teams && K164.teams[s];
+    /* 一覧の中身（チームスペースが変わった時・中身が変わった時だけ組み直す） */
+    const key = (t ? t.key + '#' + sig164([t]) : String(K164.teams == null)) + '#' + (t && K164.req[t.key] ? Math.floor((Date.now() - K164.req[t.key]) / 4000) : '');
+    const swap = key !== K164.listKey;
+    let nodes = null;
+    if (swap) {
+      nodes = listNodes164(t);
+      K164.meas.replaceChildren(nodes.frag);
+      fit164(K164.meas);
+    }
+    /* 先頭の印・名前の大きさが変わるので、クラスを付け替えてから高さを読む */
+    const order = [];
+    for (let p = 0; p < N; p++) order.push((s + p) % N);
+    K164.els.forEach((e, k) => {
+      const on = k === s;
+      e.classList.toggle('on', on);
+      e.setAttribute('aria-pressed', on ? 'true' : 'false');
+      e.tabIndex = on ? 0 : -1;
+    });
+    const hs = K164.els.map((e) => e.offsetHeight);
+    const contentH = swap ? K164.meas.offsetHeight : (K164.listIn.offsetHeight || 0);
+    const y0 = OB_PAD;
+    const h0 = N ? hs[s] : 0;
+    const listTop = N ? y0 + h0 + 2 : y0;
+    const reserve = Math.min(Math.max(0, N - 1), 2) * 50 + 10;
+    const listH = Math.round(Math.max(0, Math.min(contentH, Math.max(76, G.bodyH - listTop - reserve))));
+    const quick = still164();
+    const L = K164.list;
+    px164(L, '--y', listTop + 'px');
+    px164(L, '--h', listH + 'px');
+    L.style.transition = quick ? 'none' : '';
+    /* チームスペースの位置 */
+    let y = listTop + listH + (N > 1 ? 10 : 0);
+    const gen = (K164.gen = (K164.gen || 0) + 1);
+    order.forEach((k, p) => {
+      const e = K164.els[k];
+      const ny = p === 0 ? y0 : y;
+      if (p > 0) y += hs[k] + 4;
+      const op = e.__p;
+      e.__p = p;
+      e.style.setProperty('--p', String(p));
+      clearTimeout(e.__t1);
+      clearTimeout(e.__t2);
+      if (e.__pend != null) {
+        /* 抜けている途中に次の操作: 抜けた先（入る前の位置）へすぐ置いてから続ける */
+        e.style.transition = 'none';
+        e.style.transform = 'translateY(' + e.__pend + 'px)';
+        e.style.opacity = '0';
+        void e.offsetWidth;
+        e.__pend = null;
+        e.__wrapIn = true;
+      }
+      const wrap = !fresh && !quick && op >= 0 && dir !== 0 && ((dir > 0 && p > op) || (dir < 0 && p < op));
+      if (fresh || quick || op < 0) {
+        e.style.transition = 'none';
+        e.style.transform = 'translateY(' + ny + 'px)';
+        e.style.opacity = '';
+        if (fresh && !quick) { e.style.setProperty('--p', String(p)); }
+        return;
+      }
+      if (wrap) {
+        /* 1) 抜ける（上へ・または下へ、少しだけ動いて消える） 2) 反対側の外に置く 3) 入ってくる */
+        const outY = dir > 0 ? y0 - hs[k] * 0.6 : (parseFloat((/translateY\(([-\d.]+)px\)/.exec(e.style.transform) || [])[1]) || ny) + 24;
+        const inY = dir > 0 ? ny + 26 : y0 - hs[k] * 0.6;
+        e.__pend = inY;
+        e.style.transition = 'transform 170ms cubic-bezier(.4,0,.8,.4), opacity 150ms ease-in';
+        e.style.transform = 'translateY(' + outY + 'px)';
+        e.style.opacity = '0';
+        e.__t1 = setTimeout(() => {
+          if (gen !== K164.gen && e.__pend == null) return;
+          e.__pend = null;
+          e.style.transition = 'none';
+          e.style.transform = 'translateY(' + inY + 'px)';
+          void e.offsetWidth;
+          e.style.transition = 'transform ' + MOVE164 + ', opacity 260ms ease';
+          e.style.transform = 'translateY(' + ny + 'px)';
+          e.style.opacity = '';
+        }, 175);
+        return;
+      }
+      e.style.transition = 'transform ' + MOVE164 + ', opacity 260ms ease';
+      e.style.transform = 'translateY(' + ny + 'px)';
+      e.style.opacity = '';
+      e.__wrapIn = false;
+    });
+    /* 一覧の入れ替え: いまの中身を薄くしてから、新しい中身を順に出す */
+    if (swap) {
+      K164.listKey = key;
+      clearTimeout(K164.swapT);
+      /* 回して選んだ時は、新しい先頭が上に着いてから行を出す（動いている名前と重ならない） */
+      L.style.setProperty('--c164-d0', dir && !quick ? '230ms' : '60ms');
+      const put = () => {
+        K164.listIn.replaceChildren(...K164.meas.childNodes);
+        L.scrollTop = 0;
+        L.removeAttribute('data-out');
+        L.setAttribute('data-in', '');
+        clearTimeout(L.__inT);
+        L.__inT = setTimeout(() => L.removeAttribute('data-in'), 900);
+        listEdges164();
+      };
+      if (quick || fresh || !K164.listIn.childNodes.length) put();
+      else { L.setAttribute('data-out', ''); K164.swapT = setTimeout(put, 110); }
+    } else listEdges164();
+    const cur = curPage();
+    for (const a of K164.listIn.querySelectorAll('a.ct-r')) { const on = a.getAttribute('data-id') === cur; if (a.hasAttribute('aria-current') !== on) { if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); } }
+    /* 足元 */
+    const n = N;
+    K164.foot.toggleAttribute('data-one', n < 2);
+    const pos = n ? (s + 1) + ' / ' + n : '';
+    if (K164.pos.textContent !== pos) K164.pos.textContent = pos;
+    link164();
+  }
+
+  /* ── 7) 出どころ（惑星 → 子午線 → チームスペース） ── */
+  function planetEl164() {
+    if (K164.prev && K164.prevEl && K164.prevEl.isConnected && K164.prevEl.style.display !== 'none') return K164.prevEl;
+    if (!obWheelEl || !K164.gid) return null;
+    const G = K164.G;
+    const its = [...obWheelEl.querySelectorAll('.ob-it')].filter((e) => (e.__gid || e.getAttribute('data-c33-gid')) === K164.gid && e.style.display !== 'none');
+    let best = null, bd = 1e9;
+    for (const e of its) { const ty = ty154(e); if (!(ty > -G.icY && ty < G.wheelH - G.icY)) continue; if (ty < bd) { bd = ty; best = e; } }
+    return best;
+  }
+  function link164() {
+    const L = K164.link, G = K164.G;
+    if (!L) return;
+    const on = !!(K164.shown && G.ok && K164.els.length);
+    if (L.hasAttribute('data-on') !== on) L.toggleAttribute('data-on', on);
+    if (!on) return;
+    const it = planetEl164();
+    const yB = Math.round(G.top + G.icY);
+    let yA = NaN;
+    if (it) { const ty = ty154(it); if (isFinite(ty)) yA = Math.round(G.top + ty + G.icTop + G.icH / 2); }
+    const far = !(yA >= G.top + 4 && yA <= G.top + G.wheelH - 4);
+    const a = far ? yB : yA;
+    const iw = G.icH || 24;   // 先頭の印は惑星の印と同じ大きさ（測らない — 輪が回るたびに呼ばれる）
+    px164(L, '--kx', (Math.round(G.left * 2) / 2 - 0.5) + 'px');
+    px164(L, '--ky', Math.min(a, yB) + 'px');
+    px164(L, '--kh', Math.abs(a - yB) + 'px');
+    px164(L, '--kb', yB + 'px');
+    px164(L, '--kw', Math.max(8, Math.round((G.width - iw) / 2) - 5) + 'px');
+    px164(L, '--c164-tint', (K164.el && K164.el.style.getPropertyValue('--c164-tint')) || '#8c857b');
+    L.toggleAttribute('data-far', far);
+    L.toggleAttribute('data-up', !far && yA < yB - 1);
+  }
+
+  /* ── 8) 決める（いま何を見せるか）。見張り・窓・帯・輪から呼ばれる。中身が変わった時だけ描き直す ── */
+  function sync164(force) {
+    if (K164.broken) return;
+    try {
+      const sky = sky164(), on = sky && CAT164.on;
+      flag124('data-c164-on', on);
+      overlays164();
+      watch164();   // 空がそろう前から見張る（Caelum の印が付いた瞬間に描ける — 幕が上がる前に）
+      if (!sky) { K164.why = 'sky'; K164.G.ok = false; show164(false); return; }
+      geom164();
+      hbarCheck164();
+      const G = K164.G;
+      if (!on || !G.ok) { K164.why = !on ? 'off' : 'geom'; show164(false); return; }
+      paper164();
+      font164();
+      const want = K164.prev || (CAT164.open ? OB.sel : '');
+      if (!want || want === SOL101 || K164.rest) { K164.why = !want ? 'none' : K164.rest ? 'rest' : 'sol'; show164(false); return; }
+      K164.why = 'shown@' + Math.round(performance.now());
+      const el = build164();
+      px164(el, 'left', (Math.round(G.left * 2) / 2) + 'px');
+      px164(el, 'top', Math.round(G.top) + 'px');
+      px164(el, 'width', G.width + 'px');
+      px164(el, 'height', Math.max(0, Math.round(G.bottom - G.top)) + 'px');
+      px164(el, '--c164-foot', G.footH + 'px');
+      px164(el, '--c164-ict', G.icTop + 'px');
+      px164(el, '--c164-ich', G.icH + 'px');
+      const teams = teams164(want);
+      const sig = want + '#' + sig164(teams);
+      if (force || sig !== K164.sig || want !== K164.gid) { const fresh = want !== K164.gid; render164(want, teams, sig); if (fresh && !K164.prev) autoOpen164(); }
+      else lay164(0, false);
+      show164(true);
+    } catch (e) {
+      K164.broken = true;
+      log164('broken', 'Catalogus を止めました（' + (e && e.message) + '）。Orbit・本文はそのまま動きます。');
+      try { if (K164.el) K164.el.remove(); if (K164.link) K164.link.remove(); flag124('data-c164-cat', false); flag124('data-c164-on', false); } catch (e2) { /* noop */ }
+    }
+  }
+  function soon164(ms) {
+    /* 間引く（待ちをやり直さない）: サイドバーの小さな変化が続いても、最初の予定の時刻には必ず見直す */
+    const d = ms == null ? 90 : ms, at = performance.now() + d;
+    if (K164.refT && K164.refAt <= at) return;
+    clearTimeout(K164.refT);
+    K164.refAt = at;
+    K164.refT = setTimeout(() => {
+      K164.refT = 0;
+      if (K164.raf) return;
+      K164.raf = requestAnimationFrame(() => { K164.raf = 0; sync164(false); });
+    }, d);
+  }
+  function watch164() {
+    const side = obSide();
+    if (K164.mo && K164.side === side) return;
+    if (!K164.mo) K164.mo = new MutationObserver(() => soon164());
+    K164.mo.disconnect();
+    K164.side = side;
+    if (side) K164.mo.observe(side, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['aria-expanded', 'src', 'data-block-id', 'data-c16-g', 'data-c16-k', 'aria-labelledby'] });
+    K164.mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    K164.mo.observe(root104, { attributes: true, attributeFilter: ['class', 'data-theme', 'data-atx-dark', 'data-c39-dark', 'data-c104-native-closed', 'data-c99-orbit-visible', 'data-c114-caelum', 'data-c154-fold'] });
+  }
+
+  /* ── 9) 操作 ── */
+  function step164(d) {
+    const N = K164.els.length;
+    if (N < 2 || !d) return;
+    K164.sel = obMod(K164.sel + d, N);
+    const t = K164.teams && K164.teams[K164.sel];
+    if (t) { CAT164.team[K164.gid] = t.key; catSave164(); }
+    lay164(Math.sign(d), false);
+    autoOpen164();
+  }
+  function selectTo164(k) {
+    const N = K164.els.length;
+    if (k < 0 || k >= N || k === K164.sel) return;
+    step164(obMod(k - K164.sel, N));   // 下にあるものを選ぶ＝前へ回す（抜けたものは下から戻る）
+  }
+  function expand164(t) {
+    if (!t || !t.btn || !t.btn.isConnected) return;
+    if (t.btn.getAttribute('aria-expanded') !== 'false') return;
+    K164.req[t.key] = Date.now();
+    obPress(t.btn);
+    K164.listKey = '';
+    lay164(0, false);
+    setTimeout(() => { K164.listKey = ''; soon164(0); }, 4100);
+  }
+  let autoT164 = 0;
+  function autoOpen164() {
+    /* 固定している時だけ: 選んで少し落ち着いたら、畳まれたチームスペースを Notion のサイドバーで開いて中身を読む */
+    clearTimeout(autoT164);
+    if (K164.prev && !(CAT164.open && K164.prev === OB.sel)) return;
+    autoT164 = setTimeout(() => {
+      const t = K164.teams && K164.teams[K164.sel];
+      if (t && !t.open && !t.rows.length && !K164.req[t.key]) expand164(t);
+    }, 450);
+  }
+  function wheel164(e) {
+    if (e.ctrlKey || e.metaKey) return;                                  // 拡大の操作は妨げない
+    const ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY);
+    /* 1 回の回し（間が 0.28 秒あくまで）は、始めた所で決める: 一覧で始めたら一覧のスクロールだけ（端に着いても循環へ引き継がない）、
+     * チームスペースの所で始めたら、途中で一覧がカーソルの下に来ても回し続ける */
+    const now0 = performance.now();
+    if (now0 - (K164.wAt || 0) > 280) K164.wMode = e.target && e.target.closest && e.target.closest('.ct-list') ? 'list' : 'cycle';
+    K164.wAt = now0;
+    if (K164.wMode === 'list') return;
+    if (ax > ay || !ay) return;                                         // 横の身ぶりは妨げない
+    e.preventDefault();
+    if (K164.els.length < 2) return;
+    const raw = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1);
+    const n = (OB.wheelRev !== false ? -1 : 1) * raw;                   // Orbit と同じ向き
+    const wd = Math.abs(e.wheelDeltaY || e.wheelDelta || 0);
+    const notch = e.deltaMode === 1 || (ay >= 40 && Number.isInteger(e.deltaY) && wd > 0 && wd % 120 === 0);
+    clearTimeout(K164.accT);
+    K164.accT = setTimeout(() => { K164.acc = 0; }, 200);
+    const now = performance.now();
+    if (notch) { if (now - K164.lastStep > 60) { K164.lastStep = now; step164(Math.sign(n)); } return; }
+    K164.acc += n;
+    if (Math.abs(K164.acc) >= 46 && now - K164.lastStep > 150) { K164.lastStep = now; step164(Math.sign(K164.acc)); K164.acc = 0; }
+    else if (Math.abs(K164.acc) > 140) K164.acc = Math.sign(K164.acc) * 140;
+  }
+  function go164(id) {
+    if (!id) return;
+    const gid = K164.gid;
+    nbGo({ gid, id });
+  }
+  function click164(e) {
+    const st = e.target.closest('.ct-step');
+    if (st) { step164(Number(st.getAttribute('data-d')) || 0); return; }
+    if (e.target.closest('.ct-open')) { expand164(K164.teams && K164.teams[K164.sel]); return; }
+    const t = e.target.closest('.ct-t');
+    if (t) {
+      const k = K164.els.indexOf(t);
+      if (k >= 0 && k !== K164.sel) selectTo164(k);
+      else if (k === K164.sel) expand164(K164.teams && K164.teams[k]);
+      return;
+    }
+    const r = e.target.closest('a.ct-r');
+    if (r) {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;   // 新しいタブなどはブラウザーのまま
+      e.preventDefault();
+      go164(r.getAttribute('data-id'));
+    }
+  }
+  function key164(e) {
+    if (e.isComposing || e.keyCode === 229) return;
+    const t = e.target;
+    const team = t.closest && t.closest('.ct-t');
+    const row = t.closest && t.closest('a.ct-r');
+    const rows = [...K164.listIn.querySelectorAll('a.ct-r, .ct-open')];
+    const head = () => { const h = K164.els[K164.sel]; if (h) h.focus({ preventScroll: true }); };
+    let done = true;
+    if (e.key === 'Escape') {
+      const back = K164.prevEl && K164.prevEl.isConnected ? K164.prevEl : planetEl164();
+      if (K164.prev) { K164.prev = ''; K164.prevEl = null; } else { CAT164.open = false; catSave164(); }
+      sync164(false);
+      if (back) { K164.quiet = true; back.focus({ preventScroll: true }); K164.quiet = false; }   // 戻すだけ（見本は出さない）
+    } else if (team && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      step164(e.key === 'ArrowDown' ? 1 : -1);
+      head();
+    } else if (team && (e.key === 'Enter' || e.key === ' ')) {
+      const k = K164.els.indexOf(team);
+      if (k !== K164.sel) selectTo164(k); else expand164(K164.teams && K164.teams[k]);
+      head();
+    } else if (team && e.key === 'ArrowRight') {
+      if (rows[0]) rows[0].focus({ preventScroll: false });
+    } else if ((row || (t.classList && t.classList.contains('ct-open'))) && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      const i = rows.indexOf(row || t) + (e.key === 'ArrowDown' ? 1 : -1);
+      if (i < 0) head(); else if (rows[i]) rows[i].focus({ preventScroll: false });
+    } else if ((row || (t.classList && t.classList.contains('ct-open'))) && e.key === 'ArrowLeft') head();
+    else done = false;
+    if (done) { e.preventDefault(); e.stopPropagation(); }
+  }
+
+  /* 惑星に乗せる → 見本。押す → 固定（いちばん上の選んだ惑星をもう一度押すと畳む）。見本の間に別の惑星を横切っただけでは変えない */
+  function preview164(gid, it) {
+    if (!active164()) return;
+    K164.prev = gid;
+    K164.prevEl = it;
+    sync164(false);
+  }
+  function leaveSoon164() {
+    clearTimeout(K164.leaveT);
+    K164.leaveT = setTimeout(() => {
+      if (K164.inside || K164.onPlanet) return;
+      const a = document.activeElement;
+      if (a && K164.el && K164.el.contains(a)) return;
+      if (a && a.closest && a.closest('#c33-orbit .ob-it') && a.matches(':focus-visible')) return;
+      if (!K164.prev) return;
+      K164.prev = '';
+      K164.prevEl = null;
+      sync164(false);
+    }, 320);
+  }
+  /* カーソルが本当に動いた時だけ見本を出す（押した惑星へ輪が回る間・ホイールで輪を回す間に、止まったカーソルの下を
+   * 別の惑星が通っただけでは変えない） */
+  document.addEventListener('pointermove', (e) => {
+    if (e.movementX || e.movementY || Math.abs(e.clientX - (K164.mx || 0)) + Math.abs(e.clientY - (K164.my || 0)) > .5) { K164.mvAt = performance.now(); K164.mx = e.clientX; K164.my = e.clientY; }
+  }, { capture: true, passive: true });
+  document.addEventListener('pointerover', (e) => {
+    const it = e.target && e.target.closest ? e.target.closest('#c33-orbit .ob-it') : null;
+    K164.onPlanet = !!it;
+    if (!it || !active164()) return;
+    if (performance.now() - (K164.mvAt || 0) > 150) return;
+    clearTimeout(K164.leaveT);
+    const gid = it.__gid || it.getAttribute('data-c33-gid') || '';
+    if (!gid || gid === SOL101) return;
+    clearTimeout(K164.intentT);
+    if (gid === K164.prev) { K164.prevEl = it; link164(); return; }
+    K164.intentT = setTimeout(() => { if (it.isConnected && K164.onPlanet) preview164(gid, it); }, 130);
+  }, true);
+  document.addEventListener('pointerout', (e) => {
+    const it = e.target && e.target.closest ? e.target.closest('#c33-orbit .ob-it') : null;
+    if (!it) return;
+    const to = e.relatedTarget;
+    if (to && to.closest && to.closest('#c33-orbit .ob-it') === it) return;
+    K164.onPlanet = false;
+    clearTimeout(K164.intentT);
+    leaveSoon164();
+  }, true);
+  document.addEventListener('focusin', (e) => {
+    const it = e.target && e.target.closest ? e.target.closest('#c33-orbit .ob-it') : null;
+    if (!it || K164.quiet || !active164()) return;
+    let kb = false;
+    try { kb = it.matches(':focus-visible'); } catch (x) { kb = false; }
+    if (!kb) return;
+    const gid = it.__gid || it.getAttribute('data-c33-gid') || '';
+    if (gid && gid !== SOL101) preview164(gid, it);
+  }, true);
+  document.addEventListener('focusout', (e) => {
+    if (e.target && e.target.closest && e.target.closest('#c33-orbit .ob-it')) leaveSoon164();
+  }, true);
+  function pin164(it) {
+    if (!active164()) return;
+    const gid = it.__gid || it.getAttribute('data-c33-gid') || '';
+    if (!gid || gid === SOL101) return;
+    const atTop = it.classList.contains('top') && obDockSelection;
+    if (CAT164.open && gid === OB.sel && atTop && K164.shown) CAT164.open = false;
+    else CAT164.open = true;
+    K164.prev = '';
+    K164.prevEl = null;
+    clearTimeout(K164.intentT);
+    catSave164();
+    requestAnimationFrame(() => sync164(false));   // Orbit が選び終えてから（OB.sel が変わってから）
+  }
+  document.addEventListener('click', (e) => {
+    const it = e.target && e.target.closest ? e.target.closest('#c33-orbit .ob-it') : null;
+    if (it && e.button === 0) pin164(it);
+  }, true);
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const it = e.target && e.target.closest ? e.target.closest('#c33-orbit .ob-it') : null;
+    if (it) pin164(it);
+  }, true);
+
+  /* 輪が回るたび: 出どころの線だけ置き直す（レイアウトは読まない） */
+  const layBefore164 = obLay;
+  obLay = function() {
+    const result = layBefore164();
+    if (K164.shown) link164();
+    return result;
+  };
+  /* 上の帯の見直し（ページの移動・2 秒ごと・窓の大きさ）のたびに: 位置・中身・いまのページを見直す */
+  const zenRunBefore164 = zenRun124;
+  zenRun124 = function() {
+    zenRunBefore164();
+    soon164(40);
+  };
+  window.addEventListener('resize', () => soon164(60), { passive: true });
+  document.addEventListener('atelier-change', () => { K164.paperKey = ''; soon164(60); });
+  /* 開いたまま読み込んだ時: 幕が上がる前（³³ の準備完了の印より先）に描いておく — 後から列が出てくるのを見せない */
+  const readyBefore164 = readyCheck;
+  readyCheck = function() {
+    if (!readyDone && CAT164.open && OB.sel) sync164(false);
+    return readyBefore164();
+  };
+
+  /* 横スクロールの確かめ（v154 の隠し方が効いていない画面のため）: 本文の枠でバーが見えていたら、その要素に印を付けて隠す */
+  function hbarCheck164() {
+    if (!root104.hasAttribute('data-c154-hbar')) return;
+    for (const sc of document.querySelectorAll('.notion-scroller')) {
+      if (sc.closest('.notion-sidebar-container, .notion-peek-renderer, [role="dialog"]')) continue;
+      if (sc.clientWidth < 300) continue;
+      const bar = sc.offsetHeight - sc.clientHeight - (parseFloat(getComputedStyle(sc).borderBottomWidth) || 0);
+      const hx = bar > 1 && sc.scrollWidth > sc.clientWidth + 1;
+      if (hx && !sc.hasAttribute('data-c164-hx')) { sc.setAttribute('data-c164-hx', ''); log164('hx', '本文の横スクロールのバーが見えていたので、その枠にも印を付けて隠しました（__c33.hscroll() で詳しく見られます）。'); }
+    }
+  }
+  function hscroll164() {
+    const out = [];
+    for (const sc of document.querySelectorAll('.notion-scroller, [data-c164-hx]')) {
+      if (sc.closest('.notion-sidebar-container')) continue;
+      const cs = getComputedStyle(sc);
+      const r = sc.getBoundingClientRect();
+      const wide = [];
+      if (sc.scrollWidth > sc.clientWidth + 1) {
+        const right = r.left + sc.clientWidth;
+        let n = 0;
+        for (const d of sc.querySelectorAll('*')) {
+          if (++n > 4000) break;
+          const dr = d.getBoundingClientRect();
+          if (dr.right > right + 1 && dr.width > 40) wide.push([dr.right - right, d.tagName.toLowerCase() + '.' + String(d.className && d.className.baseVal == null ? d.className : '').trim().split(/\s+/).slice(0, 3).join('.'), (d.getAttribute('style') || '').slice(0, 90)]);
+        }
+        wide.sort((a, b) => b[0] - a[0]);
+      }
+      out.push({ el: sc.className, frame: !!sc.closest('.notion-frame'), w: [sc.clientWidth, sc.scrollWidth], bar: sc.offsetHeight - sc.clientHeight, ox: cs.overflowX, sbw: cs.scrollbarWidth, sbc: cs.scrollbarColor, hx: sc.hasAttribute('data-c164-hx'), over: wide.slice(0, 6).map((w) => Math.round(w[0]) + 'px ' + w[1] + ' ' + w[2]) });
+    }
+    return out;
+  }
+
+  /* 計器の溢れ: Notion の「⋯」（More）と名前が重なっていたので、溢れの箱は Others に。隠れている数を小さく添える */
+  const fitBefore164 = zenFit124;
+  zenFit124 = function() {
+    fitBefore164();
+    const more = document.getElementById('c124-z-more');
+    if (!more) return;
+    const n = document.querySelectorAll('#cordi-dock > .cd-b[data-c124-over]').length;
+    const v = n ? String(n) : '';
+    /* 数は計器の名前（::after）とは別の小さな印に（帯の既存の .cd-badge の位置を使う） */
+    let badge = more.querySelector(':scope > .c164-n');
+    if (v && !badge) { badge = document.createElement('span'); badge.className = 'cd-badge c164-n'; badge.setAttribute('aria-hidden', 'true'); more.appendChild(badge); }
+    if (badge) { if (badge.textContent !== v) badge.textContent = v; badge.hidden = !v; }
+    const al = 'Others — 入りきらない計器' + (n ? '（' + n + '）' : '');
+    if (more.getAttribute('aria-label') !== al) more.setAttribute('aria-label', al);
+  };
+
+  /* ── 10) 見た目 ── */
+  const cssBefore164 = nbCss;
+  nbCss = function() {
+    cssBefore164();
+    if (document.getElementById('c164-cat-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c164-cat-css';
+    const S = S164;
+    const ON = S + '[data-c124-motion]';
+    const FO = S + '[data-c154-fold][data-c154-open]';
+    const DARK = ':is(body.dark, html[data-atx-dark], html[data-c39-dark])';
+    const SERIF = 'var(--c164-serif, ' + SERIF164 + ')';
+    const chev = (d) => svgUrl124('<path d="' + d + '" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>');
+    style.textContent = `
+/* ── Catalogus: Orbit の右の第２列（地は本文と同じ紙。カード・影・色面は使わない） ── */
+#c164-cat {
+  position: fixed; z-index: 101; box-sizing: border-box; margin: 0; padding: 0;
+  background-color: var(--c164-paper, var(--c-bacPri, #fff)); background-image: var(--c164-grain, none);
+  background-size: var(--c164-grain-size, auto); background-attachment: fixed;
+  color: var(--nb-text, var(--c-texPri, #37352f)); font-family: ${SERIF}; font-size: 12px; line-height: 1.3;
+  -webkit-font-smoothing: antialiased; font-feature-settings: "palt" 1; user-select: none; contain: layout style;
+  --c164-ink2: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 68%, transparent);
+  --c164-ink3: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 46%, transparent);
+  opacity: 0; visibility: hidden; clip-path: inset(0 100% 0 0);
+  transition: opacity 150ms ease, clip-path 220ms cubic-bezier(.4,0,.7,.2), visibility 0s linear 230ms;
+}
+#c164-cat[data-vis] { opacity: 1; visibility: visible; clip-path: inset(0 0 0 0); transition: opacity 180ms ease, clip-path 320ms cubic-bezier(.22,.8,.24,1), visibility 0s; }
+${S}:not([data-c164-on]) #c164-cat { display: none !important; }
+#c164-cat .ct-body { position: absolute; left: 0; right: 0; top: 0; bottom: var(--c164-foot, 62px); overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent); }
+
+/* チームスペース: 元のアイコン → 名前 → 名前の下の短い細罫（選んでいる時） */
+#c164-cat .ct-t {
+  position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: var(--c164-ict, 5px) 6px 7px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; cursor: pointer; outline: none;
+  will-change: transform; border-radius: 7px; z-index: 2;
+}
+#c164-cat .ct-ic { position: relative; display: flex; align-items: center; justify-content: center; flex: none; width: 20px; height: 20px; }
+#c164-cat .ct-ic img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
+#c164-cat .ct-ic svg { display: block; width: 100% !important; height: 100% !important; }
+#c164-cat .ct-ic[data-txt] { font-size: 16px; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+#c164-cat .ct-t .ct-ic { width: 20px; height: 20px; margin-top: 2px; transition: width .3s ease, height .3s ease, margin .3s ease; }
+#c164-cat .ct-t.on .ct-ic { width: var(--c164-ich, 24px); height: var(--c164-ich, 24px); margin-top: 0; }
+#c164-cat .ct-nm {
+  max-width: 100%; font-size: 11px; font-weight: 600; line-height: 1.25; letter-spacing: .01em; color: var(--c164-ink2);
+  overflow-wrap: break-word; word-break: normal; line-break: strict; hyphens: auto; transition: color .2s ease;
+}
+#c164-cat .ct-t.on .ct-nm { font-size: 11.5px; font-weight: 700; color: var(--nb-text, var(--c-texPri, #37352f)); }
+#c164-cat .ct-nm[data-fit] { font-size: 10px; letter-spacing: 0; }
+#c164-cat .ct-t.on .ct-nm[data-fit] { font-size: 10.5px; }
+#c164-cat .ct-rn[data-fit] { font-size: 11px; letter-spacing: -.005em; }
+#c164-cat .ct-t:not(.on):hover .ct-nm { color: var(--nb-text, var(--c-texPri, #37352f)); }
+#c164-cat .ct-rule { display: block; height: 1px; width: 0; margin-top: 1px; background: var(--c164-tint, #8c857b); opacity: .75; transition: width 380ms cubic-bezier(.22,.8,.24,1) 80ms; }
+#c164-cat .ct-t.on .ct-rule { width: 18px; }
+#c164-cat .ct-t:focus-visible { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c164-tint, #8c857b) 70%, transparent); }
+
+/* 中身の一覧（選んだチームスペースだけ）: その中でスクロール。上下の端は淡く消える */
+#c164-cat .ct-list {
+  position: absolute; left: 0; right: 0; top: 0; transform: translateY(var(--y, 0px)); height: var(--h, 0px);
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; z-index: 1;
+  transition: transform ${MOVE164}, height ${MOVE164};
+}
+#c164-cat .ct-list::-webkit-scrollbar { width: 0; height: 0; display: none; }
+#c164-cat .ct-list[data-up] { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16px); mask-image: linear-gradient(to bottom, transparent, #000 16px); }
+#c164-cat .ct-list[data-down] { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent); }
+#c164-cat .ct-list[data-up][data-down] { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(to bottom, transparent, #000 16px, #000 calc(100% - 18px), transparent); }
+#c164-cat .ct-in { box-sizing: border-box; width: 100%; padding: 1px 2px 8px 3px; transition: opacity 110ms ease; }
+#c164-cat .ct-meas { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+#c164-cat .ct-list[data-out] .ct-in { opacity: 0; }
+#c164-cat .ct-r {
+  position: relative; display: flex; align-items: flex-start; gap: 5px; box-sizing: border-box; width: 100%;
+  padding: 4px 2px 4px calc(4px + var(--lv, 0) * 7px); border-radius: 5px; color: inherit; text-decoration: none; outline: none; cursor: pointer;
+}
+#c164-cat .ct-r { gap: 4px; }
+#c164-cat .ct-r .ct-ic { width: 14px; height: 14px; margin-top: 1.5px; }
+#c164-cat .ct-r .ct-ic[data-txt] { font-size: 12.5px; }
+#c164-cat .ct-rn {
+  min-width: 0; flex: 1; font-size: 12px; font-weight: 400; line-height: 1.32; color: var(--c164-ink2);
+  overflow-wrap: break-word; word-break: normal; line-break: strict; hyphens: auto; transition: color .18s ease, transform .18s ease;
+}
+#c164-cat .ct-r::before { content: ""; position: absolute; left: 0; top: 6px; height: 11px; width: 1.5px; border-radius: 1px; background: var(--c164-tint, #8c857b); opacity: 0; transform: scaleY(.3); transition: opacity .18s ease, transform .22s ease; }
+#c164-cat .ct-r:hover .ct-rn, #c164-cat .ct-r:focus-visible .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); transform: translateX(1px); }
+#c164-cat .ct-r:hover::before, #c164-cat .ct-r:focus-visible::before { opacity: .55; transform: none; }
+#c164-cat .ct-r[aria-current]::before { opacity: 1; transform: none; }
+#c164-cat .ct-r[aria-current] .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); font-weight: 600; }
+#c164-cat .ct-note { padding: 6px 4px 2px; font-size: 11px; line-height: 1.5; text-align: center; color: var(--c164-ink3); overflow-wrap: break-word; }
+#c164-cat .ct-dots { display: block; margin: 2px auto 5px; width: 18px; height: 4px;
+  background: radial-gradient(circle, var(--c164-tint, #8c857b) 0 1.3px, transparent 1.8px) 0 50% / 6px 4px repeat-x; opacity: .7; }
+#c164-cat .ct-open { display: block; margin: 6px auto 2px; padding: 3px 8px; border: 0; border-radius: 999px; font: 600 10.5px/1.3 ${SERIF}; letter-spacing: .02em;
+  color: var(--nb-text, var(--c-texPri, #37352f)); background: color-mix(in srgb, var(--c164-tint, #8c857b) 14%, transparent); cursor: pointer; }
+#c164-cat .ct-open:hover { background: color-mix(in srgb, var(--c164-tint, #8c857b) 24%, transparent); }
+
+/* 足元: 前・いまの番目・次（Settings と同じ段） */
+#c164-cat .ct-foot { position: absolute; left: 0; right: 0; bottom: 0; height: var(--c164-foot, 62px); display: flex; align-items: center; justify-content: center; gap: 4px; }
+#c164-cat .ct-foot[data-one] { visibility: hidden; }
+#c164-cat .ct-step { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--c164-ink3); cursor: pointer; transition: color .18s ease, background-color .18s ease; }
+#c164-cat .ct-step i { width: 13px; height: 13px; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+#c164-cat .ct-step[data-d="-1"] i { --m: ${chev('M10 3.5L5.5 8l4.5 4.5')}; }
+#c164-cat .ct-step[data-d="1"] i { --m: ${chev('M6 3.5L10.5 8 6 12.5')}; }
+#c164-cat .ct-step:hover, #c164-cat .ct-step:focus-visible { color: var(--nb-text, var(--c-texPri, #37352f)); background: color-mix(in srgb, var(--c164-tint, #8c857b) 12%, transparent); outline: none; }
+#c164-cat .ct-pos { min-width: 30px; text-align: center; font: 600 10px/1 ${SERIF}; letter-spacing: .1em; color: var(--c164-ink3); font-variant-numeric: lining-nums tabular-nums; }
+
+/* 出てくる時: 子午線の側から右へ開き、チームスペースが順に、一覧の行も順に */
+${ON} #c164-cat[data-enter] .ct-t { animation: c164-in 420ms cubic-bezier(.22,.8,.24,1) both; animation-delay: calc(min(var(--p, 0), 6) * 38ms); }
+${ON} #c164-cat .ct-list[data-in] .ct-r, ${ON} #c164-cat .ct-list[data-in] .ct-note, ${ON} #c164-cat .ct-list[data-in] .ct-open { animation: c164-row 360ms cubic-bezier(.22,.8,.24,1) both; animation-delay: calc(var(--c164-d0, 60ms) + var(--i, 0) * 24ms); }
+@keyframes c164-in { from { opacity: 0; translate: -8px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes c164-row { from { opacity: 0; translate: 0 -4px; } to { opacity: 1; translate: 0 0; } }
+
+/* ── 出どころ: 惑星（子午線の星）→ 子午線の上の細い色線 → 境界の菱形 → チームスペースの印への短い線 ── */
+#c164-link { position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 103; pointer-events: none; --tint: var(--c164-tint, #8c857b); }
+#c164-link > i { position: fixed; display: block; opacity: 0; transition: opacity .25s ease; }
+#c164-link[data-on] > i { opacity: 1; }
+#c164-link .k-v { left: var(--kx); top: var(--ky); width: 1px; height: var(--kh);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--tint) 75%, transparent), color-mix(in srgb, var(--tint) 75%, transparent));
+  transition: top .42s cubic-bezier(.22,1,.36,1), height .42s cubic-bezier(.22,1,.36,1), opacity .25s ease; }
+#c164-link[data-far] .k-v { opacity: 0 !important; }
+#c164-link .k-h { left: calc(var(--kx) + 1px); top: calc(var(--kb) - .5px); width: var(--kw); height: 1px; transform-origin: 0 50%; transform: scaleX(0);
+  background: linear-gradient(to right, color-mix(in srgb, var(--tint) 80%, transparent), color-mix(in srgb, var(--tint) 30%, transparent));
+  transition: transform .42s cubic-bezier(.22,1,.36,1) .08s, top .42s cubic-bezier(.22,1,.36,1), opacity .25s ease; }
+#c164-link[data-on] .k-h { transform: scaleX(1); }
+#c164-link .k-d { left: calc(var(--kx) - 2px); top: calc(var(--kb) - 2.5px); width: 5px; height: 5px; transform: rotate(45deg) scale(0); background: var(--tint);
+  box-shadow: 0 0 0 1.5px var(--c164-paper, var(--c-bacPri, #fff)); transition: transform .3s cubic-bezier(.3,1.6,.5,1) .12s, top .42s cubic-bezier(.22,1,.36,1), opacity .25s ease; }
+#c164-link[data-on] .k-d { transform: rotate(45deg) scale(1); }
+
+/* ── 地平線: B.U.R.I の下と Settings の上。端は淡く、列の端に小さな星。Orbit 自身の 2 本の線はこれに替える ── */
+${S}[data-c164-hz] #c33-orbit::before { display: none !important; }
+${S}[data-c164-hz] #c33-orbit .ob-ft { box-shadow: none !important; }
+#c164-hz { position: fixed; left: 0; width: 0; z-index: 102; pointer-events: none;
+  --mc: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 19%, transparent);
+  --mk: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 32%, transparent); }
+#c164-hz[hidden] { display: none !important; }
+#c164-hz > i { position: absolute; display: block; }
+#c164-hz .h-top, #c164-hz .h-bot { left: 0; height: 1px; width: var(--hw); transition: width 320ms cubic-bezier(.22,.8,.24,1);
+  background: linear-gradient(to right, transparent, var(--mc) 22px, var(--mc) var(--hx), color-mix(in srgb, var(--mc) 70%, transparent) calc(var(--hx) + 30px), transparent); }
+#c164-hz:not([data-cat]) .h-top, #c164-hz:not([data-cat]) .h-bot { background: linear-gradient(to right, transparent, var(--mc) 22px, var(--mc)); }
+#c164-hz .h-top { top: var(--ht); }
+${S}:not([data-c154-fold]) #c164-hz :is(.h-top, .h-sweep, .h-shoot, .h-end.e1) { display: none; }
+#c164-hz .h-bot { top: var(--hb); }
+#c164-hz .h-end { left: calc(var(--hw) - 6px); width: 5px; height: 5px; background: var(--mk); clip-path: var(--c124-star); opacity: 0; transform: scale(.4); transition: opacity .3s ease, transform .4s cubic-bezier(.3,1.5,.5,1), left 320ms cubic-bezier(.22,.8,.24,1); }
+#c164-hz .h-end.e1 { top: calc(var(--ht) - 2px); }
+#c164-hz .h-end.e2 { top: calc(var(--hb) - 2px); }
+#c164-hz[data-cat] .h-end { opacity: 1; transform: none; transition-delay: .18s; }
+${FO} #c164-hz .h-end.e1 { opacity: 0; }
+/* 帯を開くと、継ぎ目から右へ光が渡る */
+#c164-hz .h-sweep { left: var(--hx); top: calc(var(--ht) - 1px); width: calc(100vw - var(--hx)); height: 3px; overflow: hidden; opacity: 0; }
+#c164-hz .h-sweep::before { content: ""; position: absolute; left: 0; top: 0; width: 160px; height: 3px; transform: translateX(-170px);
+  background: radial-gradient(ellipse at 70% 50%, rgba(214,178,98,.85), rgba(214,178,98,.25) 45%, transparent 72%); }
+${ON}[data-c154-fold][data-c154-open] #c164-hz .h-sweep { opacity: 1; }
+${ON}[data-c154-fold][data-c154-open] #c164-hz .h-sweep::before { animation: c164-sweep 1.15s cubic-bezier(.3,.6,.2,1) .16s both; }
+@keyframes c164-sweep { from { transform: translateX(-170px); opacity: 1; } 80% { opacity: .9; } to { transform: translateX(calc(100vw - var(--hx))); opacity: 0; } }
+/* 金の光: 地平線を左から渡り、継ぎ目で子午線へ折れて降りる（子午線の側は C154 の .m-shoot） */
+#c164-hz .h-shoot { left: 0; top: calc(var(--ht) - .5px); width: 110px; height: 1px; opacity: 0;
+  background: linear-gradient(to right, transparent, rgba(201,162,76,.75) 75%, transparent); }
+${ON}[data-c164-sky] #c164-hz .h-shoot { animation: c164-shootH 19s linear 4s infinite; }
+@keyframes c164-shootH { 0% { transform: translateX(-120px); opacity: 0; } .6% { opacity: 1; } 3.4% { transform: translateX(calc(var(--hx) - 90px)); opacity: .9; } 4% { transform: translateX(calc(var(--hx) - 70px)); opacity: 0; } 100% { transform: translateX(calc(var(--hx) - 70px)); opacity: 0; } }
+${DARK} #c164-hz { --mc: color-mix(in srgb, var(--nb-text, var(--c-texPri, #e6e6e4)) 21%, transparent); }
+${DARK} #c164-hz .h-shoot { background: linear-gradient(to right, transparent, rgba(240,207,126,.65) 75%, transparent); }
+
+/* 計器の溢れ（Others）: Notion の ⋯ と区別できる印と、隠れている数 */
+#c124-z-more > .c164-n { min-width: 0; height: auto; padding: 0; border-radius: 0; background: none !important; box-shadow: none !important; font: 600 9px/1 ${SERIF}; color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 55%, transparent); pointer-events: none; }
+#c124-z-more > .c164-n[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  #c164-cat, #c164-cat *, #c164-link > i, #c164-hz > i, #c164-hz > i::before { transition: none !important; animation: none !important; }
+}
+${S}:not([data-c124-motion]) :is(#c164-cat, #c164-cat *, #c164-link > i, #c164-hz > i) { transition-duration: 0s !important; transition-delay: 0s !important; animation: none !important; }
+`;
+    (document.head || root104).appendChild(style);
+    soon164(0);
+  };
+
+  /* ── 11) 設定 ── */
+  function set164(key, on) {
+    CAT164[key] = !!on;
+    catSave164();
+    if (key === 'on' && !on) { K164.prev = ''; K164.prevEl = null; }
+    sync164(true);
+    return CAT164[key];
+  }
+  document.addEventListener('nebius:settings', (e) => {
+    const box = document.getElementById(String(e.detail || ''));
+    if (!box) return;
+    const l = document.createElement('label');
+    const c = document.createElement('input');
+    c.type = 'checkbox';
+    c.checked = CAT164.on;
+    l.append(c, ' Catalogus（惑星の右の第２列: チームスペースの輪と、その中の DB・ページ）');
+    c.addEventListener('change', () => set164('on', c.checked));
+    box.appendChild(l);
+  });
+
+  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), catalogus: (on) => (on == null ? CAT164.on : set164('on', on)), hscroll: () => hscroll164(), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }), catalogus: { on: CAT164.on, open: CAT164.open, shown: K164.shown, why: K164.why, prev: K164.prev, asked: Object.keys(K164.req), rest: K164.rest, gid: K164.gid, room: K164.G.room || null, teams: (K164.teams || []).map((t) => t.name + (t.open ? '（' + t.rows.length + '）' : '（閉）')), sel: K164.sel, broken: K164.broken } }) };
   obBoot();
   obSearchBoot();
 })();
