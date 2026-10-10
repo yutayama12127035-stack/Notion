@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      186.0.0
-// @description  v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      187.0.0
+// @description  v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,22 @@
 // ==/UserScript==
 
 /*
+ * v187.0.0（186 を本物の Notion で見ていただいた直し）
+ *   ・DB の題字: 上の帯を畳んでいる時、アイコン＋題字の段の下端（アイコンの箱の下端）を B.U.R.I の下の区切り線に乗せる（＿＿＿＿★ タイトル）。
+ *     186 は段の上端を線にそろえていたので、段がまるごと線の下に潜っていた。線より上に段が入りきらない時だけ、線の下から始める（線が段を横切らない）
+ *   ・行の「＋」: 「＋」そのもの（Notion の svg.plus を持つボタン・.notion-block-add-button）だけで測る。186 は行の左の小さな要素のうち
+ *     いちばん左を取っていたので、乗せた直後に「＋」がまだ描かれていないと ⋮⋮ や ☐ だけで狭く覚え（試験台で 49px・ゆとり 0・重なり 8px）、
+ *     「＋」が Catalogus の下へ戻っていた。たまたま「＋」が描かれた後に測れると広がるので、ページを移ると直ったように見えていた。
+ *     見つからない時は何も変えない（測る前の 80px のまま）。覚えた値は鍵 c33.dbfit184.v3 に（186 の狭い値は使わない）。
+ *     Catalogus の寸法を測り終える前（ページを開いた直後）も Orbit の右端＋Catalogus の幅で数え、最初から空ける
+ *   ・字の太さ: Orbit の選んだ惑星（700 → 600）・Catalogus の選んだチームスペース（700 → 600）・開いているページ（600 → 400）を、ほかと同じ太さに。
+ *     開いているページは行の地を淡く色付けて示す（惑星の色 12%。色が取れない時も淡い地は残る）
+ *   ・チームスペースを作る: 本物の Notion で、ワークスペースのメニュー（Upgrade・Settings・Add members・Add account）が Orbit・Catalogus の上に
+ *     開いたまま残っていた。見出しの「＋」が見つからずに設定へ回り、メニューの「Settings」（role の無い項目・字の後ろに近道の印）を拾えず、
+ *     Esc を Catalogus に送っていたため。→ 押して開いたメニューの中からも「Settings」を探す・見つからなければ Esc をメニューの中から送り、
+ *     それでも閉じなければスイッチャーをもう一度押して必ず閉じる・見出しの「＋」は Notion のサイドバーが閉じていれば開いてもう一度探す・
+ *     どこで止まったか（とメニューに出ていた項目）を __c33.adds() の team に残す。⌘, は何も開いていない時だけ送る
+ *
  * v186.0.0（本物の Notion の実測に合わせた直し）
  *   ・いただいた実測（1354×1064・dpr 2）: 区切り線 #c33-orbit::before の上端 61px、見出し行 [data-c154-hrow] の上端 23px（184 の計算）、
  *     「＋」は .notion-block-add-button（24×24・左端 211 で Catalogus の右端 220 に 9px 入る・Catalogus より上の層）、表には ⁰⁵ の translateX(49px)、
@@ -429,7 +445,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '186.0.0';
+  const VERSION = '187.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -1139,7 +1155,8 @@ ${icons}
     const o = { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true, composed: true };
     obTarget0().dispatchEvent(new KeyboardEvent('keydown', o));
   }
-  const SET_ITEM = /^(settings|設定)(\s|$)|settings\s*&\s*members|設定とメンバー/i;
+  /* v187: 「Settings」の後ろに近道の印（⌘, など）が字の間を空けずに続く項目も拾う */
+  const SET_ITEM = /^(settings|設定)(?![a-z])|settings\s*&\s*members|設定とメンバー/i;
   function obMenuItem(re) {
     for (const el of document.querySelectorAll('[role="menuitem"], [role="option"], [role="dialog"] [role="button"], .notion-overlay-container [role="button"]')) {
       if (el.closest('#c33-ob-set, #c33-orbit')) continue;
@@ -1149,29 +1166,111 @@ ${icons}
     return null;
   }
 
+  /* v187: 押して開いた層（Notion のメニュー・小窓）。³³ 自身のものは数えない */
+  const LAYER_SEL = '[role="menu"], [role="dialog"], [role="listbox"], .notion-overlay-container > *';
+  const obLayers = () => [...document.querySelectorAll(LAYER_SEL)].filter((el) => !el.closest('#c33-ob-set, #c33-orbit, #c164-cat') && el.getBoundingClientRect().width > 0);
+  /* 開いた層の中で、字が合ういちばん内側の要素 → 押せる箱（role の付いていない項目も拾う） */
+  function obItemIn(roots, re) {
+    let best = null;
+    for (const root of roots) {
+      for (const el of root.querySelectorAll('[role="menuitem"], [role="option"], [role="button"], button, a, div, span')) {
+        const tx = norm(el.getAttribute('aria-label') || el.textContent);
+        if (!tx || tx.length > 40 || !re.test(tx)) continue;
+        const r = el.getBoundingClientRect();
+        if (!r.width || !r.height || r.height > 60) continue;
+        if (!best || best.contains(el)) best = el;
+      }
+      if (best) break;
+    }
+    return best ? best.closest('[role="menuitem"], [role="option"], [role="button"], button, a') || best : null;
+  }
+  /* 開いた層の中身（何が出ていたかを __c33.adds() に残す。字だけ・短く） */
+  function obLayerText(roots) {
+    const t = [];
+    for (const root of roots) for (const el of root.querySelectorAll('[role="menuitem"], [role="option"], [role="button"], button')) {
+      const tx = norm(el.getAttribute('aria-label') || el.textContent).slice(0, 24);
+      if (tx && !t.includes(tx)) t.push(tx);
+      if (t.length >= 8) break;
+    }
+    if (!t.length) for (const root of roots) for (const el of root.querySelectorAll('div, span')) {
+      if (el.children.length) continue;   // role の無い項目: 字だけを持ついちばん内側の箱
+      const tx = norm(el.textContent).slice(0, 24);
+      if (tx && !t.includes(tx)) t.push(tx);
+      if (t.length >= 8) break;
+    }
+    return t.join('|');
+  }
+  /* 開いた層を閉じる: Esc は層の中（フォーカスのある所・無ければ層そのもの）から送る（obEsc はフォーカスのある所に送るので、
+   * Catalogus にいると Notion のメニューに届かない）→ 閉じなければスイッチャーをもう一度押す（開け閉めの切り替え） */
+  async function obCloseLayers(opened, again) {
+    const alive = () => opened.filter((el) => el.isConnected && el.getBoundingClientRect().width > 0);
+    if (!alive().length) return true;
+    const o = { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true, composed: true };
+    for (const el of alive()) {
+      const ae = document.activeElement;
+      const t = ae && el.contains(ae) ? ae : el;
+      try { t.dispatchEvent(new KeyboardEvent('keydown', o)); } catch (e) { /* noop */ }
+    }
+    if (await obWait(() => !alive().length, 500)) return true;
+    if (again && again.isConnected) { obPress(again); if (await obWait(() => !alive().length, 500)) return true; }
+    return false;
+  }
+  /* いま開いた設定の窓（Notion の settings-tab- の印があればそれ。無ければ、押した後に出た大きな小窓） */
+  function obSetDialog(before) {
+    const d = obDialog();
+    if (d) return d;
+    let best = null, area = 0;
+    for (const x of document.querySelectorAll('[role="dialog"]')) {
+      if (before.has(x) || x.closest('#c33-ob-set, #c164-cat, #c33-orbit, .notion-media-menu')) continue;
+      const r = x.getBoundingClientRect();
+      if (r.width < 480 || r.height < 300 || r.width * r.height <= area) continue;
+      best = x; area = r.width * r.height;
+    }
+    return best;
+  }
+
   let obSetBusy = false;
+  let obSetWhy = '';   // v187: 開けなかった時、どこで止まったか（__c33.adds() に残す）
   async function obNotionSettings(tab) {
     if (obSetBusy) return false;
     obSetBusy = true;
+    obSetWhy = '';
     try {
+      const before = new Set(document.querySelectorAll('[role="dialog"]'));
       let d = obDialog();
       if (!d) {
         const sw = obSwitcher();
-        if (sw) {
+        if (!sw) obSetWhy = 'no-switcher';
+        else {
+          const was = new Set(obLayers());
           obPress(sw);
-          const it = await obWait(() => obMenuItem(SET_ITEM), 1200);
-          if (it) { obPress(it); d = await obWait(obDialog, 1800); }
-          else obEsc();
+          const opened = () => obLayers().filter((el) => !was.has(el));
+          let it = await obWait(() => obMenuItem(SET_ITEM) || (opened().length ? obItemIn(opened(), SET_ITEM) : null), 1200);
+          const menu = opened();
+          if (it) {
+            obPress(it);
+            d = await obWait(() => obSetDialog(before), 1800);
+            if (!d) { obSetWhy = 'menu:pressed-no-dialog'; await obCloseLayers(menu, null); }
+          } else {
+            /* 「Settings」が見つからない → 開いたメニューは必ず閉じる（開いたまま Orbit・Catalogus に重ねない） */
+            obSetWhy = menu.length ? 'menu:no-settings[' + obLayerText(menu) + ']' : 'menu:none';
+            const closed = await obCloseLayers(menu, sw);
+            if (!closed) obSetWhy += ':left-open';
+          }
         }
       }
-      if (!d) { obKey(); d = await obWait(obDialog, 1500); }
+      if (!d) {
+        /* Notion の近道（⌘, / Ctrl+,）。何も開いていない時だけ（開いている窓を閉じてしまわない） */
+        if (!obLayers().some((el) => !before.has(el) && el.matches('[role="dialog"]'))) { obKey(); d = await obWait(() => obSetDialog(before), 1500); }
+        if (d) obSetWhy = '';
+      }
       if (!d) { obToast('Notion の設定を開けませんでした。⌘,（Windows は Ctrl+,）を押してみてください。'); return false; }
       if (tab) {
         const t = await obWait(() => document.getElementById('settings-tab-' + tab), 1200);
         if (t) obPress(t);
-        else obToast('この画面は見つかりませんでした（権限やプランによっては出ません）。');
+        else { obSetWhy = 'no-tab:' + tab; obToast('設定は開きました。この画面（' + tab + '）は見つかりませんでした（権限やプランによっては出ません）。'); }
       }
-      return true;
+      return d;
     } finally {
       obSetBusy = false;
     }
@@ -10291,7 +10390,7 @@ ${O} .ob-it .ob-lb {
   -webkit-mask-image: none !important;
 }
 ${O} .ob-it:hover .ob-lb { color: var(--nb-text, var(--c-texPri, #37352f)) !important; }
-${O} .ob-it.sel .ob-lb { color: var(--nb-text, var(--c-texPri, #37352f)) !important; font-weight: 700 !important; }
+${O} .ob-it.sel .ob-lb { color: var(--nb-text, var(--c-texPri, #37352f)) !important; font-weight: 600 !important; }   /* v187: 字の太さはほかの惑星と同じ（選んだ印は色と後ろの淡い光） */
 ${O} .ob-it .ob-ic { opacity: .9 !important; }
 ${O} .ob-it:hover .ob-ic, ${O} .ob-it.sel .ob-ic { opacity: 1 !important; }
 ${O} .ob-ct {
@@ -11806,7 +11905,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
    * 本文の枠は Orbit の分（--c99-rail-width）だけ既に空いているので、DB の左のゆとりは「Catalogus＋余白 − Notion の左の余白
    * （96px）− 題字のアイコンの内側の分（8px）」= 44px（測った値で決める。248px を積み増さない） */
   const SIDE174 = { orbit: 100, cat: 120, gap: 28, drop: 10 };
-  const DBLINE175 = 0;   // v175: 区切り線（1px の上端）→ 見出し行の上端（v186 からアイコンの箱ではなく見出し行）。0 = 線の高さから始まる
+  const DBLINE175 = 0;   // v175: 区切り線（1px の上端）→ アイコン＋題字の段の下端（v187 から。v186 は段の上端）。0 = 段が線の上に立つ
   const GUT154 = SIDE174.cat + SIDE174.gap - 96 - 8;   // 測れない時の値（44px）
   const NP154 = ':not(.notion-peek-renderer *)';
   const Z154 = { open: false, inside: false, tOpen: 0, tClose: 0, closedAt: -1e9, fillOk: true, fillSig: '', escaped: false };
@@ -12047,8 +12146,10 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     const wrap = row.parentElement;
     for (const o of sc.querySelectorAll('[data-c154-hwrap]')) if (o !== wrap) o.removeAttribute('data-c154-hwrap');
     if (!wrap.hasAttribute('data-c154-hwrap')) wrap.setAttribute('data-c154-hwrap', '');
-    /* v186: 上の帯を畳んでいる時は、見出し行（アイコン＋題字の段を含む [data-c154-hrow]）の上端を B.U.R.I の下の区切り線にそろえる。
-     * v174 の「題字の領域を 10px 下げる」はこの位置合わせで置き換える（畳んでいる時は下げない・下の余白も Notion のまま＝説明とタブの間は元どおり）。
+    /* v187: 上の帯を畳んでいる時は、アイコン＋題字の段の下端を B.U.R.I の下の区切り線に乗せる（＿＿＿＿★ タイトル。段は線の上に立ち、
+     * 線の下へ潜らない・線が段の途中を横切らない）。下端 = 題字のアイコンの箱の下端（アイコンが無ければ題字の段の中身の下端）。
+     * v186 は段の上端を線にそろえていたので、段がまるごと線の下に出ていた。
+     * v174 の「題字の領域を 10px 下げる」は畳んでいる時は使わない（下の余白も Notion のまま＝説明とタブの間は元どおり）。
      * 置き場所は測って決める（いまの padding・スクロール量・帯の開け閉めに左右されない値だけで計算するので、測り直しても揺れない）。
      * 畳まない時は v174 のまま（帯の下に 24px・10px 下げる） */
     const title = row.firstElementChild;
@@ -12071,12 +12172,22 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     if (fold) {
       const sr = sc.getBoundingClientRect();
       const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
-      const wrapOff = wrap.getBoundingClientRect().top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
+      const wr = wrap.getBoundingClientRect();
+      const wrapOff = wr.top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
+      /* 箱の中身の上端（padding の内側）→ 段の下端。padding を変えても中身ごと動くので、この差は変わらない */
+      const ic = title && title.querySelector('.notion-record-icon');
+      const ir = ic && ic.getBoundingClientRect();
+      let foot;
+      if (ir && ir.height > 4) foot = ir.bottom;
+      else { const tb = (title || row).getBoundingClientRect(); foot = tb.bottom - (parseFloat(getComputedStyle(title || row).paddingBottom) || 0); }
+      foot -= wr.top + (parseFloat(getComputedStyle(wrap).paddingTop) || 0);
       /* v185: 帯を開いている間（と開け閉めの途中）は、本文の枠が帯の高さだけ margin-top で下がっている。その分を引いた「畳んだ時の枠の上端」で
        * 測るので、開け閉めで値が変わらない（題字は本文と一緒に場所ごと下がり、閉じれば線の高さに戻る。開いた後・閉じた後に跳ねない） */
       const mt = parseFloat(getComputedStyle(frame).marginTop) || 0;
-      const want = ob + top - 1 + DBLINE175 - (sr.top - mt) - wrapOff;
-      v = Math.max(6, Math.min(240, Math.round(want))) + 'px';
+      const base = ob + top - 1 + DBLINE175 - (sr.top - mt) - wrapOff;   // 線の高さ（箱の中身の上端をここに置くと、段の上端が線）
+      const on = base - foot;                                             // 段の下端が線（段が線の上に立つ）
+      /* 線より上に段が入らない時（大きなアイコンなど）は、線の下から始める（線が段を横切らない）。カバー画像などで線より下に来る時は最低 6px */
+      v = (on >= 0 ? Math.min(240, Math.round(on)) : Math.max(6, Math.min(240, Math.round(base)))) + 'px';
     }
     if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
     /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
@@ -12519,9 +12630,9 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       const cs = getComputedStyle(n);
       const avail = n.clientWidth;
       if (!avail) continue;
-      const team = n.classList.contains('ct-nm');   // チームスペースの名前は、選んだ時の大きさ（700・11.5px）で測る
+      const team = n.classList.contains('ct-nm');   // チームスペースの名前は、選んだ時の大きさ（600・11.5px）で測る
       const fs = team ? 11.5 : parseFloat(cs.fontSize) || 12;
-      obFitCx.font = (team ? 'normal 700 ' : cs.fontStyle + ' ' + cs.fontWeight + ' ') + fs + 'px ' + cs.fontFamily;
+      obFitCx.font = (team ? 'normal 600 ' : cs.fontStyle + ' ' + cs.fontWeight + ' ') + fs + 'px ' + cs.fontFamily;
       const ls = parseFloat(cs.letterSpacing) || 0;
       const w = Math.max(...words.map((x) => obFitCx.measureText(x).width + ls * x.length));
       if (w <= avail + .5) continue;
@@ -13311,44 +13422,57 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     return { text: best, host };
   }
   const modal184 = () => [...document.querySelectorAll('[role="dialog"]')].find((d) => !d.closest('#c33-ob-set, #c164-cat') && !d.querySelector('[id^="settings-tab-"]') && d.getBoundingClientRect().width > 120) || null;
+  /* v187: 本物の Notion で「チームスペースを作る」を押すと、ワークスペースのメニュー（Upgrade・Settings・Add members…）が
+   * Orbit・Catalogus の上に開いたまま残っていた（見出しの「＋」が見つからず設定へ回り、メニューの「Settings」を拾えずに終わっていた）。
+   * → 見出しの「＋」は Notion のサイドバーが閉じていれば開いてからもう一度探す。押して開いたメニュー・小窓のうち、作成の画面に
+   *   つながらなかったものは必ず閉じる。どこで止まったかは __c33.adds()（team）に残す */
   async function newTeam184() {
     if (K184.busy) return false;
     K184.busy = true;
+    const steps = [];
     try {
       /* 1) Teamspaces の見出しの「＋」 */
-      const before = modal184();
-      const head = tsHead184();
-      if (head) {
+      const viaHead = async () => {
+        const before = modal184();
+        const head = tsHead184();
+        if (!head) { steps.push('head:none'); return false; }
+        const was = new Set(obLayers());
         hover184(head.text, true);
         const b = plusIn184(head.host, TEAM_RE184, false) || await obWait(() => plusIn184(head.host, TEAM_RE184, true), 900, 40);
         if (b) obPress(b);   // 押してから合図を戻す（戻すと Notion は「＋」を消す）
         hover184(head.text, false);
-        if (b) {
-          /* 作成画面（Notion の小窓）か、作成のメニュー項目 */
-          const ok = await obWait(() => {
-            const d = modal184();
-            if (d && d !== before) return d;
-            const it = obMenuItem(TEAM_RE184);
-            if (it) { obPress(it); return 'menu'; }
-            return null;
-          }, 1500);
-          if (ok) { note184('team', 'header:' + (lab184(b) || 'plus')); return true; }
-        }
-      }
+        if (!b) { steps.push('head:no-plus'); return false; }
+        /* 作成画面（Notion の小窓）か、作成のメニュー項目 */
+        const ok = await obWait(() => {
+          const d = modal184();
+          if (d && d !== before) return d;
+          const it = obMenuItem(TEAM_RE184);
+          if (it) { obPress(it); return 'menu'; }
+          return null;
+        }, 1500);
+        if (ok) { note184('team', 'header:' + (lab184(b) || 'plus')); return true; }
+        const opened = obLayers().filter((el) => !was.has(el));
+        steps.push('head:no-create[' + obLayerText(opened) + ']');
+        await obCloseLayers(opened, null);
+        return false;
+      };
+      if (await viaHead()) return true;
+      if (await sideOpen184()) { steps.push('side'); if (await viaHead()) return true; }
       /* 2) Notion の設定 → Teamspaces の「新しいチームスペース」 */
-      if (await obNotionSettings('teams')) {
-        const d = obDialog();
+      const d = await obNotionSettings('teams');
+      if (d) {
         const nb = await obWait(() => {
-          const dd = obDialog() || d;
+          const dd = obDialog() || (d.isConnected ? d : null);
           if (!dd) return null;
           return [...dd.querySelectorAll('[role="button"], button')].find((x) => TEAM_RE184.test(lab184(x)) || TEAM_RE184.test(norm(x.textContent))) || null;
         }, 1500);
-        if (nb) { obPress(nb); note184('team', 'settings'); return true; }
-        note184('team', 'settings-only');
+        if (nb) { obPress(nb); note184('team', steps.concat('settings').join(' > ')); return true; }
+        note184('team', steps.concat('settings-only' + (obSetWhy ? ':' + obSetWhy : '')).join(' > '));
         obToast('設定の Teamspaces を開きました。右上の「新しいチームスペース」から作れます。');
         return false;
       }
-      note184('team', 'not-found');
+      note184('team', steps.concat('not-found' + (obSetWhy ? ':' + obSetWhy : '')).join(' > '));
+      obToast('チームスペースを作る画面を開けませんでした。Notion のサイドバーの「Teamspaces」に乗せて「＋」から作れます（うまくいかない時は __c33.adds() の結果を送ってください）。');
       return false;
     } finally {
       K184.busy = false;
@@ -13787,7 +13911,7 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
   max-width: 100%; font-size: 11px; font-weight: 600; line-height: 1.25; letter-spacing: .01em; color: var(--c164-ink2);
   overflow-wrap: break-word; word-break: normal; line-break: strict; hyphens: auto; transition: color .2s ease;
 }
-#c164-cat .ct-t.on .ct-nm { font-size: 11.5px; font-weight: 700; color: var(--nb-text, var(--c-texPri, #37352f)); }
+#c164-cat .ct-t.on .ct-nm { font-size: 11.5px; font-weight: 600; color: var(--nb-text, var(--c-texPri, #37352f)); }   /* v187: 太さはほかのチームスペースと同じ */
 #c164-cat .ct-nm[data-fit] { font-size: 10px; letter-spacing: 0; }
 #c164-cat .ct-t.on .ct-nm[data-fit] { font-size: 10.5px; }
 #c164-cat .ct-rn[data-fit] { font-size: 11px; letter-spacing: -.005em; }
@@ -13825,7 +13949,9 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
 #c164-cat .ct-r:hover .ct-rn, #c164-cat .ct-r:focus-visible .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); transform: translateX(1px); }
 #c164-cat .ct-r:hover::before, #c164-cat .ct-r:focus-visible::before { opacity: .55; transform: none; }
 #c164-cat .ct-r[aria-current]::before { opacity: 1; transform: none; }
-#c164-cat .ct-r[aria-current] .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); font-weight: 600; }
+/* v187: 開いているページは太字にせず（ほかの行と同じ太さ）、行の地を淡く色付けて示す */
+#c164-cat .ct-r[aria-current] { background: color-mix(in srgb, var(--c164-tint, #8c857b) 12%, color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 6%, transparent)); }   /* 惑星の色が取れない時も淡い地は残る */
+#c164-cat .ct-r[aria-current] .ct-rn { color: var(--nb-text, var(--c-texPri, #37352f)); }
 #c164-cat .ct-note { padding: 6px 4px 2px; font-size: 11px; line-height: 1.5; text-align: center; color: var(--c164-ink3); overflow-wrap: break-word; }
 #c164-cat .ct-dots { display: block; margin: 2px auto 5px; width: 18px; height: 4px;
   background: radial-gradient(circle, var(--c164-tint, #8c857b) 0 1.3px, transparent 1.8px) 0 50% / 6px 4px repeat-x; opacity: .7; }
@@ -14376,7 +14502,8 @@ ${S}:not([data-c124-motion]) #c33-orbit .ob-it > .c174-orb * { transition-durati
   const S184 = S174 + ':not(#c184a):not(#c184b)';
   /* v186: 本物の Notion では、行の「＋ ⋮⋮ ☐」は表の外の別の層にあり、倍率（v174 の zoom）がかからない（「＋」は 24px のまま）。
    * 「＋」の左端 → 表の最初の列は約 77px。測る前の値を 80px・倍率なし（raw）にし、測り直した値も v2 の鍵に分けて覚える */
-  const DBF184 = { key: 'c33.dbfit184.v2', ctl: 80, pad: 6, edge: 8, max: 160, minZ: 0.6 };   // つまみの幅（測る前）・Catalogus との間・小窓の余白
+  /* v187: 鍵を v3 に（v186 までは「＋」が出る前の ⋮⋮ や ☐ だけで狭く測って覚えていることがあった。覚え直す） */
+  const DBF184 = { key: 'c33.dbfit184.v3', ctl: 80, pad: 6, edge: 8, max: 160, minZ: 0.6 };   // つまみの幅（測る前）・Catalogus との間・小窓の余白
   const ctlOk184 = (n) => typeof n === 'number' && n >= 12 && n <= 150;
   const ZF184 = (() => {
     let v = {};
@@ -14396,7 +14523,9 @@ ${S}:not([data-c124-motion]) #c33-orbit .ob-it > .c174-orb * { transition-durati
       const r = obEl.getBoundingClientRect();
       if (r.width > 0 && r.left < 8) x = r.right;
     }
-    if (active164() && !K164.rest && K164.G.ok) x = Math.max(x, K164.G.left + K164.G.width);
+    /* v187: Catalogus の寸法を測り終える前（ページを開いた直後）も、Orbit の右端＋Catalogus の幅（geom164 と同じ式）で数える。
+     * 測り終えるのを待つと、その間はゆとりが 0 で「＋」が Catalogus の下にあり、次の見直し（最大 2 秒）まで直らなかった */
+    if (active164() && !K164.rest) x = Math.max(x, K164.G.ok ? K164.G.left + K164.G.width : (obEl && obEl.isConnected ? obEl.getBoundingClientRect().right : 0) + SIDE174.cat);
     else if (K164.el && K164.el.isConnected && K164.el.hasAttribute('data-vis')) x = Math.max(x, K164.el.getBoundingClientRect().right);
     if (sc) x = Math.max(x, sc.getBoundingClientRect().left);   // 本文の枠の左端より左は、枠そのものが切る
     return Math.round(x);
@@ -14447,34 +14576,39 @@ ${S}:not([data-c124-motion]) #c33-orbit .ob-it > .c174-orb * { transition-durati
     popSoon184();
   };
 
-  /* 3) つまみの幅を測る: 表の行に乗せた時、最初の列の左に出ている小さな要素（＋・⋮⋮・☐）の左端まで */
-  /* v186: 本物の Notion の「＋」（.notion-block-add-button）は表の外の別の層にある。表の中に限らず、行の高さで最初の列の左に出ている
-   * 小さな要素（＋・⋮⋮・☐）を探す。³³ 自身の列（Orbit・Catalogus・子午線など）は数えない。いちばん左の要素が表の中（倍率が掛かる箱）に
-   * あるかどうかで、幅を倍率で割るか（表の中）・そのまま使うか（別の層）を決める */
+  /* 3) つまみの幅を測る: 表の行に乗せた時、行の「＋」の左端 → 表の最初の列の左端 */
+  /* v186: 本物の Notion の「＋」（.notion-block-add-button）は表の外の別の層にある。いちばん左の要素が表の中（倍率が掛かる箱）に
+   * あるかどうかで、幅を倍率で割るか（表の中）・そのまま使うか（別の層）を決める。
+   * v187: 「＋」そのもの（Notion の svg.plus を持つボタン・.notion-block-add-button）だけで測る。v186 は行の左の小さな要素のうち
+   * いちばん左を取っていたので、乗せた直後で「＋」がまだ描かれていないと ⋮⋮ や ☐ だけで狭く測って覚え、「＋」が Catalogus の下へ戻り、
+   * 次にたまたま「＋」が描かれた後に測れた時（ページを移った後など）に広がる、を繰り返していた。「＋」が見つからない時は何も変えない
+   * （測る前の 80px のまま）。乗せた後 0.2・0.5・0.9 秒に探す。³³ 自身の列（Orbit・Catalogus・子午線など）は数えない */
   const OURS184 = '#c164-cat, #c33-orbit, #c154-mer, #c164-hz, #c33-ob-set, #c124-zpop';
+  const PLUS184 = '.notion-block-add-button, svg.plus';
   function measure184(E, y) {
-    if (!E || !E.inner.isConnected || !ZF184.on) return;
+    if (!E || !E.inner.isConnected || !ZF184.on) return false;
     const cl = cells184(E) - (E.sc.scrollLeft || 0);
-    if (!isFinite(cl)) return;
+    if (!isFinite(cl)) return false;
     let minL = Infinity, minEl = null;
-    const take = (el) => {
-      if (!el || el === E.tv || el === E.inner || el.closest(OURS184)) return;
+    for (const s of document.querySelectorAll(PLUS184)) {
+      const el = s.matches('.notion-block-add-button') ? s : s.closest('.notion-block-add-button, [role="button"], button') || s;
+      if (el.closest(OURS184)) continue;
       const r = el.getBoundingClientRect();
-      if (r.width < 4 || r.width > 60 || r.height < 4 || r.height > 60 || r.right > cl + 2 || r.top > y + 2 || r.bottom < y - 2) return;
+      if (r.width < 8 || r.width > 48 || r.height < 8 || r.height > 48) continue;
+      if (r.right > cl + 2 || r.left < cl - 170 || Math.abs((r.top + r.bottom) / 2 - y) > 24) continue;   // 乗せた行の高さ・最初の列の左だけ
       if (r.left < minL) { minL = r.left; minEl = el; }
-    };
-    for (let x = cl - 3; x >= cl - 170 && x > 0; x -= 5) for (const el of document.elementsFromPoint(x, y)) take(el);
-    for (const el of document.querySelectorAll('.notion-block-add-button')) take(el);   // 見えない所にあっても名前で拾う
-    if (!isFinite(minL)) return;
+    }
+    if (!minEl) return false;
     const raw = !E.inner.contains(minEl);
     const z = Z174.z > 0 && Z174.z <= 1 ? Z174.z : 1;
     const w = Math.round((cl - minL) / (raw ? 1 : z));
-    if (!ctlOk184(w)) return;
+    if (!ctlOk184(w)) return false;
     if (!ZF184.sure || Math.abs(w - ZF184.ctl) >= 2 || ZF184.raw !== raw) {
       ZF184.ctl = w; ZF184.raw = raw; ZF184.sure = true; zfSave184();
-      log184('ctl', '表の行のつまみ（＋ ⋮⋮）の幅を ' + w + 'px と測りました（' + (raw ? '表の外の層・倍率なし' : '表の中・倍率あり') + '）。この分を Catalogus の右に空けます。');
+      log184('ctl', '表の行の「＋」→ 最初の列を ' + w + 'px と測りました（' + (raw ? '表の外の層・倍率なし' : '表の中・倍率あり') + '）。この分を Catalogus の右に空けます。');
       soon174(0);
     }
+    return true;
   }
   document.addEventListener('pointerover', (e) => {
     const E = Z174.els;
@@ -14484,7 +14618,14 @@ ${S}:not([data-c124-motion]) #c33-orbit .ob-it > .c174-orb * { transition-durati
     if (now - F184.hovAt < (ZF184.sure ? 4000 : 400)) return;
     F184.hovAt = now;
     const y = e.clientY;
-    setTimeout(() => requestAnimationFrame(() => { try { measure184(E, y); } catch (err) { /* noop */ } }), 260);   // Notion がつまみを描いてから
+    /* Notion が「＋」を描いてから。見つかるまで 3 回だけ探す */
+    const tries = [200, 300, 400];
+    const go = () => {
+      const d = tries.shift();
+      if (d == null) return;
+      setTimeout(() => requestAnimationFrame(() => { let ok = false; try { ok = measure184(E, y); } catch (err) { /* noop */ } if (!ok) go(); }), d);
+    };
+    go();
   }, { capture: true, passive: true });
 
   /* 4) アイコンの小窓（DB のページの本文の中の小窓）を、Catalogus の右・本文の枠の中に収める */
