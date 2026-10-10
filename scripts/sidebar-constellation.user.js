@@ -39,6 +39,11 @@
  *     チームスペース: Teamspaces の見出しの「＋」で作成画面が開くのを確かめる → 開かなければ設定 → Teamspaces の「新しいチームスペース」。
  *     Notion の DOM は動かさない・複製しない。__c33.addPage()・__c33.newTeam()・__c33.adds()（何をどう押したかの記録）
  *
+ * v175.0.0（DB の題字の始まりを区切り線に）
+ *   ・畳んでいる時、DB の題字の領域の始まり（アイコンの箱の上端）を B.U.R.I の下の区切り線の高さにそろえる。v154 の「題字の段の真ん中を
+ *     B.U.R.I の段の真ん中に」を置き換え。題字の下（タブ・表）も同じだけ下がる（重ねない）。v174 の 10px 下げ（drop）は込みで計算する。
+ *     区切り線からの間は DBLINE175（既定 0）。カバー画像がある DB など、上に何かある時は線より下に自然に来る（最低 6px）
+ *
  * v174.0.0（Caelum VII — 左の配分 100/120/28・題字の領域を 10px 下げる・DB の自動倍率・ホイールの直し・New・Orbit の動き）
  *   ・左の配分（ブラウザーの倍率 100% の CSS px。devicePixelRatio は掛けない）: Orbit 100px（いちばん長い惑星の名前が入らない時だけ広げる）・
  *     Catalogus 120px・本文手前 28px。基準の画面（1354×1064）で Orbit 0〜100・Catalogus 100〜220・本文（題字のアイコン・タブ）の左端 248。
@@ -11760,6 +11765,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
    * 本文の枠は Orbit の分（--c99-rail-width）だけ既に空いているので、DB の左のゆとりは「Catalogus＋余白 − Notion の左の余白
    * （96px）− 題字のアイコンの内側の分（8px）」= 44px（測った値で決める。248px を積み増さない） */
   const SIDE174 = { orbit: 100, cat: 120, gap: 28, drop: 10 };
+  const DBLINE175 = 0;   // v175: 区切り線（1px の上端）→ 題字のアイコンの箱の上端。0 = 線の高さから始まる
   const GUT154 = SIDE174.cat + SIDE174.gap - 96 - 8;   // 測れない時の値（44px）
   const NP154 = ':not(.notion-peek-renderer *)';
   const Z154 = { open: false, inside: false, tOpen: 0, tClose: 0, closedAt: -1e9, fillOk: true, fillSig: '', escaped: false };
@@ -12000,21 +12006,9 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     const wrap = row.parentElement;
     for (const o of sc.querySelectorAll('[data-c154-hwrap]')) if (o !== wrap) o.removeAttribute('data-c154-hwrap');
     if (!wrap.hasAttribute('data-c154-hwrap')) wrap.setAttribute('data-c154-hwrap', '');
-    /* 題字の段の真ん中を B.U.R.I の段の真ん中に（畳んでいる時）。畳まない時は帯の下に 24px */
-    const title = row.firstElementChild;
-    const th = title ? Math.round(title.getBoundingClientRect().height) : 38;
-    const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
-    const v = (root104.hasAttribute('data-c154-fold') ? Math.max(6, Math.round(top / 2 - th / 2)) : 24) + 'px';
-    if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
-    /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
-    const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
-    const ic = title && title.querySelector('.notion-record-icon');
-    let inset = 8;
-    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
-    const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
-    set104('--c154-gut', gut);
     /* v174: 題字の領域を 10px 下げる。下の余白（Notion の題字の段の margin と説明の margin。重なって大きい方）から同じだけ引き、
      * 2px は残す（説明が無い DB は余白が 8px なので 6px だけ下げる — タブに重ねない） */
+    const title = row.firstElementChild;
     const last = row.lastElementChild;
     const gapNat = Math.max(parseFloat(row.style.marginBottom) || 0, last && last !== title ? parseFloat(last.style.marginBottom) || 0 : 0);
     const drop = Math.max(0, Math.min(SIDE174.drop, gapNat - 2));
@@ -12023,6 +12017,27 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       if (row.style.getPropertyValue('--c174-drop') !== drop + 'px') row.style.setProperty('--c174-drop', drop + 'px');
       if (row.style.getPropertyValue('--c174-hgap') !== (gapNat - drop) + 'px') row.style.setProperty('--c174-hgap', (gapNat - drop) + 'px');
     } else if (row.hasAttribute('data-c174-drop')) row.removeAttribute('data-c174-drop');
+    /* v175: 畳んでいる時は、題字の領域の始まり（アイコンの箱の上端）を B.U.R.I の下の区切り線にそろえる。畳まない時は帯の下に 24px。
+     * 置き場所は測って決める（いまの padding・スクロール量に左右されない値だけで計算するので、測り直しても揺れない） */
+    const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
+    const ic0 = title && title.querySelector('.notion-record-icon');
+    let v = '24px';
+    if (root104.hasAttribute('data-c154-fold')) {
+      const sr = sc.getBoundingClientRect(), rr = row.getBoundingClientRect();
+      const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
+      const wrapOff = wrap.getBoundingClientRect().top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
+      const icIn = ic0 ? Math.max(0, ic0.getBoundingClientRect().top - rr.top) : 0;   // 題字の段の上端 → アイコンの箱の上端
+      const want = ob + top - 1 + DBLINE175 - sr.top - wrapOff - drop - icIn;
+      v = Math.max(6, Math.min(240, Math.round(want))) + 'px';
+    }
+    if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
+    /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
+    const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
+    const ic = title && title.querySelector('.notion-record-icon');
+    let inset = 8;
+    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
+    const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
+    set104('--c154-gut', gut);
   }
 
   /* 5) 子午線 — 測る（窓の大きさ・帯の見直しの時だけ）と、置く（輪が回るたび。レイアウトは読まない）を分ける */
