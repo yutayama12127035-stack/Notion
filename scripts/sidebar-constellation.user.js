@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      114.0.0
-// @description  v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      124.0.0
+// @description  v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -26,6 +26,32 @@
 // @noframes
 // ==/UserScript==
 
+/*
+ * v124.0.0（Caelum II — 左辺と上辺を、ページそのものの上に）
+ *   ・上の帯が消えていた（v114 の不具合）: 入口の枠の印を「上の帯の最初の子の子」と決め打ちしていたため、包みが 1 枚多い
+ *     本物の上の帯では行ごと（パンくず・三本柱・Share ごと）に印が付き、display:none になっていた。:has の決まりも同じ。
+ *     → [data-popup-origin] のすぐ外の枠だけに印。パンくず・操作のボタン・三本柱の台を含む要素や幅 72px を超える要素には付けない。
+ *       閉じている間に隠すサイドバーも、上の帯・本文を含むものは隠さない
+ *   ・地: 空の色をやめ、ページと同じ。閉じている時の Orbit は透過（＝ページそのもの）、並べて開いた時はサイドバーの紙。
+ *     本文の紙の角丸・影はやめ、上の帯の下に 1 本の細線（閉じている時は B.U.R.I の下の線もこれ 1 本）
+ *   ・区切り: Settings の上に、B.U.R.I の下と同じ細線（列の端から端まで）。輪の下のぼかしはやめ、段の高さを列の高さで割り切る
+ *     （最後の段の次はちょうど列の外から始まる）。保存する段の高さは元のまま（OB.toJSON）
+ *   ・B.U.R.I の印: 右を向いた鰤に星を溶かす — 目は四芒星（くり抜き）、口から星の泡、背に金の側線、尾は二股。珊瑚・琥珀・金の暖かい色。
+ *     ホバー: 尾をふって前へ・泡が昇る・目がきらり。ふだんは 7 秒に 1 回だけ泡がひとつ昇る。考え中は泳ぎ続け、未読は金の星が瞬く
+ *   ・名前ごとの動き（ホバー・フォーカス・押した時に 1 回。設定で切れる・動きを減らす設定では止まる）:
+ *     Ariadnenodus 糸が一周して結び目／Hermesagitta 矢のように走る／Athenasophia 知恵の光と三つの星／Orphelyrecho 竪琴の震えと音の輪／
+ *     Vulcanfornax 槌の一打と火花／Hypnosoneira 眠りの揺れと z／Asclepiophis 鼓動と心電の線／Hermescarina 波に揺れる船／
+ *     Hestiacaelia 炉の灯り／Cliochronios 砂時計が返る／Elpisphoenix 炎の翼／Plutusmoneta 硬貨が返ってきらり／Caliocalamus 筆の運びとインク／
+ *     Daedalonorma 歯車と曲尺／Zephyrvolans 風に乗る／Demetermensa 芽吹き／Clothopeplos 糸を紡ぐ／Atlasmetrica 地球儀と衛星／
+ *     Settings 歯車と星の軸／Atelier ペン先とインク／Lumière プリズムの虹／Scholar ひらめきの星／Live 電波の輪
+ *   ・Zenith: #cordi-dock を Orbit と同じ「印＋名前（Baskerville）」の計器に。印は星を添えた新しい絵（ペン先・プリズム・本・地球）。
+ *     幅に合わせて 名前つき → 印だけ → 入りきらない分は More（選ぶと帯に戻して押す）。横スクロールは使わない。
+ *     これからの柱も、#cordi-dock に .cd-b を足せば title の名前で計器になる
+ *   ・Live（公開の計器）: ページの上の公開の帯（This page is live on … / View site / Site settings）を見つけたら公開中。
+ *     緑の点が脈打つ。押すと サイトを見る・サイトの設定・共有と公開（帯のボタンを押す）。公開していなければ Publish（共有の小窓）。
+ *     帯は Live に取り込み、見えない所（Live のすぐ下）に置く。設定・小窓のチェックで帯をページの上に戻せる
+ *   ・設定: Nebius の設定に Zenith・公開の帯・名前ごとの動き。コンソール: __c33.zenith / banner / motion(true / false)
+ */
 /*
  * v114.0.0（次世代の枠 Caelum — Orbit（左辺）＋ Zenith（上辺））
  *   名前: Caelum（カエルム）はラテン語で「空」。星座では「彫刻具座（のみ）」— 空（Orbit）と道具（Atelier）の両方を指す。
@@ -219,7 +245,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '114.0.0';
+  const VERSION = '124.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -10692,13 +10718,13 @@ ${O} .ob-all {
 ${O} .ob-all.sel::after { bottom: 2px !important; }
 
 /* 原生のせり出しを止める: 閉じている間は、原生のサイドバーを見えなく・触れなく（DOM はそのまま） */
-${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container {
+${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container:not(:has(.notion-topbar, .notion-frame)) {
   visibility: hidden !important;
   pointer-events: none !important;
   box-shadow: none !important;
 }
-${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container *,
-${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container {
+${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container:not(:has(.notion-topbar, .notion-frame)) *,
+${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container:not(:has(.notion-topbar, .notion-frame)) {
   transition: none !important;
   animation: none !important;
 }
@@ -10756,7 +10782,7 @@ ${W}[data-c99-orbit-visible] .notion-open-sidebar {
     if (!tile || !tile.isConnected) return;
     const lb = tile.querySelector('.ob-lb');
     if (lb && lb.textContent !== 'B.U.R.I') lb.textContent = 'B.U.R.I';
-    tile.setAttribute('aria-label', 'B.U.R.I — ' + BURI_NAME114 + '（' + (IS_MAC ? '⌘K' : 'Ctrl+K') + '）');
+    tile.setAttribute('aria-label', "B.U.R.I ('-' 鰤)з — 相棒（" + BURI_NAME114 + '・' + (IS_MAC ? '⌘K' : 'Ctrl+K') + '）');
     tile.setAttribute('aria-haspopup', 'dialog');
     tile.setAttribute('data-c114-buri', '');
     /* RC1 の太陽のボタン（Sol）は片付け、パネルの出入り・待機・未読の印はこの角が受け持つ */
@@ -10774,7 +10800,7 @@ ${W}[data-c99-orbit-visible] .notion-open-sidebar {
     };
     tile.addEventListener('click', open, true);
     tile.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') open(e); }, true);
-    const tip = () => C98.tipShow(tile, ['B.U.R.I に聞く ' + (IS_MAC ? '⌘K' : 'Ctrl+K'), BURI_NAME114].concat(C98.status === 'error' && C98.error ? [C98.error] : []));
+    const tip = () => C98.tipShow(tile, ["B.U.R.I ('-' 鰤)з — 相棒に聞く " + (IS_MAC ? '⌘K' : 'Ctrl+K'), BURI_NAME114].concat(C98.status === 'error' && C98.error ? [C98.error] : []));
     tile.addEventListener('pointerenter', tip);
     tile.addEventListener('pointerleave', C98.tipHide);
     tile.addEventListener('focus', tip);
@@ -10819,19 +10845,29 @@ ${W}[data-c99-orbit-visible] .notion-open-sidebar {
     }
     const closed = !!btn && !docked;
     if (root104.hasAttribute('data-c104-native-closed') !== closed) root104.toggleAttribute('data-c104-native-closed', closed);
-    /* 入口の 48px の枠（ここに乗せるとせり出す）に印。:has が効かない時のため */
-    if (btn) {
-      const bar = btn.closest('.notion-topbar');
-      const row = bar && bar.firstElementChild;
-      let w = btn;
-      while (w.parentElement && w.parentElement !== row && w.parentElement !== bar) w = w.parentElement;
-      if (w !== btn && w.parentElement === row && !w.hasAttribute('data-c114-trigger')) w.setAttribute('data-c114-trigger', '');
+    /* 入口の 48px の枠（ここに乗せるとせり出す）に印。:has が効かない時のため
+     * v124: 「上の帯の最初の子の子」と決め打ちしていたので、包みが 1 枚多い本物の上の帯では行ごと（パンくず・三本柱ごと）印が付いて消えていた
+     *       → [data-popup-origin] のすぐ外の枠だけ。パンくず・操作のボタンを含む要素や、幅の広い要素には決して付けない */
+    for (const old of document.querySelectorAll('[data-c114-trigger]')) {
+      if (old.matches(KEEP114) || old.querySelector(KEEP114)) old.removeAttribute('data-c114-trigger');
     }
+    const w = btn && trigger114(btn);
+    if (w && !w.hasAttribute('data-c114-trigger')) w.setAttribute('data-c114-trigger', '');
     const top = document.querySelector('.notion-topbar');
     const h = top ? Math.round(top.getBoundingClientRect().height) : 0;
     if (h >= 32 && h <= 72) set104('--c104-top', h + 'px');
     caelumFlag114();
   };
+  /* 上の帯で決して消してはいけないもの（パンくず・操作のボタン・三本柱の台） */
+  const KEEP114 = '.notion-topbar-breadcrumb-region, .shadow-cursor-breadcrumb, .notion-topbar-action-buttons, .notion-topbar-share-menu, .notion-topbar-more-button, #cordi-dock';
+  function trigger114(btn) {
+    const origin = btn.closest('[data-popup-origin]');
+    const w = origin && origin.parentElement;
+    if (!w || w === document.body || !w.closest('.notion-topbar') || w.matches('.notion-topbar')) return null;
+    if (w.matches(KEEP114) || w.querySelector(KEEP114)) return null;
+    if (w.getBoundingClientRect().width > 72) return null;
+    return w;
+  }
   function caelumFlag114() {
     const on = !!(CL114.on && OB.on && obEl && obEl.isConnected);
     if (root104.hasAttribute('data-c114-caelum') !== on) root104.toggleAttribute('data-c114-caelum', on);
@@ -10881,11 +10917,11 @@ ${O} .ob-all[data-c114-buri]:focus-visible { outline: 1px solid color-mix(in srg
 ${S}[data-c99-orbit-visible] #c33-orbit { z-index: 101 !important; }
 
 /* ── ニョキッと: 入口の枠ごと消す・閉じている間は原生のサイドバーを見えなく ── */
-${S}[data-c99-orbit-visible] .notion-topbar div:has(> [data-popup-origin] .notion-open-sidebar),
-${S}[data-c99-orbit-visible] [data-c114-trigger] {
+${S}[data-c99-orbit-visible] .notion-topbar div:has(> [data-popup-origin] .notion-open-sidebar):not(:has(${KEEP114})),
+${S}[data-c99-orbit-visible] [data-c114-trigger]:not(:has(${KEEP114})) {
   display: none !important;
 }
-${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-container, .notion-sidebar) {
+${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-container, .notion-sidebar):not(:has(.notion-topbar, .notion-frame)) {
   visibility: hidden !important;
   pointer-events: none !important;
   box-shadow: none !important;
@@ -10893,35 +10929,7 @@ ${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-contai
   animation: none !important;
 }
 
-/* ── Caelum の空: 上の帯・Orbit・本文の外側を 1 枚の色に。本文は角の丸い紙 ── */
-html[data-c114-caelum] { --c114-sky: var(--nb-paper, var(--c-bacSec, #f8f8f7)); }
-${W} header:has(> .notion-topbar)${NOTPEEK} { background: var(--c114-sky) !important; box-shadow: none !important; }
-${W} .notion-topbar${NOTPEEK} { background: transparent !important; box-shadow: none !important; }
-${W} .notion-frame${NOTPEEK} { background: var(--c114-sky) !important; }
-${W} :is(.notion-frame > .notion-scroller, .notion-frame > div > .notion-scroller)${NOTPEEK} {
-  background: var(--c-bacPri, #fff) !important;
-  border-start-start-radius: 14px !important;
-  box-shadow: 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.09)), 0 1px 10px -6px rgba(15,15,15,.08) !important;
-}
-${W} #c33-orbit { background: var(--c114-sky) !important; box-shadow: none !important; }   /* 透過だと、並べた時の原生サイドバーの部品が透けるので、空と同じ色で塗る（継ぎ目は出ない） */
-${W} #c33-orbit .ob-all, ${W} #c33-orbit .ob-ft { box-shadow: none !important; }
-
-/* ── Zenith: 三本柱を名前つきの計器に ── */
-${W} #cordi-dock {
-  height: 30px !important; gap: 1px !important; padding: 0 2px !important; margin-inline: 4px 10px !important;
-  border-radius: 999px !important;
-  background: color-mix(in srgb, var(--c-bacPri, #fff) 70%, transparent) !important;
-  box-shadow: inset 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.09)) !important;
-}
-${W} #cordi-dock .cd-b { width: auto !important; min-width: 28px !important; height: 26px !important; padding: 0 9px 0 7px !important; gap: 5px !important; border-radius: 999px !important; }
-${W} #cordi-dock .cd-b::after { font: 600 11.5px/1 var(--c104-serif, Baskerville, serif); letter-spacing: .02em; white-space: nowrap; color: inherit; }
-${W} #cordi-dock #cordi-b-at::after { content: "Atelier"; }
-${W} #cordi-dock #cordi-b-lm::after { content: "Lumière"; }
-${W} #cordi-dock #cordi-b-s38::after { content: "Scholar"; }
-@media (max-width: 1120px) {
-  ${W} #cordi-dock .cd-b::after { content: none !important; }
-  ${W} #cordi-dock .cd-b { width: 28px !important; padding: 0 !important; }
-}
+/* ── 空の色・本文の紙・三本柱のカプセルは v124 でやめた（C124: ページと同じ地・Zenith の計器） ── */
 @media (prefers-reduced-motion: reduce) {
   ${O} .ob-all[data-c114-buri] .ob-ic { animation: none !important; transition: none !important; }
 }
@@ -10943,14 +10951,763 @@ ${W} #cordi-dock #cordi-b-s38::after { content: "Scholar"; }
     const h = document.createElement('h4'); h.textContent = 'Caelum（Orbit と上の帯）'; box.appendChild(h);
     const l = document.createElement('label');
     const c = document.createElement('input'); c.type = 'checkbox'; c.checked = CL114.on;
-    l.append(c, ' 上の帯・Orbit・本文の外側を 1 枚の空に（本文は角の丸い紙）');
+    l.append(c, ' Orbit と上の帯を、ページと同じ地の 1 つの枠に（細線で区切る）');
     c.addEventListener('change', () => caelumSet114(c.checked));
     box.appendChild(l);
   });
   setInterval(caelumFlag114, 2000);
 
 
-  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on }) };
+  /* C124 CAELUM II（v124.0.0）— 左辺（Orbit）と上辺（Zenith）を、ページそのものの上に
+   * ・上の帯が消えていた（v114）: 入口の枠の見分けが、包みの多い本物の上の帯で行ごと（パンくず・三本柱ごと）消していた → C114 で直した
+   * ・地: 空の色をやめ、ページと同じ。閉じている時の Orbit は透過（＝ページそのもの）、並べて開いた時はサイドバーの紙
+   * ・区切り: B.U.R.I の下と Settings の上に、同じ細線（列の端から端まで）。B.U.R.I の下の線は上の帯の下の線と一本につながる
+   * ・下の端: 段の高さを列の高さで割り切る（端の段が半分で切れない・ぼかしもやめる）。保存する段の高さは元のまま
+   * ・B.U.R.I: 鰤に星を溶かした印。目は四芒星、口から星の泡、背には金の側線、暖かい色。考え中はずっと泳ぎ、未読は金の星
+   * ・名前ごとの動き: 惑星・Settings・B.U.R.I・Zenith の計器に、それぞれの名前にちなんだ動き（ホバー・フォーカス・押した時に 1 回）
+   * ・Zenith: 三本柱とこれからの柱を、Orbit と同じ「印＋名前」の計器に。幅に合わせて 名前つき → 印だけ → 入りきらない分は More へ
+   *   （横スクロールなし）。公開の計器（Live）: 公開中なら緑の点が脈打つ。押すと サイトを見る・サイトの設定・共有と公開。
+   *   ページの上の青い公開の帯は Live に取り込む（設定で戻せる）
+   */
+  const ZK124 = { zen: true, banner: true, motion: true, key: 'c33.zenith.v1' };
+  try {
+    const v = JSON.parse(localStorage.getItem(ZK124.key) || 'null');
+    if (v) for (const k of ['zen', 'banner', 'motion']) if (typeof v[k] === 'boolean') ZK124[k] = v[k];
+  } catch (e) { /* noop */ }
+  function zkSave124() {
+    try { localStorage.setItem(ZK124.key, JSON.stringify({ zen: ZK124.zen, banner: ZK124.banner, motion: ZK124.motion })); } catch (e) { /* noop */ }
+  }
+  function flag124(name, on) { if (root104.hasAttribute(name) !== !!on) root104.toggleAttribute(name, !!on); }
+  function flags124() { flag124('data-c124-motion', ZK124.motion); }
+  flags124();
+  const S124 = 'html[data-c99-redesign]' + C98.strong + ':not(#c124a):not(#c124b):not(#c124c):not(#c124d):not(#c124e):not(#c124f):not(#c124g):not(#c124h):not(#c124i):not(#c124j)';
+  const star124 = (cx, cy, r, k = 0.32) => { const a = r * k; return `M${cx} ${cy - r}L${cx + a} ${cy - a}L${cx + r} ${cy}L${cx + a} ${cy + a}L${cx} ${cy + r}L${cx - a} ${cy + a}L${cx - r} ${cy}L${cx - a} ${cy - a}Z`; };
+  const svgUrl124 = (body) => 'url("data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' + body + '</svg>') + '")';
+  const esc124 = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* 1) 段の高さを列の高さで割り切る（保存するのは元の高さ。割り切った高さは今の列のためだけ） */
+  let itemBase124 = Math.max(30, Number(OB.itemH) || 54), itemFit124 = 0, fitSig124 = '';
+  try {
+    Object.defineProperty(OB, 'itemH', {
+      configurable: true, enumerable: true,
+      get: () => itemFit124 || itemBase124,
+      set: (v) => { itemBase124 = Math.max(30, Number(v) || 54); fitSig124 = ''; }
+    });
+    Object.defineProperty(OB, 'toJSON', {
+      configurable: true, enumerable: false,
+      value: function() { const o = Object.assign({}, this); o.itemH = itemBase124; return o; }
+    });
+  } catch (e) { /* noop */ }
+  function fit124() {
+    if (!obWheelEl || !obEl || !obItemEls.length) return;
+    const H = obWheelEl.clientHeight || 0, N = obItemEls.length;
+    const sig = H + '|' + N + '|' + itemBase124;
+    if (sig === fitSig124 || H < 60) return;
+    fitSig124 = sig;
+    const base = itemBase124;
+    const usable = H - OB_PAD;   // 上の余白 8px。割り切った最後の段の次は、ちょうど列の外から始まる（下の端で半分だけ見える段が出ない）
+    let step;
+    if (N * base <= usable) step = Math.min(base * 1.18, usable / N);
+    else {
+      let n = Math.max(1, Math.round(usable / base));
+      if (usable / n < 44) n = Math.max(1, Math.floor(usable / 44));
+      step = usable / n;
+    }
+    step = Math.round(step * 100) / 100;
+    const old = obStep();
+    itemFit124 = step;
+    if (old && Math.abs(old - step) > 0.01) { const k = step / old; obOff *= k; obTarget *= k; }
+    obEl.style.setProperty('--c124-step', step + 'px');
+  }
+
+  /* 2) 名前ごとの動き: 名前（なければ席の番号）から、その名前にちなんだ動きを選ぶ */
+  const MOTIF_GID124 = { g1: 'thread', g2: 'arrow', g3: 'wisdom', g4: 'lyre', g5: 'forge', g6: 'dream', g7: 'pulse', g8: 'sail', g9: 'hearth', g10: 'hourglass', g11: 'phoenix', g12: 'globe', g13: 'coin', g14: 'quill', g15: 'gear', g16: 'wind', g17: 'sprout', g18: 'spin' };
+  const MOTIF_RX124 = [
+    [/ariadn|nodus/i, 'thread'], [/sagitt/i, 'arrow'], [/athena|sophia/i, 'wisdom'], [/orphe|lyr/i, 'lyre'],
+    [/vulcan|fornax/i, 'forge'], [/hypno|oneir/i, 'dream'], [/asclep|ophis/i, 'pulse'], [/carina/i, 'sail'],
+    [/hestia/i, 'hearth'], [/clio|chron/i, 'hourglass'], [/phoenix|elpis/i, 'phoenix'], [/plutus|moneta/i, 'coin'],
+    [/calam|calio/i, 'quill'], [/daedal|norma/i, 'gear'], [/zephyr|volans/i, 'wind'], [/demeter|mensa/i, 'sprout'],
+    [/clotho|peplos/i, 'spin'], [/atlas|metric/i, 'globe']
+  ];
+  function motifOf124(gid, label) {
+    for (const [rx, m] of MOTIF_RX124) if (rx.test(label || '')) return m;
+    return MOTIF_GID124[gid] || 'twinkle';
+  }
+  function fx124(el) {
+    if (!el || el.querySelector(':scope > .c124-fx')) return;
+    const s = document.createElement('span');
+    s.className = 'c124-fx';
+    s.setAttribute('aria-hidden', 'true');
+    s.innerHTML = '<i></i><i></i><i></i>';
+    el.appendChild(s);
+  }
+  function tagWheel124() {
+    if (!obWheelEl) return;
+    for (const it of obWheelEl.querySelectorAll('.ob-it:not([data-c124-m])')) {
+      const lb = it.querySelector('.ob-lb');
+      it.setAttribute('data-c124-m', motifOf124(it.getAttribute('data-c33-gid') || it.__gid || '', lb ? lb.textContent : ''));
+      fx124(it);
+    }
+    if (obSetBtn && !obSetBtn.hasAttribute('data-c124-m')) { obSetBtn.setAttribute('data-c124-m', 'cog'); fx124(obSetBtn); }
+  }
+  /* 押した時（選んだ時）にも 1 回。ホバー中でも最初から動き直す */
+  function play124(el) {
+    if (!el || !ZK124.motion) return;
+    el.setAttribute('data-c124-rst', '');
+    void el.offsetWidth;
+    el.removeAttribute('data-c124-rst');
+    el.setAttribute('data-c124-play', '');
+    clearTimeout(el.__c124t);
+    el.__c124t = setTimeout(() => el.removeAttribute('data-c124-play'), 1800);
+  }
+
+  /* 3) B.U.R.I の印: 右を向いた鰤。目は四芒星（くり抜き）、口から星の泡、背に金の側線、尾は二股 */
+  const FISH124 = '<svg class="c124-fish" viewBox="0 1.5 24 19" aria-hidden="true">'
+    + '<defs><linearGradient id="c124fg" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="var(--c124-f1,#d76f5c)"/><stop offset=".55" stop-color="var(--c124-f2,#e2954a)"/><stop offset="1" stop-color="var(--c124-f3,#e7b955)"/></linearGradient>'
+    + '<mask id="c124fm" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path d="' + star124(17.2, 11.05, 1.75) + '" fill="#000"/><path d="M19.25 13.05Q19.9 13.2 20.45 12.75" fill="none" stroke="#000" stroke-width=".6" stroke-linecap="round"/></mask></defs>'
+    + '<g class="f-swim"><path class="f-tail" d="M5.6 12.3L1.2 7.9Q3.1 10.4 2.9 12.3Q3.1 14.3 1.2 16.8Z" fill="url(#c124fg)"/>'
+    + '<g class="f-body" mask="url(#c124fm)"><path d="M4.6 12.3C7 9.4 11.6 8.4 15.6 8.9C18.4 9.3 20.4 10.6 21.3 12.2C20.4 13.9 18.4 15.2 15.6 15.6C11.6 16.2 7 15.2 4.6 12.3Z" fill="url(#c124fg)"/><path d="M9.6 9.25L11.6 6.7L13 8.85Z" fill="url(#c124fg)"/><path d="M10.8 15.35L12.2 17.4L13.2 15.45Z" fill="url(#c124fg)"/></g>'
+    + '<path class="f-line" d="M6.4 11.9C9.4 11.3 12.6 11.2 15.3 11.55" fill="none" stroke="var(--c124-f4,#f6d98a)" stroke-width=".5" stroke-linecap="round"/>'
+    + '<path class="f-glint" d="' + star124(17.2, 11.05, 1.75) + '" fill="var(--c124-f4,#f6d98a)"/></g>'
+    + '<g class="f-bub"><path class="b1" d="' + star124(22.1, 8.4, 1.45) + '" fill="var(--c124-f3,#e7b955)"/><path class="b2" d="' + star124(20.3, 5.1, 0.95) + '" fill="var(--c124-f2,#e2954a)"/><circle class="b3" cx="22.9" cy="3.7" r=".55" fill="var(--c124-f3,#e7b955)"/></g></svg>';
+  function fish124() {
+    const t = obAllEl;
+    if (!t || !t.isConnected) return;
+    const ic = t.querySelector('.ob-ic');
+    if (ic && !ic.querySelector('.c124-fish')) ic.innerHTML = FISH124;
+    if (t.getAttribute('data-c124-m') !== 'swim') t.setAttribute('data-c124-m', 'swim');
+    fx124(t);
+  }
+
+  const buildBefore124 = obBuild;
+  obBuild = function() {
+    const rail = buildBefore124();
+    if (rail && !rail.__c124) {
+      rail.__c124 = true;
+      rail.addEventListener('click', (e) => {
+        const t = e.target && e.target.closest ? e.target.closest('.ob-it, .ob-all, .ob-set') : null;
+        if (t) play124(t);
+      }, true);
+    }
+    fish124();
+    tagWheel124();
+    return rail;
+  };
+  const layBefore124 = obLay;
+  obLay = function() {
+    fit124();
+    const result = layBefore124();
+    tagWheel124();
+    if (obAllEl && !obAllEl.querySelector('.c124-fish')) fish124();
+    return result;
+  };
+
+  /* 4) Zenith — 上の帯の計器 */
+  const ZIC124 = {
+    at: svgUrl124('<g transform="rotate(38 11 13)"><path fill-rule="evenodd" d="M11 22L6 13.4L7.8 7.6H14.2L16 13.4ZM10.35 14.1h1.3v7h-1.3ZM11 10.6a1.45 1.45 0 1 0 .001 0Z"/><rect x="7.4" y="4.4" width="7.2" height="2.2" rx=".7"/></g><path d="' + star124(19.6, 4.4, 2.5) + '"/>'),
+    lm: svgUrl124('<path d="M11.5 5.2L18.6 17.6H4.4Z" fill="none" stroke="#000" stroke-width="1.7" stroke-linejoin="round"/><path d="M1.2 13.6L8.6 11.9" stroke="#000" stroke-width="1.3" stroke-linecap="round"/><path d="M14.6 11.6L22.6 9.4M14.9 12.4L22.6 12.6M15.2 13.2L22.4 15.8" stroke="#000" stroke-width="1.2" stroke-linecap="round"/><path d="' + star124(19.6, 3.6, 2.4) + '"/>'),
+    s38: svgUrl124('<path d="M2.6 7.4C5.6 6.2 8.8 6.5 11.3 8.2V20.2C8.8 18.7 5.6 18.4 2.6 19.4Z"/><path d="M12.7 8.2C15.2 6.5 18.4 6.2 21.4 7.4V19.4C18.4 18.4 15.2 18.7 12.7 20.2Z"/><path d="' + star124(17.6, 3.3, 2.4) + '"/>'),
+    live: svgUrl124('<g fill="none" stroke="#000" stroke-linecap="round"><circle cx="10.8" cy="13.4" r="7.6" stroke-width="1.6"/><ellipse cx="10.8" cy="13.4" rx="3.3" ry="7.6" stroke-width="1.15"/><path d="M3.4 11.2H18.2M3.4 15.6H18.2" stroke-width="1.1"/></g><path d="' + star124(19.9, 4.2, 2.5) + '"/>'),
+    more: svgUrl124('<circle cx="5" cy="13" r="1.9"/><circle cx="12" cy="13" r="1.9"/><circle cx="19" cy="13" r="1.9"/><path d="' + star124(19.4, 5, 2.1) + '"/>')
+  };
+  /* 名前・動き・印・色（明るい地 / 暗い地） */
+  const ZMETA124 = {
+    'cordi-b-at': { name: 'Atelier', m: 'ink', ic: 'at', c: ['#9b7fd1', '#6d55b0'], d: ['#c3adf0', '#a088e0'] },
+    'cordi-b-lm': { name: 'Lumière', m: 'prism', ic: 'lm', c: ['#e8ab3e', '#d06e2e'], d: ['#f3c56a', '#e99a5a'] },
+    'cordi-b-s38': { name: 'Scholar', m: 'idea', ic: 's38', c: ['#4aa79a', '#2f7a8c'], d: ['#7fcfc2', '#5fa9bb'] },
+    'c124-z-live': { name: 'Live', m: 'broadcast', ic: 'live', c: ['#4a9be0', '#3368b8'], d: ['#86bff0', '#6d9be0'] },
+    'c124-z-more': { name: 'More', m: 'twinkle', ic: 'more', c: ['#8f8a81', '#6b665e'], d: ['#c4beb4', '#a29c92'] }
+  };
+  function zenName124(b) {
+    if (b.id === 'c124-z-live') return live124.on ? 'Live' : 'Publish';
+    const meta = ZMETA124[b.id];
+    if (meta) return meta.name;
+    const t = String(b.getAttribute('title') || b.getAttribute('aria-label') || '').split(/\s+[—–-]\s+|[（(]/)[0].trim();
+    return t.length > 14 ? t.slice(0, 13) + '…' : t;
+  }
+  function zenTag124(b) {
+    const meta = ZMETA124[b.id];
+    const name = zenName124(b);
+    if (name && b.getAttribute('data-c124-name') !== name) b.setAttribute('data-c124-name', name);
+    const m = meta ? meta.m : 'twinkle';
+    if (b.getAttribute('data-c124-m') !== m) b.setAttribute('data-c124-m', m);
+    if (meta && !b.querySelector(':scope > .c124-zic')) {
+      const i = document.createElement('span');
+      i.className = 'c124-zic';
+      i.setAttribute('aria-hidden', 'true');
+      b.insertBefore(i, b.firstChild);
+    }
+    if (meta && b.getAttribute('data-c124-ic') !== meta.ic) b.setAttribute('data-c124-ic', meta.ic);
+    fx124(b);
+  }
+
+  /* 公開の計器: ページの上の公開の帯（「This page is live on …」「View site」「Site settings」）を探す */
+  const live124 = { on: false, domain: '', view: null, site: null, el: null };
+  const RX_VIEW124 = /^(view site|visit site|open site|view page|サイトを(表示|見る|開く)|サイトへ移動)$/i;
+  const RX_SITE124 = /^(site settings|サイト(の)?設定)$/i;
+  const RX_LIVE124 = /\blive on\b|\bis live\b|公開(中|されています)|で公開/i;
+  function bannerFind124() {
+    const frame = document.querySelector('.notion-frame');
+    const sc = frame && frame.querySelector('.notion-scroller');
+    if (!sc) return null;
+    for (let n = sc; n && n !== frame; n = n.parentElement) {
+      for (let s = n.previousElementSibling; s; s = s.previousElementSibling) {
+        if (s.matches('header, .notion-topbar, style, script') || s.querySelector('.notion-topbar, .notion-scroller, [contenteditable="true"], .notion-page-content')) continue;
+        const text = (s.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!text || text.length > 240) continue;
+        const btns = [...s.querySelectorAll('[role="button"], a, button')];
+        const label = (b) => (b.textContent || '').replace(/\s+/g, ' ').trim();
+        const view = btns.find((b) => RX_VIEW124.test(label(b))) || null;
+        const site = btns.find((b) => RX_SITE124.test(label(b))) || null;
+        if (!(view || site) && !(RX_LIVE124.test(text) && btns.length)) continue;
+        const dm = text.match(/([a-z0-9-]+(?:\.[a-z0-9-]+)*\.notion\.site)/i) || text.match(/\b([a-z0-9-]+(?:\.[a-z0-9-]+)+\.[a-z]{2,})\b/i);
+        return { el: s, view, site, domain: dm ? dm[1] : '' };
+      }
+    }
+    return null;
+  }
+  function liveUpdate124() {
+    const f = bannerFind124();
+    live124.on = !!f;
+    live124.domain = f ? f.domain : '';
+    live124.view = f ? f.view : null;
+    live124.site = f ? f.site : null;
+    live124.el = f ? f.el : null;
+    const absorb = !!(f && ZK124.banner && root104.hasAttribute('data-c124-zenith'));
+    for (const old of document.querySelectorAll('[data-c124-banner]')) if (!absorb || old !== f.el) old.removeAttribute('data-c124-banner');
+    if (absorb && !f.el.hasAttribute('data-c124-banner')) f.el.setAttribute('data-c124-banner', '');
+    const b = document.getElementById('c124-z-live');
+    if (b) {
+      if (b.hasAttribute('data-live') !== live124.on) b.toggleAttribute('data-live', live124.on);
+      const title = live124.on ? '公開中' + (live124.domain ? ' — ' + live124.domain : '') + '（サイトを見る・サイトの設定・共有と公開）' : 'このページを Web に公開する（共有と公開）';
+      if (b.title !== title) b.title = title;
+      b.setAttribute('aria-label', live124.on ? 'Live — ' + title : 'Publish — ' + title);
+      zenTag124(b);
+      /* 取り込んだ帯は見えない所に置く。押す時は Live の計器のすぐ下にあることにする（Notion の小窓がそこに出る） */
+      const r = b.getBoundingClientRect();
+      if (r.width) {
+        set104('--c124-bt', Math.round(r.bottom + 4) + 'px');
+        set104('--c124-br', Math.round(Math.max(0, innerWidth - r.right)) + 'px');
+      }
+    }
+  }
+
+  /* 小窓（Live・More） */
+  let zpop124 = null;
+  function zpopClose124() {
+    if (zpop124) { zpop124.remove(); zpop124 = null; }
+    for (const id of ['c124-z-live', 'c124-z-more']) { const b = document.getElementById(id); if (b && b.getAttribute('aria-expanded') !== 'false') b.setAttribute('aria-expanded', 'false'); }
+  }
+  function zpopOpen124(anchor, html, onClick) {
+    zpopClose124();
+    document.dispatchEvent(new CustomEvent('cordi:closepops', { detail: 'c124' }));
+    const el = document.createElement('div');
+    el.id = 'c124-zpop';
+    el.setAttribute('role', 'menu');
+    el.setAttribute('data-lm-keep', '');
+    el.setAttribute('data-at-keep', '');
+    el.setAttribute('data-no-passthrough', '1');
+    el.innerHTML = html;
+    document.body.appendChild(el);
+    const r = anchor.getBoundingClientRect();
+    el.style.top = Math.round(r.bottom + 6) + 'px';
+    el.style.left = Math.round(Math.max(8, Math.min(innerWidth - el.offsetWidth - 8, r.right - el.offsetWidth + 4))) + 'px';
+    anchor.setAttribute('aria-expanded', 'true');
+    el.addEventListener('mousedown', (e) => { if (!e.target.closest('input, label')) e.preventDefault(); });
+    el.addEventListener('click', (e) => onClick(e, el));
+    zpop124 = el;
+  }
+  document.addEventListener('pointerdown', (e) => {
+    if (!zpop124) return;
+    const t = e.target;
+    if (zpop124.contains(t) || (t.closest && t.closest('#c124-z-live, #c124-z-more'))) return;
+    zpopClose124();
+  }, true);
+  document.addEventListener('keydown', (e) => {
+    if (!zpop124 || e.key !== 'Escape') return;
+    const a = document.querySelector('#c124-z-live[aria-expanded="true"], #c124-z-more[aria-expanded="true"]');
+    zpopClose124();
+    if (a) a.focus({ preventScroll: true });
+    e.stopPropagation();
+  }, true);
+  document.addEventListener('cordi:closepops', (e) => { if (e.detail !== 'c124') zpopClose124(); });
+
+  function shareOpen124() {
+    const s = document.querySelector('.notion-topbar-share-menu');
+    if (s) s.click();
+    else C98.log('zenith', '共有のボタンが見つからないため、共有と公開の小窓を開けませんでした。');
+  }
+  function livePop124(b) {
+    if (zpop124 && b.getAttribute('aria-expanded') === 'true') { zpopClose124(); return; }
+    liveUpdate124();
+    if (!live124.on) { shareOpen124(); return; }
+    zpopOpen124(b,
+      '<div class="hd"><i class="dot"></i><b>Live</b><span>' + esc124(live124.domain || 'Web に公開中') + '</span></div>'
+      + (live124.view ? '<button type="button" role="menuitem" data-a="view">サイトを見る<small>新しいタブ</small></button>' : '')
+      + (live124.site ? '<button type="button" role="menuitem" data-a="site">サイトの設定</button>' : '')
+      + '<button type="button" role="menuitem" data-a="share">共有と公開…</button>'
+      + '<label class="opt"><input type="checkbox" data-a="banner"' + (ZK124.banner ? '' : ' checked') + '> 公開の帯をページの上にも出す</label>',
+      (e) => {
+        const x = e.target.closest('[data-a]');
+        if (!x) return;
+        const a = x.getAttribute('data-a');
+        if (a === 'banner') { ZK124.banner = !x.checked; zkSave124(); liveUpdate124(); return; }
+        zpopClose124();
+        if (a === 'share') { shareOpen124(); return; }
+        const btn = a === 'view' ? live124.view : live124.site;
+        if (btn && btn.isConnected) btn.click();
+      });
+  }
+  let zenPin124 = [];
+  function morePop124(b) {
+    if (zpop124 && b.getAttribute('aria-expanded') === 'true') { zpopClose124(); return; }
+    const over = [...document.querySelectorAll('#cordi-dock > .cd-b[data-c124-over]')];
+    zpopOpen124(b,
+      '<div class="hd"><b>Zenith</b><span>入りきらない計器</span></div>'
+      + over.map((t) => '<button type="button" role="menuitem" data-id="' + esc124(t.id) + '"><i class="mi" data-for="' + esc124(t.id) + '"></i>' + esc124(t.getAttribute('data-c124-name') || t.title || t.id) + '</button>').join(''),
+      (e) => {
+        const x = e.target.closest('[data-id]');
+        if (!x) return;
+        zpopClose124();
+        const t = document.getElementById(x.getAttribute('data-id'));
+        if (!t) return;
+        /* 選んだ計器を帯に戻して（いちばん長く使っていない計器が More へ）、それを押す */
+        zenPin124 = [t.id].concat(zenPin124.filter((i) => i !== t.id)).slice(0, 6);
+        zenFit124();
+        requestAnimationFrame(() => t.click());
+      });
+  }
+
+  /* 幅に合わせる: 名前つき → 印だけ → 入りきらない分は More（横スクロールは使わない） */
+  const zenW124 = new Map();
+  function zenLabelW124(name) {
+    let w = zenW124.get(name);
+    if (w == null) {
+      obFitCx.font = '600 9.5px ' + BASK104;
+      w = obFitCx.measureText(name).width + name.length * 0.2;
+      zenW124.set(name, w);
+    }
+    return w;
+  }
+  function zenFit124() {
+    const dock = document.getElementById('cordi-dock');
+    const acts = dock && dock.parentElement;
+    const row = acts && acts.parentElement;
+    if (!row || !dock.isConnected) return;
+    const more = document.getElementById('c124-z-more');
+    const tiles = [...dock.children].filter((b) => b.classList.contains('cd-b') && b !== more && !b.hidden);
+    const ord = (b) => parseFloat(b.style.getPropertyValue('--cd-o')) || 5;
+    tiles.sort((a, b) => ord(a) - ord(b));
+    const rs = getComputedStyle(row);
+    const rowW = row.clientWidth - (parseFloat(rs.paddingLeft) || 0) - (parseFloat(rs.paddingRight) || 0);
+    const others = acts.getBoundingClientRect().width - dock.getBoundingClientRect().width;
+    const crumb = row.querySelector('.notion-topbar-breadcrumb-region > *');
+    const reserve = Math.max(120, Math.min(260, crumb ? crumb.scrollWidth + 12 : 200));
+    const avail = rowW - others - reserve - 16;
+    const GAP = 2;
+    const needTile = tiles.reduce((s, b) => s + Math.max(44, Math.ceil(zenLabelW124(b.getAttribute('data-c124-name') || '')) + 16) + GAP, 0);
+    const needIcon = tiles.length * (30 + GAP);
+    let mode = 'tile', show = tiles.length;
+    if (needTile > avail) {
+      mode = 'icon';
+      if (needIcon > avail) show = Math.max(0, Math.floor((avail - 32) / (30 + GAP)));
+    }
+    const keep = new Set();
+    if (show < tiles.length) {
+      for (const id of zenPin124) { const t = tiles.find((x) => x.id === id); if (t && keep.size < show) keep.add(t); }
+      for (const t of tiles) if (keep.size < show) keep.add(t);
+    }
+    for (const t of tiles) {
+      const over = show < tiles.length && !keep.has(t);
+      if (t.hasAttribute('data-c124-over') !== over) t.toggleAttribute('data-c124-over', over);
+    }
+    if (dock.getAttribute('data-c124-zen') !== mode) dock.setAttribute('data-c124-zen', mode);
+    if (more) { const on = show < tiles.length; if (more.hasAttribute('data-c124-on') !== on) more.toggleAttribute('data-c124-on', on); }
+  }
+
+  function zenButton124(id, order, onClick) {
+    let b = document.getElementById(id);
+    if (!b) {
+      b = document.createElement('button');
+      b.id = id;
+      b.className = 'cd-b';
+      b.type = 'button';
+      b.style.setProperty('--cd-o', String(order));
+      b.setAttribute('aria-haspopup', 'menu');
+      b.setAttribute('aria-expanded', 'false');
+      b.setAttribute('data-no-passthrough', '1');
+      b.addEventListener('mousedown', (e) => e.preventDefault());
+      b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); onClick(b); });
+    }
+    return b;
+  }
+  let zenRaf124 = 0;
+  function zenSoon124() { if (!zenRaf124) zenRaf124 = requestAnimationFrame(zenRun124); }
+  function zenRun124() {
+    zenRaf124 = 0;
+    const on = !!(ZK124.zen && root104.hasAttribute('data-c114-caelum'));
+    flag124('data-c124-zenith', on);
+    let dock = document.getElementById('cordi-dock');
+    if (!on) {
+      for (const id of ['c124-z-live', 'c124-z-more']) { const e = document.getElementById(id); if (e) e.remove(); }
+      if (dock) dock.removeAttribute('data-c124-zen');
+      for (const old of document.querySelectorAll('[data-c124-banner]')) old.removeAttribute('data-c124-banner');
+      zpopClose124();
+      return;
+    }
+    const acts = document.querySelector('.notion-topbar-action-buttons');
+    if (!acts) return;
+    if (!dock || !dock.isConnected || !acts.contains(dock)) {
+      /* 三本柱がまだ台を作っていない（または入っていない）時は、同じ台を同じ所に（柱は後からここへ入る） */
+      if (!dock) { dock = document.createElement('div'); dock.id = 'cordi-dock'; }
+      const anchor = acts.querySelector('.notion-topbar-share-menu') || acts.querySelector('.notion-topbar-more-button');
+      let ref = anchor;
+      while (ref && ref.parentElement !== acts) ref = ref.parentElement;
+      acts.insertBefore(dock, ref || acts.firstChild);
+    }
+    const live = zenButton124('c124-z-live', 8, livePop124);
+    if (!live.querySelector('.c124-zdot')) { const d = document.createElement('span'); d.className = 'c124-zdot'; d.setAttribute('aria-hidden', 'true'); live.appendChild(d); }
+    if (live.parentElement !== dock) dock.appendChild(live);
+    const more = zenButton124('c124-z-more', 99, morePop124);
+    more.title = '入りきらない計器';
+    if (more.parentElement !== dock) dock.appendChild(more);
+    for (const b of dock.querySelectorAll(':scope > .cd-b')) zenTag124(b);
+    liveUpdate124();
+    zenFit124();
+  }
+
+  /* 上の帯・サイドバーが動いた時（C104 の見張り・2 秒ごと・窓の大きさ）に、Zenith も見直す */
+  const nativeBefore124 = nativeCheck104;
+  nativeCheck104 = function() {
+    nativeBefore124();
+    zenSoon124();
+  };
+  new MutationObserver(() => zenSoon124()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-c114-caelum'] });
+
+  /* 5) 見た目 */
+  const STAR_CLIP124 = 'polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)';
+  const ECG124 = 'url("data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 12" preserveAspectRatio="none"><path d="M0 6H14L16 3L18.5 10.5L21.5 1L24 8.5L26 6H42" fill="none" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/></svg>') + '")';
+  const WAVE124 = 'url("data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4"><path d="M0 2.4Q3 .2 6 2.4T12 2.4" fill="none" stroke="#000" stroke-width="1.2"/></svg>') + '")';
+
+  /* 名前ごとの動き: [印の動きの長さ, 緩急, 印のキーフレーム, 粒の決まり]。@B = 粒の入れ物、@1〜@3 = 粒 */
+  const MOT124 = {
+    thread: ['1.1s', 'ease-in-out', '0%,100%{transform:none}25%{transform:rotate(-9deg)}55%{transform:rotate(6deg)}80%{transform:rotate(-2deg)}', `
+@B::before { width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1.2px solid #cf9f45; -webkit-mask: conic-gradient(#000 var(--c124-a), transparent 0); mask: conic-gradient(#000 var(--c124-a), transparent 0); animation: c124-draw .95s cubic-bezier(.55,0,.25,1) both, c124-hold 1.5s ease both; }
+@1 { --y0: -15px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .7s ease .85s both; }
+@2 { --x0: 9px; --y0: -12px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .55s ease 1s both; }
+@3 { --x0: -9px; --y0: -12px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .55s ease 1.08s both; }`],
+    arrow: ['.85s', 'cubic-bezier(.3,.7,.3,1)', '0%,100%{transform:none}22%{transform:translateX(-2.5px) scaleX(.93)}42%{transform:translateX(4px) scaleX(1.06)}70%{transform:translateX(-.5px)}', `
+@1, @2, @3 { width: 10px; height: 1.4px; margin: -.7px 0 0 -5px; border-radius: 1px; background: #3e9fa4; --x0: -12px; --x: -12px; animation: c124-streak .55s ease-out .28s both; }
+@1 { --y0: -5px; } @2 { --y0: 0px; animation-delay: .32s; } @3 { --y0: 5px; animation-delay: .36s; }
+@B::after { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: #4fb0b4; clip-path: var(--c124-star); border-radius: 0; --x0: 8px; --y0: -7px; --x: 14px; --y: -12px; animation: c124-fly .7s ease-out .3s both; }`],
+    wisdom: ['1.2s', 'ease', '0%,100%{transform:none;filter:none}40%{transform:translateY(-2px) scale(1.07);filter:drop-shadow(0 0 5px rgba(146,116,214,.6))}', `
+@B::before { width: 40px; height: 40px; margin: -20px 0 0 -20px; background: radial-gradient(circle, rgba(150,120,220,.3), transparent 65%); z-index: -1; animation: c124-glow 1.2s ease both; }
+@1, @2, @3 { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #8f74cf; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .6s ease .12s both; }
+@1 { --x0: -11px; --y0: -10px; } @2 { --y0: -15px; width: 6px; height: 6px; background: #c9a24c; animation-delay: .26s; } @3 { --x0: 11px; --y0: -10px; animation-delay: .4s; }`],
+    lyre: ['1.2s', 'linear', '0%,100%{transform:none}8%{transform:rotate(5deg)}17%{transform:rotate(-4.5deg)}26%{transform:rotate(3.6deg)}36%{transform:rotate(-2.6deg)}47%{transform:rotate(1.7deg)}58%{transform:rotate(-1deg)}70%{transform:rotate(.5deg)}', `
+@B::before, @B::after { width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 1px solid #9a72c9; z-index: -1; animation: c124-ring 1.1s ease-out both; }
+@B::after { animation-delay: .3s; }
+@1, @2 { width: auto; height: auto; margin: -7px 0 0 -3px; background: none; border-radius: 0; color: #9a72c9; font: 700 11px/1 var(--c104-serif, serif); animation: c124-fly 1.1s ease-out .1s both; }
+@1::before, @2::before { content: "\\266A"; }
+@1 { --x0: 9px; --y0: -4px; --x: 7px; --y: -13px; } @2 { --x0: -10px; --y0: -3px; --x: -6px; --y: -11px; font-size: 9px; animation-delay: .4s; }`],
+    forge: ['.9s', 'ease-out', '0%,100%{transform:none;filter:none}13%{transform:translateY(2px) scale(1.08,.88);filter:drop-shadow(0 0 5px rgba(232,110,48,.7))}28%{transform:translateY(-2px) scale(.96,1.06);filter:drop-shadow(0 0 4px rgba(232,110,48,.5))}46%{transform:none;filter:none}', `
+@B::before { width: 30px; height: 12px; margin: -6px 0 0 -15px; --y0: 7px; background: radial-gradient(ellipse at center, rgba(240,120,50,.45), transparent 70%); z-index: -1; animation: c124-glow .8s ease .05s both; }
+@1, @2, @3 { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; background: #f0903a; box-shadow: 0 0 4px #f6b04a; animation: c124-spark .8s ease-out .1s both; }
+@1 { --x: -13px; --y: -14px; } @2 { --x: 2px; --y: -18px; background: #f6b04a; animation-delay: .13s; } @3 { --x: 14px; --y: -11px; background: #e8642e; animation-delay: .16s; }`],
+    dream: ['1.8s', 'ease-in-out', '0%,100%{transform:none}45%{transform:rotate(-7deg) translateY(1px) scale(.96)}', `
+@1, @2 { width: auto; height: auto; margin: -8px 0 0 -2px; background: none; border-radius: 0; color: #7d74c9; font: italic 700 10px/1 var(--c104-serif, serif); animation: c124-fly 1.5s ease-out .15s both; }
+@1::before, @2::before { content: "z"; }
+@1 { --x0: 7px; --y0: -6px; --x: 8px; --y: -13px; } @2 { --x0: 4px; --y0: -3px; --x: 14px; --y: -8px; font-size: 8px; animation-delay: .55s; }
+@3 { --x0: -9px; --y0: -9px; width: 4px; height: 4px; background: #b8a4e6; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .8s ease .9s both; }`],
+    pulse: ['1.1s', 'ease', '0%,100%{transform:none}10%{transform:scale(1.16)}20%{transform:scale(.98)}30%{transform:scale(1.1)}42%{transform:none}', `
+@B::before, @B::after { width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 1.2px solid #3fae6e; z-index: -1; animation: c124-ring .9s ease-out .05s both; }
+@B::after { animation-delay: .3s; }
+@1 { width: 42px; height: 12px; margin: -6px 0 0 -21px; border-radius: 0; background: #3fae6e; -webkit-mask: ${ECG124} center / 100% 100% no-repeat; mask: ${ECG124} center / 100% 100% no-repeat; z-index: -1; animation: c124-ecg 1.1s ease-out both; }`],
+    sail: ['1.4s', 'ease-in-out', '0%,100%{transform:none}25%{transform:rotate(-8deg) translateY(-1px)}50%{transform:rotate(5deg) translateY(.5px)}75%{transform:rotate(-3deg)}', `
+@I { transform-origin: 50% 85%; }
+@1 { width: 34px; height: 4px; margin: -2px 0 0 -17px; --y0: 12px; border-radius: 0; background: #4a8fd0; -webkit-mask: ${WAVE124} 0 0 / 12px 4px repeat-x; mask: ${WAVE124} 0 0 / 12px 4px repeat-x; animation: c124-wave 1.4s linear both; }
+@2, @3 { width: 2.5px; height: 2.5px; margin: -1.25px 0 0 -1.25px; background: #6aa9e0; animation: c124-fly .7s ease-out .35s both; }
+@2 { --x0: -8px; --y0: 9px; --x: -4px; --y: -8px; } @3 { --x0: 8px; --y0: 9px; --x: 5px; --y: -9px; animation-delay: .6s; }`],
+    hearth: ['1.4s', 'ease', '0%,100%{transform:none;filter:none}35%{transform:scale(1.05);filter:drop-shadow(0 0 6px rgba(240,140,60,.75))}70%{filter:drop-shadow(0 0 3px rgba(240,140,60,.45))}', `
+@B::before { width: 28px; height: 12px; margin: -6px 0 0 -14px; --y0: 8px; background: radial-gradient(ellipse at center, rgba(244,150,70,.5), transparent 70%); z-index: -1; animation: c124-flicker 1.4s linear both; }
+@1, @2, @3 { width: 2.5px; height: 2.5px; margin: -1.25px 0 0 -1.25px; background: #f08a3a; --x0: 6px; --y0: -8px; animation: c124-fly 1s ease-out .1s both; }
+@1 { --x: 3px; --y: -12px; } @2 { --x: -2px; --y: -15px; background: #f4b25a; animation-delay: .35s; } @3 { --x: 6px; --y: -16px; background: #c9a089; animation-delay: .6s; }`],
+    hourglass: ['1.5s', 'cubic-bezier(.65,0,.35,1)', '0%{transform:rotate(0)}38%,62%{transform:rotate(180deg)}100%{transform:rotate(360deg)}', `
+@B::before { width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1px solid rgba(214,168,74,.75); -webkit-mask: conic-gradient(#000 var(--c124-a), transparent 0); mask: conic-gradient(#000 var(--c124-a), transparent 0); animation: c124-draw 1.5s linear both, c124-hold 1.5s ease both; }
+@1, @2, @3 { width: 2px; height: 2px; margin: -1px 0 0 -1px; background: #d6a84a; --y0: -3px; --y: 7px; animation: c124-fall .45s ease-in .55s both; }
+@2 { --x0: -1px; animation-delay: .65s; } @3 { --x0: 1px; animation-delay: .75s; }`],
+    phoenix: ['1.2s', 'ease-out', '0%,100%{transform:none;filter:none}35%{transform:translateY(-3px) scale(1.1);filter:drop-shadow(0 0 5px rgba(236,108,92,.7))}', `
+@B::before, @B::after { width: 15px; height: 7px; --y0: -1px; z-index: -1; }
+@B::before { margin: -3.5px 0 0 -15px; --x0: -3px; border-radius: 100% 0 100% 0; background: linear-gradient(90deg, rgba(240,170,90,.5), #e8705e); transform-origin: 100% 50%; animation: c124-wingL 1.1s ease-out .1s both; }
+@B::after { margin: -3.5px 0 0 0; --x0: 3px; border-radius: 0 100% 0 100%; background: linear-gradient(90deg, #e8705e, rgba(240,170,90,.5)); transform-origin: 0 50%; animation: c124-wingR 1.1s ease-out .1s both; }
+@1, @2, @3 { width: 2.5px; height: 2.5px; margin: -1.25px 0 0 -1.25px; background: #e8705e; --y0: 9px; animation: c124-fly 1s ease-out .2s both; }
+@1 { --x0: -5px; --x: 2px; --y: -22px; } @2 { --x: 1px; --y: -26px; background: #f0a35a; animation-delay: .3s; } @3 { --x0: 5px; --x: -2px; --y: -21px; animation-delay: .4s; }`],
+    coin: ['1s', 'cubic-bezier(.3,.7,.3,1)', '0%{transform:perspective(80px) rotateY(0)}70%,100%{transform:perspective(80px) rotateY(360deg)}', `
+@B::before { width: 26px; height: 26px; margin: -13px 0 0 -13px; background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.85) 50%, transparent 62%) 150% 0 / 250% 100% no-repeat; animation: c124-glint .7s ease-out .45s both; }
+@1, @2, @3 { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #d2a640; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .6s ease .5s both; }
+@1 { --x0: 12px; --y0: -9px; } @2 { --x0: -11px; --y0: -7px; width: 4px; height: 4px; animation-delay: .62s; } @3 { --x0: 8px; --y0: -15px; width: 4px; height: 4px; animation-delay: .74s; }`],
+    quill: ['1.1s', 'ease-in-out', '0%,100%{transform:none}20%{transform:translate(-1.5px,.5px) rotate(-7deg)}40%{transform:translate(1px,-.5px) rotate(4deg)}60%{transform:translate(-1px,1px) rotate(-5deg)}80%{transform:translate(1px,0) rotate(2deg)}', `
+@1 { width: 26px; height: 1.4px; margin: -.7px 0 0 -13px; --y0: 13px; border-radius: 1px; background: linear-gradient(90deg, transparent, #5b63c4 30%, #5b63c4); transform-origin: 0 50%; animation: c124-ink 1.1s ease-out .1s both; }
+@2 { --x0: 13px; --y0: 13px; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; background: #5b63c4; animation: c124-pop .5s ease .6s both; }
+@3 { --x0: 16px; --y0: 7px; width: 4px; height: 4px; background: #c9a24c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .55s ease .7s both; }`],
+    gear: ['1.4s', 'linear', '0%{transform:rotate(0)}20%{transform:rotate(97deg)}25%{transform:rotate(90deg)}45%{transform:rotate(187deg)}50%{transform:rotate(180deg)}70%{transform:rotate(277deg)}75%{transform:rotate(270deg)}95%{transform:rotate(367deg)}100%{transform:rotate(360deg)}', `
+@B::before { width: 11px; height: 11px; margin: 0; --x0: -17px; --y0: -3px; border-radius: 0; border-left: 1.5px solid #c45aa8; border-bottom: 1.5px solid #c45aa8; transform-origin: 0 100%; animation: c124-sq 1.4s ease both; }
+@B::after { width: 32px; height: 32px; margin: -16px 0 0 -16px; border: 1px dashed #c45aa8; z-index: -1; animation: c124-dash 1.4s ease both; }`],
+    wind: ['1.3s', 'ease-in-out', '0%,100%{transform:none}35%{transform:translate(2px,-3px) rotate(7deg)}65%{transform:translate(-1px,-1px) rotate(-3deg)}', `
+@1, @2, @3 { width: 12px; height: 5px; margin: -2.5px 0 0 -6px; border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: none; border-top: 1.3px solid #4fae7a; --x0: -16px; --x: 26px; animation: c124-gust .9s ease-in-out both; }
+@1 { --y0: -6px; } @2 { --y0: 1px; animation-delay: .15s; } @3 { --y0: 7px; animation-delay: .3s; }`],
+    sprout: ['.9s', 'ease', '0%,100%{transform:none}30%{transform:translateY(-3px)}50%{transform:translateY(0) scale(1.06,.92)}65%{transform:scale(.98,1.03)}', `
+@1, @2, @3 { width: 6px; height: 4px; margin: -2px 0 0 -3px; border-radius: 0 100% 0 100%; background: #6aa84f; --y0: 9px; animation: c124-leafup .8s ease-out .2s both; }
+@1 { --x: -10px; --y: -24px; --r: -40deg; } @2 { --x: 0px; --y: -28px; --r: 0deg; animation-delay: .28s; } @3 { --x: 10px; --y: -24px; --r: 40deg; animation-delay: .36s; }`],
+    spin: ['1.1s', 'cubic-bezier(.6,0,.3,1)', '0%{transform:rotate(0)}100%{transform:rotate(360deg)}', `
+@B::before { width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1.2px solid transparent; border-top-color: #d77a9a; border-right-color: #d77a9a; animation: c124-whirl 1.1s ease-out both; }
+@1 { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; background: #d77a9a; animation: c124-orbitdot 1.1s ease-out both; }`],
+    globe: ['1.4s', 'ease-in-out', '0%,100%{transform:perspective(80px) rotateY(0)}30%{transform:perspective(80px) rotateY(40deg)}65%{transform:perspective(80px) rotateY(-28deg)}', `
+@B::before { width: 34px; height: 12px; margin: -6px 0 0 -17px; border: 1.1px solid #6b8fb3; animation: c124-ell 1.4s ease both; }
+@1 { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; background: #6b8fb3; animation: c124-sat 1.4s linear both; }`],
+    twinkle: ['.9s', 'ease', '0%,100%{transform:none}40%{transform:scale(1.08) rotate(-4deg)}', `
+@1, @2, @3 { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: var(--c124-tw, #c9a24c); clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .6s ease both; }
+@1 { --x0: 12px; --y0: -9px; } @2 { --x0: -12px; --y0: -6px; width: 4px; height: 4px; animation-delay: .15s; } @3 { --x0: 6px; --y0: -14px; width: 4px; height: 4px; animation-delay: .3s; }`],
+    cog: ['1.2s', 'cubic-bezier(.4,-0.3,.3,1.35)', '0%{transform:rotate(0)}100%{transform:rotate(360deg)}', `
+@1 { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; background: #d4a548; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .7s ease .45s both; }
+@2, @3 { width: 4px; height: 4px; margin: -2px 0 0 -2px; background: #d4a548; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .5s ease .55s both; }
+@2 { --x0: 11px; --y0: -9px; } @3 { --x0: -11px; --y0: 8px; animation-delay: .7s; }`],
+    ink: ['1s', 'ease-in-out', '0%,100%{transform:none}30%{transform:rotate(-14deg) translate(-1px,1px)}55%{transform:rotate(6deg) translate(1px,-1px)}', `
+@1 { width: 22px; height: 1.4px; margin: -.7px 0 0 -11px; --y0: 10px; border-radius: 1px; background: linear-gradient(90deg, transparent, #7a5fc0 30%, #7a5fc0); transform-origin: 0 50%; animation: c124-ink 1s ease-out .1s both; }
+@2 { --x0: 11px; --y0: 10px; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; background: #7a5fc0; animation: c124-pop .5s ease .55s both; }
+@3 { --x0: 8px; --y0: -7px; width: 6px; height: 6px; margin: -3px 0 0 -3px; background: #c9a24c; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .6s ease .3s both; }`],
+    prism: ['1.3s', 'ease', '0%,100%{filter:none;transform:none}50%{filter:hue-rotate(150deg) saturate(1.5);transform:scale(1.08)}', `
+@B::before { width: 28px; height: 28px; margin: -14px 0 0 -14px; background: conic-gradient(#f37a7a, #f6c25a, #79c96e, #5cb2e6, #a77ce0, #f37a7a); -webkit-mask: radial-gradient(circle, transparent 55%, #000 57%, #000 66%, transparent 68%); mask: radial-gradient(circle, transparent 55%, #000 57%, #000 66%, transparent 68%); z-index: -1; animation: c124-halo 1.3s ease both; }
+@1, @2, @3 { width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; --x0: 5px; animation: c124-fly .8s ease-out .2s both; }
+@1 { --x: 13px; --y: -5px; background: #f37a7a; } @2 { --x: 15px; --y: 0px; background: #79c96e; animation-delay: .25s; } @3 { --x: 13px; --y: 5px; background: #5cb2e6; animation-delay: .3s; }`],
+    idea: ['1s', 'ease', '0%,100%{transform:none}30%{transform:perspective(60px) rotateX(18deg) translateY(-1px)}60%{transform:none}', `
+@B::after { width: 12px; height: 12px; margin: -6px 0 0 -6px; --x0: 6px; --y0: -7px; border: 1px solid #d4a548; animation: c124-ring .7s ease-out .25s both; }
+@1 { --x0: 6px; --y0: -7px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: #d4a548; clip-path: var(--c124-star); border-radius: 0; animation: c124-pop .6s ease .2s both; }`],
+    broadcast: ['1.3s', 'ease-in-out', '0%,100%{transform:perspective(80px) rotateY(0)}35%{transform:perspective(80px) rotateY(35deg)}70%{transform:perspective(80px) rotateY(-20deg)}', `
+@B::before, @B::after { width: 20px; height: 20px; margin: -10px 0 0 -10px; border: 1.2px solid #3a86c8; z-index: -1; animation: c124-ring 1s ease-out both; }
+@B::after { animation-delay: .35s; }`]
+  };
+
+  const cssBefore124 = nbCss;
+  nbCss = function() {
+    cssBefore124();
+    nativeSoon104();
+    if (document.getElementById('c124-caelum-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c124-caelum-css';
+    const S = S124;
+    const C = S + '[data-c114-caelum]';
+    const O = S + ' #c33-orbit';
+    const ON = S + '[data-c124-motion]';
+    const OO = ON + ' #c33-orbit';
+    const Z = S + '[data-c124-zenith] #cordi-dock[data-c124-zen]';
+    const motion = Object.entries(MOT124).map(([m, [d, ease, kf, fx]]) => {
+      const T = `${ON} [data-c124-m="${m}"]:is(:hover, :focus-visible, [data-c124-play])`;
+      const I = `${T} > :is(.ob-ic, .c124-zic)`;
+      const B = `${T} > .c124-fx`;
+      return `@keyframes c124-${m} { ${kf} }
+${I} { animation: c124-${m} ${d} ${ease} both; }` + fx.replace(/@I/g, I).replace(/@B/g, B).replace(/@([123])/g, (x, n) => `${B} > i:nth-child(${n})`);
+    }).join('\n');
+    const zic = Object.entries(ZMETA124).map(([id, z]) => `${Z} #${id} .c124-zic, #c124-zpop .mi[data-for="${id}"] { -webkit-mask-image: ${ZIC124[z.ic]}; mask-image: ${ZIC124[z.ic]}; background-image: linear-gradient(135deg, ${z.c[0]}, ${z.c[1]}); }
+body.dark ${Z} #${id} .c124-zic, body.dark #c124-zpop .mi[data-for="${id}"] { background-image: linear-gradient(135deg, ${z.d[0]}, ${z.d[1]}); }`).join('\n');
+    style.textContent = `
+@property --c124-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+html { --c124-line: var(--ca-borSecTra, rgba(55,53,47,.09)); --c124-star: ${STAR_CLIP124}; }
+
+/* ── 地: ページと同じ。閉じている時の Orbit は透過、並べて開いた時はサイドバーの紙 ── */
+${C} #c33-orbit { background: transparent !important; box-shadow: none !important; }
+${C}:not([data-c104-native-closed]) #c33-orbit { background: var(--nb-paper, var(--c-bacSec, #f8f8f7)) !important; }
+/* 上の帯の下に 1 本の細線。閉じている時は Orbit が透けるので、B.U.R.I の下の線もこれ 1 本 */
+${C} header:has(> .notion-topbar):not(.notion-peek-renderer *) { box-shadow: inset 0 -1px 0 var(--c124-line) !important; }
+${C}:not([data-c104-native-closed]) #c33-orbit::before {
+  content: ""; position: absolute; left: 0; right: 0; top: calc(var(--c104-top, 45px) - 1px); height: 1px;
+  background: var(--c124-line); pointer-events: none; z-index: 2;
+}
+/* Settings の上にも同じ細線（列の端から端まで） */
+${C} #c33-orbit .ob-ft { box-shadow: inset 0 1px 0 var(--c124-line) !important; }
+${C} #c33-orbit .ob-all { box-shadow: none !important; }
+/* 下の端: ぼかしをやめ、割り切った段の高さで並べる */
+${C} #c33-orbit .ob-wheel { -webkit-mask-image: none !important; mask-image: none !important; }
+${O} .ob-it { height: calc(var(--c124-step, 54px) - 6px) !important; }
+
+/* ── B.U.R.I（鰤と星） ── */
+${O} .ob-all[data-c124-m="swim"] { grid-template-rows: 22px auto !important; isolation: isolate; }
+${O} .ob-all[data-c124-m="swim"] .ob-ic {
+  width: 32px !important; height: 22px !important; opacity: 1 !important; overflow: visible !important;
+  -webkit-mask-image: none !important; mask-image: none !important; background: none !important;
+  transform: none !important; transition: none !important; animation: none !important; filter: none;
+}
+${O} .ob-all .c124-fish { display: block; width: 100%; height: 100%; overflow: visible; }
+${O} .c124-fish .f-tail { transform-box: fill-box; transform-origin: 100% 50%; }
+${O} .c124-fish .f-swim { transform-box: fill-box; transform-origin: 50% 50%; }
+${O} .c124-fish .f-bub > *, ${O} .c124-fish .f-glint { transform-box: fill-box; transform-origin: 50% 50%; }
+${O} .c124-fish .f-glint { opacity: 0; }
+body.dark ${O} .c124-fish { --c124-f1: #ee9a83; --c124-f2: #f0b56e; --c124-f3: #f3cf7e; --c124-f4: #ffe3a0; }
+/* ふだん: ときどき泡がひとつ昇る（7 秒に 1 回・ほんの少し） */
+${OO} .ob-all[data-c124-m="swim"]:not([data-state="busy"]) .c124-fish .b3 { animation: c124-idlebub 7s ease-in-out infinite; }
+${OO} .ob-all[data-c124-m="swim"]:not([data-state="busy"]) .c124-fish .f-glint { animation: c124-blink 9s ease-in-out 2s infinite; }
+/* ホバー・押した時: 泳ぐ（尾をふる・前へ・星の泡・目がきらり） */
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) .c124-fish .f-swim { animation: c124-swim 1.2s ease-in-out both; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) .c124-fish .f-tail { animation: c124-tail .32s ease-in-out 4 both; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) .c124-fish .f-bub > * { animation: c124-bub 1.2s ease-in-out both; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) .c124-fish .f-bub > .b2 { animation-delay: .15s; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) .c124-fish .f-bub > .b3 { animation-delay: .3s; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) .c124-fish .f-glint { animation: c124-glint2 .9s ease .2s both; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) > .c124-fx > i { width: 4px; height: 4px; margin: -2px 0 0 -2px; background: #e7b955; clip-path: var(--c124-star); border-radius: 0; --x0: 13px; --y0: -3px; animation: c124-fly 1s ease-out .1s both; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) > .c124-fx > i:nth-child(1) { --x: 4px; --y: -10px; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) > .c124-fx > i:nth-child(2) { --x: 9px; --y: -6px; width: 3px; height: 3px; background: #e2954a; animation-delay: .35s; }
+${OO} .ob-all[data-c124-m="swim"]:is(:hover, :focus-visible, [data-c124-play]) > .c124-fx > i:nth-child(3) { --x: 1px; --y: -13px; width: 3px; height: 3px; animation-delay: .6s; }
+/* 考え中: ずっと泳ぐ */
+${O} .ob-all[data-c124-m="swim"][data-state="busy"] .c124-fish .f-swim { animation: c124-swim 1.4s ease-in-out infinite; }
+${O} .ob-all[data-c124-m="swim"][data-state="busy"] .c124-fish .f-tail { animation: c124-tail .36s ease-in-out infinite; }
+${O} .ob-all[data-c124-m="swim"][data-state="busy"] .c124-fish .f-bub > * { animation: c124-bub 1.4s ease-in-out infinite; }
+${O} .ob-all[data-c124-m="swim"][data-state="busy"] .c124-fish .f-bub > .b2 { animation-delay: .2s; }
+${O} .ob-all[data-c124-m="swim"][data-state="busy"] .c124-fish .f-bub > .b3 { animation-delay: .4s; }
+${O} .ob-all[data-c124-m="swim"][data-state="error"] .ob-ic { filter: grayscale(1) !important; opacity: .55 !important; }
+/* 未読: 金の星がゆっくり瞬く */
+${O} .ob-all[data-c124-m="swim"][data-unread]::before {
+  content: "" !important; position: absolute !important; top: 4px !important; left: calc(50% + 13px) !important;
+  width: 8px !important; height: 8px !important; border-radius: 0 !important; box-shadow: none !important;
+  background: #e3a33f !important; clip-path: var(--c124-star); animation: c124-twk 2.4s ease-in-out infinite;
+}
+
+/* ── 名前ごとの動き（ホバー・フォーカス・押した時） ── */
+${S} :is(.ob-it, .ob-all, .ob-set, .cd-b) > .c124-fx { position: absolute; grid-area: 1 / 1 / 2 / 2; inset: 0; pointer-events: none; z-index: auto; }
+${S} .c124-fx::before, ${S} .c124-fx::after, ${S} .c124-fx > i {
+  content: ""; position: absolute; left: calc(50% + var(--x0, 0px)); top: calc(50% + var(--y0, 0px));
+  width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; opacity: 0; pointer-events: none; z-index: 2; font-style: normal;
+}
+${S} .c124-fx > i::before { content: none; }
+${S} :is(.ob-all, .ob-set) { isolation: isolate; }
+${S} [data-c124-rst] > :is(.ob-ic, .c124-zic), ${S} [data-c124-rst] > .c124-fx::before, ${S} [data-c124-rst] > .c124-fx::after, ${S} [data-c124-rst] > .c124-fx > i, ${S} [data-c124-rst] .c124-fish * { animation: none !important; }
+${motion}
+@keyframes c124-fly { 0% { transform: translate(0, 0) scale(.5); opacity: 0; } 18% { opacity: 1; } 100% { transform: translate(var(--x, 0px), var(--y, -12px)) scale(1); opacity: 0; } }
+@keyframes c124-pop { 0% { transform: scale(0) rotate(0deg); opacity: 0; } 45% { transform: scale(1.25) rotate(45deg); opacity: 1; } 100% { transform: scale(0) rotate(90deg); opacity: 0; } }
+@keyframes c124-ring { 0% { transform: scale(.45); opacity: .75; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes c124-glow { 0%, 100% { opacity: 0; } 40% { opacity: 1; } }
+@keyframes c124-draw { from { --c124-a: 0deg; } to { --c124-a: 360deg; } }
+@keyframes c124-hold { 0% { opacity: 0; } 8% { opacity: .95; } 75% { opacity: .95; } 100% { opacity: 0; } }
+@keyframes c124-spark { 0% { transform: translate(0, 0) scale(1); opacity: 0; } 10% { opacity: 1; } 60% { transform: translate(var(--x), var(--y)) scale(.9); opacity: 1; } 100% { transform: translate(calc(var(--x) * 1.2), calc(var(--y) * .55 + 5px)) scale(.4); opacity: 0; } }
+@keyframes c124-streak { 0% { transform: translateX(0) scaleX(.2); opacity: 0; } 30% { opacity: .85; } 100% { transform: translateX(var(--x, -14px)) scaleX(1); opacity: 0; } }
+@keyframes c124-ecg { 0% { clip-path: inset(0 100% 0 0); opacity: .9; } 55% { clip-path: inset(0 0 0 0); opacity: .9; } 100% { clip-path: inset(0 0 0 100%); opacity: 0; } }
+@keyframes c124-wave { 0% { -webkit-mask-position: 0 0; mask-position: 0 0; opacity: 0; } 20% { opacity: .8; } 80% { opacity: .8; } 100% { -webkit-mask-position: -24px 0; mask-position: -24px 0; opacity: 0; } }
+@keyframes c124-flicker { 0% { opacity: 0; } 15% { opacity: .9; } 30% { opacity: .55; } 45% { opacity: 1; } 60% { opacity: .5; } 80% { opacity: .8; } 100% { opacity: 0; } }
+@keyframes c124-fall { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(var(--y, 7px)); opacity: 0; } }
+@keyframes c124-wingL { 0% { transform: rotate(0deg) scale(.3); opacity: 0; } 40% { transform: rotate(32deg) scale(1); opacity: .9; } 100% { transform: rotate(52deg) scale(.85); opacity: 0; } }
+@keyframes c124-wingR { 0% { transform: rotate(0deg) scale(.3); opacity: 0; } 40% { transform: rotate(-32deg) scale(1); opacity: .9; } 100% { transform: rotate(-52deg) scale(.85); opacity: 0; } }
+@keyframes c124-glint { 0% { background-position: 150% 0; opacity: 0; } 25% { opacity: 1; } 100% { background-position: -60% 0; opacity: 0; } }
+@keyframes c124-ink { 0% { transform: scaleX(0); opacity: .9; } 55% { transform: scaleX(1); opacity: .9; } 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes c124-sq { 0% { transform: scale(0); opacity: 0; } 25% { transform: scale(1); opacity: .85; } 80% { opacity: .85; } 100% { opacity: 0; } }
+@keyframes c124-dash { 0% { transform: rotate(0deg) scale(.8); opacity: 0; } 25% { opacity: .55; } 100% { transform: rotate(-120deg) scale(1); opacity: 0; } }
+@keyframes c124-gust { 0% { transform: translateX(0); opacity: 0; } 25% { opacity: .85; } 100% { transform: translateX(var(--x, 24px)); opacity: 0; } }
+@keyframes c124-leafup { 0% { transform: translate(0, 0) rotate(0deg) scale(.3); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(var(--x), var(--y)) rotate(var(--r, 40deg)) scale(1); opacity: 0; } }
+@keyframes c124-whirl { 0% { transform: rotate(0deg); opacity: 0; } 20% { opacity: .85; } 100% { transform: rotate(540deg); opacity: 0; } }
+@keyframes c124-orbitdot { 0% { transform: rotate(0deg) translateX(15px); opacity: 0; } 20% { opacity: 1; } 100% { transform: rotate(540deg) translateX(15px); opacity: 0; } }
+@keyframes c124-ell { 0% { transform: rotate(-18deg) scale(.6); opacity: 0; } 30% { opacity: .8; } 100% { transform: rotate(-18deg) scale(1.05); opacity: 0; } }
+@keyframes c124-sat { 0% { transform: translate(-16px, 5px); opacity: 0; } 15% { opacity: 1; } 40% { transform: translate(0, 6px); } 65% { transform: translate(16px, -5px); } 85% { transform: translate(0, -6px); opacity: 1; } 100% { transform: translate(-14px, 3px); opacity: 0; } }
+@keyframes c124-halo { 0% { transform: rotate(0deg) scale(.6); opacity: 0; } 30% { opacity: .8; } 100% { transform: rotate(200deg) scale(1.1); opacity: 0; } }
+@keyframes c124-swim { 0%, 100% { transform: none; } 25% { transform: translateX(1.2px) rotate(-3deg); } 50% { transform: translateX(2px) rotate(2deg); } 75% { transform: translateX(.8px) rotate(-1.5deg); } }
+@keyframes c124-tail { 0%, 100% { transform: none; } 50% { transform: scaleX(.55) skewY(8deg); } }
+@keyframes c124-bub { 0% { transform: translateY(0) scale(1); opacity: 1; } 50% { transform: translateY(-1.5px) scale(1.3); opacity: 1; } 100% { transform: translateY(-3px) scale(.6); opacity: .25; } }
+@keyframes c124-glint2 { 0%, 100% { opacity: 0; transform: scale(.4) rotate(0deg); } 40% { opacity: 1; transform: scale(1.25) rotate(45deg); } }
+@keyframes c124-idlebub { 0%, 84% { transform: none; opacity: 1; } 90% { transform: translateY(-2px) scale(1.4); opacity: 1; } 96% { transform: translateY(-3.5px) scale(.5); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes c124-blink { 0%, 90%, 100% { opacity: 0; transform: none; } 94% { opacity: 1; transform: scale(1.2) rotate(45deg); } }
+@keyframes c124-twk { 0%, 100% { transform: scale(1) rotate(0deg); opacity: .85; } 50% { transform: scale(1.25) rotate(45deg); opacity: 1; } }
+@keyframes c124-live { 0%, 100% { box-shadow: 0 0 0 1.5px var(--c-bacPri, #fff), 0 0 0 0 rgba(47,179,109,.5); } 60% { box-shadow: 0 0 0 1.5px var(--c-bacPri, #fff), 0 0 0 5px rgba(47,179,109,0); } }
+
+/* ── Zenith: Orbit と同じ「印＋名前」の計器（幅に合わせて自動） ── */
+${Z} {
+  display: inline-flex !important; flex: none !important;
+  height: 44px !important; gap: 2px !important; margin-inline: 2px 8px !important; padding: 0 !important;
+  background: none !important; box-shadow: none !important; border-radius: 0 !important; align-items: center !important;
+}
+${Z} .cd-b {
+  display: grid !important; grid-template-rows: 18px auto; grid-template-columns: auto; justify-items: center; align-content: center; row-gap: 3px;
+  width: auto !important; min-width: 44px !important; height: 40px !important; padding: 0 7px !important; border-radius: 10px !important;
+  position: relative !important; isolation: isolate; color: var(--c-icoSec, #91918e) !important; overflow: visible !important;
+  order: var(--cd-o, 5); border: 0 !important; background: transparent; cursor: pointer; margin: 0 !important;
+}
+${Z} .cd-b > svg { grid-area: 1 / 1; width: 18px !important; height: 18px !important; }
+${Z} .cd-b[data-c124-ic] > :not(.c124-zic, .c124-fx, .cd-badge, .c124-zdot) { display: none !important; }
+${Z} .cd-b > .c124-zic { grid-area: 1 / 1; display: block; width: 18px; height: 18px; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; }
+${Z} .cd-b::after {
+  content: attr(data-c124-name) !important; grid-area: 2 / 1; display: block;
+  font: 600 9.5px/1.1 var(--c104-serif, Baskerville, serif) !important; letter-spacing: .02em; white-space: nowrap;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 74%, transparent);
+}
+${Z} .cd-b:hover, ${Z} .cd-b:focus-visible { background: var(--ca-bacIntTra, rgba(55,53,47,.06)) !important; }
+${Z} .cd-b:hover::after, ${Z} .cd-b[aria-expanded="true"]::after { color: var(--nb-text, var(--c-texPri, #37352f)); }
+${Z} .cd-b[aria-expanded="true"] { background: color-mix(in srgb, var(--c-texPri, #37352f) 7%, transparent) !important; }
+${Z} .cd-b .cd-badge { position: absolute !important; top: 1px !important; right: 3px !important; z-index: 3; }
+${Z}[data-c124-zen="icon"] .cd-b { grid-template-rows: 18px; min-width: 30px !important; width: 30px !important; height: 30px !important; padding: 0 !important; border-radius: 8px !important; }
+${Z}[data-c124-zen="icon"] .cd-b::after { content: none !important; display: none !important; }
+${Z} .cd-b[data-c124-over] { display: none !important; }
+${Z} #c124-z-more:not([data-c124-on]) { display: none !important; }
+${Z} #c124-z-live .c124-zdot { position: absolute; grid-area: 1 / 1 / 2 / 2; left: calc(50% + 5px); top: calc(50% + 3px); width: 6px; height: 6px; border-radius: 50%; background: #2fb36d; box-shadow: 0 0 0 1.5px var(--c-bacPri, #fff); z-index: 3; display: none; }
+${Z} #c124-z-live[data-live] .c124-zdot { display: block; animation: c124-live 2.4s ease-out infinite; }
+${Z} #c124-z-live:not([data-live]) .c124-zic { filter: saturate(.35); opacity: .8; }
+${zic}
+/* 取り込んだ公開の帯: 見えない所へ（押す時は Live の計器のすぐ下にあることになる） */
+${S}[data-c124-zenith] [data-c124-banner] {
+  position: fixed !important; top: var(--c124-bt, -400px) !important; right: var(--c124-br, 0px) !important; left: auto !important;
+  opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; z-index: -1 !important; margin: 0 !important;
+}
+
+/* 小窓 */
+#c124-zpop {
+  position: fixed; z-index: 1000; min-width: 220px; max-width: 320px; padding: 6px; border-radius: 12px;
+  background: var(--c-bacPri, #fff); color: var(--c-texPri, #37352f);
+  box-shadow: 0 0 0 1px rgba(15,15,15,.06), 0 10px 28px -6px rgba(15,15,15,.24);
+  font: 13px/1.4 var(--cordi-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif);
+}
+#c124-zpop .hd { display: flex; align-items: center; gap: 7px; padding: 6px 8px 8px; margin-bottom: 4px; border-bottom: 1px solid var(--c124-line); }
+#c124-zpop .hd b { font: 700 12.5px/1 var(--c104-serif, Baskerville, serif); letter-spacing: .04em; }
+#c124-zpop .hd span { min-width: 0; color: var(--c-texSec, #787774); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#c124-zpop .dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #2fb36d; animation: c124-live 2.4s ease-out infinite; }
+#c124-zpop button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 8px; border: 0; border-radius: 7px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+#c124-zpop button small { margin-left: auto; color: var(--c-texSec, #787774); font-size: 11px; }
+#c124-zpop button:hover, #c124-zpop button:focus-visible { background: var(--ca-bacIntTra, rgba(55,53,47,.06)); outline: none; }
+#c124-zpop .opt { display: flex; align-items: center; gap: 6px; padding: 8px 8px 4px; margin-top: 4px; border-top: 1px solid var(--c124-line); color: var(--c-texSec, #787774); font-size: 12px; cursor: pointer; }
+#c124-zpop .mi { flex: none; width: 16px; height: 16px; background: var(--c-icoSec, #91918e); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  ${S} .c124-fx { display: none !important; }
+  ${S} :is(.ob-ic, .c124-zic), ${S} .c124-fish, ${S} .c124-fish * { animation: none !important; }
+  ${S} #c124-z-live .c124-zdot, #c124-zpop .dot, ${O} .ob-all[data-unread]::before { animation: none !important; }
+}
+`;
+    (document.head || root104).appendChild(style);
+    nativeSoon104();
+  };
+
+  /* 6) 設定（Nebius の設定の段）と、コンソール */
+  document.addEventListener('nebius:settings', (e) => {
+    const box = document.getElementById(String(e.detail || ''));
+    if (!box) return;
+    const add = (text, get, set) => {
+      const l = document.createElement('label');
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = get();
+      l.append(c, ' ' + text);
+      c.addEventListener('change', () => set(c.checked));
+      box.appendChild(l);
+    };
+    add('Zenith: 上の帯の計器（印＋名前・幅に合わせて自動）', () => ZK124.zen, (v) => zenSet124('zen', v));
+    add('公開の帯を Zenith の Live に取り込む', () => ZK124.banner, (v) => zenSet124('banner', v));
+    add('名前ごとの動き（ホバー・押した時）', () => ZK124.motion, (v) => zenSet124('motion', v));
+  });
+  function zenSet124(key, on) {
+    ZK124[key] = !!on;
+    zkSave124();
+    flags124();
+    zenSoon124();
+    return ZK124[key];
+  }
+  window.addEventListener('resize', zenSoon124, { passive: true });
+
+
+  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124 }, ZK124) }) };
   obBoot();
   obSearchBoot();
 })();
