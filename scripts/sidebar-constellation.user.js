@@ -12838,6 +12838,8 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       e.classList.toggle('on', on);
       e.setAttribute('aria-pressed', on ? 'true' : 'false');
       e.tabIndex = on ? 0 : -1;
+      const ic = e.firstElementChild;   // C186: 選んでいるチームスペースのアイコンは、押すと変えられる
+      if (on !== ic.hasAttribute('title')) { if (on) ic.title = 'アイコンを変える'; else ic.removeAttribute('title'); }
     });
     const hs = K164.els.map((e) => e.offsetHeight);
     const contentH = swap ? K164.meas.offsetHeight : (K164.listIn.offsetHeight || 0);
@@ -13134,6 +13136,14 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       fn: () => { obPopClose(); addPage184(t); }
     });
     if (!t) r1.disabled = true;
+    /* C186: 選んでいるチームスペースのアイコンを変える（キーボードからも届く入口） */
+    const r186 = obPopRow(pop, {
+      t: t ? t.name + ' のアイコンを変える' : 'チームスペースのアイコンを変える',
+      sub: t ? 'Notion のアイコンの小窓が開きます' : 'チームスペースを選ぶと変えられます',
+      fn: () => { obPopClose(); teamIcon186(t); }
+    });
+    if (!t) r186.disabled = true;
+    r186.querySelector('.os-ic').innerHTML = FACE_SVG186;
     const r2 = obPopRow(pop, { t: '新しいチームスペースを作る', sub: 'Notion の作成画面が開きます', fn: () => { obPopClose(); newTeam184(); } });
     const r3 = obPopRow(pop, { t: 'チームスペースを探す・参加する', sub: 'Notion の設定 → Teamspaces', fn: () => { obPopClose(); obNotionSettings('teams'); } });
     pop.appendChild(document.createElement('hr'));
@@ -13322,6 +13332,166 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       K184.busy = false;
     }
   }
+
+  /* ── C186: チームスペースのアイコンを変える ──
+   * Catalogus で選んでいるチームスペースのアイコンを押す（または New →「<名前> のアイコンを変える」）と、Notion の
+   * そのチームスペースの「⋯」→「Teamspace settings」を開き、設定の窓のアイコンを押して Notion のアイコンの小窓を出す。
+   * 変わるのは Notion の本物のアイコン。³³ は写すだけなので、選ぶと Notion のサイドバー → Catalogus・Orbit の順にそのまま映る
+   * （小窓も Notion のもの — ²⁹ Icon Library を入れていれば Library のタブもそのまま使える）。
+   * 「⋯」は乗せた時だけ描かれる部品 → 乗せた合図（C184 と同じ）→ 無ければ右クリックのメニュー → それでも無ければ Notion の
+   * サイドバーを開いてもう一度。途中で見つからない時（権限が無くて設定の項目が出ない時も）は、そこまで開いたまま残りの押し方を
+   * 知らせる。やめる時は Notion の小窓・設定の窓をそのまま閉じる（何も変わらない）。Notion の DOM は動かさない・複製しない。
+   * 何をしたかは __c33.adds()（icon:<名前>）。コンソール: __c33.teamIcon() */
+  const MORE_RE186 = /^(more|open menu|options|actions|teamspace (settings|options|actions)|その他|メニュー|オプション|操作)/i;
+  const TSET_RE186 = /teamspace settings|チームスペース(の)?設定/i;
+  const ICON_RE186 = /^((change|edit|select|choose|update|set) )?(the )?(teamspace )?icon$|^(チームスペースの)?アイコン(を(変更|選択|選ぶ|変える|変更する))?$/i;
+  const GEN_RE186 = /^(general|一般)$/i;
+  const FACE_SVG186 = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5.9" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="6" cy="6.9" r=".85" fill="currentColor"/><circle cx="10" cy="6.9" r=".85" fill="currentColor"/><path d="M5.6 9.6a2.8 2.8 0 0 0 4.8 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>';
+  /* ページの行の「⋯」は除く（チームスペースの見出しを含まない [data-block-id]・ページの行の中にあるもの） */
+  const pageSide186 = (b, host) => { const p = b.closest('[data-block-id], ' + SEL_PAGE); return !!p && !p.contains(host); };
+  function moreIn186(host) {
+    if (!host || !host.isConnected) return null;
+    for (const scope of [host, host.closest(SEL_TEAM)]) {
+      if (!scope) continue;
+      const ctx = [...scope.querySelectorAll('.notion-outliner-team-context-menu-button')].find((b) => !pageSide186(b, host));
+      if (ctx) return ctx.matches('[role="button"], button') ? ctx : ctx.querySelector('[role="button"], button') || ctx;
+      const bs = [...scope.querySelectorAll('[role="button"], button')].filter((b) => b !== host && !b.contains(host) && !pageSide186(b, host) && !b.closest('#c164-cat, #c33-ob-set, #c33-orbit'));
+      const hit = bs.find((b) => MORE_RE186.test(lab184(b)))
+        || bs.find((b) => !b.querySelector('[role="button"], button') && b.querySelector('svg[class*="dots" i], svg[class*="ellipsis" i], svg[class*="more" i]'));
+      if (hit) return hit;
+    }
+    return null;
+  }
+  function ctxMenu186(el) {
+    if (!el || !el.isConnected) return false;
+    const r = el.getBoundingClientRect();
+    const o = { bubbles: true, cancelable: true, composed: true, button: 2, buttons: 2, clientX: r.left + Math.min(40, r.width / 2), clientY: r.top + r.height / 2 };
+    try { el.dispatchEvent(new MouseEvent('contextmenu', o)); return true; } catch (e) { return false; }
+  }
+  /* 「⋯」→ 無ければ右クリック。設定の項目・何かのメニュー（押す前に無かった項目）・何も出ない、を分けて返す */
+  const items186 = () => [...document.querySelectorAll('[role="menuitem"], [role="option"]')].filter((el) => !el.closest('#c33-ob-set, #c33-orbit, #c164-cat') && el.getBoundingClientRect().width);
+  async function teamMenu186(get) {
+    const host = get();
+    if (!host) return { item: null, menu: null };
+    const was = new Set(items186());
+    const opened = () => items186().find((el) => !was.has(el)) || null;
+    let b = moreIn186(host);
+    if (!b) { hover184(host, true); b = await obWait(() => moreIn186(get()), 900, 40); }
+    if (b) obPress(b);   // 押してから合図を戻す（戻すと Notion は「⋯」を消す）
+    hover184(get() || host, false);
+    let item = b ? await obWait(() => obMenuItem(TSET_RE186), 1200) : null;
+    if (item) return { item, how: 'more' };
+    const open = b && opened();
+    if (open) return { item: null, menu: open };
+    ctxMenu186(get() || host);
+    item = await obWait(() => obMenuItem(TSET_RE186), 900);
+    if (item) return { item, how: 'context' };
+    return { item: null, menu: opened() };
+  }
+  /* 開いたメニューを閉じる: Esc はメニューの中から送る（obEsc はフォーカスのある所に送るので、Catalogus にいると Catalogus が閉じる） */
+  function esc186(el) {
+    const o = { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true, cancelable: true, composed: true };
+    try { (el && el.isConnected ? el : document.body).dispatchEvent(new KeyboardEvent('keydown', o)); } catch (e) { /* noop */ }
+  }
+  /* いま開いた設定の窓（メニューより大きい、³³ のものではない role="dialog"） */
+  function setDialog186(before) {
+    let best = null, area = 0;
+    for (const d of document.querySelectorAll('[role="dialog"]')) {
+      if (before.has(d) || d.closest('#c33-ob-set, #c164-cat, #c33-orbit') || d.closest('.notion-media-menu')) continue;
+      const r = d.getBoundingClientRect();
+      if (r.width < 320 || r.width * r.height <= area) continue;
+      best = d; area = r.width * r.height;
+    }
+    return best;
+  }
+  /* 設定の窓のアイコンのボタン: 名前（Change icon など）→ いまのアイコンと同じ絵 → Notion のアイコンの箱 */
+  function iconBtn186(d, t) {
+    if (!d || !d.isConnected) return null;
+    const bs = [...d.querySelectorAll('[role="button"], button')].filter((b) => {
+      if (b.closest('[role="tablist"], .notion-media-menu')) return false;
+      const r = b.getBoundingClientRect();
+      return r.width >= 12 && r.height >= 12 && r.width <= 160 && r.height <= 160;
+    });
+    const hit = bs.find((b) => ICON_RE186.test(lab184(b)));
+    if (hit) return hit;
+    const leaf = (b) => !b.querySelector('[role="button"], button');
+    const ic = t && t.ic;
+    const same = (b) => {
+      if (!ic) return false;
+      if (ic.t === 'txt') return norm(b.textContent) === ic.v;
+      if (ic.t === 'img') return [...b.querySelectorAll('img')].some((im) => (im.currentSrc || im.src) === ic.v && (!ic.bg || im.style.backgroundPosition === ic.bg.backgroundPosition));
+      return false;
+    };
+    return bs.find((b) => leaf(b) && same(b)) || bs.find((b) => leaf(b) && b.querySelector('.notion-record-icon')) || null;
+  }
+  async function teamIcon186(t) {
+    if (!t || K184.busy) return false;
+    K184.busy = true;
+    const box = K164.els[K164.sel] && K164.teams && K164.teams[K164.sel] && K164.teams[K164.sel].key === t.key ? K164.els[K164.sel].firstElementChild : null;
+    if (box) box.setAttribute('data-busy', '');
+    try {
+      const get = () => teamHost184(t);
+      /* 1) そのチームスペースのメニュー → Teamspace settings（見つからなければ Notion のサイドバーを開いてもう一度） */
+      let r = await teamMenu186(get);
+      if (!r.item && !r.menu && await sideOpen184()) r = await teamMenu186(get);
+      if (!r.item) {
+        if (r.menu) esc186(r.menu);
+        note184('icon:' + t.name, r.menu ? 'no-settings' : 'not-found');
+        obToast(r.menu
+          ? '「' + t.name + '」のメニューに Teamspace settings がありませんでした（チームスペースの管理者でないと出ません）。'
+          : '「' + t.name + '」のメニューが見つかりませんでした。Notion のサイドバーで「' + t.name + '」の「⋯」→ Teamspace settings のアイコンから変えられます。');
+        return false;
+      }
+      /* 2) 設定の窓 → アイコンのボタン（General のタブに無ければ General へ） */
+      const before = new Set(document.querySelectorAll('[role="dialog"]'));
+      obPress(r.item);
+      const d = await obWait(() => setDialog186(before), 2000);
+      if (!d) {
+        note184('icon:' + t.name, r.how + ':no-dialog');
+        obToast('「' + t.name + '」の設定が開きませんでした。Notion のサイドバーの「⋯」→ Teamspace settings から変えられます。');
+        return false;
+      }
+      const cur = () => setDialog186(before) || d;
+      let ib = await obWait(() => iconBtn186(cur(), t), 1500);
+      if (!ib) {
+        const g = [...cur().querySelectorAll('[role="tab"]')].find((x) => GEN_RE186.test(norm(x.textContent)) && x.getAttribute('aria-selected') !== 'true');
+        if (g) { obPress(g); ib = await obWait(() => iconBtn186(cur(), t), 1200); }
+      }
+      if (!ib) {
+        note184('icon:' + t.name, r.how + ':settings-only');
+        obToast('「' + t.name + '」の設定を開きました。窓の中のアイコンを押すと変えられます。');
+        return false;
+      }
+      /* 3) Notion のアイコンの小窓 */
+      const menus = new Set(document.querySelectorAll('.notion-media-menu'));
+      obPress(ib);
+      const mm = await obWait(() => [...document.querySelectorAll('.notion-media-menu')].find((m) => !menus.has(m)) || null, 1500);
+      note184('icon:' + t.name, r.how + (mm ? ':picker' : ':pressed'));
+      obToast(mm ? 'アイコンを選ぶと「' + t.name + '」のアイコンが変わります（Catalogus にもそのまま映ります）。' : '「' + t.name + '」の設定を開きました。窓の中のアイコンを押すと変えられます。');
+      return !!mm;
+    } finally {
+      K184.busy = false;
+      if (box) box.removeAttribute('data-busy');
+    }
+  }
+  const cssBefore186 = nbCss;
+  nbCss = function() {
+    cssBefore186();
+    if (document.getElementById('c186-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c186-css';
+    style.textContent = `
+/* ── C186: 選んでいるチームスペースのアイコンは押せる（Notion の題字のアイコンと同じく、乗せると淡い地。押している間も） ── */
+#c164-cat .ct-t.on > .ct-ic { cursor: pointer; isolation: isolate; }
+#c164-cat .ct-t.on > .ct-ic::after {
+  content: ""; position: absolute; inset: -4px; z-index: -1; border-radius: 6px; pointer-events: none;
+  background: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 9%, transparent); opacity: 0; transform: scale(.86);
+  transition: opacity .16s ease, transform .2s ease;
+}
+#c164-cat .ct-t.on > .ct-ic:hover::after, #c164-cat .ct-t.on > .ct-ic[data-busy]::after { opacity: 1; transform: none; }
+`;
+    (document.head || root104).appendChild(style);
+  };
   window.addEventListener('pointerdown', (e) => {
     K164.newWas = !!(K164.newb && e.target && K164.newb.contains(e.target) && newMenuOpen164());
   }, true);
@@ -13352,6 +13522,8 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     if (ad) { if (ad.getAttribute('data-act') === 'team') newTeam184(); else addPage184(K164.teams && K164.teams[K164.sel]); return; }
     if (e.target.closest('.ct-open')) { expand164(K164.teams && K164.teams[K164.sel]); return; }
     const t = e.target.closest('.ct-t');
+    /* C186: 選んでいるチームスペースのアイコン → アイコンを変える（ほかのチームスペースのアイコンは今まで通り、押すと選ぶ） */
+    if (t && e.target.closest('.ct-t > .ct-ic') && K164.els.indexOf(t) === K164.sel) { teamIcon186(K164.teams && K164.teams[K164.sel]); return; }
     if (t) {
       const k = K164.els.indexOf(t);
       if (k >= 0 && k !== K164.sel) selectTo164(k);
@@ -14428,6 +14600,7 @@ ${FR} .notion-scroller[data-c154-db] [data-c184-pz] { zoom: var(--c184-pz, 1) !i
   });
 
   window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), catalogus: (on) => (on == null ? CAT164.on : set164('on', on)), hscroll: () => hscroll164(), dbzoom: (v) => dbzoom174(v), dbfit: (v) => dbfit184(v), addPage: () => addPage184(K164.teams && K164.teams[K164.sel]), newTeam: () => newTeam184(), adds: () => K184.log.slice(), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }), catalogus: { on: CAT164.on, open: CAT164.open, shown: K164.shown, why: K164.why, prev: K164.prev, asked: Object.keys(K164.req), rest: K164.rest, gid: K164.gid, room: K164.G.room || null, teams: (K164.teams || []).map((t) => t.name + (t.open ? '（' + t.rows.length + '）' : '（閉）')), sel: K164.sel, broken: K164.broken }, dbzoom: dbzoom174(), dbfit: dbfit184() }) };
+  window.__c33.teamIcon = () => teamIcon186(K164.teams && K164.teams[K164.sel]);   // C186
   obBoot();
   obSearchBoot();
 })();
