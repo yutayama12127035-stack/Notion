@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      164.0.0
-// @description  v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      174.0.0
+// @description  v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,25 @@
 // ==/UserScript==
 
 /*
+ * v174.0.0（Caelum VII — 左の配分 100/120/28・題字の領域を 10px 下げる・DB の自動倍率・ホイールの直し・New・Orbit の動き）
+ *   ・左の配分（ブラウザーの倍率 100% の CSS px。devicePixelRatio は掛けない）: Orbit 100px（いちばん長い惑星の名前が入らない時だけ広げる）・
+ *     Catalogus 120px・本文手前 28px。基準の画面（1354×1064）で Orbit 0〜100・Catalogus 100〜220・本文（題字のアイコン・タブ）の左端 248。
+ *     本文の枠は Orbit の分だけ既に空いているので、DB の左のゆとりは「120＋28 − Notion の左の余白 96 − 題字のアイコンの内側 8」= 44px を測って決める
+ *     （v154 の 32px を置き換え。248px を積み増さない）。出どころの線・地平線は新しい幅に付いていく
+ *   ・Catalogus の行: アイコンの右端 → 名前の字の左端を、実測でおよそ 10px（gap 9px。字 12px・アイコン 14px はそのまま）
+ *   ・DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる。下の余白（Notion の margin。説明があれば 12px）から同じだけ引くので、
+ *     タブ・操作の段・表の縦位置は変わらない。2px は残す（説明が無い DB は 6px だけ下げる — タブに重ねない）。本文全体は動かさない
+ *   ・ホイールで回らないことがあった: Mac のマウスは 1 ノッチが 4px ほどで届き、46px 貯まるまで回らなかった → 1 回の回しで 1 段も回らなければ、
+ *     回し終えた時に回した向きへ 1 段。スクロールできない短い一覧の上でも回る（スクロールできる一覧は一覧だけ — 前と同じ）
+ *   ・足元の「‹ 1 / 2 ›」はやめ、Settings と同じ段に New: いまのチームスペースにページを足す（Notion のサイドバーの「＋」をそのまま押す）／
+ *     Notion のサイドバーを開く（チームスペースを作る・並べ替える。閉じるのは ⌘\ か «）
+ *   ・DB の自動倍率（C174）: テーブルビュー 1 つ。倍率 = clamp(利用できる幅 ÷ 100% の列群の幅, 0.85, 1)。CSS の zoom を、表の内側の箱と
+ *     タブの段の内側の箱（とフィルターの段の中身）だけに。題字・説明・Orbit・Catalogus・ほかの DB は縮めない。毎回 100% に戻して測らない・
+ *     縮めた幅を基準に使わない（揺れない）。最小倍率は DBZ174.min（と __c33.dbzoom({ min })）。__c33.dbzoom(false) で 100% に戻る
+ *   ・横のバー: v164 の印（data-c164-hx）に隠す CSS が無かった → 足した。.notion-scroller 以外の要素も探す。Firefox（::-webkit-scrollbar が無い）は、
+ *     横にはみ出している時だけ本文の枠の下端を 16px 画面の外へ出してバーを見える所から外す
+ *   ・Orbit の動き: 輪の地の小さな星（回すと 0.3 倍で流れる・瞬く）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋。Catalogus は回すと先頭の印が返る
+ *
  * v164.0.0（Caelum VI — Catalogus: Orbit の右の第２列、地平線、子午線の星の粒）
  *   ・Catalogus（新しい第２列）: Orbit で惑星 → Catalogus でその惑星のチームスペース → その中の DB・ページ。
  *     ・幅は Orbit と同じ（測る。あなたの画面では 97px — 境界線・内側の余白もこの中）。左は Orbit の右の端、上は Orbit の先頭の段
@@ -352,7 +371,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '164.0.0';
+  const VERSION = '174.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -11724,7 +11743,12 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
   try { const v = JSON.parse(localStorage.getItem(ZK154.key) || 'null'); if (v) for (const k of ZK154_KEYS) if (typeof v[k] === 'boolean') ZK154[k] = v[k]; } catch (e) { /* noop */ }
   function zkSave154() { try { const o = {}; for (const k of ZK154_KEYS) o[k] = ZK154[k]; localStorage.setItem(ZK154.key, JSON.stringify(o)); } catch (e) { /* noop */ } }
   const S154 = S144 + ':not(#c154a):not(#c154b)';
-  const GUT154 = 32;                       // サイドカーの分のゆとり（Orbit と同じくらいの列 ＋ 余白は、Notion の 96px と合わせて 128px）
+  /* v174: 左の配分（ブラウザーの倍率 100% の CSS px。devicePixelRatio は掛けない）。基準の画面では
+   * Orbit 0〜100・Catalogus 100〜220・本文手前の余白 220〜248・本文（題字のアイコン・タブの文字）の左端 248。
+   * 本文の枠は Orbit の分（--c99-rail-width）だけ既に空いているので、DB の左のゆとりは「Catalogus＋余白 − Notion の左の余白
+   * （96px）− 題字のアイコンの内側の分（8px）」= 44px（測った値で決める。248px を積み増さない） */
+  const SIDE174 = { orbit: 100, cat: 120, gap: 28, drop: 10 };
+  const GUT154 = SIDE174.cat + SIDE174.gap - 96 - 8;   // 測れない時の値（44px）
   const NP154 = ':not(.notion-peek-renderer *)';
   const Z154 = { open: false, inside: false, tOpen: 0, tClose: 0, closedAt: -1e9, fillOk: true, fillSig: '', escaped: false };
 
@@ -11948,7 +11972,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     const sc = frame && frame.querySelector('.notion-scroller');
     for (const old of document.querySelectorAll('[data-c154-db], [data-c154-hrow], [data-c154-hwrap]')) {
       if (sc && (old === sc || sc.contains(old))) continue;
-      old.removeAttribute('data-c154-db'); old.removeAttribute('data-c154-hrow'); old.removeAttribute('data-c154-hwrap');
+      old.removeAttribute('data-c154-db'); old.removeAttribute('data-c154-hrow'); old.removeAttribute('data-c154-hwrap'); old.removeAttribute('data-c174-drop');
     }
     if (!sc || !root104.hasAttribute('data-c114-caelum')) return;
     const blk = sc.querySelector('.notion-collection_view_page-block');
@@ -11959,7 +11983,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     let row = blk;
     while (row && row.parentElement && row.parentElement !== sc && !/padding-inline-end/.test(row.getAttribute('style') || '')) row = row.parentElement;
     if (!row || row.parentElement === sc || !/padding-inline-end/.test(row.getAttribute('style') || '')) return;
-    for (const o of sc.querySelectorAll('[data-c154-hrow]')) if (o !== row) o.removeAttribute('data-c154-hrow');
+    for (const o of sc.querySelectorAll('[data-c154-hrow]')) if (o !== row) { o.removeAttribute('data-c154-hrow'); o.removeAttribute('data-c174-drop'); }
     if (!row.hasAttribute('data-c154-hrow')) row.setAttribute('data-c154-hrow', '');
     const wrap = row.parentElement;
     for (const o of sc.querySelectorAll('[data-c154-hwrap]')) if (o !== wrap) o.removeAttribute('data-c154-hwrap');
@@ -11970,6 +11994,23 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
     const v = (root104.hasAttribute('data-c154-fold') ? Math.max(6, Math.round(top / 2 - th / 2)) : 24) + 'px';
     if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
+    /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
+    const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
+    const ic = title && title.querySelector('.notion-record-icon');
+    let inset = 8;
+    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
+    const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
+    set104('--c154-gut', gut);
+    /* v174: 題字の領域を 10px 下げる。下の余白（Notion の題字の段の margin と説明の margin。重なって大きい方）から同じだけ引き、
+     * 2px は残す（説明が無い DB は余白が 8px なので 6px だけ下げる — タブに重ねない） */
+    const last = row.lastElementChild;
+    const gapNat = Math.max(parseFloat(row.style.marginBottom) || 0, last && last !== title ? parseFloat(last.style.marginBottom) || 0 : 0);
+    const drop = Math.max(0, Math.min(SIDE174.drop, gapNat - 2));
+    if (drop > 0) {
+      if (!row.hasAttribute('data-c174-drop')) row.setAttribute('data-c174-drop', '');
+      if (row.style.getPropertyValue('--c174-drop') !== drop + 'px') row.style.setProperty('--c174-drop', drop + 'px');
+      if (row.style.getPropertyValue('--c174-hgap') !== (gapNat - drop) + 'px') row.style.setProperty('--c174-hgap', (gapNat - drop) + 'px');
+    } else if (row.hasAttribute('data-c174-drop')) row.removeAttribute('data-c174-drop');
   }
 
   /* 5) 子午線 — 測る（窓の大きさ・帯の見直しの時だけ）と、置く（輪が回るたび。レイアウトは読まない）を分ける */
@@ -12149,7 +12190,10 @@ ${S}[data-c154-folio] ${FR} .notion-page-controls { height: 0 !important; min-he
 ${S}[data-c154-folio] ${FR} [data-c154-hwrap] { padding-top: var(--c154-dbtop, 24px) !important; }
 
 /* ── DB の新しい定位置: 左にサイドカーの分のゆとり ── */
-${S}[data-c154-gut] ${FR} .notion-scroller[data-c154-db] { padding-inline-start: ${GUT154}px !important; }
+${S}[data-c154-gut] ${FR} .notion-scroller[data-c154-db] { padding-inline-start: var(--c154-gut, ${GUT154}px) !important; }
+/* v174: 題字の領域（アイコン・題字・説明）をまとめて下げる。下の余白から同じだけ引くので、DB のタブ・表の縦位置は変わらない */
+${S}[data-c154-gut] ${FR} [data-c154-hrow][data-c174-drop] { margin-top: var(--c174-drop, 0px) !important; margin-bottom: 0 !important; padding-bottom: var(--c174-hgap, 8px) !important; }
+${S}[data-c154-gut] ${FR} [data-c154-hrow][data-c174-drop] > :last-child { margin-bottom: 0 !important; }
 
 /* ── Folio の小窓 ── */
 #c124-zpop .c154-fi { flex: none; width: 15px; height: 15px; margin-right: 2px; background: currentColor; opacity: .7; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
@@ -12228,7 +12272,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     };
     add('上の帯は B.U.R.I に乗せた時だけ開く（ふだんは畳んで本文を広く）', 'fold');
     add('Add cover・Hide description などを上の帯の Folio にまとめる', 'folio');
-    add('DB の新しい定位置（左にサイドカーの分のゆとり・題字を B.U.R.I の高さに）', 'gutter');
+    add('DB の新しい定位置（左に Catalogus の分のゆとり・題字の領域を 10px 下げる）', 'gutter');
     add('横スクロールのバーを見せない', 'hbar');
     add('Orbit の右に子午線（縦の区切り）', 'mer');
   });
@@ -12277,7 +12321,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
   const id164 = (v) => { const m = /[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}/i.exec(String(v || '')); return m ? m[0].replace(/-/g, '').toLowerCase() : ''; };
   const PAGE_RX164 = /(?:^|\s)notion-(?:page|collection_view_page)-block(?:\s|$)/;
   const K164 = {
-    el: null, body: null, list: null, listIn: null, meas: null, foot: null, pos: null, link: null, hz: null,
+    el: null, body: null, list: null, listIn: null, meas: null, foot: null, newb: null, link: null, hz: null,
     gid: '', prev: '', prevEl: null, intentT: 0, leaveT: 0, inside: false, onPlanet: false,
     teams: null, els: [], sel: 0, sig: '', listKey: '', shown: false, rest: false, broken: false,
     G: { ok: false }, raf: 0, refT: 0, acc: 0, accT: 0, lastStep: 0, swapT: 0,
@@ -12444,8 +12488,10 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       if (h1) left = Math.min(left, at(h1));
     }
     if (!isFinite(left)) return { ok: true, left: NaN };
-    const need = G.width + (db ? 24 : 44);
-    return { ok: left - G.left >= need, left: Math.round(left), need };
+    /* v174: DB は題字のアイコン・タブの文字（箱の左＋8px）まで Catalogus の右から 16px 以上（基準 28px）。ページはブロックのつまみの分 44px */
+    const lead = db ? 8 : 0;
+    const need = G.width + (db ? 16 : 44);
+    return { ok: left + lead - G.left >= need, left: Math.round(left + lead), need };
   }
   /* 書体: Orbit の惑星の名前に実際に当たっている書体（計算済みの値）を使う。取れない・汎用の書体しか無い時は候補の明朝へ */
   const SERIF164 = '"EB Garamond", "Cormorant Garamond", Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif';
@@ -12456,6 +12502,17 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     else if (!/Mincho|Noto Serif JP|明朝/.test(f)) f = f.replace(/,\s*serif\s*$/i, '') + ', "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif';
     set104('--c164-serif', f);
   }
+  /* v174: Orbit は 100px（境界線・内側の余白も含む外寸）。いちばん長い名前がそれより広い時だけ広げる（名前を切らない）。
+   * 本文の枠の左の空き（--c99-rail-width）もこの値から決まるので、248px の配分に二重には足さない */
+  const railBefore164 = obRailWUpdate;
+  obRailWUpdate = function(gs) {
+    railBefore164(gs);
+    const need = obRailW;
+    obRailW = Math.max(SIDE174.orbit, need);
+    if (need > SIDE174.orbit) log164('railw', '惑星の名前が 100px に入らないため、Orbit を ' + need + 'px にしました（名前は切りません）。');
+    set104('--c33-rail-w', obRailW + 'px');
+    if (obEl) obEl.style.setProperty('width', obRailW + 'px', 'important');
+  };
   function paper164() {
     const fr = mainFrame154() || document.querySelector('.notion-frame');
     let node = fr, color = '', img = 'none', size = 'auto';
@@ -12483,7 +12540,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     const it = obItemEls.find((e) => e.style.display !== 'none') || obItemEls[0];
     const ic = it && it.querySelector('.ob-ic');
     G.left = r.right;
-    G.width = Math.round(r.width);
+    G.width = SIDE174.cat;   // v174: Orbit 100px と別に、Catalogus は 120px（境界線・内側の余白もこの中）
     G.wt = obWheelEl.offsetTop;
     G.top = r.top + G.wt;
     G.bottom = r.bottom;
@@ -12510,10 +12567,10 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     const el = document.createElement('aside');
     el.id = 'c164-cat';
     el.setAttribute('aria-label', 'Catalogus');
+    /* v174: 足元の「‹ 1 / 2 ›」はやめ（回すのはホイール）、Settings と同じ段に New（ページ・チームスペースを足す入口） */
     el.innerHTML = '<div class="ct-body"><div class="ct-list" role="group"><div class="ct-in"></div></div></div>' +
-      '<div class="ct-foot"><button type="button" class="ct-step" data-d="-1" aria-label="前のチームスペース"><i></i></button>' +
-      '<span class="ct-pos" aria-live="polite"></span>' +
-      '<button type="button" class="ct-step" data-d="1" aria-label="次のチームスペース"><i></i></button></div>' +
+      '<div class="ct-foot"><button type="button" class="ct-new" aria-haspopup="menu" aria-expanded="false" aria-label="New — ページ・チームスペースを足す">' +
+      '<i class="ct-new-ic"></i><span class="ct-new-lb">New</span></button></div>' +
       '<div class="ct-meas ct-in" aria-hidden="true"></div>';
     document.body.appendChild(el);
     K164.el = el;
@@ -12521,7 +12578,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     K164.list = el.querySelector('.ct-list');
     K164.listIn = K164.list.firstElementChild;
     K164.foot = el.querySelector('.ct-foot');
-    K164.pos = el.querySelector('.ct-pos');
+    K164.newb = el.querySelector('.ct-new');
     K164.meas = el.querySelector('.ct-meas');
     K164.els = [];
     K164.listKey = '';
@@ -12812,11 +12869,6 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     } else listEdges164();
     const cur = curPage();
     for (const a of K164.listIn.querySelectorAll('a.ct-r')) { const on = a.getAttribute('data-id') === cur; if (a.hasAttribute('aria-current') !== on) { if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); } }
-    /* 足元 */
-    const n = N;
-    K164.foot.toggleAttribute('data-one', n < 2);
-    const pos = n ? (s + 1) + ' / ' + n : '';
-    if (K164.pos.textContent !== pos) K164.pos.textContent = pos;
     link164();
   }
 
@@ -12947,14 +12999,25 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       if (t && !t.open && !t.rows.length && !K164.req[t.key]) expand164(t);
     }, 450);
   }
+  /* v174: ホイールで回らないことがある — 直し
+   * ・Mac のマウスは 1 ノッチが 4px ほどの小さな値で届き（行単位でも 120 刻みでもない）、46px 貯まるまで回らなかった
+   *   → 1 回の回し（間が 0.13 秒あくまで）で 1 段も回らなかったら、回し終えた時に回した向きへ 1 段（Orbit と同じ考え）
+   * ・一覧の上で始めた回しは一覧のスクロールに決めていたので、スクロールできない短い一覧の上ではどちらも動かなかった
+   *   → 一覧がスクロールできる時だけ一覧に（できる一覧の端に着いても循環へは引き継がない — 前と同じ）
+   * ・回しの区切りは 0.13 秒（前は 0.28 秒）: 一覧で回した直後にチームスペースの所で回し始めても、一覧の扱いが残らない */
+  const WGAP164 = 130;
   function wheel164(e) {
     if (e.ctrlKey || e.metaKey) return;                                  // 拡大の操作は妨げない
     const ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY);
-    /* 1 回の回し（間が 0.28 秒あくまで）は、始めた所で決める: 一覧で始めたら一覧のスクロールだけ（端に着いても循環へ引き継がない）、
-     * チームスペースの所で始めたら、途中で一覧がカーソルの下に来ても回し続ける */
-    const now0 = performance.now();
-    if (now0 - (K164.wAt || 0) > 280) K164.wMode = e.target && e.target.closest && e.target.closest('.ct-list') ? 'list' : 'cycle';
-    K164.wAt = now0;
+    const now = performance.now();
+    if (now - (K164.wAt || 0) > WGAP164) {
+      const L = K164.list;
+      const inList = !!(e.target && e.target.closest && e.target.closest('.ct-list'));
+      K164.wMode = inList && L && L.scrollHeight > L.clientHeight + 1 ? 'list' : 'cycle';
+      K164.acc = 0;
+      K164.wSteps = 0;
+    }
+    K164.wAt = now;
     if (K164.wMode === 'list') return;
     if (ax > ay || !ay) return;                                         // 横の身ぶりは妨げない
     e.preventDefault();
@@ -12963,22 +13026,97 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     const n = (OB.wheelRev !== false ? -1 : 1) * raw;                   // Orbit と同じ向き
     const wd = Math.abs(e.wheelDeltaY || e.wheelDelta || 0);
     const notch = e.deltaMode === 1 || (ay >= 40 && Number.isInteger(e.deltaY) && wd > 0 && wd % 120 === 0);
+    const go = (d) => { K164.lastStep = performance.now(); K164.wSteps = (K164.wSteps || 0) + 1; step164(d); };
     clearTimeout(K164.accT);
-    K164.accT = setTimeout(() => { K164.acc = 0; }, 200);
-    const now = performance.now();
-    if (notch) { if (now - K164.lastStep > 60) { K164.lastStep = now; step164(Math.sign(n)); } return; }
+    if (notch) { if (now - K164.lastStep > 60) go(Math.sign(n)); return; }
     K164.acc += n;
-    if (Math.abs(K164.acc) >= 46 && now - K164.lastStep > 150) { K164.lastStep = now; step164(Math.sign(K164.acc)); K164.acc = 0; }
+    if (Math.abs(K164.acc) >= 40 && now - K164.lastStep > 140) { go(Math.sign(K164.acc)); K164.acc = 0; }
     else if (Math.abs(K164.acc) > 140) K164.acc = Math.sign(K164.acc) * 140;
+    /* 回し終えた時: 1 段も回らなかった小さな回しでも、回した向きへ 1 段 */
+    K164.accT = setTimeout(() => {
+      if (!K164.wSteps && Math.abs(K164.acc) >= 2 && K164.wMode === 'cycle') go(Math.sign(K164.acc));
+      K164.acc = 0;
+    }, WGAP164);
   }
+  /* v174: New — Notion のサイドバーを閉じたままだと、ページやチームスペースを足す場所が無かった。
+   * ・<チームスペース> にページを足す: Notion のサイドバーの、そのチームスペースの「＋」（Add to …）をそのまま押す
+   * ・Notion のサイドバーを開く: チームスペースの作成・参加・並べ替え・名前の変更は Notion の画面で（閉じるのは ⌘\ か « ）
+   * 小窓は Settings と同じもの（#c33-ob-set）。開いている間は Catalogus を閉じない */
+  const NEW_SVG164 = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11.4" cy="12.6" r="8.6" fill="none" stroke="#000" stroke-width="1.4"/>'
+    + '<path d="M11.4 8.2V17M7 12.6H15.8" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round"/><path d="' + star124(19.4, 4.6, 3) + '"/></svg>';
+  const SIDE_SVG164 = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="1.8" y="2.6" width="12.4" height="10.8" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6 2.8V13.2" stroke="currentColor" stroke-width="1.3"/><path d="M3.4 5.6H4.6M3.4 7.6H4.6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>';
+  const PAGE_SVG164 = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M3.6 1.8H9.4L12.6 5V14.2H3.6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8.1 7.4V12M5.8 9.7H10.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+  function newMenuOpen164() { const pop = document.getElementById('c33-ob-set'); return !!(pop && pop.style.display !== 'none' && pop.__c174 === 'new'); }
+  function addBtn164(t) {
+    const host = t && t.btn && t.btn.isConnected ? t.btn : null;
+    if (!host) return null;
+    const svg = host.querySelector('[role="button"] svg[class*="plus"]');
+    if (svg) return svg.closest('[role="button"]');
+    return [...host.querySelectorAll('[role="button"][aria-label]')].find((b) => /^Add to |に追加|追加/i.test(b.getAttribute('aria-label') || '')) || null;
+  }
+  function openSide164() {
+    const btn = document.querySelector('.notion-open-sidebar');
+    if (btn) { obPress(btn); return; }
+    /* 入口が無い時は Notion の近道（⌘\ / Ctrl+\）を送る */
+    try { document.body.dispatchEvent(new KeyboardEvent('keydown', { key: '\\', code: 'Backslash', keyCode: 220, which: 220, metaKey: IS_MAC, ctrlKey: !IS_MAC, bubbles: true, cancelable: true, composed: true })); } catch (e) { /* noop */ }
+  }
+  function newMenu164() {
+    const b = K164.newb;
+    if (!b) return;
+    if (K164.newWas) { K164.newWas = false; return; }   // 開いていた所をもう一度押した（外側の押下で閉じたので、開き直さない）
+    if (newMenuOpen164()) { obPopClose(); return; }
+    let pop = document.getElementById('c33-ob-set');
+    if (!pop) { pop = document.createElement('div'); pop.id = 'c33-ob-set'; pop.setAttribute('role', 'menu'); document.body.appendChild(pop); }
+    pop.textContent = '';
+    const h = document.createElement('div'); h.className = 'os-h'; h.textContent = 'New';
+    pop.appendChild(h);
+    const t = K164.teams && K164.teams[K164.sel];
+    const add = t ? addBtn164(t) : null;
+    const r1 = obPopRow(pop, {
+      t: t ? t.name + ' にページを足す' : 'ページを足す',
+      sub: add ? 'Notion の「＋」と同じ・新しいページが開く' : (t ? 'このチームスペースの「＋」が見つかりません' : 'チームスペースを選ぶと足せます'),
+      fn: () => { obPopClose(); if (add && add.isConnected) obPress(add); }
+    });
+    if (!add) r1.disabled = true;
+    const r2 = obPopRow(pop, { t: 'Notion のサイドバーを開く', sub: 'チームスペースを作る・並べ替える', key: IS_MAC ? '⌘\\' : 'Ctrl+\\', fn: () => { obPopClose(); openSide164(); } });
+    r1.querySelector('.os-ic').innerHTML = PAGE_SVG164;
+    r2.querySelector('.os-ic').innerHTML = SIDE_SVG164;
+    pop.__c174 = 'new';
+    pop.style.display = '';
+    const r = b.getBoundingClientRect(), cr = K164.el.getBoundingClientRect();
+    const pw = pop.offsetWidth || 280, ph = pop.offsetHeight || 160;
+    const x = Math.max(8, Math.min(innerWidth - pw - 8, cr.right + 8));
+    const y = Math.max(8, Math.min(innerHeight - ph - 8, r.bottom - ph));
+    pop.style.left = Math.round(x) + 'px';
+    pop.style.top = Math.round(y) + 'px';
+    b.setAttribute('aria-expanded', 'true');
+  }
+  window.addEventListener('pointerdown', (e) => {
+    K164.newWas = !!(K164.newb && e.target && K164.newb.contains(e.target) && newMenuOpen164());
+  }, true);
+  const popCloseBefore164 = obPopClose;
+  obPopClose = function() {
+    const was = newMenuOpen164();
+    popCloseBefore164();
+    const pop = document.getElementById('c33-ob-set');
+    if (pop) pop.__c174 = '';
+    if (K164.newb) K164.newb.setAttribute('aria-expanded', 'false');
+    if (was) leaveSoon164();
+  };
+  const settingsBefore164 = obSettings;
+  obSettings = function(anchor) {
+    const pop = document.getElementById('c33-ob-set');
+    if (pop) pop.__c174 = '';
+    if (K164.newb) K164.newb.setAttribute('aria-expanded', 'false');
+    return settingsBefore164(anchor);
+  };
   function go164(id) {
     if (!id) return;
     const gid = K164.gid;
     nbGo({ gid, id });
   }
   function click164(e) {
-    const st = e.target.closest('.ct-step');
-    if (st) { step164(Number(st.getAttribute('data-d')) || 0); return; }
+    if (e.target.closest('.ct-new')) { newMenu164(); return; }
     if (e.target.closest('.ct-open')) { expand164(K164.teams && K164.teams[K164.sel]); return; }
     const t = e.target.closest('.ct-t');
     if (t) {
@@ -13034,7 +13172,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
   function leaveSoon164() {
     clearTimeout(K164.leaveT);
     K164.leaveT = setTimeout(() => {
-      if (K164.inside || K164.onPlanet) return;
+      if (K164.inside || K164.onPlanet || newMenuOpen164()) return;
       const a = document.activeElement;
       if (a && K164.el && K164.el.contains(a)) return;
       if (a && a.closest && a.closest('#c33-orbit .ob-it') && a.matches(':focus-visible')) return;
@@ -13155,7 +13293,7 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
         }
         wide.sort((a, b) => b[0] - a[0]);
       }
-      out.push({ el: sc.className, frame: !!sc.closest('.notion-frame'), w: [sc.clientWidth, sc.scrollWidth], bar: sc.offsetHeight - sc.clientHeight, ox: cs.overflowX, sbw: cs.scrollbarWidth, sbc: cs.scrollbarColor, hx: sc.hasAttribute('data-c164-hx'), over: wide.slice(0, 6).map((w) => Math.round(w[0]) + 'px ' + w[1] + ' ' + w[2]) });
+      out.push({ el: sc.className, frame: !!sc.closest('.notion-frame'), w: [sc.clientWidth, sc.scrollWidth], bar: sc.offsetHeight - sc.clientHeight, ox: cs.overflowX, sbw: cs.scrollbarWidth, sbc: cs.scrollbarColor, hx: sc.getAttribute('data-c164-hx'), ffx: sc.hasAttribute('data-c174-ffx'), over: wide.slice(0, 6).map((w) => Math.round(w[0]) + 'px ' + w[1] + ' ' + w[2]) });
     }
     return out;
   }
@@ -13188,7 +13326,6 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
     const FO = S + '[data-c154-fold][data-c154-open]';
     const DARK = ':is(body.dark, html[data-atx-dark], html[data-c39-dark])';
     const SERIF = 'var(--c164-serif, ' + SERIF164 + ')';
-    const chev = (d) => svgUrl124('<path d="' + d + '" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>');
     style.textContent = `
 /* ── Catalogus: Orbit の右の第２列（地は本文と同じ紙。カード・影・色面は使わない） ── */
 #c164-cat {
@@ -13249,7 +13386,7 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
   position: relative; display: flex; align-items: flex-start; gap: 5px; box-sizing: border-box; width: 100%;
   padding: 4px 2px 4px calc(4px + var(--lv, 0) * 7px); border-radius: 5px; color: inherit; text-decoration: none; outline: none; cursor: pointer;
 }
-#c164-cat .ct-r { gap: 4px; }
+#c164-cat .ct-r { gap: var(--c164-rgap, 9px); }   /* v174: アイコンの右端 → 名前の字の左端を実測でおよそ 10px（gap 9px ＋ 字の左の余白） */
 #c164-cat .ct-r .ct-ic { width: 14px; height: 14px; margin-top: 1.5px; }
 #c164-cat .ct-r .ct-ic[data-txt] { font-size: 12.5px; }
 #c164-cat .ct-rn {
@@ -13268,15 +13405,22 @@ ${S}:not([data-c164-on]) #c164-cat { display: none !important; }
   color: var(--nb-text, var(--c-texPri, #37352f)); background: color-mix(in srgb, var(--c164-tint, #8c857b) 14%, transparent); cursor: pointer; }
 #c164-cat .ct-open:hover { background: color-mix(in srgb, var(--c164-tint, #8c857b) 24%, transparent); }
 
-/* 足元: 前・いまの番目・次（Settings と同じ段） */
-#c164-cat .ct-foot { position: absolute; left: 0; right: 0; bottom: 0; height: var(--c164-foot, 62px); display: flex; align-items: center; justify-content: center; gap: 4px; }
-#c164-cat .ct-foot[data-one] { visibility: hidden; }
-#c164-cat .ct-step { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--c164-ink3); cursor: pointer; transition: color .18s ease, background-color .18s ease; }
-#c164-cat .ct-step i { width: 13px; height: 13px; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
-#c164-cat .ct-step[data-d="-1"] i { --m: ${chev('M10 3.5L5.5 8l4.5 4.5')}; }
-#c164-cat .ct-step[data-d="1"] i { --m: ${chev('M6 3.5L10.5 8 6 12.5')}; }
-#c164-cat .ct-step:hover, #c164-cat .ct-step:focus-visible { color: var(--nb-text, var(--c-texPri, #37352f)); background: color-mix(in srgb, var(--c164-tint, #8c857b) 12%, transparent); outline: none; }
-#c164-cat .ct-pos { min-width: 30px; text-align: center; font: 600 10px/1 ${SERIF}; letter-spacing: .1em; color: var(--c164-ink3); font-variant-numeric: lining-nums tabular-nums; }
+/* 足元: New（Settings と同じ段・同じ箱。印 24px・字間を空けた大文字） */
+#c164-cat .ct-foot { position: absolute; left: 0; right: 0; bottom: 0; height: var(--c164-foot, 62px); display: flex; align-items: center; justify-content: center; }
+#c164-cat .ct-new {
+  display: grid; grid-template-columns: 1fr; grid-template-rows: 24px auto; row-gap: 3px; justify-items: center; align-content: center;
+  width: calc(100% - 10px); height: 48px; margin: 0; padding: 0; border: 0; border-radius: 10px; background: transparent; cursor: pointer; outline: none;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 68%, transparent); transition: color .18s ease;
+}
+#c164-cat .ct-new-ic { display: block; width: 24px; height: 24px; background: currentColor; -webkit-mask: ${svgUrl124(NEW_SVG164.replace(/^<svg[^>]*>|<\/svg>$/g, ''))} center / contain no-repeat; mask: ${svgUrl124(NEW_SVG164.replace(/^<svg[^>]*>|<\/svg>$/g, ''))} center / contain no-repeat; transition: transform .5s cubic-bezier(.3,1.4,.5,1); }
+#c164-cat .ct-new-lb { display: block; font: 600 8.5px/1.1 var(--c104-serif, ${SERIF164}); letter-spacing: .14em; text-indent: .14em; text-transform: uppercase; white-space: nowrap;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 70%, transparent); transition: color .18s ease; }
+#c164-cat .ct-new:hover, #c164-cat .ct-new[aria-expanded="true"], #c164-cat .ct-new:focus-visible { color: var(--nb-text, var(--c-texPri, #37352f)); }
+#c164-cat .ct-new:hover .ct-new-lb, #c164-cat .ct-new[aria-expanded="true"] .ct-new-lb, #c164-cat .ct-new:focus-visible .ct-new-lb { color: var(--nb-text, var(--c-texPri, #37352f)); }
+#c164-cat .ct-new:focus-visible { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c164-tint, #8c857b) 70%, transparent); }
+${ON} #c164-cat .ct-new:hover .ct-new-ic, ${ON} #c164-cat .ct-new[aria-expanded="true"] .ct-new-ic { transform: rotate(90deg) scale(1.06); }
+#c33-ob-set button:disabled { opacity: .5; cursor: default; }
+#c33-ob-set button:disabled:hover { background: none; }
 
 /* 出てくる時: 子午線の側から右へ開き、チームスペースが順に、一覧の行も順に */
 ${ON} #c164-cat[data-enter] .ct-t { animation: c164-in 420ms cubic-bezier(.22,.8,.24,1) both; animation-delay: calc(min(var(--p, 0), 6) * 38ms); }
@@ -13367,7 +13511,411 @@ ${S}:not([data-c124-motion]) :is(#c164-cat, #c164-cat *, #c164-link > i, #c164-h
     box.appendChild(l);
   });
 
-  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), catalogus: (on) => (on == null ? CAT164.on : set164('on', on)), hscroll: () => hscroll164(), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }), catalogus: { on: CAT164.on, open: CAT164.open, shown: K164.shown, why: K164.why, prev: K164.prev, asked: Object.keys(K164.req), rest: K164.rest, gid: K164.gid, room: K164.G.room || null, teams: (K164.teams || []).map((t) => t.name + (t.open ? '（' + t.rows.length + '）' : '（閉）')), sel: K164.sel, broken: K164.broken } }) };
+  /* C174 CAELUM VII（v174.0.0）— DB の自動倍率・Orbit の動き・横のバー
+   * ・DB の自動倍率（テーブルビュー 1 つ。DB のページの本体の表だけ）: ビューのタブと操作の段・有効なフィルターの段・表を、
+   *   利用できる幅に合わせて 85〜100% に縮める（CSS の zoom。transform で見た目だけ縮めることはしない）。
+   *   倍率 = clamp(利用できる幅 ÷ 100% の時の列群の幅, 最小 0.85, 1)。85% でも入らない時はそれ以上縮めず、横スクロールのまま。
+   *   ・列群の幅: 表の見出しの段の子（列）の幅の合計。zoom の中でも offsetWidth は 100% の CSS px のままなので、毎回 100% に戻して
+   *     測らない（ちらつかない）。縮めた幅を次の基準に使わない（揺れない）
+   *   ・利用できる幅: 本文の枠（.notion-scroller）の見える幅 − 表の左端までの距離（左のゆとり 44px ＋ Notion の 96px）− 表の右の余白
+   *     （Notion の 96px）。縦のスクロールバーの幅は、見えたことのある最大の幅をいつも引く（バーの出入りで倍率が揺れない）
+   *   ・縮める箱は、表の内側の箱（.notion-table-view の子）とタブの段の内側の箱だけ。Notion の左右の 96px の余白は縮めないので、
+   *     表・タブの左端は題字（248px）とそろったまま。題字・アイコン・説明・Orbit・Catalogus・ほかの DB・ページ全体は縮めない
+   *   ・倍率は 1 か所（DBZ174）と html の変数 --c174-z だけで決める。印は data 属性だけ（Notion の DOM は動かさない・複製しない）
+   *   ・見張り: 本文の枠・表の内側の箱・見出しの段の大きさ（ResizeObserver）と、本文の枠の子の入れ替え（MutationObserver。
+   *     ビューの切り替え・ページの移動）。どちらも間引いて、同じ倍率なら何もしない（見張り → 倍率 → 見張りの輪にならない）
+   *   ・行の描き分け（Notion は見えている行だけ描く）と倍率が合わず、見えている所に行の無いすき間が続いたら、その表は 100% に戻す
+   * ・Orbit の動き: 輪の地に小さな星（輪を回すと、輪より遅く流れる＝奥行き。ときどき瞬く）。選んだ惑星のまわりに細い軌道の輪と
+   *   小さな衛星（選ぶと輪が描かれ、波紋が広がる）。Catalogus はチームスペースを回すと、先頭の印が軽く返る
+   * ・横のバー: v164 で付けた印（data-c164-hx）に、隠す CSS が無かった。本文の枠の中で、横のバーが実際に見えている要素を
+   *   .notion-scroller に限らず探して印を付け、その要素の横のバーを隠す（横にだけ動く要素はバーごと隠す）
+   */
+  const S174 = S164 + ':not(#c174a):not(#c174b)';
+  const DBZ174 = { min: 0.85, max: 1, step: 0.005, key: 'c33.dbzoom174.v1' };   // 最小倍率はここ（と __c33.dbzoom({ min }) ）で変える
+  const ZM174 = (() => {
+    let v = {};
+    try { v = JSON.parse(localStorage.getItem(DBZ174.key) || '{}') || {}; } catch (e) { v = {}; }
+    return { on: v.on !== false, min: typeof v.min === 'number' && v.min >= 0.5 && v.min <= 1 ? v.min : DBZ174.min, orb: v.orb !== false };
+  })();
+  function zmSave174() { try { localStorage.setItem(DBZ174.key, JSON.stringify(ZM174)); } catch (e) { /* noop */ } }
+  const Z174 = { z: 1, why: '', W: 0, A: 0, sb: 0, els: null, ro: null, mo: null, moEl: null, t: 0, at: 0, raf: 0, dirty: true, bad: new WeakSet(), gapT: 0, gapN: 0, onScroll: null };
+  const seen174 = new Set();
+  function log174(key, msg) { if (seen174.has(key)) return; seen174.add(key); console.info('[³³ DB zoom]', msg); }
+
+  /* 1) 対象を探す: DB のページの本体の表（インラインの DB・ほかの表は対象外）と、タブの段・フィルターの段 */
+  function find174() {
+    const fr = mainFrame154();
+    const sc = fr && fr.querySelector('.notion-scroller');
+    if (!sc || !sc.hasAttribute('data-c154-db')) return { why: 'not-db' };
+    const views = [...sc.querySelectorAll('.notion-collection-view-body .notion-table-view')].filter((v) => !v.closest('.notion-page-content'));
+    if (views.length !== 1) {
+      const other = sc.querySelector('.notion-board-view, .notion-gallery-view, .notion-list-view, .notion-calendar-view, .notion-timeline-view');
+      return { why: views.length ? 'many-tables' : other ? 'not-table' : 'no-table', sc };
+    }
+    const tv = views[0];
+    const inner = tv.querySelector(':scope > .notion-collection_view_page-block');
+    if (!inner || !inner.querySelector('.notion-table-view-header-row')) return { why: 'no-header', sc };
+    const hrow = sc.querySelector('[data-c154-hrow]');
+    let bar = null;
+    for (const b of sc.querySelectorAll('.notion-collection_view_page-block')) {
+      if (b === inner || tv.contains(b) || (hrow && (hrow.contains(b) || b.contains(hrow)))) continue;
+      if (b.contains(tv)) continue;
+      if (b.querySelector('[role="tablist"], .notion-collection-view-tab-button, .notion-collection-filter, .notion-collection-sort')) { bar = b; break; }
+    }
+    let pills = null;
+    const row = bar && bar.parentElement;
+    if (row && row !== sc) {
+      const nx = row.nextElementSibling;
+      if (nx && !nx.contains(tv) && !nx.querySelector('.notion-collection-view-body')) pills = nx;
+    }
+    return { why: '', sc, tv, inner, bar, pills };
+  }
+  /* 2) 測る（どちらも倍率に左右されない値） */
+  function offX174(el, root) {
+    /* root（表の内側の箱）の左からの距離。zoom の中でも offsetLeft は 100% の CSS px */
+    let x = 0;
+    for (let e = el; e && e !== root; e = e.offsetParent) { x += e.offsetLeft; if (!root.contains(e.offsetParent)) return NaN; }
+    return x;
+  }
+  function need174(inner) {
+    let W = 0;
+    const span = (row) => {
+      let w = 0;
+      for (const c of row.children) {
+        const cs = getComputedStyle(c);
+        if (cs.display === 'none' || cs.position === 'absolute' || cs.position === 'fixed' || parseFloat(cs.flexGrow) > 0) continue;
+        w += c.offsetWidth + (parseFloat(cs.marginInlineStart) || 0) + (parseFloat(cs.marginInlineEnd) || 0);
+      }
+      const x = offX174(row, inner);
+      return w + (x > 0 && x < 200 ? x : 0);   // 段の左のずれ（見出しの段の margin など）も含める
+    };
+    /* 見出しの段だけで測る（行の箱は枠いっぱいに伸びる子を持つので、縮めると広く測れてしまい、倍率が揺れる） */
+    for (const hr of inner.querySelectorAll('.notion-table-view-header-row')) W = Math.max(W, span(hr));
+    return Math.round(W);
+  }
+  function avail174(E) {
+    const sc = E.sc;
+    const cs = getComputedStyle(sc);
+    const bl = parseFloat(cs.borderLeftWidth) || 0, br = parseFloat(cs.borderRightWidth) || 0;
+    const sb = Math.max(Z174.sb, sc.offsetWidth - sc.clientWidth - bl - br);
+    if (sb >= 0 && sb <= 30) Z174.sb = sb;
+    const view = sc.offsetWidth - bl - br - Z174.sb;
+    const left = E.inner.getBoundingClientRect().left + sc.scrollLeft - sc.getBoundingClientRect().left - bl;
+    const padR = parseFloat(getComputedStyle(E.tv).paddingInlineEnd) || 0;
+    return Math.floor(view - left - padR);
+  }
+  /* 3) 印と倍率（変わった時だけ書く） */
+  function mark174(E) {
+    const want = new Map();
+    if (E) { want.set(E.inner, 'data-c174-zt'); if (E.bar) want.set(E.bar, 'data-c174-zt'); if (E.pills) want.set(E.pills, 'data-c174-zp'); }
+    for (const el of document.querySelectorAll('[data-c174-zt], [data-c174-zp]')) {
+      const a = want.get(el);
+      if (a !== 'data-c174-zt' && el.hasAttribute('data-c174-zt')) el.removeAttribute('data-c174-zt');
+      if (a !== 'data-c174-zp' && el.hasAttribute('data-c174-zp')) el.removeAttribute('data-c174-zp');
+    }
+    for (const [el, a] of want) if (!el.hasAttribute(a)) el.setAttribute(a, '');
+  }
+  function setZ174(z) {
+    const v = Math.round(z * 1000) / 1000;
+    Z174.z = v;
+    flag124('data-c174-z', v < 1);
+    if (v < 1) set104('--c174-z', String(v)); else root104.style.removeProperty('--c174-z');
+  }
+  function off174(why, sc) {
+    Z174.why = why;
+    Z174.els = null;
+    mark174(null);
+    setZ174(1);
+    watch174(sc || null);   // 表が無いページでも、本文の枠の入れ替え（表のビューへの切り替え）は見ておく
+  }
+  /* 4) 決める */
+  function run174() {
+    Z174.raf = 0;
+    Z174.runs = (Z174.runs || 0) + 1;
+    try {
+      if (!ZM174.on || !root104.hasAttribute('data-c114-caelum')) { off174(!ZM174.on ? 'off' : 'sky'); return; }
+      const old = Z174.els;
+      const alive = old && old.sc.isConnected && old.inner.isConnected && (!old.bar || old.bar.isConnected) && old.sc.contains(old.inner) && (!old.pills || old.pills.isConnected);
+      const E = alive && !Z174.dirty ? old : find174();
+      if (!E.inner) { off174(E.why, E.sc); return; }
+      if (Z174.bad.has(E.inner)) { off174('rows', E.sc); return; }
+      if (E !== old) { Z174.els = E; mark174(E); watch174(E.sc, E); }
+      Z174.dirty = false;
+      const W = need174(E.inner), A = avail174(E);
+      Z174.W = W; Z174.A = A;
+      if (!(W > 80) || !(A > 80)) { Z174.why = 'measure'; setZ174(1); log174('measure', '表の列の幅を測れなかったので、100% のままにします。'); return; }
+      let z = A >= W ? 1 : Math.max(ZM174.min, Math.min(DBZ174.max, A / W));
+      z = z >= 1 ? 1 : Math.floor(z / DBZ174.step) * DBZ174.step;    // 切り捨て（入る側へ）
+      if (z < ZM174.min) z = ZM174.min;
+      Z174.why = z >= 1 ? 'fits' : A / W < ZM174.min ? 'min' : 'fit';
+      if (Math.abs(z - Z174.z) >= DBZ174.step / 2) { setZ174(z); requestAnimationFrame(() => hbar174(true)); }
+    } catch (e) {
+      Z174.why = 'error';
+      try { mark174(null); setZ174(1); } catch (e2) { /* noop */ }
+      log174('error', 'DB の自動倍率を止めました（' + (e && e.message) + '）。表は 100% のまま動きます。');
+      ZM174.on = false;
+    }
+  }
+  function soon174(ms) {
+    const d = ms == null ? 120 : ms, at = performance.now() + d;
+    if (Z174.t && Z174.at <= at) return;
+    clearTimeout(Z174.t);
+    Z174.at = at;
+    Z174.t = setTimeout(() => { Z174.t = 0; if (!Z174.raf) Z174.raf = requestAnimationFrame(run174); }, d);
+  }
+  /* 5) 見張り（対象が変わった時に付け替える。古い対象の見張りは外す） */
+  function watch174(sc, E) {
+    if (!Z174.ro && typeof ResizeObserver === 'function') Z174.ro = new ResizeObserver(() => soon174(80));
+    if (!Z174.mo) Z174.mo = new MutationObserver((recs) => {
+      /* 行の描き分け（見えている行の出し入れ）だけの変化は見ない */
+      for (const r of recs) {
+        const t = r.target;
+        if (t.nodeType === 1 && t.closest && t.closest('.notion-collection-result-wrapper, .notion-table-view-cell')) continue;
+        if (t.nodeType === 1 && t.parentElement && t.querySelector && [...r.addedNodes, ...r.removedNodes].every((n) => n.nodeType !== 1 || (n.classList && n.classList.contains('notion-collection-result-wrapper')))) continue;
+        Z174.dirty = true;
+        soon174(150);
+        return;
+      }
+    });
+    if (Z174.ro) Z174.ro.disconnect();
+    if (sc !== Z174.moEl) {
+      Z174.mo.disconnect();
+      if (Z174.moEl && Z174.onScroll) Z174.moEl.removeEventListener('scroll', Z174.onScroll);
+      Z174.moEl = sc || null;
+      if (sc) {
+        Z174.mo.observe(sc, { childList: true, subtree: true });
+        if (!Z174.onScroll) Z174.onScroll = () => { clearTimeout(Z174.gapT); Z174.gapT = setTimeout(gap174, 700); };
+        sc.addEventListener('scroll', Z174.onScroll, { passive: true });
+      }
+    }
+    if (Z174.ro && sc) {
+      Z174.ro.observe(sc);
+      if (E) { Z174.ro.observe(E.inner); for (const hr of E.inner.querySelectorAll('.notion-table-view-header-row')) Z174.ro.observe(hr.firstElementChild || hr); }
+    }
+  }
+  /* 6) 行の描き分けの確かめ: 縮めている時、止まって 0.7 秒たっても、見えている所に行の無いすき間（48px 超）が続いたら 100% に */
+  function gap174() {
+    const E = Z174.els;
+    if (!E || Z174.z >= 1 || !E.inner.isConnected) { Z174.gapN = 0; return; }
+    const H = E.sc.getBoundingClientRect();
+    let gap = 0;
+    const lists = new Set([...E.inner.querySelectorAll('.notion-collection-result-wrapper')].map((w) => w.parentElement));
+    for (const list of lists) {
+      const lr = list.getBoundingClientRect();
+      const top = Math.max(lr.top, H.top + 100), bot = Math.min(lr.bottom, H.bottom);
+      if (bot <= top) continue;
+      const vis = [...list.children].filter((w) => w.classList.contains('notion-collection-result-wrapper')).map((w) => w.getBoundingClientRect()).filter((r) => r.bottom > top && r.top < bot).sort((a, b) => a.top - b.top);
+      let y = top;
+      for (const r of vis) { if (r.top > y + 1) gap = Math.max(gap, r.top - y); y = Math.max(y, r.bottom); }
+      if (bot > y + 1) gap = Math.max(gap, bot - y);
+    }
+    if (gap > 48) {
+      if (++Z174.gapN >= 2) {
+        Z174.bad.add(E.inner);
+        log174('rows', '縮めた表で、行の描き分け（見えている行だけ描く仕組み）と合わないすき間が出たため、この表は 100% に戻しました。');
+        Z174.gapN = 0;
+        soon174(0);
+      } else { clearTimeout(Z174.gapT); Z174.gapT = setTimeout(gap174, 900); }
+    } else Z174.gapN = 0;
+  }
+  /* 走らせる: 上の帯の見直し（ページの移動・2 秒ごと・窓の大きさ）・幕の前 */
+  const zenRunBefore174 = zenRun124;
+  zenRun124 = function() {
+    zenRunBefore174();
+    soon174(60);
+    hbar174();
+  };
+  const readyBefore174 = readyCheck;
+  readyCheck = function() {
+    if (!readyDone && !Z174.raf) { try { run174(); } catch (e) { /* noop */ } }
+    return readyBefore174();
+  };
+  function dbzoom174(v) {
+    if (v == null) return { on: ZM174.on, z: Z174.z, need: Z174.W, avail: Z174.A, min: ZM174.min, why: Z174.why, runs: Z174.runs || 0 };
+    if (typeof v === 'object') { if (typeof v.min === 'number' && v.min >= 0.5 && v.min <= 1) ZM174.min = v.min; if (typeof v.on === 'boolean') ZM174.on = v.on; }
+    else ZM174.on = !!v;
+    zmSave174();
+    Z174.dirty = true;
+    run174();
+    return dbzoom174();
+  }
+
+  /* 7) 横のバー: 本文の枠の中で、横のバーが実際に見えている要素（.notion-scroller に限らない）に印を付けて隠す */
+  /* Firefox には ::-webkit-scrollbar が無く、横のバーだけを隠す CSS が無い（v154 の隠し方が効かない）。横にはみ出している時だけ、
+   * 本文の枠（.notion-scroller）の下端を 16px だけ画面の外へ出し、横のバーを見える所から外す（縦のバーと縦横のスクロールはそのまま） */
+  const FF174 = /\bFirefox\//.test(navigator.userAgent || '');
+  let hbarAt174 = 0;
+  function hbar174(force) {
+    if (!root104.hasAttribute('data-c154-hbar')) { for (const e of document.querySelectorAll('[data-c174-ffx]')) e.removeAttribute('data-c174-ffx'); return; }
+    const now = performance.now();
+    if (!force && now - hbarAt174 < 1500) return;
+    hbarAt174 = now;
+    const fr = mainFrame154();
+    if (!fr) return;
+    if (FF174) {
+      const sc = fr.querySelector('.notion-scroller');
+      for (const e of document.querySelectorAll('[data-c174-ffx]')) if (e !== sc) e.removeAttribute('data-c174-ffx');
+      if (sc) { const over = sc.scrollWidth > sc.clientWidth + 1; if (sc.hasAttribute('data-c174-ffx') !== over) sc.toggleAttribute('data-c174-ffx', over); }
+    }
+    const cand = new Set(fr.querySelectorAll('.notion-scroller, .sticky-portal-target *, [style*="overflow-x: auto"], [style*="overflow-x: scroll"], [style*="overflow: auto"], [style*="overflow: scroll"]'));
+    for (const el of cand) {
+      if (el.closest('.notion-peek-renderer, [role="dialog"]')) continue;
+      if (el.clientWidth < 120 || el.scrollWidth <= el.clientWidth + 1) continue;
+      const cs = getComputedStyle(el);
+      if (!/(auto|scroll)/.test(cs.overflowX)) continue;
+      const bar = el.offsetHeight - el.clientHeight - (parseFloat(cs.borderTopWidth) || 0) - (parseFloat(cs.borderBottomWidth) || 0);
+      if (bar <= 1) continue;
+      const only = el.scrollHeight <= el.clientHeight + 1 || !/(auto|scroll)/.test(cs.overflowY);
+      const v = only ? 'x' : 'xy';
+      if (el.getAttribute('data-c164-hx') !== v) el.setAttribute('data-c164-hx', v);
+      log174('hx', '本文の枠の中で横のバーが見えていた要素に印を付けて隠しました（__c33.hscroll() で一覧できます）。');
+    }
+  }
+
+  hbarCheck164 = function() { hbar174(); };   // v164 の確かめ（.notion-scroller だけ・隠す CSS なし）はこちらへ
+
+  /* 8) Orbit の動き: 選んだ惑星の軌道の輪と衛星・選んだ時の波紋・輪の地の星（回すと奥行きを持って流れる） */
+  const ORB_SVG174 = '<svg viewBox="0 0 44 16" aria-hidden="true"><ellipse cx="22" cy="8" rx="20" ry="5.6"/></svg><b></b><u></u>';
+  let selPrev174 = '', parY174 = NaN;
+  function orbits174() {
+    if (!obWheelEl) return;
+    for (const el of obItemEls.concat(obCopies)) {
+      if (el.__c174) continue;
+      if (!el.querySelector(':scope > .c174-orb')) { const o = document.createElement('i'); o.className = 'c174-orb'; o.setAttribute('aria-hidden', 'true'); o.innerHTML = ORB_SVG174; el.appendChild(o); }
+      el.__c174 = true;
+    }
+  }
+  const layBefore174 = obLay;
+  obLay = function() {
+    const result = layBefore174();
+    if (obWheelEl && ZM174.orb) {
+      orbits174();
+      /* 輪の地の星: 輪より遅く流れる（輪 1 段 → 星は 0.3 段） */
+      const y = Math.round(-obOff * 0.3 * 10) / 10;
+      if (y !== parY174) { parY174 = y; obWheelEl.style.setProperty('--c174-par', y + 'px'); }
+      /* 選んだ惑星が変わったら、その惑星に波紋（1 回だけ） */
+      const sel = OB.sel || '';
+      if (sel !== selPrev174) {
+        const first = selPrev174 === '' && !obWheelEl.__c174seen;
+        selPrev174 = sel;
+        obWheelEl.__c174seen = true;
+        if (sel && !first) for (const el of obItemEls.concat(obCopies)) if (el.__gid === sel) { el.removeAttribute('data-c174-burst'); void el.offsetWidth; el.setAttribute('data-c174-burst', ''); clearTimeout(el.__c174bt); el.__c174bt = setTimeout(() => el.removeAttribute('data-c174-burst'), 1000); }
+      }
+    }
+    return result;
+  };
+  /* 印の真ん中の高さ（惑星の段の中での位置）を測って変数に */
+  function orbGeom174() {
+    if (!obEl) return;
+    const it = obItemEls.find((e) => e.style.display !== 'none');
+    const ic = it && it.querySelector('.ob-ic');
+    if (!ic) return;
+    const v = (ic.offsetTop + ic.offsetHeight / 2) + 'px';
+    if (obEl.style.getPropertyValue('--c174-icy') !== v) obEl.style.setProperty('--c174-icy', v);
+  }
+  window.addEventListener('resize', () => requestAnimationFrame(orbGeom174), { passive: true });
+  /* Catalogus: チームスペースを回した時、先頭の印が軽く返る */
+  const stepBefore174 = step164;
+  step164 = function(d) {
+    const before = K164.sel;
+    const r = stepBefore174(d);
+    const e = K164.els[K164.sel];
+    if (e && K164.sel !== before) { e.removeAttribute('data-c174-flip'); void e.offsetWidth; e.setAttribute('data-c174-flip', d > 0 ? 'up' : 'down'); clearTimeout(e.__c174ft); e.__c174ft = setTimeout(() => e.removeAttribute('data-c174-flip'), 700); }
+    return r;
+  };
+
+  /* 9) 見た目 */
+  const cssBefore174 = nbCss;
+  nbCss = function() {
+    cssBefore174();
+    if (document.getElementById('c174-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c174-css';
+    const S = S174;
+    const ON = S + '[data-c124-motion]';
+    const DARK = ':is(body.dark, html[data-atx-dark], html[data-c39-dark])';
+    const FR = `.notion-frame${NP154}`;
+    /* 輪の地の星（3 つの層。点の大きさ・濃さを変えて、紙の上に淡く） */
+    const dot = (x, y, r, a) => `radial-gradient(circle at ${x}px ${y}px, color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) ${a}%, transparent) 0 ${r}px, transparent ${r + 0.7}px)`;
+    const gold = (x, y, r, a) => `radial-gradient(circle at ${x}px ${y}px, rgba(201,162,76,${a}) 0 ${r}px, transparent ${r + 0.8}px)`;
+    const sky1 = [dot(14, 22, 0.6, 20), dot(71, 58, 0.5, 16), dot(38, 97, 0.7, 18), dot(86, 141, 0.5, 14), dot(22, 176, 0.6, 16), gold(60, 203, 0.8, 0.45)].join(', ');
+    const sky2 = [dot(52, 14, 0.5, 14), dot(9, 79, 0.5, 12), dot(91, 112, 0.6, 18), gold(31, 151, 0.7, 0.4), dot(64, 188, 0.5, 14)].join(', ');
+    style.textContent = `
+/* ── DB の自動倍率: 表の内側の箱とタブの段の内側の箱だけ（Notion の左右の余白は縮めない） ── */
+${S}[data-c174-z] ${FR} [data-c174-zt] { zoom: var(--c174-z, 1) !important; }
+${S}[data-c174-z] ${FR} [data-c174-zp] > * { zoom: var(--c174-z, 1) !important; }
+
+/* ── 横のバー（v164 の印に、隠す CSS を足す） ── */
+${S}[data-c154-hbar] ${FR} [data-c164-hx="x"] { scrollbar-width: none !important; }
+${S}[data-c154-hbar] ${FR} [data-c164-hx="x"]::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+${S}[data-c154-hbar] ${FR} [data-c164-hx="xy"] { scrollbar-width: auto !important; scrollbar-color: auto !important; }
+${S}[data-c154-hbar] ${FR} [data-c164-hx="xy"]::-webkit-scrollbar:horizontal { height: 0 !important; display: none !important; }
+${S}[data-c154-hbar] ${FR} .notion-scroller[data-c174-ffx] { margin-bottom: -16px !important; }
+
+/* ── Orbit: 輪の地の星（回すと 0.3 倍の速さで流れる・ときどき瞬く） ── */
+${S} #c33-orbit .ob-wheel::before, ${S} #c33-orbit .ob-wheel::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-repeat: repeat; background-size: 100px 214px; background-position: 0 var(--c174-par, 0px);
+}
+${S} #c33-orbit .ob-wheel::before { background-image: ${sky1}; opacity: .9; }
+${S} #c33-orbit .ob-wheel::after { background-image: ${sky2}; background-size: 100px 198px; background-position: 0 calc(var(--c174-par, 0px) * 1.6); opacity: .55; }
+${ON} #c33-orbit .ob-wheel::after { animation: c174-twinkle 6.5s ease-in-out infinite alternate; }
+${DARK} #c33-orbit .ob-wheel::before { opacity: 1; filter: brightness(1.4); }
+@keyframes c174-twinkle { 0%, 40% { opacity: .55; } 70% { opacity: .15; } 100% { opacity: .7; } }
+
+/* ── Orbit: 選んだ惑星の軌道の輪と衛星（輪は印の後ろ。選ぶと描かれ、衛星が 7 秒で 1 周） ── */
+${S} #c33-orbit .ob-it > .c174-orb { position: absolute; left: 50%; top: var(--c174-icy, 17px); width: 44px; height: 16px; margin: -8px 0 0 -22px; z-index: -1; pointer-events: none; transform: rotate(-14deg); opacity: 0; transition: opacity .3s ease; }
+${S} #c33-orbit .ob-it { isolation: isolate; }
+${S} #c33-orbit .ob-it > .c174-orb svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+${S} #c33-orbit .ob-it > .c174-orb ellipse { fill: none; stroke: color-mix(in srgb, var(--ob-tint, #b19762) 62%, transparent); stroke-width: .9; stroke-dasharray: 84; stroke-dashoffset: 84; }
+${S} #c33-orbit .ob-it.sel > .c174-orb { opacity: 1; }
+${S} #c33-orbit .ob-it.sel > .c174-orb ellipse { stroke-dashoffset: 0; transition: stroke-dashoffset .9s cubic-bezier(.22,.8,.24,1) .05s; }
+${S} #c33-orbit .ob-it > .c174-orb b { position: absolute; left: 0; top: 0; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 50%; background: var(--ob-tint, #b19762); opacity: 0;
+  offset-path: path("M 42 8 A 20 5.6 0 1 1 2 8 A 20 5.6 0 1 1 42 8"); offset-rotate: 0deg; offset-distance: 0%; }
+${S} #c33-orbit .ob-it.sel > .c174-orb b { opacity: 1; }
+${ON} #c33-orbit .ob-it.sel > .c174-orb b { animation: c174-moon 7s linear .6s infinite; }
+@keyframes c174-moon { 0% { offset-distance: 0%; opacity: 1; } 25% { opacity: 1; } 50% { offset-distance: 50%; opacity: .25; } 75% { opacity: .25; } 100% { offset-distance: 100%; opacity: 1; } }
+/* 選んだ時の波紋（1 回） */
+${S} #c33-orbit .ob-it > .c174-orb u { position: absolute; inset: 0; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ob-tint, #b19762) 70%, transparent); opacity: 0; text-decoration: none; }
+${ON} #c33-orbit .ob-it[data-c174-burst] > .c174-orb u { animation: c174-ripple .9s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes c174-ripple { 0% { transform: scale(.45); opacity: .85; } 100% { transform: scale(1.9); opacity: 0; } }
+${ON} #c33-orbit .ob-it[data-c174-burst] > .c174-orb { animation: c174-tilt .9s cubic-bezier(.22,.8,.24,1) both; }
+@keyframes c174-tilt { 0% { transform: rotate(-40deg) scale(.7); } 100% { transform: rotate(-14deg) scale(1); } }
+${S}:not([data-c174-orb]) #c33-orbit .ob-wheel::before, ${S}:not([data-c174-orb]) #c33-orbit .ob-wheel::after, ${S}:not([data-c174-orb]) #c33-orbit .ob-it > .c174-orb { display: none !important; }
+
+/* ── Catalogus: 回した時に先頭の印が軽く返る ── */
+${ON} #c164-cat .ct-t[data-c174-flip] .ct-ic { animation: c174-flip .62s cubic-bezier(.22,.8,.24,1) both; }
+@keyframes c174-flip { 0% { transform: perspective(60px) rotateX(70deg) scale(.8); opacity: .3; } 60% { transform: perspective(60px) rotateX(-12deg) scale(1.04); opacity: 1; } 100% { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  ${S} #c33-orbit .ob-wheel::after, ${S} #c33-orbit .ob-it > .c174-orb, ${S} #c33-orbit .ob-it > .c174-orb *, #c164-cat .ct-t .ct-ic { animation: none !important; transition: none !important; }
+}
+${S}:not([data-c124-motion]) #c33-orbit .ob-it > .c174-orb * { transition-duration: 0s !important; }
+`;
+    (document.head || root104).appendChild(style);
+    flag124('data-c174-orb', ZM174.orb);
+    requestAnimationFrame(orbGeom174);
+    soon174(0);
+  };
+
+  /* 10) 設定 */
+  document.addEventListener('nebius:settings', (e) => {
+    const box = document.getElementById(String(e.detail || ''));
+    if (!box) return;
+    const add = (text, get, set) => {
+      const l = document.createElement('label');
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = get();
+      l.append(c, ' ' + text);
+      c.addEventListener('change', () => set(c.checked));
+      box.appendChild(l);
+    };
+    add('DB の表を幅に合わせて自動で縮める（' + Math.round(ZM174.min * 100) + '〜100%・テーブルビュー）', () => ZM174.on, (v) => dbzoom174(v));
+    add('Orbit の地の星・選んだ惑星の軌道の輪', () => ZM174.orb, (v) => { ZM174.orb = !!v; zmSave174(); flag124('data-c174-orb', ZM174.orb); });
+  });
+
+  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), catalogus: (on) => (on == null ? CAT164.on : set164('on', on)), hscroll: () => hscroll164(), dbzoom: (v) => dbzoom174(v), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }), catalogus: { on: CAT164.on, open: CAT164.open, shown: K164.shown, why: K164.why, prev: K164.prev, asked: Object.keys(K164.req), rest: K164.rest, gid: K164.gid, room: K164.G.room || null, teams: (K164.teams || []).map((t) => t.name + (t.open ? '（' + t.rows.length + '）' : '（閉）')), sel: K164.sel, broken: K164.broken }, dbzoom: dbzoom174() }) };
   obBoot();
   obSearchBoot();
 })();
