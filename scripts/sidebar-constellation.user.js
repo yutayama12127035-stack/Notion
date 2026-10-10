@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      97.0.0
-// @description  v97.0.0: Nebius 第 2 世代 — Stella を本物の星図に（Orbit の右端に 1 本の子午線・チームスペースは星座（子午線から伸びる光脈と、先の DB の数の点）・選んだ DB に光暈と 2.4 秒の波紋・選ぶと子午線 → 光脈 → アイコンへ光の粒が走って火花・惑星ごとの色相が 1.2 秒で流れる・淡い星空と流れ星・最近の Meteora）。('-' 鰤)з セクション（B.U.R.I）— SVG の顔のピル（乗せると「探す・聞く ⌘K」）・中央 720px → 右に留める 400px → 大きく の 3 段の窓・枠線の無い温かいオフホワイト・時間で変わる「おかえり、Wパパ」・候補は親のフル DB 付き・開くと親のフル DB へ移ってサイドピーク（Orbit と Stella も連動）・⌘↵ で送る／↵ で改行（変換中は送らない）。⁴¹ Telescopium との連絡口（nebius:req）・Stella の細い列（52px・乗せると元の幅で重なる・ピン留め）。アクセント色に青を使わない。v87.0.0: Nebius — 輪（Orbit）と右の星図（Stella）を合わせた新しいサイドバー。Stella: チームを色の札のカード（チームの色・右上に件数・中の行が順にふわっと出る・今のページに ★・乗せるとアイコンが少し回る）＋上に「輪で選んだ大分類」の見出し。サイドの検索窓をやめて ('-' 鰤)з のピル（押すと ⌘K の B.U.R.I）— 文字の見切れが無い。Orbit: 選んだ色の枠が上のぼかしで見切れていた → 上に余白・ホイールを止めると一番近い段にぴたっと止まる。v77.0.0: Next Notion — ★ぶりレンズ（ページの文字を選ぶと ✦。説明・要約・言い換え・訳す・続きを書く・自由に聞く。置き換え／下に入れる／コピー。⌃⌥J）★おかえりハイライト（前に見た時から変わった段がうっすら光る。↑↓ で移動・ぶりに要約・⌘K でも「前回から変わった所」。⌃⌥N）。描き直しを見せない — サイドバーの印・輪・検索窓を同じコマで置く（以前は 80ms〜2 秒遅れて上書きが見えていた）・準備ができたら html[data-c33-ready]（16c の幕の合図）。顔はいつも 1 つ（ホームの大きな顔・答えごとの顔をやめた）。検索画面は窓の幅に合わせて 3 段（広い・中・狭い＝ぶりが画面いっぱい）＋欄の中も幅に合わせて詰める。v67.0.0: B.U.R.I を大幅に強化 — 自然な日本語・出典は文の終わりに小さな番号（¹ ²）＋番号つきの出典一覧・今日の日付で「これから／もう過ぎた」を言い分け・まとめ役を選べる（既定は NVIDIA）・AI が考えた「次に聞けそうなこと」・いま開いているページの要約／質問・「〜を開いて」でページへ・Markdown でコピー（脚注つき）・これまでの答え（履歴・検索）・読み込みの速さを表示。軽く — 見回りを 0.1→0.7 秒・位置合わせを 0.15→0.45 秒（変化の時だけ）・地の色は変わった時だけ測る。v57.0.0: 検索画面そのものを次世代に（ガラスの板・画面中央へすっと出る・アイコンの小箱・ぶりに聞くボタン・キーの刻印・大きな画面）・顔文字が明朝になる問題を根元から修正（丸ゴシックを直接指定＋ウェブ書体）・NVIDIA は時間で切らず待つ・学習（覚えて／忘れて・話題・好み → 答えに活かす・「覚えたこと」画面）・⌘↵ で送る／↵ で改行・速く（開いた瞬間に入る・検索と一覧の先取り・覚えておく）。v56.0.0: UI を抜本的に作り直し — ぶりの顔が丸い字に・気分で顔が変わる（探す時は鯖・嬉しい時は鯛・衝撃は鮪・✨💧♥・ゲフンゲフン）・Figma 風の道具バー・Orbit が検索中に消える／中身と重なる／透けるを修正・ぶりが呼ぶ名前を設定。v55.0.0: 賢く — 会話を読んで検索語を作る（「調べて。」で句点を調べない）・AI がある時は本棚の決まり文句で終わらせず AI が答える・Wikipedia の本文まで読む・まとめ役は下書きを書かない・OpenRouter は強い無料モデルだけ。v54.0.0: 無料の最強布陣（Gemini・NVIDIA・Groq・OpenRouter ＋ 予備 Z.ai・Cohere）・有料だったモデルや回数切れの仲間を自動で外して次の仲間が入る・Z.ai は本当に無料の 2 モデルだけ。v53.0.0: MoA の仲間を組み直し（Mistral は有料化したので外し、NVIDIA・Z.ai GLM・Cohere を追加）・相談の人数・遅い仲間を待ちすぎない。v52.1.0: Firefox で検索画面が開かなかった（MouseEvent の view で例外）を修正。v52.0.0: サイドの検索窓を押すと Notion の検索画面（B.U.R.I 入り）が開く・答え欄を一新（進み具合・見出しと箇条書き・出典の印・相談の中身・コピー）・無料の AI を束ねる MoA（Gemini・Groq・OpenRouter・Mistral・Chrome 内蔵）。v51.0.0: B.U.R.I を Notion の検索画面に融合（結果一覧の先頭に段・答えは右の大きなプレビュー欄・続けて聞ける）・Gemini は鍵で使えるモデルを Google に聞いて選ぶ（Flash → Flash-Lite）。v50.0.0: Notion の検索（⌘K）に B.U.R.I が同居（その場で答える）・Gemini の無料枠が「0」のモデルを自動で避ける・Wikipedia も調べる・Google の抜粋の読み違いを修正。v49.0.0: B.U.R.I の AI を無料で使えるように（既定は Google Gemini の無料枠・Chrome 内蔵 AI も選べる・Claude は任意）。v48.0.0: 輪で選んだ大分類の中身が出ない（¹⁶ で畳んだまま）を修正・輪のスクロールの向きを逆に（設定で戻せる）・B.U.R.I が Notion 全体と Google を調べ、AI（Claude・鍵は自分の物）でまとめて話す。v38.0.0: 【完全版】UIロジックを1文字も削らず復元しUI崩壊を解決。数字バッジ被り修正。特権APIを用いた最高精度のGoogle検索（本・小説特化）とAIアニメーション、フローティングUI搭載。
+// @version      104.0.0
+// @description  v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,20 @@
 // ==/UserScript==
 
 /*
+ * v104.0.0（Orbit を最初からあった列に — 見た目だけの改修）
+ *   ・地: Notion のサイドバーと同じ色（--nb-paper）と、右に同じ 1px の細線。v99 の一段濃い紙・影・角丸はやめた
+ *   ・ALL の段を上の帯（トップバー）と同じ高さに。下の細線が帯の下端とそろう
+ *   ・書体: v99 で --c99-serif が「inherit, "Hiragino Mincho ProN", …」という無効な並びになり、Orbit の文字が
+ *     Baskerville でも太めでもない書体（ページの書体・400）に崩れていた → Orbit の列には Baskerville を直接指定。
+ *     名前は 600、選んだ惑星は 700。薄く（opacity）せず、色の濃さで強弱
+ *   ・文字の表記: 惑星の名前は固有名なので今のまま。ALL と SETTINGS は字間を空けた大文字（操作の印として区別）
+ *   ・見切れ: 列の幅を「Baskerville 700・10px」で一番長い名前から測る（ALL・SETTINGS も字間込み）
+ *   ・原生のせり出し: サイドバーが閉じている間（「Lock sidebar open」がある・幅が無い・左の外にある）は、
+ *     原生のサイドバーを見えなく・触れなくする（DOM は消さない。Orbit が出ている時だけ。開いて並べた時は今までどおり）
+ *   ・印: ALL＝星座（4 つの星を結んだ線と、右上に四芒星）、Settings＝四芒星を軸にした歯車、Sol＝光冠と 8 本の光線の太陽
+ *   ・軽く: v103 の見張り（文書全体の変化のたびにその場で測っていた）を、1 フレームにまとめた
+ *   ・ドックした原生サイドバー（Stella）の文字・Sol の働き・B.U.R.I は変えていない
+ * v98.0.0〜v103.0.0（外部で更新: Celestial Catalogus RC1〜RC6 — Sol を Orbit の循環列へ・ホバー星表・Native の展開入口の識別・本文の余白）
  * v97.0.0（Nebius 第 2 世代 — Stella の星図・('-' 鰤)з セクション・Telescopium との連絡口）
  *   ■ Stella（右の星図）— 仕様書 1 のとおりに作り直し。Orbit は変えない
  *   ・Orbit の右端に 1 本の子午線。選んだ惑星の高さに接点の光。見出しは無し
@@ -188,7 +202,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '97.0.0';
+  const VERSION = '104.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -5933,7 +5947,7 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
     }
     /* ピルの位置から広がる（どこから開いたかを目で追える） */
     function npMorph(open) {
-      const pr = pill.getBoundingClientRect(), r = np.getBoundingClientRect();
+      const pr = C98.sol ? C98.sol.getBoundingClientRect() : { left: 0, top: 0, width: 0, height: 0 }, r = np.getBoundingClientRect();
       if (nbReduce() || !pr.width || !r.width) return Promise.resolve();
       const k = `translate(${pr.left - r.left}px, ${pr.top - r.top}px) scale(${pr.width / r.width}, ${pr.height / r.height})`;
       const a = np.animate(open ? [{ transform: k, opacity: 0, borderRadius: '999px' }, { transform: 'none', opacity: 1, borderRadius: '14px' }] : [{ transform: 'none', opacity: 1 }, { transform: k, opacity: 0 }], { duration: open ? 250 : 200, easing: open ? 'cubic-bezier(.2,.85,.25,1)' : 'cubic-bezier(.5,0,.75,.2)' });
@@ -5967,7 +5981,7 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
       if (npOpen) return;
       np.hidden = true;
       pill.setAttribute('aria-expanded', 'false');
-      if (why !== 'nav') pill.focus({ preventScroll: true });
+      if (why !== 'nav' && C98.sol) C98.sol.focus({ preventScroll: true });
     }
 
     /* ---- ホーム ---- */
@@ -6135,8 +6149,8 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
         items.push({ id: id32(it.id), title, icon: b.format && b.format.page_icon, par, rg, dbName: rg ? rg.name : par && par.name ? par.name : '' });
       }
       const sel = scopeGid;
-      let list = sel ? items.filter((x) => x.rg && x.rg.gid === sel) : items;
-      list = list.sort((a, b) => ((b.rg && b.rg.gid === OB.sel) ? 1 : 0) - ((a.rg && a.rg.gid === OB.sel) ? 1 : 0)).slice(0, 6);
+      let list = items.slice();
+      list = list.sort((a, b) => ((b.rg && b.rg.gid === (sel || OB.sel)) ? 1 : 0) - ((a.rg && a.rg.gid === (sel || OB.sel)) ? 1 : 0)).slice(0, 6);
       cands = list;
       candsEl.textContent = '';
       list.forEach((x, i) => {
@@ -6301,7 +6315,7 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
       let ask = q;
       if (scopeGid && BURI.aiOn()) { const g = obGroups().find((x) => x.gid === scopeGid); if (g) ask = q + '\n（探す範囲のヒント: ' + g.label + ' の中）'; }
       let res;
-      try { res = await BURI.ask(ask); } catch (e) { res = { text: "('-' 鰤)з💦 ごめんね、調べている途中でつまずいちゃった。（" + String(e && e.message || e) + '）', cards: [], chips: [] }; }
+      try { res = await BURI.ask(ask); } catch (e) { res = { _catalogusError: String(e && e.message || e), text: "('-' 鰤)з💦 ごめんね、調べている途中でつまずいちゃった。（" + String(e && e.message || e) + '）', cards: [], chips: [] }; }
       if (my !== npSeq) return;
       BURI.setProgress(null);
       await th.done();
@@ -6310,6 +6324,7 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
       npBusy = false; npBusyPaint();
       try { logAdd(q, res); } catch (e) { /* noop */ }
       npEntry(res, q, true);
+      C98.finish(res, npOpen);
       if (!npOpen) { pill.classList.remove('ping'); void pill.offsetWidth; pill.classList.add('ping'); }
     }
     /* MoA の相談: 小さな顔のまわりを、相談している AI の数だけ衛星が回る → まとめる時に中心へ集まって溶ける */
@@ -6489,7 +6504,7 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
     window.addEventListener('resize', () => { if (npOpen) npPlace(); pillFit(); });
     /* ⌘K（Windows は Ctrl+K）— 本文で文字を選んでいる時は Notion のリンク（⌘K）のまま */
     window.addEventListener('keydown', (e) => {
-      if (npBypass || NPS.hotkey === false) return;
+      if (npBypass || C98.keys || NPS.hotkey === false) return;
       if (!(IS_MAC ? e.metaKey : e.ctrlKey) || e.altKey || e.shiftKey || e.code !== 'KeyK') return;
       const ae = document.activeElement, sel = document.getSelection();
       if (ae && ae.closest && ae.closest('[contenteditable="true"]') && sel && !sel.isCollapsed && !np.contains(ae)) return;
@@ -6664,6 +6679,178 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
         else reply({ err: 'unknown' });
       } catch (e) { reply({ err: String(e && e.message || e) }); }
     });
+
+    /* Catalogus RC1: existing B.U.R.I integration */
+
+  C98.linked = true;
+  C98.keys = true;
+
+  const c98Open = npOpenNow;
+  npOpenNow = function(text) {
+    const result = c98Open(text);
+    C98.opened();
+    return result;
+  };
+
+  C98.openPanel = () => npOpenNow();
+
+  C98.newPanel = () => {
+    npStop();
+    drawerShow(false);
+    BURI.aiReset();
+    npHome(true);
+    nta.value = '';
+    npGrow();
+    C98.state('idle');
+    npOpenNow();
+  };
+
+  const c98BusyPaint = npBusyPaint;
+  npBusyPaint = function() {
+    c98BusyPaint();
+    if (npBusy) C98.state('busy');
+    else if (C98.status === 'busy') C98.state('idle');
+  };
+
+  const c98Close = npClose;
+  npClose = async function(why) {
+    if (C98.sol) C98.sol.setAttribute('aria-expanded', 'false');
+    return c98Close(why);
+  };
+
+  /*
+   * 範囲は除外フィルターではなく優先度。
+   * 候補のfilterも、生成時に下でsortへ置き換える。
+   */
+  npScope = function(reset) {
+    if (reset) scopeGid = OB.on ? OB.sel || '' : '';
+    const group = scopeGid ? obGroups().find(g => g.gid === scopeGid) : null;
+    scopeEl.hidden = !group;
+
+    if (group) {
+      obIcPaint(scopeEl.firstElementChild, group);
+      scopeEl.lastElementChild.textContent = group.label + 'を優先';
+      scopeEl.title = group.label + 'のチームスペースを優先します。ほかの範囲も除外しません。';
+    }
+  };
+
+  const c98Chips = npChips;
+  npChips = function() {
+    c98Chips();
+    if (npChat || !OB.sel) return;
+    const group = obGroups().find(g => g.gid === OB.sel);
+    if (!group) return;
+
+    const chip = mk('button', 'n2-chip');
+    chip.type = 'button';
+    chip.textContent = group.label + 'について聞く';
+    chip.style.setProperty('--i', '0');
+
+    chip.addEventListener('click', () => {
+      scopeGid = group.gid;
+      npScope();
+      nta.value = group.label + 'について教えて';
+      npGrow();
+      nta.focus();
+      npCandsSoon();
+    });
+
+    chipsEl.insertBefore(chip, chipsEl.firstChild);
+  };
+
+  document.addEventListener('nebius:planet', () => {
+    if (!npOpen) return;
+    npScope(true);
+    if (!npChat) npChips();
+    npCandsSoon();
+  });
+
+  const c98Settings = npSettings;
+  npSettings = function() {
+    c98Settings();
+    const host = logEl.querySelector('.n2-set');
+    if (!host) return;
+
+    const about = mk('section', 'bs-card', null, host);
+    mk('h4', null, 'B.U.R.Iについて', about);
+    mk('div', null, C98.fullName, about);
+    mk('div', null, '読み：ぶり', about);
+    mk('small', null, 'B.U.R.I Warasa — v98.0.0 / Catalogus RC1', about);
+
+    const apostrophe = '\u0027';
+    const face = mk('span', 'b-face', null, about);
+    face.textContent = '(' + apostrophe + '-' + apostrophe + ' 鰤)з';
+  };
+
+  /*
+   * 日本語変換中とcompositionend直後の1フレームを無視。
+   */
+  let c98Composing = false;
+  let c98CompositionFrame = false;
+  let c98CompositionEpoch = 0;
+
+  nta.addEventListener('compositionstart', () => {
+    c98Composing = true;
+    imeGuard = true;
+    c98CompositionEpoch++;
+  });
+
+  nta.addEventListener('compositionend', () => {
+    c98Composing = false;
+    c98CompositionFrame = true;
+    const epoch = ++c98CompositionEpoch;
+    requestAnimationFrame(() => {
+      if (epoch === c98CompositionEpoch) c98CompositionFrame = false;
+    });
+  });
+
+  /*
+   * 太陽のキー操作。
+   * 元の⌘Kハンドラーは、生成時にC98.keysが真なら退出するようにする。
+   */
+  window.addEventListener('keydown', e => {
+    if (!C98.keys || npBypass ||
+        e.isComposing || e.keyCode === 229 ||
+        c98Composing || c98CompositionFrame || imeGuard) return;
+
+    const mod = IS_MAC ? e.metaKey : e.ctrlKey;
+    if (!mod || e.altKey || e.shiftKey) return;
+    const key = e.code || (e.key.toLowerCase() === 'k' ? 'KeyK' :
+                         e.key.toLowerCase() === 'o' ? 'KeyO' : '');
+
+    if (key !== 'KeyK' && key !== 'KeyO') return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if (key === 'KeyO') C98.newPanel();
+    else npOpenNow();
+  }, true);
+
+  /*
+   * B.U.R.Iの候補から、CSSで畳んだチームのDBを開くときも展開する。
+   */
+  const c98OpenTeam = nbOpenTeam;
+  nbOpenTeam = function(dbId) {
+    const registration = (NBS.reg || {})[id32(dbId)];
+    const side = obSide();
+
+    if (registration && side) {
+      for (const team of side.querySelectorAll('[data-c98-team]')) {
+        if (team.getAttribute('data-c16-k') === registration.team)
+          C98.setFold(team, false);
+      }
+    }
+    return c98OpenTeam(dbId);
+  };
+
+  requestAnimationFrame(() => {
+    C98.paintSol();
+    nbLayoutSoon();
+    readyCheck();
+  });
+
     document.documentElement.setAttribute('data-nebius', VERSION);
 
     BURI.restore();
@@ -6690,6 +6877,3841 @@ html:not([data-c33-ok-off]) [data-c33-ok].c33-ok-now { animation: c33OkPulse 1.3
   }
 
   /* v48: 窓口（v38 で消えていて B.U.R.I の起動が途中で止まっていた） */
+  /* Catalogus RC1: sidebar implementation */
+
+  const C98 = {
+    version: '98.0.0',
+    release: 'Catalogus RC1',
+    fullName: 'Blended Understanding & Reasoning Intelligence',
+    scope: 'html[data-c98-catalogus][data-c33][data-c33-stella]',
+    strong: ':not(#c98a):not(#c98b):not(#c98c):not(#c98d)' +
+            ':not(#c98e):not(#c98f):not(#c98g):not(#c98h)',
+    greek: [...'αβγδεζηθικλμνξοπρστυφχψω'],
+    linked: false,
+    keys: false,
+    dir: 1,
+    status: 'idle',
+    error: '',
+    unread: false,
+    sol: null,
+    host: null,
+    observer: null,
+    resize: null,
+    observed: new WeakSet(),
+    names: new WeakSet(),
+    folded: new WeakMap(),
+    net: false,
+    queued: false,
+    lastInput: 0,
+    once: new Set(),
+    raf: 0,
+    enterTimer: 0,
+    key: 'c33.catalogus.v3',
+    data: { fold: {}, fresh: {}, counts: {} }
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(C98.key) || 'null');
+    if (saved && typeof saved === 'object') {
+      for (const k of ['fold', 'fresh', 'counts']) {
+        if (saved[k] && typeof saved[k] === 'object')
+          C98.data[k] = saved[k];
+      }
+    }
+  } catch (_) {}
+
+  C98.log = (key, message) => {
+    if (C98.once.has(key)) return;
+    C98.once.add(key);
+    console.info('[³³ Catalogus RC1]', message);
+  };
+
+  C98.save = () => {
+    try {
+      localStorage.setItem(C98.key, JSON.stringify(C98.data));
+    } catch (_) {
+      C98.log('storage', 'Catalogusの保存場所を利用できません。表示は続けます。');
+    }
+  };
+
+  C98.attr = (el, key, value) => {
+    if (!el) return;
+    const s = String(value);
+    if (el.getAttribute(key) !== s) el.setAttribute(key, s);
+  };
+
+  C98.flag = (el, key, value) => {
+    if (el && el.hasAttribute(key) !== !!value)
+      el.toggleAttribute(key, !!value);
+  };
+
+  C98.var = (el, key, value) => {
+    if (el && el.style.getPropertyValue(key) !== String(value))
+      el.style.setProperty(key, String(value));
+  };
+
+  C98.teamKey = t =>
+    t.getAttribute('data-c16-k') ||
+    idOf(t) ||
+    norm((t.querySelector(SEL_TEAM_BTN) || t).textContent);
+
+  C98.isJapanese = s => /[\u3000-\u9fff\uff00-\uffef]/.test(s);
+
+  C98.isLatin = s =>
+    /^[\p{Script=Latin}\p{M}\p{N}\p{P}\p{Zs}]+$/u.test(s) &&
+    /\p{Script=Latin}/u.test(s);
+
+  C98.tipHide = () => {
+    clearTimeout(C98.tipTimer);
+    if (C98.tipElement) C98.tipElement.hidden = true;
+  };
+
+  C98.tipShow = (anchor, lines, delay = 400) => {
+    C98.tipHide();
+    C98.tipTimer = setTimeout(() => {
+      if (!anchor || !anchor.isConnected) return;
+
+      let tip = C98.tipElement;
+      if (!tip) {
+        tip = document.createElement('div');
+        tip.id = 'c98-tooltip';
+        tip.setAttribute('role', 'tooltip');
+        document.body.appendChild(tip);
+        C98.tipElement = tip;
+      }
+
+      tip.replaceChildren();
+      for (let i = 0; i < lines.length; i++) {
+        const line = document.createElement(i ? 'small' : 'div');
+        line.textContent = lines[i];
+        tip.appendChild(line);
+      }
+
+      tip.hidden = false;
+      const r = anchor.getBoundingClientRect();
+      const tr = tip.getBoundingClientRect();
+      const left = Math.max(8, Math.min(r.right + 10, innerWidth - tr.width - 8));
+      const top = Math.max(8, Math.min(r.top, innerHeight - tr.height - 8));
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+    }, delay);
+  };
+
+  /*
+   * 名前の文字は変更しない。
+   * 表示用のdata属性とCSSだけを付ける。
+   */
+  C98.tagName = (row, kind) => {
+    const text = nameEl(row) || textEl(row);
+    if (!text) {
+      C98.log('name-' + kind, '名前の要素が見つからない行は、文字の整形だけ休みます。');
+      return null;
+    }
+
+    const name = norm(text.textContent);
+    C98.attr(text, 'data-c98-name', kind);
+    C98.attr(text, 'data-c98-fullname', name);
+    C98.flag(text, 'data-c98-ja', C98.isJapanese(name));
+    C98.flag(text, 'data-c98-latin', C98.isLatin(name));
+
+    for (let p = text.parentElement; p && p !== row; p = p.parentElement)
+      C98.attr(p, 'data-c98-flow', '1');
+
+    const icon =
+      row.querySelector('.notion-record-icon') ||
+      row.querySelector('[role="img"]:not([data-c98-name])');
+
+    if (icon) {
+      C98.attr(icon, 'data-c98-icon', kind);
+      for (let p = icon.parentElement; p && p !== row; p = p.parentElement)
+        C98.attr(p, 'data-c98-flow', '1');
+    } else {
+      C98.log('icon-' + kind,
+        'Notionのアイコンを特定できない行は、アイコンの配置だけ休みます。代替アイコンは作りません。');
+    }
+
+    if (!C98.names.has(text)) {
+      C98.names.add(text);
+      text.addEventListener('pointerenter', () =>
+        C98.tipShow(text, [text.getAttribute('data-c98-fullname') || '']));
+      text.addEventListener('pointerleave', C98.tipHide);
+      text.addEventListener('focusin', () =>
+        C98.tipShow(text, [text.getAttribute('data-c98-fullname') || '']));
+      text.addEventListener('focusout', C98.tipHide);
+    }
+    return text;
+  };
+
+  C98.setFold = (team, folded, remember = true) => {
+    if (!team) return;
+    C98.flag(team, 'data-c98-fold', folded);
+    C98.folded.set(team, !!folded);
+    if (remember) {
+      C98.data.fold[C98.teamKey(team)] = !!folded;
+      C98.save();
+    }
+  };
+
+  /*
+   * Catalogus用のスキャン。
+   * MutationObserverから呼んでもレイアウトを読まない。
+   */
+  const c98OriginalScanTeam = scanTeam;
+  scanTeam = function(team) {
+    if (!nbOn()) return c98OriginalScanTeam(team);
+
+    const btn = team.querySelector(SEL_TEAM_BTN);
+    if (!btn) {
+      C98.log('team-button', 'チームスペースの行が見つからないため、そのチームの整形だけ休みます。');
+      return;
+    }
+
+    C98.attr(team, 'data-c33-team', '1');
+    C98.attr(team, 'data-c98-team', '1');
+    C98.attr(btn, 'data-c98-heading', '1');
+
+    /* 過去のスクリプト自身が付けた位置調整を解く。 */
+    for (const m of team.querySelectorAll('[data-c33-mv]')) {
+      m.style.removeProperty('margin-inline-start');
+      m.removeAttribute('data-c33-mv');
+    }
+
+    C98.tagName(btn, 'team');
+    for (const a of ['data-c33-n', 'data-neb-n', 'data-neb-more', 'data-neb-none'])
+      btn.removeAttribute(a);
+
+    const rows = rowsOf(team);
+    const dbHints = new Set();
+    let previous = null;
+
+    for (const r of rows) {
+      if (bulletSlot(r)) {
+        if (previous) dbHints.add(previous);
+      } else previous = r;
+    }
+
+    let index = 0;
+    let unresolved = false;
+
+    for (const r of rows) {
+      if (bulletSlot(r)) {
+        C98.attr(r, 'data-c33-kind', 'view');
+        continue;
+      }
+
+      const id = idOf(r);
+      const cache = id && C98.data.fresh[id];
+      const knownKey = C98.teamKey(team) + '|' + nameOf(r);
+      const isDb = cache && typeof cache.db === 'boolean'
+        ? cache.db
+        : dbHints.has(r) || !!KNOWN_DB[knownKey];
+
+      if (!cache || typeof cache.db !== 'boolean') unresolved = true;
+
+      C98.attr(r, 'data-c33-kind', isDb ? 'db' : 'page');
+      C98.flag(r, 'data-c98-pending', !cache || typeof cache.db !== 'boolean');
+
+      if (!isDb) continue;
+
+      C98.attr(r, 'data-c98-row', '1');
+      C98.attr(r, 'data-c98-id', id || '');
+      C98.attr(r, 'data-c98-bayer', C98.greek[index] || String(index + 1));
+      C98.var(r, '--c98-index', String(index));
+      C98.flag(r, 'data-c33-cur', !!id && curPage() === id.replace(/-/g, ''));
+      C98.tagName(r, 'db');
+
+      const age = cache && cache.at ? Date.now() - cache.at : null;
+      C98.attr(r, 'data-c98-mag',
+        age == null ? 'normal' :
+        age <= 86400000 ? 'fresh' :
+        age <= 604800000 ? 'normal' : 'old');
+
+      const owner = r.closest('[role="treeitem"]') || r.closest('a[href]') || r;
+      C98.attr(owner, 'data-c98-item', '1');
+      C98.var(owner, '--c98-index', String(index));
+      index++;
+      ST.rows++;
+      ST.dbs++;
+    }
+
+    const key = C98.teamKey(team);
+    const nativeClosed = btn.getAttribute('aria-expanded') === 'false';
+    const count = nativeClosed && !rows.length
+      ? C98.data.counts[key] ?? NBS.counts[key] ?? 0
+      : index;
+
+    if (!unresolved && !nativeClosed && C98.data.counts[key] !== count) {
+      C98.data.counts[key] = count;
+      C98.save();
+    }
+
+    const text = btn.querySelector('[data-c98-name="team"]');
+    if (text) C98.attr(text, 'data-c98-count', count);
+
+    C98.flag(team, 'data-c98-empty', !count && !unresolved && !nativeClosed);
+
+    if (!C98.folded.has(team)) {
+      const saved = C98.data.fold[key];
+      C98.setFold(team, typeof saved === 'boolean' ? saved : nativeClosed, false);
+    }
+
+    C98.queueFresh();
+  };
+
+  /*
+   * Notionの既存DOMは移動・削除・複製しない。
+   * 元のOrbitは、スクリプト自身のDOMなのでそのまま維持する。
+   */
+  const c98OriginalBuild = obBuild;
+  obBuild = function() {
+    const rail = c98OriginalBuild();
+    const footer = rail.querySelector('.ob-ft');
+    if (!footer) {
+      C98.log('footer', 'Orbitの下部が見つからないため、太陽の描画だけ休みます。');
+      return rail;
+    }
+
+    const sol = document.createElement('button');
+    sol.id = 'c98-sol';
+    sol.type = 'button';
+    sol.setAttribute('role', 'button');
+    sol.setAttribute('aria-haspopup', 'dialog');
+    sol.setAttribute('aria-expanded', 'false');
+
+    const mac = /Mac|iPhone|iPad/.test(navigator.platform || '');
+    sol.setAttribute('aria-label', 'B.U.R.Iに聞く（' + (mac ? '⌘K' : 'Ctrl+K') + '）');
+    sol.innerHTML =
+      '<i class="c98-corona" aria-hidden="true"></i>' +
+      '<span class="c98-sol-face" aria-hidden="true">' + FACE_SVG + '</span>';
+
+    sol.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (C98.openPanel) C98.openPanel();
+      else C98.log('panel-link', 'B.U.R.Iの準備が終わるまで、太陽は待機します。');
+    });
+
+    const tooltip = () => {
+      const lines = [
+        'B.U.R.Iに聞く ' + (mac ? '⌘K' : 'Ctrl+K'),
+        C98.fullName
+      ];
+      if (C98.status === 'error' && C98.error) lines.push(C98.error);
+      C98.tipShow(sol, lines);
+    };
+
+    sol.addEventListener('pointerenter', tooltip);
+    sol.addEventListener('pointerleave', C98.tipHide);
+    sol.addEventListener('focus', tooltip);
+    sol.addEventListener('blur', C98.tipHide);
+
+    footer.insertBefore(sol, footer.firstChild);
+    C98.sol = sol;
+
+    const setting = footer.querySelector('.ob-set');
+    if (setting) setting.setAttribute('title', 'Settings');
+
+    C98.paintSol();
+    return rail;
+  };
+
+  C98.paintSol = () => {
+    if (!C98.sol) return;
+    C98.attr(C98.sol, 'data-state', C98.status);
+    C98.flag(C98.sol, 'data-unread', C98.unread);
+  };
+
+  C98.state = (state, error = '') => {
+    C98.status = state;
+    C98.error = norm(error).slice(0, 180);
+    C98.paintSol();
+  };
+
+  C98.finish = (result, open) => {
+    const error = result && (
+      result._catalogusError ||
+      result.err ||
+      (result.mood === 'panic' ? result.text : '')
+    );
+
+    if (error) {
+      C98.state('error', error);
+      return;
+    }
+
+    C98.state('idle');
+    if (!open) {
+      C98.unread = true;
+      C98.paintSol();
+
+      const corona = C98.sol && C98.sol.querySelector('.c98-corona');
+      if (corona && !nbReduce()) {
+        corona.animate(
+          [{ opacity: .14 }, { opacity: .42 }, { opacity: .14 }],
+          { duration: 750, easing: 'ease-out' }
+        );
+      }
+    }
+  };
+
+  C98.opened = () => {
+    C98.unread = false;
+    C98.paintSol();
+    if (C98.sol) C98.sol.setAttribute('aria-expanded', 'true');
+    C98.tipHide();
+  };
+
+  /*
+   * 色の計算。RGB → HSLで、明度だけを変更する。
+   */
+  C98.paperColors = css => {
+    const nums = String(css).match(/[\d.]+/g);
+    if (!nums || nums.length < 3) return null;
+    const [r, g, b] = nums.slice(0, 3).map(v => Number(v) / 255);
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2, d = max - min;
+    let h = 0, s = 0;
+    if (d) {
+      s = d / (1 - Math.abs(2 * l - 1));
+      h = max === r ? ((g - b) / d) % 6 :
+          max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+      h = (h * 60 + 360) % 360;
+    }
+    const color = light =>
+      'hsl(' + h.toFixed(3) + ' ' + (s * 100).toFixed(3) + '% ' +
+      Math.max(0, Math.min(100, light)).toFixed(3) + '%)';
+    return {
+      deep: color(l * 100 - 3.5),
+      sun: color(l * 100 - 1.5)
+    };
+  };
+
+  C98.theme = side => {
+    if (!side) return;
+    const container = side.closest('.notion-sidebar-container') || side;
+    let node = container, paper = '';
+    while (node) {
+      const c = getComputedStyle(node).backgroundColor;
+      if (c && c !== 'transparent' && c !== 'rgba(0, 0, 0, 0)') {
+        paper = c;
+        break;
+      }
+      node = node.parentElement;
+    }
+
+    if (!paper) {
+      C98.log('paper', 'サイドバーの背景色を取得できないため、背景の調整だけ休みます。');
+      return;
+    }
+
+    const colors = C98.paperColors(paper);
+    if (!colors) return;
+
+    const root = document.documentElement;
+    C98.var(root, '--nb-paper', paper);
+    C98.var(root, '--nb-paper-deep', colors.deep);
+    C98.var(root, '--nb-sol-paper', colors.sun);
+    C98.var(root, '--nb-text', getComputedStyle(side).color);
+
+    if (!C98.font) {
+      const label = obEl && obEl.querySelector('.ob-it .ob-lb, .ob-all .ob-lb');
+      let font = label ? getComputedStyle(label).fontFamily : '';
+      if (!font || /sans-serif|system-ui|Inter|Arial/i.test(font)) {
+        font = '"EB Garamond", "Cormorant Garamond", Georgia, "Times New Roman"';
+      }
+      font = font.replace(/,\s*serif\s*$/i, '');
+      C98.font = font +
+        ', "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif';
+      C98.var(root, '--nb-serif', C98.font);
+    }
+  };
+
+  /*
+   * 子午線はスクロール内容の外側。
+   * 専用のスクリプト所有要素を1本だけ作る。
+   */
+  nbEnsure = function() {
+    const side = obSide();
+    const host = side && (side.closest('.notion-sidebar-container') || side);
+    if (!host) return;
+
+    if (!nbMer || !nbMer.isConnected || nbMer.parentElement !== host) {
+      if (nbMer) nbMer.remove(); // スクリプト所有の線のみ
+      nbMer = document.createElement('div');
+      nbMer.id = 'c33-neb-mer';
+      nbMer.setAttribute('aria-hidden', 'true');
+      nbMer.innerHTML = '<i class="nm-glow"></i>';
+      host.appendChild(nbMer);
+    }
+    C98.host = host;
+  };
+
+  nbSeg = function() {};
+
+  nbContact = function() {
+    if (!nbMer || !nbShow || !C98.host) return;
+
+    const candidates = OB.sel && obWheelEl
+      ? [...obWheelEl.querySelectorAll('.ob-it.sel')]
+      : [obAllEl];
+
+    const hostRect = C98.host.getBoundingClientRect();
+    let best = null, distance = Infinity;
+
+    for (const el of candidates) {
+      if (!el || el.style.display === 'none') continue;
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      const center = r.top + r.height / 2;
+      const d = Math.abs(center - (nbCy || center));
+      if (d < distance) {
+        best = center;
+        distance = d;
+      }
+    }
+
+    nbMer.toggleAttribute('data-off', best == null);
+    if (best != null) {
+      nbCy = best;
+      C98.var(nbMer, '--c98-contact', (best - hostRect.top) + 'px');
+    }
+  };
+
+  nbLayout = function() {
+    if (!nbOn()) {
+      if (nbMer) nbMer.hidden = true;
+      return;
+    }
+
+    const side = obSide();
+    if (!side || !obEl || !obEl.isConnected) return;
+
+    nbShow = obEl.style.display !== 'none' && obSidebarVisible(side);
+    nbEnsure();
+    if (!nbMer || !C98.host) return;
+    nbMer.hidden = !nbShow;
+    if (!nbShow) return;
+
+    const dpr = devicePixelRatio || 1;
+    const rail = obEl.getBoundingClientRect();
+    const host = C98.host.getBoundingClientRect();
+    nbMx = Math.round(rail.right * dpr) / dpr;
+
+    C98.var(nbMer, 'left', (nbMx - host.left) + 'px');
+
+    for (const team of side.querySelectorAll('[data-c98-team]')) {
+      const r = team.getBoundingClientRect();
+      if (r.width) C98.var(team, '--c98-gap', (r.left - nbMx - 1) + 'px');
+    }
+
+    C98.theme(side);
+    nbContact();
+    nbNarrowSync();
+
+    const sc = obScroller();
+    if (sc) {
+      C98.attr(sc, 'data-c98-scroller', '1');
+      C98.flag(sc, 'data-c98-bottom',
+        sc.scrollTop + sc.clientHeight < sc.scrollHeight - 2);
+      C98.var(C98.host, '--c98-fade-left', (nbMx - host.left + 1) + 'px');
+    }
+
+    C98.watch(side, sc);
+  };
+
+  nbOrbitMoved = function() {
+    if (!nbOn() || !nbShow) return;
+    nbContact(); // Orbitの既存アニメーションフレームから呼ばれる
+  };
+
+  nbBeforeSelect = function(prev, next) {
+    if (!nbOn() || !nbShow || prev === next || nbReduce()) return false;
+    document.documentElement.setAttribute('data-c98-out', '');
+    return true;
+  };
+
+  nbAfterSelect = function() {
+    const root = document.documentElement;
+    root.removeAttribute('data-c98-out');
+    root.setAttribute('data-c98-in', '');
+    nbHue(OB.sel);
+
+    C98.var(root, '--c98-hue', String(nbHueCur == null ? 190 : nbHueCur));
+
+    document.dispatchEvent(new CustomEvent('nebius:planet', {
+      detail: { id: OB.sel || '', dir: C98.dir, hue: nbHueCur }
+    }));
+
+    clearTimeout(C98.enterTimer);
+    C98.enterTimer = setTimeout(() => root.removeAttribute('data-c98-in'), 1600);
+    nbLayoutSoon();
+  };
+
+  const c98OriginalSelect = obSelect;
+  obSelect = function(gid) {
+    const ids = obItemEls.map(el => el.__gid);
+    const a = ids.indexOf(OB.sel), b = ids.indexOf(gid);
+    if (a >= 0 && b >= 0 && a !== b) {
+      let d = b - a;
+      if (Math.abs(d) > ids.length / 2)
+        d -= Math.sign(d) * ids.length;
+      C98.dir = Math.sign(d) || 1;
+    }
+    C98.var(document.documentElement, '--c98-dir', String(C98.dir));
+    return c98OriginalSelect(gid);
+  };
+
+  nbEmpty = function(side, teams) {
+    const needed = !!(OB.sel && !teams.length && nbShow);
+    if (!needed) {
+      if (nbEmptyEl) {
+        nbEmptyEl.remove(); // スクリプト所有の空状態だけ
+        nbEmptyEl = null;
+      }
+      return;
+    }
+
+    const root = side.querySelector('#c16-root');
+    if (!root) return;
+
+    if (!nbEmptyEl) {
+      nbEmptyEl = document.createElement('div');
+      nbEmptyEl.id = 'c33-neb-empty';
+      nbEmptyEl.textContent = 'まだ星座が記されていません';
+    }
+    if (!nbEmptyEl.isConnected) root.after(nbEmptyEl);
+  };
+
+  nbSync = function() {
+    if (!nbOn()) return;
+    const side = obSide();
+    if (!side) return;
+
+    if (nbHueCur == null) {
+      nbHue(OB.sel, true);
+      C98.var(document.documentElement, '--c98-hue', String(nbHueCur));
+    }
+
+    const teams = nbVisibleTeams(side);
+    let actual = null;
+
+    for (const team of teams) {
+      const r = team.querySelector('[data-c98-row][data-c33-cur]');
+      if (r) { actual = r; break; }
+    }
+
+    const remembered = OB.sel && NBS.last[OB.sel];
+    for (const team of side.querySelectorAll('[data-c98-team]')) {
+      for (const r of team.querySelectorAll('[data-c98-row]')) {
+        const id = (r.getAttribute('data-c98-id') || '').replace(/-/g, '');
+        const active = actual ? r === actual :
+          !!remembered && id === remembered && teams.includes(team);
+        C98.flag(r, 'data-c98-active', active);
+      }
+    }
+
+    if (actual && OB.sel) {
+      const id = (actual.getAttribute('data-c98-id') || '').replace(/-/g, '');
+      if (id && NBS.last[OB.sel] !== id) {
+        NBS.last[OB.sel] = id;
+        nbSave();
+      }
+    }
+
+    nbEmpty(side, teams);
+    nbMeteora(side); // Meteoraの既存実装は残す
+    C98.queueFresh();
+    nbLayoutSoon();
+  };
+
+  /*
+   * まとめて読むだけのAPI。
+   * legacyが失敗／不足したときだけMainへ。
+   */
+  C98.readBlocks = async ids => {
+    const records = new Map();
+    const headers = { 'Content-Type': 'application/json' };
+    const user = activeUser();
+    if (user) headers['x-notion-active-user-header'] = user;
+
+    for (const endpoint of ['syncRecordValues', 'syncRecordValuesMain']) {
+      const missing = ids.filter(id => !records.has(id));
+      if (!missing.length) break;
+
+      const requests = missing.map(id =>
+        endpoint === 'syncRecordValuesMain'
+          ? { pointer: { table: 'block', id }, version: -1 }
+          : { table: 'block', id, version: -1 });
+
+      try {
+        const response = await fetch(location.origin + '/api/v3/' + endpoint, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers,
+          body: JSON.stringify({ requests })
+        });
+
+        if (!response.ok) continue;
+        const json = await response.json();
+
+        const map = json && json.recordMap && json.recordMap.block || {};
+        for (const id of missing) {
+          const raw = map[id] || Object.entries(map).find(
+            ([key]) => key.replace(/-/g, '') === id.replace(/-/g, '')
+          )?.[1];
+          const value = raw && (
+            raw.value && raw.value.value ? raw.value.value : raw.value
+          );
+          if (value) records.set(id, value);
+        }
+      } catch (_) {}
+    }
+    return records;
+  };
+
+  C98.queueFresh = () => {
+    if (C98.queued || C98.net || !nbOn()) return;
+    C98.queued = true;
+
+    const job = async () => {
+      C98.queued = false;
+
+      if (document.hidden || Date.now() - C98.lastInput < 800) {
+        setTimeout(C98.queueFresh, 1000);
+        return;
+      }
+
+      const side = obSide();
+      if (!side) return;
+
+      const ids = [...new Set(
+        [...side.querySelectorAll(
+          '[data-c33-kind="db"], [data-c33-kind="page"]'
+        )].map(idOf).filter(Boolean)
+      )];
+
+      const now = Date.now();
+      const wanted = ids.filter(id =>
+        !C98.data.fresh[id] || now - C98.data.fresh[id].chk >= 300000
+      );
+
+      if (!wanted.length) return;
+      C98.net = true;
+
+      try {
+        const records = await C98.readBlocks(wanted);
+        const checked = Date.now();
+
+        for (const id of wanted) {
+          const block = records.get(id);
+          const old = C98.data.fresh[id] || {};
+          C98.data.fresh[id] = {
+            chk: checked,
+            at: block && Number(block.last_edited_time) || 0,
+            db: block ? block.type === 'collection_view_page' : old.db
+          };
+        }
+
+        if (records.size < wanted.length) {
+          C98.log('fresh-api',
+            '一部のDBの更新日時を取得できません。取得できない行は不透明度0.85で表示します。');
+        }
+
+        C98.save();
+        schedule(0);
+      } finally {
+        C98.net = false;
+      }
+    };
+
+    if (window.requestIdleCallback)
+      requestIdleCallback(job, { timeout: 2000 });
+    else setTimeout(job, 200);
+  };
+
+  C98.markLegacyEntries = side => {
+    if (!side) return;
+    for (const el of side.querySelectorAll('[role="button"], button')) {
+      if (el.closest(SEL_TEAM) || el.closest('#c33-orbit')) continue;
+      const text = norm(el.textContent);
+      if (/^(New chat|新しいチャット|新しい会話)(?:\s*[⌘Ctrl+O\s]*)?$/i.test(text))
+        C98.attr(el, 'data-c98-old-entry', '1');
+    }
+  };
+
+  C98.watch = (side, scroller) => {
+    if (C98.observer && C98.watchedSide !== side) {
+      C98.observer.disconnect();
+      C98.observer = null;
+    }
+
+    if (!C98.observer) {
+      C98.watchedSide = side;
+      C98.observer = new MutationObserver(records => {
+        const changed = records.some(record => {
+          if (record.target.closest &&
+              record.target.closest('#c33-orbit, #c33-meteora, #c33-neb-mer'))
+            return false;
+
+          if (record.type === 'childList') {
+            const nodes = [...record.addedNodes, ...record.removedNodes];
+            if (nodes.length && nodes.every(node =>
+              node.nodeType === 1 &&
+              /^c33-|^c98-/.test(node.id || '')
+            )) return false;
+          }
+          return true;
+        });
+
+        if (!changed) return;
+
+        /* 読むのはDOM属性と文字だけ。矩形・計算済みスタイルは読まない。 */
+        for (const team of side.querySelectorAll(SEL_TEAM))
+          scanTeam(team);
+        C98.markLegacyEntries(side);
+        nbSync();
+      });
+
+      C98.observer.observe(side, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ['aria-expanded', 'data-c16-g', 'data-block-id', 'href']
+      });
+
+      C98.markLegacyEntries(side);
+    }
+
+    if (!C98.resize && typeof ResizeObserver === 'function')
+      C98.resize = new ResizeObserver(nbLayoutSoon);
+
+    if (C98.resize) {
+      for (const node of [C98.host, obEl, scroller]) {
+        if (node && !C98.observed.has(node)) {
+          C98.observed.add(node);
+          C98.resize.observe(node);
+        }
+      }
+    }
+  };
+
+  /*
+   * 旧Stellaのクリック演出・光の粒・星空は登録しない。
+   * 細幅のホバーとピン留めは既存の関数を使う。
+   */
+  let c98Wired = false;
+  nbWire = function() {
+    if (c98Wired) return;
+    c98Wired = true;
+
+    document.addEventListener('input', () => {
+      C98.lastInput = Date.now();
+    }, true);
+
+    document.addEventListener('click', e => {
+      if (!nbOn() || e.button !== 0) return;
+      const btn = e.target.closest && e.target.closest('[data-c98-heading]');
+      if (!btn || e.target.closest('[role="button"]') !== btn) return;
+
+      const team = btn.closest('[data-c98-team]');
+      if (!team) return;
+
+      /* native側で未展開なら、そのクリックはNotionに任せて実物の行を描画させる。 */
+      if (!team.querySelector('[data-c98-row]') &&
+          btn.getAttribute('aria-expanded') === 'false') {
+        C98.setFold(team, false);
+        return;
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      C98.setFold(team, !team.hasAttribute('data-c98-fold'));
+      nbLayoutSoon();
+    }, true);
+
+    document.addEventListener('pointerover', e => {
+      if (!document.documentElement.hasAttribute('data-neb-narrow')) return;
+      const within = e.target.closest &&
+        e.target.closest('.notion-sidebar-container, #c33-neb-pinb');
+      nbPeekOn(!!within);
+    }, true);
+
+    document.addEventListener('keydown', e => {
+      if (e.isComposing || e.keyCode === 229 ||
+          e.target.isContentEditable ||
+          /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName || '')) return;
+
+      const row = e.target.closest && e.target.closest('[data-c98-row]');
+      const heading = e.target.closest && e.target.closest('[data-c98-heading]');
+      if (!row && !heading) return;
+
+      const team = (row || heading).closest('[data-c98-team]');
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        C98.setFold(team, e.key === 'ArrowLeft');
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        const side = obSide();
+        if (!side) return;
+        const all = [...side.querySelectorAll(
+          '[data-c98-heading], [data-c98-row]'
+        )].filter(el => {
+          const t = el.closest('[data-c98-team]');
+          return (!OB.sel || t.getAttribute('data-c16-g') === OB.sel) &&
+            (el.hasAttribute('data-c98-heading') ||
+             !t.hasAttribute('data-c98-fold'));
+        });
+
+        const index = all.indexOf(row || heading);
+        const target = all[index + (e.key === 'ArrowDown' ? 1 : -1)];
+        const focus = target && (
+          target.closest('a[href], [tabindex]') ||
+          target.querySelector('a[href], [tabindex]')
+        );
+
+        if (focus) {
+          e.preventDefault();
+          focus.focus({ preventScroll: true });
+          focus.scrollIntoView({ block: 'nearest' });
+        }
+      }
+    }, true);
+
+    new MutationObserver(() => nbLayoutSoon()).observe(
+      document.documentElement,
+      {
+        attributes: true,
+        attributeFilter: [
+          'class', 'data-neb-narrow', 'data-neb-peek',
+          'data-neb-pinned', 'data-atx-dark', 'data-c39-dark'
+        ]
+      }
+    );
+
+    if (document.body) {
+      new MutationObserver(() => nbLayoutSoon()).observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+
+    window.addEventListener('resize', nbLayoutSoon);
+    document.addEventListener('scroll', event => {
+      if (event.target === obScroller()) nbLayoutSoon();
+    }, true);
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        C98.queueFresh();
+        nbLayoutSoon();
+      }
+    });
+
+    setInterval(() => {
+      if (!document.hidden && nbOn()) {
+        C98.queueFresh();
+        nbLayoutSoon();
+      }
+    }, 300000);
+  };
+
+  /*
+   * 旧nbCssの代わりにCatalogusを描く。
+   * Orbitの配置・循環・アイコン・transformには手を加えない。
+   */
+  nbCss = function() {
+    document.documentElement.setAttribute('data-c98-catalogus', '');
+
+    let style = document.getElementById('c33-neb-css');
+    if (style) return;
+    style = document.createElement('style');
+    style.id = 'c33-neb-css';
+
+    const S = C98.scope;
+    const B = C98.strong;
+    const T = S + ' [data-c98-team]' + B;
+    const H = S + ' [data-c98-heading]' + B;
+    const R = S + ' [data-c98-row]' + B;
+    const N = S + '[data-neb-narrow]:not([data-neb-peek])';
+    const O = 'html[data-c98-catalogus] #c33-orbit' + B;
+
+    style.textContent = `
+@property --c98-h {
+  syntax: "<number>"; inherits: true; initial-value: 190;
+}
+html[data-c98-catalogus] {
+  --c98-h: var(--c98-hue, 190);
+  --c98-accent: oklch(62% .13 var(--c98-h));
+  --c98-ink: hsl(var(--c98-h) 38% 30%);
+  transition: --c98-h 1.2s ease;
+}
+${O} {
+  background: var(--nb-paper-deep, var(--c-bacSec)) !important;
+  border-inline-end: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--nb-serif) !important;
+}
+${O} .ob-it {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  opacity: 1 !important;
+}
+${O} .ob-it .ob-ic {
+  position: relative;
+  isolation: isolate;
+  opacity: .55 !important;
+  transition: opacity .2s ease;
+}
+${O} .ob-it .ob-lb {
+  font: 400 10.5px/1.3 var(--nb-serif) !important;
+  letter-spacing: .02em !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  opacity: .5 !important;
+  mask-image: linear-gradient(to right,#000 calc(100% - 6px),transparent);
+  -webkit-mask-image: linear-gradient(to right,#000 calc(100% - 6px),transparent);
+  transition: opacity .2s ease;
+}
+${O} .ob-it:hover .ob-ic,
+${O} .ob-it:hover .ob-lb { opacity: .85 !important; }
+${O} .ob-it.sel .ob-ic,
+${O} .ob-it.sel .ob-lb { opacity: 1 !important; }
+${O} .ob-it.sel .ob-lb { font-weight: 500 !important; }
+${O} .ob-it.sel .ob-ic::before {
+  content: ""; position: absolute; z-index: -1;
+  width: 56px; height: 56px; left: 50%; top: 50%;
+  transform: translate(-50%,-50%); border-radius: 50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb,var(--c98-accent) 18%,transparent),transparent 70%);
+  pointer-events: none;
+}
+${O} .ob-ct {
+  min-width: 0 !important; height: auto !important; padding: 0 !important;
+  background: none !important; box-shadow: none !important;
+  border: 0 !important; border-radius: 0 !important;
+  top: 4px !important; right: 6px !important;
+  font: 400 9px/1 var(--nb-serif) !important;
+  color: var(--nb-text, var(--c-texPri)) !important;
+  opacity: .6 !important;
+}
+${O} .ob-all .ob-lb { font-family: var(--nb-serif) !important; }
+${O} .ob-ft {
+  overflow: visible !important;
+  gap: 8px !important; padding: 12px 0 8px !important;
+  box-shadow: none !important;
+  border-top: 1px solid color-mix(in srgb,var(--nb-text,#333) 8%,transparent) !important;
+}
+${O} .ob-set {
+  display: flex !important; align-items: center !important;
+  justify-content: center !important;
+}
+${O} .ob-set .ob-lb { display: none !important; }
+
+html[data-c98-catalogus] #c98-sol {
+  position: relative; isolation: isolate;
+  display: flex; align-items: center; justify-content: center;
+  flex: none; align-self: center;
+  width: 40px; height: 40px; min-width: 40px;
+  margin: 0; padding: 0; border: 0; border-radius: 50%;
+  background: var(--nb-sol-paper);
+  color: var(--nb-text,var(--c-texPri));
+  cursor: pointer; overflow: visible;
+}
+#c98-sol .c98-corona {
+  position: absolute; z-index: -1;
+  left: -12px; top: -12px; width: 64px; height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle,var(--c98-accent),transparent 70%);
+  opacity: .14; pointer-events: none;
+  animation: c98Idle 4s ease-in-out infinite;
+}
+#c98-sol .c98-sol-face {
+  display: flex; align-items: center; justify-content: center;
+  width: 31px; transition: transform .15s ease;
+}
+#c98-sol .c98-sol-face svg { display: block; width: 31px; height: auto; fill: currentColor; }
+#c98-sol:hover .c98-sol-face { transform: scale(1.06); }
+#c98-sol:hover .c98-corona { opacity: .22; animation: none; }
+#c98-sol[data-state="busy"] .c98-corona {
+  animation: c98Busy 1.2s ease-in-out infinite;
+}
+#c98-sol[data-state="error"] .c98-corona {
+  background: radial-gradient(circle,#888,transparent 70%);
+  opacity: .16; animation: none;
+}
+#c98-sol[data-unread]::after {
+  content: ""; position: absolute;
+  right: 1px; top: 1px; width: 5px; height: 5px;
+  border-radius: 50%; background: var(--c98-accent);
+}
+#c98-sol:focus-visible { outline: 2px solid var(--c98-accent); outline-offset: 5px; }
+@keyframes c98Idle { 0%,100% {opacity:.10} 50% {opacity:.16} }
+@keyframes c98Busy { 0%,100% {opacity:.12} 50% {opacity:.28} }
+
+html[data-c98-catalogus] :is(
+  #c33-search-header, #c33-pill, #c33-neb-sky,
+  .c33-neb-pt, .c33-neb-sp
+) { display: none !important; }
+${S} [data-c98-old-entry] { display: none !important; }
+
+${S} .notion-sidebar-container {
+  --c33-item-font: var(--nb-serif);
+  --c33-item-size: 14.5px;
+  --c33-item-weight: 400;
+  --c33-item-track: .01em;
+  --c33-item-h: 30px;
+  --c33-item-color: var(--nb-text,var(--c-texPri));
+  --c33-icon-size: 18px;
+  --c33-icon-gap: 8px;
+  --c33-team-font: var(--nb-serif);
+  --c33-team-size: 12.5px;
+  --c33-team-weight: 600;
+  --c33-team-track: .18em;
+  --c33-team-case: uppercase;
+  --c33-cur-weight: 400;
+  --c33-cur-color: var(--nb-text,var(--c-texPri));
+  --c33-radius: 0px;
+  position: relative !important;
+}
+${S} [data-c98-scroller]${B} {
+  padding-block: 20px 32px !important;
+  scrollbar-width: none !important;
+  border-inline-start: 0 !important;
+  box-shadow: none !important;
+}
+${S} [data-c98-scroller]::-webkit-scrollbar {
+  display: none !important; width: 0 !important;
+}
+${T} {
+  position: relative !important; overflow: visible !important;
+  background: transparent !important; border: 0 !important;
+  border-radius: 0 !important; box-shadow: none !important;
+  margin-block: 0 26px !important;
+  opacity: 1 !important;
+}
+${T}::before { content: none !important; }
+${T}::after { content: none !important; }
+${T}[data-c98-empty]:not([data-c98-fold])::after {
+  content: "星はまだありません" !important;
+  display: block; margin: 8px 0 0 38px;
+  font: italic 12px/1.5 var(--nb-serif);
+  opacity: .45;
+}
+${H} {
+  position: relative !important;
+  height: 38px !important; min-height: 38px !important;
+  padding: 0 !important;
+  background: transparent !important; border: 0 !important;
+  box-shadow: none !important; overflow: visible !important;
+}
+${H}::before {
+  content: "" !important; position: absolute !important;
+  left: calc(-1 * var(--c98-gap,0px)); top: 16px;
+  width: 6px; height: 1px;
+  background: color-mix(in srgb,var(--nb-text,#333) 18%,transparent);
+  pointer-events: none;
+}
+${H}::after {
+  content: "" !important; position: absolute !important;
+  left: calc(-1 * var(--c98-gap,0px)); top: 32px !important;
+  width: calc((100% + var(--c98-gap,0px)) * .7) !important;
+  height: 1px !important;
+  background: linear-gradient(to right,
+    color-mix(in srgb,oklch(62% .055 var(--c98-h)) 35%,transparent),
+    transparent) !important;
+  border: 0 !important; box-shadow: none !important;
+  transform-origin: top; pointer-events: none;
+}
+${S} [data-c98-flow]${B} { position: static !important; }
+${H} [data-c98-icon="team"] {
+  position: absolute !important;
+  left: calc(12px - var(--c98-gap,0px)) !important; top: 7px !important;
+  width: 18px !important; height: 18px !important;
+  rotate: 0deg !important; scale: 1 !important;
+  animation: none !important;
+  transition: scale .15s ease !important;
+}
+${H} [data-c98-name="team"] {
+  position: absolute !important;
+  left: calc(38px - var(--c98-gap,0px)) !important;
+  top: 7px !important;
+  max-width: calc(100% - 44px + var(--c98-gap,0px)) !important;
+  font: 600 12.5px/18px var(--nb-serif) !important;
+  font-style: normal !important;
+  text-transform: uppercase !important; letter-spacing: .18em !important;
+  color: var(--nb-text,var(--c-texPri)) !important;
+  opacity: .85 !important;
+  white-space: nowrap !important; overflow: hidden !important;
+  text-overflow: clip !important;
+  mask-image: linear-gradient(to right,#000 calc(100% - 24px),transparent);
+  -webkit-mask-image: linear-gradient(to right,#000 calc(100% - 24px),transparent);
+}
+${H} [data-c98-name="team"][data-c98-ja] { letter-spacing: .12em !important; }
+${T}[data-c98-fold] [data-c98-name="team"]::after {
+  content: " " attr(data-c98-count);
+  margin-inline-start: 5px;
+  font: 400 11px/1 var(--nb-serif);
+  font-variant-numeric: oldstyle-nums;
+  letter-spacing: 0; opacity: .45;
+}
+${R} {
+  position: relative !important;
+  height: 30px !important; min-height: 30px !important;
+  padding: 0 !important; border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  background-image: none !important; box-shadow: none !important;
+  opacity: 1 !important; overflow: visible !important;
+  color: var(--nb-text,var(--c-texPri)) !important;
+}
+${R}::before {
+  content: "" !important; position: absolute !important;
+  left: calc(-1 * var(--c98-gap,0px)); top: 15px;
+  width: 3px; height: 1px;
+  background: color-mix(in srgb,var(--nb-text,#333) 18%,transparent);
+  border: 0 !important; box-shadow: none !important;
+  animation: none !important; pointer-events: none;
+}
+${R}::after {
+  content: attr(data-c98-bayer) !important;
+  position: absolute !important;
+  left: calc(20px - var(--c98-gap,0px)); top: 9px;
+  width: 14px; height: 14px;
+  text-align: right;
+  font: italic 10px/14px var(--nb-serif);
+  color: var(--nb-text,var(--c-texPri));
+  opacity: .4; background: none !important;
+  box-shadow: none !important; animation: none !important;
+  pointer-events: none;
+}
+${R} [data-c98-icon="db"] {
+  position: absolute !important;
+  left: calc(38px - var(--c98-gap,0px)) !important; top: 6px !important;
+  width: 18px !important; height: 18px !important;
+  rotate: 0deg !important; scale: 1 !important;
+  animation: none !important;
+  transition: scale .15s ease !important;
+}
+${R} [data-c98-name="db"] {
+  position: absolute !important;
+  left: calc(64px - var(--c98-gap,0px)) !important;
+  top: 5px !important;
+  max-width: calc(100% - 70px + var(--c98-gap,0px)) !important;
+  font: 400 14.5px/20px var(--nb-serif) !important;
+  font-style: normal !important;
+  letter-spacing: .01em !important; text-transform: none !important;
+  color: var(--nb-text,var(--c-texPri)) !important;
+  opacity: .85 !important;
+  white-space: nowrap !important; overflow: hidden !important;
+  text-overflow: clip !important;
+  mask-image: linear-gradient(to right,#000 calc(100% - 24px),transparent);
+  -webkit-mask-image: linear-gradient(to right,#000 calc(100% - 24px),transparent);
+  transition: transform .15s ease !important;
+}
+${R} [data-c98-name="db"][data-c98-latin] { font-style: italic !important; }
+${R}:hover [data-c98-name="db"] { transform: translateX(2px) !important; }
+${R}:hover [data-c98-icon="db"] { scale: 1.15 !important; }
+${H}:hover [data-c98-icon="team"] { scale: 1.15 !important; }
+${R}[data-c98-mag="fresh"] [data-c98-name="db"] { opacity: 1 !important; }
+${R}[data-c98-mag="old"] [data-c98-name="db"] { opacity: .55 !important; }
+${R}[data-c98-mag="fresh"] {
+  background-image: radial-gradient(circle,
+    color-mix(in srgb,var(--c98-accent) 8%,transparent),transparent 70%) !important;
+  background-size: 28px 28px !important;
+  background-position: calc(33px - var(--c98-gap,0px)) 1px !important;
+  background-repeat: no-repeat !important;
+}
+${R}[data-c98-active] {
+  background-image: radial-gradient(circle,
+    color-mix(in srgb,var(--c98-accent) 16%,transparent),transparent 70%) !important;
+  background-size: 28px 28px !important;
+  background-position: calc(33px - var(--c98-gap,0px)) 1px !important;
+  background-repeat: no-repeat !important;
+}
+${R}[data-c98-active]::before { width: 8px; background: var(--c98-accent); }
+${R}[data-c98-active]::after { color: var(--c98-accent); opacity: 1; }
+${R}[data-c98-active] [data-c98-name="db"] {
+  color: var(--c98-ink) !important; font-weight: 500 !important;
+}
+${S} [data-c98-item]${B} {
+  max-height: 30px; min-height: 0;
+  transition: max-height .2s ease, opacity .2s ease, transform .2s ease;
+}
+${T}[data-c98-fold] [data-c98-item]${B} {
+  max-height: 0 !important; min-height: 0 !important;
+  margin-block: 0 !important; padding-block: 0 !important;
+  opacity: 0 !important; overflow: hidden !important;
+  transform: translateY(-6px);
+  pointer-events: none !important;
+}
+${S} [data-c33-kind="view"]${B},
+${S} [data-c33-kind="page"]:not([data-c98-pending])${B} {
+  display: none !important;
+}
+${S}[data-c98-in] [data-c98-item] {
+  animation: c98RowIn .2s ease both;
+  animation-delay: calc(min(var(--c98-index,0),40) * 30ms);
+}
+${S}[data-c98-out] [data-c98-team] {
+  transform: translateY(calc(var(--c98-dir,1) * 12px));
+  opacity: 0 !important;
+  transition: transform .15s ease, opacity .15s ease;
+}
+@keyframes c98RowIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--c98-dir,1) * -12px));
+  }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+${S} .notion-sidebar-container * { text-overflow: clip !important; }
+html[data-c98-catalogus] #c33-neb-mer {
+  position: absolute !important;
+  top: 0 !important; bottom: 0 !important; height: 100% !important;
+  width: 1px !important;
+  background: color-mix(in srgb,var(--nb-text,#333) 13%,transparent);
+  pointer-events: none; z-index: 8;
+  box-shadow: none !important; border: 0 !important;
+}
+#c33-neb-mer .nm-glow {
+  position: absolute; left: 0;
+  top: calc(var(--c98-contact,0px) - 20px);
+  width: 1px; height: 40px;
+  background: linear-gradient(transparent,var(--c98-accent),transparent);
+  transition: top .3s ease;
+}
+#c33-neb-mer[data-off] .nm-glow { opacity: 0; }
+${S} .notion-sidebar-container:has([data-c98-bottom])::after {
+  content: ""; position: absolute;
+  left: var(--c98-fade-left,0px); right: 0; bottom: 0;
+  height: 24px; z-index: 9; pointer-events: none;
+  background: linear-gradient(transparent,var(--nb-paper));
+}
+#c33-neb-empty {
+  padding: 32px 12px;
+  text-align: center;
+  font: italic 13px/1.7 var(--nb-serif);
+  color: var(--nb-text,var(--c-texPri));
+  opacity: .45;
+}
+
+${N} .notion-sidebar-container${B} {
+  width: calc(var(--c33-rail-w,88px) + 52px) !important;
+  min-width: 0 !important;
+  transition: width .25s ease !important;
+}
+${N} [data-c98-heading]${B} {
+  height: 0 !important; min-height: 0 !important; overflow: hidden !important;
+}
+${N} [data-c98-team]${B} { margin-bottom: 8px !important; }
+${N} [data-c98-name]${B} { visibility: hidden !important; }
+${N} [data-c98-row]${B}::after { content: none !important; }
+${N} [data-c98-team]${B}::after { content: none !important; }
+${N} [data-c98-icon="db"]${B} {
+  left: calc(17px - var(--c98-gap,0px)) !important;
+}
+${S}[data-neb-narrow][data-neb-peek] .notion-sidebar-container${B} {
+  width: calc(var(--c33-rail-w,88px) + 52px) !important;
+  overflow: visible !important; z-index: 5 !important;
+}
+${S}[data-neb-narrow][data-neb-peek] .notion-sidebar${B} {
+  width: var(--neb-full-w,280px) !important;
+  min-width: var(--neb-full-w,280px) !important;
+  background: var(--nb-paper) !important;
+  box-shadow: 14px 0 30px -12px rgba(15,15,15,.22) !important;
+}
+#c33-neb-pinb {
+  position: fixed; z-index: 30;
+  width: 30px; height: 30px;
+  border: 0; border-radius: 7px;
+  background: var(--nb-paper);
+  color: var(--nb-text,var(--c-texPri));
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+#c33-neb-pinb[hidden] { display: none !important; }
+
+#c98-tooltip {
+  position: fixed; z-index: 2147483600;
+  max-width: min(420px,calc(100vw - 16px));
+  padding: 9px 12px; border-radius: 8px;
+  background: var(--nb-paper,#f7f5f0);
+  color: var(--nb-text,#34312c);
+  box-shadow: 0 5px 22px rgba(0,0,0,.12);
+  font: 13px/1.5 var(--nb-serif,Georgia,serif);
+  pointer-events: none; overflow-wrap: anywhere;
+}
+#c98-tooltip small {
+  display: block; margin-top: 3px;
+  font: 10px/1.4 system-ui,sans-serif; opacity: .65;
+}
+#c98-tooltip[hidden] { display: none !important; }
+html[data-c98-catalogus] .b-face {
+  font-family: "SF Mono",Menlo,Consolas,monospace !important;
+}
+@media (min-resolution: 2dppx) {
+  ${H}::after { transform: scaleY(.5) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #c98-sol .c98-corona { animation: none !important; }
+  ${T}, ${R}, ${S} [data-c98-item], #c33-neb-mer .nm-glow {
+    animation: none !important; transition: none !important;
+    transform: none !important;
+  }
+}
+`;
+    (document.head || document.documentElement).appendChild(style);
+  };
+
+  /*
+   * 幕を開く前に、太陽とB.U.R.Iの連絡を準備する。
+   */
+  const c98OriginalReadyCheck = readyCheck;
+  readyCheck = function() {
+    if (OB.on && (
+      !C98.linked || !C98.sol || !C98.sol.isConnected
+    )) return;
+    return c98OriginalReadyCheck();
+  };
+
+
+  
+
+  /* C99 PAPER CATALOGUS */
+
+  const de99 = document.documentElement;
+  const seen99 = new Set();
+
+  function log99(key, message) {
+    if (seen99.has(key)) return;
+    seen99.add(key);
+    console.info('[³³ Paper Catalogus]', message);
+  }
+
+  function attr99(el, key, value) {
+    if (el && el.getAttribute(key) !== value)
+      el.setAttribute(key, value);
+  }
+
+  function flag99(el, key, on) {
+    if (el && el.hasAttribute(key) !== !!on)
+      el.toggleAttribute(key, !!on);
+  }
+
+  function var99(el, key, value) {
+    if (el && el.style.getPropertyValue(key) !== value)
+      el.style.setProperty(key, value);
+  }
+
+  const fallback99 =
+    '"EB Garamond","Cormorant Garamond",Georgia,"Times New Roman",' +
+    '"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif';
+
+  /*
+   * 元のOrbitの計測用書体を優先。
+   * 前回のCSSで上書きされた計算済み書体を再採用しない。
+   */
+  const serif99 =
+    typeof obLabelFont === 'string' && obLabelFont.trim()
+      ? obLabelFont + ',"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif'
+      : fallback99;
+
+  function font99() {
+    var99(de99, '--c99-serif', serif99);
+    var99(de99, '--nb-serif', serif99);
+  }
+
+  const theme98For99 = C98.theme;
+  C98.theme = function(...args) {
+    const result = theme98For99.apply(this, args);
+    font99();
+    return result;
+  };
+
+  /*
+   * Native DOMは移動・複製しない。
+   * アイコンと名前の共通祖先、およびその枝に属性だけを付ける。
+   * 構造が異なる行は、その配置補助だけ停止する。
+   */
+  function pair99(row) {
+    const name = row.querySelector('[data-c98-name]');
+    const icon = row.querySelector('[data-c98-icon]');
+    if (!name || !icon) {
+      log99('pair',
+        'アイコンと名前を特定できない行は、横並びの補助だけ休みます。');
+      return;
+    }
+
+    let common = name.parentElement;
+    while (common && common !== row && !common.contains(icon))
+      common = common.parentElement;
+
+    if (!common || !common.contains(icon) ||
+        name.contains(icon) || icon.contains(name)) {
+      log99('pair-structure',
+        '共通祖先を安全に特定できない行は、配置を変更しません。');
+      return;
+    }
+
+    function branch(el) {
+      let p = el;
+      while (p.parentElement && p.parentElement !== common)
+        p = p.parentElement;
+      return p.parentElement === common ? p : null;
+    }
+
+    const textBranch = branch(name);
+    const iconBranch = branch(icon);
+    if (!textBranch || !iconBranch || textBranch === iconBranch)
+      return;
+
+    attr99(common, 'data-c99-pair', '1');
+    attr99(textBranch, 'data-c99-textlane', '1');
+    attr99(iconBranch, 'data-c99-iconlane', '1');
+
+    /*
+     * 固定高の中間祖先が名前の折り返しを切らないようにする。
+     * アイコンを含む共通祖先には付けない。
+     */
+    for (let p = name.parentElement;
+         p && p !== common;
+         p = p.parentElement)
+      attr99(p, 'data-c99-textpath', '1');
+  }
+
+  const scan98For99 = scanTeam;
+  scanTeam = function(team) {
+    const result = scan98For99(team);
+
+    if (!nbOn() || !team || !team.isConnected) return result;
+
+    const heading = team.querySelector('[data-c98-heading]');
+    if (heading) pair99(heading);
+
+    for (const row of team.querySelectorAll('[data-c98-row]'))
+      pair99(row);
+
+    return result;
+  };
+
+  /*
+   * Orbitの表示をNative sidebarの開閉から分離。
+   * 個々の惑星のdisplay・transformは既存obLayに任せる。
+   */
+  function railState99(shown) {
+    if (!obEl) return;
+
+    obSidebarShown = shown;
+    flag99(de99, 'data-c99-orbit-visible', shown);
+
+    if (shown) {
+      obEl.style.removeProperty('display');
+      obEl.style.removeProperty('pointer-events');
+      obEl.removeAttribute('aria-hidden');
+      obEl.removeAttribute('inert');
+    } else {
+      obEl.style.setProperty('display', 'none', 'important');
+      obEl.style.setProperty('pointer-events', 'none', 'important');
+      attr99(obEl, 'aria-hidden', 'true');
+      flag99(obEl, 'inert', true);
+    }
+  }
+
+  function safeMain99(fallback) {
+    const railWidth = Math.max(1, Number(obRailW) || 88);
+
+    var99(de99, '--c99-rail-width', railWidth + 'px');
+
+    const old = document.querySelectorAll('[data-c99-safe-main]');
+    if (!fallback) {
+      old.forEach(el => el.removeAttribute('data-c99-safe-main'));
+      return;
+    }
+
+    const frame = document.querySelector('.notion-frame');
+    old.forEach(el => {
+      if (el !== frame) el.removeAttribute('data-c99-safe-main');
+    });
+
+    if (!frame) {
+      log99('main',
+        '本文領域を特定できないため、閉じたサイドバー時の本文余白補助だけ休みます。');
+      return;
+    }
+
+    const rect = frame.getBoundingClientRect();
+    flag99(frame, 'data-c99-safe-main',
+      rect.width > railWidth && rect.left < railWidth);
+  }
+
+  const anchor98For99 = obAnchor;
+  obAnchor = function() {
+    if (!obEl || !OB.on) {
+      safeMain99(false);
+      return;
+    }
+
+    const side = obSide();
+    const nativeShown = obSidebarVisible(side);
+
+    if (nativeShown) {
+      flag99(de99, 'data-c99-rail-fallback', false);
+      anchor98For99();
+      safeMain99(false);
+      return;
+    }
+
+    flag99(de99, 'data-c99-rail-fallback', true);
+
+    const width = Math.max(1, Number(obRailW) || 88);
+    const values = {
+      left: '0px',
+      top: '0px',
+      height: window.innerHeight + 'px',
+      width: width + 'px'
+    };
+
+    for (const [key, value] of Object.entries(values)) {
+      if (obEl.style.getPropertyValue(key) !== value)
+        obEl.style.setProperty(key, value, 'important');
+    }
+
+    safeMain99(true);
+  };
+
+  obSyncSidebar = function() {
+    if (!obEl) return false;
+
+    const shown = !!OB.on;
+    const changed = obSidebarShown !== shown;
+
+    railState99(shown);
+
+    if (shown) {
+      obAnchor();
+      if (changed) obLay();
+    } else {
+      safeMain99(false);
+      obPopClose();
+    }
+
+    if (changed && layoutNow) layoutNow();
+    return shown;
+  };
+
+  /*
+   * 初回はOrbitをオンで起動。
+   * 既存の明示的なoff/toggle APIは変更しない。
+   */
+  OB.on = true;
+
+  const css98For99 = nbCss;
+  nbCss = function() {
+    css98For99();
+
+    attr99(de99, 'data-c99-redesign', 'paper');
+    font99();
+
+    if (document.getElementById('c99-paper-css')) return;
+
+    const style = document.createElement('style');
+    style.id = 'c99-paper-css';
+
+    /*
+     * RC1は :not(#...) で高い詳細度を使っている。
+     * それより高い詳細度で、意図した項目だけを上書き。
+     */
+    const W =
+      'html[data-c99-redesign]' +
+      C98.strong +
+      ':not(#c99specific1):not(#c99specific2)';
+
+    const O = W + ' #c33-orbit';
+    const S = W + ' .notion-sidebar-container';
+    const R = S + ' [data-c98-row]';
+    const H = S + ' [data-c98-heading]';
+    const T = S + ' [data-c98-team]';
+    const M = W + ' #c33-meteora';
+
+    style.textContent = `
+${O} {
+  font-family: var(--c99-serif) !important;
+  background: var(--nb-paper-deep,var(--c-bacSec,#eeeae4)) !important;
+}
+${W}[data-c99-orbit-visible] #c33-orbit {
+  display: flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+${W} [data-c99-safe-main] {
+  box-sizing: border-box !important;
+  padding-inline-start: var(--c99-rail-width,88px) !important;
+}
+
+/* Orbit: 配置・循環用transformには触れない */
+${O} .ob-it {
+  opacity: 1 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+${O} .ob-it .ob-ic {
+  color: var(--ob-tint,var(--nb-text,#554d42)) !important;
+  opacity: .82 !important;
+}
+${O} .ob-it.empty .ob-ic { opacity: .65 !important; }
+${O} .ob-it .ob-lb {
+  font: 500 var(--ob-fs,9.5px)/1.18 var(--c99-serif) !important;
+  letter-spacing: 0 !important;
+  color: var(--nb-text,var(--c-texPri,#37352f)) !important;
+  opacity: .8 !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+${O} .ob-it .ob-lb[data-fit="2"] {
+  white-space: normal !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow-wrap: anywhere !important;
+  line-height: 1.08 !important;
+}
+${O} .ob-it:hover .ob-ic,
+${O} .ob-it:hover .ob-lb,
+${O} .ob-it.sel .ob-ic,
+${O} .ob-it.sel .ob-lb {
+  opacity: 1 !important;
+}
+${O} .ob-it.sel .ob-lb { font-weight: 500 !important; }
+
+/* マスクされたアイコンの中ではなく、その後ろで光らせる */
+${O} .ob-it .ob-ic::before { content: none !important; }
+${O} .ob-it.sel::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 3px !important;
+  width: 56px !important;
+  height: 56px !important;
+  transform: translateX(-50%) !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  background: radial-gradient(circle,
+    color-mix(in srgb,var(--ob-tint,#a88649) 18%,transparent),
+    transparent 72%) !important;
+  pointer-events: none !important;
+}
+${O} .ob-ic,
+${O} .ob-lb { position: relative; }
+${O} .ob-ft {
+  gap: 6px !important;
+  padding: 9px 0 8px !important;
+  background: transparent !important;
+}
+
+/* Sol: 浮いた丸い台座をやめ、紙面の小さな印に */
+${W} #c98-sol {
+  width: 40px !important;
+  height: 32px !important;
+  min-width: 40px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: var(--nb-text,var(--c-texPri,#514a40)) !important;
+}
+${W} #c98-sol .c98-sol-face,
+${W} #c98-sol .c98-sol-face svg {
+  width: 30px !important;
+}
+${W} #c98-sol .c98-sol-face {
+  opacity: .76 !important;
+  transition: opacity .18s ease, transform .18s ease !important;
+}
+${W} #c98-sol .c98-corona {
+  left: -4px !important;
+  top: -8px !important;
+  width: 48px !important;
+  height: 48px !important;
+  background: radial-gradient(circle,
+    color-mix(in srgb,#b69a62 18%,transparent),
+    transparent 72%) !important;
+  opacity: 0 !important;
+  animation: none !important;
+  transition: opacity .2s ease !important;
+}
+${W} #c98-sol:hover .c98-sol-face {
+  opacity: 1 !important;
+  transform: translateY(-1px) !important;
+}
+${W} #c98-sol:hover .c98-corona { opacity: 1 !important; }
+${W} #c98-sol[data-state="busy"] .c98-corona {
+  opacity: .7 !important;
+  animation: c99SolarWork 1.6s ease-in-out infinite !important;
+}
+${W} #c98-sol[data-state="error"] .c98-corona {
+  opacity: .25 !important;
+  animation: none !important;
+}
+${W} #c98-sol[data-unread]::after {
+  right: 4px !important;
+  top: 3px !important;
+  width: 3px !important;
+  height: 3px !important;
+  background: #ad8d52 !important;
+}
+@keyframes c99SolarWork {
+  0%,100% { opacity: .3; }
+  50% { opacity: .85; }
+}
+
+/* Stella: カードではなく、余白と細線で読む星表 */
+${S} {
+  --c33-item-font: var(--c99-serif);
+  --c33-team-font: var(--c99-serif);
+  --c33-item-size: 14px;
+  --c33-team-size: 13px;
+  --c33-team-track: .045em;
+  --c33-item-track: 0em;
+}
+${S} [data-c98-scroller] {
+  padding-block: 22px 28px !important;
+}
+${T} {
+  margin-block: 0 23px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+${H} {
+  height: auto !important;
+  min-height: 36px !important;
+  padding: 7px 12px 11px !important;
+  box-sizing: border-box !important;
+}
+${H}::before { content: none !important; }
+${H}::after {
+  left: 12px !important;
+  right: 12px !important;
+  top: auto !important;
+  bottom: 0 !important;
+  width: auto !important;
+  height: 1px !important;
+  transform: none !important;
+  background: linear-gradient(to right,
+    color-mix(in srgb,var(--nb-text,#37352f) 15%,transparent),
+    transparent 92%) !important;
+}
+${R} {
+  height: auto !important;
+  min-height: 34px !important;
+  padding: 7px 12px 7px 27px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+${R}::before {
+  left: 3px !important;
+  top: 17px !important;
+}
+${R}::after {
+  left: 7px !important;
+  top: 10px !important;
+  width: 13px !important;
+  font: italic 11px/16px var(--c99-serif) !important;
+  opacity: .48 !important;
+}
+${S} [data-c98-item] {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+}
+${T}[data-c98-fold] [data-c98-item] {
+  display: none !important;
+}
+
+/* RC1の絶対位置を解除し、Nativeの枝を横並びにする */
+${S} [data-c98-flow] { position: static !important; }
+${S} [data-c99-pair] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  box-sizing: border-box !important;
+}
+${S} [data-c99-textlane] {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+${S} [data-c99-iconlane] {
+  flex: 0 0 auto !important;
+}
+${S} [data-c99-textpath] {
+  height: auto !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+${S} [data-c98-name] {
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  transform: none !important;
+  color: var(--nb-text,var(--c-texPri,#37352f)) !important;
+}
+${H} [data-c98-name="team"] {
+  font: 500 13px/1.45 var(--c99-serif) !important;
+  font-style: normal !important;
+  letter-spacing: .045em !important;
+  text-transform: none !important;
+  opacity: .92 !important;
+}
+${H} [data-c98-name="team"][data-c98-ja] {
+  letter-spacing: .035em !important;
+}
+${R} [data-c98-name="db"] {
+  font: 400 14px/1.5 var(--c99-serif) !important;
+  font-style: normal !important;
+  letter-spacing: 0 !important;
+  opacity: .88 !important;
+}
+${R} [data-c98-name="db"][data-c98-latin] {
+  font-style: italic !important;
+}
+${R} [data-c98-name="db"][data-c98-ja] {
+  font-style: normal !important;
+  font-synthesis: none !important;
+}
+${R}[data-c98-mag="old"] [data-c98-name="db"] {
+  opacity: .7 !important;
+}
+${R}[data-c98-mag="fresh"] [data-c98-name="db"],
+${R}:hover [data-c98-name="db"],
+${R}[data-c98-active] [data-c98-name="db"] {
+  opacity: 1 !important;
+}
+${R}[data-c98-active] [data-c98-name="db"] {
+  font-weight: 500 !important;
+  color: var(--c98-ink,var(--nb-text)) !important;
+}
+${S} [data-c98-icon] {
+  position: static !important;
+  inset: auto !important;
+  rotate: 0deg !important;
+  scale: 1 !important;
+}
+${R}:hover [data-c98-icon="db"],
+${H}:hover [data-c98-icon="team"] {
+  scale: 1.15 !important;
+}
+
+/* 空状態にも和文の合成イタリックを使わない */
+${W} #c33-neb-empty {
+  margin: 14px 12px 24px !important;
+  padding: 12px 0 !important;
+  text-align: left !important;
+  font: 400 12px/1.8 var(--c99-serif) !important;
+  font-style: normal !important;
+  opacity: .6 !important;
+}
+${T}[data-c98-empty]:not([data-c98-fold])::after {
+  margin: 9px 12px 0 38px !important;
+  font: 400 12px/1.7 var(--c99-serif) !important;
+  font-style: normal !important;
+}
+
+/* Meteora: 前回欠けていた一覧用レイアウトを明示 */
+${M} {
+  margin: 20px 0 24px !important;
+  padding: 0 12px !important;
+  font-family: var(--c99-serif) !important;
+}
+${M} .mt-h {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 9px !important;
+  min-height: 28px !important;
+  margin-bottom: 5px !important;
+}
+${M} .mt-h i {
+  font: italic 400 14px/1.4 var(--c99-serif) !important;
+  color: var(--nb-text,var(--c-texPri)) !important;
+}
+${M} .mt-h small {
+  font: 400 9px/1.4 var(--c99-serif) !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  opacity: .55 !important;
+}
+${M} .mt-r {
+  display: grid !important;
+  grid-template-columns: 18px minmax(0,1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: auto !important;
+  min-height: 32px !important;
+  padding: 5px 0 !important;
+  box-sizing: border-box !important;
+  color: var(--nb-text,var(--c-texPri)) !important;
+  cursor: pointer;
+}
+${M} .mt-g { display: none !important; }
+${M} .mt-i {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+${M} .mt-i .notion-record-icon {
+  margin: 0 !important;
+}
+${M} .mt-n {
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  overflow: visible !important;
+  font: 400 13px/1.5 var(--c99-serif) !important;
+}
+${M} .mt-t {
+  white-space: nowrap !important;
+  font: 400 10px/1.4 var(--c99-serif) !important;
+  font-variant-numeric: tabular-nums;
+  opacity: .52 !important;
+}
+${M} .mt-r:hover {
+  background: linear-gradient(to right,
+    color-mix(in srgb,var(--nb-text,#37352f) 4%,transparent),
+    transparent) !important;
+}
+
+/* ⁴¹の細幅状態: ここだけはアイコン列 */
+${W}[data-neb-narrow]:not([data-neb-peek]) [data-c98-row] {
+  padding: 7px 8px !important;
+}
+${W}[data-neb-narrow]:not([data-neb-peek]) [data-c98-heading] {
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+${W}[data-neb-narrow]:not([data-neb-peek]) [data-c98-name],
+${W}[data-neb-narrow]:not([data-neb-peek]) [data-c99-textlane] {
+  display: none !important;
+}
+${W}[data-neb-narrow]:not([data-neb-peek]) [data-c99-pair] {
+  justify-content: center !important;
+}
+${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora {
+  padding-inline: 8px !important;
+}
+${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-h,
+${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-n,
+${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-t {
+  display: none !important;
+}
+${W}[data-neb-narrow]:not([data-neb-peek]) #c33-meteora .mt-r {
+  grid-template-columns: 18px !important;
+  justify-content: center !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  ${W} #c98-sol .c98-corona {
+    animation: none !important;
+  }
+}
+`;
+
+    (document.head || de99).appendChild(style);
+  };
+
+  /*
+   * ブラウザーの表示領域変更時も、Nativeの開閉と独立して追従。
+   * 通常の更新監視は既存³³の仕組みを使い、見回りを増やさない。
+   */
+  window.addEventListener('resize', () => {
+    if (!OB.on || !obEl) return;
+    obSyncSidebar();
+    obLay();
+  }, { passive: true });
+
+
+  
+
+  
+  /* C101 CELESTIAL CATALOGUS */
+
+  const SOL101 = '__c101_sol__';
+  const de101 = document.documentElement;
+  const logged101 = new Set();
+  const reservations101 = new Map();
+
+  let card101 = null;
+  let anchor101 = null;
+  let current101 = '';
+  let pinned101 = false;
+  let hoverTimer101 = 0;
+  let closeTimer101 = 0;
+  let layoutRAF101 = 0;
+  let scanRAF101 = 0;
+  let userSelection101 = null;
+  let faceSVG101 = '';
+  let signature101 = '';
+
+  const celestialSVG101 =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+    '<g fill="white">' +
+    '<circle cx="11.2" cy="12.5" r="4.15"/>' +
+    '<path d="M19.1 1.4l1.05 2.9 2.9 1.05-2.9 1.05-1.05 2.9' +
+    '-1.05-2.9-2.9-1.05 2.9-1.05z"/>' +
+    '</g>' +
+    '<g fill="none" stroke="white" stroke-width="1.35">' +
+    '<ellipse cx="11.2" cy="12.5" rx="10.1" ry="4.9"' +
+    ' transform="rotate(-34 11.2 12.5)"/>' +
+    '</g></svg>';
+
+  const solMask101 =
+    'url("data:image/svg+xml,' +
+    encodeURIComponent(celestialSVG101) + '")';
+
+  function log101(key, message) {
+    if (logged101.has(key)) return;
+    logged101.add(key);
+    console.info('[³³ Celestial Catalogus]', message);
+  }
+
+  function node101(tag, className, text) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function target101(event) {
+    return event.target instanceof Element ? event.target : null;
+  }
+
+  function id101(value) {
+    const match = String(value || '').match(
+      /[a-f0-9]{8}-?[a-f0-9]{4}-?[a-f0-9]{4}-?[a-f0-9]{4}-?[a-f0-9]{12}/i
+    );
+    return match ? match[0].replace(/-/g, '').toLowerCase() : '';
+  }
+
+  function group101(gid) {
+    if (gid === SOL101)
+      return { gid, label: 'Sol', tint: '#b19762' };
+
+    if (!gid)
+      return { gid: '', label: 'All', tint: '#8c857b' };
+
+    try {
+      return obGroups().find(g => g.gid === gid) ||
+        { gid, label: 'Catalogus', tint: '#8c857b' };
+    } catch (error) {
+      log101('group', '惑星情報の取得を休みます。');
+      return { gid, label: 'Catalogus', tint: '#8c857b' };
+    }
+  }
+
+  /*
+   * Solをデータ列の末尾へ追加。
+   * 既存の惑星順・循環計算・wheel処理は変更しない。
+   */
+  const groupsBefore101 = obGroups;
+  obGroups = function() {
+    const groups = groupsBefore101();
+    if (!groups.length) return groups;
+
+    return groups.concat({
+      gid: SOL101,
+      label: 'Sol',
+      cnt: '',
+      txt: '',
+      mask: solMask101,
+      bgi: 'none',
+      tint: '#b19762'
+    });
+  };
+
+  /*
+   * RC1が作るSolボタンを、回転列のSolスロットへ移す。
+   * 動かすのは³³自身のDOMだけ。
+   * C98.solは実体のボタンを保持し、準備判定も維持。
+   */
+  function integrateSol101() {
+    if (!obWheelEl || !C98.sol) return;
+
+    const index = obItemEls.findIndex(el => el.__gid === SOL101);
+    if (index < 0) return;
+
+    const slot = obItemEls[index];
+    const primary = C98.sol;
+
+    if (!primary.hasAttribute('data-c101-sol')) {
+      const oldFace = primary.querySelector('.c98-sol-face svg');
+      if (oldFace) faceSVG101 = oldFace.outerHTML;
+
+      primary.replaceChildren();
+      primary.className = 'ob-it c101-sol';
+      primary.__gid = SOL101;
+
+      primary.setAttribute('data-c33-gid', SOL101);
+      primary.setAttribute('data-c101-sol', '');
+      primary.setAttribute('aria-label', 'Sol — B.U.R.Iを開く');
+      primary.setAttribute('aria-haspopup', 'dialog');
+      primary.removeAttribute('title');
+      primary.style.setProperty('--ob-tint', '#b19762');
+
+      const icon = node101('div', 'ob-ic');
+      obIcPaint(icon, {
+        label: 'Sol',
+        mask: solMask101,
+        bgi: 'none',
+        txt: ''
+      });
+
+      const label = node101('div', 'ob-lb', 'Sol');
+      obFitLabel(primary, label, 'Sol');
+      primary.append(icon, label);
+
+      primary.addEventListener('click', () => {
+        const position = obItemEls.findIndex(
+          el => el.__gid === SOL101
+        );
+        if (position >= 0) obJump(position);
+        closeCard101();
+      }, true);
+    }
+
+    if (slot !== primary) {
+      slot.replaceWith(primary);
+      obItemEls[index] = primary;
+
+      for (const copy of obCopies) copy.remove();
+      obCopies = [];
+    }
+
+    primary.classList.remove('empty');
+  }
+
+  const buildBefore101 = obBuild;
+  obBuild = function() {
+    const rail = buildBefore101();
+    integrateSol101();
+    return rail;
+  };
+
+  const fillBefore101 = obFill;
+  obFill = function() {
+    const result = fillBefore101();
+    integrateSol101();
+    if (C98.sol && C98.sol.parentElement === obWheelEl) obLay();
+    return result;
+  };
+
+  const layBefore101 = obLay;
+  obLay = function() {
+    const result = layBefore101();
+
+    for (const el of [...obItemEls, ...obCopies]) {
+      if (el.__gid !== SOL101) continue;
+
+      el.classList.add('c101-sol');
+      el.classList.remove('empty');
+      el.setAttribute('data-c101-sol', '');
+      el.setAttribute('aria-haspopup', 'dialog');
+
+      /*
+       * 循環用コピーには同じidを付けない。
+       */
+      if (el !== C98.sol) el.removeAttribute('id');
+
+      const state = C98.status || 'idle';
+      if (el.getAttribute('data-state') !== state)
+        el.setAttribute('data-state', state);
+
+      if (el.hasAttribute('data-unread') !== !!C98.unread)
+        el.toggleAttribute('data-unread', !!C98.unread);
+    }
+
+    return result;
+  };
+
+  const paintSolBefore101 = C98.paintSol;
+  C98.paintSol = function() {
+    paintSolBefore101();
+
+    for (const el of obCopies) {
+      if (el.__gid !== SOL101) continue;
+      el.setAttribute('data-state', C98.status || 'idle');
+      el.toggleAttribute('data-unread', !!C98.unread);
+    }
+  };
+
+  /*
+   * 旧Solツールチップと新しい小窓を二重表示しない。
+   */
+  const tipBefore101 = C98.tipShow;
+  C98.tipShow = function(anchor, ...args) {
+    if (anchor && anchor.closest &&
+        anchor.closest('[data-c101-sol]')) return;
+    return tipBefore101.call(this, anchor, ...args);
+  };
+
+  function putFaceInside101() {
+    if (!faceSVG101) return;
+
+    const panel = document.getElementById('c33-np');
+    const header = panel && panel.querySelector('.n2-top');
+
+    if (!header || header.querySelector('.c101-panel-face')) return;
+
+    const badge = node101('span', 'c101-panel-face');
+    badge.setAttribute('aria-label', "(\u0027-\u0027 鰤)з");
+    badge.innerHTML = faceSVG101;
+    header.appendChild(badge);
+  }
+
+  /*
+   * Native DOMと取得済みregistryから読む。
+   * id32/nbGoなど、存在・スコープ未確認の関数は使わない。
+   */
+  function records101(gid) {
+    const records = new Map();
+    const side = obSide();
+
+    if (side) {
+      const teams = side.querySelectorAll(
+        '[data-c33-team][data-c16-g]'
+      );
+
+      for (const team of teams) {
+        const teamGid = team.getAttribute('data-c16-g') || '';
+        if (gid && teamGid !== gid) continue;
+
+        const teamText = team.querySelector('[data-c98-name="team"]');
+        const teamName = teamText
+          ? teamText.textContent.trim()
+          : team.getAttribute('data-c16-k') || '';
+
+        const rows = team.querySelectorAll(
+          '[data-c33-kind="db"],[data-c33-kind="page"]'
+        );
+
+        for (const row of rows) {
+          try {
+            const link = row.matches('a[href]')
+              ? row
+              : row.querySelector('a[href]');
+
+            let rawId = row.getAttribute('data-c98-id') || '';
+
+            if (!rawId && typeof idOf === 'function')
+              rawId = idOf(row);
+
+            const id = id101(rawId || (link && link.href));
+            if (!id) continue;
+
+            const nameNode = row.querySelector('[data-c98-name]');
+            const name = nameNode
+              ? nameNode.textContent.trim()
+              : typeof nameOf === 'function'
+                ? nameOf(row)
+                : row.textContent.trim();
+
+            let href = new URL('/' + id, location.origin).href;
+
+            if (link) {
+              const candidate = new URL(link.href, location.href);
+              if (candidate.origin === location.origin)
+                href = candidate.href;
+            }
+
+            records.set(id, {
+              id, href,
+              name: name || 'Untitled',
+              team: teamName,
+              kind: row.getAttribute('data-c33-kind') || 'page'
+            });
+          } catch (error) {
+            log101('row', '読み取れない行は一覧から除外しました。');
+          }
+        }
+      }
+    }
+
+    const registry =
+      typeof NBS !== 'undefined' && NBS.reg ? NBS.reg : {};
+
+    for (const [rawId, entry] of Object.entries(registry)) {
+      if (!entry || (gid && entry.gid !== gid)) continue;
+
+      const id = id101(rawId);
+      if (!id || records.has(id)) continue;
+
+      records.set(id, {
+        id,
+        href: new URL('/' + id, location.origin).href,
+        name: entry.name || 'Untitled',
+        team: entry.team || '',
+        kind: entry.kind || 'page'
+      });
+    }
+
+    return [...records.values()].sort((a, b) =>
+      a.team.localeCompare(b.team) ||
+      a.name.localeCompare(b.name)
+    );
+  }
+
+  function makeCard101() {
+    if (card101) return card101;
+
+    card101 = node101('section', 'c101-card');
+    card101.id = 'c101-card';
+    card101.hidden = true;
+    card101.setAttribute('aria-label', 'Catalogus');
+    document.body.appendChild(card101);
+
+    card101.addEventListener('pointerenter', () => {
+      clearTimeout(closeTimer101);
+      clearTimeout(hoverTimer101);
+    });
+
+    card101.addEventListener('pointerleave', () => {
+      if (!pinned101) scheduleClose101();
+    });
+
+    return card101;
+  }
+
+  function placeCard101() {
+    if (!card101 || card101.hidden || !obEl) return;
+
+    const rail = obEl.getBoundingClientRect();
+    const anchor = anchor101 && anchor101.isConnected
+      ? anchor101.getBoundingClientRect()
+      : rail;
+
+    const width = Math.max(160, Math.min(282, innerWidth - 16));
+    card101.style.width = width + 'px';
+
+    const bounds = card101.getBoundingClientRect();
+
+    card101.style.left = Math.round(Math.max(
+      8, Math.min(rail.right + 8, innerWidth - bounds.width - 8)
+    )) + 'px';
+
+    card101.style.top = Math.round(Math.max(
+      8, Math.min(anchor.top - 5, innerHeight - bounds.height - 8)
+    )) + 'px';
+  }
+
+  function closeCard101() {
+    clearTimeout(hoverTimer101);
+    clearTimeout(closeTimer101);
+
+    if (card101) card101.hidden = true;
+    pinned101 = false;
+    anchor101 = null;
+  }
+
+  function scheduleClose101() {
+    clearTimeout(closeTimer101);
+    closeTimer101 = setTimeout(() => {
+      if (!pinned101) closeCard101();
+    }, 300);
+  }
+
+  function openBuri101() {
+    closeCard101();
+
+    if (typeof C98.openPanel === 'function') {
+      C98.openPanel();
+      requestAnimationFrame(putFaceInside101);
+      return;
+    }
+
+    log101('buri-link', 'B.U.R.Iの接続準備を待っています。');
+  }
+
+  /*
+   * 非表示のまま内容を完成させ、最後に表示。
+   * データ取得が失敗しても、タイトルと説明を残す。
+   */
+  function showCard101(gid, anchor, pin, keyboard) {
+    clearTimeout(closeTimer101);
+    clearTimeout(hoverTimer101);
+
+    const card = makeCard101();
+    const group = group101(gid);
+    const fragment = document.createDocumentFragment();
+
+    const head = node101('header', 'c101-head');
+    const titles = node101('div', 'c101-titles');
+    const overline = node101(
+      'div', 'c101-overline',
+      gid === SOL101 ? 'SOL · ASSISTANT' : 'ORBIT · CATALOGUS'
+    );
+    const title = node101(
+      'h2', 'c101-title',
+      gid === SOL101 ? 'B.U.R.I' : group.label
+    );
+    const close = node101('button', 'c101-close', '×');
+
+    close.type = 'button';
+    close.setAttribute('aria-label', '閉じる');
+    close.addEventListener('click', closeCard101);
+
+    titles.append(overline, title);
+    head.append(titles, close);
+    fragment.appendChild(head);
+
+    const body = node101('div', 'c101-body');
+
+    if (gid === SOL101) {
+      body.appendChild(node101(
+        'p', 'c101-description',
+        'Blended Understanding & Reasoning Intelligence'
+      ));
+      body.appendChild(node101(
+        'p', 'c101-empty',
+        'ここからB.U.R.Iを開きます。中の構成は、次の段階で整えます。'
+      ));
+
+      const open = node101('button', 'c101-action', 'B.U.R.Iを開く');
+      open.type = 'button';
+      open.addEventListener('click', openBuri101);
+      body.appendChild(open);
+    } else {
+      let entries = [];
+
+      try {
+        entries = records101(gid);
+      } catch (error) {
+        log101('records', '一覧の読取に失敗したため、案内を表示します。');
+      }
+
+      if (!entries.length) {
+        body.appendChild(node101(
+          'p', 'c101-empty',
+          '取得済みの項目はまだありません。' +
+          'チームスペースを開くと、この星表に反映されます。'
+        ));
+      } else {
+        let previousTeam = null;
+
+        for (const entry of entries) {
+          if (entry.team !== previousTeam) {
+            previousTeam = entry.team;
+
+            if (entry.team)
+              body.appendChild(node101(
+                'div', 'c101-team', entry.team
+              ));
+          }
+
+          const link = node101('a', 'c101-entry');
+          link.href = entry.href;
+
+          const mark = node101(
+            'span', 'c101-entry-mark',
+            entry.kind === 'db' ? '·' : '–'
+          );
+          mark.setAttribute('aria-hidden', 'true');
+
+          link.append(
+            mark,
+            node101('span', 'c101-entry-name', entry.name)
+          );
+          link.addEventListener('click', closeCard101);
+          body.appendChild(link);
+        }
+      }
+    }
+
+    fragment.appendChild(body);
+    fragment.appendChild(node101(
+      'footer', 'c101-footer',
+      pin ? '項目を選んで開く · Escで閉じる' : 'クリックで選択 · Escで閉じる'
+    ));
+
+    card.replaceChildren(fragment);
+    card.style.setProperty('--c101-tint', group.tint || '#8c857b');
+    card.setAttribute('role', pin ? 'dialog' : 'region');
+    card.setAttribute('aria-modal', 'false');
+
+    current101 = gid;
+    anchor101 = anchor;
+    pinned101 = !!pin;
+    card.hidden = false;
+    placeCard101();
+
+    if (keyboard) {
+      const focus = card.querySelector('.c101-entry,.c101-action');
+      (focus || close).focus({ preventScroll: true });
+    }
+  }
+
+  const selectBefore101 = obSelect;
+  obSelect = function(gid) {
+    if (gid === SOL101) {
+      userSelection101 = null;
+      openBuri101();
+      return;
+    }
+
+    const user = userSelection101;
+    userSelection101 = null;
+    const result = selectBefore101(gid);
+
+    if (user && user.gid === (gid || '')) {
+      requestAnimationFrame(() => {
+        showCard101(gid || '', user.anchor, true, user.keyboard);
+      });
+    }
+
+    return result;
+  };
+
+  document.addEventListener('pointerover', event => {
+    const target = target101(event);
+    const item = target && target.closest(
+      '#c33-orbit .ob-it,#c33-orbit .ob-all'
+    );
+
+    if (!item || !OB.on || pinned101) return;
+    if (event.relatedTarget instanceof Node &&
+        item.contains(event.relatedTarget)) return;
+
+    clearTimeout(closeTimer101);
+    clearTimeout(hoverTimer101);
+
+    const gid = item.getAttribute('data-c33-gid') || '';
+
+    hoverTimer101 = setTimeout(() => {
+      if (item.isConnected && OB.on && !pinned101)
+        showCard101(gid, item, false, false);
+    }, 150);
+  }, true);
+
+  document.addEventListener('pointerout', event => {
+    const target = target101(event);
+    const item = target && target.closest(
+      '#c33-orbit .ob-it,#c33-orbit .ob-all'
+    );
+
+    if (!item) return;
+    if (event.relatedTarget instanceof Node &&
+        item.contains(event.relatedTarget)) return;
+
+    clearTimeout(hoverTimer101);
+    if (!pinned101) scheduleClose101();
+  }, true);
+
+  document.addEventListener('focusin', event => {
+    const target = target101(event);
+    const item = target && target.closest(
+      '#c33-orbit .ob-it,#c33-orbit .ob-all'
+    );
+
+    if (!item || pinned101) return;
+
+    showCard101(
+      item.getAttribute('data-c33-gid') || '',
+      item, false, false
+    );
+  }, true);
+
+  document.addEventListener('click', event => {
+    const target = target101(event);
+    if (!target) return;
+
+    const item = target.closest('#c33-orbit .ob-it');
+
+    if (item) {
+      const gid = item.getAttribute('data-c33-gid') || '';
+
+      if (gid === SOL101) {
+        closeCard101();
+        return;
+      }
+
+      userSelection101 = {
+        gid,
+        anchor: item,
+        keyboard: event.detail === 0
+      };
+
+      queueMicrotask(() => { userSelection101 = null; });
+      return;
+    }
+
+    const all = target.closest('#c33-orbit .ob-all');
+    if (all) {
+      setTimeout(() => showCard101('', all, true, false), 0);
+      return;
+    }
+
+    if (card101 && !card101.contains(target)) closeCard101();
+  }, true);
+
+  document.addEventListener('keydown', event => {
+    if (event.isComposing || event.keyCode === 229) return;
+
+    if (event.key === 'Escape' && card101 && !card101.hidden) {
+      const anchor = anchor101;
+      closeCard101();
+      if (anchor && anchor.isConnected)
+        anchor.focus({ preventScroll: true });
+      event.preventDefault();
+      return;
+    }
+
+    const target = target101(event);
+    const item = target && target.closest('#c33-orbit .ob-it');
+
+    if (!item || !['Enter', ' '].includes(event.key)) return;
+
+    userSelection101 = {
+      gid: item.getAttribute('data-c33-gid') || '',
+      anchor: item,
+      keyboard: true
+    };
+
+    queueMicrotask(() => { userSelection101 = null; });
+  }, true);
+
+  /*
+   * 三本線は意味ラベル、または明確な三本線形状で識別。
+   * ページアイコンや他のメニューボタンを一括非表示にしない。
+   */
+  function markSidebarToggle101() {
+    const bar = document.querySelector('.notion-topbar');
+    if (!bar) return;
+
+    const buttons = bar.querySelectorAll('button,[role="button"]');
+    let found = false;
+
+    for (const button of buttons) {
+      if (button.closest('#c33-orbit')) continue;
+
+      const label =
+        (button.getAttribute('aria-label') || '') + ' ' +
+        (button.getAttribute('title') || '');
+
+      const semantic =
+        /(?:open|expand|toggle)\s+(?:the\s+)?sidebar|サイドバー.*(?:開く|展開|切り替え)/i
+          .test(label);
+
+      const svg = button.querySelector('svg');
+      let lines = false;
+
+      if (svg && !button.textContent.trim()) {
+        const shapes = [...svg.querySelectorAll('line,rect')];
+
+        const horizontal = shapes.filter(shape => {
+          if (shape.tagName.toLowerCase() === 'rect')
+            return Number(shape.getAttribute('width')) >= 10 &&
+              Number(shape.getAttribute('height')) <= 3;
+
+          return shape.getAttribute('y1') === shape.getAttribute('y2') &&
+            Math.abs(
+              Number(shape.getAttribute('x2')) -
+              Number(shape.getAttribute('x1'))
+            ) >= 10;
+        });
+
+        const paths = [...svg.querySelectorAll('path')];
+        const simpleThreeLines = paths.some(path => {
+          const d = path.getAttribute('d') || '';
+          return (d.match(/[Mm]/g) || []).length === 3 &&
+            !/[CcQqAaSsTtZz]/.test(d);
+        });
+
+        const rect = button.getBoundingClientRect();
+        const barRect = bar.getBoundingClientRect();
+
+        lines = (horizontal.length === 3 || simpleThreeLines) &&
+          rect.left - barRect.left < 120;
+      }
+
+      if (semantic || lines) {
+        button.setAttribute('data-c101-native-toggle', '');
+        found = true;
+        break;
+      }
+    }
+
+    if (!found)
+      log101('native-toggle',
+        'サイドバー展開ボタンを安全に識別できないため、非表示だけ停止します。');
+  }
+
+  function restore101(el, saved) {
+    for (const [key, original] of Object.entries(saved.original)) {
+      if (el.style.getPropertyValue(key) !== saved.applied[key]) continue;
+
+      if (original.value)
+        el.style.setProperty(key, original.value, original.priority);
+      else
+        el.style.removeProperty(key);
+    }
+  }
+
+  function reserve101() {
+    document.querySelectorAll('[data-c99-safe-main]').forEach(el =>
+      el.removeAttribute('data-c99-safe-main')
+    );
+
+    const active = !!(OB.on && obEl && obEl.isConnected);
+    const targets = active
+      ? [...document.querySelectorAll('.notion-frame,.notion-topbar')]
+      : [];
+
+    for (const [el, saved] of reservations101) {
+      if (!targets.includes(el) || !el.isConnected) {
+        restore101(el, saved);
+        reservations101.delete(el);
+      }
+    }
+
+    if (!active) return;
+
+    const rail = obEl.getBoundingClientRect();
+
+    for (const el of targets) {
+      if (targets.some(parent => parent !== el && parent.contains(el)))
+        continue;
+
+      const rect = el.getBoundingClientRect();
+      const gap = rect.bottom > rail.top && rect.top < rail.bottom
+        ? Math.max(0, Math.ceil(rail.right - rect.left))
+        : 0;
+
+      let saved = reservations101.get(el);
+
+      if (!gap || rect.width <= gap + 40) {
+        if (saved) restore101(el, saved);
+        reservations101.delete(el);
+        continue;
+      }
+
+      if (!saved) {
+        saved = {
+          original: {},
+          applied: {},
+          padding: parseFloat(getComputedStyle(el).paddingLeft) || 0
+        };
+
+        for (const key of ['padding-left', 'box-sizing']) {
+          saved.original[key] = {
+            value: el.style.getPropertyValue(key),
+            priority: el.style.getPropertyPriority(key)
+          };
+        }
+
+        reservations101.set(el, saved);
+      }
+
+      const values = {
+        'padding-left': (saved.padding + gap) + 'px',
+        'box-sizing': 'border-box'
+      };
+
+      for (const [key, value] of Object.entries(values)) {
+        if (el.style.getPropertyValue(key) !== value ||
+            el.style.getPropertyPriority(key) !== 'important')
+          el.style.setProperty(key, value, 'important');
+
+        saved.applied[key] = value;
+      }
+    }
+  }
+
+  function requestReserve101() {
+    if (layoutRAF101) return;
+
+    layoutRAF101 = requestAnimationFrame(() => {
+      layoutRAF101 = 0;
+      reserve101();
+    });
+  }
+
+  safeMain99 = function() {
+    requestReserve101();
+  };
+
+  const syncBefore101 = obSyncSidebar;
+  obSyncSidebar = function(...args) {
+    const result = syncBefore101.apply(this, args);
+
+    const rail = obEl && obEl.getBoundingClientRect();
+    const frame = document.querySelector('.notion-frame');
+    const bar = document.querySelector('.notion-topbar');
+
+    const signature = [
+      !!OB.on, innerWidth, innerHeight,
+      rail && Math.round(rail.right),
+      frame && Math.round(frame.getBoundingClientRect().left),
+      bar && Math.round(bar.getBoundingClientRect().left)
+    ].join('|');
+
+    if (signature !== signature101) {
+      signature101 = signature;
+      requestReserve101();
+    }
+
+    if (!OB.on) closeCard101();
+    return result;
+  };
+
+  const cssBefore101 = nbCss;
+  nbCss = function() {
+    cssBefore101();
+
+    if (document.getElementById('c101-css')) return;
+
+    const style = node101('style');
+    style.id = 'c101-css';
+
+    const W = 'html[data-c99-redesign]' + C98.strong +
+      ':not(#c101a):not(#c101b):not(#c101c):not(#c101d)';
+
+    style.textContent = `
+${W}[data-c99-orbit-visible] [data-c101-native-toggle] {
+  display: none !important;
+}
+${W} #c33-orbit .ob-ft {
+  padding-block: 8px !important;
+}
+${W} #c33-orbit .c101-sol {
+  border: 0 !important;
+  padding: 0 !important;
+  font: inherit !important;
+}
+${W} #c33-orbit .c101-sol .ob-ic {
+  color: #b19762 !important;
+  opacity: .88 !important;
+}
+${W} #c33-orbit .c101-sol::after {
+  content: none !important;
+}
+${W} #c33-orbit .c101-sol[data-unread]::after {
+  content: "" !important;
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #b19762;
+}
+${W} #c33-orbit .c101-sol[data-state="busy"] .ob-ic {
+  animation: c101Work 1.5s ease-in-out infinite;
+}
+@keyframes c101Work {
+  0%,100% { opacity: .5; }
+  50% { opacity: 1; }
+}
+${W} #c33-np .c101-panel-face {
+  display: inline-flex;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-inline: 6px;
+  opacity: .75;
+}
+${W} #c33-np .c101-panel-face svg {
+  width: 34px;
+  height: 18px;
+}
+
+${W} #c101-card {
+  position: fixed !important;
+  z-index: 2147482000 !important;
+  box-sizing: border-box !important;
+  max-height: min(440px,calc(100vh - 16px));
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 18px 18px 12px !important;
+  border: 1px solid
+    color-mix(in srgb,var(--nb-text,#37352f) 12%,transparent);
+  border-radius: 7px;
+  background: var(--nb-paper,var(--c-bacSec,#f7f6f3));
+  color: var(--nb-text,var(--c-texPri,#37352f));
+  box-shadow: 0 3px 8px #00000005,0 14px 36px #0000000c;
+  font: 400 14px/1.55 var(--c99-serif);
+  animation: c101Reveal .13s ease-out;
+}
+${W} #c101-card[hidden] { display: none !important; }
+${W} #c101-card .c101-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid
+    color-mix(in srgb,var(--c101-tint,#8c857b) 30%,transparent);
+}
+${W} #c101-card .c101-titles { min-width: 0; }
+${W} #c101-card .c101-overline {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 8px/1.5 system-ui,sans-serif;
+  letter-spacing: .16em;
+  opacity: .58;
+}
+${W} #c101-card .c101-overline::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c101-tint,#8c857b);
+}
+${W} #c101-card .c101-title {
+  margin: 5px 0 0;
+  font: 500 21px/1.2 var(--c99-serif);
+  letter-spacing: .005em;
+  overflow-wrap: anywhere;
+}
+${W} #c101-card .c101-close {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  opacity: .45;
+  cursor: pointer;
+  font: 16px/22px system-ui,sans-serif;
+}
+${W} #c101-card .c101-body { padding-block: 7px 9px; }
+${W} #c101-card .c101-team {
+  margin: 12px 0 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .025em;
+  opacity: .6;
+  overflow-wrap: anywhere;
+}
+${W} #c101-card .c101-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 7px 3px;
+  border-radius: 3px;
+  color: inherit;
+  text-decoration: none;
+}
+${W} #c101-card .c101-entry-mark {
+  flex: 0 0 9px;
+  color: var(--c101-tint,#8c857b);
+  text-align: center;
+}
+${W} #c101-card .c101-entry-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+${W} #c101-card .c101-entry:hover {
+  background: color-mix(in srgb,var(--c101-tint,#8c857b) 7%,transparent);
+}
+${W} #c101-card .c101-empty {
+  margin: 10px 0;
+  font-size: 12px;
+  line-height: 1.85;
+  opacity: .65;
+}
+${W} #c101-card .c101-description {
+  margin: 8px 0;
+  font: 400 11px/1.6 var(--c99-serif);
+  opacity: .7;
+}
+${W} #c101-card .c101-action {
+  width: 100%;
+  margin-top: 5px;
+  padding: 9px 10px;
+  border: 1px solid
+    color-mix(in srgb,var(--c101-tint,#b19762) 30%,transparent);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: 400 13px/1.5 var(--c99-serif);
+}
+${W} #c101-card .c101-footer {
+  border-top: 1px solid
+    color-mix(in srgb,var(--nb-text,#37352f) 8%,transparent);
+  padding-top: 9px;
+  font: 400 9px/1.5 system-ui,sans-serif;
+  letter-spacing: .015em;
+  opacity: .45;
+}
+${W} #c101-card a:focus-visible,
+${W} #c101-card button:focus-visible {
+  outline: 1px solid var(--c101-tint,#8c857b);
+  outline-offset: 2px;
+}
+@keyframes c101Reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  ${W} #c101-card,
+  ${W} #c33-orbit .c101-sol .ob-ic {
+    animation: none !important;
+  }
+}
+`;
+
+    (document.head || de101).appendChild(style);
+  };
+
+  /*
+   * DOM追加に追従。style属性を監視して自己ループしない。
+   */
+  const observer101 = new MutationObserver(() => {
+    if (scanRAF101) return;
+
+    scanRAF101 = requestAnimationFrame(() => {
+      scanRAF101 = 0;
+      markSidebarToggle101();
+      putFaceInside101();
+      requestReserve101();
+    });
+  });
+
+  observer101.observe(de101, { childList: true, subtree: true });
+
+  window.addEventListener('resize', () => {
+    requestReserve101();
+    placeCard101();
+  }, { passive: true });
+
+  window.addEventListener('scroll', placeCard101, {
+    passive: true,
+    capture: true
+  });
+
+
+  
+
+  /* C102 SOL ALIGNMENT FIX */
+
+  const solarSVG102 =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+    '<g fill="#000">' +
+    '<path fill-rule="evenodd" d="' +
+    'M10.5 7.9a5.1 5.1 0 1 1 0 10.2a5.1 5.1 0 1 1 0-10.2z ' +
+    'M10.5 10.6l.65 1.75 1.75.65-1.75.65-.65 1.75-.65-1.75' +
+    '-1.75-.65 1.75-.65z"/>' +
+    '<path d="' +
+    'M9.6 3.6h1.8l-.2 3.1H9.8z ' +
+    'M9.6 22.4h1.8l-.2-3.1H9.8z ' +
+    'M1.1 12.1v1.8l3.1-.2v-1.4z ' +
+    'M19.9 12.1v1.8l-3.1-.2v-1.4z ' +
+    'M3.4 5.9l1.3-1.3 2.05 2.35-.95.95z ' +
+    'M3.4 20.1l1.3 1.3 2.05-2.35-.95-.95z ' +
+    'M17.6 20.1l-1.3 1.3-2.05-2.35.95-.95z ' +
+    'M18.8 1.4l.75 2.85 2.85.75-2.85.75-.75 2.85' +
+    '-.75-2.85-2.85-.75 2.85-.75z"/>' +
+    '</g></svg>';
+
+  const solarMask102 =
+    'url("data:image/svg+xml,' +
+    encodeURIComponent(solarSVG102) + '")';
+
+  const layoutProperties102 = [
+    'position',
+    'left', 'right', 'top', 'bottom',
+    'width', 'min-width', 'max-width',
+    'height', 'min-height', 'max-height',
+    'display',
+    'grid-template-columns', 'grid-template-rows',
+    'justify-items', 'align-items',
+    'justify-content', 'align-content',
+    'row-gap', 'column-gap',
+    'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+    'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+    'border-top-width', 'border-right-width',
+    'border-bottom-width', 'border-left-width',
+    'border-radius',
+    'box-sizing',
+    'overflow',
+    'align-self',
+    'transform-origin'
+  ];
+
+  let logged102 = false;
+
+  function fixSol102() {
+    if (!obWheelEl) return;
+
+    /*
+     * 通常の惑星を配置の基準にする。
+     * 選択中の特殊な見た目は基準にしない。
+     */
+    const candidates = [...obWheelEl.querySelectorAll(
+      '.ob-it:not([data-c101-sol])'
+    )];
+
+    const reference =
+      candidates.find(el =>
+        !el.classList.contains('sel') &&
+        getComputedStyle(el).display !== 'none'
+      ) ||
+      candidates.find(el =>
+        getComputedStyle(el).display !== 'none'
+      );
+
+    if (!reference) {
+      if (!logged102) {
+        logged102 = true;
+        console.info(
+          '[³³ Sol Fix]',
+          '基準になる惑星が見つからないため、配置補助だけ待機します。'
+        );
+      }
+      return;
+    }
+
+    const computed = getComputedStyle(reference);
+
+    /*
+     * display:noneは循環処理の可視範囲判定なので上書きしない。
+     */
+    const values = Object.fromEntries(
+      layoutProperties102.map(key => [
+        key, computed.getPropertyValue(key)
+      ])
+    );
+
+    for (const sol of obWheelEl.querySelectorAll(
+      '.ob-it[data-c101-sol]'
+    )) {
+      const visible = sol.style.getPropertyValue('display') !== 'none';
+
+      for (const [key, value] of Object.entries(values)) {
+        if (key === 'display' && !visible) continue;
+
+        if (sol.style.getPropertyValue(key) !== value ||
+            sol.style.getPropertyPriority(key) !== 'important')
+          sol.style.setProperty(key, value, 'important');
+      }
+
+      /*
+       * 元の循環・浮き上がり用transformには触れない。
+       */
+      const icon = sol.querySelector('.ob-ic');
+
+      if (icon && !icon.hasAttribute('data-c102-icon')) {
+        obIcPaint(icon, {
+          label: 'Sol',
+          mask: solarMask102,
+          bgi: 'none',
+          txt: ''
+        });
+        icon.setAttribute('data-c102-icon', '');
+      }
+    }
+  }
+
+  const layoutBefore102 = obLay;
+  obLay = function() {
+    const result = layoutBefore102();
+    fixSol102();
+    return result;
+  };
+
+  const buildBefore102 = obBuild;
+  obBuild = function() {
+    const rail = buildBefore102();
+    fixSol102();
+    return rail;
+  };
+
+  const cssBefore102 = nbCss;
+  nbCss = function() {
+    cssBefore102();
+
+    if (document.getElementById('c102-sol-css')) return;
+
+    const style = document.createElement('style');
+    style.id = 'c102-sol-css';
+
+    const W = 'html[data-c99-redesign]' + C98.strong +
+      ':not(#c102a):not(#c102b):not(#c102c):not(#c102d)' +
+      ':not(#c102e)';
+
+    style.textContent = `
+${W} #c33-orbit .ob-it[data-c101-sol] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  text-align: center !important;
+  font-family: var(--c99-serif) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+${W} #c33-orbit .ob-it[data-c101-sol] .ob-ic {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0 !important;
+  color: var(--ob-tint,#b19762) !important;
+}
+${W} #c33-orbit .ob-it[data-c101-sol] .ob-lb {
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+/* ユーザー提示の原生サイドバー展開ボタンのみ */
+${W}[data-c99-orbit-visible]
+.notion-open-sidebar[aria-label="Lock sidebar open"] {
+  display: none !important;
+}
+`;
+
+    (document.head || document.documentElement).appendChild(style);
+  };
+
+
+  
+
+  /* C103 ORBIT FINISH */
+
+  /* v104: 星と同じ言葉の印 — ALL は星座（右上に四芒星）、Settings は星を軸にした歯車、Sol は光冠と光線の太陽 */
+  const arts103 = {"all":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.3\" stroke-linecap=\"round\"><path d=\"M5.24 15.93L6.85 10.79M9.55 9.96L11.18 11.26M15.33 10.63L17.1 8.02M15.79 15.39L17.7 17.3\"/></g><g fill=\"#000\"><circle cx=\"4.4\" cy=\"18.6\" r=\"2\"/><circle cx=\"7.6\" cy=\"8.4\" r=\"1.7\"/><circle cx=\"13.6\" cy=\"13.2\" r=\"2.3\"/><circle cx=\"19.4\" cy=\"19\" r=\"1.6\"/><path d=\"M19 1.1999999999999997L19.975 4.125L22.9 5.1L19.975 6.074999999999999L19 9L18.025 6.074999999999999L15.1 5.1L18.025 4.125Z\"/></g></svg>","settings":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"6.3\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.7\"/><g fill=\"#000\"><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(0 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(45 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(90 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(135 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(180 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(225 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(270 12 12)\"/><rect x=\"10.75\" y=\"1.7\" width=\"2.5\" height=\"3.4\" rx=\".75\" transform=\"rotate(315 12 12)\"/><path d=\"M12 8.4L12.9 11.1L15.6 12L12.9 12.9L12 15.6L11.1 12.9L8.4 12L11.1 11.1Z\"/></g></svg>","sol":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#000\"/><circle cx=\"12\" cy=\"12\" r=\"6\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\"/><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.6\" stroke-linecap=\"round\"><path d=\"M20.1 12L23.1 12M12 20.1L12 23.1M3.9 12L0.9 12M12 3.9L12 0.9M17.73 17.73L18.86 18.86M6.27 17.73L5.14 18.86M6.27 6.27L5.14 5.14M17.73 6.27L18.86 5.14\"/></g></svg>"};
+  const root103 = document.documentElement;
+
+  const masks103 = Object.fromEntries(
+    Object.entries(arts103).map(([key, svg]) => [
+      key,
+      'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")'
+    ])
+  );
+
+  let updateRAF103 = 0;
+  const marked103 = new Set();
+
+  function flag103(el, key, on) {
+    if (el.hasAttribute(key) !== !!on)
+      el.toggleAttribute(key, !!on);
+  }
+
+  /*
+   * Solの循環用データも新しい図像に揃える。
+   * 既存の惑星順・件数・並びは変更しない。
+   */
+  const groupsBefore103 = obGroups;
+  obGroups = function() {
+    return groupsBefore103().map(group =>
+      group.gid === '__c101_sol__'
+        ? Object.assign({}, group, {
+            mask: masks103.sol,
+            bgi: 'none',
+            txt: ''
+          })
+        : group
+    );
+  };
+
+  function paintIcon103(icon, key) {
+    if (!icon) return;
+    if (icon.getAttribute('data-c103-art') === key) return;
+
+    /*
+     * ³³が所有する図像だけを変更。
+     * Nativeのチーム・DBアイコンは触らない。
+     */
+    obIcPaint(icon, {
+      label: key,
+      mask: masks103[key],
+      bgi: 'none',
+      txt: ''
+    });
+
+    icon.setAttribute('data-c103-art', key);
+  }
+
+  function finishControls103() {
+    if (!obEl) return;
+
+    paintIcon103(
+      obEl.querySelector('.ob-all .ob-ic'),
+      'all'
+    );
+
+    paintIcon103(
+      obEl.querySelector('.ob-ft .ob-set .ob-ic'),
+      'settings'
+    );
+
+    for (const sol of obEl.querySelectorAll(
+      '.ob-it[data-c101-sol]'
+    )) {
+      paintIcon103(sol.querySelector('.ob-ic'), 'sol');
+    }
+  }
+
+  /*
+   * 原生の浮動サイドバーを識別。
+   *
+   * 通常のStella：
+   *   Orbitと同じ上端から始まる常設列。
+   *
+   * 原生のせり出し：
+   *   Orbitの上端より下に浮き、
+   *   角丸や影を持ち、Orbitの下へ潜り込む。
+   *
+   * ⁴¹のrelativeなpeek表示は除外する。
+   */
+  function suppressNativePeek103() {
+    const active = !!(OB.on && obEl && obEl.isConnected);
+
+    if (!active) {
+      for (const side of marked103)
+        side.removeAttribute('data-c103-native-hover');
+      marked103.clear();
+      return;
+    }
+
+    const rail = obEl.getBoundingClientRect();
+    if (rail.width < 1 || rail.height < 1) return;
+
+    const sides = document.querySelectorAll(
+      '.notion-sidebar-container'
+    );
+
+    for (const side of sides) {
+      const rect = side.getBoundingClientRect();
+      const css = getComputedStyle(side);
+
+      const radius = Math.max(
+        parseFloat(css.borderTopLeftRadius) || 0,
+        parseFloat(css.borderTopRightRadius) || 0
+      );
+
+      const hasShadow = css.boxShadow !== 'none';
+
+      const telescopiumPeek =
+        root103.hasAttribute('data-neb-narrow') &&
+        root103.hasAttribute('data-neb-peek') &&
+        css.position === 'relative';
+
+      const floatingNative =
+        !telescopiumPeek &&
+        rect.width > rail.width + 40 &&
+        rect.height > 80 &&
+        rect.left < rail.right - 2 &&
+        rect.top > rail.top + 20 &&
+        (radius >= 4 || hasShadow);
+
+      flag103(side, 'data-c103-native-hover', floatingNative);
+
+      if (floatingNative) marked103.add(side);
+      else marked103.delete(side);
+    }
+
+    for (const side of [...marked103]) {
+      if (!side.isConnected) marked103.delete(side);
+    }
+  }
+
+  function requestFinish103() {
+    if (updateRAF103) return;
+
+    updateRAF103 = requestAnimationFrame(() => {
+      updateRAF103 = 0;
+      finishControls103();
+      suppressNativePeek103();
+    });
+  }
+
+  const layoutBefore103 = obLay;
+  obLay = function() {
+    const result = layoutBefore103();
+    finishControls103();
+    return result;
+  };
+
+  const buildBefore103 = obBuild;
+  obBuild = function() {
+    const rail = buildBefore103();
+    finishControls103();
+    return rail;
+  };
+
+  const syncBefore103 = obSyncSidebar;
+  obSyncSidebar = function(...args) {
+    suppressNativePeek103();
+    const result = syncBefore103.apply(this, args);
+    return result;
+  };
+
+  const cssBefore103 = nbCss;
+  nbCss = function() {
+    cssBefore103();
+
+    if (document.getElementById('c103-finish-css')) return;
+
+    const style = document.createElement('style');
+    style.id = 'c103-finish-css';
+
+    const W = 'html[data-c99-redesign]' + C98.strong +
+      ':not(#c103a):not(#c103b):not(#c103c)' +
+      ':not(#c103d):not(#c103e):not(#c103f)';
+
+    style.textContent = `
+/* DOMは保持し、浮動している原生サイドバーだけ不可視化 */
+${W}[data-c99-orbit-visible]
+.notion-sidebar-container[data-c103-native-hover] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+
+/* 原生の展開入口も引き続き非表示 */
+${W}[data-c99-orbit-visible] .notion-open-sidebar {
+  display: none !important;
+}
+
+/* 固定入口：カードではなく、星表の端に置かれた図像 */
+${W} #c33-orbit .ob-all,
+${W} #c33-orbit .ob-ft .ob-set {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: 24px auto !important;
+  justify-items: center !important;
+  align-content: center !important;
+  row-gap: 4px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--nb-text,var(--c-texPri,#544e45)) !important;
+}
+${W} #c33-orbit .ob-all {
+  padding-inline: 0 !important;
+}
+${W} #c33-orbit .ob-ft .ob-set {
+  width: calc(100% - 10px) !important;
+  height: 48px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+${W} #c33-orbit .ob-all .ob-ic,
+${W} #c33-orbit .ob-ft .ob-set .ob-ic {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0 !important;
+  background-color: currentColor !important;
+  mask-size: contain !important;
+  -webkit-mask-size: contain !important;
+  mask-repeat: no-repeat !important;
+  -webkit-mask-repeat: no-repeat !important;
+  mask-position: center !important;
+  -webkit-mask-position: center !important;
+  opacity: .72 !important;
+  transition: opacity .15s ease !important;
+}
+${W} #c33-orbit .ob-all .ob-ic {
+  mask-image: ${masks103.all} !important;
+  -webkit-mask-image: ${masks103.all} !important;
+}
+${W} #c33-orbit .ob-ft .ob-set .ob-ic {
+  mask-image: ${masks103.settings} !important;
+  -webkit-mask-image: ${masks103.settings} !important;
+}
+${W} #c33-orbit .ob-all .ob-lb,
+${W} #c33-orbit .ob-ft .ob-set .ob-lb {
+  display: block !important;
+  position: static !important;
+  margin: 0 !important;
+  width: auto !important;
+  max-width: 100% !important;
+  font: 500 9.5px/1.2 var(--c99-serif) !important;
+  letter-spacing: .025em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  color: inherit !important;
+  opacity: .72 !important;
+}
+${W} #c33-orbit .ob-all:hover .ob-ic,
+${W} #c33-orbit .ob-all.sel .ob-ic,
+${W} #c33-orbit .ob-ft .ob-set:hover .ob-ic,
+${W} #c33-orbit .ob-all:hover .ob-lb,
+${W} #c33-orbit .ob-all.sel .ob-lb,
+${W} #c33-orbit .ob-ft .ob-set:hover .ob-lb {
+  opacity: 1 !important;
+}
+${W} #c33-orbit .ob-all.sel::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 3px !important;
+  left: calc(50% - 7px) !important;
+  width: 14px !important;
+  height: 1px !important;
+  background: var(--nb-text,var(--c-texPri,#544e45)) !important;
+  opacity: .35 !important;
+}
+${W} #c33-orbit .ob-ft {
+  padding-block: 7px !important;
+  background: transparent !important;
+}
+${W} #c33-orbit .ob-all:focus-visible,
+${W} #c33-orbit .ob-ft .ob-set:focus-visible {
+  outline: 1px solid
+    color-mix(in srgb,var(--nb-text,#544e45) 35%,transparent);
+  outline-offset: -3px;
+}
+
+/* Sol：同じ密度の独自紋章 */
+${W} #c33-orbit .ob-it[data-c101-sol] .ob-ic {
+  mask-image: ${masks103.sol} !important;
+  -webkit-mask-image: ${masks103.sol} !important;
+  color: var(--ob-tint,#b19762) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  ${W} #c33-orbit .ob-all .ob-ic,
+  ${W} #c33-orbit .ob-ft .ob-set .ob-ic {
+    transition: none !important;
+  }
+}
+`;
+
+    (document.head || root103).appendChild(style);
+    requestFinish103();
+  };
+
+  /*
+   * 原生サイドバーの追加・スタイル変更を捕捉。
+   * 独自data属性は監視対象に含めず、自己ループを避ける。
+   */
+  const observer103 = new MutationObserver(records => {
+    const relevant = records.some(record => {
+      if (record.type === 'childList') return true;
+
+      const target = record.target;
+      return target instanceof Element &&
+        !!target.closest('.notion-sidebar-container');
+    });
+
+    if (!relevant) return;
+
+    /* v104: 毎回その場で測らず、1 フレームにまとめる */
+    requestFinish103();
+  });
+
+  observer103.observe(root103, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style', 'class']
+  });
+
+  window.addEventListener('resize', requestFinish103, {
+    passive: true
+  });
+
+
+  /* C104 ORBIT NATIVE（v104.0.0）
+   * ・書体: v99 の --c99-serif が「inherit, …」（無効な並び）になり、Orbit の文字が Baskerville でも太めでもなくなっていた → Orbit の列に Baskerville を直接指定・太め（600、選んだ惑星は 700）
+   * ・地: Notion のサイドバーと同じ色・同じ細線。影・角丸・濃い紙は使わない（最初からあった列に見せる）。ALL の段は上の帯（トップバー）と同じ高さ
+   * ・原生のせり出し: サイドバーが閉じている間（「Lock sidebar open」がある・幅が無い）は、原生のサイドバーを見えなく・触れなくする（Orbit が出ている時だけ）
+   * ・文字: 惑星の名前は固有名なので今の表記、ALL と SETTINGS は字間を空けた大文字。幅は Baskerville の太字で測って、見切れないように列の幅を決める
+   */
+  const BASK104 = '"Baskerville", "Libre Baskerville", "Baskerville Old Face", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif';
+  const root104 = document.documentElement;
+  function set104(key, value) { if (root104.style.getPropertyValue(key) !== value) root104.style.setProperty(key, value); }
+
+  /* 書体は Orbit の列にだけ（ドックした時の原生サイドバー＝Stella の文字は v103 のまま。大文字の見出しが見切れないように） */
+  set104('--c104-serif', BASK104);
+
+  /* 列の幅: いちばん長い名前を、選んだ時の太字（700・10px）で測る。ALL・SETTINGS は大文字の字間込み */
+  obRailWUpdate = function(gs) {
+    obLabelFont = BASK104;
+    if (obEl) obEl.style.setProperty('font-family', BASK104, 'important');
+    let w = 0;
+    obFitCx.font = '700 10px ' + BASK104;
+    for (const g of gs || []) {
+      const t = String((g && g.label) || '');
+      w = Math.max(w, obFitCx.measureText(t).width + t.length * 0.1);
+    }
+    obFitCx.font = '600 8.5px ' + BASK104;
+    for (const t of ['ALL', 'SETTINGS']) w = Math.max(w, obFitCx.measureText(t).width + t.length * 1.2);
+    obRailW = Math.max(76, Math.ceil(w) + 22);
+    set104('--c33-rail-w', obRailW + 'px');
+    if (obEl) obEl.style.setProperty('width', obRailW + 'px', 'important');
+  };
+
+  /* 原生のサイドバーが「閉じている」か: 開く入口（Lock sidebar open）があるか、幅が無い。
+   * ただし本文を押しのけて並んでいる（ドック）時は開いている — その時は何もしない */
+  let native104Raf = 0;
+  function nativeCheck104() {
+    native104Raf = 0;
+    const side = document.querySelector('.notion-sidebar-container');
+    const frame = document.querySelector('.notion-frame');
+    let closed = false;
+    if (side) {
+      const r = side.getBoundingClientRect();
+      const fl = frame ? frame.getBoundingClientRect().left : 0;
+      const docked = r.width >= 120 && fl >= r.right - 4;
+      closed = !docked && (!!document.querySelector('.notion-open-sidebar') || r.width < 24 || r.right < 30);
+    }
+    if (root104.hasAttribute('data-c104-native-closed') !== closed) root104.toggleAttribute('data-c104-native-closed', closed);
+    const bar = document.querySelector('.notion-topbar');
+    const h = bar ? Math.round(bar.getBoundingClientRect().height) : 0;
+    if (h >= 32 && h <= 72) set104('--c104-top', h + 'px');
+  }
+  function nativeSoon104() { if (!native104Raf) native104Raf = requestAnimationFrame(nativeCheck104); }
+
+  const cssBefore104 = nbCss;
+  nbCss = function() {
+    cssBefore104();
+    nativeSoon104();
+    if (document.getElementById('c104-native-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c104-native-css';
+    const W = 'html[data-c99-redesign]' + C98.strong +
+      ':not(#c104a):not(#c104b):not(#c104c):not(#c104d):not(#c104e):not(#c104f):not(#c104g)';
+    const O = W + ' #c33-orbit';
+    style.textContent = `
+/* 地: Notion のサイドバーと同じ色・右に同じ細線。影も角丸も無し */
+${O} {
+  background: var(--nb-paper, var(--c-bacSec, #f8f8f7)) !important;
+  box-shadow: inset -1px 0 0 var(--ca-borSecTra, rgba(55,53,47,.09)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-family: var(--c104-serif) !important;
+}
+${O} .ob-ft {
+  background: transparent !important;
+  box-shadow: inset 0 1px 0 var(--ca-borSecTra, rgba(55,53,47,.09)), inset -1px 0 0 var(--ca-borSecTra, rgba(55,53,47,.09)) !important;
+  border-top: 0 !important;
+}
+
+/* 惑星の名前: Baskerville の太め。薄くせず、色で強弱 */
+${O} .ob-it .ob-lb {
+  font: 600 10px/1.2 var(--c104-serif) !important;
+  letter-spacing: .01em !important;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 74%, transparent) !important;
+  opacity: 1 !important;
+  -webkit-font-smoothing: antialiased;
+  text-overflow: clip !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+${O} .ob-it:hover .ob-lb { color: var(--nb-text, var(--c-texPri, #37352f)) !important; }
+${O} .ob-it.sel .ob-lb { color: var(--nb-text, var(--c-texPri, #37352f)) !important; font-weight: 700 !important; }
+${O} .ob-it .ob-ic { opacity: .9 !important; }
+${O} .ob-it:hover .ob-ic, ${O} .ob-it.sel .ob-ic { opacity: 1 !important; }
+${O} .ob-ct {
+  font: 600 9px/1 var(--c104-serif) !important;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 55%, transparent) !important;
+  opacity: 1 !important;
+}
+
+/* ALL・SETTINGS: 字間を空けた大文字（惑星の名前と区別する、操作の印） */
+${O} .ob-all .ob-lb,
+${O} .ob-ft .ob-set .ob-lb {
+  display: block !important;
+  font: 600 8.5px/1.1 var(--c104-serif) !important;
+  letter-spacing: .14em !important;
+  text-indent: .14em !important;
+  text-transform: uppercase !important;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 70%, transparent) !important;
+  opacity: 1 !important;
+  white-space: nowrap !important;
+}
+${O} .ob-all .ob-ic,
+${O} .ob-ft .ob-set .ob-ic {
+  width: 22px !important;
+  height: 22px !important;
+  color: color-mix(in srgb, var(--nb-text, var(--c-texPri, #37352f)) 68%, transparent) !important;
+  opacity: 1 !important;
+}
+${O} .ob-all:hover .ob-ic, ${O} .ob-all.sel .ob-ic, ${O} .ob-ft .ob-set:hover .ob-ic,
+${O} .ob-all:hover .ob-lb, ${O} .ob-all.sel .ob-lb, ${O} .ob-ft .ob-set:hover .ob-lb {
+  color: var(--nb-text, var(--c-texPri, #37352f)) !important;
+}
+/* ALL の段は上の帯（トップバー）と同じ高さ。下の細線が帯の下端とそろう */
+${O} .ob-all {
+  height: calc(var(--c104-top, 45px) - 1px) !important;
+  min-height: 0 !important;
+  margin: 0 5px 1px !important;
+  grid-template-rows: 22px auto !important;
+  row-gap: 3px !important;
+  align-content: center !important;
+  box-shadow: 0 1px 0 var(--ca-borSecTra, rgba(55,53,47,.09)) !important;
+}
+${O} .ob-all.sel::after { bottom: 2px !important; }
+
+/* 原生のせり出しを止める: 閉じている間は、原生のサイドバーを見えなく・触れなく（DOM はそのまま） */
+${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container *,
+${W}[data-c99-orbit-visible][data-c104-native-closed] .notion-sidebar-container {
+  transition: none !important;
+  animation: none !important;
+}
+${W}[data-c99-orbit-visible] .notion-open-sidebar {
+  display: none !important;
+}
+`;
+    (document.head || root104).appendChild(style);
+    nativeSoon104();
+  };
+
+  /* 見張るのはサイドバーと上の帯だけ（本文の打鍵では動かない）。念のため 2 秒ごとにも見直す */
+  const NATIVE104 = '.notion-sidebar-container, .notion-topbar';
+  new MutationObserver((records) => {
+    for (const r of records) {
+      const t = r.target;
+      if (!(t instanceof Element) || t.closest('#c33-orbit')) continue;
+      if (t.closest(NATIVE104) || (r.type === 'attributes' && t.matches('.notion-frame'))) { nativeSoon104(); return; }
+      if (r.type === 'childList') {
+        for (const n of r.addedNodes) {
+          if (n instanceof Element && (n.matches(NATIVE104) || n.querySelector(NATIVE104))) { nativeSoon104(); return; }
+        }
+      }
+    }
+  }).observe(root104, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+  window.addEventListener('resize', nativeSoon104, { passive: true });
+  setInterval(nativeSoon104, 2000);
+  nativeSoon104();
+
+
   window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB) }) };
   obBoot();
   obSearchBoot();
