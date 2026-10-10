@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      104.0.0
-// @description  v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      114.0.0
+// @description  v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -26,6 +26,23 @@
 // @noframes
 // ==/UserScript==
 
+/*
+ * v114.0.0（次世代の枠 Caelum — Orbit（左辺）＋ Zenith（上辺））
+ *   名前: Caelum（カエルム）はラテン語で「空」。星座では「彫刻具座（のみ）」— 空（Orbit）と道具（Atelier）の両方を指す。
+ *         上の帯は Zenith（天頂）。Telescopium（望遠鏡座）・Prisma に続く、星座の名前の柱
+ *   ・空の地: 上の帯（header）・Orbit・本文の外側（.notion-frame）を同じ 1 色（サイドバーの紙の色）に。
+ *     本文（いちばん外のスクローラー）は白い紙として、左上の角を 14px 丸め、細線とごく淡い影で置く
+ *   ・左上の角に B.U.R.I: ALL の段を使い直す（位置の計算は今までどおり）。押す・Enter で B.U.R.I のパネル。
+ *     印は「3 本の軌道（いくつもの頭脳の相談 ＝ Blended）が 1 つの四芒星（推論 ＝ Reasoning）を巡り、軌道の上に小さな星」。
+ *     3 色（菫・青緑・金）が溶け合う。考え中は軌道がゆっくり回り、未読は小さな金の点、つまずいた時は灰色に
+ *   ・ALL はやめた（いまの状態がすでに「全部」なので）。Sol も輪から外した（パネルの出入り・待機・未読の印は角が受け持つ）
+ *   ・Zenith: 三本柱（Atelier・Lumière・Scholar）を、上の帯の上に名前つきの計器として並べる（窓が 1120px より狭い時は印だけ）
+ *   ・ニョキッと: v104 は「閉じている」判定がずれる場合があった（左の外にあるサイドバーを「ドック」と見誤る）。
+ *     判定を「Lock sidebar open がある」を正に一本化し、上の帯の左の見えない入口（48px の枠・pointer-events:auto）
+ *     そのものを消す。閉じている間は .notion-sidebar-container と .notion-sidebar をどこにあっても見えなく・触れなく
+ *   ・Orbit を上の帯（z-index 100）より上へ（101）。でないと左上の角が上の帯に覆われて押せなかった
+ *   ・設定: Nebius の設定に「Caelum」の段（空の地を切れる）。コンソール: __c33.caelum(true / false)
+ */
 /*
  * v104.0.0（Orbit を最初からあった列に — 見た目だけの改修）
  *   ・地: Notion のサイドバーと同じ色（--nb-paper）と、右に同じ 1px の細線。v99 の一段濃い紙・影・角丸はやめた
@@ -202,7 +219,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '104.0.0';
+  const VERSION = '114.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -10712,7 +10729,228 @@ ${W}[data-c99-orbit-visible] .notion-open-sidebar {
   nativeSoon104();
 
 
-  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB) }) };
+  /* C114 CAELUM（v114.0.0）— Orbit（左辺）と Zenith（上辺）を合わせた 1 枚の空
+   * Caelum: ラテン語で「空」。星座では「彫刻具座（のみ）」— 道具（Atelier）と空（Orbit）の両方の名前。
+   *   ・空の地: 上の帯（Zenith）・Orbit・本文の外側を 1 枚の同じ色に。本文は左上の角が丸い紙として、その上に置く
+   *   ・左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence）。ALL はやめた
+   *     印: 3 本の軌道（いくつもの頭脳の相談 ＝ Blended）が、1 つの星（推論 ＝ Reasoning）を巡る。色は 3 色が溶け合う
+   *   ・Sol は輪から外した（B.U.R.I は角の 1 か所に）
+   *   ・Zenith: 三本柱（Atelier・Lumière・Scholar）を名前つきの「計器」として上の帯に並べる（狭い時は印だけ）
+   *   ・ニョキッと: 上の帯の左の見えない入口（Lock sidebar open の 48px の枠）そのものを消し、閉じている間は
+   *     原生のサイドバーをどこにあっても見えなく・触れなくする。判定は「Lock sidebar open がある」を正とする
+   */
+  const CL114 = { on: true, key: 'c33.caelum.v1' };
+  try { const v = JSON.parse(localStorage.getItem(CL114.key) || 'null'); if (v && v.on === false) CL114.on = false; } catch (e) { /* noop */ }
+  const BURI_NAME114 = 'Blended Understanding & Reasoning Intelligence';
+
+  /* 1) Sol を輪から外す */
+  const groupsBefore114 = obGroups;
+  obGroups = function() {
+    return groupsBefore114().filter((g) => g && g.gid !== SOL101);
+  };
+
+  /* 2) 左上の角を B.U.R.I に（ALL の段をそのまま使う — 位置の計算は今までどおり） */
+  const BURI_SEEN114 = new WeakSet();
+  function buriTile114() {
+    const tile = obAllEl;
+    if (!tile || !tile.isConnected) return;
+    const lb = tile.querySelector('.ob-lb');
+    if (lb && lb.textContent !== 'B.U.R.I') lb.textContent = 'B.U.R.I';
+    tile.setAttribute('aria-label', 'B.U.R.I — ' + BURI_NAME114 + '（' + (IS_MAC ? '⌘K' : 'Ctrl+K') + '）');
+    tile.setAttribute('aria-haspopup', 'dialog');
+    tile.setAttribute('data-c114-buri', '');
+    /* RC1 の太陽のボタン（Sol）は片付け、パネルの出入り・待機・未読の印はこの角が受け持つ */
+    for (const old of obEl ? obEl.querySelectorAll('#c98-sol') : []) if (old !== tile) old.remove();
+    C98.sol = tile;
+    C98.paintSol();
+    if (BURI_SEEN114.has(tile)) return;
+    BURI_SEEN114.add(tile);
+    const open = (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      C98.tipHide();
+      if (C98.openPanel) C98.openPanel();
+      else C98.log('panel-link', 'B.U.R.Iの準備が終わるまで、角の印は待機します。');
+    };
+    tile.addEventListener('click', open, true);
+    tile.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') open(e); }, true);
+    const tip = () => C98.tipShow(tile, ['B.U.R.I に聞く ' + (IS_MAC ? '⌘K' : 'Ctrl+K'), BURI_NAME114].concat(C98.status === 'error' && C98.error ? [C98.error] : []));
+    tile.addEventListener('pointerenter', tip);
+    tile.addEventListener('pointerleave', C98.tipHide);
+    tile.addEventListener('focus', tip);
+    tile.addEventListener('blur', C98.tipHide);
+  }
+  const buildBefore114 = obBuild;
+  obBuild = function() {
+    const rail = buildBefore114();
+    buriTile114();
+    return rail;
+  };
+  const layBefore114 = obLay;
+  obLay = function() {
+    const result = layBefore114();
+    if (obAllEl && C98.sol !== obAllEl) buriTile114();
+    return result;
+  };
+
+  /* 列の幅: 「B.U.R.I」と「SETTINGS」も字間込みで測る */
+  const railBefore114 = obRailWUpdate;
+  obRailWUpdate = function(gs) {
+    railBefore114(gs);
+    obFitCx.font = '600 8.5px ' + BASK104;
+    const need = Math.ceil(obFitCx.measureText('B.U.R.I').width + 7 * 1.2) + 22;
+    if (need > obRailW) {
+      obRailW = need;
+      set104('--c33-rail-w', obRailW + 'px');
+      if (obEl) obEl.style.setProperty('width', obRailW + 'px', 'important');
+    }
+  };
+
+  /* 3) ニョキッと: 判定を「Lock sidebar open がある」に一本化。並べて開いている（ドック）時だけは除く */
+  nativeCheck104 = function() {
+    native104Raf = 0;
+    const btn = document.querySelector('.notion-open-sidebar');
+    const side = document.querySelector('.notion-sidebar-container');
+    const frame = document.querySelector('.notion-frame');
+    let docked = false;
+    if (side && frame) {
+      const r = side.getBoundingClientRect();
+      docked = r.left >= -2 && r.width >= 120 && frame.getBoundingClientRect().left >= r.right - 4;
+    }
+    const closed = !!btn && !docked;
+    if (root104.hasAttribute('data-c104-native-closed') !== closed) root104.toggleAttribute('data-c104-native-closed', closed);
+    /* 入口の 48px の枠（ここに乗せるとせり出す）に印。:has が効かない時のため */
+    if (btn) {
+      const bar = btn.closest('.notion-topbar');
+      const row = bar && bar.firstElementChild;
+      let w = btn;
+      while (w.parentElement && w.parentElement !== row && w.parentElement !== bar) w = w.parentElement;
+      if (w !== btn && w.parentElement === row && !w.hasAttribute('data-c114-trigger')) w.setAttribute('data-c114-trigger', '');
+    }
+    const top = document.querySelector('.notion-topbar');
+    const h = top ? Math.round(top.getBoundingClientRect().height) : 0;
+    if (h >= 32 && h <= 72) set104('--c104-top', h + 'px');
+    caelumFlag114();
+  };
+  function caelumFlag114() {
+    const on = !!(CL114.on && OB.on && obEl && obEl.isConnected);
+    if (root104.hasAttribute('data-c114-caelum') !== on) root104.toggleAttribute('data-c114-caelum', on);
+  }
+
+  /* 4) 見た目 */
+  const BURI_SVG114 = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-width="1.2">'
+    + '<ellipse cx="12" cy="12" rx="10.3" ry="3.9"/><ellipse cx="12" cy="12" rx="10.3" ry="3.9" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10.3" ry="3.9" transform="rotate(120 12 12)"/></g>'
+    + '<g fill="#000"><path d="M12 8.7L12.79 11.21L15.3 12L12.79 12.79L12 15.3L11.21 12.79L8.7 12L11.21 11.21Z"/><circle cx="22.3" cy="12" r="1.3"/><circle cx="6.85" cy="3.08" r="1.3"/><circle cx="6.85" cy="20.92" r="1.3"/></g></svg>';
+  masks103.all = 'url("data:image/svg+xml,' + encodeURIComponent(BURI_SVG114) + '")';
+
+  const cssBefore114 = nbCss;
+  nbCss = function() {
+    cssBefore114();
+    nativeSoon104();
+    if (document.getElementById('c114-caelum-css')) return;
+    const style = document.createElement('style');
+    style.id = 'c114-caelum-css';
+    const S = 'html[data-c99-redesign]' + C98.strong + ':not(#c114a):not(#c114b):not(#c114c):not(#c114d):not(#c114e):not(#c114f):not(#c114g):not(#c114h)';
+    const W = S + '[data-c114-caelum]';
+    const O = S + ' #c33-orbit';
+    const NOTPEEK = ':not(.notion-peek-renderer *)';
+    style.textContent = `
+/* ── B.U.R.I（左上の角） ── */
+${O} .ob-all[data-c114-buri] { cursor: pointer; background: transparent !important; box-shadow: none !important; }
+${O} .ob-all[data-c114-buri].sel::after { content: none !important; display: none !important; }
+${O} .ob-all[data-c114-buri] .ob-ic {
+  width: 24px !important; height: 24px !important; opacity: 1 !important;
+  mask-image: ${masks103.all} !important; -webkit-mask-image: ${masks103.all} !important;
+  background-color: #6f8fa8 !important;
+  background-image: linear-gradient(135deg, #8e7cc8 10%, #4f9fa3 52%, #c39a52 92%) !important;
+  transition: transform .2s ease, filter .2s ease !important;
+}
+:is(body.dark) ${O} .ob-all[data-c114-buri] .ob-ic { background-image: linear-gradient(135deg, #b4a5e6 10%, #79c2c4 52%, #ddb978 92%) !important; }
+${O} .ob-all[data-c114-buri]:hover .ob-ic { transform: scale(1.07) rotate(-8deg); }
+${O} .ob-all[data-c114-buri][data-state="busy"] .ob-ic { animation: c114Orbit 3.2s linear infinite !important; }
+${O} .ob-all[data-c114-buri][data-state="error"] .ob-ic { filter: grayscale(1); opacity: .55 !important; }
+${O} .ob-all[data-c114-buri][data-unread]::before {
+  content: ""; position: absolute; top: 5px; left: calc(50% + 11px); width: 5px; height: 5px; border-radius: 50%;
+  background: #c39a52; box-shadow: 0 0 0 2px var(--c114-sky, var(--nb-paper, #f8f8f7));
+}
+${O} .ob-all[data-c114-buri] .ob-lb { letter-spacing: .1em !important; text-indent: .1em !important; }
+${O} .ob-all[data-c114-buri]:focus-visible { outline: 1px solid color-mix(in srgb, var(--nb-text, #544e45) 35%, transparent) !important; outline-offset: -3px; }
+@keyframes c114Orbit { to { transform: rotate(360deg); } }
+
+/* ── Orbit を上の帯（header・z-index 100）より上に。でないと左上の角（B.U.R.I）が帯に覆われて押せない ── */
+${S}[data-c99-orbit-visible] #c33-orbit { z-index: 101 !important; }
+
+/* ── ニョキッと: 入口の枠ごと消す・閉じている間は原生のサイドバーを見えなく ── */
+${S}[data-c99-orbit-visible] .notion-topbar div:has(> [data-popup-origin] .notion-open-sidebar),
+${S}[data-c99-orbit-visible] [data-c114-trigger] {
+  display: none !important;
+}
+${S}[data-c99-orbit-visible][data-c104-native-closed] :is(.notion-sidebar-container, .notion-sidebar) {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ── Caelum の空: 上の帯・Orbit・本文の外側を 1 枚の色に。本文は角の丸い紙 ── */
+html[data-c114-caelum] { --c114-sky: var(--nb-paper, var(--c-bacSec, #f8f8f7)); }
+${W} header:has(> .notion-topbar)${NOTPEEK} { background: var(--c114-sky) !important; box-shadow: none !important; }
+${W} .notion-topbar${NOTPEEK} { background: transparent !important; box-shadow: none !important; }
+${W} .notion-frame${NOTPEEK} { background: var(--c114-sky) !important; }
+${W} :is(.notion-frame > .notion-scroller, .notion-frame > div > .notion-scroller)${NOTPEEK} {
+  background: var(--c-bacPri, #fff) !important;
+  border-start-start-radius: 14px !important;
+  box-shadow: 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.09)), 0 1px 10px -6px rgba(15,15,15,.08) !important;
+}
+${W} #c33-orbit { background: var(--c114-sky) !important; box-shadow: none !important; }   /* 透過だと、並べた時の原生サイドバーの部品が透けるので、空と同じ色で塗る（継ぎ目は出ない） */
+${W} #c33-orbit .ob-all, ${W} #c33-orbit .ob-ft { box-shadow: none !important; }
+
+/* ── Zenith: 三本柱を名前つきの計器に ── */
+${W} #cordi-dock {
+  height: 30px !important; gap: 1px !important; padding: 0 2px !important; margin-inline: 4px 10px !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--c-bacPri, #fff) 70%, transparent) !important;
+  box-shadow: inset 0 0 0 1px var(--ca-borSecTra, rgba(55,53,47,.09)) !important;
+}
+${W} #cordi-dock .cd-b { width: auto !important; min-width: 28px !important; height: 26px !important; padding: 0 9px 0 7px !important; gap: 5px !important; border-radius: 999px !important; }
+${W} #cordi-dock .cd-b::after { font: 600 11.5px/1 var(--c104-serif, Baskerville, serif); letter-spacing: .02em; white-space: nowrap; color: inherit; }
+${W} #cordi-dock #cordi-b-at::after { content: "Atelier"; }
+${W} #cordi-dock #cordi-b-lm::after { content: "Lumière"; }
+${W} #cordi-dock #cordi-b-s38::after { content: "Scholar"; }
+@media (max-width: 1120px) {
+  ${W} #cordi-dock .cd-b::after { content: none !important; }
+  ${W} #cordi-dock .cd-b { width: 28px !important; padding: 0 !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  ${O} .ob-all[data-c114-buri] .ob-ic { animation: none !important; transition: none !important; }
+}
+`;
+    (document.head || root104).appendChild(style);
+    nativeSoon104();
+  };
+
+  /* 5) 設定（Nebius の設定の段）と、コンソール */
+  function caelumSet114(on) {
+    CL114.on = !!on;
+    try { localStorage.setItem(CL114.key, JSON.stringify({ on: CL114.on })); } catch (e) { /* noop */ }
+    caelumFlag114();
+    return CL114.on;
+  }
+  document.addEventListener('nebius:settings', (e) => {
+    const box = document.getElementById(String(e.detail || ''));
+    if (!box) return;
+    const h = document.createElement('h4'); h.textContent = 'Caelum（Orbit と上の帯）'; box.appendChild(h);
+    const l = document.createElement('label');
+    const c = document.createElement('input'); c.type = 'checkbox'; c.checked = CL114.on;
+    l.append(c, ' 上の帯・Orbit・本文の外側を 1 枚の空に（本文は角の丸い紙）');
+    c.addEventListener('change', () => caelumSet114(c.checked));
+    box.appendChild(l);
+  });
+  setInterval(caelumFlag114, 2000);
+
+
+  window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on }) };
   obBoot();
   obSearchBoot();
 })();
