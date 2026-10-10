@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      174.0.0
-// @description  v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      175.0.0
+// @description  v175.0.0: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,11 @@
 // ==/UserScript==
 
 /*
+ * v175.0.0（DB の題字の始まりを区切り線に）
+ *   ・畳んでいる時、DB の題字の領域の始まり（アイコンの箱の上端）を B.U.R.I の下の区切り線の高さにそろえる。v154 の「題字の段の真ん中を
+ *     B.U.R.I の段の真ん中に」を置き換え。題字の下（タブ・表）も同じだけ下がる（重ねない）。v174 の 10px 下げ（drop）は込みで計算する。
+ *     区切り線からの間は DBLINE175（既定 0）。カバー画像がある DB など、上に何かある時は線より下に自然に来る（最低 6px）
+ *
  * v174.0.0（Caelum VII — 左の配分 100/120/28・題字の領域を 10px 下げる・DB の自動倍率・ホイールの直し・New・Orbit の動き）
  *   ・左の配分（ブラウザーの倍率 100% の CSS px。devicePixelRatio は掛けない）: Orbit 100px（いちばん長い惑星の名前が入らない時だけ広げる）・
  *     Catalogus 120px・本文手前 28px。基準の画面（1354×1064）で Orbit 0〜100・Catalogus 100〜220・本文（題字のアイコン・タブ）の左端 248。
@@ -371,7 +376,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '174.0.0';
+  const VERSION = '175.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -11748,6 +11753,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
    * 本文の枠は Orbit の分（--c99-rail-width）だけ既に空いているので、DB の左のゆとりは「Catalogus＋余白 − Notion の左の余白
    * （96px）− 題字のアイコンの内側の分（8px）」= 44px（測った値で決める。248px を積み増さない） */
   const SIDE174 = { orbit: 100, cat: 120, gap: 28, drop: 10 };
+  const DBLINE175 = 0;   // v175: 区切り線（1px の上端）→ 題字のアイコンの箱の上端。0 = 線の高さから始まる
   const GUT154 = SIDE174.cat + SIDE174.gap - 96 - 8;   // 測れない時の値（44px）
   const NP154 = ':not(.notion-peek-renderer *)';
   const Z154 = { open: false, inside: false, tOpen: 0, tClose: 0, closedAt: -1e9, fillOk: true, fillSig: '', escaped: false };
@@ -11988,21 +11994,9 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     const wrap = row.parentElement;
     for (const o of sc.querySelectorAll('[data-c154-hwrap]')) if (o !== wrap) o.removeAttribute('data-c154-hwrap');
     if (!wrap.hasAttribute('data-c154-hwrap')) wrap.setAttribute('data-c154-hwrap', '');
-    /* 題字の段の真ん中を B.U.R.I の段の真ん中に（畳んでいる時）。畳まない時は帯の下に 24px */
-    const title = row.firstElementChild;
-    const th = title ? Math.round(title.getBoundingClientRect().height) : 38;
-    const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
-    const v = (root104.hasAttribute('data-c154-fold') ? Math.max(6, Math.round(top / 2 - th / 2)) : 24) + 'px';
-    if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
-    /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
-    const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
-    const ic = title && title.querySelector('.notion-record-icon');
-    let inset = 8;
-    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
-    const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
-    set104('--c154-gut', gut);
     /* v174: 題字の領域を 10px 下げる。下の余白（Notion の題字の段の margin と説明の margin。重なって大きい方）から同じだけ引き、
      * 2px は残す（説明が無い DB は余白が 8px なので 6px だけ下げる — タブに重ねない） */
+    const title = row.firstElementChild;
     const last = row.lastElementChild;
     const gapNat = Math.max(parseFloat(row.style.marginBottom) || 0, last && last !== title ? parseFloat(last.style.marginBottom) || 0 : 0);
     const drop = Math.max(0, Math.min(SIDE174.drop, gapNat - 2));
@@ -12011,6 +12005,27 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       if (row.style.getPropertyValue('--c174-drop') !== drop + 'px') row.style.setProperty('--c174-drop', drop + 'px');
       if (row.style.getPropertyValue('--c174-hgap') !== (gapNat - drop) + 'px') row.style.setProperty('--c174-hgap', (gapNat - drop) + 'px');
     } else if (row.hasAttribute('data-c174-drop')) row.removeAttribute('data-c174-drop');
+    /* v175: 畳んでいる時は、題字の領域の始まり（アイコンの箱の上端）を B.U.R.I の下の区切り線にそろえる。畳まない時は帯の下に 24px。
+     * 置き場所は測って決める（いまの padding・スクロール量に左右されない値だけで計算するので、測り直しても揺れない） */
+    const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
+    const ic0 = title && title.querySelector('.notion-record-icon');
+    let v = '24px';
+    if (root104.hasAttribute('data-c154-fold')) {
+      const sr = sc.getBoundingClientRect(), rr = row.getBoundingClientRect();
+      const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
+      const wrapOff = wrap.getBoundingClientRect().top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
+      const icIn = ic0 ? Math.max(0, ic0.getBoundingClientRect().top - rr.top) : 0;   // 題字の段の上端 → アイコンの箱の上端
+      const want = ob + top - 1 + DBLINE175 - sr.top - wrapOff - drop - icIn;
+      v = Math.max(6, Math.min(240, Math.round(want))) + 'px';
+    }
+    if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
+    /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
+    const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
+    const ic = title && title.querySelector('.notion-record-icon');
+    let inset = 8;
+    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
+    const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
+    set104('--c154-gut', gut);
   }
 
   /* 5) 子午線 — 測る（窓の大きさ・帯の見直しの時だけ）と、置く（輪が回るたび。レイアウトは読まない）を分ける */
