@@ -12015,7 +12015,10 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
       const wrapOff = wrap.getBoundingClientRect().top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
       const icIn = ic0 ? Math.max(0, ic0.getBoundingClientRect().top - rr.top) : 0;   // 題字の段の上端 → アイコンの箱の上端
-      const want = ob + top - 1 + DBLINE175 - sr.top - wrapOff - drop - icIn;
+      /* v185: 帯を開いている間（と開け閉めの途中）は、本文の枠が帯の高さだけ margin-top で下がっている。その分を引いた「畳んだ時の枠の上端」で
+       * 測るので、開け閉めで値が変わらない（題字は本文と一緒に場所ごと下がり、閉じれば線の高さに戻る。開いた後・閉じた後に跳ねない） */
+      const mt = parseFloat(getComputedStyle(frame).marginTop) || 0;
+      const want = ob + top - 1 + DBLINE175 - (sr.top - mt) - wrapOff - drop - icIn;
       v = Math.max(6, Math.min(240, Math.round(want))) + 'px';
     }
     if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
