@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      190.0.0
-// @description  v190.0.0: Notion の新規ページの小窓などで暗幕が掛かった時、Orbit は沈むのに Catalogus だけ浮いていたのを直す（暗幕の色と濃さを読んで、Catalogus の所に掛かっていない時だけ同じ幕を重ねる。Notion の DOM には触れない）。Catalogus の選んだ行の地をさらに半分に（--c189-sel 25% → 12.5%、色相・形・範囲はそのまま）。一覧の終わりの区切り線（◆—✦）をチームスペースの間の区切りにも（最後のチームスペースの下には付けない）。B.U.R.I に乗せて上の帯を開いた時、題字の段の真ん中を Catalogus の一番上のチームスペースのまとまり（アイコン・名前・下の細罫）の真ん中にそろえる（本文は今までどおり帯の高さだけ場所ごと下がり、帯とは重ねない。畳んだ時の位置は変えない）。__c33.veil()・__c33.align() で確かめられる。 v189.2.0: Catalogus の選んだ行の地をもう一段淡く — 189.1 は本物でも効いていた（スクショの画素で確認）が、まだ字と左の目盛りより先に緑の長方形が見えていたので、見えていた明度差の約半分に（--c189-sel 50% → 25%、189.0 の定義からの割合。色相・形・範囲はそのまま）。__c33.selbg() で実際に描かれている値を確かめられる。 v189.1.0: Catalogus の開いているページの地（選んだ行の淡い色）を 189.0 の約半分の濃さに — 同じ色のまま不透明度だけ半分（色相・形・範囲・行の不透明度・字・左の目盛り・アイコンはそのまま）。濃さは --c189-sel（189.0 = 100%、今は 50%）の 1 つの値で変えられる。 v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      191.0.0
+// @description  v191.0.0: DB の見出し行（アイコン＋題字）の位置を作り直す — ふだん（帯を畳んでいる時）は見出し行の縦の真ん中を B.U.R.I の下の線の高さに、横は線の描かれている右端（四芒星）から 14px の所にアイコン（説明・タブ・表・左のゆとりはそのまま）。B.U.R.I に乗せて帯を開いた時は、DB アイコンの中心を Catalogus に出ているその DB のチームスペースのアイコンの中心にそろえる（分からない時はほかのチームスペースで代わりにせず、帯の高さだけ下がる。帯の線から 12px は離す）。189 の「見えている下辺を線に」とアイコンを字の並びの線へ寄せる translate はやめた。__c33.align() で基準と量を確かめられる。 v190.0.0: Notion の新規ページの小窓などで暗幕が掛かった時、Orbit は沈むのに Catalogus だけ浮いていたのを直す（暗幕の色と濃さを読んで、Catalogus の所に掛かっていない時だけ同じ幕を重ねる。Notion の DOM には触れない）。Catalogus の選んだ行の地をさらに半分に（--c189-sel 25% → 12.5%、色相・形・範囲はそのまま）。一覧の終わりの区切り線（◆—✦）をチームスペースの間の区切りにも（最後のチームスペースの下には付けない）。B.U.R.I に乗せて上の帯を開いた時、題字の段の真ん中を Catalogus の一番上のチームスペースのまとまり（アイコン・名前・下の細罫）の真ん中にそろえる（本文は今までどおり帯の高さだけ場所ごと下がり、帯とは重ねない。畳んだ時の位置は変えない）。__c33.veil()・__c33.align() で確かめられる。 v189.2.0: Catalogus の選んだ行の地をもう一段淡く — 189.1 は本物でも効いていた（スクショの画素で確認）が、まだ字と左の目盛りより先に緑の長方形が見えていたので、見えていた明度差の約半分に（--c189-sel 50% → 25%、189.0 の定義からの割合。色相・形・範囲はそのまま）。__c33.selbg() で実際に描かれている値を確かめられる。 v189.1.0: Catalogus の開いているページの地（選んだ行の淡い色）を 189.0 の約半分の濃さに — 同じ色のまま不透明度だけ半分（色相・形・範囲・行の不透明度・字・左の目盛り・アイコンはそのまま）。濃さは --c189-sel（189.0 = 100%、今は 50%）の 1 つの値で変えられる。 v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,18 @@
 // ==/UserScript==
 
 /*
+ * v191.0.0（DB の見出し行の位置: ふだんは B.U.R.I の下の線の続き・帯を開いた時はチームスペースのアイコンの高さ）
+ *   ・ふだん（帯を畳んでいる時）: 見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の下の線（1px）の真ん中に（--c154-dbtop の決め方を
+ *     置き換え。189 の「アイコンの絵と字の並びの線を線に乗せる」と、アイコンを字の並びの線へ寄せる translate はやめ、アイコンと題字は
+ *     Notion のまま真ん中そろえ）。横は、線の描かれている右端（地平線 #c164-hz の .h-top の終わりの四芒星 .h-end.e1 の右端）から 14px の
+ *     所にアイコンの箱の左端（見出し行だけ margin-inline-start に --c191-hx。説明・タブ・表・左のゆとり・「＋」の場所はそのまま）。
+ *     Catalogus が出ていない（線の終わりに四芒星が無い）時は横を止める
+ *   ・帯を開いた時: 本文の枠は今までどおり帯の実際の高さ（--c154-h）だけ margin-top で下がる。--c190-al を「DB アイコンの中心を、
+ *     Catalogus に出ているその DB のチームスペース（一覧にその DB がある、一番上のチームスペース）のアイコンの中心にそろえる量」に
+ *     置き換え（190 のチームスペースのまとまりの真ん中はやめた）。チームスペースが分からない・一番上に無い・アイコンが無い時は
+ *     位置合わせだけ止める（帯の高さだけ下がる）。見出しの上端は帯の線から 12px 以上離す
+ *   ・左のゆとりや「＋」の分が変わった時は、次の画面で見出し行の横を測り直す（2 秒待たない）
+ *
  * v190.0.0（暗幕で Catalogus が浮かない・選んだ行の地をさらに淡く・チームスペースの間の区切り・帯を開いた時の題字の位置）
  *   ・Notion の新規ページの小窓などを開いた時、暗幕は Orbit には掛かるのに Catalogus の箱の中だけ掛かっていなかった（いただいたスクショで、
  *     地平線の 1 本の線が Orbit の上では暗く Catalogus の上では明るい → 暗幕に Catalogus の形の穴があると推定。重なり順では説明できない）。
@@ -505,7 +517,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '190.0.0';
+  const VERSION = '191.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -12188,157 +12200,6 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
 @1 { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #e0ad4c; clip-path: var(--c124-star); border-radius: 0; --x0: 9px; --y0: -9px; animation: c124-pop .55s ease .45s both; }`]
   });
 
-  /* v189: 題字は「見えている下辺」で線に乗せる — 字は字の並びの線（ベースライン）、アイコンは絵が描かれている所の下端。
-   * 187 は段の下端（アイコンの箱の下端）を線にそろえたので、本物の Notion ではアイコンの箱の中の余白と題字の行の下の余白の分だけ、
-   * 絵はおよそ 6px・字はおよそ 10px 線から浮いて見えた（青い破線より上）。
-   * 字: 題字の字の箱（Range の矩形 ＝ 書体の上下の高さ）の下端から、同じ書体の下の高さ（canvas の measureText）を引いた所。
-   * アイコン: <img> は同じ絵を小さな canvas に同じ置き方で描いて、透明でない最後の行（結果は src ごとに覚える）・<svg> は形の矩形・
-   * 絵文字は字と同じ測り方。測れない絵（ほかのサイトの画像など）は箱の下端のまま。
-   * 絵の下端と字の並びの線の差（本物の Notion でおよそ 4px）は、アイコンを translate で動かしてそろえる（Notion のアイコンは差し替えない・
-   * 色も変えない・DOM も動かさない。動かす量は 10px まで） */
-  const INK189 = { key: 'c33.ink189.v1', mem: null, miss: new Set(), busy: new Set(), cx: null };
-  function inkMem189() {
-    if (INK189.mem) return INK189.mem;
-    let m = null;
-    try { m = JSON.parse(localStorage.getItem(INK189.key) || 'null'); } catch (e) { m = null; }
-    INK189.mem = m && typeof m === 'object' ? m : {};
-    return INK189.mem;
-  }
-  function hash189(s) {
-    let h = 5381;
-    for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
-    return (h >>> 0).toString(36) + '.' + s.length.toString(36);
-  }
-  function font189(el, text) {
-    if (!INK189.cx) INK189.cx = document.createElement('canvas').getContext('2d');
-    const cs = getComputedStyle(el);
-    INK189.cx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
-    const m = INK189.cx.measureText(text || 'Hg');
-    return { a: m.fontBoundingBoxAscent, d: m.fontBoundingBoxDescent, ad: m.actualBoundingBoxDescent, aa: m.actualBoundingBoxAscent, cs };
-  }
-  /* 字のいちばん下の行の矩形と、その字の親（書体を読む） */
-  function lastLine189(h) {
-    const rg = document.createRange();
-    const w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
-    let best = null, host = null, text = '';
-    for (let n = w.nextNode(); n; n = w.nextNode()) {
-      if (!/\S/.test(n.nodeValue) || !n.parentElement || (h.classList.contains('notion-record-icon') ? false : n.parentElement.closest('.notion-record-icon'))) continue;
-      rg.selectNodeContents(n);
-      for (const r of rg.getClientRects()) if (r.height > 2 && r.width > 0 && (!best || r.bottom > best.bottom)) { best = r; host = n.parentElement; text = n.nodeValue; }
-    }
-    return best ? { r: best, host, text } : null;
-  }
-  /* 字の並びの線（いちばん下の行）。和文の字（かな・漢字）は字の面の下端が並びの線より少し下にあるので、その字の下端に。
-   * 字が無い（Untitled の空の題字）時は、1 行の箱の半分の行間から */
-  const CJK189 = /[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]/g;
-  function base189(h) {
-    if (!h || !h.isConnected) return null;
-    const ln = lastLine189(h);
-    if (ln) {
-      const m = font189(ln.host);
-      if (!(m.d > 0 && m.d < ln.r.height)) return null;
-      const bl = ln.r.bottom - Math.round(m.d);
-      const cjk = (ln.text.match(CJK189) || []).join('');
-      if (!cjk) return bl;
-      const ad = font189(ln.host, cjk).ad;
-      return ad > 0 && ad < m.d + 1 ? bl + Math.round(ad * 2) / 2 : bl;
-    }
-    const m = font189(h);
-    const r = h.getBoundingClientRect();
-    if (!(m.a > 0) || !(r.height > 2)) return null;
-    const lh = parseFloat(m.cs.lineHeight);
-    const box = Math.round(m.a) + Math.round(m.d);
-    return r.top + (parseFloat(m.cs.paddingTop) || 0) + (parseFloat(m.cs.borderTopWidth) || 0) + ((lh > 0 ? lh : box) - box) / 2 + Math.round(m.a);
-  }
-  /* <img> の絵の下端を、箱の高さに対する割合で（object-fit も同じに描く）。結果は src ごとに覚える（localStorage・120 件まで） */
-  function scan189(img, k) {
-    if (INK189.busy.has(k) || INK189.miss.has(k)) return;
-    INK189.busy.add(k);
-    const r = img.getBoundingClientRect();
-    const fit = getComputedStyle(img).objectFit;
-    const src = img.currentSrc || img.src;
-    const im = new Image();
-    let t = 0;
-    const done = (v) => {
-      clearTimeout(t);
-      INK189.busy.delete(k);
-      if (v == null) { INK189.miss.add(k); return; }   // 測れない絵は覚えない（次に開いた時にもう一度）
-      const m = inkMem189();
-      m[k] = v;
-      const ks = Object.keys(m);
-      if (ks.length > 120) delete m[ks[0]];
-      try { localStorage.setItem(INK189.key, JSON.stringify(m)); } catch (e) { /* noop */ }
-      zenSoon124();
-    };
-    t = setTimeout(() => done(null), 4000);
-    im.onerror = () => done(null);
-    im.onload = () => {
-      try {
-        const ch = 128, cw = Math.max(16, Math.min(512, Math.round(ch * (r.width / r.height || 1))));
-        const c = document.createElement('canvas');
-        c.width = cw; c.height = ch;
-        const g = c.getContext('2d', { willReadFrequently: true });
-        const nw = im.naturalWidth, nh = im.naturalHeight, R = nw > 0 && nh > 0 ? nw / nh : cw / ch;
-        let dw = cw, dh = ch;
-        if (Math.abs(R / (cw / ch) - 1) > 0.02 && /contain|scale-down|cover/.test(fit)) {
-          const wide = cw / ch > R;
-          if (fit === 'cover' ? wide : !wide) { dw = cw; dh = cw / R; } else { dh = ch; dw = ch * R; }
-        }
-        g.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-        const px = g.getImageData(0, 0, cw, ch).data;
-        const row = (y) => { for (let x = 0; x < cw; x++) if (px[(y * cw + x) * 4 + 3] > 40) return true; return false; };
-        let lo = -1, hi = -1;
-        for (let y = ch - 1; y >= 0; y--) if (row(y)) { lo = y; break; }
-        for (let y = 0; y < ch; y++) if (row(y)) { hi = y; break; }
-        if (lo < 0) return done(null);
-        inkTopSet190(k, Math.round(hi / ch * 1000) / 1000);   // v190: 絵の上端も（帯を開いた時の題字の段の真ん中に使う）
-        done(Math.round((lo + 1) / ch * 1000) / 1000);
-      } catch (e) { done(null); }   // ほかのサイトの画像（読めない）は箱の下端のまま
-    };
-    try {
-      if (/^https?:/i.test(src) && new URL(src, location.href).origin !== location.origin) im.crossOrigin = 'anonymous';
-    } catch (e) { /* noop */ }
-    im.src = src;
-  }
-  /* アイコンの絵の下端（いま描かれている位置）。まだ測っている途中は null */
-  function iconInk189(ic) {
-    if (!ic || !ic.isConnected) return null;
-    let img = null, area = 0;
-    for (const x of ic.querySelectorAll('img')) {
-      const q = x.getBoundingClientRect();
-      if (q.width > 4 && q.height > 4 && q.width * q.height > area) { img = x; area = q.width * q.height; }
-    }
-    if (img) {
-      const q = img.getBoundingClientRect();
-      const cs = getComputedStyle(img);
-      const top = q.top + (parseFloat(cs.borderTopWidth) || 0) + (parseFloat(cs.paddingTop) || 0);
-      const h = q.bottom - (parseFloat(cs.borderBottomWidth) || 0) - (parseFloat(cs.paddingBottom) || 0) - top;
-      const src = img.currentSrc || img.src;
-      if (!src || !(h > 4)) return q.bottom;
-      const k = hash189(src) + '|' + cs.objectFit + '|' + (q.width / q.height).toFixed(2);
-      const f = inkMem189()[k];
-      if (typeof f === 'number') return top + f * h;
-      if (INK189.miss.has(k)) return q.bottom;
-      scan189(img, k);
-      return null;
-    }
-    const svg = ic.querySelector('svg');
-    if (svg) {
-      const sr = svg.getBoundingClientRect();
-      if (!(sr.height > 4)) return null;
-      let b = -Infinity;
-      for (const s of svg.querySelectorAll('path, circle, ellipse, rect, polygon, polyline, line, use, text')) {
-        const q = s.getBoundingClientRect();
-        if (q.width + q.height > 0.5 && q.bottom > b) b = q.bottom;
-      }
-      return b > -Infinity ? Math.min(b, sr.bottom) : sr.bottom;
-    }
-    /* 絵文字（字のアイコン）: 字の矩形の下端 − 書体の下の高さ ＋ その字の絵の下の高さ */
-    const ln = lastLine189(ic);
-    if (!ln || !(ln.r.height > 4)) return null;
-    const m = font189(ln.host, ln.text.trim() || 'H');
-    return m.d > 0 && m.d < ln.r.height && Math.abs(m.ad) < ln.r.height ? ln.r.bottom - Math.round(m.d) + m.ad : ln.r.bottom;
-  }
   /* 4) DB: 見出しの幅を枠の中に・題字の高さ・左のゆとり（印は書くのは変わった時だけ） */
   function db154() {
     const frame = mainFrame154();
@@ -12347,7 +12208,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       if (sc && (old === sc || sc.contains(old))) continue;
       old.removeAttribute('data-c154-db'); old.removeAttribute('data-c154-hrow'); old.removeAttribute('data-c154-hwrap'); old.removeAttribute('data-c174-drop');
     }
-    for (const old of document.querySelectorAll('[data-c189-ic]')) if (!sc || !sc.contains(old)) old.removeAttribute('data-c189-ic');
+    for (const old of document.querySelectorAll('[data-c191-hx]')) if (!sc || !sc.contains(old)) hxSet191(old, null);
     if (!sc || !root104.hasAttribute('data-c114-caelum')) return;
     const blk = sc.querySelector('.notion-collection_view_page-block');
     const isDb = !!(blk && !blk.closest('.notion-page-content'));
@@ -12385,56 +12246,41 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     if (!drop && row.hasAttribute('data-c174-drop')) row.removeAttribute('data-c174-drop');
     const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
     let v = '24px';
-    let icdy = 0;
-    let al = 0;   // v190: 帯を開いた時の位置合わせ（null = 測っている途中なので今のまま）
+    let al = 0;      // v190/v191: 帯を開いた時の位置合わせ（--c190-al）
+    let hx = null;   // v191: 見出し行の横（--c191-hx。null = 止める＝Notion のまま）
     const ic0 = title && title.querySelector('.notion-record-icon');
-    for (const o of sc.querySelectorAll('[data-c189-ic]')) if (o !== ic0) o.removeAttribute('data-c189-ic');
     if (fold) {
       const sr = sc.getBoundingClientRect();
       const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
       const wr = wrap.getBoundingClientRect();
       const wrapOff = wr.top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
-      /* 箱の中身の上端（padding の内側）→ 段の下端。padding を変えても中身ごと動くので、この差は変わらない */
-      /* v189: 下端 = 題字の字の並びの線（ベースライン）。字の並びの線が取れない時は v187 のまま（アイコンの箱の下端） */
-      const ic = ic0;
-      const ir = ic && ic.getBoundingClientRect();
+      const cin = wr.top + (parseFloat(getComputedStyle(wrap).paddingTop) || 0);   // 箱の中身の上端（padding の内側。中身はここから一緒に動く）
       const h1 = (title && title.querySelector('h1')) || row.querySelector('h1') || (title && title.querySelector('[contenteditable="true"]'));
-      const bl = base189(h1);
-      let foot;
-      if (bl != null) foot = bl;
-      else if (ir && ir.height > 4) foot = ir.bottom;
-      else { const tb = (title || row).getBoundingClientRect(); foot = tb.bottom - (parseFloat(getComputedStyle(title || row).paddingBottom) || 0); }
-      /* v189: アイコンの絵の下端を字の並びの線にそろえる量（いま動かしている分を戻した、元の位置から測る。測っている途中は今のまま） */
-      const tr = ic && ic.hasAttribute('data-c189-ic') ? String(getComputedStyle(ic).translate || '').split(/\s+/) : [];
-      const was = tr.length > 1 ? parseFloat(tr[1]) || 0 : 0;
-      icdy = was;
-      if (ic && bl != null) {
-        const ink = iconInk189(ic);
-        if (ink != null) { const d = Math.round((bl - (ink - was)) * 2) / 2; icdy = Math.abs(d) <= 10 ? d : 0; }
-      } else icdy = 0;
-      foot -= wr.top + (parseFloat(getComputedStyle(wrap).paddingTop) || 0);
       /* v185: 帯を開いている間（と開け閉めの途中）は、本文の枠が帯の高さだけ margin-top で下がっている。その分を引いた「畳んだ時の枠の上端」で
        * 測るので、開け閉めで値が変わらない（題字は本文と一緒に場所ごと下がり、閉じれば線の高さに戻る。開いた後・閉じた後に跳ねない） */
       const mt = parseFloat(getComputedStyle(frame).marginTop) || 0;
-      const base = ob + top - 1 + DBLINE175 - (sr.top - mt) - wrapOff;   // 線の高さ（箱の中身の上端をここに置くと、段の上端が線）
-      const on = base - foot;                                             // 段の下端が線（段が線の上に立つ）
-      /* 線より上に段が入らない時（大きなアイコンなど）は、線の下から始める（線が段を横切らない）。カバー画像などで線より下に来る時は最低 6px */
-      v = (on >= 0 ? Math.min(240, Math.round(on)) : Math.max(6, Math.min(240, Math.round(base)))) + 'px';
-      /* v190: 帯を開いた時だけの位置合わせ（畳んだ時の位置はこのまま）。量は帯の分（--c154-h）とは別に持つ */
-      al = align190({ frame, sr, mt, wrapOff, pad: parseFloat(v), foot, wrap, wr, title, h1, ic, was, icdy });
+      const base = ob + top - 1 + DBLINE175 - (sr.top - mt) - wrapOff;   // 箱の中身の上端を線（1px）の上端に置く padding
+      /* v191: 見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の下の線（1px）の真ん中に。189 の「見えている下辺を線に」と、
+       * アイコンを字の並びの線へ寄せる translate はやめる（アイコンと題字は Notion のまま真ん中そろえ） */
+      const mid = rowMid191(title, ic0, h1);
+      if (base < 0) v = '6px';   // カバー画像などで、箱がもともと線より下にある時（v187 のまま）
+      else if (mid != null) v = Math.max(0, Math.min(240, Math.round((base + 0.5 - (mid - cin)) * 2) / 2)) + 'px';   // 0.5px 刻み（倍率 2 の画面の 1 画素）
+      else v = Math.min(240, Math.round(base)) + 'px';
+      /* 帯を開いた時だけの位置合わせ（畳んだ時の位置はこのまま）。量は帯の分（--c154-h）とは別に持つ */
+      al = align191({ frame, sr, mt, wrapOff, pad: parseFloat(v), cin, title, h1, ic: ic0 });
+      hx = hx191(title, ic0, h1);
     }
     if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
     if (al !== null) { const a = al ? al + 'px' : ''; if (wrap.style.getPropertyValue('--c190-al') !== a) { if (a) wrap.style.setProperty('--c190-al', a); else wrap.style.removeProperty('--c190-al'); } }
-    if (ic0 && icdy) { if (!ic0.hasAttribute('data-c189-ic')) ic0.setAttribute('data-c189-ic', ''); }
-    else if (ic0 && ic0.hasAttribute('data-c189-ic')) ic0.removeAttribute('data-c189-ic');
-    const dyv = icdy ? icdy + 'px' : '';
-    if (wrap.style.getPropertyValue('--c189-icdy') !== dyv) { if (dyv) wrap.style.setProperty('--c189-icdy', dyv); else wrap.style.removeProperty('--c189-icdy'); }
+    if (title) hxSet191(title, hx);
+    K191.v = v;
     /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
     const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
     const ic = title && title.querySelector('.notion-record-icon');
     let inset = 8;
-    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
+    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left - hxNow191(title); if (d >= 0 && d <= 24) inset = Math.round(d); }   // v191: 見出し行を寄せた分は戻して測る
     const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
+    if (fold && hx != null && root104.style.getPropertyValue('--c154-gut') !== gut) zenSoon124();   // v191: 左のゆとりが変わると見出し行の元の位置も動くので、次の画面で測り直す
     set104('--c154-gut', gut);
   }
 
@@ -12613,8 +12459,6 @@ ${S}[data-c154-hbar] ${FR} .notion-scroller::-webkit-scrollbar:horizontal { heig
 /* ── ページの上の段（Add cover・Hide description…）は Folio へ。段の場所も詰める（DOM はそのまま） ── */
 ${S}[data-c154-folio] ${FR} .notion-page-controls { height: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 ${S}[data-c154-folio] ${FR} [data-c154-hwrap] { padding-top: var(--c154-dbtop, 24px) !important; }
-/* v189: 題字のアイコンの絵の下端を字の並びの線にそろえる（測った量だけ。Notion のアイコンはそのまま） */
-${S}[data-c154-folio] ${FR} [data-c154-hwrap] [data-c189-ic] { translate: 0 var(--c189-icdy, 0px); }
 
 /* ── DB の新しい定位置: 左にサイドカーの分のゆとり ── */
 ${S}[data-c154-gut] ${FR} .notion-scroller[data-c154-db] { padding-inline-start: var(--c154-gut, ${GUT154}px) !important; }
@@ -14144,7 +13988,9 @@ ${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both
    * ・帯を開いた時（B.U.R.I に乗せた時）の題字: 本文（題字・説明・タブ・表）は今までどおり帯の高さ（--c154-h）だけ場所ごと下がる。そのうえで、
    *   題字の段（アイコン＋題字の見えている上端〜字の並びの線）の真ん中を、Catalogus の 1 番上のチームスペースのまとまり（アイコン・名前・
    *   下の細罫）の真ん中にそろえる量を --c190-al に別に持ち、題字の領域の上のゆとりに足す（後ろのタブ・表も一緒に動く＝間隔はそのまま）。
-   *   上へ寄せる時は、題字の上端が帯の線から 12px 以上離れる所まで（帯とは重ねない）。畳んだ時の位置は変えない */
+   *   上へ寄せる時は、題字の上端が帯の線から 12px 以上離れる所まで（帯とは重ねない）。畳んだ時の位置は変えない
+   *   → v191 で基準を作り直した（下の C191: 畳んだ時は見出し行の真ん中を線に、開いた時は DB アイコンの中心をその DB のチームスペースの
+   *     アイコンの中心に。--c190-al はその量に置き換え、足し重ねはしない） */
   const SEP190 = { above: 10, h: 7, gap: 10 + 7 + 28 };
   const GAP190 = 12;
   const K190 = { seps: [], sepT: 0, sepAt: 0, veil: null, dim: null, poll: 0, t: [], al: null, warned: false, top: null };
@@ -14259,108 +14105,142 @@ ${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both
   document.addEventListener('click', veilSoon190, { capture: true, passive: true });
   document.addEventListener('keydown', veilSoon190, { capture: true, passive: true });
 
-  /* 帯を開いた時の題字の位置 */
-  const INK190 = { key: 'c33.ink190.v1', mem: null };
-  function inkTop190() {
-    if (INK190.mem) return INK190.mem;
-    let m = null;
-    try { m = JSON.parse(localStorage.getItem(INK190.key) || 'null'); } catch (e) { m = null; }
-    INK190.mem = m && typeof m === 'object' ? m : {};
-    return INK190.mem;
-  }
-  function inkTopSet190(k, f) {
-    const m = inkTop190();
-    m[k] = f;
-    const ks = Object.keys(m);
-    if (ks.length > 120) delete m[ks[0]];
-    try { localStorage.setItem(INK190.key, JSON.stringify(m)); } catch (e) { /* noop */ }
-  }
-  /* アイコンの絵の上端（いま描かれている位置）。測っている途中は null */
-  function iconTop190(ic) {
+  /* ── C191: DB の見出し行の位置（ふだん = B.U.R.I の下の線の続き・帯を開いた時 = その DB のチームスペースのアイコンの高さ） ──
+   * ・ふだん（帯を畳んでいる時）: 見出し行（アイコン＋題字）の縦の真ん中を B.U.R.I の下の線の真ん中に（--c154-dbtop。db154 で決める）。
+   *   横は、線の描かれている右端（地平線 #c164-hz の .h-top の終わりに置いた四芒星 .h-end.e1 の右端）から GAP191 あけた所に
+   *   アイコンの箱の左端を置く（見出し行の margin-inline-start に --c191-hx。説明・タブ・表・左のゆとりは動かさない）。
+   *   Catalogus が出ていない（線に四芒星が無い）時は横を止める（Notion のまま）
+   * ・帯を開いた時: 本文の枠は今までどおり帯の実際の高さ（--c154-h）だけ margin-top で下がる。そのうえで DB アイコンの中心を、
+   *   Catalogus に出ているその DB のチームスペース（一覧にその DB がある、一番上のチームスペース）のアイコンの中心にそろえる量を
+   *   --c190-al として題字の領域の上のゆとりに足す（説明・タブ・表も一緒に動く）。チームスペースが分からない・一番上に無い時は
+   *   ほかのチームスペースで代わりにせず、位置合わせだけ止める（帯の高さだけ下がる）。上へ寄せる時は見出しの上端が帯の線から
+   *   GAP190 以上離れる所まで（帯とは重ねない） */
+  const GAP191 = 14;
+  const K191 = { v: '', line: null, row: null, hx: null };
+  try { localStorage.removeItem('c33.ink189.v1'); localStorage.removeItem('c33.ink190.v1'); } catch (e) { /* noop */ }   // 189・190 の測り置き（もう使わない）
+  /* アイコンの箱（中の img・svg のいちばん大きいもの。無ければアイコンの箱そのもの） */
+  function iconBox191(ic) {
     if (!ic || !ic.isConnected) return null;
-    let img = null, area = 0;
-    for (const x of ic.querySelectorAll('img')) {
+    const box = ic.getBoundingClientRect();
+    /* アイコンの箱の中にあるものだけ（アイコンの小窓が箱の中の DOM に開いても、その中の絵は拾わない） */
+    const inside = (q) => { const x = (q.left + q.right) / 2, y = (q.top + q.bottom) / 2; return x >= box.left - 1 && x <= box.right + 1 && y >= box.top - 1 && y <= box.bottom + 1; };
+    let best = null, area = 0;
+    for (const x of ic.querySelectorAll('img, svg')) {
+      if (x.parentElement && x.parentElement.closest('svg')) continue;
       const q = x.getBoundingClientRect();
-      if (q.width > 4 && q.height > 4 && q.width * q.height > area) { img = x; area = q.width * q.height; }
+      if (q.width > 4 && q.height > 4 && inside(q) && q.width * q.height > area) { best = q; area = q.width * q.height; }
     }
-    if (img) {
-      const q = img.getBoundingClientRect();
-      const cs = getComputedStyle(img);
-      const top = q.top + (parseFloat(cs.borderTopWidth) || 0) + (parseFloat(cs.paddingTop) || 0);
-      const h = q.bottom - (parseFloat(cs.borderBottomWidth) || 0) - (parseFloat(cs.paddingBottom) || 0) - top;
-      const src = img.currentSrc || img.src;
-      if (!src || !(h > 4)) return q.top;
-      const k = hash189(src) + '|' + cs.objectFit + '|' + (q.width / q.height).toFixed(2);
-      const f = inkTop190()[k];
-      if (typeof f === 'number') return top + f * h;
-      if (INK189.miss.has(k)) return q.top;
-      scan189(img, k);
+    if (best) return best;
+    /* 字のアイコン（絵文字）: 字の矩形（箱が字より大きいことがあるので） */
+    const rg = document.createRange();
+    rg.selectNodeContents(ic);
+    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+    for (const q of rg.getClientRects()) if (q.width > 0 && q.height > 4 && inside(q)) { l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom); }
+    if (r - l > 4 && b - t > 4) return { left: l, top: t, right: r, bottom: b, width: r - l, height: b - t };
+    return box.width > 4 && box.height > 4 ? box : null;
+  }
+  /* 見出し行の縦の真ん中（アイコンの箱と題字の箱を合わせた範囲の真ん中。Notion は 2 つを真ん中でそろえているので、アイコンの中心と同じ） */
+  function rowMid191(title, ic, h1) {
+    let t = Infinity, b = -Infinity;
+    const ib = iconBox191(ic);
+    if (ib) { t = ib.top; b = ib.bottom; }
+    const hr = h1 && h1.isConnected ? h1.getBoundingClientRect() : null;
+    if (hr && hr.height > 2) { t = Math.min(t, hr.top); b = Math.max(b, hr.bottom); }
+    if (!(b > t) && title) {
+      const r = title.getBoundingClientRect(), cs = getComputedStyle(title);
+      t = r.top + (parseFloat(cs.paddingTop) || 0); b = r.bottom - (parseFloat(cs.paddingBottom) || 0);
+    }
+    if (!(b > t + 2)) { K191.row = null; return null; }
+    K191.row = { t: Math.round(t * 10) / 10, b: Math.round(b * 10) / 10 };
+    return (t + b) / 2;
+  }
+  /* B.U.R.I の下の線: 縦は Orbit の線（#c33-orbit::before）と同じ高さの地平線の .h-top、右端はその終わりの四芒星 .h-end.e1 の右端 */
+  function line191() {
+    const hz = K164.hz;
+    if (!hz || !hz.isConnected || hz.hidden || !hz.hasAttribute('data-cat')) return null;
+    const ln = hz.querySelector('.h-top'), end = hz.querySelector('.h-end.e1');
+    if (!ln || !end) return null;
+    const lr = ln.getBoundingClientRect(), er = end.getBoundingClientRect();
+    if (!(lr.width > 20) || !(er.width > 0)) return null;   // 線が出ていない（display: none）
+    return { y: Math.round((lr.top + lr.height / 2) * 10) / 10, right: Math.round(er.right * 10) / 10, lineRight: Math.round(lr.right * 10) / 10, endStar: Math.round(er.right * 10) / 10 };
+  }
+  /* いま見出し行に足している横の量（Notion の元の margin からの差） */
+  function hxNow191(title) {
+    if (!title || !title.hasAttribute('data-c191-hx')) return 0;
+    return (parseFloat(getComputedStyle(title).marginInlineStart) || 0) - (parseFloat(title.style.getPropertyValue('--c191-m0')) || 0);
+  }
+  function hx191(title, ic, h1) {
+    try {
+      const ln = line191();
+      K191.line = ln;
+      if (!ln || !title) { K191.hx = { why: ln ? '見出し行が無い' : 'B.U.R.I の下の線の右端（Catalogus の所の四芒星）が出ていない' }; return null; }
+      const ib = iconBox191(ic);
+      let left = ib ? ib.left : null;
+      if (left == null && h1) {
+        const rg = document.createRange();
+        rg.selectNodeContents(h1);
+        const r = [...rg.getClientRects()].find((q) => q.width > 0 && q.height > 2);
+        if (r) left = r.left;
+      }
+      if (left == null) { K191.hx = { why: '見出しのアイコン・題字を測れない' }; return null; }
+      const nat = left - hxNow191(title);
+      const dx = Math.round((ln.right + GAP191 - nat) * 2) / 2;
+      if (Math.abs(dx) > 240) { K191.hx = { why: '寄せる量が大きすぎる（' + dx + 'px）' }; return null; }
+      K191.hx = { from: ib ? 'icon' : 'title', natural: Math.round(nat * 10) / 10, left: Math.round((nat + dx) * 10) / 10, gap: Math.round((nat + dx - ln.right) * 10) / 10, dx };
+      return dx;
+    } catch (e) {
+      try { if (!K190.warned) { K190.warned = true; C98.log('align', '見出しの横の位置合わせを休みます（' + (e && e.message) + '）。'); } } catch (e2) { /* 起動の途中 */ }
       return null;
     }
-    const svg = ic.querySelector('svg');
-    if (svg) {
-      const sr = svg.getBoundingClientRect();
-      if (!(sr.height > 4)) return null;
-      let t = Infinity;
-      for (const x of svg.querySelectorAll('path, circle, ellipse, rect, polygon, polyline, line, use, text')) {
-        const q = x.getBoundingClientRect();
-        if (q.width + q.height > 0.5 && q.top < t) t = q.top;
-      }
-      return t < Infinity ? Math.max(t, sr.top) : sr.top;
+  }
+  function hxSet191(title, dx) {
+    if (dx == null) {
+      if (title.hasAttribute('data-c191-hx')) { title.removeAttribute('data-c191-hx'); title.style.removeProperty('--c191-hx'); title.style.removeProperty('--c191-m0'); }
+      return;
     }
-    const ln = lastLine189(ic);
-    if (!ln || !(ln.r.height > 4)) return null;
-    const m = font189(ln.host, ln.text.trim() || 'H');
-    return m.a > 0 && m.aa > 0 && m.aa < ln.r.height ? ln.r.top + Math.round(m.a) - m.aa : ln.r.top;
-  }
-  /* 題字の字のいちばん上の行の、字の面の上端 */
-  function textTop190(h) {
-    if (!h || !h.isConnected) return null;
-    const rg = document.createRange();
-    const w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
-    let best = null, host = null, text = '';
-    for (let n = w.nextNode(); n; n = w.nextNode()) {
-      if (!/\S/.test(n.nodeValue) || !n.parentElement || n.parentElement.closest('.notion-record-icon')) continue;
-      rg.selectNodeContents(n);
-      for (const r of rg.getClientRects()) if (r.height > 2 && r.width > 0 && (!best || r.top < best.top)) { best = r; host = n.parentElement; text = n.nodeValue; }
+    if (!title.hasAttribute('data-c191-hx')) {
+      title.style.setProperty('--c191-m0', (parseFloat(getComputedStyle(title).marginInlineStart) || 0) + 'px');   // 寄せる前の Notion の margin
+      title.setAttribute('data-c191-hx', '');
     }
-    if (!best) return null;
-    const m = font189(host, text.trim() || 'H');
-    return m.a > 0 && m.aa > 0 && m.aa < best.height ? best.top + Math.round(m.a) - m.aa : best.top;
+    const v = dx + 'px';
+    if (title.style.getPropertyValue('--c191-hx') !== v) title.style.setProperty('--c191-hx', v);
   }
-  /* Catalogus の 1 番上（選んでいる）チームスペースのまとまり: アイコンの上端 〜 名前の下の細罫の下端（回している途中でも着く位置で） */
-  function block190() {
-    if (!K164.el || !K164.shown || K164.rest || !K164.els.length || !K164.body) return null;
-    const e = K164.els[K164.sel];
-    if (!e || !e.classList.contains('on')) return null;
-    const ic = e.firstElementChild, nm = e.children[1], rule = e.querySelector('.ct-rule');
-    const er = e.getBoundingClientRect();
-    const pic = ((ic && ic.querySelector('img, svg')) || ic).getBoundingClientRect();
-    const top0 = K164.body.getBoundingClientRect().top + OB_PAD;   // 先頭は translateY(OB_PAD)
-    const rb = rule && rule.offsetHeight ? rule.getBoundingClientRect().bottom : nm.getBoundingClientRect().bottom;
-    const t = top0 + (pic.top - er.top), b = top0 + (rb - er.top);
-    return b > t + 8 ? { t: Math.round(t * 10) / 10, b: Math.round(b * 10) / 10 } : null;
+  /* Catalogus に出ている、この DB のチームスペースのアイコンの中心（一番上に着いた時の位置で） */
+  function teamIcon191() {
+    const cur = curPage();
+    if (!cur) return { why: 'ページの ID が読めない' };
+    const ts = K164.teams;
+    if (!K164.el || !K164.shown || K164.rest || !ts || !ts.length || !K164.els.length || !K164.body) return { why: 'Catalogus が出ていない' };
+    const k = ts.findIndex((t) => t && t.rows && t.rows.some((r) => r.id === cur));
+    if (k < 0) return { why: 'この DB が、Catalogus に出ているチームスペースの一覧に見つからない' };
+    const t = ts[k];
+    if (k !== K164.sel) return { why: 'この DB のチームスペース（' + t.name + '）が Catalogus の一番上ではない', team: t.name };
+    const e = K164.els[k];
+    const ic = e && e.firstElementChild;
+    if (!e || !e.classList.contains('on') || !ic || ic.hasAttribute('data-none')) return { why: 'チームスペース（' + t.name + '）のアイコンが無い', team: t.name };
+    const er = e.getBoundingClientRect(), q = ic.getBoundingClientRect();
+    if (!(q.height > 4)) return { why: 'チームスペース（' + t.name + '）のアイコンが無い', team: t.name };
+    const top0 = K164.body.getBoundingClientRect().top + OB_PAD;   // 一番上は translateY(OB_PAD) に着く（回している途中でも着く位置で）
+    return { team: t.name, mid: Math.round((top0 + (q.top - er.top) + q.height / 2) * 10) / 10 };
   }
-  function align190(g) {
+  function align191(g) {
     try {
-      const blk = block190();
-      if (!blk) { K190.al = { why: 'Catalogus のチームスペースが見えていない' }; return 0; }
-      let it = iconTop190(g.ic);
-      if (g.ic && it == null) return null;   // 絵の上端を測っている途中（今のまま）
-      if (it != null) it += (g.icdy || 0) - (g.was || 0);   // アイコンは字の並びの線へそろえた後の位置で
-      const tt = textTop190(g.h1);
-      const top = Math.min(it == null ? Infinity : it, tt == null ? Infinity : tt);
-      if (!(top < Infinity)) { K190.al = { why: '題字の上端を測れない' }; return 0; }
-      const ref = g.wr.top + (parseFloat(getComputedStyle(g.wrap).paddingTop) || 0);   // 測った時の箱の中身の上端
-      const topRel = top - ref;
+      const tm = teamIcon191();
+      if (tm.mid == null) { K190.al = Object.assign({ al: 0 }, tm); return 0; }
+      const ib = iconBox191(g.ic);
+      if (!ib) { K190.al = { why: '題字のアイコンが無い', team: tm.team, al: 0 }; return 0; }
       const origin = (g.sr.top - g.mt) + g.wrapOff + g.pad;   // 畳んだ時・スクロールしていない時の箱の中身の上端
       const H = parseFloat(root104.style.getPropertyValue('--c154-h')) || 62;
-      const headT = origin + topRel + H, headB = origin + g.foot + H;   // 帯を開いた時（そろえる前）
-      const want = (blk.t + blk.b) / 2 - (headT + headB) / 2;
+      const icFold = origin + (ib.top + ib.bottom) / 2 - g.cin;   // ふだんの DB アイコンの中心
+      const icOpen = icFold + H;                                    // 帯を開いた時（そろえる前）
+      const want = tm.mid - icOpen;
+      const hr = g.h1 && g.h1.isConnected ? g.h1.getBoundingClientRect() : null;
+      const headT = origin + Math.min(ib.top, hr && hr.height > 2 ? hr.top : Infinity) - g.cin + H;   // 帯を開いた時の見出しの上端
       const bandB = g.frame.getBoundingClientRect().top - g.mt + H;   // 帯の下の線（開いた時の本文の枠の上端）
-      const up = Math.max(0, Math.min(headT - bandB - GAP190, g.pad));
-      const al = Math.round(Math.max(-up, Math.min(160, want)));
-      K190.al = { block: blk, head: { t: Math.round(headT * 10) / 10, b: Math.round(headB * 10) / 10 }, band: Math.round(bandB * 10) / 10, want: Math.round(want * 10) / 10, al };
+      const room = Math.max(0, headT - bandB - GAP190);
+      const al = Math.round(Math.max(-room, Math.min(160, want)) * 2) / 2;
+      const r1 = (x) => Math.round(x * 10) / 10;
+      K190.al = { team: tm.team, teamIcon: tm.mid, dbIcon: { fold: r1(icFold), open: r1(icOpen + al) }, band: r1(bandB), headTop: r1(headT + al), want: r1(want), al, move: r1(H + al), clamped: al > want + 0.25 };
       return al;
     } catch (e) {
       try {
@@ -14395,8 +14275,10 @@ ${ON} #c164-cat .ct-sep .ct-end > s { animation: c189-glint 7s ease-in-out calc(
 #c190-veil { position: fixed; z-index: 105; display: none; pointer-events: auto; background: var(--c190-veil, transparent); transition: background-color 120ms linear; }
 #c190-veil[data-on] { display: block; }
 
-/* ── C190: 帯を開いた時だけ、題字の領域の上のゆとりに位置合わせの量を足す（帯の分の margin-top とは別） ── */
+/* ── C190・C191: 帯を開いた時だけ、題字の領域の上のゆとりに位置合わせの量（DB アイコンの中心 → チームスペースのアイコンの中心）を足す（帯の分の margin-top とは別） ── */
 ${S154}[data-c154-folio][data-c154-fold][data-c154-open] ${HW} { padding-top: calc(var(--c154-dbtop, 24px) + var(--c190-al, 0px)) !important; }
+/* ── C191: 見出し行（アイコン＋題字）だけ、B.U.R.I の下の線の右端から 14px の所へ（説明・タブ・表・左のゆとりはそのまま） ── */
+${S154}[data-c154-folio][data-c154-fold] ${FR} [data-c154-hrow] > [data-c191-hx] { margin-inline-start: calc(var(--c191-m0, 0px) + var(--c191-hx, 0px)) !important; }
 ${S154}[data-c154-folio][data-c154-fold][data-c190-mv] ${HW} { transition: padding-top 220ms cubic-bezier(.4,0,.7,.2) !important; }
 ${S154}[data-c154-folio][data-c154-fold][data-c154-open][data-c190-mv] ${HW} { transition: padding-top 300ms cubic-bezier(.22,.8,.24,1) !important; }
 @media (prefers-reduced-motion: reduce) {
@@ -15333,6 +15215,7 @@ ${S}:not([data-c124-motion]) #c33-orbit .ob-it > .c174-orb * { transition-durati
     F184.room = room;
     flag124('data-c184-room', room > 0);
     if (room > 0) set104('--c184-room', room + 'px'); else root104.style.removeProperty('--c184-room');
+    zenSoon124();   // v191: 見出し行の横（B.U.R.I の下の線の右端から 14px）を、左のゆとりが変わった次の画面で測り直す
     return true;
   }
   const runBefore184 = run174;
@@ -15556,7 +15439,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
   window.__c33.teamSet = () => teamSet189(K164.teams && K164.teams[K164.sel]);     // C189
   /* v189.2: 選んだ行の地を本物で確かめる（読むだけ）— 版・--c189-sel・描いている ::after の算出値 */
   window.__c33.veil = () => ({ on: !!K190.dim, color: K190.veil ? K190.veil.style.getPropertyValue('--c190-veil') : '', dim: K190.dim ? (K190.dim.el.id || K190.dim.el.className || K190.dim.el.tagName) : null });   // C190
-  window.__c33.align = () => Object.assign({ open: Z154.open }, K190.al || {});   // C190
+  window.__c33.align = () => ({ version: VERSION, open: Z154.open, normal: { line: K191.line, row: K191.row, dbtop: K191.v, hx: K191.hx }, hover: K190.al });   // C190・C191
   window.__c33.selbg = () => { const r = document.querySelector('#c164-cat .ct-r[aria-current]'); if (!r) return { version: VERSION, row: null }; const a = getComputedStyle(r, '::after'), c = document.getElementById('c164-cat'); return { version: VERSION, row: (r.textContent || '').trim(), sel: getComputedStyle(c).getPropertyValue('--c189-sel').trim(), rowBg: getComputedStyle(r).backgroundColor + ' | ' + getComputedStyle(r).backgroundImage, afterColor: a.backgroundColor, afterImage: a.backgroundImage }; };
 
   /* v188: 187 は「チームスペースを作る」で Notion のサイドバーを開き、開いたまま残した。Notion はサイドバーの開け閉めを覚えるので、
