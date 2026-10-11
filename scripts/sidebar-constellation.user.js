@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      193.0.0
-// @description  v193.0.0: ふだん（帯を畳んでいる時）の DB の見出し（アイコン＋題字をひとつの見出しとして）の中身の下辺を、B.U.R.I の下の横線（いま描かれている 1px の線。Catalogus と一緒の時は地平線 #c164-hz .h-top）の上端に乗せる — ＿＿＿＿ ★ タイトル。真ん中・上端・字の並びの線ではなく、外側の余白を除いたアイコンの箱と題字の字の箱の低い方。192 の「B.U.R.I のセルの真ん中」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置・横線・帯を開いた時の計算は変えない。__c33.align() で線と下辺の高さを確かめられる。 v192.0.0: ふだん（帯を畳んでいる時）の DB の見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の上段のセル（魚と名前を収めた格子の箱 #c33-orbit .ob-all）の縦の真ん中に — 191 の「B.U.R.I の下の線に合わせる」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置と、帯を開いた後の位置（その DB のチームスペースのアイコンの高さ。分からない時は 191 と同じ所）は変えず、下げ幅はその差に計算し直す。__c33.align() でセルの上下端・真ん中と量を確かめられる。 v191.0.0: DB の見出し行（アイコン＋題字）の位置を作り直す — ふだん（帯を畳んでいる時）は見出し行の縦の真ん中を B.U.R.I の下の線の高さに、横は線の描かれている右端（四芒星）から 14px の所にアイコン（説明・タブ・表・左のゆとりはそのまま）。B.U.R.I に乗せて帯を開いた時は、DB アイコンの中心を Catalogus に出ているその DB のチームスペースのアイコンの中心にそろえる（分からない時はほかのチームスペースで代わりにせず、帯の高さだけ下がる。帯の線から 12px は離す）。189 の「見えている下辺を線に」とアイコンを字の並びの線へ寄せる translate はやめた。__c33.align() で基準と量を確かめられる。 v190.0.0: Notion の新規ページの小窓などで暗幕が掛かった時、Orbit は沈むのに Catalogus だけ浮いていたのを直す（暗幕の色と濃さを読んで、Catalogus の所に掛かっていない時だけ同じ幕を重ねる。Notion の DOM には触れない）。Catalogus の選んだ行の地をさらに半分に（--c189-sel 25% → 12.5%、色相・形・範囲はそのまま）。一覧の終わりの区切り線（◆—✦）をチームスペースの間の区切りにも（最後のチームスペースの下には付けない）。B.U.R.I に乗せて上の帯を開いた時、題字の段の真ん中を Catalogus の一番上のチームスペースのまとまり（アイコン・名前・下の細罫）の真ん中にそろえる（本文は今までどおり帯の高さだけ場所ごと下がり、帯とは重ねない。畳んだ時の位置は変えない）。__c33.veil()・__c33.align() で確かめられる。 v189.2.0: Catalogus の選んだ行の地をもう一段淡く — 189.1 は本物でも効いていた（スクショの画素で確認）が、まだ字と左の目盛りより先に緑の長方形が見えていたので、見えていた明度差の約半分に（--c189-sel 50% → 25%、189.0 の定義からの割合。色相・形・範囲はそのまま）。__c33.selbg() で実際に描かれている値を確かめられる。 v189.1.0: Catalogus の開いているページの地（選んだ行の淡い色）を 189.0 の約半分の濃さに — 同じ色のまま不透明度だけ半分（色相・形・範囲・行の不透明度・字・左の目盛り・アイコンはそのまま）。濃さは --c189-sel（189.0 = 100%、今は 50%）の 1 つの値で変えられる。 v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      194.0.0
+// @description  v194.0.0: Next Notion — Orbit × Catalogus × フル DB の第 1 実装。Catalogus の上段（B.U.R.I の右隣）に今開いているフル DB のアイコンと名前（本文の大きな見出しは見た目だけ畳む）。その上でホイールを回すと同じチームスペースのフル DB を候補として巡り、止まって 0.8 秒で移る（クリック・Enter はすぐ、Esc・離れると取り消し、乗せただけでは移らない）。B.U.R.I の機能メニューは今の DB の右から始まり、本文はメニューの高さだけ下がる。説明は「このDBについて」として全文（省略なし）、右に DB ごとに書いた実務（一続きの紙面・狭いと 1 列）。魚の入り（同じ DB はセッションで 1 回）。表のビューだけ「巡る索引帯」（確定したビューが左の着地点・ホイール・←→・0.7 秒で切り替え）とビューごとのしおり（縦横の位置と基準の行）。ビューの案内の魚（書いた案内だけ・7 秒・固定・Esc・出し直し）。表の見出し行 48px と二段の固定。星図の罫線（左端の線・行の境の菱形・触れたセルの左上の四芒星・列の 12 色）。191〜193 の見出しの位置合わせはやめた。__c33.next() で状態・設定・メモ・しおり。 v193.0.0: ふだん（帯を畳んでいる時）の DB の見出し（アイコン＋題字をひとつの見出しとして）の中身の下辺を、B.U.R.I の下の横線（いま描かれている 1px の線。Catalogus と一緒の時は地平線 #c164-hz .h-top）の上端に乗せる — ＿＿＿＿ ★ タイトル。真ん中・上端・字の並びの線ではなく、外側の余白を除いたアイコンの箱と題字の字の箱の低い方。192 の「B.U.R.I のセルの真ん中」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置・横線・帯を開いた時の計算は変えない。__c33.align() で線と下辺の高さを確かめられる。 v192.0.0: ふだん（帯を畳んでいる時）の DB の見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の上段のセル（魚と名前を収めた格子の箱 #c33-orbit .ob-all）の縦の真ん中に — 191 の「B.U.R.I の下の線に合わせる」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置と、帯を開いた後の位置（その DB のチームスペースのアイコンの高さ。分からない時は 191 と同じ所）は変えず、下げ幅はその差に計算し直す。__c33.align() でセルの上下端・真ん中と量を確かめられる。 v191.0.0: DB の見出し行（アイコン＋題字）の位置を作り直す — ふだん（帯を畳んでいる時）は見出し行の縦の真ん中を B.U.R.I の下の線の高さに、横は線の描かれている右端（四芒星）から 14px の所にアイコン（説明・タブ・表・左のゆとりはそのまま）。B.U.R.I に乗せて帯を開いた時は、DB アイコンの中心を Catalogus に出ているその DB のチームスペースのアイコンの中心にそろえる（分からない時はほかのチームスペースで代わりにせず、帯の高さだけ下がる。帯の線から 12px は離す）。189 の「見えている下辺を線に」とアイコンを字の並びの線へ寄せる translate はやめた。__c33.align() で基準と量を確かめられる。 v190.0.0: Notion の新規ページの小窓などで暗幕が掛かった時、Orbit は沈むのに Catalogus だけ浮いていたのを直す（暗幕の色と濃さを読んで、Catalogus の所に掛かっていない時だけ同じ幕を重ねる。Notion の DOM には触れない）。Catalogus の選んだ行の地をさらに半分に（--c189-sel 25% → 12.5%、色相・形・範囲はそのまま）。一覧の終わりの区切り線（◆—✦）をチームスペースの間の区切りにも（最後のチームスペースの下には付けない）。B.U.R.I に乗せて上の帯を開いた時、題字の段の真ん中を Catalogus の一番上のチームスペースのまとまり（アイコン・名前・下の細罫）の真ん中にそろえる（本文は今までどおり帯の高さだけ場所ごと下がり、帯とは重ねない。畳んだ時の位置は変えない）。__c33.veil()・__c33.align() で確かめられる。 v189.2.0: Catalogus の選んだ行の地をもう一段淡く — 189.1 は本物でも効いていた（スクショの画素で確認）が、まだ字と左の目盛りより先に緑の長方形が見えていたので、見えていた明度差の約半分に（--c189-sel 50% → 25%、189.0 の定義からの割合。色相・形・範囲はそのまま）。__c33.selbg() で実際に描かれている値を確かめられる。 v189.1.0: Catalogus の開いているページの地（選んだ行の淡い色）を 189.0 の約半分の濃さに — 同じ色のまま不透明度だけ半分（色相・形・範囲・行の不透明度・字・左の目盛り・アイコンはそのまま）。濃さは --c189-sel（189.0 = 100%、今は 50%）の 1 つの値で変えられる。 v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,36 @@
 // ==/UserScript==
 
 /*
+ * v194.0.0（Next Notion — Orbit × Catalogus × フル DB の第 1 実装。C194）
+ *   ・A 現在の DB: Catalogus の上段（B.U.R.I の右隣・#c33-n194-db）にアイコン（上）と名前（下）。本文の大きな見出し（アイコン＋題字）は
+ *     見た目だけ畳む（[data-c194-hide]。DOM はそのまま・格子を押すと見出しを出して編集できる）。名前・アイコンの変更と移動に付いていく
+ *   ・DB を巡る: 格子の上のホイール（↑↓←→）で「まとまり」のフル DB を候補に（先頭と末尾は輪）。まとまり = その DB が入っている
+ *     チームスペース（Catalogus の一覧の順・ページの下の DB は Notion が描いている分だけ）。⚙ で惑星（¹⁶ の大分類）全体にもできる。
+ *     止まって 800ms 格子の上にいれば移る（T194.dbCommit・⚙ で切れる）。クリック／Enter はすぐ。Esc・離れると取り消し。
+ *     編集中・変換中（IME）・小窓が開いている間は自動では移らない。移れなければ元に戻して知らせる（二重に移らない）
+ *   ・B メニュー: B.U.R.I の機能メニュー（上の帯）は今の DB の格子の右から始まる（帯の段の左の余白で寄せる）。本文は帯の実際の高さだけ下がり、
+ *     畳めば空白なし（C154 のまま）。B.U.R.I → 格子 → メニューと渡っても閉じない。格子に乗せただけでは開かない
+ *   ・C このDBについて: 説明（DB の憲法）を全文（折りたたみ・行数の制限・省略記号なし）、右に実務（DB ID ごとに ³³ に書いた実データ。
+ *     Folio の「実務を書く」・__c33.next.practice()）。区切り線・カード・半々の分割なしの一続きの紙面。狭いと 1 列。データが無ければ枠も出さない
+ *   ・魚の入り: SVG の魚。同じ DB はセッションで 1 回・操作を止めない・高さは最初から確保・動きを減らす設定では出さない・読み上げには出さない
+ *   ・D 巡る索引帯（表のビューだけ）: 本物のタブを CSS の order で並べ替え、確定したビューを左の着地点（目盛り）に。ホイール・←→ で候補、
+ *     Enter・Esc、止まって 700ms で切り替え（T194.viewCommit）。クリックはすぐ。名前を隠すフェードなし（入り切らない分は「+N」で、回せば全部届く）。
+ *     表でないビュー（ボード・リストなど）は Notion のまま
+ *   ・しおり: DB ID＋ビュー ID ごとに最後に確定したビュー・縦横の位置・基準の行とずれ。保存 → 切り替え → 描き終わりを待つ → 戻す → 確かめ直す。
+ *     戻す間は表の所だけ伏せて先頭を見せない。行が減っていれば届く所まで・基準の行が消えていれば座標。古い戻しは捨て、手で動かしたらやめる。
+ *     帯の開け閉めはスクロールと数えない。localStorage c33.marks194.v1（v:1・400 件まで・⚙ で全部消せる）
+ *   ・E ビューの案内: DB ID＋ビュー ID に書いた案内だけ（Folio の「このビューの案内を書く」・__c33.next.guide()）。ビューが確定した後に、
+ *     このDBについての右端（見えなければ索引帯の空き。余地が無ければ自動では出さない）。7 秒で消える（乗せる・フォーカスで止まる）・魚かピンで固定・
+ *     Esc・× で閉じる・出し直しの小さな魚。固定はビューを替えても残り、DB が替わると外れる
+ *   ・F 表の見出し行 48px（T194.headH・表の自動倍率が掛かっても画面で 48px）と二段の固定（索引帯の段＋見出し行。Notion の写しの見出しは隠す）
+ *   ・G 星図の罫線: 罫線は全部残し、表の左端の線と行の境の小さな ◆。触れたセルの左上の交点だけに四芒星（短い色の線つき）。
+ *     列の 12 色（PAL194。見えているプロパティの列の順・13 列目から繰り返し）を見出しの目盛りと星に。行に乗せた時の地の色はやめた
+ *   ・小窓が開くと Notion の暗幕（足りない所は 190 の紗）が格子にも掛かる。星・魚は小窓より下。切る／入れるで聞き手・時計が増えない
+ *   ・やめたもの: 191〜193 の本文の見出しの位置合わせ（見出しは畳むので）。localStorage の片付けは残す
+ *   ・ついでに直したもの: Notion の SVG のアイコンが Catalogus で空になっていた（outerHTML に xmlns が無い時に名前空間の無い要素になっていた）
+ *   ・ほかのスクリプト: ⁰⁸ は 1.5.7（このDBについての中の説明に幅を書かない）、⁴¹ は 1.0.1（索引帯のタブを横に流さない）。
+ *     ⁴¹ 1.0.0 のままなら索引帯は止めて ⁴¹ に任せ、⁰⁸ 1.5.6 のままならこのDBについては 1 列になる
+ *
  * v193.0.0（ふだんの DB の見出しの下辺を B.U.R.I の下の横線に）
  *   ・ふだん（帯を畳んでいる時）: アイコンと題字をひとつの見出しとして、その中身の下辺を B.U.R.I の下の横線の上端に乗せる（＿＿＿＿ ★ タイトル）。
  *     真ん中・上端・字の並びの線ではない。下辺 = .notion-record-icon の外側の余白を除いた中の img・svg（絵文字なら字の箱）と、h1 の字の箱
@@ -534,7 +564,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '193.0.0';
+  const VERSION = '194.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -11997,7 +12027,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
   const DBLINE175 = 0;   // v175: 区切り線（1px の上端）→ アイコン＋題字の段の下端（v187 から。v186 は段の上端）。0 = 段が線の上に立つ
   const GUT154 = SIDE174.cat + SIDE174.gap - 96 - 8;   // 測れない時の値（44px）
   const NP154 = ':not(.notion-peek-renderer *)';
-  const Z154 = { open: false, inside: false, tOpen: 0, tClose: 0, closedAt: -1e9, fillOk: true, fillSig: '', escaped: false, mvT: 0 };
+  const Z154 = { open: false, inside: false, tOpen: 0, tClose: 0, closedAt: -1e9, fillOk: true, fillSig: '', escaped: false, mvAt: -1e9 };
 
   function mainFrame154() {
     for (const f of document.querySelectorAll('.notion-frame')) if (!f.closest('.notion-peek-renderer')) return f;
@@ -12072,12 +12102,11 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     Z154.open = on;
     if (on) { fold154(); stagger154(); }
     else Z154.closedAt = performance.now();
-    /* v190: 開け閉めの間だけ、題字の領域の上のゆとり（--c190-al の分）も本文の枠と同じ速さで動かす（ふだんの測り直しは動かさない） */
-    flag124('data-c190-mv', true);
-    clearTimeout(Z154.mvT);
-    Z154.mvT = setTimeout(() => flag124('data-c190-mv', false), 460);
+    /* v194: 開け閉めの間（本文の枠が動いている間）は、しおり（C194）がスクロールの位置を覚え直さない */
+    Z154.mvAt = performance.now();
     flag124('data-c154-open', on);
     merSoon154();
+    try { ovMove194(); } catch (e) { /* noop */ }
   }
   function keep154() {
     const bar = mainBar154();
@@ -12101,16 +12130,19 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
     clearTimeout(Z154.tClose);
     Z154.tClose = setTimeout(tryClose154, ms == null ? 300 : ms);
   }
-  const ZONE154 = '#c33-orbit .ob-all, .notion-topbar, #c124-zpop';
+  /* v194: 上段の「今の DB」（#c33-n194-db）は B.U.R.I と帯の間にある。開いている帯へ渡る途中では閉じないが、そこに乗るだけでは開かない */
+  const ZONE154 = '#c33-orbit .ob-all, .notion-topbar, #c124-zpop, #c33-n194-db';
   function zoneOf154(t) {
     const z = t && t.closest ? t.closest(ZONE154) : null;
     if (!z) return '';
     if (z.matches('.notion-topbar')) return z.closest('.notion-peek-renderer') ? '' : 'bar';
+    if (z.id === 'c33-n194-db') return 'grid';
     return z.id === 'c124-zpop' ? 'pop' : 'buri';
   }
   document.addEventListener('pointerover', (e) => {
     if (!root104.hasAttribute('data-c154-fold')) return;
     const z = zoneOf154(e.target);
+    if (z === 'grid' && !Z154.open) { Z154.inside = false; clearTimeout(Z154.tOpen); Z154.tOpen = 0; return; }
     Z154.inside = !!z;
     if (z) {
       clearTimeout(Z154.tClose); Z154.tClose = 0;
@@ -12134,7 +12166,7 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
   document.addEventListener('focusin', (e) => {
     if (!root104.hasAttribute('data-c154-fold')) return;
     const z = zoneOf154(e.target);
-    if (z && !Z154.escaped && e.target.matches && e.target.matches(':focus-visible')) { clearTimeout(Z154.tClose); open154(true); }
+    if (z && z !== 'grid' && !Z154.escaped && e.target.matches && e.target.matches(':focus-visible')) { clearTimeout(Z154.tClose); open154(true); }
   }, true);
   document.addEventListener('focusout', (e) => {
     if (!zoneOf154(e.relatedTarget)) Z154.escaped = false;   // Esc で閉じた後は、B.U.R.I を離れるまで開き直さない
@@ -12193,16 +12225,21 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
   function folioPop154(btn) {
     if (zpop124 && btn.getAttribute('aria-expanded') === 'true') { zpopClose124(); return; }
     const items = folioItems154();
+    let more = [];
+    try { more = folioNext194(); } catch (e) { more = []; }   // v194: この DB の実務・このビューの案内を書く
     zpopOpen124(btn,
       '<div class="hd"><i class="mi" data-for="c154-z-folio"></i><b>Folio</b><span>このページ</span></div>'
       + (items.length
         ? items.map((x, i) => '<button type="button" role="menuitem" data-i="' + i + '"><i class="c154-fi" data-k="' + x.k + '"></i>' + esc124(x.jp) + (x.jp !== x.t ? '<small>' + esc124(x.t) + '</small>' : '') + '</button>').join('')
         : '<p class="c154-none">このページで足せるもの（アイコン・カバー・説明・コメント）はありません。付いているアイコンやカバーは、ページの上で押すと変えられます。</p>')
+      + more.map((x) => '<button type="button" role="menuitem" data-a="' + x.a + '"><i class="c154-fi" data-k="other"></i>' + esc124(x.jp) + '</button>').join('')
       + '<label class="opt"><input type="checkbox" data-a="pc"' + (ZK154.folio ? '' : ' checked') + '> Notion の元の段（ページの上）にも出す</label>',
       (e) => {
         const x = e.target.closest('[data-i], [data-a]');
         if (!x) return;
         if (x.getAttribute('data-a') === 'pc') { set154('folio', !x.checked); return; }
+        const a = x.getAttribute('data-a') || '';
+        if (a.startsWith('n194-')) { zpopClose124(); edOpen194(a === 'n194-guide' ? 'guide' : 'prac'); return; }
         const it = items[+x.getAttribute('data-i')];
         zpopClose124();
         if (it) requestAnimationFrame(() => folioPress154(it.b));
@@ -12225,27 +12262,21 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       if (sc && (old === sc || sc.contains(old))) continue;
       old.removeAttribute('data-c154-db'); old.removeAttribute('data-c154-hrow'); old.removeAttribute('data-c154-hwrap'); old.removeAttribute('data-c174-drop');
     }
-    for (const old of document.querySelectorAll('[data-c191-hx]')) if (!sc || !sc.contains(old)) hxSet191(old, null);
-    if (!sc || !root104.hasAttribute('data-c114-caelum')) return;
+    if (!sc || !root104.hasAttribute('data-c114-caelum')) { db194(null); return; }
     const blk = sc.querySelector('.notion-collection_view_page-block');
     const isDb = !!(blk && !blk.closest('.notion-page-content'));
     if (sc.hasAttribute('data-c154-db') !== isDb) sc.toggleAttribute('data-c154-db', isDb);
-    if (!isDb) return;
+    if (!isDb) { db194(null); return; }
     /* 見出しの行 = 題字の上の、padding-inline-end（右の 96px）と固定の幅を持つ箱。その親が左の 96px の箱 */
     let row = blk;
     while (row && row.parentElement && row.parentElement !== sc && !/padding-inline-end/.test(row.getAttribute('style') || '')) row = row.parentElement;
-    if (!row || row.parentElement === sc || !/padding-inline-end/.test(row.getAttribute('style') || '')) return;
+    if (!row || row.parentElement === sc || !/padding-inline-end/.test(row.getAttribute('style') || '')) { db194(null); return; }
     for (const o of sc.querySelectorAll('[data-c154-hrow]')) if (o !== row) { o.removeAttribute('data-c154-hrow'); o.removeAttribute('data-c174-drop'); }
     if (!row.hasAttribute('data-c154-hrow')) row.setAttribute('data-c154-hrow', '');
     const wrap = row.parentElement;
     for (const o of sc.querySelectorAll('[data-c154-hwrap]')) if (o !== wrap) o.removeAttribute('data-c154-hwrap');
     if (!wrap.hasAttribute('data-c154-hwrap')) wrap.setAttribute('data-c154-hwrap', '');
-    /* v187: 上の帯を畳んでいる時は、アイコン＋題字の段の下端を B.U.R.I の下の区切り線に乗せる（＿＿＿＿★ タイトル。段は線の上に立ち、
-     * 線の下へ潜らない・線が段の途中を横切らない）。下端 = 題字のアイコンの箱の下端（アイコンが無ければ題字の段の中身の下端）。
-     * v186 は段の上端を線にそろえていたので、段がまるごと線の下に出ていた。
-     * v174 の「題字の領域を 10px 下げる」は畳んでいる時は使わない（下の余白も Notion のまま＝説明とタブの間は元どおり）。
-     * 置き場所は測って決める（いまの padding・スクロール量・帯の開け閉めに左右されない値だけで計算するので、測り直しても揺れない）。
-     * 畳まない時は v174 のまま（帯の下に 24px・10px 下げる） */
+    /* 畳まない時は v174 のまま（帯の下に 24px・題字の領域を 10px 下げる）。畳んでいる時は下の v194 */
     const title = row.firstElementChild;
     const fold = root104.hasAttribute('data-c154-fold');
     let drop = 0;
@@ -12261,66 +12292,21 @@ ${NB} > svg { width: 20px !important; height: 20px !important; align-self: cente
       }
     }
     if (!drop && row.hasAttribute('data-c174-drop')) row.removeAttribute('data-c174-drop');
-    const top = parseFloat(root104.style.getPropertyValue('--c104-top')) || 62;
-    let v = '24px';
-    let al = 0;      // v190/v191: 帯を開いた時の位置合わせ（--c190-al）
-    let hx = null;   // v191: 見出し行の横（--c191-hx。null = 止める＝Notion のまま）
-    const ic0 = title && title.querySelector('.notion-record-icon');
-    if (fold) {
-      const sr = sc.getBoundingClientRect();
-      const ob = obEl && obEl.isConnected ? obEl.getBoundingClientRect().top : 0;
-      const wr = wrap.getBoundingClientRect();
-      const wrapOff = wr.top - sr.top + sc.scrollTop;   // 枠の中での箱の上端（padding の外側）
-      const cin = wr.top + (parseFloat(getComputedStyle(wrap).paddingTop) || 0);   // 箱の中身の上端（padding の内側。中身はここから一緒に動く）
-      const h1 = (title && title.querySelector('h1')) || row.querySelector('h1') || (title && title.querySelector('[contenteditable="true"]'));
-      /* v185: 帯を開いている間（と開け閉めの途中）は、本文の枠が帯の高さだけ margin-top で下がっている。その分を引いた「畳んだ時の枠の上端」で
-       * 測るので、開け閉めで値が変わらない（題字は本文と一緒に場所ごと下がり、閉じれば線の高さに戻る。開いた後・閉じた後に跳ねない） */
-      const mt = parseFloat(getComputedStyle(frame).marginTop) || 0;
-      const base = ob + top - 1 + DBLINE175 - (sr.top - mt) - wrapOff;   // 箱の中身の上端を線（1px）の上端に置く padding
-      /* v191 の位置: 見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の下の線（1px）の真ん中に。アイコンと題字は Notion のまま真ん中そろえ。
-       * v192 からは、B.U.R.I のセルが取れない時の位置（既存の配置）と、帯を開いた時の位置合わせを止めた時の到達位置（この位置＋帯の高さ）に使う */
-      const mid = rowMid191(title, ic0, h1);
-      let vLine;
-      if (base < 0) vLine = 6;   // カバー画像などで、箱がもともと線より下にある時（v187 のまま）
-      else if (mid != null) vLine = Math.max(0, Math.min(240, Math.round((base + 0.5 - (mid - cin)) * 2) / 2));   // 0.5px 刻み（倍率 2 の画面の 1 画素）
-      else vLine = Math.min(240, Math.round(base));
-      /* v193: 見出し（アイコン＋題字をひとつの見出しとして）の中身の下辺を、B.U.R.I の下の線（いま描かれている 1px の線）の上端に乗せる
-       * （＿＿＿＿ ★ タイトル。真ん中・上端・字の並びの線ではない。192 のセルの真ん中を置き換え）。下辺は、外側の余白を除いた
-       * アイコンの箱（中の img・svg・絵文字の字）と題字の字の箱の低い方。説明・タブ・表は同じ箱の中身なので一緒に動き、間隔は Notion のまま。
-       * 線が測れない時は今の値に触らない（帯を開いた時の量も） */
-      let pad = null;
-      K193.raw = null;
-      if (base < 0) pad = 6;   // カバー画像などで、箱がもともと線より下にある時（v187 のまま）
-      else {
-        const ln = line193();
-        const bot = ln ? rowBottom193(title, ic0, h1) : null;
-        if (ln && bot != null) {
-          const raw = ln.top - (sr.top - mt) - wrapOff - (bot - cin);
-          K193.raw = Math.round(raw * 10) / 10;   // 負なら padding 0 でも届かない（見出しは線より下に残る）
-          pad = Math.max(0, Math.min(240, Math.round(raw * 2) / 2));   // 0.5px 刻み
-        }
-      }
-      K193.vLine = vLine; K193.pad = pad;
-      if (pad == null) { v = null; al = null; }
-      else {
-        v = pad + 'px';
-        /* 帯を開いた時だけの位置合わせ（192 のまま）。量は帯の分（--c154-h）とは別に持つ。止める時は 191 と同じ到達位置（back） */
-        al = align191({ frame, sr, mt, wrapOff, pad, cin, title, h1, ic: ic0, back: vLine - pad });
-      }
-      hx = hx191(title, ic0, h1);
-    }
-    if (v != null && wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
-    if (al !== null) { const a = al ? al + 'px' : ''; if (wrap.style.getPropertyValue('--c190-al') !== a) { if (a) wrap.style.setProperty('--c190-al', a); else wrap.style.removeProperty('--c190-al'); } }
-    if (title) hxSet191(title, hx);
-    K191.v = v != null ? v : wrap.style.getPropertyValue('--c154-dbtop');
+    /* v194: 本文の見出しの位置合わせ（187〜193: B.U.R.I の下の線・B.U.R.I のセル・帯を開いた時のチームスペースのアイコン・線の右端から 14px）はやめた。
+     * DB の名前とアイコンは Catalogus の上段（現在の DB）に出し、本文の大きな見出しは見た目だけ畳む（C194）。帯を畳んでいる時の上のゆとりは
+     * 決まった値（DBTOP194）。帯を開けば、本文の枠が帯の実際の高さ（--c154-h）だけ下がる — 足し引きの量（--c190-al・--c191-hx）は使わない */
+    const v = (fold ? DBTOP194 : 24) + 'px';
+    if (wrap.style.getPropertyValue('--c154-dbtop') !== v) wrap.style.setProperty('--c154-dbtop', v);
+    if (wrap.style.getPropertyValue('--c190-al')) wrap.style.removeProperty('--c190-al');   // 193 までの値の残り
+    if (title && title.hasAttribute('data-c191-hx')) { title.removeAttribute('data-c191-hx'); title.style.removeProperty('--c191-hx'); title.style.removeProperty('--c191-m0'); }
     /* v174: 左のゆとり = Catalogus＋余白 − Notion の左の余白 − 題字のアイコンの内側の分（どれもゆとりに左右されない値なので、測り直しても揺れない） */
     const pad = parseFloat(getComputedStyle(wrap).paddingInlineStart);
     const ic = title && title.querySelector('.notion-record-icon');
     let inset = 8;
-    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left - hxNow191(title); if (d >= 0 && d <= 24) inset = Math.round(d); }   // v191: 見出し行を寄せた分は戻して測る
+    if (ic) { const d = ic.getBoundingClientRect().left - row.getBoundingClientRect().left; if (d >= 0 && d <= 24) inset = Math.round(d); }
     const gut = Math.max(0, Math.min(200, Math.round(SIDE174.cat + SIDE174.gap - (pad >= 0 && pad <= 400 ? pad : 96) - inset))) + 'px';
-    if (fold && hx != null && root104.style.getPropertyValue('--c154-gut') !== gut) zenSoon124();   // v191: 左のゆとりが変わると見出し行の元の位置も動くので、次の画面で測り直す
     set104('--c154-gut', gut);
+    db194({ sc, row, wrap, title, blk });
   }
 
   /* 5) 子午線 — 測る（窓の大きさ・帯の見直しの時だけ）と、置く（輪が回るたび。レイアウトは読まない）を分ける */
@@ -12725,7 +12711,8 @@ ${DARK} #c154-mer .m-shoot { background: linear-gradient(to bottom, transparent,
       box.appendChild(im);
     } else if (ic.t === 'svg') {
       try {
-        const doc = new DOMParser().parseFromString(ic.v, 'image/svg+xml');
+        /* v194: HTML の中の svg の outerHTML には xmlns が付かないことがあり、そのまま読むと名前空間の無い要素になって何も描かれなかった（Notion の svg のアイコンが空になる） */
+        const doc = new DOMParser().parseFromString(/^<svg(?![^>]*\sxmlns=)/i.test(ic.v) ? ic.v.replace(/^<svg/i, '<svg xmlns="http://www.w3.org/2000/svg"') : ic.v, 'image/svg+xml');
         const sv = doc.documentElement;
         if (!sv || sv.nodeName.toLowerCase() !== 'svg' || doc.querySelector('parsererror')) throw new Error('svg');
         sv.querySelectorAll('script, foreignObject').forEach((n) => n.remove());
@@ -14031,9 +14018,8 @@ ${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both
    *   → v191 で基準を作り直した（下の C191: 畳んだ時は見出し行の真ん中を線に、開いた時は DB アイコンの中心をその DB のチームスペースの
    *     アイコンの中心に。--c190-al はその量に置き換え、足し重ねはしない） */
   const SEP190 = { above: 10, h: 7, gap: 10 + 7 + 28 };
-  const GAP190 = 12;
-  const K190 = { seps: [], sepT: 0, sepAt: 0, veil: null, dim: null, poll: 0, t: [], al: null, warned: false, top: null };
-  const OURS190 = '#c33-orbit, #c164-cat, #c164-hz, #c164-link, #c189-tpop, #c154-mer, #c33-ob-set, #c33-ob-toast, #c190-veil';
+  const K190 = { seps: [], sepT: 0, sepAt: 0, veil: null, dim: null, poll: 0, t: [], warned: false, top: null };
+  const OURS190 = '#c33-orbit, #c164-cat, #c164-hz, #c164-link, #c189-tpop, #c154-mer, #c33-ob-set, #c33-ob-toast, #c190-veil, #c33-n194-db, #c33-n194, #c33-n194-ed';
   function sepOn190() { return !!(K164.els && K164.els.length > 1); }
   function sep190(ys, dir, now) {
     const body = K164.body;
@@ -14128,7 +14114,8 @@ ${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both
         K190.veil.setAttribute('aria-hidden', 'true');
         document.body.appendChild(K190.veil);
       }
-      const v = K190.veil, cr = K164.el.getBoundingClientRect(), c = dim.c;
+      /* v194: Catalogus の上の「今の DB」（#c33-n194-db）も同じ紗の下に入れる（小窓より上に出さない） */
+      const v = K190.veil, cr = veilRect194(K164.el.getBoundingClientRect()), c = dim.c;
       px164(v, 'left', cr.left + 'px'); px164(v, 'top', cr.top + 'px'); px164(v, 'width', cr.width + 'px'); px164(v, 'height', cr.height + 'px');
       px164(v, '--c190-veil', 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + dim.a + ')');
       if (!v.hasAttribute('data-on')) v.setAttribute('data-on', '');
@@ -14144,203 +14131,9 @@ ${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both
   document.addEventListener('click', veilSoon190, { capture: true, passive: true });
   document.addEventListener('keydown', veilSoon190, { capture: true, passive: true });
 
-  /* ── C191: DB の見出し行の位置（ふだん = B.U.R.I の下の線の続き・帯を開いた時 = その DB のチームスペースのアイコンの高さ） ──
-   * ・ふだん（帯を畳んでいる時）: 見出し行（アイコン＋題字）の縦の真ん中を B.U.R.I の下の線の真ん中に（--c154-dbtop。db154 で決める）。
-   *   → v192: ふだんの縦は B.U.R.I の上段のセルの真ん中に置き換え（下の C192）。止める時の到達位置は 191 と同じ所
-   *   横は、線の描かれている右端（地平線 #c164-hz の .h-top の終わりに置いた四芒星 .h-end.e1 の右端）から GAP191 あけた所に
-   *   アイコンの箱の左端を置く（見出し行の margin-inline-start に --c191-hx。説明・タブ・表・左のゆとりは動かさない）。
-   *   Catalogus が出ていない（線に四芒星が無い）時は横を止める（Notion のまま）
-   * ・帯を開いた時: 本文の枠は今までどおり帯の実際の高さ（--c154-h）だけ margin-top で下がる。そのうえで DB アイコンの中心を、
-   *   Catalogus に出ているその DB のチームスペース（一覧にその DB がある、一番上のチームスペース）のアイコンの中心にそろえる量を
-   *   --c190-al として題字の領域の上のゆとりに足す（説明・タブ・表も一緒に動く）。チームスペースが分からない・一番上に無い時は
-   *   ほかのチームスペースで代わりにせず、位置合わせだけ止める（帯の高さだけ下がる）。上へ寄せる時は見出しの上端が帯の線から
-   *   GAP190 以上離れる所まで（帯とは重ねない） */
-  const GAP191 = 14;
-  const K191 = { v: '', line: null, row: null, hx: null };
-  try { localStorage.removeItem('c33.ink189.v1'); localStorage.removeItem('c33.ink190.v1'); } catch (e) { /* noop */ }   // 189・190 の測り置き（もう使わない）
-  /* ── C193: ふだんの縦は、見出しの中身の下辺を B.U.R.I の下の線の上端に（192 の「B.U.R.I のセルの真ん中」を置き換え）──
-   * 線 = いま描かれている B.U.R.I の下の 1px の線。Catalogus と一緒の時は地平線 #c164-hz .h-top（Orbit の #c33-orbit::before は
-   *   display: none になる）、そうでなければ #c33-orbit::before（top は calc(var(--c104-top) - 1px)。計算済みの top・height と Orbit の箱から読む）。
-   *   どちらも描かれていない時は線が無いものとして、--c154-dbtop に触らない。
-   * 見出しの中身の下辺 = アイコンの箱（.notion-record-icon の外側の余白を除いた中の img・svg、絵文字なら字の箱。iconBox191）と、
-   *   題字（h1）の字の箱（padding・行の高さの余りを除く。字が無い時は h1 の中身の箱）の、低い方 */
-  const K193 = { line: null, why: '', bottom: null, raw: null, vLine: null, pad: null };
-  function line193() {
-    const r1 = (x) => Math.round(x * 10) / 10;
-    const done = (top, h, src) => { K193.why = ''; K193.line = { top: r1(top), bottom: r1(top + h), src }; return { top, bottom: top + h }; };
-    /* Catalogus と一緒に出ている時は、Orbit の線の代わりに地平線の .h-top が描かれている（#c33-orbit::before は display: none） */
-    const hz = K164.hz;
-    const ln = hz && hz.isConnected && !hz.hidden ? hz.querySelector('.h-top') : null;
-    if (ln) { const r = ln.getBoundingClientRect(); if (r.width > 20 && r.height > 0) return done(r.top, r.height, '#c164-hz .h-top'); }
-    if (obEl && obEl.isConnected) {
-      const cs = getComputedStyle(obEl, '::before');
-      const t = parseFloat(cs.top), h = parseFloat(cs.height);
-      if (cs.content && cs.content !== 'none' && cs.display !== 'none' && h > 0 && isFinite(t)) {
-        const r = obEl.getBoundingClientRect();
-        return done(r.top + obEl.clientTop + t, h, '#c33-orbit::before');
-      }
-    }
-    K193.line = null; K193.why = 'B.U.R.I の下の線（#c164-hz .h-top・#c33-orbit::before）が描かれていない';
-    return null;
-  }
-  function rowBottom193(title, ic, h1) {
-    let b = -Infinity, from = '';
-    const ib = iconBox191(ic);
-    if (ib) { b = ib.bottom; from = 'icon'; }
-    if (h1 && h1.isConnected) {
-      let tb = -Infinity;
-      const rg = document.createRange(); rg.selectNodeContents(h1);
-      for (const q of rg.getClientRects()) if (q.width > 0 && q.height > 0) tb = Math.max(tb, q.bottom);
-      if (!(tb > -Infinity)) {   // 題字が空（「無題」の薄い字だけ）の時は h1 の中身の箱
-        const r = h1.getBoundingClientRect(), cs = getComputedStyle(h1);
-        if (r.height > 2) tb = r.bottom - (parseFloat(cs.paddingBottom) || 0) - (parseFloat(cs.borderBottomWidth) || 0);
-      }
-      if (tb > b) { b = tb; from = 'title'; }
-    }
-    if (!(b > -Infinity) && title) {
-      const r = title.getBoundingClientRect(), cs = getComputedStyle(title);
-      if (r.height > 2) { b = r.bottom - (parseFloat(cs.paddingBottom) || 0); from = 'row'; }
-    }
-    if (!(b > -Infinity)) { K193.bottom = null; return null; }
-    K193.bottom = { y: Math.round(b * 10) / 10, from };
-    return b;
-  }
-  /* アイコンの箱（中の img・svg のいちばん大きいもの。無ければアイコンの箱そのもの） */
-  function iconBox191(ic) {
-    if (!ic || !ic.isConnected) return null;
-    const box = ic.getBoundingClientRect();
-    /* アイコンの箱の中にあるものだけ（アイコンの小窓が箱の中の DOM に開いても、その中の絵は拾わない） */
-    const inside = (q) => { const x = (q.left + q.right) / 2, y = (q.top + q.bottom) / 2; return x >= box.left - 1 && x <= box.right + 1 && y >= box.top - 1 && y <= box.bottom + 1; };
-    let best = null, area = 0;
-    for (const x of ic.querySelectorAll('img, svg')) {
-      if (x.parentElement && x.parentElement.closest('svg')) continue;
-      const q = x.getBoundingClientRect();
-      if (q.width > 4 && q.height > 4 && inside(q) && q.width * q.height > area) { best = q; area = q.width * q.height; }
-    }
-    if (best) return best;
-    /* 字のアイコン（絵文字）: 字の矩形（箱が字より大きいことがあるので） */
-    const rg = document.createRange();
-    rg.selectNodeContents(ic);
-    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
-    for (const q of rg.getClientRects()) if (q.width > 0 && q.height > 4 && inside(q)) { l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom); }
-    if (r - l > 4 && b - t > 4) return { left: l, top: t, right: r, bottom: b, width: r - l, height: b - t };
-    return box.width > 4 && box.height > 4 ? box : null;
-  }
-  /* 見出し行の縦の真ん中（アイコンの箱と題字の箱を合わせた範囲の真ん中。Notion は 2 つを真ん中でそろえているので、アイコンの中心と同じ） */
-  function rowMid191(title, ic, h1) {
-    let t = Infinity, b = -Infinity;
-    const ib = iconBox191(ic);
-    if (ib) { t = ib.top; b = ib.bottom; }
-    const hr = h1 && h1.isConnected ? h1.getBoundingClientRect() : null;
-    if (hr && hr.height > 2) { t = Math.min(t, hr.top); b = Math.max(b, hr.bottom); }
-    if (!(b > t) && title) {
-      const r = title.getBoundingClientRect(), cs = getComputedStyle(title);
-      t = r.top + (parseFloat(cs.paddingTop) || 0); b = r.bottom - (parseFloat(cs.paddingBottom) || 0);
-    }
-    if (!(b > t + 2)) { K191.row = null; return null; }
-    K191.row = { t: Math.round(t * 10) / 10, b: Math.round(b * 10) / 10 };
-    return (t + b) / 2;
-  }
-  /* B.U.R.I の下の線: 縦は Orbit の線（#c33-orbit::before）と同じ高さの地平線の .h-top、右端はその終わりの四芒星 .h-end.e1 の右端 */
-  function line191() {
-    const hz = K164.hz;
-    if (!hz || !hz.isConnected || hz.hidden || !hz.hasAttribute('data-cat')) return null;
-    const ln = hz.querySelector('.h-top'), end = hz.querySelector('.h-end.e1');
-    if (!ln || !end) return null;
-    const lr = ln.getBoundingClientRect(), er = end.getBoundingClientRect();
-    if (!(lr.width > 20) || !(er.width > 0)) return null;   // 線が出ていない（display: none）
-    return { y: Math.round((lr.top + lr.height / 2) * 10) / 10, right: Math.round(er.right * 10) / 10, lineRight: Math.round(lr.right * 10) / 10, endStar: Math.round(er.right * 10) / 10 };
-  }
-  /* いま見出し行に足している横の量（Notion の元の margin からの差） */
-  function hxNow191(title) {
-    if (!title || !title.hasAttribute('data-c191-hx')) return 0;
-    return (parseFloat(getComputedStyle(title).marginInlineStart) || 0) - (parseFloat(title.style.getPropertyValue('--c191-m0')) || 0);
-  }
-  function hx191(title, ic, h1) {
-    try {
-      const ln = line191();
-      K191.line = ln;
-      if (!ln || !title) { K191.hx = { why: ln ? '見出し行が無い' : 'B.U.R.I の下の線の右端（Catalogus の所の四芒星）が出ていない' }; return null; }
-      const ib = iconBox191(ic);
-      let left = ib ? ib.left : null;
-      if (left == null && h1) {
-        const rg = document.createRange();
-        rg.selectNodeContents(h1);
-        const r = [...rg.getClientRects()].find((q) => q.width > 0 && q.height > 2);
-        if (r) left = r.left;
-      }
-      if (left == null) { K191.hx = { why: '見出しのアイコン・題字を測れない' }; return null; }
-      const nat = left - hxNow191(title);
-      const dx = Math.round((ln.right + GAP191 - nat) * 2) / 2;
-      if (Math.abs(dx) > 240) { K191.hx = { why: '寄せる量が大きすぎる（' + dx + 'px）' }; return null; }
-      K191.hx = { from: ib ? 'icon' : 'title', natural: Math.round(nat * 10) / 10, left: Math.round((nat + dx) * 10) / 10, gap: Math.round((nat + dx - ln.right) * 10) / 10, dx };
-      return dx;
-    } catch (e) {
-      try { if (!K190.warned) { K190.warned = true; C98.log('align', '見出しの横の位置合わせを休みます（' + (e && e.message) + '）。'); } } catch (e2) { /* 起動の途中 */ }
-      return null;
-    }
-  }
-  function hxSet191(title, dx) {
-    if (dx == null) {
-      if (title.hasAttribute('data-c191-hx')) { title.removeAttribute('data-c191-hx'); title.style.removeProperty('--c191-hx'); title.style.removeProperty('--c191-m0'); }
-      return;
-    }
-    if (!title.hasAttribute('data-c191-hx')) {
-      title.style.setProperty('--c191-m0', (parseFloat(getComputedStyle(title).marginInlineStart) || 0) + 'px');   // 寄せる前の Notion の margin
-      title.setAttribute('data-c191-hx', '');
-    }
-    const v = dx + 'px';
-    if (title.style.getPropertyValue('--c191-hx') !== v) title.style.setProperty('--c191-hx', v);
-  }
-  /* Catalogus に出ている、この DB のチームスペースのアイコンの中心（一番上に着いた時の位置で） */
-  function teamIcon191() {
-    const cur = curPage();
-    if (!cur) return { why: 'ページの ID が読めない' };
-    const ts = K164.teams;
-    if (!K164.el || !K164.shown || K164.rest || !ts || !ts.length || !K164.els.length || !K164.body) return { why: 'Catalogus が出ていない' };
-    const k = ts.findIndex((t) => t && t.rows && t.rows.some((r) => r.id === cur));
-    if (k < 0) return { why: 'この DB が、Catalogus に出ているチームスペースの一覧に見つからない' };
-    const t = ts[k];
-    if (k !== K164.sel) return { why: 'この DB のチームスペース（' + t.name + '）が Catalogus の一番上ではない', team: t.name };
-    const e = K164.els[k];
-    const ic = e && e.firstElementChild;
-    if (!e || !e.classList.contains('on') || !ic || ic.hasAttribute('data-none')) return { why: 'チームスペース（' + t.name + '）のアイコンが無い', team: t.name };
-    const er = e.getBoundingClientRect(), q = ic.getBoundingClientRect();
-    if (!(q.height > 4)) return { why: 'チームスペース（' + t.name + '）のアイコンが無い', team: t.name };
-    const top0 = K164.body.getBoundingClientRect().top + OB_PAD;   // 一番上は translateY(OB_PAD) に着く（回している途中でも着く位置で）
-    return { team: t.name, mid: Math.round((top0 + (q.top - er.top) + q.height / 2) * 10) / 10 };
-  }
-  function align191(g) {
-    /* v192: 位置合わせを止める時（チームスペースが分からない・一番上に無い・アイコンが無い）の量。帯の高さだけ下げると、ふだんの位置が
-     * 上がった分だけ開いた後も上がってしまうので、開いた後は 191 と同じ位置（見出し行の真ん中 = 線の真ん中 ＋ 帯の高さ）に保つ */
-    const back = g.back || 0;
-    const H = parseFloat(root104.style.getPropertyValue('--c154-h')) || 62;
-    try {
-      const tm = teamIcon191();
-      if (tm.mid == null) { K190.al = Object.assign({ al: back, move: H + back }, tm); return back; }
-      const ib = iconBox191(g.ic);
-      if (!ib) { K190.al = { why: '題字のアイコンが無い', team: tm.team, al: back, move: H + back }; return back; }
-      const origin = (g.sr.top - g.mt) + g.wrapOff + g.pad;   // 畳んだ時・スクロールしていない時の箱の中身の上端
-      const icFold = origin + (ib.top + ib.bottom) / 2 - g.cin;   // ふだんの DB アイコンの中心
-      const icOpen = icFold + H;                                    // 帯を開いた時（そろえる前）
-      const want = tm.mid - icOpen;
-      const hr = g.h1 && g.h1.isConnected ? g.h1.getBoundingClientRect() : null;
-      const headT = origin + Math.min(ib.top, hr && hr.height > 2 ? hr.top : Infinity) - g.cin + H;   // 帯を開いた時の見出しの上端
-      const bandB = g.frame.getBoundingClientRect().top - g.mt + H;   // 帯の下の線（開いた時の本文の枠の上端）
-      /* 開いた後の見出しの上端を帯の線から GAP190 以上（v192: ふだんの位置が上がったので、届かない時は下へ押す側にも効かせる） */
-      const lo = bandB + GAP190 - headT;
-      const al = Math.max(Math.ceil(lo * 2) / 2, Math.round(Math.min(160, want) * 2) / 2);
-      const r1 = (x) => Math.round(x * 10) / 10;
-      K190.al = { team: tm.team, teamIcon: tm.mid, dbIcon: { fold: r1(icFold), open: r1(icOpen + al) }, band: r1(bandB), headTop: r1(headT + al), want: r1(want), al, move: r1(H + al), clamped: al > want + 0.25 };
-      return al;
-    } catch (e) {
-      try {
-        if (!K190.warned) { K190.warned = true; C98.log('align', '帯を開いた時の題字の位置合わせを休みます（' + (e && e.message) + '）。'); }
-        K190.al = { why: String(e && e.message), al: back };
-      } catch (e2) { /* 起動の途中 */ }
-      return back;
-    }
-  }
+  /* C191〜C193（本文の DB の見出しを B.U.R.I の線・セル・チームスペースのアイコンにそろえる）は v194 でやめた（見出しは Catalogus の上段へ）。
+   * 189・190 の測り置きの掃除だけ残す */
+  try { localStorage.removeItem('c33.ink189.v1'); localStorage.removeItem('c33.ink190.v1'); } catch (e) { /* noop */ }
 
   const cssBefore190 = nbCss;
   nbCss = function() {
@@ -14348,8 +14141,6 @@ ${ON} #c189-tpop[data-out] .tp-ln { animation: c189-line 160ms ease reverse both
     if (document.getElementById('c190-css')) return;
     const S = S164;
     const ON = S + '[data-c124-motion]';
-    const FR = `.notion-frame${NP154}`;
-    const HW = `${FR} [data-c154-hwrap]`;
     const style = document.createElement('style');
     style.id = 'c190-css';
     style.textContent = `
@@ -14366,14 +14157,8 @@ ${ON} #c164-cat .ct-sep .ct-end > s { animation: c189-glint 7s ease-in-out calc(
 #c190-veil { position: fixed; z-index: 105; display: none; pointer-events: auto; background: var(--c190-veil, transparent); transition: background-color 120ms linear; }
 #c190-veil[data-on] { display: block; }
 
-/* ── C190・C191: 帯を開いた時だけ、題字の領域の上のゆとりに位置合わせの量（DB アイコンの中心 → チームスペースのアイコンの中心）を足す（帯の分の margin-top とは別） ── */
-${S154}[data-c154-folio][data-c154-fold][data-c154-open] ${HW} { padding-top: calc(var(--c154-dbtop, 24px) + var(--c190-al, 0px)) !important; }
-/* ── C191: 見出し行（アイコン＋題字）だけ、B.U.R.I の下の線の右端から 14px の所へ（説明・タブ・表・左のゆとりはそのまま） ── */
-${S154}[data-c154-folio][data-c154-fold] ${FR} [data-c154-hrow] > [data-c191-hx] { margin-inline-start: calc(var(--c191-m0, 0px) + var(--c191-hx, 0px)) !important; }
-${S154}[data-c154-folio][data-c154-fold][data-c190-mv] ${HW} { transition: padding-top 220ms cubic-bezier(.4,0,.7,.2) !important; }
-${S154}[data-c154-folio][data-c154-fold][data-c154-open][data-c190-mv] ${HW} { transition: padding-top 300ms cubic-bezier(.22,.8,.24,1) !important; }
 @media (prefers-reduced-motion: reduce) {
-  #c164-cat .ct-sep, ${S154}[data-c154-folio][data-c154-fold] ${HW} { transition: none !important; }
+  #c164-cat .ct-sep { transition: none !important; }
 }
 `;
     (document.head || root104).appendChild(style);
@@ -15525,12 +15310,1906 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     box.appendChild(l);
   });
 
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+   * C194 NEXT NOTION（v194.0.0）— Orbit × Catalogus × フル DB の第 1 実装
+   *  A. 現在の DB: Catalogus の上段（B.U.R.I の右隣）に、いま開いているフル DB のアイコン（上）と名前（下）。本文の大きな見出しは見た目だけ畳む。
+   *     その格子の上でホイール（↑↓・←→ も）を回すと、同じまとまり（既定はその DB が入っているチームスペース）のフル DB を候補として巡り、
+   *     止まって T194.dbCommit（800ms）カーソルが残っていれば移る。クリック／Enter はすぐ移る。Esc・離れると取り消し。乗せただけでは移らない
+   *  B. 上の帯（B.U.R.I の機能メニュー）は現在の DB の格子の右から始まる。本文は帯の実際の高さだけ下がる（C154 のまま・畳めば空白なし）
+   *  C. このDBについて: 説明（DB の憲法）を全文、右に実務（DB ID ごとに書いた実データ・Folio から書く）。一続きの紙面。狭いと 1 列。
+   *     魚の入り（同じ DB はセッションで 1 回・動きを減らす設定では出さない・操作を止めない）
+   *  D. 表のビューだけ: 巡る索引帯（本物のタブを CSS の order で並べ替えた帯。確定したビューが左の着地点。ホイール・←→ で候補、
+   *     止まって T194.viewCommit（700ms）で切り替え。クリックはすぐ）。ビューごとのしおり（DB ID＋ビュー ID・縦横の位置と基準の行）
+   *  E. ビューの案内: DB ID＋ビュー ID に書いた案内だけを、ビューが確定した後に小さな魚と出す（7 秒で消える・固定・Esc・出し直し）
+   *  F. 表の見出し行（T194.headH = 48px）と二段の固定（索引帯＋見出し行。Notion の写しの見出しは隠す）
+   *  G. 星図の罫線: 罫線は残し、表の左端の線と行の境の小さな菱形。触れたセルの左上の交点だけが四芒星になる（列の 12 色・PAL194）
+   * Notion の DOM は動かさない・消さない・写さない（印 data-c194-* と CSS、³³ 自身の層だけ）。分からない所は機能ごとに止め、理由を __c33.next() に残す。
+   * ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+  const T194 = {
+    dbCommit: 800,      // DB の候補で止まってから移るまで（ms・仮値）。0 で自動では移らない（⚙ でも切れる）
+    viewCommit: 700,    // ビューの候補で止まってから切り替えるまで（ms・仮値）。0 で自動では切り替えない
+    guideHide: 7000,    // ビューの案内が消えるまで（ms）
+    headH: 48,          // 表の見出し行の高さ（CSS px・比較用の基準）
+    dbTop: 32,          // 帯を畳んでいる時の、本文（このDBについて）の上のゆとり（CSS px）
+    fishMs: 1500,       // 魚が見出しを渡る時間（ms）
+    navWait: 3200,      // DB へ移るのを待つ上限（ms）。過ぎたら元の DB の表示へ戻す
+    viewWait: 1800,     // ビューの切り替えを待つ上限（ms）
+    restoreWait: 1600,  // しおりへ戻す前に、描き終わりを待つ上限（ms）
+    marksMax: 400,      // しおりを覚えておく数（DB×ビュー。古いものから消す）
+    narrow: 760         // 説明の行の幅（CSS px）がこれより狭い時は、憲法の下に実務（1 列）
+  };
+  /* 列の 12 色（1〜12 列目に順に、13 列目から 1 色目へ）。隣どうしの色相と明るさが離れる順。黄は白地で見失わない金・黄土寄り */
+  const PAL194 = {
+    light: ['#5B7FA8', '#B7684C', '#5E8C6A', '#9C6FA8', '#B8913A', '#4E8F95', '#A85A6E', '#6F7F45', '#6E6AAE', '#B07A47', '#7A8F9E', '#8A6A52'],
+    dark: ['#8FB0D6', '#E09A80', '#8EC09A', '#C9A0D6', '#E2C070', '#82C0C6', '#D88CA0', '#A8B878', '#A6A2E0', '#E0AA78', '#A9BCCB', '#C49E84']
+  };
+  const DBTOP194 = T194.dbTop;   // C154 の db154 が読む（帯を畳んでいる時の本文の上のゆとり）
+  const S194 = S184 + ':not(#c194a):not(#c194b)';
+  const TAG194 = '[³³ Next]';
+
+  /* ── 設定・書いた内容・しおり（どれも localStorage。形に版を持つ） ── */
+  const PK194 = 'c33.next194.v1', NK194 = 'c33.notes194.v1', MK194 = 'c33.marks194.v1', FK194 = 'c33.fish194';
+  const ZN194 = (() => {
+    const d = { on: true, grid: true, dbAuto: true, group: 'team', about: true, fish: true, band: true, viewAuto: true, marks: true, lastView: true, guide: true, head: true, sticky: true, stars: true };
+    try { const v = JSON.parse(localStorage.getItem(PK194) || '{}') || {}; for (const k of Object.keys(d)) if (typeof v[k] === typeof d[k]) d[k] = v[k]; } catch (e) { /* noop */ }
+    if (d.group !== 'planet') d.group = 'team';
+    return d;
+  })();
+  function znSave194() { try { localStorage.setItem(PK194, JSON.stringify(ZN194)); } catch (e) { /* noop */ } }
+  const NT194 = (() => {
+    let v = null;
+    try { v = JSON.parse(localStorage.getItem(NK194) || 'null'); } catch (e) { v = null; }
+    if (!v || v.v !== 1) v = { v: 1, practice: {}, guide: {} };
+    if (!v.practice || typeof v.practice !== 'object') v.practice = {};
+    if (!v.guide || typeof v.guide !== 'object') v.guide = {};
+    return v;
+  })();
+  function ntSave194() {
+    try { localStorage.setItem(NK194, JSON.stringify(NT194)); return true; } catch (e) { obToast('書いた内容を保存できませんでした（ブラウザーの保存場所）。'); return false; }
+  }
+  const txt194 = (x) => (x && typeof x.t === 'string' ? x.t.replace(/\r\n?/g, '\n').trim() : '');
+  const practice194 = (db) => txt194(NT194.practice[db]);
+  const guideOf194 = (db, v) => txt194(NT194.guide[db + ':' + v]);
+  const MS194 = (() => {
+    let v = null;
+    try { v = JSON.parse(localStorage.getItem(MK194) || 'null'); } catch (e) { v = null; }
+    if (!v || v.v !== 1 || !v.m || typeof v.m !== 'object') v = { v: 1, m: {}, last: {} };
+    if (!v.last || typeof v.last !== 'object') v.last = {};
+    return v;
+  })();
+  let msT194 = 0;
+  function msSave194(now) {
+    clearTimeout(msT194);
+    const run = () => {
+      msT194 = 0;
+      const keys = Object.keys(MS194.m);
+      if (keys.length > T194.marksMax) keys.sort((a, b) => (MS194.m[a].at || 0) - (MS194.m[b].at || 0)).slice(0, keys.length - T194.marksMax).forEach((k) => { delete MS194.m[k]; });
+      try { localStorage.setItem(MK194, JSON.stringify(MS194)); } catch (e) { log194('ms', 'しおりを保存できませんでした（' + (e && e.message) + '）。'); }
+    };
+    if (now) run(); else msT194 = setTimeout(run, 600);
+  }
+  function marksReset194() { MS194.m = {}; MS194.last = {}; msSave194(true); return true; }
+
+  /* ── 状態（1 か所） ── */
+  const N194 = {
+    ctx: null, id: '', gen: 0, why: {},
+    g: null, gIn: false, gFocus: false, cands: null, ci: -1, cur: -1, gT: 0, nav: null, gSig: '', grp: null, gw: {}, jumpTo: '',
+    reveal: false, revT: 0,
+    abSig: '', introFor: '', intro: null,
+    E: null, vid: '', vgen: 0, isTable: false, H: null,
+    tl: null, track: null, bviews: null, bc: null, bT: 0, bIn: false, bFocus: false, bsw: null, ordSig: '', bw: {}, bnames: {},
+    rs: null, restoring: false, saveT: 0, sw: null, holdT: 0, stH: 0,
+    gd: { pin: false, open: false, key: '', T: 0, left: 0, at: 0, over: false },
+    hot: null, hotH: null, pm: null, pmRaf: 0, starOn: false,
+    host: null, root: null, sr: null, mo: null, moEl: null, visMo: null, runT: 0, ovRaf: 0, ovUntil: 0,
+    ime: false
+  };
+  const seen194 = new Set();
+  function log194(key, msg) { if (seen194.has(key)) return; seen194.add(key); console.info(TAG194, msg); }
+  function why194(k, v) { if (v) N194.why[k] = v; else delete N194.why[k]; }
+  const reduced194 = () => !root104.hasAttribute('data-c124-motion') || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const vidOf194 = (el) => String((el && el.getAttribute('data-collection-view-id')) || '').replace(/-/g, '').toLowerCase();
+  const cssStr194 = (s) => '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\A ') + '"';
+  function say194(text) {
+    let sr = document.getElementById('c33-n194-sr');
+    if (!sr) { sr = document.createElement('div'); sr.id = 'c33-n194-sr'; sr.setAttribute('aria-live', 'polite'); sr.setAttribute('role', 'status'); document.body.appendChild(sr); }
+    sr.textContent = '';
+    requestAnimationFrame(() => { sr.textContent = text; });
+  }
+  /* 自動で移る・切り替えるのを止める時（編集中・IME の変換中・小窓や全面の幕が出ている時） */
+  function busy194() {
+    if (N194.ime) return 'ime';
+    const a = document.activeElement;
+    if (a && a !== document.body && !a.closest('#c33-n194-db, #c33-n194') && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) {
+      if (!(N194.tl && N194.tl.contains(a))) return 'edit';
+    }
+    if (document.getElementById('c33-n194-ed')) return 'modal';
+    for (const d of document.querySelectorAll('[role="dialog"], [aria-modal="true"]')) {
+      if (d.closest('#c33-n194, #c33-n194-db, #c124-zpop')) continue;
+      const r = d.getBoundingClientRect();
+      if (r.width > 40 && r.height > 40) return 'modal';
+    }
+    if (K190.dim) return 'modal';
+    return '';
+  }
+  document.addEventListener('compositionstart', () => { N194.ime = true; }, true);
+  document.addEventListener('compositionend', () => { N194.ime = false; }, true);
+
+  /* ── 入口: C154 の db154 が毎回（帯の見直し・2 秒ごと・窓の大きさ・本文の変化）呼ぶ。ctx は見出しの行の箱たち（無ければ null） ── */
+  function db194(ctx) {
+    try { db194x(ctx); } catch (e) {
+      log194('db:' + (e && e.message), 'Next の飾りを止めました（' + (e && e.message) + '）。Notion の表示はそのままです。');
+      try { off194(); } catch (e2) { /* noop */ }
+    }
+  }
+  function db194x(ctx) {
+    const on = !!(ctx && ctx.sc && ctx.row && ctx.blk && ZN194.on && root104.hasAttribute('data-c114-caelum'));
+    flag124('data-c194-on', !!(ZN194.on && root104.hasAttribute('data-c114-caelum')));
+    if (!on) { if (N194.ctx || N194.id) leave194(); N194.ctx = null; gridSync194(); headSync194(); aboutSync194(); tableSync194(); return; }
+    const id = id164(ctx.blk.getAttribute('data-block-id')) || curPage();
+    N194.ctx = ctx;   // 先に入れる（DB が替わった時の上段の書き直しが、新しい見出しを読むように）
+    if (id !== N194.id) enter194(id);
+    watch194(ctx);
+    gridSync194();
+    headSync194();
+    aboutSync194();
+    tableSync194();
+  }
+  function enter194(id) {
+    leave194(true);
+    N194.id = id;
+    N194.gen++;
+    why194('db', '');
+  }
+  function leave194(keepId) {
+    N194.gen++;
+    gridEndCand194();
+    if (N194.nav && !keepId) N194.nav = null;
+    bandEnd194();
+    restoreEnd194('leave');
+    introEnd194();
+    guideHide194(true);
+    N194.gd.pin = false;
+    starHide194();
+    N194.vid = ''; N194.vgen++; N194.sw = null; N194.bsw = null;
+    N194.reveal = false; clearInterval(N194.revT); N194.revT = 0;
+    N194.abSig = '';
+    if (!keepId) N194.id = '';
+  }
+  /* すべて外す（⚙ で切った・³³ を切った・何かで止めた時）— 自分の付けた印と値だけを戻す */
+  function off194() {
+    leave194();
+    N194.ctx = null;
+    if (N194.g) N194.g.hidden = true;
+    rowShift194(false);
+    for (const el of document.querySelectorAll('[data-c194-hide], [data-c194-about], [data-c194-band], [data-c194-tbl], [data-c194-sb], [data-c194-sh], [data-c194-hold], [data-c194-sticky]')) clean194(el);
+    for (const a of ['data-c194-grid', 'data-c194-sticky']) flag124(a, false);
+    bandOrder194(null);
+    if (N194.host) N194.host.hidden = true;
+  }
+  const ATTR194 = ['data-c194-hide', 'data-c194-reveal', 'data-c194-about', 'data-c194-cbox', 'data-c194-const', 'data-c194-noconst', 'data-c194-prac', 'data-c194-narrow', 'data-c194-intro',
+    'data-c194-band', 'data-c194-bandrow', 'data-c194-track', 'data-c194-it', 'data-c194-off', 'data-c194-first', 'data-c194-pend', 'data-c194-cand', 'data-c194-rest',
+    'data-c194-tbl', 'data-c194-head', 'data-c194-lines', 'data-c194-nodia', 'data-c194-hr', 'data-c194-k', 'data-c194-ki', 'data-c194-hot', 'data-c194-sb', 'data-c194-sh', 'data-c194-hold', 'data-c194-sticky'];
+  const VARS194 = ['--c194-practice', '--c194-tx', '--c194-bw', '--c194-fx', '--c194-fw', '--c194-vms', '--c194-ht', '--c194-st', '--c194-dx', '--c194-fd'];
+  function clean194(root) {
+    const all = [root, ...root.querySelectorAll(ATTR194.map((a) => '[' + a + ']').join(','))];
+    for (const el of all) {
+      for (const a of ATTR194) if (el.hasAttribute(a)) el.removeAttribute(a);
+      for (const v of VARS194) if (el.style && el.style.getPropertyValue(v)) el.style.removeProperty(v);
+    }
+  }
+
+  /* ── 見張り: 本文の枠の中の変化（ページ・ビューの切り替え・タブの描き直し）を、間引いて 1 回にまとめる ── */
+  function watch194(ctx) {
+    const fr = ctx.sc.closest('.notion-frame');
+    if (!fr || fr === N194.moEl) return;
+    if (!N194.mo) N194.mo = new MutationObserver((recs) => {
+      for (const r of recs) {
+        const t = r.target;
+        if (t.nodeType === 1 && t.closest && t.closest('#c33-n194, #c33-n194-db')) continue;
+        soon194(); return;
+      }
+    });
+    N194.mo.disconnect();
+    N194.moEl = fr;
+    N194.mo.observe(fr, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-selected', 'data-collection-view-id'] });
+  }
+  function soon194(ms) {
+    if (N194.runT) return;
+    N194.runT = setTimeout(run194, ms == null ? 90 : ms);
+  }
+  function run194() {
+    N194.runT = 0;
+    try {
+      const c = N194.ctx;
+      if (!c) { if (ZN194.on && mainFrame154() && mainFrame154().querySelector('.notion-collection_view_page-block')) zenSoon124(); return; }
+      if (!c.row.isConnected || !c.sc.isConnected || !c.blk.isConnected || (curPage() && curPage() !== N194.id && /[0-9a-f]{32}/i.test(location.pathname))) { zenSoon124(); return; }
+      gridSync194();
+      headSync194();
+      aboutSync194();
+      tableSync194();
+    } catch (e) { log194('run:' + (e && e.message), 'Next の見直しで止まりました（' + (e && e.message) + '）。'); }
+  }
+  /* URL が変わった時（Notion の SPA 遷移・戻る・進む）: 早めに見直す */
+  const hist194 = (k) => {
+    const f = history[k];
+    if (typeof f !== 'function' || f.__c194) return;
+    const w = function() { const r = f.apply(this, arguments); try { url194(); } catch (e) { /* noop */ } return r; };
+    w.__c194 = true;
+    try { history[k] = w; } catch (e) { /* noop */ }
+  };
+  hist194('pushState'); hist194('replaceState');
+  window.addEventListener('popstate', () => url194());
+  let urlLast194 = location.href;
+  function url194() {
+    if (location.href === urlLast194) return;
+    urlLast194 = location.href;
+    for (const ms of [0, 120, 320, 800, 1600]) setTimeout(() => { if (ms) zenSoon124(); soon194(0); }, ms);
+  }
+
+  /* ═══ A. 現在の DB（Catalogus の上段の格子）と DB の巡回 ═══ */
+  function gridShow194() {
+    return !!(ZN194.on && ZN194.grid && N194.ctx && K164.el && K164.el.isConnected && K164.el.hasAttribute('data-vis') && root104.hasAttribute('data-c114-caelum') && CAT164.on);
+  }
+  function gridEnsure194() {
+    if (N194.g && N194.g.isConnected) return N194.g;
+    const g = document.createElement('div');
+    g.id = 'c33-n194-db';
+    g.setAttribute('role', 'group');
+    g.setAttribute('aria-label', '現在のデータベース');
+    g.setAttribute('data-no-passthrough', '1');
+    g.innerHTML = '<button type="button" class="ng-cell"><span class="ng-ic" aria-hidden="true"></span><span class="ng-nm"></span><span class="ng-ix" aria-hidden="true"></span><i class="ng-bar" aria-hidden="true"></i></button>';
+    const b = g.firstElementChild;
+    b.addEventListener('mousedown', (e) => { if (e.button === 0) e.preventDefault(); });
+    b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); gridClick194(); });
+    b.addEventListener('keydown', gridKey194);
+    g.addEventListener('wheel', gridWheel194, { passive: false });
+    g.addEventListener('pointerenter', () => { N194.gIn = true; });
+    g.addEventListener('pointerleave', () => { N194.gIn = false; if (gridPending194() && !N194.nav) gridCancel194('leave'); });
+    g.addEventListener('focusin', () => { N194.gFocus = true; });
+    g.addEventListener('focusout', () => { N194.gFocus = false; if (gridPending194() && !N194.nav && !N194.gIn) gridCancel194('blur'); });
+    document.body.appendChild(g);
+    N194.g = g;
+    N194.gSig = '';
+    if (!N194.visMo && K164.el) {
+      N194.visMo = new MutationObserver(() => { gridSync194(); headSync194(); });
+      N194.visMo.observe(K164.el, { attributes: true, attributeFilter: ['data-vis'] });
+    }
+    return g;
+  }
+  function gridSync194() {
+    if (!N194.visMo && K164.el && K164.el.isConnected) {
+      N194.visMo = new MutationObserver(() => { try { gridSync194(); headSync194(); aboutSync194(); } catch (e) { /* noop */ } });
+      N194.visMo.observe(K164.el, { attributes: true, attributeFilter: ['data-vis'] });
+    }
+    const show = gridShow194();
+    flag124('data-c194-grid', show);
+    if (!show) {
+      if (N194.g) N194.g.hidden = true;
+      if (gridPending194() && !N194.nav) gridEndCand194();
+      rowShift194(false);
+      why194('grid', !ZN194.grid ? '⚙ で切っています' : !N194.ctx ? 'フル DB のページではありません' : !(K164.el && K164.el.hasAttribute('data-vis')) ? 'Catalogus が出ていません（Notion のサイドバーが開いている・幅が足りない）' : '');
+      return;
+    }
+    why194('grid', '');
+    const g = gridEnsure194();
+    const cr = K164.el.getBoundingClientRect();
+    const top = Math.max(40, Math.round(cr.top) - 1);
+    px164(g, 'left', Math.round(cr.left) + 'px');
+    px164(g, 'width', Math.round(cr.width) + 'px');
+    px164(g, 'height', top + 'px');
+    if (g.hidden) g.hidden = false;
+    gridPaint194();
+    rowShift194(true);
+  }
+  function head194() {
+    const c = N194.ctx, blk = c && c.blk;
+    const h1 = blk && (blk.querySelector('h1[aria-roledescription="page title"]') || blk.querySelector('h1'));
+    const name = norm(h1 ? h1.textContent : '') || 'Untitled';
+    return { name: name.slice(0, 200), ic: icon164(blk) };
+  }
+  const gridPending194 = () => !!(N194.cands && N194.ci >= 0 && N194.ci !== N194.cur);
+  function gridPaint194() {
+    const g = N194.g;
+    if (!g) return;
+    const cand = gridPending194() ? N194.cands[N194.ci] : null;
+    const h = cand ? { name: cand.name, ic: cand.ic } : head194();
+    const ix = cand ? (N194.ci + 1) + ' / ' + N194.cands.length : '';
+    const sig = (cand ? 'c:' + cand.id : 'n') + '|' + h.name + '|' + iconSig164(h.ic) + '|' + ix;
+    if (sig === N194.gSig) return;
+    N194.gSig = sig;
+    const b = g.firstElementChild;
+    paintIcon164(b.querySelector('.ng-ic'), h.ic);
+    const nm = b.querySelector('.ng-nm');
+    nm.textContent = h.name;
+    lang164(nm, h.name);
+    b.querySelector('.ng-ix').textContent = ix;
+    g.toggleAttribute('data-cand', !!cand);
+    b.title = cand ? h.name + '（候補 ' + ix + '）' : h.name;
+    b.setAttribute('aria-label', cand
+      ? '候補: ' + h.name + '（' + ix + '）。Enter で移る、Esc で取り消し'
+      : '現在のデータベース: ' + h.name + '。ホイールか上下の矢印で同じまとまりのデータベースを巡ります。Enter で見出しを編集');
+  }
+  /* まとまり: 既定は「その DB が入っているチームスペース」（Catalogus に並ぶチームスペース＝Notion のサイドバーのチームスペース）。
+   * ⚙ で「惑星」（¹⁶ のグループ＝Orbit で選んでいる惑星の、チームスペース全部）にもできる。どちらも Notion のサイドバーに描かれている行から読む */
+  function group194(id) {
+    const out = (team, gid, how, rows) => {
+      const seen = new Set(), list = [];
+      for (const r of rows) if (r.kind === 'db' && r.id && !seen.has(r.id)) { seen.add(r.id); list.push({ id: r.id, name: r.name, ic: r.ic }); }
+      return { team, gid, how, list };
+    };
+    const T = K164.teams || [];
+    let ti = T.findIndex((t) => t.rows.some((r) => r.id === id));
+    if (ti >= 0) {
+      if (ZN194.group === 'planet') return out(T.map((t) => t.name).join(' · '), K164.gid, 'planet', [].concat(...T.map((t) => t.rows)));
+      return out(T[ti].name, K164.gid, 'team', T[ti].rows);
+    }
+    /* Catalogus の惑星に無い時: Notion のサイドバーの全チームスペースから、この DB の行を持つものを探す */
+    const side = obSide();
+    if (side) {
+      for (const el of side.querySelectorAll(SEL_TEAM)) {
+        if (!el.querySelector('a[href*="' + id + '"]')) continue;
+        const rows = rows164(el);
+        if (!rows.some((r) => r.id === id)) continue;
+        const gid = el.getAttribute('data-c16-g') || K164.gid;
+        if (ZN194.group === 'planet' && gid) {
+          const all = [...side.querySelectorAll(SEL_TEAM + '[data-c16-g="' + CSS.escape(gid) + '"]')];
+          return out(gid, gid, 'planet', [].concat(...all.map((t) => rows164(t))));
+        }
+        const btn = el.querySelector(SEL_TEAM_BTN) || el.querySelector('.notion-outliner-team');
+        return out((btn && label164(btn)) || el.getAttribute('data-c16-k') || 'Teamspace', gid, 'team', rows);
+      }
+    }
+    return { why: 'この DB が入っているチームスペースを、Notion のサイドバーの中に見つけられません（巡回は止めています）' };
+  }
+  function gridStep194(d) {
+    if (N194.nav) return;
+    if (!N194.cands) {
+      const gr = group194(N194.id);
+      N194.grp = gr;
+      if (!gr.list) { why194('cycle', gr.why); log194('grp', gr.why); gridNudge194(); return; }
+      const cur = gr.list.findIndex((r) => r.id === N194.id);
+      if (cur < 0 || gr.list.length < 2) { why194('cycle', cur < 0 ? 'まとまりの中にこの DB がありません' : 'まとまりの中のフル DB がこの 1 つだけです'); gridNudge194(); return; }
+      why194('cycle', '');
+      N194.cands = gr.list; N194.cur = cur; N194.ci = cur;
+    }
+    const n = N194.cands.length;
+    N194.ci = (N194.ci + d + n) % n;
+    gridPaint194();
+    gridTick194(d);
+    if (gridPending194()) say194('候補 ' + N194.cands[N194.ci].name + '、' + (N194.ci + 1) + ' / ' + n);
+    else say194('今の DB に戻りました');
+    gridArm194();
+  }
+  function gridNudge194() {
+    const b = N194.g && N194.g.firstElementChild;
+    if (!b || reduced194() || !b.animate) return;
+    b.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-2px)' }, { transform: 'translateY(1px)' }, { transform: 'none' }], { duration: 260, easing: 'ease-out' });
+  }
+  function gridTick194(d) {
+    const b = N194.g && N194.g.firstElementChild;
+    if (!b || reduced194() || !b.animate) return;
+    for (const el of b.querySelectorAll('.ng-ic, .ng-nm')) el.animate([{ opacity: 0.25, transform: 'translateY(' + (d > 0 ? 4 : -4) + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 170, easing: 'cubic-bezier(.2,.8,.3,1)' });
+  }
+  function gridArm194() {
+    clearTimeout(N194.gT); N194.gT = 0;
+    const g = N194.g;
+    if (!g) return;
+    g.removeAttribute('data-pend');
+    if (!gridPending194()) { gridEndCand194(); return; }
+    if (!ZN194.dbAuto || !(T194.dbCommit > 0)) return;
+    void g.offsetWidth;   // 待ちの線を最初から引き直す
+    px164(g, '--c194-dbms', T194.dbCommit + 'ms');
+    g.setAttribute('data-pend', '');
+    N194.gT = setTimeout(() => {
+      N194.gT = 0;
+      g.removeAttribute('data-pend');
+      if (!gridPending194()) return;
+      if (!(N194.gIn || N194.gFocus)) { gridCancel194('left'); return; }
+      const b = busy194();
+      if (b) { why194('auto', '自動では移りませんでした（' + ({ ime: '変換中', edit: '編集中', modal: '小窓が開いている' }[b] || b) + '）。クリックか Enter で移れます'); return; }
+      why194('auto', '');
+      gridCommit194();
+    }, T194.dbCommit);
+  }
+  function gridEndCand194() {
+    clearTimeout(N194.gT); N194.gT = 0;
+    const had = !!N194.cands;
+    N194.cands = null; N194.ci = -1; N194.cur = -1;
+    if (N194.g) { N194.g.removeAttribute('data-pend'); if (!N194.nav) N194.g.removeAttribute('data-nav'); }
+    if (had) { N194.gSig = ''; gridPaint194(); }
+  }
+  function gridCancel194(why) {
+    if (!gridPending194()) { gridEndCand194(); return; }
+    gridEndCand194();
+    if (why === 'esc') say194('取り消しました');
+  }
+  function gridCommit194() {
+    clearTimeout(N194.gT); N194.gT = 0;
+    if (N194.nav) return;
+    const t = gridPending194() ? N194.cands[N194.ci] : null;
+    if (!t) { gridEndCand194(); return; }
+    const gr = N194.grp || {};
+    N194.nav = { id: t.id, t0: performance.now() };
+    N194.jumpTo = t.id;
+    const g = N194.g;
+    g.removeAttribute('data-pend');
+    g.setAttribute('data-nav', '');
+    say194(t.name + ' へ移ります');
+    try { nbGo({ gid: gr.gid || K164.gid, id: t.id }); } catch (e) { N194.nav.fail = true; }
+    const wait = () => {
+      const nv = N194.nav;
+      if (!nv || nv.id !== t.id) return;
+      /* URL が変わっても、本文がまだ前の DB のことがある。本文の DB のブロックが移った先になってから（最長 1.2 秒）確定とし、候補の表示は新しい DB に入った所で終える */
+      if (curPage() === t.id) {
+        if (!nv.urlAt) nv.urlAt = performance.now();
+        const fr = mainFrame154(), b = fr && fr.querySelector('.notion-collection_view_page-block[data-block-id]');
+        if ((b && !b.closest('.notion-page-content') && id164(b.getAttribute('data-block-id')) === t.id) || performance.now() - nv.urlAt > 1200) {
+          N194.nav = null; g.removeAttribute('data-nav');
+          zenSoon124(); soon194(0);
+          const cs = N194.cands;
+          setTimeout(() => { if (!N194.nav && N194.cands && N194.cands === cs) gridEndCand194(); }, 1500);
+          return;
+        }
+      }
+      if (nv.fail || performance.now() - nv.t0 > T194.navWait) {
+        N194.nav = null; N194.jumpTo = '';
+        g.removeAttribute('data-nav');
+        gridEndCand194();
+        obToast('「' + t.name + '」に移れませんでした。今の DB のままです。');
+        log194('nav:' + t.id, '「' + t.name + '」へ移れませんでした（' + T194.navWait + 'ms 待っても URL が変わらない）。表示は今の DB に戻しました。');
+        return;
+      }
+      setTimeout(wait, 100);
+    };
+    setTimeout(wait, 100);
+  }
+  function gridClick194() {
+    if (N194.nav) return;
+    if (gridPending194()) { gridCommit194(); return; }
+    headReveal194(true);
+  }
+  function gridKey194(e) {
+    const k = e.key;
+    if (k === 'ArrowDown' || k === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); gridStep194(1); }
+    else if (k === 'ArrowUp' || k === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); gridStep194(-1); }
+    else if (k === 'Escape' && gridPending194()) { e.preventDefault(); e.stopPropagation(); gridCancel194('esc'); }
+  }
+  /* ホイール: Catalogus と同じ数え方（マウスの刻み・トラックパッドの小さな量・回し終えの 1 段）。慣性で減っていく量は、1 段進んだ後は重く数える */
+  function wheelSteps194(st, e, step) {
+    const now = performance.now();
+    if (now - (st.at || 0) > 130) { st.acc = 0; st.n = 0; st.pay = 0; }
+    st.at = now;
+    const ay = Math.abs(e.deltaY);
+    const raw = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1);
+    const wd = Math.abs(e.wheelDeltaY || e.wheelDelta || 0);
+    const notch = e.deltaMode === 1 || (ay >= 40 && Number.isInteger(e.deltaY) && wd > 0 && wd % 120 === 0);
+    const go = (d) => { st.last = performance.now(); st.n = (st.n || 0) + 1; step(d); };
+    clearTimeout(st.T);
+    if (notch) { if (now - (st.last || 0) > 60) go(Math.sign(raw)); return; }
+    const decay = st.n > 0 && ay < (st.pay || 0) * 0.98;
+    st.pay = ay;
+    st.acc = (st.acc || 0) + raw;
+    const th = decay ? 120 : 40;
+    if (Math.abs(st.acc) >= th && now - (st.last || 0) > 140) { go(Math.sign(st.acc)); st.acc = 0; }
+    else if (Math.abs(st.acc) > 160) st.acc = Math.sign(st.acc) * 160;
+    st.T = setTimeout(() => { if (!st.n && Math.abs(st.acc) >= 2) go(Math.sign(st.acc)); st.acc = 0; }, 130);
+  }
+  function gridWheel194(e) {
+    if (e.ctrlKey || e.metaKey) return;                                   // 拡大の操作は妨げない
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || !e.deltaY) return;     // 横の身ぶりは通す
+    e.preventDefault();
+    wheelSteps194(N194.gw, e, gridStep194);
+  }
+  /* 上の帯（機能メニュー）を現在の DB の格子の右から: 帯の行（C124 の zenFit124 と同じ行）の左の内側を格子の右端まで広げる。
+   * 計器の台（C134 の zenPlace134）はその内側の左に付くので一緒に動く。B.U.R.I と格子は動かさない・覆わない */
+  function rowShift194(on) {
+    const dock = document.getElementById('cordi-dock');
+    const row = dock && dock.parentElement && dock.parentElement.parentElement;
+    for (const r of document.querySelectorAll('[data-c194-row]')) if (r !== row || !on) { r.removeAttribute('data-c194-row'); r.style.removeProperty('--c194-pl'); zenSoon124(); }
+    if (!on || !row || !N194.g || N194.g.hidden) return;
+    if (!row.hasAttribute('data-c194-row')) row.__c194pl = parseFloat(getComputedStyle(row).paddingLeft) || 0;
+    const gr = N194.g.getBoundingClientRect(), rr = row.getBoundingClientRect();
+    if (!gr.width || !rr.width) return;
+    const v = Math.max(row.__c194pl || 0, Math.round(gr.right + 6 - rr.left)) + 'px';
+    let changed = false;
+    if (row.style.getPropertyValue('--c194-pl') !== v) { row.style.setProperty('--c194-pl', v); changed = true; }
+    if (!row.hasAttribute('data-c194-row')) { row.setAttribute('data-c194-row', ''); changed = true; }
+    if (changed) zenSoon124();
+  }
+  /* 暗幕（C190）: Catalogus と現在の DB の格子を合わせた範囲に掛ける */
+  function veilRect194(cr) {
+    const g = N194.g;
+    if (!g || g.hidden || !g.isConnected) return cr;
+    const r = g.getBoundingClientRect();
+    if (!r.width) return cr;
+    const left = Math.min(cr.left, r.left), top = Math.min(cr.top, r.top), right = Math.max(cr.right, r.right), bottom = Math.max(cr.bottom, r.bottom);
+    return { left, top, width: right - left, height: bottom - top };
+  }
+
+  /* ── 本文の大きな見出し: 現在の DB の格子が出ている間は、見た目だけ畳む（DOM はそのまま・幅と横の位置は残す＝⁰⁴・⁰⁵・⁰⁸ の測りも変わらない）。
+   *    格子を押すと開いて題字に字を打てる（アイコンの小窓もそこから）。見出しの外へ出て、Notion の小窓も閉じたら畳み直す ── */
+  function constLeaf194(row) {
+    return row ? row.querySelector('div[contenteditable="true"][data-content-editable-leaf="true"][role="textbox"][aria-multiline="true"]') : null;
+  }
+  function head0194(c) {
+    if (!c || !c.blk) return null;
+    const leaf = constLeaf194(c.row);
+    if (c.title && c.title !== c.blk && c.title.contains(c.blk) && !(leaf && c.title.contains(leaf))) return c.title;
+    return c.blk;
+  }
+  function headSync194() {
+    const c = N194.ctx;
+    const head = c && gridShow194() ? head0194(c) : null;
+    for (const el of document.querySelectorAll('[data-c194-hide]')) if (el !== head) { el.removeAttribute('data-c194-hide'); el.removeAttribute('data-c194-reveal'); }
+    if (!head) { if (N194.reveal) { N194.reveal = false; clearInterval(N194.revT); N194.revT = 0; } return; }
+    if (!head.hasAttribute('data-c194-hide')) head.setAttribute('data-c194-hide', '');
+    if (head.hasAttribute('data-c194-reveal') !== N194.reveal) head.toggleAttribute('data-c194-reveal', N194.reveal);
+  }
+  const popOpen194 = () => !!document.querySelector('.notion-overlay-container [role="dialog"], .notion-overlay-container [role="menu"], .notion-overlay-container [role="listbox"], [data-c184-pt]');
+  function headReveal194(on) {
+    const c = N194.ctx;
+    const head = c && head0194(c);
+    N194.reveal = !!(on && head);
+    clearInterval(N194.revT); N194.revT = 0;
+    headSync194();
+    if (!N194.reveal) return;
+    const h1 = c.blk.querySelector('h1[aria-roledescription="page title"]') || c.blk.querySelector('h1');
+    requestAnimationFrame(() => {
+      const sr = c.sc.getBoundingClientRect(), hr = head.getBoundingClientRect();
+      if (hr.top < sr.top || hr.bottom > sr.bottom) c.sc.scrollTop += hr.top - sr.top - 24;
+      if (h1) {
+        try {
+          h1.focus();
+          const r = document.createRange(); r.selectNodeContents(h1); r.collapse(false);
+          const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+        } catch (e) { /* noop */ }
+      }
+    });
+    /* 畳み直し: 見出しの外にいて、Notion の小窓（アイコン・メニュー）も閉じている時。小窓から戻る時は focusout が来ないので軽く見回る */
+    N194.revT = setInterval(() => {
+      const hd = N194.ctx && head0194(N194.ctx);
+      const a = document.activeElement;
+      if (!hd || !N194.reveal) { clearInterval(N194.revT); N194.revT = 0; return; }
+      if ((a && hd.contains(a)) || popOpen194() || (N194.g && N194.g.contains(a))) return;
+      headReveal194(false);
+    }, 600);
+  }
+
+  /* ═══ C. このDBについて（憲法＝説明の全文、実務＝DB ID ごとに書いた実データ）═══ */
+  function aboutSync194() {
+    const c = N194.ctx;
+    const on = !!(c && ZN194.about);
+    const row = on ? c.row : null;
+    for (const el of document.querySelectorAll('[data-c194-about]')) if (el !== row) aboutOff194(el);
+    if (!row) return;
+    const leaf = constLeaf194(row);
+    const txt = leaf ? (leaf.textContent || '').trim() : '';
+    const prac = practice194(N194.id);
+    if (!txt && !prac) { if (row.hasAttribute('data-c194-about')) aboutOff194(row); why194('about', '説明も実務も無い DB です（空の枠は出しません）'); return; }
+    why194('about', '');
+    const cbox = leaf ? [...row.children].find((k) => k.contains(leaf)) : null;
+    const w = row.clientWidth - (parseFloat(getComputedStyle(row).paddingLeft) || 0) - (parseFloat(getComputedStyle(row).paddingRight) || 0);
+    const sig = [N194.id, leaf ? 1 : 0, txt.length, prac, Math.round(w / 8), cbox ? 1 : 0, leaf && leaf.getAttribute('style')].join('|');
+    if (sig === N194.abSig && row.hasAttribute('data-c194-about')) { introMaybe194(row); return; }
+    N194.abSig = sig;
+    for (const el of row.querySelectorAll('[data-c194-cbox]')) if (el !== cbox) el.removeAttribute('data-c194-cbox');
+    for (const el of row.querySelectorAll('[data-c194-const]')) if (el !== leaf) el.removeAttribute('data-c194-const');
+    if (cbox && !cbox.hasAttribute('data-c194-cbox')) cbox.setAttribute('data-c194-cbox', '');
+    if (leaf && txt && !leaf.hasAttribute('data-c194-const')) leaf.setAttribute('data-c194-const', '');
+    if (row.hasAttribute('data-c194-noconst') !== !(txt && cbox)) row.toggleAttribute('data-c194-noconst', !(txt && cbox));
+    if (prac) { const v = cssStr194(prac); if (row.style.getPropertyValue('--c194-practice') !== v) row.style.setProperty('--c194-practice', v); }
+    else if (row.style.getPropertyValue('--c194-practice')) row.style.removeProperty('--c194-practice');
+    if (row.hasAttribute('data-c194-prac') !== !!prac) row.toggleAttribute('data-c194-prac', !!prac);
+    /* 狭い時は 1 列。⁰⁸ が説明の箱に幅を直書きしている時（パッチ前の版）も、横に並べると重なるので 1 列に */
+    const inlineMin = leaf ? parseFloat(leaf.style.minWidth) || parseFloat(leaf.style.width) || 0 : 0;
+    const narrow = w < T194.narrow || inlineMin > w * 0.6;
+    if (row.hasAttribute('data-c194-narrow') !== narrow) row.toggleAttribute('data-c194-narrow', narrow);
+    if (!row.hasAttribute('data-c194-about')) row.setAttribute('data-c194-about', '');
+    /* 小見出しの字の始まり = 憲法の字の始まり（⁰⁴ が説明の左を題字の字の位置に寄せていれば、それに合わせる） */
+    requestAnimationFrame(() => {
+      if (!row.isConnected) return;
+      let tx = 0;
+      if (leaf && txt) {
+        const rr = row.getBoundingClientRect(), lr = leaf.getBoundingClientRect();
+        tx = Math.round(lr.left + (parseFloat(getComputedStyle(leaf).paddingLeft) || 0) - rr.left - (parseFloat(getComputedStyle(row).paddingLeft) || 0));
+        if (!(tx >= 0 && tx <= 200)) tx = 0;
+      }
+      px164(row, '--c194-tx', tx + 'px');
+      introMaybe194(row);
+    });
+  }
+  function aboutOff194(row) {
+    for (const a of ['data-c194-about', 'data-c194-noconst', 'data-c194-prac', 'data-c194-narrow', 'data-c194-intro']) if (row.hasAttribute(a)) row.removeAttribute(a);
+    for (const v of ['--c194-practice', '--c194-tx']) if (row.style.getPropertyValue(v)) row.style.removeProperty(v);
+    for (const el of row.querySelectorAll('[data-c194-cbox], [data-c194-const]')) { el.removeAttribute('data-c194-cbox'); el.removeAttribute('data-c194-const'); }
+    if (N194.intro && N194.intro.row === row) introEnd194();
+  }
+
+  /* ── 魚の入り（同じ DB はセッションで 1 回）。全文の高さは最初から取ってあり、入りは見た目だけ（押し下げない・操作を止めない） ── */
+  function fishSeen194(id, add) {
+    let a = [];
+    try { a = JSON.parse(sessionStorage.getItem(FK194) || '[]'); } catch (e) { a = []; }
+    if (!Array.isArray(a)) a = [];
+    if (add && a.indexOf(id) < 0) { a.push(id); try { sessionStorage.setItem(FK194, JSON.stringify(a.slice(-300))); } catch (e) { /* noop */ } }
+    return a.indexOf(id) >= 0;
+  }
+  function introMaybe194(row) {
+    const id = N194.id;
+    if (!id || N194.introFor === id || (N194.intro && N194.intro.row === row)) return;
+    if (!ZN194.fish || reduced194() || fishSeen194(id)) { N194.introFor = id; fishSeen194(id, true); return; }
+    N194.introFor = id;
+    const gen = N194.gen, t0 = performance.now();
+    /* 幕（¹⁶c・²¹・Lumière）が本文を隠している間は待つ（1.5 秒まで）。見えないまま過ぎたら、出さずに済ませる */
+    const tryRun = () => {
+      if (gen !== N194.gen || !row.isConnected || !row.hasAttribute('data-c194-about')) return;
+      const sc = N194.ctx && N194.ctx.sc;
+      let vis = !!sc && !document.hidden && !root104.hasAttribute('data-c21-veil');
+      for (let n = sc; vis && n && n !== document.body; n = n.parentElement) if (parseFloat(getComputedStyle(n).opacity) < 0.9) vis = false;
+      const rr = row.getBoundingClientRect();
+      if (vis && (rr.bottom < 0 || rr.top > innerHeight)) vis = false;
+      const a = document.activeElement;
+      if (a && row.contains(a)) { fishSeen194(id, true); return; }   // 説明を編集している時は出さない
+      if (vis) { introRun194(row, gen); return; }
+      if (performance.now() - t0 > 1500) { fishSeen194(id, true); return; }
+      setTimeout(tryRun, 120);
+    };
+    tryRun();
+  }
+  const FISH194 = '<svg viewBox="0 0 26 12" aria-hidden="true"><path d="M24.6 6C21.4 1.6 13.4 1.4 7.4 6C13.4 10.6 21.4 10.4 24.6 6Z" fill="currentColor"/><path d="M8 6L1.6 1.9L3.2 6L1.6 10.1Z" fill="currentColor" opacity=".85"/><circle cx="21.3" cy="5.2" r=".85" fill="var(--c194-paper)"/></svg>';
+  function introRun194(row, gen) {
+    const root = host194();
+    if (!root) return;
+    fishSeen194(N194.id, true);
+    const cb = row.querySelector('[data-c194-cbox]');
+    const rr = row.getBoundingClientRect();
+    const cs = getComputedStyle(row);
+    const pl = parseFloat(cs.paddingLeft) || 0, pr = parseFloat(cs.paddingRight) || 0;
+    const tx = parseFloat(row.style.getPropertyValue('--c194-tx')) || 0;
+    const top3 = cb ? cb.getBoundingClientRect().top : rr.top + 40;
+    const hy = top3 - 12 - 10;                       // 小見出しの行の真ん中（下の CSS: 高さ 20px・下に 12px）
+    const x0 = rr.left + pl + tx - 34, x1 = Math.min(rr.right - pr, innerWidth - 24);
+    if (x1 - x0 < 120) { row.setAttribute('data-c194-intro', 'done'); return; }
+    row.style.setProperty('--c194-fd', T194.fishMs + 'ms');
+    row.setAttribute('data-c194-intro', 'run');
+    const box = document.createElement('div');
+    box.className = 'intro';
+    root.appendChild(box);
+    const it = N194.intro = { row, gen, box, anims: [], T: 0, sc: N194.ctx.sc, onScroll: null };
+    const fish = (cls, x, y, size) => {
+      const f = document.createElement('div');
+      f.className = 'fish ' + cls;
+      f.innerHTML = FISH194;
+      f.style.width = size + 'px';
+      f.style.height = (size * 12 / 26) + 'px';
+      f.style.left = '0px'; f.style.top = '0px';
+      f.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      box.appendChild(f);
+      return f;
+    };
+    const lead = fish('lead', x0, hy - 6, 24);
+    const trail = document.createElement('i');
+    trail.className = 'trail';
+    trail.style.left = x0 + 'px'; trail.style.top = (hy + 0.5) + 'px'; trail.style.width = (x1 - x0) + 'px';
+    box.appendChild(trail);
+    const F = T194.fishMs;
+    if (lead.animate) {
+      it.anims.push(lead.animate([
+        { transform: 'translate(' + x0 + 'px,' + (hy - 6) + 'px)', opacity: 0 },
+        { opacity: 0.9, offset: 0.08 },
+        { transform: 'translate(' + ((x0 + x1) / 2) + 'px,' + (hy - 8.5) + 'px)', opacity: 0.85, offset: 0.5 },
+        { opacity: 0.7, offset: 0.9 },
+        { transform: 'translate(' + x1 + 'px,' + (hy - 6) + 'px)', opacity: 0 }
+      ], { duration: F, easing: 'cubic-bezier(.45,.05,.4,1)', fill: 'forwards' }));
+      it.anims.push(trail.animate([
+        { transform: 'scaleX(0)', opacity: 0.55 }, { transform: 'scaleX(1)', opacity: 0.4, offset: 0.85 }, { transform: 'scaleX(1)', opacity: 0 }
+      ], { duration: F + 300, easing: 'cubic-bezier(.45,.05,.4,1)', fill: 'forwards' }));
+      /* 小さな群れ（4 匹）が見出しの下を通り、憲法から実務まで内容が現れる */
+      const y2 = top3 + 6;
+      for (let i = 0; i < 4; i++) {
+        const dy = [0, 5, -3, 8][i], sz = [12, 10, 11, 9][i];
+        const f = fish('school', x0 - 30, y2 + dy, sz);
+        it.anims.push(f.animate([
+          { transform: 'translate(' + (x0 - 30 - i * 14) + 'px,' + (y2 + dy) + 'px)', opacity: 0 },
+          { opacity: 0.55, offset: 0.12 },
+          { transform: 'translate(' + ((x0 + x1) / 2 - i * 10) + 'px,' + (y2 + dy + (i % 2 ? 3 : -3)) + 'px)', opacity: 0.5, offset: 0.55 },
+          { opacity: 0.35, offset: 0.9 },
+          { transform: 'translate(' + (x1 - i * 8) + 'px,' + (y2 + dy) + 'px)', opacity: 0 }
+        ], { duration: F * 1.1, delay: 380 + i * 90, easing: 'cubic-bezier(.4,.1,.35,1)', fill: 'both' }));
+      }
+    }
+    /* スクロールしたら、その場で静止した状態へ（古い演出を残さない） */
+    it.onScroll = () => introEnd194();
+    it.sc.addEventListener('scroll', it.onScroll, { passive: true, once: true });
+    it.T = setTimeout(() => introEnd194(), F * 1.1 + 380 + 3 * 90 + 300);
+  }
+  function introEnd194() {
+    const it = N194.intro;
+    if (!it) return;
+    N194.intro = null;
+    clearTimeout(it.T);
+    for (const a of it.anims) { try { a.cancel(); } catch (e) { /* noop */ } }
+    if (it.box) it.box.remove();
+    if (it.sc && it.onScroll) it.sc.removeEventListener('scroll', it.onScroll);
+    if (it.row && it.row.isConnected && it.row.hasAttribute('data-c194-intro')) it.row.setAttribute('data-c194-intro', 'done');
+  }
+
+  /* ═══ 自分の重ねの層（星・魚・案内）— 影の木の中に置く（³⁹ の属性の見張りや Notion の CSS と混ざらない）。押せない・読み上げない ═══ */
+  const HOST_CSS194 = `
+:host { all: initial; }
+.intro, .star { position: absolute; left: 0; top: 0; pointer-events: none; }
+.fish { position: absolute; color: var(--c194-fish); will-change: transform, opacity; }
+.fish svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.trail { position: absolute; height: 1px; transform-origin: 0 50%; background: linear-gradient(90deg, transparent, var(--c194-fish) 30%, transparent); opacity: 0; }
+.star { width: 0; height: 0; transform: translate(var(--x), var(--y)); }
+.star[hidden] { display: none; }
+.star > i { position: absolute; left: 0; top: 0; display: block; }
+.star .sh { height: 1px; width: var(--w, 24px); margin-top: -0.5px; background: linear-gradient(90deg, var(--c), transparent); opacity: .85; transform-origin: 0 50%; }
+.star .sv { width: 1px; height: var(--h, 18px); margin-left: -0.5px; background: linear-gradient(180deg, var(--c), transparent); opacity: .85; transform-origin: 50% 0; }
+.star .halo { width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--c) 30%, transparent), transparent 70%); }
+.star svg { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; overflow: visible; }
+.star svg path { fill: var(--c); }
+.star[data-on] .sh { animation: s-h 220ms cubic-bezier(.2,.8,.3,1) both; }
+.star[data-on] .sv { animation: s-v 220ms cubic-bezier(.2,.8,.3,1) both; }
+.star[data-on] svg { animation: s-c 200ms cubic-bezier(.3,1.5,.5,1) both; }
+.star[data-on] .halo { animation: s-o 260ms ease both; }
+@keyframes s-h { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes s-v { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes s-c { from { transform: scale(.35) rotate(-30deg); opacity: .4; } to { transform: none; opacity: 1; } }
+@keyframes s-o { from { opacity: 0; } to { opacity: 1; } }
+.guide { position: absolute; left: 0; top: 0; display: flex; align-items: flex-start; gap: 6px; pointer-events: auto; max-width: 320px; box-sizing: border-box;
+  font: 400 12px/1.6 ui-sans-serif, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif; color: var(--c194-ink); opacity: 0; transform: translateY(4px);
+  transition: opacity 220ms ease, transform 260ms cubic-bezier(.2,.8,.3,1); }
+.guide[hidden] { display: none; }
+.guide[data-in] { opacity: 1; transform: none; }
+.guide .gf { all: unset; flex: none; width: 22px; height: 12px; margin-top: 9px; color: var(--c194-fish); cursor: pointer; border-radius: 3px; }
+.guide .gf svg { display: block; width: 100%; height: 100%; }
+.guide .gf:focus-visible, .guide button:focus-visible, .reopen:focus-visible { outline: 1.5px solid var(--c194-acc); outline-offset: 2px; }
+.guide[data-in] .gf { animation: g-swim 700ms cubic-bezier(.3,.8,.3,1) both; }
+@keyframes g-swim { from { transform: translateX(-10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.guide .gb { position: relative; flex: 1 1 auto; min-width: 0; padding: 6px 30px 7px 11px; border: 1px solid var(--c194-gline); border-radius: 8px; background: var(--c194-paper); box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.guide .gb::after { content: ""; position: absolute; left: 14px; bottom: -4px; width: 7px; height: 7px; background: var(--c194-paper); border-right: 1px solid var(--c194-gline); border-bottom: 1px solid var(--c194-gline); transform: rotate(45deg); }
+.guide[data-up] .gb::after { bottom: auto; top: -4px; transform: rotate(225deg); }
+.guide .gt { white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; cursor: text; }
+.guide .gt:focus-visible { outline: none; }
+.guide .gx, .guide .gp { all: unset; position: absolute; top: 4px; width: 16px; height: 16px; display: grid; place-items: center; font: 12px/1 sans-serif; color: var(--c194-ink2); cursor: pointer; border-radius: 3px; }
+.guide .gx { right: 4px; }
+.guide .gp { right: 21px; font-size: 10px; opacity: .8; }
+.guide[data-pin] .gp { color: var(--c194-acc); opacity: 1; }
+.guide[data-pin] .gb { border-color: color-mix(in srgb, var(--c194-acc) 55%, var(--c194-gline)); }
+.guide .gx:hover, .guide .gp:hover, .guide .gf:hover { color: var(--c194-ink); }
+.guide[data-out] { opacity: 0; transform: translateY(-3px); }
+.reopen { all: unset; position: absolute; left: 0; top: 0; width: 22px; height: 16px; display: grid; place-items: center; color: var(--c194-fish); pointer-events: auto; cursor: pointer; opacity: .55; border-radius: 4px; transition: opacity 160ms ease; }
+.reopen[hidden] { display: none; }
+.reopen:hover { opacity: 1; }
+.reopen svg { width: 18px; height: 9px; display: block; }
+@media (prefers-reduced-motion: reduce) { .star *, .guide, .guide *, .reopen { animation: none !important; transition: none !important; } }
+`;
+  function host194() {
+    if (N194.root && N194.host && N194.host.isConnected) { if (N194.host.hidden) N194.host.hidden = false; return N194.root; }
+    try {
+      const h = document.createElement('div');
+      h.id = 'c33-n194';
+      h.setAttribute('aria-hidden', 'false');
+      document.body.appendChild(h);
+      const root = h.attachShadow({ mode: 'open' });
+      root.innerHTML = '<style>' + HOST_CSS194 + '</style>'
+        + '<div class="star" hidden aria-hidden="true"><i class="halo"></i><i class="sh"></i><i class="sv"></i><svg viewBox="-5 -5 10 10"><path d="' + star124(0, 0, 4.6) + '"/></svg></div>'
+        + '<div class="guide" hidden role="dialog" aria-label="ビューの案内" data-no-passthrough="1">'
+        + '<button type="button" class="gf" aria-label="案内を固定する">' + FISH194 + '</button>'
+        + '<div class="gb"><div class="gt" tabindex="0"></div><button type="button" class="gp" aria-label="固定する" aria-pressed="false">✦</button><button type="button" class="gx" aria-label="閉じる">×</button></div></div>'
+        + '<button type="button" class="reopen" hidden aria-label="このビューの案内を出す" title="このビューの案内">' + FISH194 + '</button>';
+      N194.host = h; N194.root = root;
+      guideWire194(root);
+      return root;
+    } catch (e) {
+      log194('host', '重ねの層を作れないため、星・魚・案内は止めています（' + (e && e.message) + '）。');
+      return null;
+    }
+  }
+
+  /* ═══ D. 表のビュー: 巡る索引帯・しおり ═══ */
+  function selVid194(root) {
+    if (!root) return '';
+    const t = root.querySelector('[role="tablist"] [role="tab"][aria-selected="true"]');
+    const b = t && t.closest('[data-collection-view-id]');
+    return b ? vidOf194(b) : '';
+  }
+  function hsc194(E) {
+    const hr = E && E.inner && E.inner.querySelector('.notion-table-view-header-row');
+    const h = hr && hr.closest('.notion-scroller.horizontal');
+    return h && N194.ctx && N194.ctx.sc.contains(h) ? h : (N194.ctx && N194.ctx.sc);
+  }
+  function tableSync194() {
+    const c = N194.ctx;
+    const E0 = c ? find174() : null;
+    const ok = !!(E0 && !E0.why && E0.sc === c.sc);
+    const E = ok ? E0 : null;
+    N194.E = E;
+    N194.isTable = ok;
+    N194.H = E ? hsc194(E) : null;
+    if (c) {
+      const vid = selVid194((E && E.bar) || c.sc) || curView();
+      if (vid && vid !== N194.vid) viewEnter194(vid, ok);
+      why194('table', ok ? '' : E0 && E0.why ? '表のビューではありません（' + E0.why + '）。索引帯・見出し行・罫線は Notion のまま' : '');
+    }
+    bandSync194(E);
+    tblSync194(E);
+    N194.starOn = !!(E && ZN194.stars && N194.host);
+    if (!N194.starOn) starHide194();
+    ovSoon194();
+  }
+  function viewEnter194(vid, isTable) {
+    const prev = N194.vid, db = N194.id;
+    const userMoved = !!(N194.sw && N194.sw.vid === vid && N194.sw.user);   // 切り替えを待つ間に手でスクロールした
+    N194.vid = vid;
+    N194.vgen++;
+    N194.sw = null;
+    if (N194.bsw && N194.bsw.vid === vid) N194.bsw = null;
+    bandEnd194();
+    if (ZN194.marks && isTable) { MS194.last[db] = vid; msSave194(); }
+    /* 最後に確定したビュー: 上段の格子から移って来た時だけ、Notion が別のビューで開いたら、覚えているビューへ切り替える（確かめたタブを押す） */
+    if (!prev && ZN194.lastView && N194.jumpTo === db) {
+      N194.jumpTo = '';
+      const last = MS194.last[db];
+      const tab = last && last !== vid ? tabFor194(last) : null;
+      if (tab) {
+        N194.sw = { vid: last, at: performance.now() };
+        if (MS194.m[db + ':' + last]) holdOn194();
+        obPress(tab);
+        setTimeout(() => { if (N194.sw && N194.sw.vid === last && N194.vid !== last) { N194.sw = null; holdOff194(); } }, T194.viewWait);
+        return;
+      }
+    }
+    N194.jumpTo = '';
+    if (userMoved) { restoreEnd194('user', true); holdOff194(); guideKick194(); return; }
+    restoreMaybe194(db, vid, isTable);
+  }
+  function tabFor194(vid) {
+    const c = N194.ctx;
+    const root = (N194.E && N194.E.bar) || (c && c.sc);
+    if (!root) return null;
+    for (const b of root.querySelectorAll('[role="tablist"] [data-collection-view-id]')) if (vidOf194(b) === vid) return b.querySelector('[role="tab"]') || b;
+    return null;
+  }
+
+  /* ── 巡る索引帯（表のビューの時だけ）: Notion の本物のタブに印を付け、CSS の order で「確定したビュー（候補を回している間は候補）」を
+   *    左の着地点へ回す。全部のタブを描かせるため、⁴¹ Telescopium と同じく帯を広く見せて元の幅で切り抜く。押すのは Notion のタブそのもの ── */
+  function trackOf194(tl) {
+    const btns = [...tl.querySelectorAll('[data-collection-view-id]')];
+    if (!btns.length) return null;
+    let lca = btns[0].parentElement;
+    while (lca && lca !== tl && !btns.every((b) => lca.contains(b))) lca = lca.parentElement;
+    if (!lca) return null;
+    if (btns.length === 1) { lca = tl.firstElementChild || null; }
+    if (!lca || lca === tl) lca = tl.firstElementChild;
+    if (!lca) return null;
+    /* 子のそれぞれがタブを 1 つだけ持つ箱であること */
+    for (const k of lca.children) if (k.querySelectorAll('[data-collection-view-id]').length > 1) return null;
+    return lca;
+  }
+  /* 表の自動倍率（C174 の zoom）の中の箱は、画面の px と CSS の px がずれる。画面で測った量を CSS に書く時はこの倍率で割る */
+  function zf194(el) {
+    const w = el && el.offsetWidth;
+    if (!w) return 1;
+    const z = el.getBoundingClientRect().width / w;
+    return z > 0.3 && z < 1.5 ? z : 1;
+  }
+  function bandSync194(E) {
+    const on = !!(E && ZN194.band && E.bar);
+    const tl = on ? E.bar.querySelector('[role="tablist"]') : null;
+    if (N194.tl && N194.tl !== tl) bandOff194(N194.tl);
+    if (!tl) { N194.tl = null; N194.track = null; N194.bviews = null; bandOrder194(null); if (E && ZN194.band) why194('band', 'タブの並び（role=tablist）が見つかりません'); else why194('band', ''); return; }
+    const row = tl.parentElement, track = trackOf194(tl);
+    if (!row || !track) { bandOff194(tl); N194.tl = null; why194('band', 'タブの箱の形が分かりません（帯は止めて Notion のタブのまま）'); log194('band:track', '索引帯: タブの箱の形が分からないため、Notion のタブのままにしました。'); return; }
+    /* 道具の段（Filter・Sort・Search・New）の幅を除いた所が帯 */
+    const tool = tl.nextElementSibling;
+    let toolW = 0;
+    if (tool) {
+      let x0 = Infinity, x1 = -Infinity;
+      for (const k of tool.querySelectorAll('[role="button"], button, input')) { const r = k.getBoundingClientRect(); if (r.width < 1) continue; if (r.left < x0) x0 = r.left; if (r.right > x1) x1 = r.right; }
+      toolW = (x1 > x0 ? x1 - x0 : 0) + (parseFloat(getComputedStyle(tool).paddingInlineEnd) || 0) + 12;
+    }
+    const rr = row.getBoundingClientRect();
+    const ms = parseFloat(getComputedStyle(tl).marginInlineStart) || 0;
+    const bw = Math.floor(rr.width - ms - toolW);
+    if (bw < 160) { bandOff194(tl); N194.tl = null; why194('band', '帯の幅が足りません（' + bw + 'px）'); return; }
+    /* ⁴¹ Telescopium 1.0.0 も同じタブを横に流す（譲る仕組みが無い）。取り合わないよう、その時は帯を止めて Telescopium に任せる（1.0.1 は譲る） */
+    let tlv = '';
+    try { const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window; tlv = W.__c41 && W.__c41.version ? String(W.__c41.version) : ''; } catch (e) { tlv = ''; }
+    if (tlv === '1.0.0' && tl.hasAttribute('data-tl-tabs')) {   // 1.0.0 が実際にこのタブを流している時だけ
+      bandOff194(tl); N194.tl = null;
+      why194('band', '⁴¹ Telescopium 1.0.0 が同じタブを動かしています（1.0.1 に入れ替えると索引帯が出ます）');
+      log194('band:c41', '索引帯: ⁴¹ Telescopium 1.0.0 が同じタブを横に流しているので、帯は止めて Telescopium に任せました。⁴¹ を 1.0.1 に入れ替えると索引帯が出ます。');
+      return;
+    }
+    why194('band', '');
+    const views = [];
+    N194.bnames = {};
+    for (const it of track.children) {
+      const b = it.matches('[data-collection-view-id]') ? it : it.querySelector('[data-collection-view-id]');
+      const v = b ? vidOf194(b) : '';
+      if (v && views.indexOf(v) < 0) { views.push(v); N194.bnames[v] = norm(b.textContent).slice(0, 80); }
+      if (it.getAttribute('data-c194-it') !== v) it.setAttribute('data-c194-it', v);
+    }
+    N194.tl = tl; N194.track = track; N194.bviews = views;
+    if (!tl.hasAttribute('data-c194-band')) {
+      tl.setAttribute('data-c194-band', '');
+      if (!tl.__c194) {
+        tl.__c194 = true;
+        tl.addEventListener('wheel', bandWheel194, { passive: false });
+        tl.addEventListener('keydown', bandKey194, true);
+        tl.addEventListener('pointerenter', () => { N194.bIn = true; clearTimeout(N194.bLeaveT); });
+        /* 離れたら取り消す。ただし帯の下で並びや高さが動いただけ（指は動いていない）の時は離れたことにしない — 少し待って、指の位置が帯の外か確かめる */
+        tl.addEventListener('pointerleave', () => {
+          N194.bIn = false;
+          clearTimeout(N194.bLeaveT);
+          N194.bLeaveT = setTimeout(() => {
+            if (N194.bIn || !N194.bc || N194.bsw) return;
+            const t = N194.px != null ? document.elementFromPoint(N194.px, N194.py) : null;
+            if (t && N194.tl && N194.tl.contains(t)) { N194.bIn = true; return; }
+            bandEnd194(true);
+          }, 120);
+        });
+        tl.addEventListener('focusin', () => { N194.bFocus = true; });
+        tl.addEventListener('focusout', (e) => { N194.bFocus = !!(e.relatedTarget && tl.contains(e.relatedTarget)); if (!N194.bFocus && !N194.bIn && N194.bc && !N194.bsw) bandEnd194(true); });
+      }
+    }
+    if (!row.hasAttribute('data-c194-bandrow')) row.setAttribute('data-c194-bandrow', '');
+    if (!track.hasAttribute('data-c194-track')) track.setAttribute('data-c194-track', '');
+    N194.bwS = bw;   // 画面の px（帯の右端の判定・案内の置き場所に使う）
+    px164(tl, '--c194-bw', (Math.floor(bw / zf194(tl) * 10) / 10) + 'px');
+    bandOrder194(views);
+    bandFit194();
+  }
+  function bandOrder194(views) {
+    let st = document.getElementById('c194-order');
+    if (!views || !views.length) { if (st) st.textContent = ''; N194.ordSig = ''; return; }
+    const base = N194.bc || N194.vid;
+    let k = views.indexOf(base);
+    if (k < 0) k = 0;
+    const sig = views.join(',') + '@' + k;
+    if (sig === N194.ordSig) return;
+    N194.ordSig = sig;
+    if (!st) { st = document.createElement('style'); st.id = 'c194-order'; (document.head || root104).appendChild(st); }
+    st.textContent = views.map((v, i) => `${S194} [data-c194-band] [data-c194-it="${v}"] { order: ${(i - k + views.length) % views.length} !important; }`).join('\n');
+  }
+  /* 帯に入りきらない項目は見せず（巡れば着地点へ来る）、右の端に残りの数。着地点の下線は最初の項目の幅 */
+  function bandFit194() {
+    const tl = N194.tl, track = N194.track;
+    if (!tl || !track) return;
+    const row = tl.parentElement;
+    const bw = N194.bwS || 0;
+    const lr = tl.getBoundingClientRect(), rr = row.getBoundingClientRect();
+    const zr = zf194(row);
+    const first = N194.bc || N194.vid;
+    let rest = 0, fx = 0, fw = 0;
+    for (const it of track.children) {
+      const v = it.getAttribute('data-c194-it');
+      if (!v) continue;
+      const r = it.getBoundingClientRect();
+      const off = r.right > lr.left + bw - 1;
+      if (it.hasAttribute('data-c194-off') !== off) it.toggleAttribute('data-c194-off', off);
+      if (off) rest++;
+      const isF = v === first;
+      if (it.hasAttribute('data-c194-first') !== isF) it.toggleAttribute('data-c194-first', isF);
+      if (isF) {
+        const tab = it.querySelector('[role="tab"]') || it;
+        const tr = tab.getBoundingClientRect();
+        fx = Math.round(tr.left - rr.left); fw = Math.round(tr.width);
+      }
+    }
+    px164(row, '--c194-fx', Math.round(fx / zr) + 'px');
+    px164(row, '--c194-fw', Math.max(0, Math.round(fw / zr)) + 'px');
+    const rs = rest ? '+' + rest : '';
+    if ((tl.getAttribute('data-c194-rest') || '') !== rs) { if (rs) tl.setAttribute('data-c194-rest', rs); else tl.removeAttribute('data-c194-rest'); }
+    row.toggleAttribute('data-c194-cand', !!N194.bc);
+  }
+  function bandOff194(tl) {
+    if (!tl) return;
+    const row = tl.parentElement;
+    clean194(tl);
+    if (row) { for (const a of ['data-c194-bandrow', 'data-c194-pend', 'data-c194-cand']) row.removeAttribute(a); for (const v of ['--c194-fx', '--c194-fw', '--c194-vms']) row.style.removeProperty(v); }
+    if (tl === N194.tl) { N194.tl = null; N194.track = null; N194.bviews = null; }
+    bandOrder194(null);
+    clearTimeout(N194.bT); N194.bT = 0; N194.bc = null;
+  }
+  function bandWheel194(e) {
+    const tl = e.currentTarget;
+    if (!tl.hasAttribute('data-c194-band') || e.ctrlKey || e.metaKey) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || !e.deltaY) return;     // 横の身ぶり・本文のスクロールは奪わない
+    e.preventDefault();
+    e.stopPropagation();
+    wheelSteps194(N194.bw, e, bandStep194);
+  }
+  function bandKey194(e) {
+    const tl = e.currentTarget;
+    if (!tl.hasAttribute('data-c194-band')) return;
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown') { e.preventDefault(); e.stopPropagation(); bandStep194(1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp') { e.preventDefault(); e.stopPropagation(); bandStep194(-1); }
+    else if (k === 'Enter' && N194.bc) { e.preventDefault(); e.stopPropagation(); bandCommit194(); }
+    else if (k === 'Escape' && N194.bc) { e.preventDefault(); e.stopPropagation(); bandEnd194(true); say194('取り消しました'); }
+  }
+  function bandStep194(d) {
+    if (N194.bsw) return;
+    const views = N194.bviews;
+    if (!views || views.length < 2) return;
+    const base = N194.bc || N194.vid;
+    let k = views.indexOf(base);
+    if (k < 0) k = 0;
+    const nv = views[(k + d + views.length) % views.length];
+    const track = N194.track;
+    const w0 = track && track.querySelector('[data-c194-first]');
+    const wPrev = w0 ? w0.getBoundingClientRect().width : 0;
+    N194.bc = nv === N194.vid ? null : nv;
+    bandOrder194(views);
+    bandFit194();
+    /* 回る動き: 帯ごと 1 項目ぶん、元の位置から滑らせる（動きを減らす設定では、すぐ） */
+    if (track && track.animate && !reduced194()) {
+      let dx = 0;
+      if (d > 0) dx = wPrev;
+      else { const f = track.querySelector('[data-c194-first]'); dx = -(f ? f.getBoundingClientRect().width : 0); }
+      dx = dx / zf194(track);
+      if (dx) track.animate([{ transform: 'translateX(' + dx + 'px)' }, { transform: 'translateX(0)' }], { duration: 220, easing: 'cubic-bezier(.2,.8,.3,1)' });
+    }
+    const name = N194.bnames[nv] || '';
+    say194((N194.bc ? '候補 ' : '今のビュー ') + name + '、' + (views.indexOf(nv) + 1) + ' / ' + views.length);
+    bandArm194();
+  }
+  function bandArm194() {
+    clearTimeout(N194.bT); N194.bT = 0;
+    const row = N194.tl && N194.tl.parentElement;
+    if (row) row.removeAttribute('data-c194-pend');
+    if (!N194.bc || !row) return;
+    if (!ZN194.viewAuto || !(T194.viewCommit > 0)) return;
+    void row.offsetWidth;
+    px164(row, '--c194-vms', T194.viewCommit + 'ms');
+    row.setAttribute('data-c194-pend', '');
+    N194.bT = setTimeout(() => {
+      N194.bT = 0;
+      row.removeAttribute('data-c194-pend');
+      if (!N194.bc) return;
+      if (!(N194.bIn || N194.bFocus)) { bandEnd194(true); return; }
+      const b = busy194();
+      if (b) { why194('vauto', 'ビューを自動では切り替えませんでした（' + b + '）'); return; }
+      why194('vauto', '');
+      bandCommit194();
+    }, T194.viewCommit);
+  }
+  /* Esc: フォーカスが上段や索引帯に無くても、待っている候補（DB・ビュー）は取り消す。Notion の小窓が開いている時はそちらに任せる */
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || e.isComposing || popOpen194()) return;
+    const ours = !document.activeElement || document.activeElement === document.body || !!(document.activeElement.closest && document.activeElement.closest('#c33-n194-db, [data-c194-band]'));
+    let hit = false;
+    if (gridPending194() && !N194.nav) { gridCancel194('esc'); hit = true; }
+    if (N194.bc) { bandEnd194(true); say194('取り消しました'); hit = true; }
+    if (hit && ours) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+  function bandEnd194(revert) {
+    clearTimeout(N194.bT); N194.bT = 0;
+    const had = !!N194.bc;
+    N194.bc = null;
+    const row = N194.tl && N194.tl.parentElement;
+    if (row) { row.removeAttribute('data-c194-pend'); row.removeAttribute('data-c194-cand'); }
+    if (had && N194.bviews) { bandOrder194(N194.bviews); bandFit194(); }
+    void revert;
+  }
+  function bandCommit194() {
+    clearTimeout(N194.bT); N194.bT = 0;
+    const v = N194.bc;
+    if (!v || N194.bsw) return;
+    const tab = tabFor194(v);
+    if (!tab) { bandEnd194(true); obToast('そのビューのタブが見つかりませんでした。'); return; }
+    markSave194(true);
+    N194.sw = { vid: v, at: performance.now() };
+    if (MS194.m[N194.id + ':' + v]) holdOn194();
+    N194.bsw = { vid: v, t0: performance.now() };
+    const row = N194.tl && N194.tl.parentElement;
+    if (row) row.removeAttribute('data-c194-pend');
+    obPress(tab);
+    const wait = () => {
+      const s = N194.bsw;
+      if (!s || s.vid !== v) return;
+      if (N194.vid === v) { N194.bsw = null; return; }
+      if (performance.now() - s.t0 > T194.viewWait) {
+        N194.bsw = null; N194.sw = null;
+        holdOff194();
+        bandEnd194(true);
+        obToast('ビューを切り替えられませんでした。元のビューのままです。');
+        log194('vsw:' + v, 'ビューの切り替えを確かめられませんでした（' + T194.viewWait + 'ms）。帯は元のビューへ戻しました。');
+        return;
+      }
+      soon194(0);
+      setTimeout(wait, 100);
+    };
+    setTimeout(wait, 100);
+  }
+
+  /* ── しおり（DB ID＋ビュー ID ごとに、縦・横の位置と、見えている先頭の行と行からのずれ）。表のビューだけ ── */
+  function stickyH194() { return N194.stH || 0; }
+  function anchor194(E, V) {
+    const top = V.getBoundingClientRect().top + stickyH194();
+    let best = null, bt = Infinity;
+    for (const it of E.inner.querySelectorAll('.notion-collection-item[data-block-id]')) {
+      const r = it.getBoundingClientRect();
+      if (r.height <= 0 || r.bottom <= top + 1) continue;
+      if (r.top < bt) { bt = r.top; best = it; }
+    }
+    return best ? { id: best.getAttribute('data-block-id'), o: Math.round(bt - top) } : null;
+  }
+  function markSoon194() {
+    if (!ZN194.marks || !N194.isTable || N194.rs || N194.restoring || N194.sw || performance.now() - (Z154.mvAt || -1e9) < 500) return;
+    clearTimeout(N194.saveT);
+    N194.saveT = setTimeout(() => markSave194(false), 120);
+  }
+  function markSave194(force) {
+    clearTimeout(N194.saveT); N194.saveT = 0;
+    if (!ZN194.marks || !N194.isTable || N194.rs || N194.restoring) return;
+    if (!force && (N194.sw || performance.now() - (Z154.mvAt || -1e9) < 500)) return;
+    const c = N194.ctx, E = N194.E;
+    if (!c || !E || !N194.vid || !E.inner.isConnected) return;
+    if (selVid194(E.bar) && selVid194(E.bar) !== N194.vid) return;   // 描き替えの途中
+    const V = c.sc, H = N194.H || V;
+    const a = anchor194(E, V);
+    MS194.m[N194.id + ':' + N194.vid] = { t: Math.round(V.scrollTop), l: Math.round(H.scrollLeft), a: a ? a.id : '', o: a ? a.o : 0, at: Date.now() };
+    msSave194();
+  }
+  function holdOn194() {
+    const sc = N194.ctx && N194.ctx.sc;
+    if (!sc || root104.hasAttribute('data-c21-veil')) return;   // ²¹ の幕が掛かっている間は、その幕に任せる
+    if (!sc.hasAttribute('data-c194-hold')) sc.setAttribute('data-c194-hold', '');
+    clearTimeout(N194.holdT);
+    N194.holdT = setTimeout(holdOff194, T194.restoreWait + T194.viewWait);
+  }
+  function holdOff194() {
+    clearTimeout(N194.holdT); N194.holdT = 0;
+    for (const el of document.querySelectorAll('[data-c194-hold]')) el.removeAttribute('data-c194-hold');
+  }
+  function restoreMaybe194(db, vid, isTable) {
+    restoreEnd194('new', true);
+    const m = ZN194.marks && isTable ? MS194.m[db + ':' + vid] : null;
+    if (!m) { holdOff194(); guideKick194(); return; }   // 初めて開くビュー・表でないビューは Notion のまま
+    const rs = N194.rs = { db, vid, m, gen: N194.vgen, t0: performance.now(), lastH: -1, stable: 0, user: false, tries: 0 };
+    if (m.t > 40) holdOn194();
+    requestAnimationFrame(() => restoreStep194(rs));
+  }
+  function restoreStep194(rs) {
+    if (rs !== N194.rs) return;
+    const c = N194.ctx;
+    if (rs.user || rs.gen !== N194.vgen || !c) { restoreEnd194(rs.user ? 'user' : 'stale'); return; }
+    const E = find174();
+    const V = c.sc;
+    const ready = !E.why && E.sc === V && selVid194(E.bar) === rs.vid && !!E.inner.querySelector('.notion-table-view-header-row');
+    if (ready) { const h = V.scrollHeight; if (h === rs.lastH) rs.stable++; else { rs.stable = 0; rs.lastH = h; } }
+    if (ready && rs.stable >= 2) { restoreApply194(rs, E, V); return; }
+    if (performance.now() - rs.t0 > T194.restoreWait) {
+      if (ready) restoreApply194(rs, E, V);
+      else { log194('rs:wait', 'しおり: ビューの描き終わりを確かめられなかったので、位置は戻しませんでした。'); restoreEnd194('timeout'); }
+      return;
+    }
+    requestAnimationFrame(() => restoreStep194(rs));
+  }
+  function restoreApply194(rs, E, V) {
+    if (rs !== N194.rs || rs.user) { restoreEnd194('user'); return; }
+    const m = rs.m;
+    const H = (E && hsc194(E)) || V;
+    N194.restoring = true;
+    let anchored = false;
+    if (m.a && E && E.inner) {
+      let it = null;
+      try { it = E.inner.querySelector('.notion-collection-item[data-block-id="' + CSS.escape(m.a) + '"]'); } catch (e) { it = null; }
+      if (it) {
+        const top = V.getBoundingClientRect().top + stickyH194();
+        V.scrollTop += it.getBoundingClientRect().top - top - m.o;
+        anchored = true;
+      }
+    }
+    if (!anchored) { const max = Math.max(0, V.scrollHeight - V.clientHeight); V.scrollTop = Math.min(m.t, max); }
+    if (H) H.scrollLeft = Math.min(m.l, Math.max(0, H.scrollWidth - H.clientWidth));
+    rs.tries++;
+    /* 行がまだ読み込まれていない（³⁵ の続きの読み込み・仮想化）時は、伸びるのを少し待ってもう一度。基準の行が消えていたら座標のまま */
+    const short = !anchored && m.t > V.scrollTop + 2;
+    const again = (short || (!anchored && m.a)) && rs.tries < 8 && performance.now() - rs.t0 < T194.restoreWait + 1500;
+    if (again) {
+      holdOff194();
+      setTimeout(() => { if (rs === N194.rs && !rs.user) restoreApply194(rs, find174(), V); else if (rs === N194.rs) restoreEnd194('user'); }, 130);
+      return;
+    }
+    /* 戻した後に表の倍率（C174）や行の高さが決まり直して位置がずれることがあるので、少しの間だけ基準の行の位置を確かめ直す（手で動かしたらやめる） */
+    if (anchored && (rs.settle || 0) < 3) {
+      const ms = [140, 260, 420][rs.settle || 0];
+      rs.settle = (rs.settle || 0) + 1;
+      if (rs.settle > 1) holdOff194();   // 最初の確かめ直しまでは伏せたまま（ずれた位置を一瞬見せない）
+      setTimeout(() => { if (rs === N194.rs && !rs.user) restoreApply194(rs, find174(), V); else if (rs === N194.rs) restoreEnd194('user'); }, ms);
+      return;
+    }
+    restoreEnd194(anchored ? 'anchor' : 'coord');
+  }
+  function restoreEnd194(why, quiet) {
+    const rs = N194.rs;
+    N194.rs = null;
+    holdOff194();
+    if (rs) rs.end = why;
+    setTimeout(() => { if (!N194.rs) N194.restoring = false; }, 80);
+    if (rs && why === 'user') setTimeout(() => { if (!N194.rs) markSoon194(); }, 360);   // 手で動かした先を覚える（動いている間は戻しの最中として数えなかった分）
+    if (rs && !quiet) guideKick194();
+  }
+  /* 利用者が自分でスクロールし始めたら、戻すのを止める（何度も位置を奪わない） */
+  /* 手でのスクロール（索引帯の上のホイールは巡るためのもの・⌘/Ctrl＋ホイールは拡大なので数えない） */
+  const userScroll194 = (e) => {
+    const t = e.target;
+    if (!N194.ctx || !t || !t.closest || !N194.ctx.sc.contains(t) || t.closest('[data-c194-band]') || e.ctrlKey || e.metaKey) return;
+    if (N194.rs) N194.rs.user = true;
+    if (N194.sw) N194.sw.user = true;
+  };
+  document.addEventListener('wheel', userScroll194, { capture: true, passive: true });
+  document.addEventListener('touchstart', userScroll194, { capture: true, passive: true });
+  document.addEventListener('keydown', (e) => { if (/^(PageUp|PageDown|Home|End|ArrowUp|ArrowDown|ArrowLeft|ArrowRight| )$/.test(e.key)) userScroll194(e); }, true);
+  /* タブを押す直前（Notion が描き替える前）に今の位置を書き、行き先にしおりがあれば本文の表の所を一瞬だけ伏せる（先頭が見えてから飛ぶのを避ける） */
+  document.addEventListener('pointerdown', (e) => {
+    const c = N194.ctx;
+    if (!c || e.button !== 0 || !e.target || !e.target.closest) return;
+    const b = e.target.closest('[role="tablist"] [data-collection-view-id]');
+    if (!b || !c.sc.contains(b)) return;
+    const v = vidOf194(b);
+    if (!v || v === N194.vid) return;
+    markSave194(true);
+    N194.sw = { vid: v, at: performance.now() };
+    if (ZN194.marks && MS194.m[N194.id + ':' + v]) holdOn194();
+    setTimeout(() => { if (N194.sw && N194.sw.vid === v && N194.vid !== v) { N194.sw = null; holdOff194(); } }, T194.viewWait);
+  }, true);
+  document.addEventListener('scroll', (e) => {
+    const c = N194.ctx;
+    if (!c) return;
+    const t = e.target;
+    if (t === c.sc || t === N194.H) { markSoon194(); starHide194(); ovSoon194(); }
+  }, { capture: true, passive: true });
+
+  /* ═══ F・G. 表の見出し行・二段の固定・星図の罫線 ═══ */
+  const HEADOK194 = new WeakMap();
+  function tblSync194(E) {
+    const tv = E ? E.tv : null;
+    for (const el of document.querySelectorAll('[data-c194-tbl]')) if (el !== tv) clean194(el);
+    if (!tv) { stickyOff194(''); return; }
+    if (!tv.hasAttribute('data-c194-tbl')) tv.setAttribute('data-c194-tbl', '');
+    const hr = E.inner.querySelector('.notion-table-view-header-row');
+    if (!hr) { stickyOff194('見出し行が見つかりません'); return; }
+    for (const o of tv.querySelectorAll('[data-c194-hr]')) if (o !== hr) o.removeAttribute('data-c194-hr');
+    if (!hr.hasAttribute('data-c194-hr')) hr.setAttribute('data-c194-hr', '');
+    /* 列の番号（いま表に出ているプロパティの列の順。行番号・つまみ・列を足すボタンは見出しのセルではないので数えない） */
+    const cells = hr.querySelectorAll('.notion-table-view-header-cell');
+    cells.forEach((cell, i) => {
+      const k = String(i % 12), ki = String(i);
+      if (cell.getAttribute('data-c194-k') !== k) cell.setAttribute('data-c194-k', k);
+      if (cell.getAttribute('data-c194-ki') !== ki) cell.setAttribute('data-c194-ki', ki);
+    });
+    /* 見出し行の高さ: 当ててみて、最初の行が見出しの下から始まっていなければ外す（行が見出しの高さを前提に置かれている形） */
+    const headOn = ZN194.head && HEADOK194.get(hr) !== false;
+    if (tv.hasAttribute('data-c194-head') !== headOn) tv.toggleAttribute('data-c194-head', headOn);
+    if (headOn && !HEADOK194.has(hr)) {
+      HEADOK194.set(hr, true);
+      /* 切り替えの途中は行がまだ前の置き方のことがあるので、重なって見えたら少し待ってもう一度だけ測る */
+      const check = (again) => {
+        const row = E.inner.querySelector('.notion-collection-item .notion-table-view-row, .notion-table-view-row');
+        if (!row || !hr.isConnected) return;
+        const hq = hr.getBoundingClientRect(), hb = hq.bottom, rt = row.getBoundingClientRect().top;
+        if (rt < hq.top - 1) { HEADOK194.delete(hr); return; }   // 最初の行が固定した見出しより上へスクロールしている。重なりではないので、後で測り直す
+        if (rt < hb - 1.5 && again) { setTimeout(() => check(false), 260); return; }
+        if (rt < hb - 1.5) {
+          HEADOK194.set(hr, false);
+          tv.removeAttribute('data-c194-head');
+          why194('head', '見出し行の高さを変えると最初の行に重なる形でした（' + Math.round(hb - rt) + 'px）。Notion の高さのままです');
+          log194('head', '見出し行: 行が見出しの高さを前提に置かれているため、48px は当てずに Notion の高さのままにしました。');
+        } else why194('head', '');
+      };
+      requestAnimationFrame(() => check(true));
+    }
+    const lines = !!ZN194.stars;
+    if (tv.hasAttribute('data-c194-lines') !== lines) tv.toggleAttribute('data-c194-lines', lines);
+    /* 菱形: 行の箱（仮想化の包み）が位置を持っている時だけ。行の左端と包みの左端の差も足す */
+    if (lines) {
+      const w = E.inner.querySelector('.notion-collection-result-wrapper');
+      const r = w && w.querySelector('.notion-table-view-row');
+      const nodia = !w || !r || getComputedStyle(w).position === 'static';
+      if (tv.hasAttribute('data-c194-nodia') !== nodia) tv.toggleAttribute('data-c194-nodia', nodia);
+      if (!nodia) px164(tv, '--c194-dx', Math.round((r.getBoundingClientRect().left - w.getBoundingClientRect().left) / zf194(w)) + 'px');
+    }
+    stickySync194(E, hr);
+  }
+  /* 二段の固定: 帯（Notion のタブと操作の段の箱）を top: 0、本物の見出し行をその下に。どちらも本文の実際のスクロールの箱（.notion-scroller）を基準に、
+   * 途中に overflow の箱が無いことを確かめてから。Notion の写しの見出し（.sticky-portal-target）は二重に見えるので隠す */
+  function upTo194(el, other) {
+    let e = el;
+    while (e && e.parentElement && !e.parentElement.contains(other)) e = e.parentElement;
+    return e && e.parentElement && e.parentElement.contains(other) ? e : null;
+  }
+  function flowOk194(from, sc) {
+    for (let el = from; el; el = el.parentElement) {
+      if (el === sc) return true;
+      const cs = getComputedStyle(el);
+      if (/(auto|scroll|hidden)/.test(cs.overflowX + ' ' + cs.overflowY)) return false;
+    }
+    return false;
+  }
+  function stickySync194(E, hr) {
+    const c = N194.ctx;
+    if (!ZN194.sticky || !c) { stickyOff194(ZN194.sticky ? '' : '⚙ で切っています'); return; }
+    const sc = c.sc;
+    const sb = upTo194(E.bar, E.tv);
+    let bad = '';
+    if (!sb || !sc.contains(sb)) bad = '帯の箱と表の箱の関係が分かりません';
+    else if (!flowOk194(sb.parentElement, sc)) bad = '帯の上に overflow の箱があります';
+    else if (!flowOk194(hr.parentElement, sc)) bad = '見出し行の上に overflow の箱があります';
+    else if (E.inner.querySelector('.notion-collection-item, .notion-table-view-row') && !hr.parentElement.querySelector('.notion-collection-item, .notion-table-view-row')) bad = '見出し行と行が別の箱です';   // 行が 0 の表は確かめようがないので止めない
+    else {
+      const ps = getComputedStyle(sb).position;
+      if (ps !== 'sticky') for (let e = E.bar; e && e !== sb; e = e.parentElement) if (getComputedStyle(e).position === 'sticky') { bad = '帯の中に別の固定（sticky）の箱があります'; break; }
+    }
+    if (bad) { stickyOff194(bad); log194('sticky:' + bad, '二段の固定を止めました: ' + bad + '。'); return; }
+    for (const o of document.querySelectorAll('[data-c194-sb]')) if (o !== sb) o.removeAttribute('data-c194-sb');
+    for (const o of document.querySelectorAll('[data-c194-sh]')) if (o !== hr) { o.removeAttribute('data-c194-sh'); o.style.removeProperty('--c194-ht'); }
+    if (!sb.hasAttribute('data-c194-sb')) sb.setAttribute('data-c194-sb', '');
+    if (!hr.hasAttribute('data-c194-sh')) hr.setAttribute('data-c194-sh', '');
+    const bh = sb.getBoundingClientRect().height;
+    const hh = hr.getBoundingClientRect().height;
+    let z = 1;
+    if (hr.closest('[data-c174-zt]') && root104.hasAttribute('data-c174-z')) { const v = parseFloat(getComputedStyle(root104).getPropertyValue('--c174-z')); if (v > 0.3 && v <= 1) z = v; }
+    px164(hr, '--c194-ht', (Math.round(bh / z * 10) / 10) + 'px');
+    px164(sc, '--c194-st', Math.round(bh + hh) + 'px');
+    if (!sc.hasAttribute('data-c194-sticky')) sc.setAttribute('data-c194-sticky', '');
+    flag124('data-c194-sticky', true);
+    N194.stH = Math.round(bh + hh);
+    why194('sticky', '');
+  }
+  function stickyOff194(why) {
+    for (const o of document.querySelectorAll('[data-c194-sb]')) o.removeAttribute('data-c194-sb');
+    for (const o of document.querySelectorAll('[data-c194-sh]')) { o.removeAttribute('data-c194-sh'); o.style.removeProperty('--c194-ht'); }
+    for (const o of document.querySelectorAll('.notion-scroller[data-c194-sticky]')) { o.removeAttribute('data-c194-sticky'); o.style.removeProperty('--c194-st'); }
+    flag124('data-c194-sticky', false);
+    N194.stH = 0;
+    why194('sticky', why || '');
+  }
+
+  /* ── 星: 触れたセルの左上の交点だけ。層は 1 つを使い回す（全部のセルに飾りを付けない）。固定の段の下・枠の外・スクロール中・タッチでは出さない ── */
+  document.addEventListener('pointermove', (e) => {
+    N194.px = e.clientX; N194.py = e.clientY;   // 索引帯・上段から本当に離れたかを確かめる時に使う
+    if (!N194.starOn || e.pointerType === 'touch') return;
+    N194.pm = e;
+    if (!N194.pmRaf) N194.pmRaf = requestAnimationFrame(starRun194);
+  }, { capture: true, passive: true });
+  document.addEventListener('focusin', (e) => {
+    if (!N194.starOn || !N194.E) return;
+    const cell = e.target && e.target.closest && e.target.closest('.notion-table-view-cell[data-col-index]');
+    if (cell && N194.E.inner.contains(cell)) starAt194(cell);
+  }, true);
+  function starRun194() {
+    N194.pmRaf = 0;
+    const e = N194.pm, t = e && e.target;
+    const E = N194.E;
+    const cell = t && t.closest ? t.closest('.notion-table-view-cell[data-col-index]') : null;
+    if (!cell || !E || !E.inner.contains(cell)) { starHide194(); return; }
+    if (cell === N194.hot) return;
+    starAt194(cell);
+  }
+  function starAt194(cell) {
+    const root = host194();
+    const st = root && root.querySelector('.star');
+    const c = N194.ctx;
+    if (!st || !c) return;
+    const r = cell.getBoundingClientRect(), sr = c.sc.getBoundingClientRect();
+    const lim = sr.top + stickyH194();
+    if (r.top < lim - 0.5 || r.top > sr.bottom - 4 || r.left < sr.left - 0.5 || r.left > sr.right - 4) { starHide194(); return; }
+    const ki = parseInt(cell.getAttribute('data-col-index'), 10);
+    if (!(ki >= 0)) { starHide194(); return; }
+    N194.hot = cell;
+    st.style.setProperty('--x', Math.round(r.left * 2) / 2 + 'px');
+    st.style.setProperty('--y', Math.round(r.top * 2) / 2 + 'px');
+    st.style.setProperty('--w', Math.round(Math.min(30, r.width * 0.5)) + 'px');
+    st.style.setProperty('--h', Math.round(Math.min(22, r.height * 0.5)) + 'px');
+    st.style.setProperty('--c', 'var(--c194-p' + (ki % 12) + ')');
+    st.removeAttribute('data-on');
+    st.hidden = false;
+    void st.offsetWidth;
+    st.setAttribute('data-on', '');
+    /* 対応する見出しの目盛りを少しはっきり */
+    const hr = N194.E && N194.E.inner.querySelector('[data-c194-hr]');
+    const h = hr && hr.querySelector('[data-c194-ki="' + ki + '"]');
+    if (N194.hotH && N194.hotH !== h) N194.hotH.removeAttribute('data-c194-hot');
+    if (h && !h.hasAttribute('data-c194-hot')) h.setAttribute('data-c194-hot', '');
+    N194.hotH = h || null;
+  }
+  function starHide194() {
+    N194.hot = null;
+    if (N194.hotH) { N194.hotH.removeAttribute('data-c194-hot'); N194.hotH = null; }
+    const st = N194.root && N194.root.querySelector('.star');
+    if (st && !st.hidden) { st.hidden = true; st.removeAttribute('data-on'); }
+  }
+
+  /* ═══ E. ビューの案内の魚（DB ID＋ビュー ID に書いた案内だけ。候補を回している間は出さない）═══ */
+  function guideWire194(root) {
+    const g = root.querySelector('.guide');
+    const toggle = () => {
+      if (N194.gd.pin) { N194.gd.pin = false; guideHide194(false, true); return; }
+      N194.gd.pin = true;
+      clearTimeout(N194.gd.T); N194.gd.T = 0;
+      g.setAttribute('data-pin', '');
+      g.querySelector('.gp').setAttribute('aria-pressed', 'true');
+      g.querySelector('.gp').setAttribute('aria-label', '固定を外して閉じる');
+      g.querySelector('.gf').setAttribute('aria-label', '固定を外して閉じる');
+    };
+    g.querySelector('.gf').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggle(); });
+    g.querySelector('.gp').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggle(); });
+    g.querySelector('.gx').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); N194.gd.pin = false; guideHide194(false, true); });
+    const pause = () => { N194.gd.over = true; if (N194.gd.T) { clearTimeout(N194.gd.T); N194.gd.T = 0; N194.gd.left = Math.max(1200, N194.gd.left - (performance.now() - N194.gd.at)); } };
+    const resume = () => { N194.gd.over = false; if (N194.gd.open && !N194.gd.pin && !N194.gd.T) guideTimer194(N194.gd.left || T194.guideHide); };
+    g.addEventListener('pointerenter', pause);
+    g.addEventListener('pointerleave', () => { if (!g.contains(root.activeElement)) resume(); });
+    g.addEventListener('focusin', pause);
+    g.addEventListener('focusout', (e) => { if (!(e.relatedTarget && g.contains(e.relatedTarget))) resume(); });
+    g.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); N194.gd.pin = false; guideHide194(false, true); } });
+    for (const t of ['mousedown', 'pointerdown', 'click', 'keydown', 'keyup']) g.addEventListener(t, (e) => e.stopPropagation());
+    const ro = root.querySelector('.reopen');
+    ro.addEventListener('mousedown', (e) => e.preventDefault());
+    ro.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const t = guideOf194(N194.id, N194.vid); if (t) guideShow194(t, true); });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !N194.gd.open) return;
+    const a = document.activeElement;
+    if (a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) return;   // 編集中の Esc は Notion のもの
+    N194.gd.pin = false;
+    guideHide194(false, true);
+  });
+  function guideKick194() {
+    if (!ZN194.guide || !N194.ctx || !N194.vid) { guideHide194(true); return; }
+    if (N194.bc || N194.bsw || N194.rs) return;            // 候補を回している・切り替え・位置を戻している間は出さない
+    const key = N194.id + ':' + N194.vid;
+    const t = guideOf194(N194.id, N194.vid);
+    if (N194.gd.key === key && N194.gd.open) { if (t) guideFill194(t); return; }
+    N194.gd.key = key;
+    if (!t) { guideHide194(false); reopenSync194(); return; }   // 案内の無いビュー: 何も出さない（固定は保つ）
+    guideShow194(t, false);
+  }
+  function guideFill194(t) {
+    const g = N194.root && N194.root.querySelector('.guide');
+    if (g) g.querySelector('.gt').textContent = t;
+  }
+  function guideShow194(t, manual) {
+    const root = host194();
+    const g = root && root.querySelector('.guide');
+    if (!g) return;
+    guideFill194(t);
+    g.removeAttribute('data-out');
+    g.hidden = false;
+    if (!guidePlace194(!manual && !N194.gd.pin)) { g.hidden = true; N194.gd.open = false; reopenSync194(); return; }
+    N194.gd.open = true;
+    g.toggleAttribute('data-pin', N194.gd.pin);
+    g.querySelector('.gp').setAttribute('aria-pressed', String(N194.gd.pin));
+    requestAnimationFrame(() => g.setAttribute('data-in', ''));
+    clearTimeout(N194.gd.T); N194.gd.T = 0;
+    if (!N194.gd.pin) guideTimer194(T194.guideHide);
+    reopenSync194();
+    if (manual) requestAnimationFrame(() => { try { g.querySelector('.gt').focus({ preventScroll: true }); } catch (e) { /* noop */ } });
+  }
+  function guideTimer194(ms) {
+    clearTimeout(N194.gd.T);
+    N194.gd.left = ms; N194.gd.at = performance.now();
+    N194.gd.T = setTimeout(() => { N194.gd.T = 0; if (!N194.gd.pin && !N194.gd.over) guideHide194(false, true); }, ms);
+  }
+  function guideHide194(drop, soft) {
+    clearTimeout(N194.gd.T); N194.gd.T = 0;
+    const g = N194.root && N194.root.querySelector('.guide');
+    N194.gd.open = false;
+    if (drop) { N194.gd.key = ''; N194.gd.pin = false; }
+    if (g && !g.hidden) {
+      g.removeAttribute('data-in');
+      if (soft && !reduced194()) { g.setAttribute('data-out', ''); setTimeout(() => { if (!N194.gd.open) { g.hidden = true; g.removeAttribute('data-out'); } }, 240); }
+      else g.hidden = true;
+      if (!N194.gd.pin) g.removeAttribute('data-pin');
+    }
+    reopenSync194();
+  }
+  /* 置き場所: 第一は「このDBについて」の終わりの右（帯の上・右寄せ）。説明が上へ抜けていれば、固定した帯の空いている所。どちらも無ければ自動では出さない */
+  function guideSpots194() {
+    const c = N194.ctx, tl = N194.tl;
+    if (!c || !tl || !tl.isConnected) return null;
+    const row = tl.parentElement;
+    const sr = c.sc.getBoundingClientRect(), br = row.getBoundingClientRect(), lr = tl.getBoundingClientRect();
+    const bw = N194.bwS || lr.width;
+    let lastR = lr.left;
+    for (const it of N194.track ? N194.track.children : []) { if (!it.getAttribute('data-c194-it') || it.hasAttribute('data-c194-off')) continue; const r = it.getBoundingClientRect(); if (r.right > lastR) lastR = r.right; }
+    const ab = c.row.getBoundingClientRect();
+    return { sr, br, lr, bw, lastR, ab, aboutVis: c.row.hasAttribute('data-c194-about') && ab.bottom > sr.top + stickyH194() + 24 };
+  }
+  function guidePlace194(auto) {
+    const g = N194.root && N194.root.querySelector('.guide');
+    const s = guideSpots194();
+    if (!g || !s) return false;
+    const W = Math.min(320, Math.max(220, s.br.width * 0.38));
+    g.style.width = W + 'px';
+    const h = g.getBoundingClientRect().height || 44;
+    let x, y, up = false;
+    if (s.aboutVis && s.br.top - h - 8 > s.sr.top) { x = s.br.right - W; y = s.br.top - h - 6; }
+    else {
+      const free = s.lr.left + s.bw - s.lastR - 24;
+      if (free >= 220 && s.br.top >= s.sr.top - 2) { const w2 = Math.min(W, free); g.style.width = w2 + 'px'; x = s.lastR + 16; y = s.br.top + Math.max(0, (s.br.height - (g.getBoundingClientRect().height || h)) / 2); up = true; }
+      else if (!auto) {   // 押して出した時・ピン留めの時だけ: 帯と見出し行の下（表の上に少し重なる。見出しの名前は隠さない）
+        const hr = N194.E && N194.E.inner && N194.E.inner.querySelector('[data-c194-hr]');
+        const hb = hr ? hr.getBoundingClientRect().bottom : 0;
+        x = s.br.right - W; y = Math.max(s.br.bottom, hb > s.sr.top && hb < innerHeight ? hb : 0) + 6; up = true;
+      }
+      else return false;
+    }
+    x = Math.max(s.sr.left + 4, Math.min(x, innerWidth - W - 6));
+    y = Math.max(s.sr.top + 2, y);
+    g.style.transform = '';
+    g.style.left = Math.round(x) + 'px';
+    g.style.top = Math.round(y) + 'px';
+    g.toggleAttribute('data-up', up);
+    return true;
+  }
+  function reopenSync194() {
+    const ro = N194.root && N194.root.querySelector('.reopen');
+    if (!ro) return;
+    const has = !!(ZN194.guide && N194.ctx && N194.isTable && N194.tl && N194.vid && guideOf194(N194.id, N194.vid));
+    const show = has && !N194.gd.open;
+    if (ro.hidden === show) ro.hidden = !show;
+    if (!show) return;
+    const s = guideSpots194();
+    if (!s) { ro.hidden = true; return; }
+    const x = Math.min(s.lr.left + s.bw - 26, s.lastR + 8), y = s.br.top + s.br.height / 2 - 8;
+    if (y < s.sr.top - 4 || y > s.sr.bottom) { ro.hidden = true; return; }
+    ro.style.left = Math.round(x) + 'px';
+    ro.style.top = Math.round(y) + 'px';
+  }
+  /* 重ねの層の位置合わせ（スクロール・帯の開け閉め・窓の大きさ）— 間引いて 1 フレームに 1 回 */
+  function ovSoon194() {
+    if (N194.ovRaf) return;
+    N194.ovRaf = requestAnimationFrame(() => {
+      N194.ovRaf = 0;
+      if (N194.gd.open) { if (!guidePlace194(false)) guideHide194(false); }
+      reopenSync194();
+      if (performance.now() < N194.ovUntil) ovSoon194();
+    });
+  }
+  function ovMove194() { N194.ovUntil = performance.now() + 450; starHide194(); ovSoon194(); }
+  window.addEventListener('resize', () => { starHide194(); ovSoon194(); soon194(); }, { passive: true });
+
+  /* ═══ 実務・ビューの案内を書く（Folio から。DB ID・DB ID＋ビュー ID をキーにした暫定の保存先 c33.notes194.v1）═══ */
+  function edOpen194(kind) {
+    const db = N194.id, v = N194.vid;
+    if (!db || (kind === 'guide' && !v)) { obToast(kind === 'guide' ? '表のビューを開いている時に書けます。' : 'フル DB を開いている時に書けます。'); return; }
+    const old = document.getElementById('c33-n194-ed');
+    if (old) old.remove();
+    const name = head194().name;
+    const vname = kind === 'guide' ? (N194.bnames[v] || norm((tabFor194(v) || {}).textContent || '') || v.slice(0, 8)) : '';
+    const cur = kind === 'guide' ? guideOf194(db, v) : practice194(db);
+    const d = document.createElement('div');
+    d.id = 'c33-n194-ed';
+    d.setAttribute('data-no-passthrough', '1');
+    d.innerHTML = '<div class="ed-card" role="dialog" aria-modal="true" aria-labelledby="c33-n194-ed-t">'
+      + '<b id="c33-n194-ed-t">' + esc124(kind === 'guide' ? 'ビューの案内 — ' + name + ' / ' + vname : '実務 — ' + name) + '</b>'
+      + '<p>' + esc124(kind === 'guide'
+        ? 'このビューで何を集め、何をするためのビューかを短く。ビューが確定した後に、小さな魚と一緒に出ます（7 秒で消える・固定できる）。'
+        : 'この DB の実務（入れるもの・記録時の必須事項・入れないもの・他 DB との使い分け・迷った時の判断）。書いた通りに「このDBについて」の右に出ます。') + '</p>'
+      + '<textarea rows="' + (kind === 'guide' ? 4 : 9) + '" spellcheck="false"></textarea>'
+      + '<div class="ed-b"><button type="button" data-a="clear">消す</button><span></span><button type="button" data-a="cancel">取消</button><button type="button" data-a="save" class="pri">保存</button></div>'
+      + '<small>' + (IS_MAC ? '⌘' : 'Ctrl') + '＋Enter で保存・Esc で取消。保存先はこのブラウザーの localStorage（' + NK194 + '）です。</small></div>';
+    document.body.appendChild(d);
+    const ta = d.querySelector('textarea');
+    ta.value = cur;
+    const close = () => { d.remove(); };
+    const save = (t) => {
+      const val = String(t || '').replace(/\r\n?/g, '\n').trim().slice(0, 4000);
+      const store = kind === 'guide' ? NT194.guide : NT194.practice;
+      const key = kind === 'guide' ? db + ':' + v : db;
+      if (val) store[key] = { t: val, at: new Date().toISOString() }; else delete store[key];
+      if (!ntSave194()) return;
+      close();
+      N194.abSig = '';
+      if (kind === 'guide') { N194.gd.key = ''; guideKick194(); } else aboutSync194();
+      obToast(val ? '保存しました。' : '消しました。');
+    };
+    d.addEventListener('click', (e) => {
+      if (e.target === d) { close(); return; }
+      const a = e.target.closest('[data-a]');
+      if (!a) return;
+      const k = a.getAttribute('data-a');
+      if (k === 'cancel') close();
+      else if (k === 'clear') save('');
+      else if (k === 'save') save(ta.value);
+    });
+    d.addEventListener('keydown', (e) => {
+      e.stopPropagation();
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(ta.value); }
+    });
+    for (const t of ['keyup', 'keypress', 'input', 'paste', 'copy', 'cut']) d.addEventListener(t, (e) => e.stopPropagation());
+    requestAnimationFrame(() => { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); });
+  }
+  /* Folio の小窓に足す項目（フル DB の時だけ。ビューの案内は表のビューの時だけ） */
+  function folioNext194() {
+    if (!ZN194.on || !N194.ctx || !N194.id) return [];
+    const out = [{ a: 'n194-prac', jp: practice194(N194.id) ? '実務を直す（この DB）' : '実務を書く（この DB）' }];
+    if (N194.isTable && N194.vid) out.push({ a: 'n194-guide', jp: guideOf194(N194.id, N194.vid) ? 'このビューの案内を直す' : 'このビューの案内を書く' });
+    return out;
+  }
+
+  /* ═══ 見た目 ═══ */
+  const cssBefore194 = nbCss;
+  nbCss = function() {
+    cssBefore194();
+    if (document.getElementById('c194-css')) return;
+    const S = S194;
+    const ON = S + '[data-c194-on]';
+    const DARK = ':is(body.dark, html[data-atx-dark], html[data-c39-dark])';
+    const SERIF = 'var(--c164-serif, ' + SERIF164 + ')';
+    const INK = 'var(--nb-text, var(--c-texPri, #37352f))';
+    const PAPER = 'var(--c164-paper, var(--c-bacPri, #fff))';
+    const A = ON + ' .notion-frame [data-c194-about]';
+    const T = ON + ' .notion-frame [data-c194-tbl]';
+    const B = ON + ' .notion-frame';
+    const pal = (p) => p.map((c, i) => `--c194-p${i}: ${c};`).join(' ');
+    const style = document.createElement('style');
+    style.id = 'c194-css';
+    style.textContent = `
+/* ── C194: 色（淡い紙・暗い紙）。12 色は PAL194、線は見失わない濃さ ── */
+html { ${pal(PAL194.light)} --c194-paper: ${PAPER}; --c194-ink: ${INK}; --c194-ink2: color-mix(in srgb, ${INK} 66%, transparent);
+  --c194-line: rgba(55,53,47,.15); --c194-line2: rgba(55,53,47,.26); --c194-edge: rgba(55,53,47,.34); --c194-dia: rgba(55,53,47,.46);
+  --c194-acc: var(--c164-tint, #8c857b); --c194-fish: color-mix(in srgb, #4f6f86 72%, ${INK}); --c194-gline: color-mix(in srgb, ${INK} 18%, transparent); }
+html:has(${DARK}), ${DARK} { ${pal(PAL194.dark)} --c194-line: rgba(255,255,255,.13); --c194-line2: rgba(255,255,255,.24); --c194-edge: rgba(255,255,255,.30); --c194-dia: rgba(255,255,255,.44);
+  --c194-fish: color-mix(in srgb, #9cc0d8 70%, ${INK}); --c194-gline: color-mix(in srgb, ${INK} 22%, transparent); }
+
+/* ── A. 現在の DB（Catalogus の上段・B.U.R.I の右隣）: B.U.R.I と同じ格子（印 24px・名前 600 10px・上下 7px） ── */
+#c33-n194-db { position: fixed; z-index: 101; top: 0; box-sizing: border-box; margin: 0; padding: 7px 5px; color: ${INK};
+  background-color: ${PAPER}; background-image: var(--c164-grain, none); background-size: var(--c164-grain-size, auto); background-attachment: fixed;
+  font-family: ${SERIF}; -webkit-font-smoothing: antialiased; user-select: none; contain: layout style; }
+#c33-n194-db[hidden] { display: none !important; }
+#c33-n194-db .ng-cell { all: unset; position: relative; box-sizing: border-box; width: 100%; height: 100%; display: grid; grid-template-rows: 24px auto; row-gap: 3px; align-content: center; justify-items: center;
+  text-align: center; cursor: pointer; border-radius: 10px; transition: background-color .15s ease; }
+#c33-n194-db .ng-cell:hover { background-color: color-mix(in srgb, ${INK} 4%, transparent); }
+#c33-n194-db .ng-cell:focus-visible { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c194-acc) 75%, transparent); }
+#c33-n194-db .ng-ic { position: relative; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; }
+#c33-n194-db .ng-ic img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 3px; }
+#c33-n194-db .ng-ic svg { display: block; width: 100% !important; height: 100% !important; }
+#c33-n194-db .ng-ic[data-txt] { font-size: 19px; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+#c33-n194-db .ng-nm { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; max-width: 100%; padding: 0 2px; box-sizing: border-box;
+  font: 600 10px/1.2 ${SERIF}; letter-spacing: .03em; color: color-mix(in srgb, ${INK} 82%, transparent); overflow-wrap: break-word; hyphens: auto; }
+#c33-n194-db .ng-cell:hover .ng-nm { color: ${INK}; }
+#c33-n194-db .ng-ix { position: absolute; right: 4px; top: 1px; font: 600 7.5px/1 ${SERIF}; letter-spacing: .04em; color: var(--c194-ink2); opacity: 0; transition: opacity .15s ease; font-variant-numeric: tabular-nums; }
+#c33-n194-db[data-cand] .ng-ix { opacity: 1; }
+#c33-n194-db[data-cand] .ng-nm { color: color-mix(in srgb, var(--c194-acc) 80%, ${INK}); font-style: italic; }
+#c33-n194-db .ng-bar { position: absolute; left: 26%; right: 26%; bottom: 1px; height: 1px; background: var(--c194-acc); transform: scaleX(0); transform-origin: 0 50%; opacity: 0; }
+#c33-n194-db[data-cand] .ng-bar { opacity: .35; transform: scaleX(1); }
+#c33-n194-db[data-pend] .ng-bar { opacity: .9; animation: c194-fill var(--c194-dbms, 800ms) linear both; }
+#c33-n194-db[data-nav] .ng-bar { opacity: .9; transform: scaleX(1); animation: c194-pulse .9s ease-in-out infinite alternate; }
+@keyframes c194-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes c194-pulse { from { opacity: .35; } to { opacity: .95; } }
+#c33-n194-sr { position: fixed; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#c33-n194 { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+#c33-n194[hidden] { display: none !important; }
+
+/* 上の帯（機能メニュー）は格子の右から（C134 の台は行の左の内側に付くので一緒に動く） */
+${S}[data-c194-grid] [data-c194-row] { padding-left: var(--c194-pl, 0px) !important; box-sizing: border-box !important; }
+
+/* 本文の大きな見出し: 見た目だけ畳む（幅・横の位置は残す。押せない）。格子を押すと開く */
+${B} [data-c194-hide]:not([data-c194-reveal]) {
+  height: 1px !important; min-height: 0 !important; max-height: 1px !important; overflow: hidden !important; clip-path: inset(50%) !important;
+  margin-block: 0 !important; padding-block: 0 !important; transform: none !important; pointer-events: none !important;
+}
+
+/* ── C. このDBについて: 憲法（左寄り）と実務（右寄り）を 1 枚の紙面に。区切り線・別の地・カードは無し。狭いと 1 列 ── */
+${A} { display: grid !important; grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr); column-gap: clamp(28px, 6%, 64px); align-items: start; justify-items: stretch;
+  --constellucentia-full-db-description-right-inset: 0px; --constellucentia-full-db-description-gap: 0px; }
+${A} > * { grid-column: 1 / -1; min-width: 0; }
+${A} > [data-c194-hide] { grid-row: 1; }
+${A}::before { content: "このDBについて"; grid-column: 1 / -1; grid-row: 2; display: block; box-sizing: border-box; height: 20px; margin: 0 0 12px;
+  padding-inline-start: calc(var(--c194-tx, 0px) + 28px); font: 500 13px/20px ${SERIF}; letter-spacing: .08em; color: color-mix(in srgb, ${INK} 84%, transparent);
+  background: linear-gradient(var(--c194-acc), var(--c194-acc)) no-repeat var(--c194-tx, 0px) 50% / 18px 1px; white-space: nowrap; overflow: hidden; }
+${A} > [data-c194-cbox] { grid-column: 1; grid-row: 3; }
+${A}[data-c194-noconst] > [data-c194-cbox] { grid-column: 1 / -1; }
+${A}::after { content: none; }
+${A}[data-c194-prac]::after { content: var(--c194-practice, none); grid-column: 2; grid-row: 3; display: block; box-sizing: border-box; padding-top: 3px;
+  white-space: pre-wrap; overflow-wrap: anywhere; font: 400 13px/1.9 ui-sans-serif, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif; letter-spacing: .01em;
+  color: color-mix(in srgb, ${INK} 76%, transparent); }
+${A}[data-c194-noconst][data-c194-prac]::after { grid-column: 1; padding-inline-start: var(--c194-tx, 0px); }
+${A}[data-c194-narrow] { grid-template-columns: minmax(0, 1fr); }
+${A}[data-c194-narrow][data-c194-prac]::after { grid-column: 1; grid-row: 4; padding-top: 14px; padding-inline-start: var(--c194-tx, 0px); }
+/* 憲法は全文（折りたたみ・行数の制限・省略記号を外す）。段落と改行は Notion のまま、行間だけ読みやすく */
+${A} > [data-c194-cbox], ${A} > [data-c194-cbox] * { max-height: none !important; -webkit-line-clamp: unset !important; line-clamp: none !important; }
+${A} [data-c194-const] { overflow: visible !important; text-overflow: clip !important; max-width: none !important; width: auto !important; min-width: 0 !important; line-height: 1.9 !important; letter-spacing: .01em; }
+/* 魚の入り: 尾の軌跡から小見出し、群れが通ると憲法から実務まで（全文の高さは最初からある・押し下げない） */
+${A}[data-c194-intro="run"]::before { animation: c194-ink var(--c194-fd, 1500ms) cubic-bezier(.45,.05,.4,1) 60ms both; }
+${A}[data-c194-intro="run"] > [data-c194-cbox] { animation: c194-rise 900ms cubic-bezier(.2,.7,.3,1) 560ms both; }
+${A}[data-c194-intro="run"]::after { animation: c194-rise 900ms cubic-bezier(.2,.7,.3,1) 860ms both; }
+@keyframes c194-ink { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes c194-rise { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ── D. 巡る索引帯（表のビューだけ）: 全部のタブを描かせて元の幅で切り抜き、order で回す。左の着地点に目盛り、確定したビューの下に線 ── */
+${B} [role="tablist"][data-c194-band] { flex: none !important; width: 4000px !important; max-width: none !important; margin-inline-end: calc(var(--c194-bw, 600px) - 4000px) !important;
+  clip-path: inset(-6px calc(4000px - var(--c194-bw, 600px)) -6px -2px) !important; overflow: hidden !important; position: relative !important; }
+${B} [role="tablist"][data-c194-band]::after { content: attr(data-c194-rest); position: absolute; left: calc(var(--c194-bw, 600px) - 34px); top: 50%; transform: translateY(-50%); width: 30px; text-align: right;
+  font: 600 10px/1 ${SERIF}; letter-spacing: .04em; color: var(--c194-ink2); pointer-events: none; background: linear-gradient(90deg, transparent, ${PAPER} 40%); padding-left: 6px; }
+${B} [data-c194-bandrow] { position: relative !important; overflow-x: clip !important; overflow-clip-margin: 6px; }
+${B} [data-c194-band] [data-c194-track] { display: flex !important; flex-wrap: nowrap !important; align-items: stretch !important; padding-inline-start: 14px !important; transform: none !important; width: max-content !important; }
+${B} [data-c194-band] [data-c194-it] { flex: none !important; }
+${B} [data-c194-band] [data-c194-it=""] { order: 9999 !important; }
+${B} [data-c194-band] [data-c194-off] { visibility: hidden !important; }
+${B} [data-c194-band] .notion-collection-view-tab-button { background: transparent !important; box-shadow: none !important; border-radius: 0 !important; transform: none !important; }
+${B} [data-c194-band] .notion-collection-view-tab-button::before, ${B} [data-c194-band] .notion-collection-view-tab-button::after,
+${B} [data-c194-band] [role="tab"]::before, ${B} [data-c194-band] [role="tab"]::after { content: none !important; display: none !important; }
+${B} [data-c194-band] [role="tab"] { font-family: ${SERIF} !important; font-size: 14.5px !important; font-weight: 400 !important; letter-spacing: .01em !important; transform: none !important; background: transparent !important; }
+${B} [data-c194-band] [role="tab"][aria-selected="true"] { font-weight: 600 !important; }
+${B} [data-c194-band] [data-c194-first] [role="tab"]:not([aria-selected="true"]) { font-weight: 500 !important; font-style: italic; }
+${B} [data-c194-band] [data-c12-ln] { translate: none !important; }
+${B} [data-c194-bandrow]::before { content: ""; position: absolute; left: 2px; top: 50%; width: 2px; height: 18px; margin-top: -9px; background: var(--c194-acc); border-radius: 1px; pointer-events: none; z-index: 1; }
+${B} [data-c194-bandrow]::after { content: ""; position: absolute; left: var(--c194-fx, 14px); bottom: 0; width: var(--c194-fw, 60px); height: 2px; background: var(--c194-acc); transform-origin: 0 50%;
+  pointer-events: none; z-index: 1; transition: left .22s cubic-bezier(.2,.8,.3,1), width .22s cubic-bezier(.2,.8,.3,1); }
+${B} [data-c194-bandrow][data-c194-cand]::after { opacity: .45; }
+${B} [data-c194-bandrow][data-c194-pend]::after { opacity: 1; animation: c194-land var(--c194-vms, 700ms) linear both; }
+@keyframes c194-land { from { transform: scaleX(0); opacity: .45; } to { transform: scaleX(1); opacity: 1; } }
+/* しおりへ戻す間だけ、表の所を伏せる（先頭が見えてから飛ぶのを避ける。最長でも数百 ms） */
+${B} .notion-scroller[data-c194-hold] .notion-collection-view-body { opacity: 0 !important; }
+
+/* ── F. 見出し行（高さは T194.headH）と二段の固定 ── */
+${T}[data-c194-head] [data-c194-hr] { height: calc(${T194.headH}px / var(--c174-z, 1)) !important; min-height: calc(${T194.headH}px / var(--c174-z, 1)) !important; }
+${T}[data-c194-head] [data-c194-hr] > *, ${T}[data-c194-head] [data-c194-hr] .notion-table-view-header-cell { height: calc(${T194.headH}px / var(--c174-z, 1)) !important; }
+${T}[data-c194-head] [data-c194-hr] .notion-table-view-header-cell [role="button"] { height: 100% !important; gap: 8px !important; font-weight: 600 !important; color: color-mix(in srgb, ${INK} 88%, transparent) !important; }
+${T}[data-c194-head] [data-c194-hr] .notion-table-view-header-cell [role="button"] :is(svg, [style*="mask"]) { opacity: .7 !important; }
+${B} [data-c194-sb] { position: sticky !important; top: 0 !important; z-index: 6 !important; background-color: ${PAPER} !important; }
+${B} [data-c194-sh] { position: sticky !important; top: var(--c194-ht, 44px) !important; z-index: 5 !important; background-color: ${PAPER} !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+${S}[data-c194-sticky] .notion-frame .sticky-portal-target .notion-table-view-header-row { visibility: hidden !important; }
+${B} .notion-scroller[data-c194-sticky] { scroll-padding-top: var(--c194-st, 0px) !important; }
+
+/* ── G. 星図の罫線: 縦・横・ヘッダーとデータの境の線は残し、表の左端に線、行の境に小さな菱形。行に乗せた時の淡い地はやめて、交点の星へ ── */
+${T}[data-c194-lines] .notion-table-view-row, ${T}[data-c194-lines] [data-c194-hr] {
+  background-image: linear-gradient(var(--c194-edge), var(--c194-edge)) !important; background-size: 1px 100% !important; background-position: 0 0 !important; background-repeat: no-repeat !important; }
+${T}[data-c194-lines] .notion-table-view-row { border-bottom-color: var(--c194-line) !important; }
+${T}[data-c194-lines] [data-c194-hr] { border-bottom-color: var(--c194-line2) !important; }
+${T}[data-c194-lines] :is(.notion-table-view-cell, .notion-table-view-header-cell) { border-inline-end-color: var(--c194-line) !important; }
+${T}[data-c194-lines] .notion-collection-item:hover > .notion-table-view-row { background-color: transparent !important; box-shadow: none !important; }
+${T}[data-c194-lines] .notion-collection-item:hover > .notion-table-view-row::before { content: none !important; }
+${T}[data-c194-lines]:not([data-c194-nodia]) .notion-collection-result-wrapper::after { content: ""; position: absolute; left: var(--c194-dx, 0px); bottom: 0; width: 4px; height: 4px; margin: 0 0 -2px -1.5px;
+  transform: rotate(45deg); background: var(--c194-dia); pointer-events: none; z-index: 1; }
+/* 見出しの小さな目盛り（列の色を控えめに）。星が出ている列はその色で少しはっきり */
+${T}[data-c194-lines] [data-c194-hr] [data-c194-k] {
+  background-image: linear-gradient(color-mix(in srgb, var(--c194-col) 62%, transparent), color-mix(in srgb, var(--c194-col) 62%, transparent)) !important;
+  background-size: 10px 2px !important; background-position: 8px 100% !important; background-repeat: no-repeat !important; }
+${T}[data-c194-lines] [data-c194-hr] [data-c194-hot] { background-image: linear-gradient(var(--c194-col), var(--c194-col)) !important; background-size: 22px 2px !important; }
+${[...Array(12).keys()].map((i) => `${T}[data-c194-lines] [data-c194-hr] [data-c194-k="${i}"] { --c194-col: var(--c194-p${i}); }`).join('\n')}
+
+/* ── 実務・ビューの案内を書く小窓 ── */
+#c33-n194-ed { position: fixed; inset: 0; z-index: 140; display: grid; place-items: center; background: rgba(15,15,15,.28); }
+#c33-n194-ed .ed-card { width: min(560px, calc(100vw - 48px)); box-sizing: border-box; padding: 18px 20px 14px; border-radius: 10px; background: ${PAPER}; color: ${INK};
+  box-shadow: 0 0 0 1px var(--c194-gline), 0 14px 40px rgba(15,15,15,.18); font: 13px/1.6 ui-sans-serif, -apple-system, "Segoe UI", "Hiragino Sans", sans-serif; }
+#c33-n194-ed b { display: block; font: 600 14px/1.4 ${SERIF}; letter-spacing: .02em; margin-bottom: 6px; }
+#c33-n194-ed p { margin: 0 0 10px; color: var(--c194-ink2); font-size: 12px; }
+#c33-n194-ed textarea { width: 100%; box-sizing: border-box; resize: vertical; min-height: 88px; padding: 9px 10px; border-radius: 6px; border: 1px solid var(--c194-gline); background: transparent; color: inherit; font: 13px/1.75 inherit; outline: none; }
+#c33-n194-ed textarea:focus { border-color: color-mix(in srgb, var(--c194-acc) 70%, transparent); }
+#c33-n194-ed .ed-b { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+#c33-n194-ed .ed-b span { flex: 1; }
+#c33-n194-ed button { all: unset; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12.5px; color: var(--c194-ink2); }
+#c33-n194-ed button:hover { background: color-mix(in srgb, ${INK} 6%, transparent); color: ${INK}; }
+#c33-n194-ed button.pri { color: ${INK}; box-shadow: inset 0 0 0 1px var(--c194-gline); }
+#c33-n194-ed button:focus-visible { outline: 1.5px solid var(--c194-acc); outline-offset: 2px; }
+#c33-n194-ed small { display: block; margin-top: 8px; color: var(--c194-ink2); font-size: 10.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+  #c33-n194-db *, ${A}, ${A}::before, ${A}::after, ${A} > *, ${B} [data-c194-bandrow]::after { animation: none !important; transition: none !important; }
+}
+${S}:not([data-c124-motion]) :is(#c33-n194-db *, .notion-frame [data-c194-about], .notion-frame [data-c194-about] > *, .notion-frame [data-c194-bandrow]) { animation: none !important; transition-duration: 0s !important; }
+${S}:not([data-c124-motion]) .notion-frame :is([data-c194-about]::before, [data-c194-about]::after, [data-c194-bandrow]::after) { animation: none !important; }
+`;
+    (document.head || root104).appendChild(style);
+  };
+
+  /* ⚙ の設定（Nebius の設定の段） */
+  document.addEventListener('nebius:settings', (e) => {
+    const box = document.getElementById(String(e.detail || ''));
+    if (!box) return;
+    const add = (text, k) => {
+      const l = document.createElement('label');
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = !!ZN194[k];
+      l.append(c, ' ' + text);
+      c.addEventListener('change', () => next194set({ [k]: c.checked }));
+      box.appendChild(l);
+    };
+    add('Next: 現在の DB を Catalogus の上段に（本文の大きな見出しは畳む）', 'grid');
+    add('Next: DB の候補で止まったら自動で移る（' + T194.dbCommit + 'ms）', 'dbAuto');
+    const gl = document.createElement('label');
+    const gc = document.createElement('input');
+    gc.type = 'checkbox'; gc.checked = ZN194.group === 'planet';
+    gl.append(gc, ' Next: DB を巡る範囲を「惑星（チームスペース全部）」に（切るとその DB のチームスペース）');
+    gc.addEventListener('change', () => next194set({ group: gc.checked ? 'planet' : 'team' }));
+    box.appendChild(gl);
+    add('Next: このDBについて（説明の全文と実務）', 'about');
+    add('Next: 魚の入り（同じ DB はセッションで 1 回）', 'fish');
+    add('Next: 表のビューを巡る索引帯に', 'band');
+    add('Next: ビューの候補で止まったら自動で切り替える（' + T194.viewCommit + 'ms）', 'viewAuto');
+    add('Next: ビューごとのしおり（スクロールの位置）', 'marks');
+    add('Next: ビューの案内の魚', 'guide');
+    add('Next: 表の見出し行 ' + T194.headH + 'px', 'head');
+    add('Next: 帯と見出し行の二段の固定', 'sticky');
+    add('Next: 星図の罫線（左端の線・菱形・交点の星・列の 12 色）', 'stars');
+    const rb = document.createElement('button');
+    rb.type = 'button';
+    rb.textContent = 'しおりを全部消す（' + Object.keys(MS194.m).length + '）';
+    rb.addEventListener('click', (ev) => { ev.preventDefault(); marksReset194(); rb.textContent = 'しおりを消しました'; });
+    box.appendChild(rb);
+  });
+  function next194set(o) {
+    if (o && typeof o === 'object') for (const k of Object.keys(o)) if (k in ZN194 && typeof o[k] === typeof ZN194[k]) ZN194[k] = o[k];
+    if (ZN194.group !== 'planet') ZN194.group = 'team';
+    znSave194();
+    gridEndCand194();
+    if (!ZN194.on) off194();
+    else {
+      if (!ZN194.band && N194.tl) bandOff194(N194.tl);
+      for (const el of document.querySelectorAll('[data-c194-tbl]')) clean194(el);
+      stickyOff194('');
+      N194.abSig = '';
+      if (!ZN194.about) for (const el of document.querySelectorAll('[data-c194-about]')) aboutOff194(el);
+      if (!ZN194.guide) guideHide194(true);
+      zenSoon124();
+      soon194(0);
+    }
+    return Object.assign({}, ZN194);
+  }
+  /* 確かめる: __c33.next() — 版・いまの DB とまとまり・止めている機能と理由・しおりの数・測った値 */
+  function next194() {
+    const c = N194.ctx, gr = N194.grp || (N194.id ? group194(N194.id) : null);
+    const g = N194.g && !N194.g.hidden ? N194.g.getBoundingClientRect() : null;
+    return {
+      version: VERSION, on: ZN194.on, prefs: Object.assign({}, ZN194), tune: Object.assign({}, T194),
+      db: N194.id || null, name: c ? head194().name : null, view: N194.vid || null, table: N194.isTable,
+      grid: g ? { left: Math.round(g.left), top: Math.round(g.top), width: Math.round(g.width), height: Math.round(g.height) } : null,
+      group: gr ? (gr.list ? { how: gr.how, team: gr.team, count: gr.list.length, dbs: gr.list.map((r) => r.name) } : { why: gr.why }) : null,
+      candidate: gridPending194() ? N194.cands[N194.ci].name : null, navigating: N194.nav ? N194.nav.id : null,
+      band: N194.tl ? { views: (N194.bviews || []).length, width: N194.bwS || 0, candidate: N194.bc } : null,
+      sticky: N194.stH ? { height: N194.stH } : null,
+      about: c && c.row.hasAttribute('data-c194-about') ? { narrow: c.row.hasAttribute('data-c194-narrow'), practice: !!practice194(N194.id), constitution: !c.row.hasAttribute('data-c194-noconst') } : null,
+      marks: { count: Object.keys(MS194.m).length, key: N194.id && N194.vid ? N194.id + ':' + N194.vid : null, here: N194.id && N194.vid ? MS194.m[N194.id + ':' + N194.vid] || null : null, store: MK194 },
+      guide: { open: N194.gd.open, pinned: N194.gd.pin, has: !!(N194.id && N194.vid && guideOf194(N194.id, N194.vid)) },
+      stopped: Object.assign({}, N194.why)
+    };
+  }
+  next194.set = next194set;
+  next194.marks = () => JSON.parse(JSON.stringify(MS194));
+  next194.marks.reset = marksReset194;
+  next194.practice = (t) => {
+    if (t === undefined) return N194.id ? practice194(N194.id) : null;
+    if (!N194.id) return false;
+    const v = String(t || '').trim();
+    if (v) NT194.practice[N194.id] = { t: v.slice(0, 4000), at: new Date().toISOString() }; else delete NT194.practice[N194.id];
+    ntSave194(); N194.abSig = ''; aboutSync194(); return true;
+  };
+  next194.guide = (t) => {
+    if (t === undefined) return N194.id && N194.vid ? guideOf194(N194.id, N194.vid) : null;
+    if (!N194.id || !N194.vid) return false;
+    const v = String(t || '').trim(), k = N194.id + ':' + N194.vid;
+    if (v) NT194.guide[k] = { t: v.slice(0, 4000), at: new Date().toISOString() }; else delete NT194.guide[k];
+    ntSave194(); N194.gd.key = ''; guideKick194(); return true;
+  };
+  next194.notes = (json) => {
+    if (json === undefined) return JSON.parse(JSON.stringify(NT194));
+    let v = json;
+    try { if (typeof v === 'string') v = JSON.parse(v); } catch (e) { return false; }
+    if (!v || v.v !== 1) return false;
+    NT194.practice = v.practice && typeof v.practice === 'object' ? v.practice : {};
+    NT194.guide = v.guide && typeof v.guide === 'object' ? v.guide : {};
+    ntSave194(); N194.abSig = ''; aboutSync194(); return true;
+  };
+  next194.edit = (kind) => edOpen194(kind === 'guide' ? 'guide' : 'prac');
+
   window.__c33 = { version: VERSION, on: () => obApply(true), off: () => obApply(false), toggle: () => obToggle(), select: (g) => obSelect(g), caelum: (on) => (on == null ? CL114.on : caelumSet114(on)), zenith: (on) => (on == null ? ZK124.zen : zenSet124('zen', on)), banner: (on) => (on == null ? ZK124.banner : zenSet124('banner', on)), motion: (on) => (on == null ? ZK124.motion : zenSet124('motion', on)), left: (on) => (on == null ? ZK134.left : zenSet134('left', on)), native: (on) => (on == null ? ZK134.ntv : zenSet134('ntv', on)), smooth: (on) => (on == null ? ZK134.smooth : zenSet134('smooth', on)), band: (on) => (on == null ? ZK144.band : band144Set(on)), fold: (on) => (on == null ? ZK154.fold : set154('fold', on)), open: (on) => { if (on == null) return Z154.open; open154(!!on); return Z154.open; }, folio: (on) => (on == null ? ZK154.folio : set154('folio', on)), gutter: (on) => (on == null ? ZK154.gutter : set154('gutter', on)), hbar: (on) => (on == null ? ZK154.hbar : set154('hbar', on)), meridian: (on) => (on == null ? ZK154.mer : set154('mer', on)), catalogus: (on) => (on == null ? CAT164.on : set164('on', on)), hscroll: () => hscroll164(), dbzoom: (v) => dbzoom174(v), dbfit: (v) => dbfit184(v), addPage: () => addPage184(K164.teams && K164.teams[K164.sel]), newTeam: () => newTeam184(), adds: () => K184.log.slice(), status: () => Object.assign({}, ST, { orbit: Object.assign({}, OB), caelum: CL114.on, zenith: Object.assign({ live: live124.on, domain: live124.domain, step: itemFit124, open: Z154.open, fill: Z154.fillOk }, ZK124, { fold: ZK154.fold, folio: ZK154.folio, gutter: ZK154.gutter, hbar: ZK154.hbar, meridian: ZK154.mer }), catalogus: { on: CAT164.on, open: CAT164.open, shown: K164.shown, why: K164.why, prev: K164.prev, asked: Object.keys(K164.req), rest: K164.rest, gid: K164.gid, room: K164.G.room || null, teams: (K164.teams || []).map((t) => t.name + (t.open ? '（' + t.rows.length + '）' : '（閉）')), sel: K164.sel, broken: K164.broken }, dbzoom: dbzoom174(), dbfit: dbfit184() }) };
+  window.__c33.next = next194;   // C194（Next Notion）: 状態・設定・メモ・しおり
   window.__c33.teamIcon = () => teamIcon186(K164.teams && K164.teams[K164.sel]);   // C186
   window.__c33.teamSet = () => teamSet189(K164.teams && K164.teams[K164.sel]);     // C189
   /* v189.2: 選んだ行の地を本物で確かめる（読むだけ）— 版・--c189-sel・描いている ::after の算出値 */
   window.__c33.veil = () => ({ on: !!K190.dim, color: K190.veil ? K190.veil.style.getPropertyValue('--c190-veil') : '', dim: K190.dim ? (K190.dim.el.id || K190.dim.el.className || K190.dim.el.tagName) : null });   // C190
-  window.__c33.align = () => ({ version: VERSION, open: Z154.open, normal: { line: K193.line, bottom: K193.bottom, raw: K193.raw, stopped: K193.why || null, row: K191.row, dbtop: K191.v, hx: K191.hx, horizon: K191.line }, hover: K190.al });   // C190・C191・C193
+  window.__c33.align = () => ({ version: VERSION, note: 'v194: 本文の見出しの位置合わせ（191〜193）はやめました。DB の名前とアイコンは Catalogus の上段です。__c33.next() で確かめられます。', dbtop: (document.querySelector('[data-c154-hwrap]') || { style: { getPropertyValue: () => '' } }).style.getPropertyValue('--c154-dbtop') });
   window.__c33.selbg = () => { const r = document.querySelector('#c164-cat .ct-r[aria-current]'); if (!r) return { version: VERSION, row: null }; const a = getComputedStyle(r, '::after'), c = document.getElementById('c164-cat'); return { version: VERSION, row: (r.textContent || '').trim(), sel: getComputedStyle(c).getPropertyValue('--c189-sel').trim(), rowBg: getComputedStyle(r).backgroundColor + ' | ' + getComputedStyle(r).backgroundImage, afterColor: a.backgroundColor, afterImage: a.backgroundImage }; };
 
   /* v188: 187 は「チームスペースを作る」で Notion のサイドバーを開き、開いたまま残した。Notion はサイドバーの開け閉めを覚えるので、

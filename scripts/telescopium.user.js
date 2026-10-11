@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　⁴¹ _ Telescopium
 // @namespace    https://cordivestium.local/telescopium
-// @version      1.0.0
-// @description  v1.0.0: Nebius の本体 DB を「望遠鏡でのぞいた星空」に。視野 — 狭くなると Stella が細い列に縮み、長文の列が伸び縮みし、優先度の低い列から畳まれ（中身は題名の下に）、それでも足りなければ題名の列を残して横に流れる。ビューのタブは「他 N 件」に隠さず横に流れる帯に。焦点 — ◎（⌥L）で B.U.R.I レンズ。ふつうの言葉で話しかけると、合う行にピントが合い、合わない行は沈む（確実な条件は手元で、意味の条件は MoA で判定し ✦ と理由）。倍率 — つまむ（ピンチ）と星図 Planisphere へ。行の Notion アイコンがそのまま星になって飛び、リレーションで星座に。色 — 表紙の主な色を、サイドピークのにじみ・星の光暈・レンズの縦線にだけ使う。見た目だけで、Notion のデータもビューの設定も書き換えない。
+// @version      1.0.1
+// @description  v1.0.1: ³³ 194 の「巡る索引帯」（[data-c194-band] の付いたタブの並び）には、タブを横に流す仕組みを当てない（同じタブを二つで動かして取り合わないよう ³³ に譲る。³³ が帯を止めると今までどおり横に流す）。 v1.0.0: Nebius の本体 DB を「望遠鏡でのぞいた星空」に。視野 — 狭くなると Stella が細い列に縮み、長文の列が伸び縮みし、優先度の低い列から畳まれ（中身は題名の下に）、それでも足りなければ題名の列を残して横に流れる。ビューのタブは「他 N 件」に隠さず横に流れる帯に。焦点 — ◎（⌥L）で B.U.R.I レンズ。ふつうの言葉で話しかけると、合う行にピントが合い、合わない行は沈む（確実な条件は手元で、意味の条件は MoA で判定し ✦ と理由）。倍率 — つまむ（ピンチ）と星図 Planisphere へ。行の Notion アイコンがそのまま星になって飛び、リレーションで星座に。色 — 表紙の主な色を、サイドピークのにじみ・星の光暈・レンズの縦線にだけ使う。見た目だけで、Notion のデータもビューの設定も書き換えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -53,7 +53,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '1.0.1';
   const TAG = '[⁴¹ Telescopium v' + VERSION + ']';
   if (window.__c41 && window.__c41.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -920,6 +920,8 @@
     const tl = c && c.tablist;
     if (c && c.db && !tl && ST.runs > 30) need('tablist', null);
     if (!tl || !P.field || !tl.isConnected) { tabsOff(); return; }
+    /* v1.0.1: ³³ 194 の索引帯が同じタブを並べている間は譲る（³³ が帯を外すと、次の見直しでまた流す） */
+    if (tl.hasAttribute('data-c194-band')) { tabsOff(); return; }
     const row = tl.parentElement, tool = tl.nextElementSibling, inner = tl.firstElementChild;
     if (!row || !inner) return;
     const rr = row.getBoundingClientRect();
