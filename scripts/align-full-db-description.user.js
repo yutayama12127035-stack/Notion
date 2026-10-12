@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　⁰⁴ _ Align Full DB Description
 // @namespace    https://constellucentia.local/align-full-db-description
-// @version      1.1.0
+// @version      1.2.0
 // @description  Aligns a full database description with the first character of its title.
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -65,8 +65,10 @@
   /* ── v1.1.0（196）³³ の「このDBについて」と取り合わない ──
      ・[data-c194-about]（³³ が憲法と実務を並べる行）の中の説明文は揃えない（⁰⁸ 1.5.7 と同じ除外）。
        前にこのスクリプトが付けた印と字下げの変数は 1 回だけ外す。³³ を切るか「このDBについて」を切ると今までどおり揃える。
-     ・³³ が本文の寸法を変えている間（html[data-c194-hold]）は測らず、外れた時に 1 回だけ測り直す。 */
-  const VERSION = "1.1.0";
+     ・³³ が本文の寸法を変えている間（html[data-c194-hold]）は測らず、外れた時に 1 回だけ測り直す。
+     ・v1.2.0（³³ 197）: 「このDBについて」の中の自分の印と字下げの変数は、hold の間でもすぐ外す（外すだけで、測らない・書き足さない）。
+       1.1.0 は hold が外れて走査の間引き（60ms・書き換えが続くと延びる）が明けるまで外さなかったので、³³ が題字を畳んだ後に説明の字が一度動き、³³ が左端をそろえるとまた動いていた。 */
+  const VERSION = "1.2.0";
 
   const RUNTIME_KEY =
     "__constellucentiaFullDbDescriptionAlignment__";
@@ -757,6 +759,7 @@
      * （外れた時に c194ReleaseStop の見張りが 1 回だけ測り直す）。
      */
     if (C194.hold()) {
+      releaseC194About();   // v1.2.0: 外すだけは hold の間も（³³ が「このDBについて」の印を付けたその時に）
       state.c194HoldDeferred += 1;
       return;
     }
@@ -902,6 +905,7 @@
      */
     c194AboutObserver =
       new MutationObserver(() => {
+        releaseC194About();   // v1.2.0: 印が付いたその時に外す（走査の間引きは、読み込み中は書き換えが続いて遅れる）
         scheduleScan();
       });
 
