@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　⁰⁹ _ Primary Column Marker
 // @namespace    https://cordivestium.local/
-// @version      12.0.0
-// @description  v12.0.0: 軽く — 表に関わる変化の時だけ走査し、走査は最短 160ms おき（読み込み中の JS の時間が約 1/10 に）。v11.13.6: 題字とリレーションを「形」で見分ける — 題字＝property-value の直下の段に「アイコン（role=button）の入れ物＋文字」、リレーション＝折り返す段（flex-wrap）の中の inline のチップ（アイコン＋名前）。今の Notion は題字の文字に data-token-index が無く、題字が先頭の列とも限らない（Medias の Index は Works が 2 列目）ため、題字をリレーションと取り違えて印を外していた。Notionの主列だけをマーク。広い検出を維持したまま、relation除外とhover差し込みUIの兄弟要素分離を行い、hover-ui-host誤付与を防ぐ版。 v1.13.6: セルが描き直されて data-token-index が消えたとき、relationLike と誤判定して適用をやめる関門を緩めた（TUNING.RELAX_RELATION_BAIL で戻せる）。
+// @version      12.1.0
+// @description  v12.1.0: ³³ 196 との合図 — 題字の印（書体の class）の付け外しが実際にあった走査の後だけ c194:rowlayout（src c09）を 1 回出す（Atelier が題字を折り返すと行が高くなるため）。³³ が本文の寸法を変えている間（html[data-c194-hold]）は走査せず、外れた時に 1 回だけ走査する。v12.0.0: 軽く — 表に関わる変化の時だけ走査し、走査は最短 160ms おき（読み込み中の JS の時間が約 1/10 に）。v11.13.6: 題字とリレーションを「形」で見分ける — 題字＝property-value の直下の段に「アイコン（role=button）の入れ物＋文字」、リレーション＝折り返す段（flex-wrap）の中の inline のチップ（アイコン＋名前）。今の Notion は題字の文字に data-token-index が無く、題字が先頭の列とも限らない（Medias の Index は Works が 2 列目）ため、題字をリレーションと取り違えて印を外していた。Notionの主列だけをマーク。広い検出を維持したまま、relation除外とhover差し込みUIの兄弟要素分離を行い、hover-ui-host誤付与を防ぐ版。 v1.13.6: セルが描き直されて data-token-index が消えたとき、relationLike と誤判定して適用をやめる関門を緩めた（TUNING.RELAX_RELATION_BAIL で戻せる）。
 // @author       Cordivestium
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -63,7 +63,7 @@
      * ============================================================
      */
 
-    const VERSION = '12.0.0';
+    const VERSION = '12.1.0';
 
     const API_NAME =
         '__cordivestiumWorksTitleTypography__';
@@ -144,6 +144,52 @@
         typeof unsafeWindow !== 'undefined'
             ? unsafeWindow
             : window;
+
+    /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ──
+     * v12.1.0: このスクリプトは @grant unsafeWindow（ScriptCat の sandbox）なので、Foundation はページ側の window（PAGE_WINDOW）から読む */
+    const C194 = (() => {
+      const RT = Symbol.for('constellucentia.runtime');
+      const rt = () => { try { const r = PAGE_WINDOW[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+      const html = () => document.documentElement;
+      const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+      return Object.freeze({
+        hold: () => has('hold', 'data-c194-hold'),
+        split: () => has('split', 'data-c194-split'),
+        ready: () => has('ready', 'data-c194-ready'),
+        on: () => has('on', 'data-c194-on'),
+        emit(src, why) {
+          const detail = { src: String(src), why: String(why || '') };
+          const r = rt();
+          if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+          try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+        },
+        /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+        onRelease(fn, attrs) {
+          const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+          const names = attrs || ['data-c194-hold'];
+          const on = () => names.some((a) => h.hasAttribute(a));
+          let was = on();
+          const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+          mo.observe(h, { attributes: true, attributeFilter: names });
+          return () => mo.disconnect();
+        },
+        report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+      });
+    })();
+
+    /* v12.1.0: 行高の合図の間引き（題字の印の付け外しがまとまって来ても 1 回） */
+    let rl196T = 0, rl196Why = '', rl196Sent = 0;
+    function rowlayout196(why) {
+      rl196Why = why || rl196Why;
+      clearTimeout(rl196T);
+      rl196T = setTimeout(() => { rl196T = 0; rl196Sent += 1; C194.emit('c09', rl196Why); rl196Why = ''; }, 100);
+    }
+
+    /* v12.1.0: 前回の走査で印を付けた要素（今回と比べて、付け外しがあった時だけ合図する） */
+    let applied196 = new Set();
+    let c194HoldDeferred = 0;
+    let c194Pending = false;
+    let c194ReleaseStop = null;
 
     /*
      * ============================================================
@@ -2637,6 +2683,16 @@
             return;
         }
 
+        /*
+         * v12.1.0: ³³ が本文の寸法を変えている間は印を付け外ししない
+         * （行の高さが変わるため）。外れた時に 1 回だけ走査する。
+         */
+        if (C194.hold()) {
+            c194HoldDeferred += 1;
+            c194Pending = true;
+            return;
+        }
+
         try {
             state.scanCount += 1;
             state.lastReason = reason;
@@ -2697,6 +2753,28 @@
              * リレーション列などへ残った旧クラスを解除する。
              */
             cleanupStale(managed);
+
+            /*
+             * v12.1.0: 印を付けた要素の組が前回と変わった時だけ、
+             * 行の高さが変わったかもしれないと ³³ に知らせる（見回りで変化が無い時は出さない）。
+             */
+            let changed196 =
+                managed.size !== applied196.size;
+
+            if (!changed196) {
+                for (const element of managed) {
+                    if (!applied196.has(element)) {
+                        changed196 = true;
+                        break;
+                    }
+                }
+            }
+
+            applied196 = managed;
+
+            if (changed196) {
+                rowlayout196('title-typography');
+            }
         } catch (error) {
             state.lastError =
                 error instanceof Error
@@ -3055,6 +3133,14 @@
 
             scanCount: state.scanCount,
             lastReason: state.lastReason,
+
+            /* v12.1.0: hold で見送った走査の数・出した行高の合図の数 */
+            c194: {
+                holdDeferred: c194HoldDeferred,
+                pending: c194Pending,
+                rowlayoutSent: rl196Sent,
+                applied: applied196.size
+            },
             lastScanAt: state.lastScanAt,
             lastError: state.lastError,
 
@@ -3208,6 +3294,15 @@
         removeEvents();
         clearAllManagedState();
 
+        if (c194ReleaseStop) {
+            c194ReleaseStop();
+            c194ReleaseStop = null;
+        }
+
+        clearTimeout(rl196T);
+        rl196T = 0;
+        applied196 = new Set();
+
         document
             .getElementById(STYLE_ID)
             ?.remove();
@@ -3287,6 +3382,25 @@
             installObserver();
             installEvents();
             installHoverRescan();
+
+            /* v12.1.0: hold の間に見送った走査を、外れた時に 1 回だけ */
+            c194ReleaseStop =
+                C194.onRelease(() => {
+                    if (c194Pending) {
+                        c194Pending = false;
+                        scheduleScan('c194-release');
+                    }
+                });
+
+            C194.report('c09', {
+                version: VERSION,
+                observers: [
+                    'body MO（childList・characterData・subtree。表の変化だけ）',
+                    'html MO（属性 data-c194-hold・外れた時に 1 回）'
+                ],
+                listeners: ['pointerdown/pointerup/dragend/drop（capture）', 'resize', 'visibilitychange', 'focusin/focusout', 'ホバーの再適用'],
+                timers: ['scan 最短 160ms おき', 'RESCAN_DELAYS_MS', 'rowlayout 間引き 100ms']
+            });
 
             state.started = true;
 

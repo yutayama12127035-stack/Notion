@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　⁴⁰ _ Prisma
 // @namespace    https://cordivestium.local/prisma
-// @version      1.0.0
-// @description  v1.0.0: 数のプロパティを「見てわかる数」に — 進み具合のバー・輪・星・点数・色の濃さ。「読んだページ ÷ 総ページ数」のような 2 つの数の組も名前から見つけて割合のバーに（読書の進み具合・映画の採点・勉強の進捗）。新しいビューを 2 つ: 表のまま表紙が並ぶ「テーブルギャラリー」と、ボードの列の中がギャラリーになる「ギャラリーボード」。設定は Notion の「ビューの設定」と、表の上の道具の段の ◇ から。見た目だけで、Notion のデータは変えない。
+// @version      1.1.0
+// @description  v1.1.0: 表紙（テーブルギャラリー）・子アイテムの札で表の行の高さを変えた run の後だけ c194:rowlayout を 1 回出す（³³ が測り直す）。v1.0.0: 数のプロパティを「見てわかる数」に — 進み具合のバー・輪・星・点数・色の濃さ。「読んだページ ÷ 総ページ数」のような 2 つの数の組も名前から見つけて割合のバーに（読書の進み具合・映画の採点・勉強の進捗）。新しいビューを 2 つ: 表のまま表紙が並ぶ「テーブルギャラリー」と、ボードの列の中がギャラリーになる「ギャラリーボード」。設定は Notion の「ビューの設定」と、表の上の道具の段の ◇ から。見た目だけで、Notion のデータは変えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -15,6 +15,10 @@
 
 /*
  * ⁴⁰ Prisma（プリズマ）— 数と表紙に光を通す柱
+ *
+ * v1.1.0（2026-10-12・³³ 196 と一緒に）
+ *   ・表の行の高さを変える印（data-c40-th・テーブルギャラリーの大きさ・data-c40-fam）を付けた／外した run の終わりにだけ
+ *     c194:rowlayout（detail { src: 'c40', why: 'run' }）を間引いて 1 回出す。30 秒ごとの見回りで何も変わらなければ出さない。
  *
  * v1.0.0（2026-10-09）
  *   ■ 数の見せ方（表のセル・ボード／ギャラリーのカード）
@@ -42,7 +46,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const TAG = '[⁴⁰ Prisma v' + VERSION + ']';
   if (window.__c40 && window.__c40.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -54,6 +58,47 @@
   try { VIEWS = JSON.parse(localStorage.getItem(LS_V) || '{}') || {}; } catch (e) { VIEWS = {}; }
   const save = (k, o) => { try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) { /* noop */ } };
   const ST = { runs: 0, cells: 0, cards: 0, thumbs: 0, covers: 0, api: 0, lastError: '' };
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let rl196T = 0, rl196Why = '';
+  function rowlayout196(why) {
+    rl196Why = why || rl196Why;
+    clearTimeout(rl196T);
+    rl196T = setTimeout(() => { rl196T = 0; C194.emit('c40', rl196Why); rl196Why = ''; }, 100);
+  }
+  /* v1.1.0: この run で表の行の高さを変える印（表紙 data-c40-th・テーブルギャラリーの大きさ・子アイテムの札 data-c40-fam）を
+     付けた／外したか。run() の終わりに 1 回だけ見て、変わっていれば c194:rowlayout。30 秒ごとの run で何も変わらなければ出さない */
+  let dirty196 = false;
+
   const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const clamp01 = (x) => (x > 1 ? 1 : x < 0 || !isFinite(x) ? 0 : x);
@@ -480,6 +525,7 @@
     }
     const h = TG_SIZE[vc.size || 'm'] || 60;
     const ar = AR[shape] || 1;
+    if (view.getAttribute('data-c40-tg') !== (vc.size || 'm') || view.style.getPropertyValue('--c40-th') !== h + 'px' || view.style.getPropertyValue('--c40-tw') !== Math.round(h * ar) + 'px') dirty196 = true;   // v1.1.0: 表紙の大きさが変わる
     view.setAttribute('data-c40-tg', vc.size || 'm');
     view.style.setProperty('--c40-th', h + 'px');
     view.style.setProperty('--c40-tw', Math.round(h * ar) + 'px');
@@ -503,13 +549,15 @@
       }
       th.__id = id; th.__r = r; th.__im = ims.get(id);
       if (fillPic(th, r, th.__im, Math.round(h * 2.4))) ST.thumbs++;
+      if (!cell.hasAttribute('data-c40-th')) dirty196 = true;   // v1.1.0: この印で題名のセルが表紙の高さになる（表紙そのものは absolute）
       cell.setAttribute('data-c40-th', '');
       cell.__c40tg = pass;
     });
-    for (const cell of view.querySelectorAll('.notion-table-view-cell[data-c40-th]')) if (cell.__c40tg !== pass) { const t = cell.querySelector(':scope > .c40-th'); if (t) t.remove(); cell.removeAttribute('data-c40-th'); }
+    for (const cell of view.querySelectorAll('.notion-table-view-cell[data-c40-th]')) if (cell.__c40tg !== pass) { const t = cell.querySelector(':scope > .c40-th'); if (t) t.remove(); cell.removeAttribute('data-c40-th'); dirty196 = true; }
   }
   function clearTG(view) {
     if (!view.hasAttribute('data-c40-tg')) return;
+    dirty196 = true;   // v1.1.0: テーブルギャラリーをやめる＝行の高さが戻る
     view.removeAttribute('data-c40-tg');
     for (const v of ['--c40-th', '--c40-tw', '--c40-ar']) view.style.removeProperty(v);
     for (const cell of view.querySelectorAll('[data-c40-th]')) { const t = cell.querySelector(':scope > .c40-th'); if (t) t.remove(); cell.removeAttribute('data-c40-th'); }
@@ -754,11 +802,12 @@
       const k = pageIds((r.properties || {})[fam.kid]);
       if (!k.length) return;
       const b = famBadge(cell, famStat(k, kr, coll.schema), k, coll.schema, norm(plain(r.properties && r.properties.title)) || '無題', 'c40-fam');
+      if (!cell.hasAttribute('data-c40-fam')) dirty196 = true;   // v1.1.0: この印で題名の下に札の分の余白（札そのものは absolute）
       cell.setAttribute('data-c40-fam', '');
       cell.__c40fam = pass;
       reads.push({ cell, b });
     });
-    for (const cell of view.querySelectorAll('.notion-table-view-cell[data-c40-fam]')) if (cell.__c40fam !== pass) { const b = cell.querySelector(':scope > .c40-fam'); if (b) b.remove(); cell.removeAttribute('data-c40-fam'); }
+    for (const cell of view.querySelectorAll('.notion-table-view-cell[data-c40-fam]')) if (cell.__c40fam !== pass) { const b = cell.querySelector(':scope > .c40-fam'); if (b) b.remove(); cell.removeAttribute('data-c40-fam'); dirty196 = true; }
     /* 札を題名の頭にそろえる（入れ子の字下げに付いていく）— 読んでから書く */
     if (reads.length) requestAnimationFrame(() => {
       const xs = reads.map(({ cell }) => { const t = cell.querySelector('[data-testid="property-value"] span[style*="font-weight"], [data-testid="property-value"] [data-content-editable-leaf]') || pvOf(cell); const a = t && t.getBoundingClientRect(), c = cell.getBoundingClientRect(); return a ? Math.max(6, Math.round(a.left - c.left)) : 8; });
@@ -766,7 +815,7 @@
     });
   }
   function clearFam(view) {
-    for (const cell of view.querySelectorAll('[data-c40-fam]')) { const b = cell.querySelector(':scope > .c40-fam'); if (b) b.remove(); cell.removeAttribute('data-c40-fam'); }
+    for (const cell of view.querySelectorAll('[data-c40-fam]')) { const b = cell.querySelector(':scope > .c40-fam'); if (b) b.remove(); cell.removeAttribute('data-c40-fam'); dirty196 = true; }
   }
   async function famCards(view, coll, vc, items, pass) {
     const fam = famOf(coll);
@@ -1394,6 +1443,7 @@ html[data-c40-calm] .c40-g *, html[data-c40-calm] .c40-th, html[data-c40-calm] .
       const views = [...document.querySelectorAll(VIEW_SEL)];
       await Promise.all(views.map((v) => doView(v, ++passN).catch((e) => { ST.lastError = String(e && e.stack || e).slice(0, 400); })));
     } finally {
+      if (dirty196) { dirty196 = false; rowlayout196('run'); }   // v1.1.0: Promise.all の後（clearAll の時も）。変わった run だけ
       running = false;
       if (again) { again = false; soon(40); }
     }
@@ -1436,4 +1486,5 @@ html[data-c40-calm] .c40-g *, html[data-c40-calm] .c40-th, html[data-c40-calm] .
     async schema(v) { v = v || document.querySelector(VIEW_SEL); const c = v && await collOf(blockOf(v)); return c ? { cid: c.cid, nums: numList(c.schema).map((n) => ({ pid: n.pid, name: n.name, type: n.def.type, auto: autoCfg(n, numList(c.schema)) })) } : null; },
     run
   };
+  C194.report('c40', { version: VERSION, observers: ['body MO（childList・subtree・characterData）→ run', 'ビューの設定の MO（#cordi-vs-sub）'], listeners: ['表紙・札・◇ の pointer／click'], timers: ['run の間引き 40ms', 'URL の見張り 500ms', '見回りの run（P.refresh・最短 8 秒）', 'rowlayout196 の間引き 100ms'] });
 })();

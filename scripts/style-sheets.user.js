@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁹ _ Style Sheets
 // @namespace    https://cordivestium.local/style-sheets
-// @version      3.2.0
-// @description  v3.2.0: 幕に ('-' 鰤)з — 読み込みが 0.7 秒を超えると、幕の真ん中で ('-' 鰤)з が泳ぐ（待つ間も可愛く）。速く — CSS を最後へ移すのは他の CSS が後ろに来た時だけ・ワークスペース切り替えの段を印で速く。v3.1.0: 幕の保険を直した — 3 秒で必ず開いていたため、読み込みに 4 秒かかる端末では 16c の合図より先に開き、描き直しが見えていた → 16c が動いている時は 9 秒・動いていない時は 2.5 秒。印付けは、前回から間が空いていれば変化を見た直後（描画の前）に（印の付く前の姿を 1 コマも見せない）。v3.0.0: 速く — 重い div:has(…) の 3 本（⁰⁸ サイドバーのボタン中央寄せ・²⁴ リレーション区画の見出し／View details・題字の左にアイコン）を、JS の印（data-c39-*）で同じ見た目に置き換え。読み込み中のスタイル計算が大きく減る（約 1.5 秒 → 0.3 秒・試験台）。16c の幕の保険を 20 秒→3 秒。v2.0.0: いまの Stylus の 16 本（2026-10-04 の書き出し）に作り直し。ScriptCat の JS と突き合わせ、重複（古い幕 ¹⁸ Screen Curtain ＝ ²³ Details に新しい版）は既定で切。各行に「対になる JS」「重複」の注記。幕を使う時は ³⁷ Lumière の幕が自動で退く。新規「題字の左にアイコン（DB の行ページ）」入り。Stylus は全部オフのままで OK。
+// @version      3.3.0
+// @description  v3.3.0: ³³ との契約（c194 v196）— ³³ が本文の寸法を変えている間（html[data-c194-hold]）は印付け（markAll）を休み、外れた時に 1 回だけ付け直す。CSS は一字も変えていない（³³ の固定の層 [data-c194-sticky]・[data-c194-sh]・[data-c194-sb] と重なる指定は無い）。v3.2.0: 幕に ('-' 鰤)з — 読み込みが 0.7 秒を超えると、幕の真ん中で ('-' 鰤)з が泳ぐ（待つ間も可愛く）。速く — CSS を最後へ移すのは他の CSS が後ろに来た時だけ・ワークスペース切り替えの段を印で速く。v3.1.0: 幕の保険を直した — 3 秒で必ず開いていたため、読み込みに 4 秒かかる端末では 16c の合図より先に開き、描き直しが見えていた → 16c が動いている時は 9 秒・動いていない時は 2.5 秒。印付けは、前回から間が空いていれば変化を見た直後（描画の前）に（印の付く前の姿を 1 コマも見せない）。v3.0.0: 速く — 重い div:has(…) の 3 本（⁰⁸ サイドバーのボタン中央寄せ・²⁴ リレーション区画の見出し／View details・題字の左にアイコン）を、JS の印（data-c39-*）で同じ見た目に置き換え。読み込み中のスタイル計算が大きく減る（約 1.5 秒 → 0.3 秒・試験台）。16c の幕の保険を 20 秒→3 秒。v2.0.0: いまの Stylus の 16 本（2026-10-04 の書き出し）に作り直し。ScriptCat の JS と突き合わせ、重複（古い幕 ¹⁸ Screen Curtain ＝ ²³ Details に新しい版）は既定で切。各行に「対になる JS」「重複」の注記。幕を使う時は ³⁷ Lumière の幕が自動で退く。新規「題字の左にアイコン（DB の行ページ）」入り。Stylus は全部オフのままで OK。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -21,6 +21,15 @@
  *     <html> がまだ無い瞬間でも待って最初の描画に間に合わせる。
  *   ・入切は 1 本ずつ。このブラウザに覚える。小窓は外を押すと閉じる。
  *   ・新規「題字の左にアイコン」: DB の行ページで、アイコンを題名の上ではなく左に並べる（書体は Atelier のまま）。
+ *
+ * v3.3.0（2026-10-12）— ³³ v196 との契約（c194）
+ *   ・markSoon の run の頭で html[data-c194-hold] を見る。付いている間は markAll を走らせず、外れた時に
+ *     C194.onRelease から 1 回だけ markSoon（待つ間に見回りは足さない）
+ *   ・CSS の二重の指定の点検: ³³ の固定の層（[data-c194-sticky] / [data-c194-sh] / [data-c194-sb]）を指す指定は無い。
+ *     n22 Render Veil は ²¹ の幕の opacity と will-change だけで、³³ の固定の層が持つ position / top / z-index / 背景とは別の性質
+ *   ・性能の覚え: 見張り（MutationObserver）は style 属性も見るので、³³ が行や帯の style（--c194-* の変数）を書くたびに
+ *     markSoon が走る（120ms で間引き）。見た目には関係しない
+ *   ・戻し方: C194 の部品・run の頭の 1 行・onRelease の 1 行を外す
  */
 (function () {
   'use strict';
@@ -399,12 +408,43 @@
     };
     tw();
   }
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let markHeld = false;   // v3.3.0: hold の間に印付けを休んだか（外れた時に 1 回だけ付け直す）
   let markT = 0, markLast = 0;
   /* v3.1: 前回から 120ms 以上空いていれば、その場（変化を見た直後＝描画の前）で印を付ける → 印の付く前の姿が 1 コマも見えない。
      続けて変わる間（読み込み・スクロール）だけ 120ms おきにまとめる */
   const markSoon = () => {
     if (markT) return;
-    const run = () => { markT = 0; markLast = performance.now(); try { markAll(); } catch (e) { /* noop */ } };
+    const run = () => { markT = 0; if (C194.hold()) { markHeld = true; return; } markLast = performance.now(); try { markAll(); } catch (e) { /* noop */ } };   // v3.3.0: ³³ の hold の間は休む
     const wait = 120 - (performance.now() - markLast);
     if (wait <= 0) { markT = 1; queueMicrotask(run); }
     else markT = setTimeout(() => requestAnimationFrame(run), wait);
@@ -453,6 +493,8 @@
     if (!root) return setTimeout(watch, 10);
     new MutationObserver(keepLast).observe(root, { childList: true });
     if (FAST) { new MutationObserver(markSoon).observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class', 'aria-label', 'role'] }); markSoon(); }
+    /* v3.3.0: hold が外れた時に 1 回だけ付け直す（<html> ができてから置く） */
+    if (FAST) C194.onRelease(() => { if (markHeld) { markHeld = false; markSoon(); } });
   };
   watch();
 
@@ -510,5 +552,11 @@
   try { GM_registerMenuCommand('スタイルシート（入切）', () => open()); } catch (e) {}
   const mark = () => document.documentElement ? document.documentElement.setAttribute('data-cordi-s39', '1') : setTimeout(mark, 20);
   mark();
+  C194.report('c39', {
+    version: '3.3.0',
+    observers: ['<html> MO（childList: 柱を末尾に保つ）', '<html> MO（childList・subtree・style/class/aria-label/role: 印付け）', 'body MO（class: 配色の印）', 'html MO（data-c194-hold の外れ）'],
+    listeners: ['document keydown（capture: Esc）', 'cordi:run', 'cordi:closepops', '小窓の外の pointerdown（開いている間だけ）'],
+    timers: ['印付けの間引き 120ms＋requestAnimationFrame']
+  });
   window.__c39 = { open, mods: () => MODS.map((m) => ({ id: m.id, name: m.name, on: isOn(m) })), set(id, v) { saved[id] = !!v; save(); mount(); keepLast(); } };
 })();

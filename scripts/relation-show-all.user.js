@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁴ _ Relation Show All
 // @namespace    https://cordivestium.local/
-// @version      11.53.0
-// @description  v11.53.0: 速く — リレーションのセルの CSS を、重い探し方（[style*=…] の祖先さがし）から印（data-cordi13-pv / data-cordi13-up）に。v1.52.0: 本物の Notion で確かめて修正 — 旧 API（syncRecordValues）が 403 になる所では今の syncRecordValuesMain を使う。閲覧だけのボード（列の見出しに掴む所が無い）でも列を見分ける。v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。ボードビュー: リレーションで分けたボードの列（本 1 冊ごと）を、シリーズ（グループ）ごとに隣どうしへ並べ替え（見た目だけ）、シリーズの最初の列の上に名前とアイコン、境目に縦線。名前のクリックで題名とアイコン・右クリックでサブグループ。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
+// @version      11.54.0
+// @description  v11.54.0: リレーションのセルを描き直して行の高さを変えた後（nudgeRows）に c194:rowlayout を 1 回出す（³³ が星・罫線を測り直す）。後から足されたチップを隠した時も同じ。v11.53.0: 速く — リレーションのセルの CSS を、重い探し方（[style*=…] の祖先さがし）から印（data-cordi13-pv / data-cordi13-up）に。v1.52.0: 本物の Notion で確かめて修正 — 旧 API（syncRecordValues）が 403 になる所では今の syncRecordValuesMain を使う。閲覧だけのボード（列の見出しに掴む所が無い）でも列を見分ける。v1.51.0: サブグループ — グループ（シリーズ・自分で作ったグループ）の中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前を付けて入れる本にチェック。本を右クリックでもサブグループへ移せる。ボードビュー: リレーションで分けたボードの列（本 1 冊ごと）を、シリーズ（グループ）ごとに隣どうしへ並べ替え（見た目だけ）、シリーズの最初の列の上に名前とアイコン、境目に縦線。名前のクリックで題名とアイコン・右クリックでサブグループ。v1.50.0: 再読み込みの時にアイコンが文書の絵のままになる不具合を修正（雛形がアイコン無しのページだと img が無く入れられなかった・記録が届いていない時は後で描き直す）。行の中身が列の見出しと重なる不具合を修正（縦中央そろえを safe に・描き直した後に行の高さを測り直させる）。v1.49.0: 線がまだセルの端まで届いていなかった（実物の Notion ではセルの中身が中身の幅に縮むため CSS の全幅が効かない）→ セルの右端を実測して線を引く・列幅の変更にも追従。v1.48.0: シリーズ見出しの下線・区切り線が、項目の少ないセル（1列・1件など）で見出しの文字の幅までしか引かれていなかったのを、セルの端まで引くように。v1.47.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しをクリックすると編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。シリーズの無い本の「単行」にも既定のアイコン（本）を付け、題名・アイコンを変えられる。本を右クリックすると好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ²³ Page Relation Show All と共通（同じ見出しは DB とページで同じ見た目）。v0.47.0: アイコンの取り違えを修正 — 1冊だけアイコンを変えると同じセルの全部がそのアイコンになっていた。原因は ①雛形（先頭チップ）の画像を他の項目の予備に使っていた ②自己修復が「読み込み中の画像」を同じセルで先に描けた別の項目の画像で上書きしていた ③題名で対応が取れない実物チップ（並び順の当て推量）の画像も使っていた。v0.47.0 は、その項目自身のデータ（page_icon）→ 題名が一致する実物チップ、だけを使い、どちらも無ければ枠だけ残して空にする。attachment: 形式（アップロード画像）のアイコンは Notion の画像経由の URL に変換、notion:// 形式は絵文字扱いしない。v0.46.0: 「並べ直さない（ネイティブのまま）」と決まったセルが、カーソルを当てるたびに消えて出る不具合を修正 — ①不発の判定をセルの中身（行id＋関係の題名＋チップ有無）ごとに覚え、処理済みの印を消して判定し直すのをやめる ②Notion がセルを描き直した瞬間（描画前）に、覚えている「不発」を同期で付ける＝一度も透明にならない ③「関係が無い／表示できる関係が無い」も不発として扱う ④判定の記憶は localStorage に保存（再読み込み後も最初から出る）。v0.45.0: 描き直しを見せない — 表のリレーションセルは再構築が終わるまで透明にし（最長1.2秒で必ず見える）、終わったら短くフェードで出す（HOLD_UNTIL_READY）。スクロールで出てきた行も待ち時間を 300→120ms に短縮。リレーションセルを「作品の並び」として再描画する v0.34.0。発動ゲートは v0.30.0 と同一（チップ付き＝無条件 / チップ無し＝最長題名12字以上）。v0.34.0 は「旧版が残した注入DOMの掃除」を追加：起動時に data-cordi13-done / data-cordi13-cols の付いたセルから cordi13-* の要素を撤去し、隠していた元チップ（data-cordi13-native）を表示へ戻してから、新しいゲートで判定し直します。これで「もうゲートを通らないはずのセルに、古い再構築結果が残る」現象が消えます。__c13.reset() で手動実行もできます。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.so/*
 // @run-at       document-idle
@@ -11,6 +11,10 @@
 // ==/UserScript==
 
 /*
+ * v11.54.0（2026-10-12・³³ 196 と一緒に）
+ *  - 行の高さを Notion に測り直させる nudgeRows()（180ms の間引き）の中で、c194:rowlayout（detail { src: 'c14rel', why: 'rows' }）も出す。
+ *    後から足されたネイティブチップを隠した時（enforceNatives が 1 以上）も nudgeRows を呼ぶ（行の高さが戻るため）。VERSION 定数も 11.54.0 に。
+ *
  * v1.51.0（2026-10-03）
  *  - サブグループ: Notion のボードビューでしかできない「グループの中のグループ」を、リレーションのセルでも。
  *    ただし一律（全部を同じプロパティで分ける）ではなく、グループごとに好きな分け方を作れる。
@@ -669,11 +673,48 @@ PIPE_SHOW_HEADERS: true,   // v0.37.0: パイプ表示でもセクション見�
     DEBUG: false,
   };
 
-const VERSION = '11.52.0';
+const VERSION = '11.54.0';
   const STYLE_ID = 'cordi13-style-v044';
   const TAG = '[C13 v' + VERSION + ']';
 
   function log(s) { console.info(TAG + ' ' + s); }
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let rl196T = 0, rl196Why = '';
+  function rowlayout196(why) {
+    rl196Why = why || rl196Why;
+    clearTimeout(rl196T);
+    rl196T = setTimeout(() => { rl196T = 0; C194.emit('c14rel', rl196Why); rl196Why = ''; }, 100);
+  }
 
   /* ============================================================
    *  グループの編集（¹⁴ Relation Show All と ²³ Page Relation Show All で共通・同じ保存先）
@@ -2149,7 +2190,7 @@ const VERSION = '11.52.0';
   let nudgeT = 0;
   function nudgeRows() {
     clearTimeout(nudgeT);
-    nudgeT = setTimeout(() => { try { window.dispatchEvent(new Event('resize')); } catch (e) { /* noop */ } }, 180);
+    nudgeT = setTimeout(() => { try { window.dispatchEvent(new Event('resize')); } catch (e) { /* noop */ } rowlayout196('rows'); }, 180);   // v11.54.0: 測り直させた後に ³³ へも合図（間引き 100ms で 1 回）
   }
   function cellOfWrap(wrap) { return wrap.closest('.notion-table-view-cell, [data-col-index], td') || wrap.parentElement; }
   function fitLines(wrap) {
@@ -2823,6 +2864,7 @@ const VERSION = '11.52.0';
         if (wrap.querySelector('.cordi13-item, .cordi13-sec-head, .cordi13-sec-gap')) {
           /* v0.38.0: 実体があっても、後から足されたネイティブチップは毎回隠す */
           if (enforceNatives(wrap)) {
+            rowlayout196('rows');   // v11.54.0: 後から足されたチップを隠した＝行の高さが戻る → ³³ へ合図だけ（隠す物が無ければ 0 で呼ばない。window の resize は足さない）
             acted += 1;
             if (acted >= 10) break;
           }
@@ -3177,6 +3219,7 @@ const VERSION = '11.52.0';
       '・実測は __c13.report()' +
       '・シリーズは本側DBの「' + TUNING.SERIES_PROP_NAME + '」で自動グループ化・ゴーストは非表示' +
       (TUNING.HIDE_RELATION_POPUP ? '・+Nのホバーチップは非表示' : '') + '）');
+    C194.report('c14rel', { version: VERSION, observers: ['body MO（childList・subtree）→ sweep・ボード', '線の ResizeObserver（セルの幅）'], listeners: ['contextmenu（capture・本・見出し）', 'cordi-groups-change', 'load（アイコンの自己修復）'], timers: ['sweep の間引き 120ms', '起動後の sweep 200／900／2500ms', 'nudgeRows 180ms → rowlayout196 の間引き 100ms', 'ボードの並べ直し 500ms', '記録待ちの描き直し（最大 3 回）'] });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();

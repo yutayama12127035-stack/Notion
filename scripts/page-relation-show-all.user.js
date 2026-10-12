@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²³ _ Page Relation Show All
 // @namespace    https://cordivestium.local/page-relation-show-all
-// @version      12.10.0
-// @description  v2.9.0: サブグループ — グループの中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前と入れる本。本を右クリックでもサブグループへ。題名とアイコンは ✎（サブグループは見出しのクリック）。¹⁴ と共通の設定。v2.8.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しにカーソルを乗せると右に ✎（または見出しを右クリック）で編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。見出しのクリックは従来どおり畳む／開く。シリーズの無い本の「単行」にも既定のアイコン（本）と見出しを付け、題名・アイコンを変えられる。本を右クリックで好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ¹⁴ Relation Show All と共通。v1.8.0: 誤作動の防止 — ほかの画面（²⁶ のテキストパネル・Notion のメニューやダイアログ・入力欄など）が上に重なっている所を押した時は、その下の見出し・本を拾わない（パネル越しに畳んだり本を開いたりしていた）。v1.7.0: ①1列になったグループ（長い題名のグループ）が見出しクリックで畳めなかった不具合を修正（1列の指定が畳む指定より強かった）。②既定値を運用中の値へ（文字 11px・行の高さ 3.25・アイコン 20px・アイコンと文字 10px・見出しの文字 13px・アイコンと見出し 10px）。行の高さは 4 まで、アイコンと文字は 24px まで広げた。v1.6.0: シリーズ見出しのアイコン（例: ガリレオのフラスコ）の大きさと、アイコンと文字の間を編集パネルで変えられるように（見出しのアイコン 8〜40px・0 = 見出しの文字に合わせる自動）。v1.5.0: 長い題名のグループは1列 — グループの中で一番長い題名が「1列にする長さ」（既定 16字・全角1／半角0.5で数える）以上なら、そのグループだけ1列で題名を省略せずに出す（例:「お隣の天使様にいつの間にか駄目人間にされていた件 − 1」）。0 で無効。編集パネルに項目を追加。v1.4.0: ①グループ（シリーズ）とグループの間隔を編集パネルの上の方に「グループの間」として置き、0〜80px で変えられるように（Notion 側の余白指定に負けない書き方に変更） ②見出しの下の線は点線に固定し、線の編集項目はパネルから外した（コンソールの __c23.set では引き続き変更可）。v1.3.0: 見出しの下の区切り線を編集できるように — 長さ（区画の幅に対する %）・太さ（0 で消す）・濃さ・線と本の間、をパネルとコンソールで。v1.2.0: 見出しクリックで畳めなかった件を作り直し — ①開閉の状態を区画の要素の属性ではなく <head> の専用 <style> に持つ（Notion の編集領域の中は一切書き換えない＝戻されない・描き直しに影響されない） ②押した位置の真下を elementsFromPoint で調べて見出しを見つける（Notion の透明な重なりに押しが吸われても拾う） ③pointerdown / mousedown / pointerup / mouseup / click のうち最初に届いたもので1回だけ開閉。▾（トグル記号）は廃止。v1.1.0: シリーズ見出し（文字・アイコン・件数・▾ のどこでも）をクリックすると畳む／開く。押した瞬間に Notion がブロック選択で区画を描き直し、クリックが見出しに届かず畳めないことがあったのを修正（押した瞬間を ²³ が受け止め、Notion へは渡さない）。Alt（⌥）＋クリックで全見出しをまとめて畳む／開く。▾ の向きで状態を表示。ページを開いた時の「リレーションの区画」（例: 東野圭吾 → Tactus の作品一覧。Notion は10件＋「17 more…」しか出さない）を、¹⁴ Relation Show All と同じ考え方で「全件・シリーズごとの見出し付き」に並べ直す。狭い幅（サイドピーク）向けに、列数は幅から自動（格子）／1列／流し込みを選べる。文字・アイコン・列幅・行間・見出し・題名の省略などを、区画の右上の ⚙ から専用の編集パネルで変えられる（localStorage に保存）。一度表示した区画は記憶し、Notion が描き直した瞬間（描画前）に同じ中身で出す。Notion の元の一覧は消さずに隠すだけ（「リンク」「新規」はそのまま使える）。
+// @version      12.11.0
+// @description  v12.11.0: 区画を差し替えた・外した時だけ c194:rowlayout を 1 回出す（表には触らないので ³³ は測り直すだけ）。v2.9.0: サブグループ — グループの中を、グループごとに好きな名前で分けられる（例: 学園 → アクション・何段でも）。見出しを右クリック → 名前と入れる本。本を右クリックでもサブグループへ。題名とアイコンは ✎（サブグループは見出しのクリック）。¹⁴ と共通の設定。v2.8.0: グループ（シリーズ）見出しの題名とアイコンを個別に変えられるように — 見出しにカーソルを乗せると右に ✎（または見出しを右クリック）で編集パネル（²⁹ Icon Library・絵文字・SVG／画像・アイコンなし・元に戻す）。見出しのクリックは従来どおり畳む／開く。シリーズの無い本の「単行」にも既定のアイコン（本）と見出しを付け、題名・アイコンを変えられる。本を右クリックで好きなグループへ移せる（自分で作ったグループも可・Notion のデータは書き換えない）。設定は ¹⁴ Relation Show All と共通。v1.8.0: 誤作動の防止 — ほかの画面（²⁶ のテキストパネル・Notion のメニューやダイアログ・入力欄など）が上に重なっている所を押した時は、その下の見出し・本を拾わない（パネル越しに畳んだり本を開いたりしていた）。v1.7.0: ①1列になったグループ（長い題名のグループ）が見出しクリックで畳めなかった不具合を修正（1列の指定が畳む指定より強かった）。②既定値を運用中の値へ（文字 11px・行の高さ 3.25・アイコン 20px・アイコンと文字 10px・見出しの文字 13px・アイコンと見出し 10px）。行の高さは 4 まで、アイコンと文字は 24px まで広げた。v1.6.0: シリーズ見出しのアイコン（例: ガリレオのフラスコ）の大きさと、アイコンと文字の間を編集パネルで変えられるように（見出しのアイコン 8〜40px・0 = 見出しの文字に合わせる自動）。v1.5.0: 長い題名のグループは1列 — グループの中で一番長い題名が「1列にする長さ」（既定 16字・全角1／半角0.5で数える）以上なら、そのグループだけ1列で題名を省略せずに出す（例:「お隣の天使様にいつの間にか駄目人間にされていた件 − 1」）。0 で無効。編集パネルに項目を追加。v1.4.0: ①グループ（シリーズ）とグループの間隔を編集パネルの上の方に「グループの間」として置き、0〜80px で変えられるように（Notion 側の余白指定に負けない書き方に変更） ②見出しの下の線は点線に固定し、線の編集項目はパネルから外した（コンソールの __c23.set では引き続き変更可）。v1.3.0: 見出しの下の区切り線を編集できるように — 長さ（区画の幅に対する %）・太さ（0 で消す）・濃さ・線と本の間、をパネルとコンソールで。v1.2.0: 見出しクリックで畳めなかった件を作り直し — ①開閉の状態を区画の要素の属性ではなく <head> の専用 <style> に持つ（Notion の編集領域の中は一切書き換えない＝戻されない・描き直しに影響されない） ②押した位置の真下を elementsFromPoint で調べて見出しを見つける（Notion の透明な重なりに押しが吸われても拾う） ③pointerdown / mousedown / pointerup / mouseup / click のうち最初に届いたもので1回だけ開閉。▾（トグル記号）は廃止。v1.1.0: シリーズ見出し（文字・アイコン・件数・▾ のどこでも）をクリックすると畳む／開く。押した瞬間に Notion がブロック選択で区画を描き直し、クリックが見出しに届かず畳めないことがあったのを修正（押した瞬間を ²³ が受け止め、Notion へは渡さない）。Alt（⌥）＋クリックで全見出しをまとめて畳む／開く。▾ の向きで状態を表示。ページを開いた時の「リレーションの区画」（例: 東野圭吾 → Tactus の作品一覧。Notion は10件＋「17 more…」しか出さない）を、¹⁴ Relation Show All と同じ考え方で「全件・シリーズごとの見出し付き」に並べ直す。狭い幅（サイドピーク）向けに、列数は幅から自動（格子）／1列／流し込みを選べる。文字・アイコン・列幅・行間・見出し・題名の省略などを、区画の右上の ⚙ から専用の編集パネルで変えられる（localStorage に保存）。一度表示した区画は記憶し、Notion が描き直した瞬間（描画前）に同じ中身で出す。Notion の元の一覧は消さずに隠すだけ（「リンク」「新規」はそのまま使える）。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,9 @@
 // ==/UserScript==
 
 /*
+ * v12.11.0（2026-10-12・³³ 196 と一緒に）
+ *   ・API で読み直して区画を差し替えた時（refresh の mount）と、区画を外した時（unmount）だけ c194:rowlayout
+ *     （detail { src: 'c23', why: 'mount' | 'unmount' }）を間引いて 1 回出す。²³ は表（DB のビュー）に触らないので、³³ が測り直すだけで害はない。
  * v2.8.0（2026-10-03）
  *   ・見出しの編集: 見出しにカーソルを乗せると右端に ✎ → 題名とアイコンの編集パネル（見出しの右クリックでも）。
  *     見出しのクリックは今までどおり畳む／開く（⌥で全部）。畳んだ状態は元の題名で覚えるので、題名を変えても保たれる。
@@ -54,10 +57,47 @@
 (() => {
   'use strict';
 
-  const VERSION = '12.10.0';
+  const VERSION = '12.11.0';
   const API = '__c23';
   const TAG = '[²³ v' + VERSION + ']';
   if (window[API] && window[API].version) return;
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let rl196T = 0, rl196Why = '';
+  function rowlayout196(why) {
+    rl196Why = why || rl196Why;
+    clearTimeout(rl196T);
+    rl196T = setTimeout(() => { rl196T = 0; C194.emit('c23', rl196Why); rl196Why = ''; }, 100);
+  }
 
   /* ============================================================
    *  グループの編集（¹⁴ Relation Show All と ²³ Page Relation Show All で共通・同じ保存先）
@@ -843,6 +883,7 @@
   }
   function unmount(info) {
     const old = info.menu.parentElement && info.menu.parentElement.querySelector(':scope > .c23');
+    if (old || info.sec.hasAttribute('data-c23-on')) rowlayout196('unmount');   // v12.11.0: 実際に外した時だけ（「使わない」の区画を見回るたびには出さない）
     if (old) old.remove();
     info.sec.removeAttribute('data-c23-on');
   }
@@ -886,11 +927,15 @@
         MODELS[info.key] = { sig, at: Date.now(), model };
         saveModelsSoon();
         /* 今の区画（作り直されているかもしれない）へ */
+        const m196 = stats.mounts;   // v12.11.0
         for (const inf of findAll()) {
           if (inf.key !== info.key || OFF.includes(inf.propName)) continue;
           mount(inf, model, false);                      // 初回・変更時は短いフェード
           stats.mounts += 1;
         }
+        /* v12.11.0: 区画を差し替えた時だけ c194:rowlayout（間引き 100ms で 1 回）。²³ は表に触らない（EXCLUDE）ので、
+           ³³ が測り直すだけで表への害はない。記憶から同じ中身を出し直す時（handle）・中身が同じ時（same）は出さない */
+        if (stats.mounts > m196) rowlayout196('mount');
       })
       .catch((e) => {
         stats.errors += 1;
@@ -1394,4 +1439,5 @@
     })
   };
   console.info(TAG + ' ページのリレーション区画を全件表示にします。区画の右上 ⚙ で見せ方を編集 / __c23.status()');
+  C194.report('c23', { version: VERSION, observers: ['documentElement MO（childList・subtree）→ scan（描画前）'], listeners: ['pointerdown・mousedown・pointerup・mouseup・click（window／document・capture）', 'keydown（capture）', 'contextmenu・click（capture）', 'cordi-groups-change'], timers: ['記憶の保存の間引き', 'rowlayout196 の間引き 100ms'] });
 })();

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         « No »　³⁴ _ Image Cells
 // @namespace    https://cordivestium.local/image-cells
-// @version      2.2.0
+// @version      2.3.0
 // @description  テーブルビューの画像（ファイルのプロパティ）を、ギャラリーのように大きく・くっきり。Notion は表の画像を高さ 24px・幅 100px の縮小版で出すが、セルの幅いっぱい（または決めた高さ）に広げ、表示の大きさ×画面の解像度に合わせた高解像度版（最大 3840px＝4K）に差し替える。読み込みが済んでから入れ替えるので、ちらつかない。複数の画像は並べて（列の数は指定可）。大きさ・角の丸み・間隔・合わせ方は ²⁶ Atelier「表のセル」から。⌥クリックで原寸の拡大表示。³¹ Atlas Views の代わり（Atlas は廃止）。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
@@ -13,6 +13,10 @@
 // ==/UserScript==
 
 /*
+ * v2.3.0（2026-10-12・³³ 196 と一緒に）
+ *   ・行の高さを変えた後に c194:rowlayout（detail { src: 'c34', why }）を出す（³³ が星・罫線・しおりを測り直す）。合図するのは
+ *     画像のセルを初めて大きくした時（mark）・読み込みで縦横比 --c34-ar が決まった時（ratio）・合わせ方や大きさの値が変わった時（mode）だけ。
+ *     画像は続けて読み込まれるので、間引いて（100ms）1 回にまとめる。高解像度版への差し替え（縦横比は同じ）や、何も変わらない見回りでは出さない。
  * v2.2.0（2026-10-12・³³ 195 と一緒に）
  *   ・「幅に合わせる」（fill）で、縦長の表紙が上下を切られていた。原因: 幅をセルいっぱい（width: 100%）にしたまま高さの上限（--c34-maxh）で
  *     止め、はみ出した分を object-fit: cover で切り抜いていた。→ fill では切り抜かない: 画像の縦横比（読み込んだ画像の幅÷高さ）を
@@ -44,7 +48,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '2.2.0';
+  const VERSION = '2.3.0';
   const TAG = '[³⁴ v' + VERSION + ']';
   if (window.__c34 && window.__c34.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -57,6 +61,43 @@
   const CELL_IMG = '.notion-table-view-cell [data-testid="property-value"] img, .notion-table-view [role="cell"] [data-testid="property-value"] img';
   const STEPS = [400, 800, 1200, 1600, 2400, 3840];
   const isIcon = (img) => !!img.closest('.notion-record-icon, .cordi13-item, [data-cordi13-on]');
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let rl196T = 0, rl196Why = '';
+  function rowlayout196(why) {
+    rl196Why = why || rl196Why;
+    clearTimeout(rl196T);
+    rl196T = setTimeout(() => { rl196T = 0; C194.emit('c34', rl196Why); rl196Why = ''; }, 100);
+  }
 
   /* ============================================================
    *  URL
@@ -112,6 +153,7 @@
     const pv = img.closest('[data-testid="property-value"]');
     if (!pv) return;
     const n = pv.querySelectorAll('img').length;
+    if (pv.getAttribute('data-c34') !== (n > 1 ? 'multi' : 'one') || !img.hasAttribute('data-c34-img')) rowlayout196('mark');   // v2.3.0: 初めて大きくするセル・枚数が変わったセルだけ合図
     pv.setAttribute('data-c34', n > 1 ? 'multi' : 'one');
     img.setAttribute('data-c34-img', '1');
     try { img.loading = 'eager'; img.decoding = 'async'; } catch (e) { /* noop */ }
@@ -131,7 +173,7 @@
     const put = () => {
       if (!img.naturalWidth || !img.naturalHeight) return;
       const v = (img.naturalWidth / img.naturalHeight).toFixed(4);
-      if (img.style.getPropertyValue('--c34-ar') !== v) img.style.setProperty('--c34-ar', v);
+      if (img.style.getPropertyValue('--c34-ar') !== v) { img.style.setProperty('--c34-ar', v); rowlayout196('ratio'); }   // v2.3.0: 読み込みで縦横比が決まった＝行の高さが決まる（続けて読み込まれても間引いて 1 回）
     };
     if (img.complete && img.naturalWidth) put();
     else img.addEventListener('load', put, { once: true });
@@ -150,10 +192,15 @@
     resizeT = setTimeout(() => { try { window.dispatchEvent(new Event('resize')); } catch (e) { /* noop */ } }, 250);
   }
   /* 合わせ方は CSS 変数 --c34-mode（²⁶ Atelier から）→ html の印 */
+  let mode196 = '';   // v2.3.0: 前回の合わせ方と大きさの値（--c34-maxh・-h・-cols・-gap）
   function applyMode() {
     const cs = getComputedStyle(document.documentElement);
     const mode = (P.mode || cs.getPropertyValue('--c34-mode') || 'fill').trim().replace(/["']/g, '') || 'fill';
     if (document.documentElement.getAttribute('data-c34-mode') !== mode) document.documentElement.setAttribute('data-c34-mode', mode);
+    /* v2.3.0: 合わせ方・大きさが変わり、もう大きくした画像がある時だけ合図（行の高さが変わる） */
+    const sig = mode + '|' + ['--c34-maxh', '--c34-h', '--c34-cols', '--c34-gap'].map((k) => cs.getPropertyValue(k).trim()).join('|');
+    if (mode196 && sig !== mode196 && document.querySelector('img[data-c34-img]')) rowlayout196('mode');
+    mode196 = sig;
   }
   function applyVars() {
     const r = document.documentElement.style;
@@ -243,4 +290,5 @@ html[data-c34-mode="height"] img[data-c34-img]${B} { height: var(--c34-h) !impor
     set(o) { Object.assign(P, o || {}); saveP(); applyVars(); applyMode(); scan(); return Object.assign({}, P); },
     off() { P.on = false; saveP(); mo.disconnect(); const s = document.getElementById('c34-css'); if (s) s.remove(); document.querySelectorAll('[data-c34],[data-c34-img]').forEach((el) => { el.removeAttribute('data-c34'); el.removeAttribute('data-c34-img'); }); return 'stopped（__c34.set({ on: true }) と再読み込みで戻ります）'; }
   };
+  C194.report('c34', { version: VERSION, observers: ['body MO（childList・subtree・src）→ rAF で scan'], listeners: ['atelier-change', 'resize（400ms 後に高解像度を選び直す）', 'pointerdown・mousedown・click（capture・⌥クリック）'], timers: ['scan 後の resize 250ms', '読み込み中の再試行 300ms', 'rowlayout196 の間引き 100ms'] });
 })();

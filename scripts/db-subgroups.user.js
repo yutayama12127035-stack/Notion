@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁶ _ Sub Groups
 // @namespace    https://cordivestium.local/sub-groups
-// @version      14.0.0
-// @description  v14.0.0: 「⊞ サブグループ」をビューの先頭（メインのグループより上）から、Notion の道具の段（フィルター・並べ替えの並び）の左端へ。サブグループを「表の続き」でなく色の帯の段に（帯の見出し・件数の札・チェックの進み具合・★平均・行の左の色の線・段の間のすき間）。データベースの「グループ」（Group by）を、ボードビュー以外（表・リスト・ギャラリー）でもサブグループに分ける。Notion の標準ではサブグループはボードだけ。グループの中を、もう 1 つのプロパティ（セレクト・ステータス・マルチセレクト・チェックボックス・日付・人・リレーション・テキスト・数値など）の値ごとに見出しを付けて並べ分け、見出しのクリックで畳む。ビューごとに覚える。グループ分けしていないビューでも使える（ビュー全体をサブグループに分ける）。見た目だけで、Notion のデータや並び順は変えない。
+// @version      14.1.0
+// @description  v14.1.0: 見出しを描き直した・行の並びを変えた run の後だけ c194:rowlayout を 1 回出す（³³ が星・罫線を測り直す）。v14.0.0: 「⊞ サブグループ」をビューの先頭（メインのグループより上）から、Notion の道具の段（フィルター・並べ替えの並び）の左端へ。サブグループを「表の続き」でなく色の帯の段に（帯の見出し・件数の札・チェックの進み具合・★平均・行の左の色の線・段の間のすき間）。データベースの「グループ」（Group by）を、ボードビュー以外（表・リスト・ギャラリー）でもサブグループに分ける。Notion の標準ではサブグループはボードだけ。グループの中を、もう 1 つのプロパティ（セレクト・ステータス・マルチセレクト・チェックボックス・日付・人・リレーション・テキスト・数値など）の値ごとに見出しを付けて並べ分け、見出しのクリックで畳む。ビューごとに覚える。グループ分けしていないビューでも使える（ビュー全体をサブグループに分ける）。見た目だけで、Notion のデータや並び順は変えない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,9 @@
 // ==/UserScript==
 
 /*
+ * v14.1.0（2026-10-12・³³ 196 と一緒に）
+ *   ・行の並び・位置を変えた run（見出しを描いた＝ST.heads > 0・order の当て直し・入れ物の後始末・行を広く描かせる切り替え）の終わりにだけ
+ *     c194:rowlayout（detail { src: 'c36', why: 'run' }）を間引いて 1 回出す。見回りで署名が同じなら出さない。並べ方は前のまま。
  * v14.0.0（2026-10-09）— 「サブグループ」がメインのグループより上に出ていた・表の続きに見えていた、を作り直し
  *   ・「⊞ サブグループ」はビューの先頭（＝メインのグループの見出しより上）に差し込んでいた → Notion の上の道具の段
  *     （フィルター・並べ替え・検索の並び）の左端に、同じ形のボタンとして置く。使っている間はプロパティの名前も出す
@@ -50,7 +53,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '14.0.0';
+  const VERSION = '14.1.0';
   const TAG = '[³⁶ v' + VERSION + ']';
   if (window.__c36 && window.__c36.version) { console.warn(TAG, '旧版が動いています'); return; }
 
@@ -106,6 +109,46 @@
   const active = (c) => !!(c && (c.prop || (c.groups && Object.values(c.groups).some((v) => v && v !== 'off'))));
   const effProp = (c, g) => { const o = c && c.groups && g ? c.groups[g] : ''; if (o === 'off') return ''; return o || (c && c.prop) || ''; };
   const ST = { scans: 0, views: 0, bodies: 0, rows: 0, heads: 0, api: 0, lastError: '' };
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let rl196T = 0, rl196Why = '';
+  function rowlayout196(why) {
+    rl196Why = why || rl196Why;
+    clearTimeout(rl196T);
+    rl196T = setTimeout(() => { rl196T = 0; C194.emit('c36', rl196Why); rl196Why = ''; }, 100);
+  }
+  /* v14.1.0: この run で行の並び・位置を変えたか（見出しを描いた ST.heads > 0 のほか、order の当て直し・入れ物の後始末・行を広く描かせる切り替え）。
+     run() の終わりに 1 回だけ見て、変わっていれば c194:rowlayout。20 秒ごとの見回りで署名が同じなら出さない */
+  let dirty196 = false;
   const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
   const dash = (id) => {
     const h = String(id || '').replace(/-/g, '');
@@ -477,7 +520,7 @@
       if (SIG.get(body) === sig + '#' + stSig && body.querySelector(':scope > .c36-sh')) {
         /* 署名が同じでも Notion が行の style を描き直すことがあるので order だけ当て直す */
         let o = 0;
-        for (const k of order) { o += 1; for (const x of groups.get(k)) { o += 1; if (x.unit.style.order !== String(o)) x.unit.style.setProperty('order', String(o), 'important'); } }
+        for (const k of order) { o += 1; for (const x of groups.get(k)) { o += 1; if (x.unit.style.order !== String(o)) { x.unit.style.setProperty('order', String(o), 'important'); dirty196 = true; } } }   // v14.1.0: 当て直した時だけ印
         continue;
       }
       SIG.set(body, sig + '#' + stSig);
@@ -557,6 +600,7 @@
     vcssFlush();
   }
   function clearBody(b) {
+    dirty196 = true;   // v14.1.0: 呼ばれるのは data-c36-body の付いた入れ物だけ（applyView の 2 か所・clearView）＝行の位置が戻る
     const n = VB.get(b);
     if (n && VCSS.has(n)) { VCSS.delete(n); vcssFlush(); }
     b.removeAttribute('data-c36-b');
@@ -1076,11 +1120,12 @@
       /* サブグループを使っているビューがこの画面にあれば、Notion に行を広く描かせる */
       let need = false;
       for (const v of document.querySelectorAll(VIEW_SEL)) { const bid = blockOf(v); const c = bid && VIEWS[keyOf(v, bid)]; if (active(c)) { need = true; break; } }
-      if (need !== INF.on) { inflate(need); ST.inflated = need; }
+      if (need !== INF.on) { inflate(need); ST.inflated = need; dirty196 = true; }   // v14.1.0: Notion が描く行の範囲が変わる
       for (const v of document.querySelectorAll(VIEW_SEL)) {
         if (v.closest('#c36-menu')) continue;
         try { await applyView(v); } catch (e) { ST.lastError = String(e && e.stack || e); }
       }
+      if (ST.heads > 0 || dirty196) { dirty196 = false; rowlayout196('run'); }   // v14.1.0: 見出しを描き直した・並びを変えた run だけ（間引き 100ms）
     } finally {
       running = false;
       if (again) { again = false; soon(); }
@@ -1115,4 +1160,5 @@
     clear() { VIEWS = {}; saveV(); for (const v of document.querySelectorAll(VIEW_SEL)) clearView(v); run(); },
     run
   };
+  C194.report('c36', { version: VERSION, observers: ['body MO（childList・subtree）→ run', '行の ResizeObserver（仮想スクロールの行）→ run', 'ResizeObserver の包み（document-start・行を広く描かせる）'], listeners: ['keydown（⌃⌥G）', '見出し・⊞ の click／contextmenu'], timers: ['run の間引き 250ms', 'URL の見張り 600ms', '見回りの run（P.refresh・最短 5 秒・使っている時だけ）', 'rowlayout196 の間引き 100ms'] });
 })();

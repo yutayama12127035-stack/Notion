@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　²¹ _ Render Veil
 // @namespace    constellucentia
-// @version      1.2.0
-// @description  v1.2.0: 速く — 幕の上限を短く（ビュー 1.5→0.7 秒・ページ 1.8→0.9 秒）、静けさの判定を 160→110ms に。ページを移る・タブを替える時の待ちが半分以下に。v1.1.1: Stylus ²² v1.1.0 と対（表が page-block の外にある今の構造に合わせた指定）。インラインDBのタブでは幕を下ろさない。v1.1.0: ①グループ開閉では幕を下ろさない（消えて出るのが目立つため。位置は ⁰⁵ v3.6.0 が描画前に合わせる） ②タブ切替・ページ移動は「新しい表が描かれ、⁰⁵ が整列し終わる（settled）」まで幕を開けない（データ待ちの静けさで早く開き、後から表が動いて見えていた） ③上限を延長（view 1.5秒／page 1.8秒）。初回の幕（16c Screen Curtain）が開いた後の「描き直し」を感じさせないための薄い幕。タブ切替・グループ開閉・ビュー切替（?v=）・ページ移動の瞬間だけ、DBの本体（ページ移動では本文全体）を一瞬で透明にし、Notion と各スクリプト（⁰⁵ など）の書き込みが静まってから短くフェードで戻す。見た目は html の属性（data-c21-veil / data-c21-veil-scope）だけで決まり、幕の見た目は Stylus「« No »　²² _ Render Veil」が描く。操作は妨げない。スクロールでは幕を下ろさない。
+// @version      1.3.0
+// @description  v1.3.0: ³³ との契約（c194 v196）— 幕を開ける条件に「³³ が本文の寸法を変えていない（html[data-c194-hold] が無い）」を足す。³³ の上下分割表示（html[data-c194-split]）の間は ⁰⁵ の整列を待たない。上限時間・フェードは v1.2.0 のまま（上限で必ず開く）。v1.2.0: 速く — 幕の上限を短く（ビュー 1.5→0.7 秒・ページ 1.8→0.9 秒）、静けさの判定を 160→110ms に。ページを移る・タブを替える時の待ちが半分以下に。v1.1.1: Stylus ²² v1.1.0 と対（表が page-block の外にある今の構造に合わせた指定）。インラインDBのタブでは幕を下ろさない。v1.1.0: ①グループ開閉では幕を下ろさない（消えて出るのが目立つため。位置は ⁰⁵ v3.6.0 が描画前に合わせる） ②タブ切替・ページ移動は「新しい表が描かれ、⁰⁵ が整列し終わる（settled）」まで幕を開けない（データ待ちの静けさで早く開き、後から表が動いて見えていた） ③上限を延長（view 1.5秒／page 1.8秒）。初回の幕（16c Screen Curtain）が開いた後の「描き直し」を感じさせないための薄い幕。タブ切替・グループ開閉・ビュー切替（?v=）・ページ移動の瞬間だけ、DBの本体（ページ移動では本文全体）を一瞬で透明にし、Notion と各スクリプト（⁰⁵ など）の書き込みが静まってから短くフェードで戻す。見た目は html の属性（data-c21-veil / data-c21-veil-scope）だけで決まり、幕の見た目は Stylus「« No »　²² _ Render Veil」が描く。操作は妨げない。スクロールでは幕を下ろさない。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -31,13 +31,19 @@
  *   ・開ける条件に「切替が実際に起きた（新しいビュー要素 or ?v= の変化）」と「⁰⁵ settled()」を追加
  *     タブを押してからデータが届くまでの静けさで幕が開き、その後に表が描かれて動くのを防ぐ
  *
+ * v1.3.0（2026-10-12）
+ *   ・開ける条件（静けさ）に !C194.hold() を足す — ³³ が本文の寸法を変えている間は開けない
+ *   ・³³ の上下分割表示（C194.split()）の間は ⁰⁵ の settled() を待たない（⁰⁵ はその間、補正対象外）
+ *   ・T の値・上限（timeout）の道は同じ。hold が続いても MAX_*_MS で必ず開く（status().holdAtTimeout に数える）
+ *   ・戻し方: C194 の部品と tick() の 2 つの条件、reveal() の 1 行を外す
+ *
  * 調整: __c21.set({ IN_MS: 200 }) など（localStorage に保存）／ __c21.on(false) で停止／ __c21.status()
  */
 
 (() => {
   'use strict';
 
-  const VERSION = '1.2.0';
+  const VERSION = '1.3.0';
   const API = '__c21';
   const LS_OFF = 'c21-off';
   const LS_TUNE = 'c21-tuning-v1';
@@ -46,6 +52,37 @@
   const de = document.documentElement;
 
   if (window[API] && window[API].version) return;
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
 
   const DEFAULTS = {
     OUT_MS: 70,          // 押した時に透明へ向かう時間
@@ -74,7 +111,7 @@
   let lastMut = 0;
   let tickT = 0, inT = 0;
   let lastHref = location.href;
-  const stats = { view: 0, page: 0, quiet: 0, timeout: 0 };
+  const stats = { view: 0, page: 0, quiet: 0, timeout: 0, holdAtTimeout: 0 };   // v1.3.0: holdAtTimeout = 上限で開いた時に ³³ の hold が残っていた回数
   const log = [];
 
   const now = () => performance.now();
@@ -142,12 +179,14 @@
     const held = t - startAt;
     const max = scope === 'page' ? T.MAX_PAGE_MS : T.MAX_VIEW_MS;
     if (held >= max) return reveal('timeout');
-    if (held >= Math.max(T.MIN_HOLD_MS, phase === 'out' ? T.OUT_MS : 0) && t - lastMut >= T.QUIET_MS && switched() && !c05busy()) return reveal('quiet');
+    /* v1.3.0: ³³ の hold の間は開けない／³³ の上下分割表示の間は ⁰⁵ を待たない */
+    if (held >= Math.max(T.MIN_HOLD_MS, phase === 'out' ? T.OUT_MS : 0) && t - lastMut >= T.QUIET_MS && switched() && !C194.hold() && (C194.split() || !c05busy())) return reveal('quiet');
     tickT = setTimeout(tick, 30);
   }
 
   function reveal(why) {
     stats[why] += 1;
+    if (why === 'timeout' && C194.hold()) stats.holdAtTimeout += 1;   // v1.3.0
     if (log.length) log[log.length - 1].戻し = why + '（' + Math.round(now() - startAt) + 'ms）';
     /* 最後の書き込みが幕の下で描かれてから戻す */
     requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -260,6 +299,12 @@
   document.addEventListener('pointerdown', onPointerDown, true);
   document.addEventListener('keydown', onKeyDown, true);
   writeVars();
+  C194.report('c21', {
+    version: VERSION,
+    observers: ['documentElement MO（childList・subtree・style/aria/⁰⁵ の属性。静けさは幕の間だけ数える）'],
+    listeners: ['document pointerdown（capture）', 'document keydown（capture）', 'popstate', 'history.pushState/replaceState の包み'],
+    timers: ['tick 30ms（幕の間だけ）', 'フェード後の後始末 IN_MS+60ms']
+  });
 
   window[API] = {
     version: VERSION,
