@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         16c Screen Curtain
 // @namespace    c16
-// @version      3.0.0
-// @description  v3.0.0: 「出来上がった画面だけ」を出す幕 — 時計ではなく各柱の「整いました」の合図で開く（本文が描けた・¹⁶ の並べ替えが落ち着いた・³³ の輪と検索窓が置けた・⁰⁵ の整列が済んだ・書体が届いた）。合図がそろったら 1〜2 コマ待って、静かにフェードで開く。前回まで来た合図は覚えておき（入れていない柱は待たない）、合図が来ない時も本文から 2.6 秒・開いてから 7 秒で必ず開く。v2.0.0 は「2.5 秒で必ず開く」だったため、読み込みに 4 秒かかる端末では整う前に開き、描き直しが見えていた。
+// @version      3.1.0
+// @description  v3.1.0: ³³ の Next（c194）が有効な DB の全面ページでは、³³ の初回の整列が済むまで（html[data-c194-ready] があり data-c194-hold が無い）待つ合図を 1 つ足した（待つ上限は今までの settleMax のまま・³³ の合図と同じく覚える。開いた理由・時刻は c194）。v3.0.0: 「出来上がった画面だけ」を出す幕 — 時計ではなく各柱の「整いました」の合図で開く（本文が描けた・¹⁶ の並べ替えが落ち着いた・³³ の輪と検索窓が置けた・⁰⁵ の整列が済んだ・書体が届いた）。合図がそろったら 1〜2 コマ待って、静かにフェードで開く。前回まで来た合図は覚えておき（入れていない柱は待たない）、合図が来ない時も本文から 2.6 秒・開いてから 7 秒で必ず開く。v2.0.0 は「2.5 秒で必ず開く」だったため、読み込みに 4 秒かかる端末では整う前に開き、描き直しが見えていた。
 // @match        https://app.notion.com/*
 // @match        https://www.notion.com/*
 // @match        https://www.notion.so/*
@@ -25,8 +25,13 @@
  *     ③ ⁰⁵ の整列が済んだ（__constellucentiaFullDbBodyAlignment__.settled()）
  *     ④ 書体が届いた（本文から最長 0.5 秒）
  *     ⑤ 条件がそろってから、画面の変化が 140ms 止まるのを待つ（最長 0.32 秒）→ 次のコマで開く
+ *     ⑥ v3.1.0: ³³ の Next（c194）が有効（html[data-c194-on]）で、DB の全面ページ（³³ が本文の枠に付ける
+ *          .notion-scroller[data-c154-db]）の時だけ、³³ の初回の整列が済んだ（html[data-c194-ready] があり data-c194-hold が無い）
+ *          ³³ がまだ印を付けていない時は、前回この合図を見ていれば本文の形で DB の全面ページと見なして待つ
+ *        （来なければ ① から settleMax で開く。開いた理由は 'settle-max:c194'、合図の時刻は __c16c().at.c194）
  *
  *   覚えておく: ¹⁶・³³ の合図を一度でも見たら localStorage['c16c.gates'] に記録し、次からは「起動が遅れても待つ」。
+ *              v3.1.0: c194 も同じ（DB の全面ページで c194 の合図を見たら mem.c194 = 1。全面ページなのに来なかったら忘れる）。
  *              サイドバーが見えていたのに来なかった合図は忘れる（その柱を外した時に毎回待たない）。
  *   保険: 本文が出てから 2.6 秒・ページを開いてから 7 秒で必ず開く。CSS 側も、このスクリプトが動いていれば 9 秒、
  *        動いていなければ 2.5 秒で必ず開く（html[data-c16c-open="0"] の有無で見分ける）。
@@ -38,7 +43,7 @@
   if (window.__c16cLoaded) return;
   window.__c16cLoaded = true;
 
-  const VERSION = '3.0.0';
+  const VERSION = '3.1.0';
   const T = { quiet: 140, tail: 320, fonts: 500, settleMax: 2600, hard: 7000, c16Grace: 700 };
   try { const o = JSON.parse(localStorage.getItem('c16c.tune') || 'null'); if (o) for (const k of Object.keys(T)) if (isFinite(+o[k]) && +o[k] >= 0 && +o[k] <= 30000) T[k] = +o[k]; } catch (e) { /* noop */ }
   const MEM_K = 'c16c.gates';
@@ -68,6 +73,8 @@
         mem.c33 = 'c33' in at ? 1 : 0;
       }
       mem.side = 'side' in at ? 1 : 0;
+      /* v3.1.0: c194 の整列を待った DB の全面ページで合図が来たか（来なかった時は忘れる＝³³ の Next を切った時に毎回待たない） */
+      if ('c194db' in at) mem.c194 = 'c194' in at ? 1 : 0;
       localStorage.setItem(MEM_K, JSON.stringify(mem));
       /* 幕の後でサイドバーが出てきた時も覚える（次からは、出るまで待つ） */
       if (!mem.side) [1200, 4000].forEach((ms) => setTimeout(() => { try { if (!mem.side && sideShown()) { mem.side = 1; localStorage.setItem(MEM_K, JSON.stringify(mem)); } } catch (e) { /* noop */ } }, ms));
@@ -98,6 +105,10 @@
     const r = s.getBoundingClientRect();
     return r.width > 60 && r.right > 60 && r.height > 120;
   }
+  /* v3.1.0: DB の全面ページの形（³³ の data-c154-db と同じ見分け方: 本文の枠の中に DB の題字の箱があり、ページ本文の中ではない） */
+  function fullDbShape() {
+    try { const b = document.querySelector('.notion-frame .notion-scroller .notion-collection_view_page-block'); return !!(b && !b.closest('.notion-page-content')); } catch (e) { return false; }
+  }
   function gates(t, contentAt) {
     const wait = [];
     /* サイドバー（前回出ていたのに、まだ描かれていない時は待つ。閉じてある時は待たない） */
@@ -114,6 +125,17 @@
       }
       const c33on = attr('data-c33-boot') != null || mem.c33 === 1;
       if (c33on) { if (attr('data-c33-ready') === '1') seen('c33'); else wait.push('c33'); }
+    }
+    /* v3.1.0: ³³ の Next（c194）の初回の整列（DB の全面ページだけ。サイドバーの有無にかかわらず）。
+     *   ³³ が c194 を有効にしている時は ³³ の判定（本文の枠の data-c154-db）で DB の全面ページか決める。
+     *   ³³ がまだ印を付けていない時は、前回この合図を見ていれば（mem.c194）本文の形（枠の中の DB の題字の箱・ページ本文の外）で待つ */
+    const c194on = attr('data-c194-on') != null;
+    const c194db = c194on
+      ? !!document.querySelector('.notion-frame .notion-scroller[data-c154-db]')
+      : mem.c194 === 1 && fullDbShape();
+    if (c194db) {
+      seen('c194db');
+      if (attr('data-c194-ready') != null && attr('data-c194-hold') == null) seen('c194'); else wait.push('c194');
     }
     /* ⁰⁵ の整列 */
     try { const api = window.__constellucentiaFullDbBodyAlignment__; if (api && typeof api.settled === 'function') { if (api.settled()) seen('c05'); else wait.push('c05'); } } catch (e) { /* noop */ }
@@ -149,7 +171,7 @@
   /* 合図の属性が付いた瞬間にも確かめる（30ms ごとの見回りを待たない） */
   try {
     const sig = new MutationObserver(() => { if (!done && contentAt) { clearTimeout(timer); tick(); } });
-    const go = () => { if (!de()) return setTimeout(go, 10); sig.observe(de(), { attributes: true, attributeFilter: ['data-c16-ready', 'data-c16-settled', 'data-c33-ready'] }); };
+    const go = () => { if (!de()) return setTimeout(go, 10); sig.observe(de(), { attributes: true, attributeFilter: ['data-c16-ready', 'data-c16-settled', 'data-c33-ready', 'data-c194-ready', 'data-c194-hold'] }); };
     go();
   } catch (e) { /* noop */ }
   timer = setTimeout(tick, 50);

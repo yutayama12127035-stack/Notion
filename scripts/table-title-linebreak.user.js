@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³⁰ _ Table Title Line Break
 // @namespace    https://cordivestium.local/table-title-linebreak
-// @version      1.1.0
-// @description  v1.1.0: ギャラリー・ボード・リストのカードが崩れる不具合を修正（カードにまで表のセル用の「高さを中身に・はみ出し表示」を当てていた。カードは改行の折り返しだけに）。テーブルビューでもタイトルを改行できるように（本来はギャラリービューでしかできない裏ワザ）。題字のセルを編集中に ⇧Enter または ⌥Enter（Excel と同じ）で改行。改行を含むタイトルは、テーブル・リストでも折り返して表示する。編集欄へ直接入れられない時は Notion の API でタイトルに改行を書き込む。
+// @version      1.2.0
+// @description  v1.2.0: 表の題字セル・行の印を付けた／外した時だけ c194:rowlayout を 1 回出す（³³ が星・罫線を測り直す）。v1.1.0:ギャラリー・ボード・リストのカードが崩れる不具合を修正（カードにまで表のセル用の「高さを中身に・はみ出し表示」を当てていた。カードは改行の折り返しだけに）。テーブルビューでもタイトルを改行できるように（本来はギャラリービューでしかできない裏ワザ）。題字のセルを編集中に ⇧Enter または ⌥Enter（Excel と同じ）で改行。改行を含むタイトルは、テーブル・リストでも折り返して表示する。編集欄へ直接入れられない時は Notion の API でタイトルに改行を書き込む。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -13,6 +13,9 @@
 // ==/UserScript==
 
 /*
+ * v1.2.0（2026-10-12・³³ 196 と一緒に）
+ *   ・印（data-c30-nl・-cell・-up・-row）を表のセルで実際に付けた／外した時だけ、MO の 1 回分の後と初回の見回りの後に
+ *     c194:rowlayout（detail { src: 'c30', why: 'mo' | 'init' }）を間引いて 1 回出す。印の付け方・CSS は前のまま。
  * v1.0.0（2026-10-03）
  *   ・なぜテーブルでは改行できないのか:
  *       Notion のデータ（タイトル）は改行文字を持てる（ギャラリーのカードで改行すると、そのまま保存される）。
@@ -30,7 +33,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const TAG = '[³⁰ v' + VERSION + ']';
   if (window.__c30 && window.__c30.version) { console.warn(TAG, '旧版 ' + window.__c30.version + ' が動いています'); return; }
 
@@ -42,6 +45,43 @@
   const LEAF = '[contenteditable="true"]';
   const STYLE_ID = 'c30-css';
   const ST = { inserted: 0, viaApi: 0, failed: 0, lastError: '' };
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  let rl196T = 0, rl196Why = '';
+  function rowlayout196(why) {
+    rl196Why = why || rl196Why;
+    clearTimeout(rl196T);
+    rl196T = setTimeout(() => { rl196T = 0; C194.emit('c30', rl196Why); rl196Why = ''; }, 100);
+  }
 
   /* ───── 表示 ───── */
   function installCss() {
@@ -64,7 +104,11 @@ html [data-c30-row="1"]:not(#c30a) { height: auto !important; min-height: 0 !imp
 `;
     (document.head || document.documentElement).appendChild(st);
   }
-  const setAttr = (el, k, v) => { if (el && el.getAttribute(k) !== v) el.setAttribute(k, v); };
+  /* v1.2.0: 表のセル・行の印を実際に付けた／外した（＝行の高さが変わる）かどうか。
+     MO の 1 回分の処理と、初回の見回りの後に 1 回だけ見て、変わっていれば c194:rowlayout（³³ が測り直す）。何も変えない見回りでは出さない */
+  let dirty196 = false;
+  const flush196 = (why) => { if (dirty196) { dirty196 = false; rowlayout196(why); } };
+  const setAttr = (el, k, v) => { if (el && el.getAttribute(k) !== v) { el.setAttribute(k, v); return true; } return false; };   // v1.2.0: 変えた時は true
   /* 改行を含む文字の入れ物に印。セル・行にも印（高さを中身に合わせる） */
   function markNode(tn) {
     const el = tn.parentElement;
@@ -72,22 +116,24 @@ html [data-c30-row="1"]:not(#c30a) { height: auto !important; min-height: 0 !imp
     const cell = el.closest(CELL);
     if (!cell) return;
     if (el.isContentEditable && el.closest('[role="dialog"]')) return;
-    setAttr(el, 'data-c30-nl', '1');
+    let chg = setAttr(el, 'data-c30-nl', '1');   // v1.2.0: 合図に数えるのは表のセルの時だけ（カードは ³³ の表と関係ない）
     /* v1.1.0: 高さ・はみ出しを変えるのは表のセルだけ。ギャラリー・ボード・リストのカードは折り返しだけ
        （カードにも印を付けていたため、カードの高さと切り抜きが外れて見た目が崩れていた） */
     const tcell = el.closest('.notion-table-view-cell');
     if (!tcell) return;
-    setAttr(tcell, 'data-c30-cell', '1');
-    for (let p = el.parentElement; p && p !== tcell; p = p.parentElement) setAttr(p, 'data-c30-up', '1');
+    chg = setAttr(tcell, 'data-c30-cell', '1') || chg;
+    for (let p = el.parentElement; p && p !== tcell; p = p.parentElement) chg = setAttr(p, 'data-c30-up', '1') || chg;
     const row = tcell.closest('.notion-collection-item, .notion-table-view-row');
-    if (row && row !== tcell) setAttr(row, 'data-c30-row', '1');
+    if (row && row !== tcell) chg = setAttr(row, 'data-c30-row', '1') || chg;
+    if (chg) dirty196 = true;
   }
   function unmark(el) {
+    if (el.hasAttribute('data-c30-nl') && el.closest('.notion-table-view-cell')) dirty196 = true;   // v1.2.0
     el.removeAttribute('data-c30-nl');
   }
   function scan(root) {
     if (!root || root.nodeType !== 1) return;
-    root.querySelectorAll('[data-c30-cell]:not(.notion-table-view-cell), [data-c30-up]:not(.notion-table-view-cell *), [data-c30-row]:not(:has(.notion-table-view-cell))').forEach((el) => ['data-c30-cell', 'data-c30-up', 'data-c30-row'].forEach((a) => el.removeAttribute(a)));
+    root.querySelectorAll('[data-c30-cell]:not(.notion-table-view-cell), [data-c30-up]:not(.notion-table-view-cell *), [data-c30-row]:not(:has(.notion-table-view-cell))').forEach((el) => { dirty196 = true; ['data-c30-cell', 'data-c30-up', 'data-c30-row'].forEach((a) => el.removeAttribute(a)); });   // v1.2.0: 選ばれた要素は必ず印を持つ＝外せば変化
     if (!root.closest(CELL) && !root.querySelector(CELL)) return;
     const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let n;
@@ -110,9 +156,11 @@ html [data-c30-row="1"]:not(#c30a) { height: auto !important; min-height: 0 !imp
           else if (nd.nodeType === 1) scan(nd);
         }
       }
+      flush196('mo');   // v1.2.0: この回で印が変わった時だけ（間引き 100ms で 1 回に）
     });
     mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
     scan(document.body);
+    flush196('init');   // v1.2.0: 初回の見回りで印を付けた時だけ
   }
 
   /* ───── Notion の API ───── */
@@ -302,4 +350,5 @@ html [data-c30-row="1"]:not(#c30a) { height: auto !important; min-height: 0 !imp
     },
     _spliceTitle: spliceTitle
   };
+  C194.report('c30', { version: VERSION, observers: ['documentElement MO（childList・subtree・characterData）'], listeners: ['keydown・keypress・keyup・beforeinput（capture・⇧Enter／⌥Enter）'], timers: ['rowlayout196 の間引き 100ms'] });
 })();

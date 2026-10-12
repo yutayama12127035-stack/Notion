@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹³ _ Left-Edge Unifier
 // @namespace    constellucentia
-// @version      19.3.0
-// @description  v19.3.0: 題字とリレーションを形で見分ける（⁰⁹ の印を待たない）— 題字＝アイコン（role=button）の入れ物＋文字の段、リレーション＝折り返す段の中のチップ。題字が 2 列目以降の表（Medias の Index 等）で題字をリレーション列と取り違え、アイコンの入れ物に -1.6px の寄せを当ててアイコンが文字より下にずれていたのを修正。リレーション列の寄せはリレーションの形のセルだけに付ける。フルDBの本文セル左端の統一（インラインDB・ピーク・通常ページは対象外）。v9.3: 今の Notion では表・タブがタイトルの page-block の外にあるため、v9 の「page-block の中だけ」判定で本文・タブ・列見出しの処理が止まっていたのを修正（フルDBページ＝html[data-c05-full] のメイン枠なら対象）。v9.2: ⁰⁵ v3.4.0 が html[data-c05-full] を付けるようになり、グループ見出しの寄せが初めて効くため、効かないまま積み上がっていた値を一度だけ 0 に戻して測り直す。v9.1: 描画のたびのアイコンのずれを除去（列見出し1列目の印を最初のフレームから付ける・ピン留め見出しにも付ける／タブの道筋を複数記憶して上書き合戦をやめる／タブ・見出しの自動寄せは一度合ったら入室のたびに測り直さない）。① リレーション列 -1.6px（v9: 列ごと全行・描画前に印） ② タイトル列 ⁰⁹ のアイコン箱 margin +2px ③ 基準は「DBヘッダー1列目」（読むだけ）。タブのアイコン/文字を translate で寄せる（印は描画前に同期で付ける）。グループ見出しのアイコンは構造セレクタで translate（印なし）。文字は ¹² の gap。④ v9: 測り直しは静かな時だけ・2回一致・0.5px以上の差だけ（タブ切替・スクロール中は書かない）。⁰⁵ Layout Lock の値が変わったら追従。線の実測表は __c12.rows()。
+// @version      19.4.0
+// @description  v19.4.0: ³³ との契約（c194 v196）— ³³ が本文の寸法を変えている間（html[data-c194-hold]）と上下分割表示の間（html[data-c194-split]）は測り直さず、外れた時に 1 回だけ測る。³³ の索引帯（[data-c194-band]）のタブは測らない（³³ が書体・余白を描き、¹³ の translate も打ち消すため）。¹⁴Rel が組み直したリレーションのセル（[data-cordi13-on]・[data-cordi13-done]）は測る範囲から外し、align() で上限（MAX_MS_PX）に当たる値は覚えずに state() の「上限で止めた列」に記録だけ。v19.3.0: 題字とリレーションを形で見分ける（⁰⁹ の印を待たない）— 題字＝アイコン（role=button）の入れ物＋文字の段、リレーション＝折り返す段の中のチップ。題字が 2 列目以降の表（Medias の Index 等）で題字をリレーション列と取り違え、アイコンの入れ物に -1.6px の寄せを当ててアイコンが文字より下にずれていたのを修正。リレーション列の寄せはリレーションの形のセルだけに付ける。フルDBの本文セル左端の統一（インラインDB・ピーク・通常ページは対象外）。v9.3: 今の Notion では表・タブがタイトルの page-block の外にあるため、v9 の「page-block の中だけ」判定で本文・タブ・列見出しの処理が止まっていたのを修正（フルDBページ＝html[data-c05-full] のメイン枠なら対象）。v9.2: ⁰⁵ v3.4.0 が html[data-c05-full] を付けるようになり、グループ見出しの寄せが初めて効くため、効かないまま積み上がっていた値を一度だけ 0 に戻して測り直す。v9.1: 描画のたびのアイコンのずれを除去（列見出し1列目の印を最初のフレームから付ける・ピン留め見出しにも付ける／タブの道筋を複数記憶して上書き合戦をやめる／タブ・見出しの自動寄せは一度合ったら入室のたびに測り直さない）。① リレーション列 -1.6px（v9: 列ごと全行・描画前に印） ② タイトル列 ⁰⁹ のアイコン箱 margin +2px ③ 基準は「DBヘッダー1列目」（読むだけ）。タブのアイコン/文字を translate で寄せる（印は描画前に同期で付ける）。グループ見出しのアイコンは構造セレクタで translate（印なし）。文字は ¹² の gap。④ v9: 測り直しは静かな時だけ・2回一致・0.5px以上の差だけ（タブ切替・スクロール中は書かない）。⁰⁵ Layout Lock の値が変わったら追従。線の実測表は __c12.rows()。
 // @match        *://www.notion.so/*
 // @match        *://app.notion.so/*
 // @match        *://www.notion.com/*
@@ -13,6 +13,17 @@
 // ==/UserScript==
 
 /*
+ * ============================================================
+ *  v19.4.0（内部 9.4.0・2026-10-12）— ³³ v196 との契約（c194）。判定・値・時間は v19.3.0 と同一
+ *    ① quiet(): ¹⁸ の押さえ（[data-c18-shift]）と並べて !C194.hold() && !C194.split()。
+ *       外れた時は C194.onRelease から 1 回だけ scheduleCal（待つ間に見回りを足さない）
+ *    ② ³³ の索引帯（[data-c194-band]）の中のタブは測らない（snapshot のタブの段・markLines の実測）。
+ *       ³³ が帯のタブの書体と余白を描き、[data-c194-band] [data-c12-ln] { translate: none } で打ち消すため、
+ *       そこで測った差を積んでも意味が無い（帯が外れた時に効く値が狂うだけ）
+ *    ③ ¹⁴Rel が組み直したリレーションのセル（中に [data-cordi13-on]／[data-cordi13-done]）は bodyCellForColumn で
+ *       選ばない＝測る範囲の外（依頼主の「判定 NO」Creators −43.6 / Series −29.6 / Synopsis −24.6 はこのセルの差）
+ *    ④ align(): 上限（MAX_MS_PX）に当たる値は列別に覚えない。state() の「上限で止めた列」に記録だけ
+ *    戻し方: C194 の部品・quiet() の 2 条件・onRelease の 1 行・snapshot/markLines の帯の条件・bodyCellForColumn の 1 行・align() の 2 行を外す
  * ============================================================
  *  v9.3.0（2026-09-30）
  *    inScope(): v9.0 で足した「.notion-collection_view_page-block の中だけ」は、表・タブが page-block の
@@ -111,7 +122,40 @@
     };
   })();
 
-  const VERSION = '9.3.0';
+  const VERSION = '9.4.0';
+
+  /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
+  const C194 = (() => {
+    const RT = Symbol.for('constellucentia.runtime');
+    const rt = () => { try { const r = window[RT]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } };
+    const html = () => document.documentElement;
+    const has = (key, attr) => { const r = rt(); if (r) { try { return r.contract.has(key); } catch (e) { /* 次へ */ } } const h = html(); return !!(h && h.hasAttribute(attr)); };
+    return Object.freeze({
+      hold: () => has('hold', 'data-c194-hold'),
+      split: () => has('split', 'data-c194-split'),
+      ready: () => has('ready', 'data-c194-ready'),
+      on: () => has('on', 'data-c194-on'),
+      emit(src, why) {
+        const detail = { src: String(src), why: String(why || '') };
+        const r = rt();
+        if (r) { try { r.events.emit('c194:rowlayout', detail); return; } catch (e) { /* 素の発火へ */ } }
+        try { document.dispatchEvent(new CustomEvent('c194:rowlayout', { detail })); } catch (e) { /* noop */ }
+      },
+      /* hold（または split）が外れた時に fn を 1 回呼ぶ。返り値で止められる */
+      onRelease(fn, attrs) {
+        const h = html(); if (!h || typeof MutationObserver !== 'function') return () => {};
+        const names = attrs || ['data-c194-hold'];
+        const on = () => names.some((a) => h.hasAttribute(a));
+        let was = on();
+        const mo = new MutationObserver(() => { const now = on(); if (was && !now) { try { fn(); } catch (e) { /* noop */ } } was = now; });
+        mo.observe(h, { attributes: true, attributeFilter: names });
+        return () => mo.disconnect();
+      },
+      report(name, info) { const r = rt(); if (r && r.inventory) { try { r.inventory.report(name, info); } catch (e) { /* noop */ } } }
+    });
+  })();
+  const clamped = {};          // v19.4.0: align() が上限に当たって覚えなかった列（列名 → 求めた値）
+  let c194Releases = 0;        // v19.4.0: hold・split が外れて測り直しを置いた回数
   const TAGW = '[C12-Unifier v' + VERSION + ']';
   const PREFIX = 'constellucentia-left-edge-unifier-';
   const STYLE_ID_BASE = PREFIX + 'style-v900-base';
@@ -435,6 +479,7 @@
       for (const c of Array.from(row.querySelectorAll('.notion-table-view-cell'))) {
         const r = c.getBoundingClientRect();
         if (r.left < hr.left - 3 || r.left >= hr.left + hr.width) continue;
+        if (c.querySelector('[data-cordi13-on], [data-cordi13-done]')) continue;   // v19.4.0: ¹⁴Rel が組み直したセルは測らない
         if (hostOf(c) && visible(c)) return c;
       }
     }
@@ -535,7 +580,8 @@
     add('ヘッダー1列目(基準)', h1, h1, '基準点（読むだけ・書かない）');
     if (bCell) add(isTitleCol(bCell) ? '本文(タイトル列)' : '本文(リレーション列)', bCell, bCell, '');
     const tEl = tabEl();
-    if (tEl) add('タブ(' + String(tEl.textContent || '').trim().slice(0, 12) + ')', tEl, tEl,
+    /* v19.4.0: ³³ の索引帯の中のタブは測らない（³³ が書体・余白を描き、¹³ の translate も打ち消す） */
+    if (tEl && !tEl.closest('[data-c194-band]')) add('タブ(' + String(tEl.textContent || '').trim().slice(0, 12) + ')', tEl, tEl,
       'translate アイコン ' + LN['tab-icon'] + ' / 文字 ' + LN['tab-text']);
     const gEl = groupHeaderEl();
     if (gEl) {
@@ -733,7 +779,7 @@
   }
   function markLines() {
     if (!linesOn) return;
-    for (const t of Array.from(document.querySelectorAll(TAB_UNMARKED))) if (inScope(t)) markTab(t);
+    for (const t of Array.from(document.querySelectorAll(TAB_UNMARKED))) if (inScope(t) && !t.closest('[data-c194-band]')) markTab(t);   // v19.4.0: 帯の中は実測しない（道筋で付く印はそのまま）
   }
 
   function computeRel(view) {
@@ -807,7 +853,8 @@
       n - lastSwitch >= QUIET_SWITCH_MS &&
       !document.hidden &&
       !document.documentElement.hasAttribute('data-c16-dragging') &&
-      !document.querySelector('[data-c18-shift]');
+      !document.querySelector('[data-c18-shift]') &&
+      !C194.hold() && !C194.split();   // v19.4.0: ³³ が本文の寸法を変えている間・上下分割表示の間も測らない
   }
   function scheduleCal(delay, withLines) {
     if (withLines) calLines = true;
@@ -1126,6 +1173,9 @@
       let wrote = 0;
       for (const b of bad) {
         if (b.指示margin !== null && Math.abs(b.適用margin - b.指示margin) > 0.05) continue;
+        /* v19.4.0: 上限に当たる値は覚えない（列別に ±24px を積むと、その列のセルが大きくずれる）。記録だけ */
+        const want = r1(b.適用margin - b.差);
+        if (Math.abs(want) >= MAX_MS_PX) { clamped[b.列名] = want; continue; }
         const next = r1(Math.max(-MAX_MS_PX, Math.min(MAX_MS_PX, b.適用margin - b.差)));
         if (b.担当.indexOf('本スクリプト(タイトル') === 0) titleMs = next;
         else msByName.set(b.列名, next);
@@ -1241,6 +1291,9 @@
   applyBodyStyle();
 
   mo.observe(document.documentElement, { childList: true, subtree: true });
+  /* v19.4.0: hold・split が外れた時に 1 回だけ測り直す（静かになるのを待ってから・待つ間に見回りを足さない）。
+     測り直しが既に予約・進行中（入室の 5 秒後など）なら、それが外れた後の 1 回になるので置き直さない */
+  C194.onRelease(() => { c194Releases += 1; if (!calT && !calStart) scheduleCal(QUIET_MUT_MS); }, ['data-c194-hold', 'data-c194-split']);
 
   document.addEventListener('scroll', (e) => {
     const t = e && e.target;
@@ -1306,9 +1359,19 @@
       ライン: (linesOn ? 'ON ' : 'OFF ') + JSON.stringify(LN) + (linesCal ? '（合わせ済み）' : '（未調整）'),
       グループ見出しの文字: '¹² の gap（自動 ' + (autoGroup ? 'ON' : 'OFF') + ' / 試行 ' + groupTries + '）',
       直近の測り直し: lastCal,
-      強制: forced
+      強制: forced,
+      /* v19.4.0 */
+      上限で止めた列: { ...clamped },
+      c194: { hold: C194.hold(), split: C194.split(), 外れて測り直し: c194Releases }
     })
   };
+
+  C194.report('c13', {
+    version: VERSION,
+    observers: ['documentElement MO（childList・subtree・サイドバーと編集中の文字は捨てる）', 'html MO（data-c194-hold・data-c194-split の外れ）'],
+    listeners: ['document scroll（capture）', 'document pointerdown（capture）', 'document keydown（capture）', 'window resize', 'DOMContentLoaded'],
+    timers: ['測り直し（静かな時だけ・250ms で待ち直し・12 秒で諦め）', '掃除 5 秒ごと', '起動後 3 秒・7 秒の確認']
+  });
 
   console.log('%c' + TAGW + ' 印は描画前に同期で付けます。測り直しは静かな時だけ。実測: __c12.rows() / 状態: __c12.state()',
     'background:#a07; color:#fff; padding:1px 6px; border-radius:3px;');

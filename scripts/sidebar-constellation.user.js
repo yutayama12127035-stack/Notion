@@ -14810,6 +14810,11 @@ ${S}:not([data-c124-motion]) :is(#c164-cat, #c164-cat *, #c164-link > i, #c164-h
   function watch174(sc, E) {
     if (!Z174.ro && typeof ResizeObserver === 'function') Z174.ro = new ResizeObserver(() => soon174(80));
     if (!Z174.mo) Z174.mo = new MutationObserver((recs) => {
+      /* v196: 新しいビューの表の箱が入った時は、間引かずに次のフレームで倍率を決める（切り替えの後で行が動かない）。表の中の行の出し入れは見ない */
+      for (const r of recs) {
+        if (!r.addedNodes.length || (r.target.closest && r.target.closest('.notion-table-view'))) continue;
+        for (const n of r.addedNodes) if (n.nodeType === 1 && (n.matches('.notion-table-view') || n.querySelector('.notion-table-view'))) { Z174.dirty = true; soon174(0); return; }
+      }
       /* 行の描き分け（見えている行の出し入れ）だけの変化は見ない */
       for (const r of recs) {
         const t = r.target;
@@ -16613,7 +16618,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     bandSync194(E);
     split196(E);
     tblSync194(E);
-    N194.starOn = !!(E && ZN194.stars && N194.host);
+    N194.starOn = !!(E && ZN194.stars && host194());   // v196: 重ねの層は魚の導入・案内が作っていたので、導入が出ない時（reduced motion・見た DB）は星も出なかった。ここで作る
     why194('star', E ? (!ZN194.stars ? '⚙ で切っています' : !N194.host ? '重ねの層がありません' : '') : '表が見つかりません（' + ((E0 && E0.why) || 'DB ではない') + '）。__c33.find() に段ごとの結果');
     if (!N194.starOn) starHide194();
     /* v196: 初回の整列 — 表が見つかった・表でない形と分かったら enter の hold を外す（まだ何も描かれていない間は上限まで待つ） */
@@ -16627,7 +16632,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     N194.vid = vid;
     N194.vgen++;
     gen196('view');
-    if (prev && prev !== vid) { hold196('view', true); viewSettle196(); }   // v196: 新しいビューの表が描き終わるまで（初めの 1 回は enter が待つ）
+    if (prev && prev !== vid) { hold196('view', true); viewSettle196(); Z174.dirty = true; soon174(0); }   // v196: 新しいビューの表が描き終わるまで（初めの 1 回は enter が待つ）。表の倍率（C174）も間引きを待たずに決め直す（見せた後に 1px 動かさない）
     N194.sw = null;
     if (N194.bsw && N194.bsw.vid === vid) N194.bsw = null;
     bandEnd194();
@@ -17157,7 +17162,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     if (anchored && (rs.settle || 0) < 3) {
       const ms = [140, 260, 420][rs.settle || 0];
       rs.settle = (rs.settle || 0) + 1;
-      if (rs.settle > 1) holdOff194();   // 最初の確かめ直しまでは伏せたまま（ずれた位置を一瞬見せない）
+      if (rs.settle > 1) { holdOff194(); hold196('restore', false); }   // 最初の確かめ直しまでは伏せたまま（ずれた位置を一瞬見せない）。v196: 測る側への hold もここで外す（後の確かめ直しはスクロールの位置だけ）
       setTimeout(() => { if (rs === N194.rs && !rs.user) restoreApply194(rs, find196(), V); else if (rs === N194.rs) restoreEnd194('user'); }, ms);
       return;
     }
