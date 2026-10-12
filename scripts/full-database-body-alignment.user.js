@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         « No »　⁰⁵ _ Full Database Body Alignment
 // @namespace    https://constellucentia.local/full-database-body-alignment
-// @version      3.8.0
+// @version      3.9.0
 // @noframes
-// @description  フルDBのツールバーとDB本体の開始位置を、ページタイトル1文字目(T)へ揃える実測版。v3.8.0: ³³ との契約（c194 v196）— html[data-c194-hold]（³³ が本文の寸法を変えている間）は実測も書き直しもせず、外れた時に 1 回だけ測り直す（待つ間の見回りは増やさない）。html[data-c194-split]（³³ の上下分割表示）の間は補正対象外として自分の印と値を外し、床も当てない。v3.7.0: 表・ツールバー・グループ見出しがタイトルの page-block の「外」にある今の Notion の構造に合わせ、記憶値の付与・床（仮の位置）・所属判定の範囲をメインの .notion-frame へ広げる（これまで記憶値が一度も付かず、作り直された表が元の位置＝左に出てから右へ動いていた）。床は 48px 固定ではなく、このページで覚えた表の値。v3.6.0: ①v3.5.0 より前に誤った手がかりで覚えた表の値を一度だけ捨てる ②記憶値で置いた要素は、最初の実測で 1px 以上違えば確認待ちなしですぐ直す（遅れて動くのを短く） ③²¹ Render Veil 向けに settled()（表・ツールバーがすべて整列済みで、書き込み予定もない）を出す。v3.5.0: ①表の実測は「列見出し」だけを手がかりにする（グループを全部閉じた時・スクロールで見出しが外れた時に別の手がかりへ切り替わり、表が左右に動いていた） ②グループ見出しの値を開/閉の状態ごとに記憶し、開閉の瞬間（描画前）に付け直す ③²¹ Render Veil が幕を下ろしている間は確認待ちなしで即書き・実測も早める ④書き込みの記録 log()。v3.4.0: ①フルDBページでは html に data-c05-full="1" を描画前に付ける（Stylus ²¹ Group Header Layout と ¹³ のグループ見出しが効くようになる） ②ずらし量を要素の style（Notion が書き換えると消える）ではなく属性＋専用スタイルシートで持つ → 「DBが左の元の位置へ戻り、カーソルを当てると戻る」を解消。v3.3.0: 「描画のたびに少しずれる」を除去 — ①値を画面の画素に丸める ②すでに値が付いている要素は 1px 以上の差を 2回続けて測った時だけ書き直す（0.25px の揺れで動かさない） ③¹⁸ が表を押さえている間は測らない ④ピン留め見出し（ポータル）にも記憶値を描画前に付ける。v3.2.0: 基準・属性名・変数名・CSS（床48px含む）・実測アルゴリズム・ジャンプガードは v3.1.0 と同一のまま「後から動く」を除去。①実測で確定した値をページごと・要素の構造位置ごとに記憶（localStorage）し、Notion が要素を作り直した瞬間（MutationObserver のコールバック＝描画前）に同じ値を同期で付ける → タブ切替・スクロールの2回目以降は最初のフレームから整列済み ②ポータル所有マークも描画前に同期（旧: 100ms＋アイドル待ち） ③グループ見出しは ¹² のクラスを待たず構造でも判定 ④一瞬見えない要素の属性は剥がさない（床48pxへの落下防止） ⑤ document-start 起動（再読み込みでも記憶値で初回から整列）。インラインDB・通常ページ・peek は従来どおり対象外。
+// @description  フルDBのツールバーとDB本体の開始位置を、ページタイトル1文字目(T)へ揃える実測版。v3.9.0: ³³ 197 との契約に html[data-c194-edge] を追加 — ³³ が本文の見出し（題字）を畳み、表・索引帯・説明の左端を自分で 1 本にそろえている間は、表とツールバーを題字の 1 文字目へ寄せない（自分の印・値・床・記憶値の付与・ポータルの寄せを止める）。これまでは ³³ が畳んだ題字の字の位置へ表を +48px・ツールバーを −62px 寄せ、³³ の左端と取り合っていた。外れた時に 1 回だけ測り直す。v3.8.0: ³³ との契約（c194 v196）— html[data-c194-hold]（³³ が本文の寸法を変えている間）は実測も書き直しもせず、外れた時に 1 回だけ測り直す（待つ間の見回りは増やさない）。html[data-c194-split]（³³ の上下分割表示）の間は補正対象外として自分の印と値を外し、床も当てない。v3.7.0: 表・ツールバー・グループ見出しがタイトルの page-block の「外」にある今の Notion の構造に合わせ、記憶値の付与・床（仮の位置）・所属判定の範囲をメインの .notion-frame へ広げる（これまで記憶値が一度も付かず、作り直された表が元の位置＝左に出てから右へ動いていた）。床は 48px 固定ではなく、このページで覚えた表の値。v3.6.0: ①v3.5.0 より前に誤った手がかりで覚えた表の値を一度だけ捨てる ②記憶値で置いた要素は、最初の実測で 1px 以上違えば確認待ちなしですぐ直す（遅れて動くのを短く） ③²¹ Render Veil 向けに settled()（表・ツールバーがすべて整列済みで、書き込み予定もない）を出す。v3.5.0: ①表の実測は「列見出し」だけを手がかりにする（グループを全部閉じた時・スクロールで見出しが外れた時に別の手がかりへ切り替わり、表が左右に動いていた） ②グループ見出しの値を開/閉の状態ごとに記憶し、開閉の瞬間（描画前）に付け直す ③²¹ Render Veil が幕を下ろしている間は確認待ちなしで即書き・実測も早める ④書き込みの記録 log()。v3.4.0: ①フルDBページでは html に data-c05-full="1" を描画前に付ける（Stylus ²¹ Group Header Layout と ¹³ のグループ見出しが効くようになる） ②ずらし量を要素の style（Notion が書き換えると消える）ではなく属性＋専用スタイルシートで持つ → 「DBが左の元の位置へ戻り、カーソルを当てると戻る」を解消。v3.3.0: 「描画のたびに少しずれる」を除去 — ①値を画面の画素に丸める ②すでに値が付いている要素は 1px 以上の差を 2回続けて測った時だけ書き直す（0.25px の揺れで動かさない） ③¹⁸ が表を押さえている間は測らない ④ピン留め見出し（ポータル）にも記憶値を描画前に付ける。v3.2.0: 基準・属性名・変数名・CSS（床48px含む）・実測アルゴリズム・ジャンプガードは v3.1.0 と同一のまま「後から動く」を除去。①実測で確定した値をページごと・要素の構造位置ごとに記憶（localStorage）し、Notion が要素を作り直した瞬間（MutationObserver のコールバック＝描画前）に同じ値を同期で付ける → タブ切替・スクロールの2回目以降は最初のフレームから整列済み ②ポータル所有マークも描画前に同期（旧: 100ms＋アイドル待ち） ③グループ見出しは ¹² のクラスを待たず構造でも判定 ④一瞬見えない要素の属性は剥がさない（床48pxへの落下防止） ⑤ document-start 起動（再読み込みでも記憶値で初回から整列）。インラインDB・通常ページ・peek は従来どおり対象外。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -16,6 +16,19 @@
 
 (() => {
   "use strict";
+
+/*
+ * v3.9.0（2026-10-12）— ³³ 197 の html[data-c194-edge]（左端は ³³ が持つ）の間は補正しない。判定・値・時間・アニメーションは v3.8.0 と同一
+ *  原因（³³ 196 の実機の記録）: ³³ は本文の見出し（題字）を畳み、索引帯の行の並べ替えもする。⁰⁵ はその畳まれた題字の
+ *  1 文字目（T）を基準に、表を +48px・ツールバーを −62px（基準の「先頭のタブ」は DOM の先頭で、並べ替え後の見た目の先頭ではない）
+ *  寄せていたため、表・索引帯・説明の左端がそろわなかった
+ *  ① C194.edge(): html[data-c194-edge] を直接読む（Foundation 0.2.0 の契約の鍵に edge は無いので、Foundation を通さない）
+ *  ② apply(): edge の間は split と同じ分岐（lastResult 'c194-edge'）。cleanupStale で自分の印と値だけを外す
+ *  ③ stamp()（記憶値の付与）・床の 3 規則・平行移動の 2 規則・値ごとの規則・ポータルの寄せの 4 規則を edge の間は当てない（CSS の :not で即時）
+ *  ④ settled(): edge の間は true（²¹ を待たせない）。onRelease の 2 つ目に data-c194-edge（外れた時に 1 回だけ測る）
+ *  ⑤ getState() に c194Edge / c194EdgeOn。表やタブを ⁰⁵ 自身は動かさないので、³³ が無い・edge を付けない時は v3.8.0 と同じ
+ *  戻し方: C194.edge・apply() の edge の判定・stamp() の || C194.edge()・CSS の html:not([data-c194-edge])・onRelease の 1 語を外す
+ */
 
 /*
  * v3.8.0（2026-10-12）— ³³ v196 との契約（c194）に参加。判定・値・時間・CSS の動きは v3.7.0 と同一
@@ -130,7 +143,7 @@
  * v3.0.2（2026-09-27）— 裏タブ停止・間引き150ms・所有判定 requestIdleCallback・URL監視1500ms
  */
 
-  const VERSION = "3.8.0";
+  const VERSION = "3.9.0";
   /* ── v196: c194 契約（Foundation v0.2.0 があればその API。無ければ html の属性と素の dispatchEvent） ── */
   const C194 = (() => {
     const RT = Symbol.for('constellucentia.runtime');
@@ -142,6 +155,8 @@
       split: () => has('split', 'data-c194-split'),
       ready: () => has('ready', 'data-c194-ready'),
       on: () => has('on', 'data-c194-on'),
+      /* v3.9.0: ³³ 197 が左端を持つ間（Foundation 0.2.0 の契約の鍵に無いので html を直接読む） */
+      edge: () => { const h = html(); return !!(h && h.hasAttribute('data-c194-edge')); },
       emit(src, why) {
         const detail = { src: String(src), why: String(why || '') };
         const r = rt();
@@ -251,8 +266,9 @@
     const out = [];
     for (const v of valueSet) {
       const q = JSON.stringify(v);
-      out.push(`[${ATTRIBUTE}="true"][${VAL_ATTR}=${q}]:not(.sticky-portal-target *):not(.notion-collection_view-block *) { transform: translateX(${v}px) !important; }`);
-      out.push(`[${STICKY_ATTRIBUTE}="true"][${STICKY_VAL_ATTR}=${q}]:not(.sticky-portal-target *):not(.notion-collection_view-block *) { transform: translateX(${v}px) !important; }`);
+      /* v3.9.0: html[data-c194-edge] の間は値ごとの規則も当てない（属性が外れるまでの間も寄せない） */
+      out.push(`html:not([data-c194-edge]) [${ATTRIBUTE}="true"][${VAL_ATTR}=${q}]:not(.sticky-portal-target *):not(.notion-collection_view-block *) { transform: translateX(${v}px) !important; }`);
+      out.push(`html:not([data-c194-edge]) [${STICKY_ATTRIBUTE}="true"][${STICKY_VAL_ATTR}=${q}]:not(.sticky-portal-target *):not(.notion-collection_view-block *) { transform: translateX(${v}px) !important; }`);
     }
     return out.join('\n');
   }
@@ -392,7 +408,8 @@
     c194Holds: 0,
     c194Releases: 0,
     c194Split: 0,
-    c194SplitCleared: 0
+    c194SplitCleared: 0,
+    c194Edge: 0   /* v3.9.0 */
   };
 
   let observer = null;
@@ -575,7 +592,7 @@
   /* 記憶値を「属性の無い対象」へ即付与（描画前・レイアウトを読まない） */
   function stamp() {
     if (!known || !pageBlockEl || !pageBlockEl.isConnected) return 0;
-    if (C194.split()) return 0;   /* v3.8.0: ³³ の上下分割表示の間は補正対象外（記憶値も付けない） */
+    if (C194.split() || C194.edge()) return 0;   /* v3.8.0: ³³ の上下分割表示の間は補正対象外（記憶値も付けない）。v3.9.0: ³³ が左端を持つ間も */
     if (knownPageId !== primaryPageBlockId) return 0;
     const scope = scopeEl();
     if (!scope) return 0;
@@ -739,31 +756,32 @@
       style = document.createElement('style');
       style.id = STYLE_ID;
       style.textContent = `
-        [${ATTRIBUTE}="true"]:not(.sticky-portal-target *):not(.notion-collection_view-block *) {
+        /* v3.9.0: html[data-c194-edge]（³³ 197 が左端を持つ）の間は、以下の 6 規則とも当てない */
+        html:not([data-c194-edge]) [${ATTRIBUTE}="true"]:not(.sticky-portal-target *):not(.notion-collection_view-block *) {
           transform: translateX(var(${SHIFT_VARIABLE}, 0px)) !important;
         }
 
-        [${STICKY_ATTRIBUTE}="true"]:not(.sticky-portal-target *):not(.notion-collection_view-block *) {
+        html:not([data-c194-edge]) [${STICKY_ATTRIBUTE}="true"]:not(.sticky-portal-target *):not(.notion-collection_view-block *) {
           transform: translateX(var(${STICKY_SHIFT_VARIABLE}, 0px)) !important;
         }
 
         /* ポータル内コピーはコンテナ変数1本で初回描画からshift済み。
            v3.2.0: グループ判定は ¹² のクラスに加えて構造（開閉ボタンを持つ page-block）でも行う
            （¹² のクラスが付くまでの間も同じ位置で描く）。 */
-        .sticky-portal-target[${PORTAL_OWNER_ATTRIBUTE}="true"] > *:has(.notion-table-view-header-row):not(:has(${GROUP_ANY})):not(.notion-collection_view-block *) {
+        html:not([data-c194-edge]) .sticky-portal-target[${PORTAL_OWNER_ATTRIBUTE}="true"] > *:has(.notion-table-view-header-row):not(:has(${GROUP_ANY})):not(.notion-collection_view-block *) {
           transform: translateX(var(${PORTAL_HEADER_SHIFT_VARIABLE}, 48px));
         }
 
-        .sticky-portal-target[${PORTAL_OWNER_ATTRIBUTE}="true"] > *:has(${GROUP_ANY}):not(:has(.notion-table-view-header-row)):not(.notion-collection_view-block *) {
+        html:not([data-c194-edge]) .sticky-portal-target[${PORTAL_OWNER_ATTRIBUTE}="true"] > *:has(${GROUP_ANY}):not(:has(.notion-table-view-header-row)):not(.notion-collection_view-block *) {
           transform: translateX(var(${PORTAL_GROUP_SHIFT_VARIABLE}, 50px));
         }
 
-        .sticky-portal-target[${PORTAL_OWNER_ATTRIBUTE}="true"] > *:has(${GROUP_ANY}):has(.notion-table-view-header-row):not(.notion-collection_view-block *) {
+        html:not([data-c194-edge]) .sticky-portal-target[${PORTAL_OWNER_ATTRIBUTE}="true"] > *:has(${GROUP_ANY}):has(.notion-table-view-header-row):not(.notion-collection_view-block *) {
           transform: translateX(var(${PORTAL_HEADER_SHIFT_VARIABLE}, 48px));
         }
 
         /* v3.0.0: idレスポータル(通常ビューのピン帯)のヘッダーへ既定オン+48。 */
-        .sticky-portal-target:not([${PORTAL_OWNER_ATTRIBUTE}="true"]):not(.notion-peek-renderer *):not(:has([data-block-id])) > *:has(.notion-table-view-header-row):not(:has(${GROUP_ANY})):not(.notion-collection_view-block *) {
+        html:not([data-c194-edge]) .sticky-portal-target:not([${PORTAL_OWNER_ATTRIBUTE}="true"]):not(.notion-peek-renderer *):not(:has([data-block-id])) > *:has(.notion-table-view-header-row):not(:has(${GROUP_ANY})):not(.notion-collection_view-block *) {
           transform: translateX(var(${PORTAL_HEADER_SHIFT_VARIABLE}, 48px));
         }
       `;
@@ -791,11 +809,11 @@
     let floorStyle = document.getElementById(STYLE_ID + '-floor');
     if (!primaryPageBlockId) return;
     const rule = [
-      'html:not([data-c194-split]) .notion-collection_view_page-block[data-block-id="' + primaryPageBlockId + '"] div[contenteditable="false"]:not([data-constellucentia-full-db-body-aligned="true"]):not(.notion-collection_view-block *):not(.sticky-portal-target *) { transform: none !important; translate: 48px 0 !important; }',
-      'html:not([data-c194-split]) .notion-collection_view_page-block[data-block-id="' + primaryPageBlockId + '"] .notion-table-view:not([data-constellucentia-full-db-body-aligned="true"]):not(.notion-collection_view-block *):not(.sticky-portal-target *) { transform: none !important; translate: 48px 0 !important; }',
+      'html:not([data-c194-split]):not([data-c194-edge]) .notion-collection_view_page-block[data-block-id="' + primaryPageBlockId + '"] div[contenteditable="false"]:not([data-constellucentia-full-db-body-aligned="true"]):not(.notion-collection_view-block *):not(.sticky-portal-target *) { transform: none !important; translate: 48px 0 !important; }',
+      'html:not([data-c194-split]):not([data-c194-edge]) .notion-collection_view_page-block[data-block-id="' + primaryPageBlockId + '"] .notion-table-view:not([data-constellucentia-full-db-body-aligned="true"]):not(.notion-collection_view-block *):not(.sticky-portal-target *) { transform: none !important; translate: 48px 0 !important; }',
       /* v3.7.0: page-block の外にあるビュー本体（メイン枠・一番外のビューだけ）。値はこのページで覚えた表の値
-         v3.8.0: 3 規則とも html[data-c194-split]（³³ の上下分割表示）の間は当てない（補正対象外） */
-      'html[data-c05-full="1"]:not([data-c194-split]) .notion-frame:not(.notion-peek-renderer *) ' + VIEWS_IS + ':not(' + VIEWS_IS + ' *):not([data-constellucentia-full-db-body-aligned="true"]):not(.notion-collection_view-block *):not(.sticky-portal-target *):not(.notion-peek-renderer *) { transform: none !important; translate: var(--c05-floor-table, 48px) 0 !important; }',
+         v3.8.0: 3 規則とも html[data-c194-split]（³³ の上下分割表示）の間は当てない（補正対象外）。v3.9.0: html[data-c194-edge] の間も */
+      'html[data-c05-full="1"]:not([data-c194-split]):not([data-c194-edge]) .notion-frame:not(.notion-peek-renderer *) ' + VIEWS_IS + ':not(' + VIEWS_IS + ' *):not([data-constellucentia-full-db-body-aligned="true"]):not(.notion-collection_view-block *):not(.sticky-portal-target *):not(.notion-peek-renderer *) { transform: none !important; translate: var(--c05-floor-table, 48px) 0 !important; }',
     ].join('\n');
     if (!floorStyle) {
       floorStyle = document.createElement('style');
@@ -1322,9 +1340,11 @@
 
       /* v3.8.0: ³³ の上下分割表示（html[data-c194-split]）の間は本文を補正対象外にする。
          自分の印と値だけを既存の掃除（cleanupStale）で外す。外れた時に onRelease から 1 回だけ測る */
-      if (C194.split()) {
-        state.lastResult = 'c194-split';
-        state.c194Split += 1;
+      /* v3.9.0: ³³ 197 が左端を持つ間（html[data-c194-edge]）も同じ — 表とツールバーを題字へ寄せない */
+      if (C194.split() || C194.edge()) {
+        const edge = !C194.split();
+        state.lastResult = edge ? 'c194-edge' : 'c194-split';
+        if (edge) state.c194Edge += 1; else state.c194Split += 1;
         const before = document.querySelectorAll(`[${ATTRIBUTE}], [${STICKY_ATTRIBUTE}]`).length;
         cleanupStale(new Set(), new Set());
         state.c194SplitCleared += before - document.querySelectorAll(`[${ATTRIBUTE}], [${STICKY_ATTRIBUTE}]`).length;
@@ -1538,6 +1558,7 @@
         syncPage();
         if (!pageBlockEl || !pageBlockEl.isConnected) return true;
         if (state.lastResult === 'page-title-not-found') return true;
+        if (C194.split() || C194.edge()) return true;   /* v3.9.0: 補正対象外の間は書かない */
         if (scanPending || confirmPending()) return false;
         for (const sel of VIEW_SELECTORS) {
           for (const v of (scopeEl() || pageBlockEl).querySelectorAll(sel)) {
@@ -1575,6 +1596,8 @@
       c194Releases: state.c194Releases,
       c194Split: state.c194Split,
       c194SplitCleared: state.c194SplitCleared,
+      c194EdgeOn: C194.edge(),   /* v3.9.0 */
+      c194Edge: state.c194Edge,
     }),
   };
 
@@ -1595,10 +1618,10 @@
   installObserver();
   /* v3.8.0: hold・split が外れた時に 1 回だけ測り直す（待つ間は見回りを増やさない） */
   const onC194Release = () => { if (state.destroyed) return; state.c194Releases += 1; scheduleScan(); };
-  c194Off.push(C194.onRelease(onC194Release), C194.onRelease(onC194Release, ['data-c194-split']));
+  c194Off.push(C194.onRelease(onC194Release), C194.onRelease(onC194Release, ['data-c194-split', 'data-c194-edge']));
   C194.report('c05', {
     version: VERSION,
-    observers: ['documentElement MO（childList・subtree・data-block-id/aria-selected/aria-expanded）', 'documentElement ResizeObserver', 'html MO（data-c194-hold の外れ）', 'html MO（data-c194-split の外れ）'],
+    observers: ['documentElement MO（childList・subtree・data-block-id/aria-selected/aria-expanded）', 'documentElement ResizeObserver', 'html MO（data-c194-hold の外れ）', 'html MO（data-c194-split・data-c194-edge の外れ）'],
     listeners: ['window resize', 'document/window scroll（capture）', 'popstate', 'hashchange', 'visibilitychange', 'pagehide'],
     timers: ['scan 間引き 150ms（幕の間 40ms）', '確認待ち 400ms', 'スクロール静寂 1000ms', 'resize 80ms', 'URL 見張り 1500ms 間隔', '記憶の保存 1000ms']
   });
