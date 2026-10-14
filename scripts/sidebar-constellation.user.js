@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　³³ _ Sidebar Constellation
 // @namespace    https://cordivestium.local/sidebar-constellation
-// @version      201.0.0
-// @description  v201.0.0: 索引帯（ビューのタブ）を本文になじませる（²⁶ の縦の区切りを帯の中では描かない・上の罫線をやめ下に 1 本・着地点は小さな菱形・下線を細く）。右端のボタンを 1 本の溝の中の文字のボタンに。表のビューならどれでも「カードで読む」（⁴² 1.2.0 で Books 以外もカードに）。読み込みの幕は Catalogus を待たない（200 は Catalogus の印を待って毎回 8 秒掛かっていた）・上限で上がった時に出なかった物は次から待たない。v200.0.0: 読み込みの間に本文の枠・上の帯が 2 つある時は見えている方を整える（収録で、整う前の素の姿が数秒見えてから戻っていた）。整うまで Orbit の右に幕（押す・Esc で外す・上限 8 秒）と読み込みの記録（__c33.boot()）。古い ⁰⁵・⁰⁴ の案内に ScriptCat の名前と導入セットのファイル名。索引帯の右端に「配置」（⁴² 1.1.0 の配置の編集）。v199.0.0: レコードのカード（198 までの上下分割）を新しいスクリプト ⁴² Record Cards へ移し、³³ は帯の右端のボタンと譲り合いだけに。表の左端の濃い縦線をやめる。v198.0.1: 入力中・小窓の間は、索引帯の上のホイールを本文のスクロールへ通す。v198.0.0: 依頼主の画面収録（2026-10-13）の直し — 索引帯のタブを回さず・太さと斜体で幅を変えず・ビューごとの倍率の外に（タブがガクつかない）。スクロールで題字の段が外れても DB を見失わない（索引帯・上段の DB 名・上下分割が消えない）。索引帯のホイールは本文のスクロールの続きを奪わない。上下分割は表紙が一番左・その高さに題字と項目（列の役目を本物のセルで判定・見出しの名前とアイコンを本物の見出しのボタンから）。古い ⁰⁵/⁰⁴ が動いていれば案内し、左端合わせを止める。 v197.0.0: 本物の Notion（グループ分けした表・見出しの台・行の中のセルの箱）の形に合わせ直し — 見出し行 48px・二段の固定（帯＋見出し。グループ分けした表はグループの見出しも帯の下に）・上下分割・2 つ目からのグループの星としおりが、本物では出ていなかったのを直す。説明（このDBについて）・索引帯・表の左端を 1 本にし、見本どおり Catalogus に寄せる（＋ ⋮⋮ の通り道は ⚙ で戻せる。⁰⁵ は html[data-c194-edge] の間は寄せない・帯の箱が 96px 右へずれていたのを直す）。v196.0.0: 測る側との契約（html の data-c194-hold・data-c194-split・data-c194-ready・c194:rowlayout）・表の見つけ方の直し（索引帯・二段の固定・星・しおりが本物で出なかった）・--c194-pl の廃止・第二陣（レコード内の上下分割）。v195.0.0: Next Notion 第 2 実装（第一弾の修正と説明データの編集）— 説明の見た目と表の位置が跳ねていたのを直す（畳んだ見出しの中身も 1px にし、⁰⁴ の題字と説明の組をいつも付ける）。上段の格子に DB のアイコン（題字の隣の箱から読む）。ビューが 1 つの DB は索引帯がホイール・時間・しおりを使わない。入りきらないビューは押せる「+N」から全部の一覧へ。星図の罫線は行（横罫線）が主役: 触れている行の下の横罫線 × 表の左端に短い色の線と小さな四芒星（同じ行の中では始め直さない・1 行 1 か所・左端の操作に重なれば星なし・表示順の 12 色、順番が確かでなければ共通の色）。列の目盛り・行の境の菱形・列の色はやめた。説明データ（実務・具体例＝DB ID ごと、ビューの説明＝DB ID＋ビュー ID ごと）を編集の画面で足す・直す・消す・並べ替える・保存（閉じない）・取消・書き出し・読み込み・この DB を空に。保存場所は ScriptCat の c33.notes195（形に版・上限・壊れていたら上書きせず空で表示・予備へ移して始められる）。194 の書いた内容は一度だけ移し、テスト文（aaa など）は移さない。憲法（DB の説明）は Notion の説明の欄で直す（編集の画面から移れる）。「このDBについて」は憲法の左・実務の右（固定の半々なし・実務が無ければ 1 列・前の「—」なし）。魚の入りは 1 秒以内の 1 匹。 v194.0.0: Next Notion — Orbit × Catalogus × フル DB の第 1 実装。Catalogus の上段（B.U.R.I の右隣）に今開いているフル DB のアイコンと名前（本文の大きな見出しは見た目だけ畳む）。その上でホイールを回すと同じチームスペースのフル DB を候補として巡り、止まって 0.8 秒で移る（クリック・Enter はすぐ、Esc・離れると取り消し、乗せただけでは移らない）。B.U.R.I の機能メニューは今の DB の右から始まり、本文はメニューの高さだけ下がる。説明は「このDBについて」として全文（省略なし）、右に DB ごとに書いた実務（一続きの紙面・狭いと 1 列）。魚の入り（同じ DB はセッションで 1 回）。表のビューだけ「巡る索引帯」（確定したビューが左の着地点・ホイール・←→・0.7 秒で切り替え）とビューごとのしおり（縦横の位置と基準の行）。ビューの案内の魚（書いた案内だけ・7 秒・固定・Esc・出し直し）。表の見出し行 48px と二段の固定。星図の罫線（左端の線・行の境の菱形・触れたセルの左上の四芒星・列の 12 色）。191〜193 の見出しの位置合わせはやめた。__c33.next() で状態・設定・メモ・しおり。 v193.0.0: ふだん（帯を畳んでいる時）の DB の見出し（アイコン＋題字をひとつの見出しとして）の中身の下辺を、B.U.R.I の下の横線（いま描かれている 1px の線。Catalogus と一緒の時は地平線 #c164-hz .h-top）の上端に乗せる — ＿＿＿＿ ★ タイトル。真ん中・上端・字の並びの線ではなく、外側の余白を除いたアイコンの箱と題字の字の箱の低い方。192 の「B.U.R.I のセルの真ん中」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置・横線・帯を開いた時の計算は変えない。__c33.align() で線と下辺の高さを確かめられる。 v192.0.0: ふだん（帯を畳んでいる時）の DB の見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の上段のセル（魚と名前を収めた格子の箱 #c33-orbit .ob-all）の縦の真ん中に — 191 の「B.U.R.I の下の線に合わせる」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置と、帯を開いた後の位置（その DB のチームスペースのアイコンの高さ。分からない時は 191 と同じ所）は変えず、下げ幅はその差に計算し直す。__c33.align() でセルの上下端・真ん中と量を確かめられる。 v191.0.0: DB の見出し行（アイコン＋題字）の位置を作り直す — ふだん（帯を畳んでいる時）は見出し行の縦の真ん中を B.U.R.I の下の線の高さに、横は線の描かれている右端（四芒星）から 14px の所にアイコン（説明・タブ・表・左のゆとりはそのまま）。B.U.R.I に乗せて帯を開いた時は、DB アイコンの中心を Catalogus に出ているその DB のチームスペースのアイコンの中心にそろえる（分からない時はほかのチームスペースで代わりにせず、帯の高さだけ下がる。帯の線から 12px は離す）。189 の「見えている下辺を線に」とアイコンを字の並びの線へ寄せる translate はやめた。__c33.align() で基準と量を確かめられる。 v190.0.0: Notion の新規ページの小窓などで暗幕が掛かった時、Orbit は沈むのに Catalogus だけ浮いていたのを直す（暗幕の色と濃さを読んで、Catalogus の所に掛かっていない時だけ同じ幕を重ねる。Notion の DOM には触れない）。Catalogus の選んだ行の地をさらに半分に（--c189-sel 25% → 12.5%、色相・形・範囲はそのまま）。一覧の終わりの区切り線（◆—✦）をチームスペースの間の区切りにも（最後のチームスペースの下には付けない）。B.U.R.I に乗せて上の帯を開いた時、題字の段の真ん中を Catalogus の一番上のチームスペースのまとまり（アイコン・名前・下の細罫）の真ん中にそろえる（本文は今までどおり帯の高さだけ場所ごと下がり、帯とは重ねない。畳んだ時の位置は変えない）。__c33.veil()・__c33.align() で確かめられる。 v189.2.0: Catalogus の選んだ行の地をもう一段淡く — 189.1 は本物でも効いていた（スクショの画素で確認）が、まだ字と左の目盛りより先に緑の長方形が見えていたので、見えていた明度差の約半分に（--c189-sel 50% → 25%、189.0 の定義からの割合。色相・形・範囲はそのまま）。__c33.selbg() で実際に描かれている値を確かめられる。 v189.1.0: Catalogus の開いているページの地（選んだ行の淡い色）を 189.0 の約半分の濃さに — 同じ色のまま不透明度だけ半分（色相・形・範囲・行の不透明度・字・左の目盛り・アイコンはそのまま）。濃さは --c189-sel（189.0 = 100%、今は 50%）の 1 つの値で変えられる。 v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
+// @version      202.0.0
+// @description  v202.0.0: ビューのタブをグリッドに並べる（全部のビューが見える・入りきらない分の「+N」なし・選んだビューは紙の札、候補は点線で、確定までの時間は札の下の線が伸びる。⚙ で 1 列の帯に戻せる）。「このDBについて」の字は、読み込みの間に入れ替わっても落ち着いてから出す（淡い地で待ち、ふっと出る）。v201.0.0: 索引帯（ビューのタブ）を本文になじませる（²⁶ の縦の区切りを帯の中では描かない・上の罫線をやめ下に 1 本・着地点は小さな菱形・下線を細く）。右端のボタンを 1 本の溝の中の文字のボタンに。表のビューならどれでも「カードで読む」（⁴² 1.2.0 で Books 以外もカードに）。読み込みの幕は Catalogus を待たない（200 は Catalogus の印を待って毎回 8 秒掛かっていた）・上限で上がった時に出なかった物は次から待たない。v200.0.0: 読み込みの間に本文の枠・上の帯が 2 つある時は見えている方を整える（収録で、整う前の素の姿が数秒見えてから戻っていた）。整うまで Orbit の右に幕（押す・Esc で外す・上限 8 秒）と読み込みの記録（__c33.boot()）。古い ⁰⁵・⁰⁴ の案内に ScriptCat の名前と導入セットのファイル名。索引帯の右端に「配置」（⁴² 1.1.0 の配置の編集）。v199.0.0: レコードのカード（198 までの上下分割）を新しいスクリプト ⁴² Record Cards へ移し、³³ は帯の右端のボタンと譲り合いだけに。表の左端の濃い縦線をやめる。v198.0.1: 入力中・小窓の間は、索引帯の上のホイールを本文のスクロールへ通す。v198.0.0: 依頼主の画面収録（2026-10-13）の直し — 索引帯のタブを回さず・太さと斜体で幅を変えず・ビューごとの倍率の外に（タブがガクつかない）。スクロールで題字の段が外れても DB を見失わない（索引帯・上段の DB 名・上下分割が消えない）。索引帯のホイールは本文のスクロールの続きを奪わない。上下分割は表紙が一番左・その高さに題字と項目（列の役目を本物のセルで判定・見出しの名前とアイコンを本物の見出しのボタンから）。古い ⁰⁵/⁰⁴ が動いていれば案内し、左端合わせを止める。 v197.0.0: 本物の Notion（グループ分けした表・見出しの台・行の中のセルの箱）の形に合わせ直し — 見出し行 48px・二段の固定（帯＋見出し。グループ分けした表はグループの見出しも帯の下に）・上下分割・2 つ目からのグループの星としおりが、本物では出ていなかったのを直す。説明（このDBについて）・索引帯・表の左端を 1 本にし、見本どおり Catalogus に寄せる（＋ ⋮⋮ の通り道は ⚙ で戻せる。⁰⁵ は html[data-c194-edge] の間は寄せない・帯の箱が 96px 右へずれていたのを直す）。v196.0.0: 測る側との契約（html の data-c194-hold・data-c194-split・data-c194-ready・c194:rowlayout）・表の見つけ方の直し（索引帯・二段の固定・星・しおりが本物で出なかった）・--c194-pl の廃止・第二陣（レコード内の上下分割）。v195.0.0: Next Notion 第 2 実装（第一弾の修正と説明データの編集）— 説明の見た目と表の位置が跳ねていたのを直す（畳んだ見出しの中身も 1px にし、⁰⁴ の題字と説明の組をいつも付ける）。上段の格子に DB のアイコン（題字の隣の箱から読む）。ビューが 1 つの DB は索引帯がホイール・時間・しおりを使わない。入りきらないビューは押せる「+N」から全部の一覧へ。星図の罫線は行（横罫線）が主役: 触れている行の下の横罫線 × 表の左端に短い色の線と小さな四芒星（同じ行の中では始め直さない・1 行 1 か所・左端の操作に重なれば星なし・表示順の 12 色、順番が確かでなければ共通の色）。列の目盛り・行の境の菱形・列の色はやめた。説明データ（実務・具体例＝DB ID ごと、ビューの説明＝DB ID＋ビュー ID ごと）を編集の画面で足す・直す・消す・並べ替える・保存（閉じない）・取消・書き出し・読み込み・この DB を空に。保存場所は ScriptCat の c33.notes195（形に版・上限・壊れていたら上書きせず空で表示・予備へ移して始められる）。194 の書いた内容は一度だけ移し、テスト文（aaa など）は移さない。憲法（DB の説明）は Notion の説明の欄で直す（編集の画面から移れる）。「このDBについて」は憲法の左・実務の右（固定の半々なし・実務が無ければ 1 列・前の「—」なし）。魚の入りは 1 秒以内の 1 匹。 v194.0.0: Next Notion — Orbit × Catalogus × フル DB の第 1 実装。Catalogus の上段（B.U.R.I の右隣）に今開いているフル DB のアイコンと名前（本文の大きな見出しは見た目だけ畳む）。その上でホイールを回すと同じチームスペースのフル DB を候補として巡り、止まって 0.8 秒で移る（クリック・Enter はすぐ、Esc・離れると取り消し、乗せただけでは移らない）。B.U.R.I の機能メニューは今の DB の右から始まり、本文はメニューの高さだけ下がる。説明は「このDBについて」として全文（省略なし）、右に DB ごとに書いた実務（一続きの紙面・狭いと 1 列）。魚の入り（同じ DB はセッションで 1 回）。表のビューだけ「巡る索引帯」（確定したビューが左の着地点・ホイール・←→・0.7 秒で切り替え）とビューごとのしおり（縦横の位置と基準の行）。ビューの案内の魚（書いた案内だけ・7 秒・固定・Esc・出し直し）。表の見出し行 48px と二段の固定。星図の罫線（左端の線・行の境の菱形・触れたセルの左上の四芒星・列の 12 色）。191〜193 の見出しの位置合わせはやめた。__c33.next() で状態・設定・メモ・しおり。 v193.0.0: ふだん（帯を畳んでいる時）の DB の見出し（アイコン＋題字をひとつの見出しとして）の中身の下辺を、B.U.R.I の下の横線（いま描かれている 1px の線。Catalogus と一緒の時は地平線 #c164-hz .h-top）の上端に乗せる — ＿＿＿＿ ★ タイトル。真ん中・上端・字の並びの線ではなく、外側の余白を除いたアイコンの箱と題字の字の箱の低い方。192 の「B.U.R.I のセルの真ん中」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置・横線・帯を開いた時の計算は変えない。__c33.align() で線と下辺の高さを確かめられる。 v192.0.0: ふだん（帯を畳んでいる時）の DB の見出し行（アイコン＋題字）の縦の真ん中を、B.U.R.I の上段のセル（魚と名前を収めた格子の箱 #c33-orbit .ob-all）の縦の真ん中に — 191 の「B.U.R.I の下の線に合わせる」を置き換え。説明・タブ・表は一緒に動き、間隔は Notion のまま。横の位置と、帯を開いた後の位置（その DB のチームスペースのアイコンの高さ。分からない時は 191 と同じ所）は変えず、下げ幅はその差に計算し直す。__c33.align() でセルの上下端・真ん中と量を確かめられる。 v191.0.0: DB の見出し行（アイコン＋題字）の位置を作り直す — ふだん（帯を畳んでいる時）は見出し行の縦の真ん中を B.U.R.I の下の線の高さに、横は線の描かれている右端（四芒星）から 14px の所にアイコン（説明・タブ・表・左のゆとりはそのまま）。B.U.R.I に乗せて帯を開いた時は、DB アイコンの中心を Catalogus に出ているその DB のチームスペースのアイコンの中心にそろえる（分からない時はほかのチームスペースで代わりにせず、帯の高さだけ下がる。帯の線から 12px は離す）。189 の「見えている下辺を線に」とアイコンを字の並びの線へ寄せる translate はやめた。__c33.align() で基準と量を確かめられる。 v190.0.0: Notion の新規ページの小窓などで暗幕が掛かった時、Orbit は沈むのに Catalogus だけ浮いていたのを直す（暗幕の色と濃さを読んで、Catalogus の所に掛かっていない時だけ同じ幕を重ねる。Notion の DOM には触れない）。Catalogus の選んだ行の地をさらに半分に（--c189-sel 25% → 12.5%、色相・形・範囲はそのまま）。一覧の終わりの区切り線（◆—✦）をチームスペースの間の区切りにも（最後のチームスペースの下には付けない）。B.U.R.I に乗せて上の帯を開いた時、題字の段の真ん中を Catalogus の一番上のチームスペースのまとまり（アイコン・名前・下の細罫）の真ん中にそろえる（本文は今までどおり帯の高さだけ場所ごと下がり、帯とは重ねない。畳んだ時の位置は変えない）。__c33.veil()・__c33.align() で確かめられる。 v189.2.0: Catalogus の選んだ行の地をもう一段淡く — 189.1 は本物でも効いていた（スクショの画素で確認）が、まだ字と左の目盛りより先に緑の長方形が見えていたので、見えていた明度差の約半分に（--c189-sel 50% → 25%、189.0 の定義からの割合。色相・形・範囲はそのまま）。__c33.selbg() で実際に描かれている値を確かめられる。 v189.1.0: Catalogus の開いているページの地（選んだ行の淡い色）を 189.0 の約半分の濃さに — 同じ色のまま不透明度だけ半分（色相・形・範囲・行の不透明度・字・左の目盛り・アイコンはそのまま）。濃さは --c189-sel（189.0 = 100%、今は 50%）の 1 つの値で変えられる。 v189.0.0: DB の題字（Medias）はアイコンの絵と字の下辺が B.U.R.I の線に沿う（187・188 は段の下端＝アイコンの箱の下端で合わせていたので、絵はおよそ 6px・字はおよそ 10px 浮いていた。字は字の並びの線、アイコンは絵の描かれている所の下端を測り、絵と字の差はアイコンを translate でそろえる）。Catalogus で選んでいるチームスペースのアイコンを押すと 2 択の小窓（チームスペース設定・ページを追加。線が伸びて小窓がぽんと開き、歯車が回る・＋ が弾む・乗せると衛星が回る）。チームスペース設定は Notion のそのチームスペースの設定の窓を開くだけ（アイコン・名前はそこで変える）。一覧の最後の「＋ ページを追加」はやめ、一覧の終わりの区切りを Master の下の細罫と同じ真ん中に（始まりに菱形・終わりに四芒星・左から引かれて光の粒が渡る）。開いているページの地は列の幅いっぱい（色は同じ淡さ）。 v188.0.0: Catalogus に戻す — 187 が開いたまま残した Notion のサイドバー（Notion が開け閉めを覚えるので入れ直しても戻らなかった）を、188 を入れた最初の 1 回だけ閉じて Catalogus に戻す（その後は開け閉めに触らない）。Catalogus の項目（フル DB・ページ）の字は太め・小さめ（700・8px）、行ははっきりゆとり（34px ごと）。B.U.R.I（鰤）の顔・ほかの所は変えない。 v187.1.0: 緊急の直し — ³³ が自分から Notion のサイドバーを開かないように（187 は「チームスペースを作る」で開いてしまい、Catalogus の場所に Notion のサイドバーが出て元の見た目に戻った）。開いているページの地は Orbit の選んだ惑星と同じ淡い光に。 v187.0.0: 186 を本物の Notion で見ていただいた直し — DB の題字は、アイコン＋題字の段が B.U.R.I の線の上に立つ（＿＿＿★ タイトル。線の下に潜らない・線が段を横切らない）。表の行の「＋」の場所は「＋」そのものだけで測り（⋮⋮ や ☐ だけで狭く覚えない）、ページを開いた直後から Catalogus の分を空ける。Orbit・Catalogus の字の太さを選んだ所もほかと同じにし、開いているページは行の地を淡く色付けて示す。「チームスペースを作る」で Notion のメニューが開いたまま重なっていたのを直す（開いたメニューは必ず閉じる・メニューの Settings を拾えるように・サイドバーを開いてもう一度）。 v186.0.0: 本物の Notion の実測に合わせた直し — 上の帯を畳んでいる時、見出し行（アイコン＋題字の段）の上端を B.U.R.I の下の区切り線にそろえ、v174 の「10px 下げる」はこの位置合わせで置き換え（説明とタブの間は Notion のまま）。表の行の「＋ ⋮⋮ ☐」は表の外の層にあり倍率が掛からないので、表の外も探して測り（測る前は 80px）、Catalogus との重なりとクリックの取り合いをなくす。アイコンの小窓は本文の枠の外の層に出ても Catalogus の右へ。Catalogus の一覧にゆとり（行は 30px ごと・一覧の始まりと「＋ ページを追加」の上下・次のチームスペースまで 16px）。チームスペースのアイコンを変えられる（Catalogus で選んでいるチームスペースのアイコンを押す、または New →「<名前> のアイコンを変える」で、Notion のそのチームスペースの設定のアイコンの小窓が開く）。 v185.0.0: 3 つの直しを 1 本に — v184.0.0（チームスペースに足す）と 2 つの v175.0.0（DB の題字の始まり・DB の見切れ）を重ねた版。DB のページでは、題字の領域の縦の始まりは区切り線（v175 題字）、左のゆとりはつまみの分を足した幅（v175 見切れ）で、題字・タブ・表はそろったまま。上の帯を開け閉めしても題字が跳ねない（畳んだ時の枠の上端で測る）。 v184.0.0: チームスペースに「足す」— Catalogus の一覧の最後に「＋ ページを追加」（選んだチームスペースに新しいページ）、チームスペースの無い惑星に「＋ チームスペースを作る」。New の小窓は ページを追加・新しいチームスペースを作る・チームスペースを探す／参加する・Notion のサイドバーを開く。Notion の「＋」は乗せた時だけ現れるので、乗せた合図を送ってから押す（サイドバーを閉じたままでも足せる。見つからなければサイドバーを開いてもう一度・チームスペースは設定の Teamspaces から）。 v175.0.0（題字）: DB の題字の領域（Medias のアイコン・題字）の始まりを B.U.R.I の下の区切り線にそろえる（畳んでいる時・測って決める）。 v175.0.0（見切れ）: DB の見切れを直す — 表の行の「＋ ⋮⋮ ☐」が Catalogus の下に隠れないよう、DB のページだけ左のゆとりにつまみの分（行に乗せた時に実測・測る前は 64px）を足す（題字・タブ・表はそろったまま。狭くなった分は自動倍率が吸収）。アイコンの小窓（本文の中の小窓）を Catalogus の右・本文の枠の中へ動かし、入らない時だけ縮める（下限 60%）。⚙ と __c33.dbfit() で切れる。 v174.0.0: Caelum VII — 左の配分を Orbit 100px・Catalogus 120px・本文手前 28px（本文の左端 248px。左のゆとりは測って 44px、248px を積み増さない）。DB の題字の領域（アイコン・題字・説明）をまとめて 10px 下げる（タブ・表の高さはそのまま）。Catalogus の行のアイコン → 名前をおよそ 10px に。ホイールで回らないことがあったのを直す（Mac のマウスの小さな刻み・短い一覧の上）。足元の「‹ 1 / 2 ›」をやめ、New（チームスペースにページを足す・Notion のサイドバーを開いてチームスペースを作る）。DB の表を幅に合わせて自動で 85〜100% に縮める（テーブルビュー・CSS の zoom・タブと操作の段と表だけ・揺れない・行の描き分けが合わなければ 100% に戻す）。横のバーの隠し方を広げる（v164 の印に CSS が無かった・Firefox）。Orbit の地の星（回すと奥行きを持って流れる）・選んだ惑星の軌道の輪と衛星・選んだ時の波紋・Catalogus の印が返る動き。 v164.0.0: Caelum VI — Catalogus（Orbit の右に同じ幅の第２列。惑星 → チームスペース → DB・ページ。地は本文と同じ紙・元のアイコン・チームスペースが循環（ホイール・クリック・↑↓・‹ ›、先頭から抜けたものは下から戻る）・選んだものだけ中身を開き一覧はその中でスクロール・惑星に乗せると見本、押すと固定・子午線の上の細い線で出どころを示す・幅が足りない時は休む）。旧ホバーカード（282px）を取り除く。地平線（B.U.R.I の下と Settings の上の横線を子午線と同じ作りに・帯を開くと光が渡る・金の光は地平線から子午線へ）。子午線の目盛りを星の粒に。B.U.R.I の吹き出しをやめる。上の帯の More の重なりを直す（溢れの箱は Others）。横スクロールの確かめ（__c33.hscroll()）。 v154.0.0: Caelum V — Orbit の右に子午線（両端が淡く消える細線・継ぎ目の菱形・段ごとの目盛り・選んだ惑星の色の光と星・ときどき渡る金の光）。上の帯は B.U.R.I に畳み、乗せるとその場で下へ開く（本文は帯の実際の高さだけ場所ごと下がる・重ねない・transform で動かさない・開閉は 1 つの状態・小窓やキーボードの間は開いたまま・閉じかけに戻ればそのまま開き直す）。B.U.R.I の正式名称を Bridging Understanding, Reasoning & Interaction に。横スクロールの元（DB の見出しの幅が Orbit の分はみ出す）を直し、バーも見せない。Add cover・Hide description などは計器 Folio に。DB の新しい定位置（左にサイドカーの分 32px・題字を B.U.R.I の高さに）。v144 の本文の高さの二重の引き算（下に 18px のすき間）を直す。 v144.0.0: Caelum IV — B.U.R.I の箱を Settings の箱と同じに（幅 列−10px・高さ 48px・上下 7px）。B.U.R.I の下のはみ出し（ALL の頃の下線）を消す。上の帯も同じ 62px に（本文の高さは Notion の式から同じだけ引く）。計器は Settings と同じ 48px の箱・印 24px・名前 10px で、等幅・すき間なし＝きっちり等間隔（Notion のボタンも同じ幅）。柱のボタンの中央寄せで名前が切れていたのを直す。Next Notion の 9 つの箱を作り直し（全ページを横断し、Notion に足りない所から一歩こえるもの）: Gemini 二枚開き・Phoenix 何度でも蘇る版・Pictor 舞台（スライド）・Pisces 放流メモ・Crater 器・Cygnus 声・Columba 二つの言葉・Lynx 見えないつながり・Sextans 一枚の暦。v134.0.0: Caelum III — B.U.R.I（鰤）の段を惑星と同じ格子に（印 24px・名前は Baskerville 600 10px）。Orbit の滑らかスクロール（ばねで追いかけ、回し終えたら回した向きの段へカチッと。ノッチ 1 つ＝1 段）。Zenith の計器を上の帯の左（B.U.R.I の角のすぐ右）へ、パンくずは右へ。Share・リンク・お気に入り・… も計器と同じ「印＋名前」、Edited は斜体の Baskerville、パンくずの区切りは四芒星。Next Notion の 9 つの箱（見た目だけ・働きはこれから）: ラカイユの道具の星座 Pyxis・Horologium・Reticulum・Microscopium・Sculptor・Pictor・Antlia・Circinus・Octans。押すと、何をする箱かのカード。v124.0.0: Caelum II — 上の帯が消えていた不具合を直す（v114 の入口の見分けが、包みの多い本物の上の帯で行ごと消していた。パンくず・操作のボタン・三本柱を含む要素は決して消さない）。地はページと同じ色（閉じている時の Orbit は透過、並べた時はサイドバーの紙）、紙の角丸・影はやめ、上の帯の下に 1 本の細線。B.U.R.I の下と Settings の上に同じ細線、段の高さを列の高さで割り切って下の端で見切れない。B.U.R.I の印を鰤に星を溶かした暖かい印に（目は四芒星・口から星の泡・金の側線。考え中は泳ぎ続け、未読は金の星）。惑星・Settings・B.U.R.I・計器に、名前ごとのオーダーメイドの動き（Ariadne の糸・Hermes の矢・Vulcan の火花・Asclepius の鼓動・Clio の砂時計 ほか）。Zenith を Orbit と同じ「印＋名前」の計器の帯に（Atelier・Lumière・Scholar・Live。幅に合わせて 名前つき → 印だけ → More、横スクロールなし）。公開の計器 Live: 公開中は緑の点が脈打ち、サイトを見る・サイトの設定・共有と公開。ページの上の公開の帯は Live に取り込む（設定で戻せる）。v114.0.0: 次世代の枠 Caelum（カエルム）— 左辺の Orbit と上辺の Zenith（上の帯）を 1 枚の空に。上の帯・Orbit・本文の外側を同じ色にし、本文は左上の角が丸い紙としてその上に置く。左上の角（2 辺が出会う所）に B.U.R.I（Blended Understanding & Reasoning Intelligence — 3 本の軌道が 1 つの星を巡る印）。ALL と Sol はやめた。上の帯には三本柱（Atelier・Lumière・Scholar）を名前つきの計器として並べる。ニョキッと（閉じた原生サイドバーのせり出し）は、上の帯の左の見えない入口（48px の枠）ごと消し、閉じている間は原生サイドバーをどこにあっても見えなく・触れなくして止める。Orbit を上の帯より上に（角が押せなかった）。設定で Caelum の空を切れる。v104.0.0: Orbit を最初からあった列に — 地は Notion のサイドバーと同じ色と細線（影・角丸・濃い紙をやめる）・ALL の段は上の帯と同じ高さ。文字は Baskerville の太め（600・選んだ惑星は 700。v99 の書体の指定が無効になって細い別の書体に崩れていたのを直す）。ALL と SETTINGS は字間を空けた大文字、惑星の名前は固有名のまま。列の幅は太字で測って見切れない。原生サイドバーが閉じている間は、左端に乗せてもせり出さない。ALL・Settings・Sol の印を星の形に（星座と四芒星・星を軸にした歯車・光冠の太陽）。v103.0.0: Celestial Catalogus RC4 — SolをOrbitの循環列へ統合。空枠を残さないホバー星表。天球儀風Sol、Native展開入口の識別、本文余白。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -27,6 +27,16 @@
 // ==/UserScript==
 
 /*
+ * v202.0.0（2026-10-14・依頼主が 201 を本物の Notion で見た指摘: 「タブもグリッド表示化。後は読み込み時の表示が気になる。Mediasなのに、Tactusとか出るし。。。
+ *   とにかく見た目の見直しと描画の改善。後はアニメーション。Sidbarがおしゃれなのに、メインのDBが全然垢抜けてない。」 ⁴² Record Cards 1.3.0 と組で）
+ *   ・タブのグリッド（ZN194.tabgrid・既定で入・⚙ で切れる）: 索引帯の段（data-c194-bandrow）に data-c194-grid。タブの箱（data-c194-track）を格子にし、
+ *     全部のビューを折り返して見せる（4000px の切り抜き・入りきらない印 data-c194-off・「+N」は使わない）。道具の段（Filter・Sort・New）は 1 段目の右のまま。
+ *     選んだビュー（data-c194-first）は紙の札と色の縁、候補（data-c194-cand）は点線の縁、確定までの時間は札の下の線（既存の c194-land）。
+ *     ホイール・←→・自動確定は今までどおり。右端のボタン（配置・列の見出し・表に戻す）は 1 段目の高さに置き、タブは 1 段目の右だけその分を空ける（--c194-uis 列分の空の札）。
+ *     Notion のタブの中身（アイコン・名前の字）は描き替えない（札の地と縁だけ）
+ *   ・「このDBについて」: 説明の欄の字が変わった時（DB に入った時を含む）は 700ms 落ち着くまで字を伏せ、淡い地で待ってからふっと出す（data-c202-wait）。
+ *     依頼主の収録とスクショでは、Medias の「このDBについて」に「Tactus’s Master」が出ていた（196 のスクショから同じ）。³³ は題字の段の中の
+ *     説明の編集欄（role=textbox・aria-multiline）の字をそのまま見せているだけなので、Notion の説明の欄にその字があるのか、別の欄を拾っているのかは未確認
  * v201.0.0（2026-10-14・依頼主が 200 を本物の Notion で見た指摘: 「スクロールするともとに戻る。グルーピングが関係している。入れ替えができない。アイテムの。
  *   後はFigmaやDribbleなどをもとにおしゃれに。…このレイアウトは特殊だから、これをBooks以外にも使う場合にも対応。…あとは、タブがダサい。これをなんとかなじませて。…今回はDBに注力して。DBのアニメーションとかも。」
  *   ＋ __c33.boot() の結果 how: "cap"・miss: ["cat"]）
@@ -724,7 +734,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
-  const VERSION = '201.0.0';
+  const VERSION = '202.0.0';
   const TAG = '[³³ v' + VERSION + ']';
   /* v97: ('-' 鰤)з を部品として出す時は SVG（目は必ずまっすぐの縦線・どの書体・OS でも同じ形）。
      ( - 鰤 ) з の字形は Zen Maru Gothic（© Yoshimichi Ohira・SIL Open Font License 1.1）から。目は自前の縦線 */
@@ -15620,7 +15630,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
   /* ── 設定・書いた内容・しおり（どれも localStorage。形に版を持つ） ── */
   const PK194 = 'c33.next194.v1', NK194 = 'c33.notes194.v1', MK194 = 'c33.marks194.v1', FK194 = 'c33.fish194';
   const ZN194 = (() => {
-    const d = { on: true, grid: true, dbAuto: true, group: 'team', about: true, fish: true, band: true, viewAuto: true, marks: true, lastView: true, guide: true, head: true, sticky: true, stars: true };
+    const d = { on: true, grid: true, dbAuto: true, group: 'team', about: true, fish: true, band: true, tabgrid: true, viewAuto: true, marks: true, lastView: true, guide: true, head: true, sticky: true, stars: true };
     try { const v = JSON.parse(localStorage.getItem(PK194) || '{}') || {}; for (const k of Object.keys(d)) if (typeof v[k] === typeof d[k]) d[k] = v[k]; } catch (e) { /* noop */ }
     if (d.group !== 'planet') d.group = 'team';
     return d;
@@ -16175,11 +16185,11 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     bandOrder194(null);
     if (N194.host) N194.host.hidden = true;
   }
-  const ATTR194 = ['data-c194-hide', 'data-c194-reveal', 'data-c194-about', 'data-c194-cbox', 'data-c194-const', 'data-c194-noconst', 'data-c194-prac', 'data-c194-narrow', 'data-c194-intro',
+  const ATTR194 = ['data-c194-grid', 'data-c202-wait', 'data-c194-hide', 'data-c194-reveal', 'data-c194-about', 'data-c194-cbox', 'data-c194-const', 'data-c194-noconst', 'data-c194-prac', 'data-c194-narrow', 'data-c194-intro',
     'data-c194-band', 'data-c194-bandrow', 'data-c194-track', 'data-c194-it', 'data-c194-off', 'data-c194-first', 'data-c194-pend', 'data-c194-cand', 'data-c194-rest',
     'data-c194-tbl', 'data-c194-head', 'data-c194-lines', 'data-c194-nodia', 'data-c194-hr', 'data-c194-k', 'data-c194-ki', 'data-c194-hot', 'data-c194-sb', 'data-c194-sh', 'data-c194-veil', 'data-c194-sticky',
     'data-c194-hb', 'data-c194-gb', 'data-c194-sg', 'data-c194-stk', 'data-c194-ax'];
-  const VARS194 = ['--c194-practice', '--c194-tx', '--c194-bw', '--c194-fx', '--c194-fw', '--c194-vms', '--c194-ht', '--c194-st', '--c194-dx', '--c194-fd', '--c195-pf', '--c195-ps', '--c194-gt', '--c194-ax', '--c194-bx'];
+  const VARS194 = ['--c194-uis', '--c194-practice', '--c194-tx', '--c194-bw', '--c194-fx', '--c194-fw', '--c194-vms', '--c194-ht', '--c194-st', '--c194-dx', '--c194-fd', '--c195-pf', '--c195-ps', '--c194-gt', '--c194-ax', '--c194-bx'];
   function clean194(root) {
     const all = [root, ...root.querySelectorAll(ATTR194.map((a) => '[' + a + ']').join(','))];
     for (const el of all) {
@@ -16620,6 +16630,14 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     const prac = practice194(N194.id);
     if (!txt && !prac) { if (row.hasAttribute('data-c194-about')) aboutOff194(row); why194('about', '説明も実務も無い DB です（空の枠は出しません）'); return; }
     why194('about', '');
+    /* v202: 説明の字が変わった時（DB に入った時を含む）は、落ち着くまで（ABWAIT202）字を伏せて淡い地で待ち、ふっと出す */
+    const abKey = N194.id + '|' + txt;
+    if (N194.abKey !== abKey) { N194.abKey = abKey; N194.abKeyAt = performance.now(); if (txt && !row.hasAttribute('data-c202-wait')) row.setAttribute('data-c202-wait', ''); }
+    if (row.hasAttribute('data-c202-wait')) {
+      const left = ABWAIT202 - (performance.now() - N194.abKeyAt);
+      if (left > 0) { clearTimeout(N194.abWT); N194.abWT = setTimeout(() => soon194(0), left + 20); }
+      else row.removeAttribute('data-c202-wait');
+    }
     const cbox = leaf ? [...row.children].find((k) => k.contains(leaf)) : null;
     const w = row.clientWidth - (parseFloat(getComputedStyle(row).paddingLeft) || 0) - (parseFloat(getComputedStyle(row).paddingRight) || 0);
     const sig = [N194.id, leaf ? 1 : 0, txt.length, prac, Math.round(w / 8), cbox ? 1 : 0, leaf && leaf.getAttribute('style')].join('|');
@@ -16660,9 +16678,10 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
       introMaybe194(row);
     });
   }
+  const ABWAIT202 = 700;
   function aboutOff194(row) {
     if (row.hasAttribute('data-c194-about')) holdPulse196('about');
-    for (const a of ['data-c194-about', 'data-c194-noconst', 'data-c194-prac', 'data-c194-narrow', 'data-c194-intro']) if (row.hasAttribute(a)) row.removeAttribute(a);
+    for (const a of ['data-c194-about', 'data-c194-noconst', 'data-c194-prac', 'data-c194-narrow', 'data-c194-intro', 'data-c202-wait']) if (row.hasAttribute(a)) row.removeAttribute(a);
     for (const v of ['--c194-practice', '--c194-tx', '--c195-pf', '--c195-ps']) if (row.style.getPropertyValue(v)) row.style.removeProperty(v);
     for (const el of row.querySelectorAll('[data-c194-cbox], [data-c194-const]')) { el.removeAttribute('data-c194-cbox'); el.removeAttribute('data-c194-const'); }
     if (N194.intro && N194.intro.row === row) introEnd194();
@@ -17147,6 +17166,7 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
       }
     }
     if (!row.hasAttribute('data-c194-bandrow')) row.setAttribute('data-c194-bandrow', '');
+    if (row.hasAttribute('data-c194-grid') !== !!ZN194.tabgrid) { holdPulse196('band'); row.toggleAttribute('data-c194-grid', !!ZN194.tabgrid); }   // v202: タブのグリッド
     if (!track.hasAttribute('data-c194-track')) track.setAttribute('data-c194-track', '');
     N194.bwS = bw;   // 画面の px（帯の右端の判定・案内の置き場所に使う）
     px164(tl, '--c194-bw', (Math.floor(bw / zf194(tl) * 10) / 10) + 'px');
@@ -17167,6 +17187,28 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     const tl = N194.tl, track = N194.track;
     if (!tl || !track || !tl.isConnected || !tl.parentElement) return;   // v201: タブの段が仮想化で外れている間は測らない（200 は null を読んで止まった）
     const row = tl.parentElement;
+    /* v202: グリッドの時は全部のビューを見せる（入りきらない印・「+N」・下線の位置は使わない）。今のビュー／候補の印だけ付ける */
+    if (row.hasAttribute('data-c194-grid')) {
+      const first = N194.bc || N194.vid;
+      for (const it of track.children) {
+        const v = it.getAttribute('data-c194-it');
+        if (!v) continue;
+        if (it.hasAttribute('data-c194-off')) it.removeAttribute('data-c194-off');
+        if (it.hasAttribute('data-c194-first') !== (v === first)) it.toggleAttribute('data-c194-first', v === first);
+      }
+      N194.bOffC = null;
+      if (tl.hasAttribute('data-c194-rest')) tl.removeAttribute('data-c194-rest');
+      /* 右端のボタンの場所: 1 段目の右に、ボタンの幅を覆う列の数だけ空の札（格子の列の幅は 126px 以上・間 7px） */
+      /* ビューごとにボタンの数が変わる（カードの時は 3 つ・表の時は「カードで読む」だけ）。空ける幅をいちばん広い時に合わせ、段の数がビューで変わらないように */
+      SPL196.uiMax = Math.max(SPL196.uiMax || 0, SPL196.uiW || 0, SPL196.uiW ? 240 : 0);
+      const uw = SPL196.uiMax;
+      let cw = 126; const t0 = track.querySelector('[data-c194-it]'); if (t0) { const w0 = t0.getBoundingClientRect().width / zf194(tl); if (w0 > 40) cw = w0; }
+      const uis = uw > 0 ? String(Math.max(1, Math.ceil((uw / zf194(tl) + 7) / (cw + 7)))) : '';
+      if (track.style.getPropertyValue('--c194-uis') !== uis) { if (uis) track.style.setProperty('--c194-uis', uis); else track.style.removeProperty('--c194-uis'); }
+      row.toggleAttribute('data-c194-cand', !!N194.bc);
+      return;
+    }
+    if (track.style.getPropertyValue('--c194-uis')) track.style.removeProperty('--c194-uis');
     const bw = N194.bwS || 0;
     const lr = tl.getBoundingClientRect(), rr = row.getBoundingClientRect();
     const zr = zf194(row);
@@ -17206,7 +17248,8 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     if (tl.hasAttribute('data-c194-band')) holdPulse196('band');
     const row = tl.parentElement;
     clean194(tl);
-    if (row) { for (const a of ['data-c194-bandrow', 'data-c194-pend', 'data-c194-cand']) row.removeAttribute(a); for (const v of ['--c194-fx', '--c194-fw', '--c194-vms', '--c194-bx']) row.style.removeProperty(v); }
+    const tr194 = tl.querySelector('[data-c194-track]'); if (tr194) tr194.style.removeProperty('--c194-uis');   // v202
+    if (row) { for (const a of ['data-c194-bandrow', 'data-c194-pend', 'data-c194-cand', 'data-c194-grid']) row.removeAttribute(a); for (const v of ['--c194-fx', '--c194-fw', '--c194-vms', '--c194-bx']) row.style.removeProperty(v); }
     if (tl === N194.tl) { N194.tl = null; N194.track = null; N194.bviews = null; }
     bandOrder194(null);
     clearTimeout(N194.bT); N194.bT = 0; N194.bc = null;
@@ -17770,7 +17813,10 @@ html [data-c184-pz] { zoom: var(--c184-pz, 1) !important; }
     bb.toggleAttribute('data-main', !h.active);
     const row = tl.parentElement;
     const br = row.getBoundingClientRect(), lr = tl.getBoundingClientRect(), sr = c.sc.getBoundingClientRect();
-    const y = br.top + br.height / 2 - 12;
+    /* v202: グリッドの時は 1 段目の高さ（最初のタブの真ん中） */
+    const t0 = row.hasAttribute('data-c194-grid') && N194.track ? N194.track.querySelector('[data-c194-it]') : null;
+    const t0r = t0 && t0.getBoundingClientRect();
+    const y = t0r && t0r.height ? t0r.top + t0r.height / 2 - 12 : br.top + br.height / 2 - 12;
     if (y < sr.top - 4 || y > sr.bottom - 10) { box.hidden = true; return; }
     box.hidden = false;
     const bw = Math.ceil(box.offsetWidth || 150);
@@ -18835,6 +18881,41 @@ ${B} [data-c194-bandrow]::after { content: ""; position: absolute; left: var(--c
 ${B} [data-c194-bandrow][data-c194-cand]::after { opacity: .45; }
 ${B} [data-c194-bandrow][data-c194-pend]::after { opacity: 1; animation: c194-land var(--c194-vms, 700ms) linear both; }
 @keyframes c194-land { from { transform: scaleX(0); opacity: .45; } to { transform: scaleX(1); opacity: 1; } }
+/* ── v202 タブのグリッド（data-c194-grid）: 全部のビューを格子に折り返して見せる。札の地と縁だけ描き、Notion のタブの中身（アイコン・名前）は描き替えない ── */
+${B} [data-c194-bandrow][data-c194-grid] { height: auto !important; min-height: 40px !important; align-items: flex-start !important; padding-block: 10px 12px !important; overflow-x: visible !important; }
+${B} [data-c194-bandrow][data-c194-grid]::before, ${B} [data-c194-bandrow][data-c194-grid]::after { content: none !important; display: none !important; }
+/* タブの列そのものは 1 列の帯と同じ 4000px のまま（Notion は列の幅でタブを「他 N 件」に畳むので、狭めると畳まれる）。格子はタブの箱の中で帯の幅に */
+${B} [data-c194-bandrow][data-c194-grid] > [role="tablist"][data-c194-band] { height: auto !important; align-self: flex-start !important; clip-path: inset(-6px calc(4000px - var(--c194-bw, 600px)) -10px -2px) !important; }
+${B} [data-c194-bandrow][data-c194-grid] > [role="tablist"][data-c194-band] > div:not([data-c194-track]) { height: auto !important; width: var(--c194-bw, 600px) !important; display: block !important; }
+${B} [data-c194-bandrow][data-c194-grid] > [role="tablist"][data-c194-band] > [data-c194-track] { width: var(--c194-bw, 600px) !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-track] { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)) !important; gap: 7px !important; width: 100% !important; height: auto !important;
+  box-sizing: border-box !important; padding-inline: 2px 0 !important; }
+/* 右端のボタン（配置・列の見出し・表に戻す）の場所は 1 段目の右だけ空ける（--c194-uis 列分の空の札） */
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-track]::after { content: "" !important; grid-row: 1 !important; grid-column: span var(--c194-uis, 1) / -1 !important; height: 36px; pointer-events: none; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-track]:not([style*="--c194-uis"])::after { content: none !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] { position: relative !important; margin: 0 !important; min-width: 0 !important; height: 36px !important; border-radius: 11px !important; cursor: pointer !important;
+  background: color-mix(in srgb, var(--c194-ink) 3.5%, transparent) !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c194-ink) 7%, transparent) !important;
+  transition: background-color .3s cubic-bezier(.2,.8,.3,1), box-shadow .35s cubic-bezier(.2,.8,.3,1) !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] + [data-c194-it] { margin-inline-start: 0 !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it]:hover { background: ${PAPER} !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c194-ink) 14%, transparent), 0 8px 18px -12px rgba(15, 15, 15, .35) !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-off] { visibility: visible !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] > *, ${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] .notion-collection-view-tab-button, ${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] .notion-collection-view-tab-button > * { width: 100% !important; height: 100% !important; min-width: 0 !important; margin: 0 !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] [role="tab"] > span { min-width: 0 !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it] [role="tab"] { width: 100% !important; max-width: none !important; height: 100% !important; box-sizing: border-box !important; justify-content: flex-start !important; padding: 0 12px !important; border-radius: 11px !important; font-size: 13.5px !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-first] { background: ${PAPER} !important; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c194-acc) 58%, transparent), 0 10px 22px -14px color-mix(in srgb, var(--c194-acc) 70%, transparent) !important; }
+${B} [data-c194-bandrow][data-c194-grid][data-c194-cand] [data-c194-first] { box-shadow: inset 0 0 0 1px transparent, 0 0 0 0 transparent !important; outline: 1px dashed color-mix(in srgb, var(--c194-acc) 70%, transparent) !important; outline-offset: -1px !important; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-it]::after { content: "" !important; position: absolute !important; left: 12px; right: 12px; bottom: 5px; height: 1.5px; border-radius: 2px; background: var(--c194-acc); transform-origin: 0 50%; transform: scaleX(0); opacity: 0; pointer-events: none; }
+${B} [data-c194-bandrow][data-c194-grid] [data-c194-first]::after { transform: scaleX(1); opacity: .85; transition: transform .45s cubic-bezier(.2,.8,.3,1), opacity .3s; }
+${B} [data-c194-bandrow][data-c194-grid][data-c194-cand] [data-c194-first]::after { opacity: .45; }
+${B} [data-c194-bandrow][data-c194-grid][data-c194-pend] [data-c194-first]::after { opacity: 1; animation: c194-land var(--c194-vms, 700ms) linear both; }
+/* ── v202「このDBについて」: 字が落ち着くまで伏せて淡い地で待ち、ふっと出す ── */
+${A}[data-c202-wait] [data-c194-const] { color: transparent !important; border-radius: 6px; background: linear-gradient(100deg, color-mix(in srgb, var(--c194-ink) 5%, transparent) 30%, color-mix(in srgb, var(--c194-ink) 9%, transparent) 50%, color-mix(in srgb, var(--c194-ink) 5%, transparent) 70%) 0 0 / 300% 100% !important;
+  animation: c202-wait 1.2s linear infinite; }
+${A}:not([data-c202-wait]) [data-c194-const] { animation: c202-show .5s ease-out both; }
+@keyframes c202-wait { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@keyframes c202-show { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { ${A} [data-c194-const] { animation: none !important; } }
 /* しおりへ戻す間だけ、表の所を伏せる（先頭が見えてから飛ぶのを避ける。最長でも数百 ms） */
 ${B} .notion-scroller[data-c194-veil] .notion-collection-view-body { opacity: 0 !important; }
 
@@ -18956,6 +19037,7 @@ ${S}:not([data-c124-motion]) .notion-frame :is([data-c194-about]::before, [data-
     add('Next: このDBについて（説明の全文と実務）', 'about');
     add('Next: 魚の入り（同じ DB はセッションで 1 回）', 'fish');
     add('Next: 表のビューを巡る索引帯に', 'band');
+    add('Next: 索引帯のタブをグリッドに並べる（切ると 1 列の帯）', 'tabgrid');
     add('Next: ビューの候補で止まったら自動で切り替える（' + T194.viewCommit + 'ms）', 'viewAuto');
     add('Next: ビューごとのしおり（スクロールの位置）', 'marks');
     add('Next: ビューの案内の魚', 'guide');
