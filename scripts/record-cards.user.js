@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　⁴² _ Record Cards
 // @namespace    https://cordivestium.local/record-cards
-// @version      1.1.0
-// @description  v1.1.0: カードの配置を編集できるように（ドラッグで並べ替え・幅 1 列／横いっぱい・隠す・表紙の高さ・列の数・小見出し。ビューごとに覚える）。カードを 1 枚の紙に（角丸・淡い影・乗せると浮く・表紙は本のように）、出てくる時・並べ替えた時に動く。見出し行の台が残した 36px の余白・表紙の下の灰色の余り・題字のアイコンが字の上に乗るのを直す。表紙の無い行は表紙の場所に押せる枠。v1.0.0: フル DB の表のビューを、1 レコード 1 枚のカードで読む（³³ 198 までの「上下分割」をここへ移した）。値の編集は Notion のまま。対象は設定したビューだけ（既定は Medias の Books）。
+// @version      1.2.0
+// @description  v1.2.0: スクロールしても標準の表に戻らない（見出し行・タブの段が仮想化で外れても、同じ表・同じビューのまま。表が描き直されても印を付け直す）。カード（レコード）を Notion のつまみで並べ替えられるように（つまみをカードの左上へ寄せる）。Books 以外の表のビューもカードに（³³ の索引帯の「カードで読む」・配置の窓の「カードをやめる」）。見た目をさらに整え（紙・題字・あらすじの筋・本の背の光・乗せた時の筋）、スクロールで入るカードがふわっと出る。v1.1.0: カードの配置を編集できるように（ドラッグで並べ替え・幅 1 列／横いっぱい・隠す・表紙の高さ・列の数・小見出し。ビューごとに覚える）。カードを 1 枚の紙に（角丸・淡い影・乗せると浮く・表紙は本のように）、出てくる時・並べ替えた時に動く。見出し行の台が残した 36px の余白・表紙の下の灰色の余り・題字のアイコンが字の上に乗るのを直す。表紙の無い行は表紙の場所に押せる枠。v1.0.0: フル DB の表のビューを、1 レコード 1 枚のカードで読む（³³ 198 までの「上下分割」をここへ移した）。値の編集は Notion のまま。対象は設定したビューだけ（既定は Medias の Books）。
 // @match        https://www.notion.so/*
 // @match        https://*.notion.so/*
 // @match        https://www.notion.com/*
@@ -16,6 +16,23 @@
 // @noframes
 // ==/UserScript==
 
+/*
+ * v1.2.0（2026-10-14・³³ 201.0.0 と組で。依頼主の 200 の実機の見え方への直し）
+ *   「スクロールするともとに戻る。グルーピングが関係している。入れ替えができない。アイテムの。…もっとおしゃれに。…Books以外にも使う場合にも対応。…今回はDBに注力して。DBのアニメーションとかも。」
+ *   ・スクロールで戻る（収録: グループの終わりまで下げると標準の表になり、Notion の固定の見出し＝グループ名と列の見出しが出た。上へ戻すとカード）:
+ *     200 は「本文の枠の最初の表で、見出し行のある物」を選び、見出し行・タブが無いと外していた。Notion は仮想化で、見えない所の見出し行やタブの段を外し、
+ *     表の箱を描き直す（推定・本物の DOM は見ていない）。→ 今カードにしている表がまだあればそれ、無ければ行の多い表。見出し行は表の中 → Notion の固定の写し →
+ *     このビューで前に読んだ列の形の順。タブが無い間は同じ表・同じ DB なら今のビューのまま。表が一瞬見えなくなっても 1.5 秒は外さない。
+ *     同じ DB の表が 2 つ以上あればどれにも印。Notion の固定の写し（グループ名と列の見出し）はカードの間は見せない。何が起きたかは __c42.status().trail
+ *   ・並べ替え: カードに乗せると、そのカードの行の Notion のつまみ（⋮⋮）を探し、カードの左上へ translate で寄せる（並べ替えは Notion のドラッグのまま。
+ *     内部の API・合成のイベントは使わない）。見つからない時は、カードを掴もうとした時に 1 度だけ知らせる（__c42.status().grip）
+ *   ・Books 以外: 合図 c42:add（今のビューを対象に足す）・c42:drop（外す）。³³ 201 の索引帯は、表のビューならどれでも「カードで読む」を出す。配置の窓に「カードをやめる」
+ *   ・見た目: 紙（角丸 18・上が少し明るい・影を 2 段）、乗せると 2px 浮いて左に細い光の筋。題字 22px と、右へ消える細い区切り。小見出しは字の間を広く。
+ *     長い字は左に淡い色の筋。表紙は本の背の光。表紙の無い枠は細い斜線。カードの間はグループの見出しを少し大きく
+ *   ・動き（新しく足した物だけ）: スクロールで初めて描かれたカードが下からふわっと（前に見たカード・描き直しは動かさない）。乗せた時の浮き・筋。つまみの出。
+ *     視差を減らす設定では動かさない
+ *   ・色の合わせ: 強調の色は ³³ の --c194-acc（無ければ Notion の青）
+ */
 /*
  * v1.1.0（2026-10-13・³³ 200.0.0 と組で。依頼主の 199 の実機の見え方への直し）
  *   「不自然な余白がある。…レイアウト編集機能をつけないとダメだし、見た目がダサい。もっとアニメーションや表示をきちんとできるように」
@@ -53,7 +70,7 @@
  */
 (function () {
   'use strict';
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const TAG = '[⁴² Record Cards]';
   const root = document.documentElement;
   const pageWin = () => { try { return typeof unsafeWindow !== 'undefined' && unsafeWindow ? unsafeWindow : window; } catch (e) { return window; } };
@@ -82,6 +99,7 @@
     flip: 420,                 // 配置を変えた時にセルが滑る時間（ms）
     fade: 260,                 // 表に戻した時に表がふっと出る時間（ms）
     inFor: 1100,               // 出てくる動きを当てておく時間（ms。この後に描かれた行は動かさない）
+    grace: 1500,               // v1.2.0: カードの表が一瞬見えなくなっても外さずに待つ時間（ms）
   };
   const EASE = 'cubic-bezier(.2, .75, .2, 1)';
   const DEF_VIEW = '3e26c0ae968e803f98a8000cd021bc6a';   // Medias の Books（³³ 196〜198 の既定と同じ）
@@ -145,7 +163,7 @@
   load();
 
   /* ── 状態 ── */
-  const S = { tv: null, db: '', vid: '', on: false, css: '', cols: false, bad: {}, mem: {}, info: null, L: null, W: 0, why: '', chkT: 0, at: 0, n: 0, inT: 0, sc: null, ro: null };
+  const S = { tv: null, all: [], cm: {}, trail: [], db: '', vid: '', on: false, css: '', cols: false, bad: {}, mem: {}, info: null, L: null, W: 0, why: '', chkT: 0, at: 0, n: 0, inT: 0, sc: null, ro: null };
 
   /* ── 契約（html の属性・印・合図） ── */
   function rt() { try { const r = pageWin()[Symbol.for('constellucentia.runtime')]; return r && r.contract && r.events ? r : null; } catch (e) { return null; } }
@@ -195,19 +213,29 @@
     }
     return best;
   }
+  /* v1.2.0: 表の選び方。依頼主の 2026-10-14 の収録で、グループの終わりまでスクロールすると標準の表に戻り（索引帯も消え、Notion の固定の見出しが出た）、
+   *  上へ戻すとカードに戻った。Notion は仮想化で、見えていない所の見出し行・タブの段を外したり、表の箱を描き直したりする。200 までは
+   *  「最初の表で見出し行のある物」だけを選び、見出し行・タブが無いと外していた（推定。本物の DOM は見ていない）。今は:
+   *   ・表の候補 = 本文の枠の中の見えている表（ページの中・ピーク・Notion の固定の写しは除く）。今カードにしている表がまだあればそれを、
+   *     無ければ行（レコード）の多い物を選ぶ。見出し行は表の中 → Notion の固定の写し（.sticky-portal-target）→ 覚えている列の形 の順
+   *   ・同じ DB の表が 2 つ以上あれば（グループごとに分かれた時）、どれにも印を付ける */
+  const cands = (fr) => [...fr.querySelectorAll('.notion-table-view')].filter((tv) => !tv.closest('.notion-page-content, .notion-peek-renderer, .sticky-portal-target') && tv.getClientRects().length);
+  const itemsOf = (tv) => tv.querySelectorAll('.notion-collection-item').length;
   function findTable() {
     const fr = frame();
     if (!fr) return { why: 'no-frame' };
-    let noHead = null;
-    for (const tv of fr.querySelectorAll('.notion-table-view')) {
-      if (tv.closest('.notion-page-content, .notion-peek-renderer, .sticky-portal-target')) continue;
-      if (!tv.getClientRects().length) continue;   // v1.1.0: 隠れている表（読み込み中の入れ替え・別のビューの残り）は選ばない
-      const hr = tv.querySelector('.notion-table-view-header-row');
-      if (!hr) { if (!noHead) noHead = tv; continue; }
-      const sc = tv.closest('.notion-scroller.vertical') || tv.closest('.notion-scroller') || fr.querySelector('.notion-scroller');
-      return { tv, hr, fr, sc, H: hr.closest('.notion-scroller.horizontal') || sc };
-    }
-    return noHead ? { why: 'no-header', tv: noHead, fr } : { why: 'no-table', fr };
+    const list = cands(fr);
+    if (!list.length) return { why: 'no-table', fr };
+    let tv = S.tv && list.indexOf(S.tv) >= 0 ? S.tv : null;
+    if (!tv) { let best = -1; for (const t of list) { const n = itemsOf(t) + (t.querySelector('.notion-table-view-header-row') ? 0.5 : 0); if (n > best) { best = n; tv = t; } } }
+    let hr = tv.querySelector('.notion-table-view-header-row');
+    let from = 'table';
+    if (!hr) { const p = fr.querySelector('.sticky-portal-target .notion-table-view-header-row'); if (p) { hr = p; from = 'portal'; } }
+    if (!hr) from = 'memory';
+    const sc = tv.closest('.notion-scroller.vertical') || tv.closest('.notion-scroller') || fr.querySelector('.notion-scroller');
+    const db = dbOf(tv);
+    const all = list.filter((t) => t === tv || (db && dbOf(t) === db));
+    return { tv, hr, from, fr, sc, all, H: (hr && hr.closest('.notion-scroller.horizontal')) || tv.closest('.notion-scroller.horizontal') || sc };
   }
   function dbOf(tv) {
     const b = tv.querySelector('.notion-collection_view_page-block[data-block-id]');
@@ -217,11 +245,13 @@
     return m ? m[1].toLowerCase() : '';
   }
   const selTab = (fr) => fr && fr.querySelector('[role="tablist"] [role="tab"][aria-selected="true"]');
+  /* v1.2.0: タブの段が外れている間（仮想化で）は、同じ表・同じ DB なら今のビューのまま（URL の v は、タブを押していないと付かない） */
   function viewOf(E) {
     const t = selTab(E.fr);
     const b = t && t.closest('[data-collection-view-id]');
     const v = b ? id32(b.getAttribute('data-collection-view-id')) : '';
     if (ID32.test(v)) return v;
+    if (S.vid && (E.tv === S.tv || (S.db && dbOf(E.tv) === S.db))) { trail('tabs-missing'); return S.vid; }
     return id32(new URLSearchParams(location.search).get('v') || '');
   }
   const target = (db, vid) => ST.v.targets.find((t) => t.view === vid && (!t.db || !db || t.db === db)) || null;
@@ -278,9 +308,16 @@
   const cbOf = (r) => (r.querySelector(':scope > .notion-table-view-cell') ? r : [...r.children].find((k) => k.querySelector(':scope > .notion-table-view-cell')) || null);
   const cellsOf = (r) => { const b = cbOf(r); return b ? [...b.children].filter((k) => k.classList.contains('notion-table-view-cell')) : []; };
   function readCols(E) {
-    const hcs = [...E.hr.querySelectorAll('.notion-table-view-header-cell')].filter((h) => h.closest('.notion-table-view-header-row') === E.hr);
-    if (!hcs.length) return { ok: false, why: '列の見出しのセルが見つかりません。標準の表のままです' };
+    /* v1.2.0: 見出し行が無い間（仮想化で外れた・Notion の固定の写しにも無い）は、このビューで前に読んだ列の名前とアイコンを使う（行のセルの数が同じ時だけ） */
+    let hcs = E.hr ? [...E.hr.querySelectorAll('.notion-table-view-header-cell')].filter((h) => h.closest('.notion-table-view-header-row') === E.hr) : [];
+    const memo = S.vid && S.cm[S.vid];
     const all = [...E.tv.querySelectorAll('.notion-table-view-row')].filter((r) => !r.closest('.notion-table-view-header-row'));
+    if (!hcs.length && memo) {
+      const r0 = all.find((r) => cellsOf(r).length);
+      if (!r0 || cellsOf(r0).length !== memo.cols.length) return { ok: false, why: '列の見出し行が見えず、行のセルの数も前と違います。標準の表のままです' };
+      hcs = memo.cols.map(() => null);
+    }
+    if (!hcs.length) return { ok: false, why: '列の見出しのセルが見つかりません。標準の表のままです' };
     const rows = [];
     let skip = 0;
     for (const r of all) {
@@ -290,7 +327,8 @@
       rows.push(cs);
     }
     if (!rows.length && skip) return { ok: false, why: '行のセルの形が列の見出し（' + hcs.length + ' 列）と合いません。標準の表のままです' };
-    const cols = hcs.map((h) => ({ name: headName(h), ic: headIcon(h) }));
+    const cols = hcs[0] === null ? memo.cols.map((c) => Object.assign({}, c)) : hcs.map((h) => ({ name: headName(h), ic: headIcon(h) }));
+    if (S.vid && hcs[0] !== null) S.cm[S.vid] = { cols: cols.map((c) => Object.assign({}, c)) };
     /* v1.1.0: 配置で覚えるための列の名前（同じ名前が 2 つあれば「名前 #2」。名前の無い列は「#3」） */
     const cnt = {};
     const keys = cols.map((c, i) => { const n = c.name || ('#' + (i + 1)); cnt[n] = (cnt[n] || 0) + 1; return cnt[n] > 1 ? n + ' #' + cnt[n] : n; });
@@ -308,6 +346,8 @@
     let title = -1, tb = 0;
     pri.forEach((v, i) => { if (i !== cover && v > tb && v >= rows.length * 0.5) { tb = v; title = i; } });
     if (title < 0) ico.forEach((v, i) => { if (i !== cover && v > tb && v >= rows.length * 0.5) { tb = v; title = i; } });
+    /* v1.2.0: Books 以外の DB（題字の印もページのアイコンも無い）では、表のいちばん左の列を題字に（Notion の表は名前の列が左端にある形が既定） */
+    if (title < 0 && rows.length) { const f = cover === 0 ? 1 : 0; if (f < N) title = f; }
     let long = [];
     for (let i = 0; i < N; i++) if (i !== cover && i !== title && (max[i] > T.longMax || (seenN[i] && sum[i] / seenN[i] > T.longAvg))) long.push(i);
     /* 仮想化で、表紙のある行や長い字の行が今は描かれていないだけのことがある。同じ列の並びなら、一度分かった役目はそのまま */
@@ -379,12 +419,15 @@
   const CELL_E = S42 + '[data-c42-edit] .notion-frame .notion-table-view[data-c42-cards] ' + CB + ' > .notion-table-view-cell';   // 配置の編集の間
   const BASE = `
 /* ⁴² Record Cards ${VERSION}: カードの間だけ（表の箱の data-c42-cards）。色は Notion の変数から（明るい・暗いの両方） */
-${TV} { --c42-paper: var(--c-bacEle, var(--c-bacPri, #fff)); --c42-edge: color-mix(in srgb, var(--c-texPri, #37352f) 13%, transparent); --c42-edge2: color-mix(in srgb, var(--c-texPri, #37352f) 24%, transparent);
-  --c42-tint: color-mix(in srgb, var(--c-texPri, #37352f) 3%, transparent); --c42-acc: #2383e2; --c42-sh: rgba(15, 15, 15, .16); }
+${TV} { --c42-paper: var(--c-bacEle, var(--c-bacPri, #fff)); --c42-edge: color-mix(in srgb, var(--c-texPri, #37352f) 11%, transparent); --c42-edge2: color-mix(in srgb, var(--c-texPri, #37352f) 22%, transparent);
+  --c42-tint: color-mix(in srgb, var(--c-texPri, #37352f) 3%, transparent); --c42-acc: var(--c194-acc, #2383e2); --c42-sh: rgba(15, 15, 15, .16);
+  --c42-ink: var(--c-texPri, #37352f); --c42-hi: color-mix(in srgb, #fff 7%, var(--c42-paper)); }
 /* 列の見出しは隠す（「列の見出し」で出す）。v1.1.0: 見出し行の外側の台（<div style="height: 36px;">）ごと畳む — 残すとグループの見出しと最初のカードの間が 36px 空く */
 ${TV}:not([data-c42-cols]) .notion-table-view-header-row { display: none !important; }
 ${TV}:not([data-c42-cols]) div[style^="height: "]:has(> * .notion-table-view-header-row):not(:has(.notion-collection-item)) { display: none !important; }
 ${S42}[data-c194-split]:not([data-c42-cols]) .notion-frame .sticky-portal-target .notion-table-view-header-row { display: none !important; }
+/* v1.2.0: Notion の固定の写し（スクロールした時に上に出るグループの見出しと列の見出し）も、カードの間は見せない（場所は残す） */
+${S42}[data-c194-split]:not([data-c42-cols]) .notion-frame .sticky-portal-target > :has(.notion-table-view-header-row) { visibility: hidden !important; pointer-events: none !important; }
 /* 行 = カードの外側（カードの間のすき間）。本物の行は直書きの flex: 0 0 fit-content（幅は flex-basis が決める） */
 ${TV} .notion-table-view-row { height: auto !important; min-height: 0 !important; max-height: none !important; width: var(--c42-w, auto) !important; max-width: none !important;
   flex: 0 0 var(--c42-w, auto) !important; box-sizing: border-box !important; padding: 9px 0 !important; border-bottom: 0 !important; background-image: none !important; }
@@ -393,10 +436,15 @@ ${TV} .notion-collection-item > .notion-table-view-row ~ * { flex: 0 0 0px !impo
 ${TV} .notion-table-view-row:not(:has(> .notion-table-view-cell)) > :not(:has(> .notion-table-view-cell)) { flex: 0 0 0px !important; width: 0 !important; min-width: 0 !important; overflow: hidden !important; }
 /* セルの箱（行そのもの、または行の直下でセルを持つ箱）= 1 枚の紙。中は格子。チェックボックスの箱は 1 段目に幅 0 で（位置は Notion のまま） */
 ${TV} ${CB} { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; grid-auto-flow: row !important; align-items: start !important; column-gap: ${T.gap}px !important; row-gap: 0 !important;
-  flex: 1 1 auto !important; min-width: 0 !important; height: auto !important; min-height: 0 !important; max-height: none !important; box-sizing: border-box !important;
-  padding: 22px ${T.padX}px 6px !important; border-radius: 14px !important; background: var(--c42-paper) !important;
-  box-shadow: 0 0 0 1px var(--c42-edge), 0 1px 2px rgba(15, 15, 15, .04), 0 10px 28px -16px var(--c42-sh) !important; transition: box-shadow .35s ${EASE} !important; }
-${TV} ${CB}:hover { box-shadow: 0 0 0 1px var(--c42-edge2), 0 2px 5px rgba(15, 15, 15, .05), 0 22px 44px -20px rgba(15, 15, 15, .3) !important; }
+  flex: 1 1 auto !important; min-width: 0 !important; height: auto !important; min-height: 0 !important; max-height: none !important; box-sizing: border-box !important; position: relative !important;
+  padding: 26px ${T.padX}px 10px !important; border-radius: 18px !important; background: linear-gradient(180deg, var(--c42-hi), var(--c42-paper) 140px) !important;
+  box-shadow: 0 0 0 1px var(--c42-edge), 0 1px 2px rgba(15, 15, 15, .04), 0 12px 30px -18px var(--c42-sh), 0 36px 70px -46px var(--c42-sh) !important;
+  transition: box-shadow .45s ${EASE}, transform .45s ${EASE} !important; }
+${TV} ${CB}:hover { transform: translateY(-2px) !important; box-shadow: 0 0 0 1px var(--c42-edge2), 0 2px 6px rgba(15, 15, 15, .05), 0 22px 44px -22px rgba(15, 15, 15, .28), 0 48px 90px -50px rgba(15, 15, 15, .3) !important; }
+/* v1.2.0 乗せたカードの左に細い光の筋（位置は動かさない。absolute なので格子の段を取らない） */
+${TV} ${CB}::after { content: "" !important; position: absolute !important; left: 0; top: 26px; bottom: 26px; width: 3px; border-radius: 0 3px 3px 0; background: var(--c42-acc); opacity: 0; transform: scaleY(.3);
+  transition: opacity .35s ${EASE}, transform .45s ${EASE}; pointer-events: none; }
+${TV} ${CB}:hover::after { opacity: .85; transform: none; }
 ${TV} ${CB} > :not(.notion-table-view-cell) { grid-column: 1 / -1 !important; grid-row: 1 !important; width: 0 !important; min-width: 0 !important; height: 0 !important; align-self: start !important; }
 ${CELL} { display: block !important; position: relative !important; grid-column: -2 / -1 !important; flex: none !important; width: auto !important; min-width: 0 !important;
   height: auto !important; min-height: 0 !important; max-height: none !important; padding: 0 !important; margin: 0 0 16px !important; border: 0 !important; overflow: hidden !important; white-space: normal !important; }
@@ -406,8 +454,8 @@ ${CELL} > div { width: auto !important; min-width: 0 !important; max-width: 100%
 ${CELL} [data-testid="property-value"] { min-height: 26px !important; height: auto !important; padding: 2px 0 !important; box-sizing: border-box !important; }
 ${CELL} * { max-height: none !important; -webkit-line-clamp: unset !important; line-clamp: none !important; white-space: normal !important; text-overflow: clip !important; }
 /* 小見出し（実際のプロパティの名前とアイコン。大文字は表示だけ） */
-${CELL}::before { content: ""; display: block; margin: 0 0 5px; padding-inline-start: 17px; box-sizing: border-box;
-  font: 600 10px/14px ${SERIF}; letter-spacing: .14em; text-transform: uppercase; color: ${INK2}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+${CELL}::before { content: ""; display: block; margin: 0 0 6px; padding-inline-start: 17px; box-sizing: border-box;
+  font: 600 9.5px/14px ${SERIF}; letter-spacing: .2em; text-transform: uppercase; color: ${INK2}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 ${CELL}::after { content: ""; position: absolute; left: 0; top: 1.5px; width: 11px; height: 11px; background-color: ${INK2}; opacity: .85;
   -webkit-mask: none center / contain no-repeat; mask: none center / contain no-repeat; pointer-events: none; }
 /* v1.1.0 配置の編集の間: どのセルも点線で囲み、押すとその項目の札を選ぶ（Notion の編集は開かない） */
@@ -419,9 +467,20 @@ ${CELL_E} * { cursor: pointer !important; }
 @keyframes c42-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c42-acc) 45%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
 ${TV}[data-c42-in] .notion-collection-result-wrapper > .notion-collection-item { animation: c42-rise ${T.rise}ms ${EASE} both; }
 ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result-wrapper:nth-child(${n}) > .notion-collection-item { animation-delay: ${(n - 1) * T.stagger}ms; }`).join('\n')}
+/* v1.2.0 スクロールで初めて描かれたカード（data-c42-new は ⁴² が 0.9 秒だけ付ける） */
+${TV} .notion-collection-item[data-c42-new] { animation: c42-rise 560ms ${EASE} both; animation-delay: var(--c42-d, 0ms); }
+/* v1.2.0 グループの見出し（カードの間だけ）: 章の見出しのように少し大きく */
+${TV} .cordivestium-group-header { font-size: 16px !important; height: auto !important; min-height: 24px !important; }
+${TV} .cordivestium-group-text { font-weight: 650 !important; letter-spacing: .03em !important; padding-bottom: 3px !important; }
+/* v1.2.0 Notion の行のつまみ（⋮⋮）をカードの左上へ寄せる（見た目の位置だけ。⁴² がカードに乗せた時に探して印を付ける） */
+${S42}[data-c194-split] [data-c42-grip] { translate: var(--c42-gx, 0px) var(--c42-gy, 0px) !important; z-index: 96 !important; opacity: 1 !important; visibility: visible !important;
+  border-radius: 6px !important; background-color: var(--c-bacEle, var(--c-bacPri, #fff)) !important; box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-texPri, #37352f) 14%, transparent), 0 4px 12px -5px rgba(15, 15, 15, .3) !important;
+  cursor: grab !important; animation: c42-grip .3s ${EASE} both; }
+@keyframes c42-grip { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  ${TV}[data-c42-in] .notion-collection-result-wrapper > .notion-collection-item { animation: none !important; }
-  ${TV} ${CB}, ${CELL} img { transition: none !important; }
+  ${TV}[data-c42-in] .notion-collection-result-wrapper > .notion-collection-item, ${TV} .notion-collection-item[data-c42-new], ${S42} [data-c42-grip] { animation: none !important; }
+  ${TV} ${CB}, ${TV} ${CB}::after, ${CELL} img { transition: none !important; }
+  ${TV} ${CB}:hover { transform: none !important; }
 }
 `;
   function rules(info, P) {
@@ -438,14 +497,19 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
     });
     for (const k of Object.keys(P.pos)) out.push(Q(+k) + ' { grid-column: ' + P.pos[k][0] + ' !important; grid-row: ' + P.pos[k][1] + ' !important; }');
     for (const k of P.hidden) out.push(Q(k) + ' { display: none !important; }');
-    for (const k of info.long) out.push(Q(k) + ' [data-testid="property-value"], ' + Q(k) + ' [data-testid="property-value"] :is(div, span) { line-height: 1.8 !important; }');
+    /* 長い字（あらすじなど）: 行の間を広く、左に淡い色の筋（引用のように） */
+    for (const k of info.long) {
+      out.push(Q(k) + ' [data-testid="property-value"], ' + Q(k) + ' [data-testid="property-value"] :is(div, span) { line-height: 1.85 !important; }');
+      out.push(Q(k) + ' [data-testid="property-value"] { padding-inline-start: 14px !important; box-shadow: inset 2px 0 0 color-mix(in srgb, var(--c42-acc) 32%, transparent) !important; color: color-mix(in srgb, var(--c42-ink) 86%, transparent) !important; }');
+    }
     if (info.title >= 0) {
       const Tt = Q(info.title), PV = Tt + ' [data-testid="property-value"]';
       /* 題字: 大きく太く、下に細い区切り。字の大きさは span に（²⁶ Atelier の題字の指定が span に直接当たるため）。書体は Atelier のまま */
       /* 区切りの線は題字がいちばん上の時だけ（配置で下へ移した時は、ほかの項目と同じ間） */
-      out.push(Tt + ' { overflow: visible !important; }' + (P.vis[0] === info.title ? ' ' + Tt + ' { padding-bottom: 14px !important; margin-bottom: 18px !important; border-bottom: 1px solid var(--c42-edge) !important; }' : ''));
-      out.push(PV + ' { font-size: 21px !important; line-height: 1.35 !important; min-height: 30px !important; padding: 0 !important; }');
-      out.push(PV + ' span { font-size: inherit !important; line-height: inherit !important; font-weight: 700 !important; letter-spacing: .01em !important; }');
+      out.push(Tt + ' { overflow: visible !important; }' + (P.vis[0] === info.title ? ' ' + Tt + ' { padding-bottom: 16px !important; margin-bottom: 20px !important; border-bottom: 0 !important;'
+        + ' background: linear-gradient(90deg, var(--c42-edge2), var(--c42-edge) 45%, transparent) 0 100% / 100% 1px no-repeat !important; }' : ''));
+      out.push(PV + ' { font-size: 22px !important; line-height: 1.32 !important; min-height: 30px !important; padding: 0 !important; color: var(--c42-ink) !important; }');
+      out.push(PV + ' span { font-size: inherit !important; line-height: inherit !important; font-weight: 700 !important; letter-spacing: .005em !important; }');
       /* 題字のアイコンと字を同じ高さに（Notion の箱は上ぞろえ。字の大きさが変わると字だけ下がっていた） */
       out.push(PV + ' > div:not([style*="absolute"]):not(:has(> .quickActionContainer)) { align-items: center !important; }');
       out.push(PV + ' .notion-record-icon { margin-top: 0 !important; margin-bottom: 0 !important; }');
@@ -458,20 +522,24 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
         /* 中の箱の幅は Notion のまま（width: 100% の包み）。auto にすると flex の中で空の時に幅 0 になり、表紙の無い行で押せなかった */
         out.push(C + ' :is(div, a, span) { min-width: 0 !important; max-width: 100% !important; height: auto !important; min-height: 0 !important; overflow: visible !important; }');
         out.push(C + ' [data-testid="property-value"] { padding: 0 !important; display: block !important; width: 100% !important; }');
-        out.push(C + ' div:has(> img) { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }');
+        out.push(C + ' div:has(> img) { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; position: relative !important; }');
+        /* 本の背の光（絵の左の細い帯。絵は変えない・押せる所も変えない） */
+        out.push(C + ' div:has(> img):not(:has(> img ~ img))::after { content: ""; position: absolute; left: 0; top: 0; width: 12px; height: min(100%, var(--c42-cover)); border-radius: 3px 0 0 3px; pointer-events: none;'
+          + ' background: linear-gradient(90deg, rgba(0, 0, 0, .16), rgba(255, 255, 255, .16) 45%, rgba(0, 0, 0, .04) 70%, transparent); transition: transform .45s ' + EASE + '; }');
+        out.push(CH + ' div:has(> img):not(:has(> img ~ img))::after { transform: translateY(-4px); }');
         /* 表紙の箱 = 絵の大きさ（幅 = 列の幅と 高さ × ³⁴ の縦横比 の小さい方・高さは比から）。灰色の地（³⁴ の読み込み中の地）は敷かない。³⁴ の opacity の動きは残す */
         out.push(C + ' img { display: block !important; width: min(100%, calc(var(--c42-cover) * var(--c34-ar, ' + T.coverW + '))) !important; height: auto !important; max-width: 100% !important;'
           + ' max-height: var(--c42-cover) !important; aspect-ratio: auto var(--c34-ar, ' + T.coverW + ') !important; object-fit: contain !important; object-position: left top !important; background: none !important;'
           + ' border-radius: 3px 7px 7px 3px !important; transform-origin: 50% 100%; box-shadow: 0 0 0 1px rgba(15, 15, 15, .06), 0 2px 4px rgba(15, 15, 15, .08), 0 14px 26px -12px rgba(15, 15, 15, .38) !important;'
           + ' transition: opacity .2s ease, transform .45s ' + EASE + ', box-shadow .45s ' + EASE + ' !important; }');
-        out.push(CH + ' img { transform: translateY(-3px) rotate(-.5deg) !important; box-shadow: 0 0 0 1px rgba(15, 15, 15, .06), 0 4px 8px rgba(15, 15, 15, .1), 0 22px 34px -14px rgba(15, 15, 15, .45) !important; }');
+        out.push(CH + ' img { transform: translateY(-4px) !important; box-shadow: 0 0 0 1px rgba(15, 15, 15, .06), 0 4px 8px rgba(15, 15, 15, .1), 0 22px 34px -14px rgba(15, 15, 15, .45) !important; }');
         out.push(C + ':has(img)::before, ' + C + ':has(img)::after { content: none !important; }');
         /* 表紙の無い行: カードの高さいっぱいの点線の枠（列のアイコンと名前。押すと Notion の画像の追加）。枠は値の箱そのもの */
         const E = C + ':not(:has(img))';
         out.push(E + ' { align-self: stretch !important; display: flex !important; flex-direction: column !important; min-height: 136px !important; }');
         out.push(E + ' > div, ' + E + ' .notion-page-block { flex: 1 1 auto !important; display: flex !important; height: auto !important; width: 100% !important; }');
         out.push(E + ' [data-testid="property-value"] { flex: 1 1 auto !important; min-height: 136px !important; box-sizing: border-box !important; border-radius: 3px 8px 8px 3px !important;'
-          + ' border: 1.5px dashed var(--c42-edge2) !important; background: var(--c42-tint) !important; transition: border-color .3s ' + EASE + ', background-color .3s ' + EASE + ' !important; }');
+          + ' border: 1px dashed var(--c42-edge2) !important; background: repeating-linear-gradient(135deg, var(--c42-tint) 0 7px, transparent 7px 14px) !important; transition: border-color .3s ' + EASE + ', background-color .3s ' + EASE + ' !important; }');
         out.push(CH + ':not(:has(img)) [data-testid="property-value"] { border-color: color-mix(in srgb, var(--c42-acc) 55%, transparent) !important; background: color-mix(in srgb, var(--c42-acc) 5%, transparent) !important; }');
         out.push(E + '::before { content: ' + cssStr(c.name) + ' !important; position: absolute !important; left: 0; right: 0; top: calc(50% + 12px); margin: 0 !important; padding: 0 6px !important; text-align: center; pointer-events: none; }');
         out.push(c.ic ? E + '::after { content: "" !important; left: 50% !important; top: 50% !important; width: 24px !important; height: 24px !important; transform: translate(-50%, -80%); opacity: .5 !important; -webkit-mask-image: ' + c.ic + '; mask-image: ' + c.ic + '; }' : E + '::after { content: none !important; }');
@@ -539,6 +607,8 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
   /* ── 当てる・外す ── */
   function off(why) {
     const was = S.on;
+    if (was) trail('off:' + (why || ''));
+    S.lostAt = 0; S.all = [];
     for (const el of document.querySelectorAll('[data-c42-cards]')) { el.removeAttribute('data-c42-cards'); el.removeAttribute('data-c42-cols'); el.removeAttribute('data-c42-in'); }
     if (root.hasAttribute('data-c194-split')) { holdPulse(); attr('split', 'data-c194-split', null); }
     if (root.hasAttribute('data-c42-cols')) attr('', 'data-c42-cols', null);
@@ -548,11 +618,38 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
     if (was) { emit('c42:state', { on: false, view: S.vid, why: S.why }); emit('c194:rowlayout', { src: 'c42', why: 'off' }); }
   }
   function backFlag(vid) { if ((root.getAttribute('data-c42-back') || null) !== (vid || null)) attr('', 'data-c42-back', vid || null); }
+  /* v1.2.0: 見直しの記録（__c42.status().trail）。本物で何が起きて外れたかを、DOM を見られない時の手がかりにする */
+  function trail(what) {
+    const last = S.trail[S.trail.length - 1];
+    const sc = S.sc ? Math.round(S.sc.scrollTop) : null;
+    if (last && last.what === what) { last.n++; last.t = Math.round(performance.now()); last.top = sc; return; }
+    S.trail.push({ t: Math.round(performance.now()), what, top: sc, n: 1 });
+    if (S.trail.length > 24) S.trail.shift();
+  }
+  /* v1.2.0: カードにしている間に表が一瞬見えなくなった（仮想化・描き直し）時は、すぐには外さない（T.grace の間に戻れば何もしない） */
+  function lost(why) {
+    trail('lost:' + why);
+    if (S.tv && S.tv.isConnected && S.tv.getClientRects().length) return true;   // 今の表がまだ見えている（別の判定だけが揺れた）
+    if (!S.lostAt) S.lostAt = performance.now();
+    if (performance.now() - S.lostAt < T.grace) { clearTimeout(S.lostT); S.lostT = setTimeout(soon, 160); return true; }
+    return false;
+  }
+  function markAll(E, vid) {
+    for (const el of document.querySelectorAll('[data-c42-cards]')) if (E.all.indexOf(el) < 0) { el.removeAttribute('data-c42-cards'); el.removeAttribute('data-c42-cols'); el.removeAttribute('data-c42-in'); }   // 前の表（見えなくなった枠の表）の印は外す
+    for (const t of E.all) {
+      if (!t.hasAttribute('data-c42-cards')) t.setAttribute('data-c42-cards', '');
+      if (t.hasAttribute('data-c42-cols') !== S.cols) t.toggleAttribute('data-c42-cols', S.cols);
+    }
+    if ((root.getAttribute('data-c42-cols') || null) !== (S.cols ? vid : null)) { holdPulse(); attr('', 'data-c42-cols', S.cols ? vid : null); }
+  }
   function sync() {
     S.n++;
     publishWant();
     const E = findTable();
-    if (!E.tv || !E.hr) { backFlag(null); if (S.on) off(E.why); else S.why = E.why; edSync(); return; }
+    if (!E.tv) {
+      if (S.on && lost(E.why)) { edSync(); return; }
+      backFlag(null); if (S.on) off(E.why); else S.why = E.why; edSync(); return;
+    }
     const db = dbOf(E.tv), vid = viewOf(E);
     if (vid !== S.vid) { S.cols = false; }
     S.db = db; S.vid = vid;
@@ -560,7 +657,12 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
     backFlag(w.back ? vid : null);
     if (!w.on) { if (S.on || E.tv.hasAttribute('data-c42-cards')) off(w.why); else S.why = w.why; edSync(); return; }
     const info = readCols(E);
-    if (!info.ok) { off(info.why); edSync(); return; }
+    if (!info.ok) {
+      if (S.on && S.info && E.tv === S.tv && lost('cols')) { markAll(E, vid); edSync(); return; }
+      off(info.why); edSync(); return;
+    }
+    S.lostAt = 0;
+    if (E.from !== 'table') trail('head:' + E.from);
     S.W = widthOf(E);
     const L = plan(info, S.W);
     const text = rules(info, L);
@@ -571,16 +673,19 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
       css('c42-view', text);
       S.css = text;
     }
-    if (fresh) for (const el of document.querySelectorAll('[data-c42-cards]')) if (el !== E.tv) { el.removeAttribute('data-c42-cards'); el.removeAttribute('data-c42-cols'); el.removeAttribute('data-c42-in'); }   // 前の表（見えなくなった枠の表）の印は外す
-    if (!E.tv.hasAttribute('data-c42-cards')) E.tv.setAttribute('data-c42-cards', '');
-    if (E.tv.hasAttribute('data-c42-cols') !== S.cols) { holdPulse(); E.tv.toggleAttribute('data-c42-cols', S.cols); attr('', 'data-c42-cols', S.cols ? vid : null); }
-    S.tv = E.tv; S.info = info; S.L = L; S.why = '';
+    const was = S.tv;
+    markAll(E, vid);
+    S.tv = E.tv; S.all = E.all; S.info = info; S.L = L; S.why = '';
     if (S.ro && S.sc !== E.sc) { try { if (S.sc) S.ro.unobserve(S.sc); S.ro.observe(E.sc); } catch (e) { /* noop */ } S.sc = E.sc; }
     if (fresh) {
-      S.on = true; S.at = performance.now();
-      riseOn(E.tv);
+      /* 描き直しで表の箱だけが替わった時（同じビューのまま）は、出てくる動きを当て直さない（スクロールの途中でカードが出直さない） */
+      const redraw = S.on && was && was !== E.tv && S.lastVid === vid;
+      S.on = true; S.at = performance.now(); S.lastVid = vid;
+      trail(redraw ? 'redraw' : 'on');
+      for (const t of E.all) for (const it of t.querySelectorAll('.notion-collection-item')) { const id = it.getAttribute('data-block-id'); if (id) SEEN.add(id); }
+      if (!redraw) riseOn(E.tv);
       emit('c42:state', { on: true, view: vid, cols: S.cols, edit: ED.open });
-      emit('c194:rowlayout', { src: 'c42', why: 'cards' });
+      emit('c194:rowlayout', { src: 'c42', why: redraw ? 'redraw' : 'cards' });
       overlap();
     }
     edSync();
@@ -670,15 +775,20 @@ ${[2, 3, 4, 5, 6, 7, 8].map((n) => `${TV}[data-c42-in] .notion-collection-result
 button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
 @keyframes tin { from { opacity: 0; transform: translateY(5px) scale(.97); } to { opacity: 1; transform: none; } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 1.5px var(--acc), 0 0 0 0 rgba(35,131,226,.45); } 100% { box-shadow: 0 0 0 1.5px var(--acc), 0 0 0 10px rgba(35,131,226,0); } }
-@media (prefers-reduced-motion: reduce) { .pn, .tl, .chip, .seg button { transition: none !important; animation: none !important; } }
+.toast { position: fixed; left: 50%; bottom: 28px; z-index: 2147483001; max-width: min(560px, calc(100vw - 48px)); box-sizing: border-box; padding: 11px 16px; border-radius: 12px;
+  background: var(--p); color: var(--ink); box-shadow: 0 0 0 1px var(--edge), 0 18px 40px -16px rgba(15,15,15,.4); font: 400 12.5px/1.55 ui-sans-serif, -apple-system, "Segoe UI", "Hiragino Sans", sans-serif;
+  opacity: 0; transform: translate(-50%, 10px); transition: opacity .3s ease, transform .4s ${EASE}; pointer-events: none; }
+.toast[data-in] { opacity: 1; transform: translate(-50%, 0); }
+.toast[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { .pn, .tl, .chip, .seg button, .toast { transition: none !important; animation: none !important; } }
 `;
   const ED_HTML = '<div class="pn" role="dialog" aria-label="カードの配置" tabindex="-1" hidden>'
     + '<div class="hd" title="ドラッグで窓を動かす"><span class="tt">Layout</span><span class="vn"></span><button type="button" class="x" aria-label="閉じる" title="閉じる（Esc）">×</button></div>'
     + '<div class="lb">並び・幅（札をドラッグで並べ替え。⇔ で幅、− で隠す）</div><div class="pv" role="list" aria-label="カードの項目"></div>'
     + '<div class="lb">隠している項目（押すと戻す。札をここへ落としても隠せます）</div><div class="hid" data-empty="なし"></div>'
     + '<div class="op"><span>表紙</span><div class="seg" data-k="cover"></div><span>列の数</span><div class="seg" data-k="cols"></div><span>小見出し</span><div class="seg" data-k="labels"></div></div>'
-    + '<div class="ft"><button type="button" class="rs">自動の並びに戻す</button><span class="msg" aria-live="polite"></span></div>'
-    + '<div class="note">開いている間は、カードを押しても値は開かず、その項目の札が選ばれます。札の上で ← → で並べ替え・W で幅・H で隠す。窓は上の帯をドラッグで動かせます（ダブルクリックで元の場所）。</div></div>';
+    + '<div class="ft"><button type="button" class="rs">自動の並びに戻す</button><button type="button" class="rs dr" title="このビューを標準の表に戻し、カードの対象から外します（配置の設定は残ります）">カードをやめる</button><span class="msg" aria-live="polite"></span></div>'
+    + '<div class="note">開いている間は、カードを押しても値は開かず、その項目の札が選ばれます。札の上で ← → で並べ替え・W で幅・H で隠す。窓は上の帯をドラッグで動かせます（ダブルクリックで元の場所）。カード（レコード）の並べ替えは、窓を閉じてカードの左上の Notion のつまみ（⋮⋮）で。</div></div>';
   function edRoot() {
     if (ED.host && ED.host.isConnected) return ED.root;
     if (!document.body) return null;
@@ -915,7 +1025,8 @@ button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
     hd.addEventListener('pointerup', stop);
     hd.addEventListener('pointercancel', stop);
     hd.addEventListener('dblclick', () => { try { localStorage.removeItem(POS_K); } catch (er) { /* noop */ } edPlace(pn); });
-    r.querySelector('.rs').addEventListener('click', () => {
+    r.querySelector('.dr').addEventListener('click', () => cmd('drop'));
+    r.querySelector('.rs:not(.dr)').addEventListener('click', () => {
       if (ST.broken) { edMsg(save()); return; }
       delete ST.v.layouts[S.vid];
       const err = save();
@@ -1016,6 +1127,122 @@ button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
     if (e.type === 'click') { const k = cellsOf(cell.parentElement).indexOf(cell); if (k >= 0) edSelect(k, true); }
   };
   for (const t of ['pointerdown', 'mousedown', 'mouseup', 'click', 'dblclick']) document.addEventListener(t, edBlock, true);
+  /* ═══ v1.2.0 カード（レコード）の並べ替え: Notion 自身の行のつまみを使う ═══
+   *  依頼主「入れ替えができない。アイテムの。」。並べ替えは Notion の行のつまみ（⋮⋮）のドラッグでしかできない（内部の API は使わない）。
+   *  標準の表ではつまみが行の左の外に出るが、カードの間はそこが Catalogus の陰や枠の外になり、掴めなかった（推定）。
+   *  カードに乗せた時、そのカードの行のつまみを画面から探し（ドラッグの絵 dragHandle・aria-label の Drag・draggable）、見つかればカードの左上へ
+   *  translate で寄せる（Notion の DOM は動かさない・消さない・複製しない。位置の見た目だけ）。並べ替え・落とす先の判定は Notion のまま。
+   *  見つからない時はカードを掴もうとした時に 1 度だけ知らせる（__c42.status().grip に数） */
+  const GR = { item: null, el: null, t: 0, tries: 0, st: { found: 0, miss: 0, last: '' }, told: false, down: null };
+  const GRIP_SEL = '[aria-label="Drag"], [aria-label="ドラッグ"], [draggable="true"], [role="button"]:has(> svg[class*="dragHandle"]), div:has(> svg[class*="dragHandle"])';
+  const boxOf = (item) => { const r = item.querySelector('.notion-table-view-row'); return (r && cbOf(r)) || item; };
+  function gripFind(item) {
+    const r = item.getBoundingClientRect();
+    let best = null, bd = Infinity;
+    for (const el of document.querySelectorAll(GRIP_SEL)) {
+      if (el.closest('.notion-table-view-header-row, .notion-table-view-header-cell, #c42-ed, #c33-n194, [role="tablist"], .notion-peek-renderer, .notion-sidebar-container')) continue;
+      if (el.querySelector('.notion-collection-item') || el.closest('[data-c42-grip]') && el.closest('[data-c42-grip]') !== el) continue;
+      const it = el.closest('.notion-collection-item');
+      if (it && it !== item) continue;
+      const q = el.getBoundingClientRect();
+      if (q.width < 4 || q.height < 4 || q.width > 80 || q.height > 80) continue;
+      const cy = q.top + q.height / 2;
+      if (cy < r.top - 8 || cy > r.bottom + 8) continue;
+      const d = Math.abs(q.left - r.left);
+      if (d > 160) continue;
+      if (d < bd) { bd = d; best = el; }
+    }
+    return best;
+  }
+  function gripFree() {
+    clearTimeout(GR.t); GR.t = 0;
+    if (GR.el) { GR.el.removeAttribute('data-c42-grip'); GR.el.style.removeProperty('--c42-gx'); GR.el.style.removeProperty('--c42-gy'); }
+    GR.el = null; GR.item = null; GR.tries = 0;
+  }
+  function gripTry() {
+    GR.t = 0;
+    const item = GR.item;
+    if (!item || !item.isConnected || !S.on) { gripFree(); return; }
+    const el = gripFind(item);
+    if (!el) {
+      if (++GR.tries < 8) { GR.t = setTimeout(gripTry, 90); return; }
+      GR.st.miss++; GR.st.last = 'none'; return;
+    }
+    if (GR.el && GR.el !== el) { GR.el.removeAttribute('data-c42-grip'); GR.el.style.removeProperty('--c42-gx'); GR.el.style.removeProperty('--c42-gy'); }
+    GR.el = el;
+    el.style.removeProperty('--c42-gx'); el.style.removeProperty('--c42-gy');
+    const q = el.getBoundingClientRect(), b = boxOf(item).getBoundingClientRect();
+    const dx = Math.round(b.left + 6 - q.left), dy = Math.round(b.top + 12 - q.top);
+    el.style.setProperty('--c42-gx', dx + 'px'); el.style.setProperty('--c42-gy', dy + 'px');
+    el.setAttribute('data-c42-grip', '');
+    GR.st.found++; GR.st.last = (el.getAttribute('aria-label') || el.tagName.toLowerCase()) + ' ' + dx + ',' + dy;
+  }
+  document.addEventListener('pointermove', (e) => {
+    if (!S.on || e.pointerType === 'touch' || ED.open || e.buttons) return;
+    const t = e.target;
+    if (!(t instanceof Element)) return;
+    if (GR.el && (t === GR.el || GR.el.contains(t))) return;   // つまみの上
+    const item = t.closest('.notion-collection-item');
+    if (!item || !S.all.some((tv) => tv.contains(item))) {
+      if (GR.item && !GR.t) { const it = GR.item; GR.t = setTimeout(() => { GR.t = 0; if (GR.item === it) gripFree(); }, 260); }
+      return;
+    }
+    if (item === GR.item) return;
+    gripFree();
+    GR.item = item;
+    GR.t = setTimeout(gripTry, 60);
+  }, { capture: true, passive: true });
+  /* カードを掴もうとした（押して動かした）のに、つまみが見つかっていない時: 1 度だけ知らせる */
+  document.addEventListener('pointerdown', (e) => {
+    GR.down = null;
+    if (!S.on || ED.open || e.button !== 0 || GR.told) return;
+    const t = e.target;
+    if (!(t instanceof Element) || (GR.el && GR.el.contains(t))) return;
+    const item = t.closest('.notion-collection-item');
+    if (item && S.all.some((tv) => tv.contains(item))) GR.down = { x: e.clientX, y: e.clientY, item };
+  }, true);
+  document.addEventListener('pointermove', (e) => {
+    const d = GR.down;
+    if (!d || !e.buttons) return;
+    if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 14) return;
+    GR.down = null;
+    if (GR.el || GR.told) return;
+    GR.told = true;
+    toast('カードの並べ替えは、カードの左上に出る Notion のつまみ（⋮⋮）を掴みます。このカードでは Notion のつまみが見つかりませんでした。「表に戻す」で並べ替えてから、カードに戻せます');
+  }, { capture: true, passive: true });
+  document.addEventListener('pointerup', () => { GR.down = null; }, true);
+  /* 小さな知らせ（⁴² の層の下の真ん中・数秒で消える） */
+  function toast(text) {
+    const r = edRoot();
+    if (!r) return;
+    let el = r.querySelector('.toast');
+    if (!el) { el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status'); r.appendChild(el); }
+    el.textContent = text;
+    if (ED.host) ED.host.toggleAttribute('data-dark', darkNow());
+    el.hidden = false;
+    requestAnimationFrame(() => el.setAttribute('data-in', ''));
+    clearTimeout(el.__t);
+    el.__t = setTimeout(() => { el.removeAttribute('data-in'); setTimeout(() => { el.hidden = true; }, 400); }, 7000);
+  }
+
+  /* ═══ v1.2.0 スクロールで入ってくるカード: 初めて描かれたカードだけ下からふわっと（仮想化で描き直された物・前に見た物は動かさない） ═══ */
+  const SEEN = new Set();
+  function reveal(items) {
+    if (!S.on || reduced() || performance.now() - S.at < T.inFor) { for (const it of items) { const id = it.getAttribute('data-block-id'); if (id) SEEN.add(id); } return; }
+    let n = 0;
+    for (const it of items) {
+      const id = it.getAttribute('data-block-id');
+      if (!id || SEEN.has(id)) continue;
+      SEEN.add(id);
+      if (!S.all.some((tv) => tv.contains(it))) continue;
+      const r = it.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) continue;
+      it.style.setProperty('--c42-d', Math.min(n++, 4) * 50 + 'ms');
+      it.setAttribute('data-c42-new', '');
+      setTimeout(() => { it.removeAttribute('data-c42-new'); it.style.removeProperty('--c42-d'); }, 900);
+    }
+  }
+
   document.addEventListener('keydown', (e) => { if (ED.open && e.key === 'Escape' && !e.isComposing) { e.preventDefault(); e.stopPropagation(); edToggle(false); } }, true);
 
   /* ── 見張り: 表の箱が入った・タブが替わった時は、見張りの同じ流れで（描かれる前に）当てる。ほかは 1 フレームにまとめる ── */
@@ -1027,15 +1254,17 @@ button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
   const hasItem = (n) => n.nodeType === 1 && (n.matches('.notion-collection-item') || !!n.querySelector('.notion-collection-item'));
   let lazyT = 0;
   const lazy = () => { clearTimeout(lazyT); lazyT = setTimeout(() => { lazyT = 0; soon(); }, 600); };
+  let added = [], revRaf = 0;
   const mo = new MutationObserver((recs) => {
     let now = false, later = false, item = false;
     for (const r of recs) {
       if (r.type === 'attributes') { if (r.target.closest && r.target.closest('.notion-frame')) now = true; continue; }
       if (r.target && r.target.nodeType === 1 && r.target.closest && r.target.closest('#c42-ed')) continue;
-      for (const n of r.addedNodes) { if (hasTable(n)) { now = true; break; } if (!item && hasItem(n)) item = true; }
+      for (const n of r.addedNodes) { if (hasTable(n)) { now = true; break; } if (hasItem(n)) { item = true; if (S.on) added.push(...(n.matches('.notion-collection-item') ? [n] : n.querySelectorAll('.notion-collection-item'))); } }
       if (!now && r.removedNodes.length) later = true;
       if (now) break;
     }
+    if (added.length && !revRaf) revRaf = requestAnimationFrame(() => { revRaf = 0; const a = added; added = []; try { reveal(a); } catch (e) { /* noop */ } });
     if (now) { try { sync(); } catch (e) { soon(); } return; }
     if (later) soon();
     if (item) { const i = S.info; if (!S.on || !i || i.rows < T.sample && (i.cover < 0 || i.title < 0 || !i.rows)) soon(); else lazy(); }
@@ -1076,6 +1305,7 @@ button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
     if (ST.broken) return save();
     const t = ST.v.targets.find((x) => x.view === v);
     if (t) t.db = d; else ST.v.targets.push({ db: d, view: v });
+    delete ST.v.off[v]; delete S.bad[v];
     const err = save(); sync();
     return err || true;
   }
@@ -1108,7 +1338,7 @@ button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
         order: P && info ? P.vis.map((i) => info.keys[i]) : [], hidden: P && info ? P.hidden.map((i) => info.keys[i]) : [], wide: P && info ? P.vis.filter((i) => P.wideOf(i)).map((i) => info.keys[i]) : [],
         labels: P ? P.labels : null, layout: S.vid && ST.v.layouts[S.vid] ? JSON.parse(JSON.stringify(ST.v.layouts[S.vid])) : null, editing: ED.open },
       contract: { split: root.getAttribute('data-c194-split'), want: root.getAttribute('data-c42-want'), back: root.getAttribute('data-c42-back'), hold: root.getAttribute('data-c194-hold'), edit: root.hasAttribute('data-c42-edit') },
-      syncs: S.n, frames: FR.max,
+      syncs: S.n, frames: FR.max, tables: S.all.length, trail: S.trail.map((x) => Object.assign({}, x)), grip: Object.assign({}, GR.st),
     };
   }
   function reset() {
@@ -1119,8 +1349,13 @@ button:focus-visible { outline: 1.5px solid var(--acc); outline-offset: 1px; }
     return err || true;
   }
   /* ³³ の帯のボタンからは c42:cols・c42:back・c42:cards・c42:edit（detail なし。スクリプトの箱が違うと detail の中身が届かないことがあるため、名前で分ける） */
-  const cmd = (c) => { if (c === 'cols') setCols(); else if (c === 'back') back(true); else if (c === 'cards') back(false); else if (c === 'edit') edToggle(); };
-  for (const c of ['cols', 'back', 'cards', 'edit']) document.addEventListener('c42:' + c, () => cmd(c));
+  /* v1.2.0: c42:add = 今のビューをカードの対象に足す（Books 以外の表のビューでも）・c42:drop = 対象から外す（標準の表に戻り、配置の設定は残す） */
+  const cmd = (c) => {
+    if (c === 'cols') setCols(); else if (c === 'back') back(true); else if (c === 'cards') back(false); else if (c === 'edit') edToggle();
+    else if (c === 'add') { const r = add(); if (r !== true) toast(String(r)); }
+    else if (c === 'drop') { if (ED.open) edToggle(false); const tv = S.tv; const r = remove(); if (r !== true) toast(String(r)); else fadeIn(tv); }
+  };
+  for (const c of ['cols', 'back', 'cards', 'edit', 'add', 'drop']) document.addEventListener('c42:' + c, () => cmd(c));
   document.addEventListener('c42:cmd', (e) => { let c = ''; try { c = typeof e.detail === 'string' ? e.detail : (e.detail && e.detail.cmd) || ''; } catch (er) { c = ''; } cmd(c); });
   const api = { version: VERSION, status, on: setOn, cover: setCover, cols: setCols, back, add, remove, edit: (on) => edToggle(on),
     layout: (patch, view) => (patch == null ? JSON.parse(JSON.stringify(layoutOf(view ? id32(view) : S.vid))) : setLayout(patch, view ? id32(view) : '')),
