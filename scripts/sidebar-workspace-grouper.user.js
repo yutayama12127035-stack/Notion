@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         « No »　¹⁶ _ Sidebar Workspace Grouper
 // @namespace    https://cordivestium.local/sidebar-workspace-grouper
-// @version      25.9.0
-// @description  v25.9.0: ★見出しの文字のクリックで「開く」（³³ の輪が動いていれば横の窓に開く）。乗せると右に「⋯」— 題名とアイコン・開く/閉じる・横に開く・新しいグループ・消す・すべて畳む/開く。v15.9.0: チームスペース・ページの名前を、アイコン（notranslate が付いている）と取り違えないように。v15.8.0: ³³ Sidebar Constellation の段々が動いている間は、チームスペースと行の字下げの調整を ³³ に任せる（両方で測って取り合い、どちらも効かなかった）。v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
+// @version      25.10.0
+// @description  v25.10.0: 惑星（席）の名前を、意味が透けて見えるラテン語 1 語に改めた（Pulsus・Transit・Domus・Historia・Ambitio・Moneta・Stilus・Ingenium・Ludus・Umami・Couture・Globus・Varia・Nexus・Excursio ほか）。前の既定の名前が保存に残っていても新しい名前を出す。v25.9.0: ★見出しの文字のクリックで「開く」（³³ の輪が動いていれば横の窓に開く）。乗せると右に「⋯」— 題名とアイコン・開く/閉じる・横に開く・新しいグループ・消す・すべて畳む/開く。v15.9.0: チームスペース・ページの名前を、アイコン（notranslate が付いている）と取り違えないように。v15.8.0: ³³ Sidebar Constellation の段々が動いている間は、チームスペースと行の字下げの調整を ³³ に任せる（両方で測って取り合い、どちらも効かなかった）。v15.7.0: ★見出しの灰色の箱と下線を出さない（文字のクリックで編集はそのまま）。v15.6.0: ①紐づけたのに Unsorted に行く件を修正（チームスペースを名前の文字列だけで覚えていたため、読み取った名前が一瞬でも違うと「未知」として Unsorted に保存されていた／読み込み時に見出し名・旧ページ名と同じ名前を捨てていた → ID があれば ID で覚える・名前の揺れを吸収・未知のものは Unsorted に「表示」するだけで保存しない） ②★見出しの文字をクリックすると、題名とアイコン（²⁹ Icon Library・絵文字・SVG／画像・色）を編集できる。アイコン・余白をクリックすると従来どおり開閉 ③グループの追加・削除。v15.5.0: 読み込み後の描き直しを見せない — ①チームスペースが増えた・サイドバーが作り直された瞬間（描画前）に同期で並べる（旧: 次のタイマー／最長2秒の見回り待ちで、Notion の素の並びが一瞬見えていた） ②字下げの実測値を保存し、起動直後から同じ値で描く ③サイドバーが作り直された時だけ、並べ終わって字下げが整うまで一覧を透明にし、短いフェードで出す（初回は 16c の幕に任せる）。★見出し ▲チームスペース ■アイテム の3段。Notion の要素は動かさず、印と order と実測値だけを書く軽量版（Unsorted 追加版）
 // @match        https://app.notion.com/*
 // @match        https://www.notion.com/*
 // @match        https://www.notion.so/*
@@ -13,6 +13,18 @@
 // ==/UserScript==
 
 /* =============================================================================
+   v25.10.0（2026-11-23）— 惑星（席）の名前を改めた（³³ 204.0.0・³⁹ 3.4.0 と組）
+   -----------------------------------------------------------------------------
+   ・依頼主: 「ここのOrbitのタイトルを変えたい。単純にわかりにくくなってしまった。でも意匠を凝らした、オシャレなものにしたい。
+     Booksとか安直なのはなし。」 3 案から A 案「透けるラテン語」を選んだ（1 席 1 語、意味が身近な言葉から透けて見える名詞）。
+   ・変えたのは GROUPS の既定の名前だけ。席の id（g0〜g18）・並び・チームスペースの紐づけはそのまま。
+   ・保存（c16.v2.state の meta[gid].label）に 25.9 の既定の名前（FORMER_LABEL）がそのまま残っていたら、それは自分で付けた名前ではないので
+     新しい既定を出す。保存は書き換えない（読まないだけ。203 に戻せば前の名前に戻る）。それ以外の自分で付けた名前は今までどおり優先
+     （それより前の既定の名前、たとえば Ariadnecoronexa は、25.9 では自分で打たないと保存されないので、自分で付けた名前として出す）。
+   ・名前の記録を書き直すのは、⋯の編集（と __c16.rename）で名前そのものを変えた時だけ。色や絵だけを変えた時・名前に触れずに閉じた時は触れない。
+   ・⋯の編集で前の既定の名前（たとえば Unsorted）をわざわざ選び直した時は、保存に labelKeep を付け、その名前を出し続ける。
+   ・グループを消す時の確かめの文の「Unsorted」を、g0 の今の名前（LABEL[DEFAULT_GID]）に。
+   =============================================================================
    v15.6.0（2026-10-03）— 紐づけが Unsorted に戻る件の修正＋見出しの編集
    -----------------------------------------------------------------------------
    ・原因（Unsorted に行く）:
@@ -56,7 +68,7 @@
   'use strict';
   if (window.top !== window.self) return;
 
-  const VERSION = '25.9.0';
+  const VERSION = '25.10.0';
   const TAG = '[¹⁶ v' + VERSION + ']';
 
   if (window.__c16 && window.__c16.version) {
@@ -73,20 +85,32 @@
 
   /* ───── 席（この順が既定の並び。id は既存の保存と互換） ───── */
   const GROUPS = [
-    { id: 'g1',  label: 'Ariadnenodus' }, { id: 'g2',  label: 'Hermesagitta' },
-    { id: 'g3',  label: 'Athenasophia' }, { id: 'g4',  label: 'Orphelyrecho' },
-    { id: 'g5',  label: 'Vulcanfornax' }, { id: 'g6',  label: 'Hypnosoneira' },
-    { id: 'g7',  label: 'Asclepiophis' }, { id: 'g8',  label: 'Hermescarina' },
-    { id: 'g9',  label: 'Hestiacaelia' }, { id: 'g10', label: 'Cliochronios' },
-    { id: 'g11', label: 'Elpisphoenix' }, { id: 'g13', label: 'Plutusmoneta' },
-    { id: 'g14', label: 'Caliocalamus' }, { id: 'g15', label: 'Daedalonorma' },
-    { id: 'g16', label: 'Zephyrvolans' }, { id: 'g17', label: 'Demetermensa' },
-    { id: 'g18', label: 'Clothopeplos' }, { id: 'g12', label: 'Atlasmetrica' },
-    { id: 'g0',  label: 'Unsorted' } // 追加: 未分類用の席
+    { id: 'g1',  label: 'Nexus' }, { id: 'g2',  label: 'Excursio' },
+    { id: 'g3',  label: 'Lectio' }, { id: 'g4',  label: 'Organum' },
+    { id: 'g5',  label: 'Fabrica' }, { id: 'g6',  label: 'Somnium' },
+    { id: 'g7',  label: 'Pulsus' }, { id: 'g8',  label: 'Transit' },
+    { id: 'g9',  label: 'Domus' }, { id: 'g10', label: 'Historia' },
+    { id: 'g11', label: 'Ambitio' }, { id: 'g13', label: 'Moneta' },
+    { id: 'g14', label: 'Stilus' }, { id: 'g15', label: 'Ingenium' },
+    { id: 'g16', label: 'Ludus' }, { id: 'g17', label: 'Umami' },
+    { id: 'g18', label: 'Couture' }, { id: 'g12', label: 'Globus' },
+    { id: 'g0',  label: 'Varia' } // 追加: 未分類用の席
   ];
   const GIDS = GROUPS.map(g => g.id);
   const LABEL = {}; GROUPS.forEach(g => { LABEL[g.id] = g.label; });
-  const DEFAULT_GID = 'g0'; // 未知のものは強制的に g0 (Unsorted) に入れる
+  /* v25.10: 席の名前を改めた。保存に 25.9 の既定の名前（下の FORMER_LABEL）がそのまま残っていても、それは自分で付けた名前ではないので
+     新しい既定を出す。保存は書き換えない（読まないだけ。残った記録に害はなく、25.9 に戻せば前の名前に戻る）。
+     名前の記録を書き直すのは、⋯の編集で名前そのものを変えた時だけ。色や絵だけを変えた時・名前に触れずに閉じた時は触れない。
+     ⋯の編集で前の既定の名前をわざわざ選び直した時は、labelKeep を付けて保存し、その名前を出す。
+     載せるのは 25.9 の既定だけ。それより前の既定（Ariadnecoronexa など）は 25.9 では自分で打たないと保存されないので、自分で付けた名前として出す */
+  const FORMER_LABEL = {
+    g1: ['Ariadnenodus'], g2: ['Hermesagitta'], g3: ['Athenasophia'], g4: ['Orphelyrecho'], g5: ['Vulcanfornax'], g6: ['Hypnosoneira'],
+    g7: ['Asclepiophis'], g8: ['Hermescarina'], g9: ['Hestiacaelia'], g10: ['Cliochronios'], g11: ['Elpisphoenix'], g12: ['Atlasmetrica'],
+    g13: ['Plutusmoneta'], g14: ['Caliocalamus'], g15: ['Daedalonorma'], g16: ['Zephyrvolans'], g17: ['Demetermensa'], g18: ['Clothopeplos'],
+    g0: ['Unsorted']
+  };
+  const isFormerLabel = (g, s) => (FORMER_LABEL[g] || []).includes(String(s == null ? '' : s).trim());
+  const DEFAULT_GID = 'g0'; // 未知のものは強制的に g0（未分類の席）に入れる
   const STORE_KEY = 'c16.v2.state';
   const PLAIN_KEY = 'c16.plainDrag';
   const SEL_TEAM = '.notion-outliner-team-container';
@@ -129,7 +153,7 @@
     if (Array.isArray(o.custom)) o.custom.forEach(c => { if (c && typeof c.id === 'string' && /^c\d+$/.test(c.id)) { S.custom.push({ id: c.id, label: String(c.label || c.id) }); addSeat(c.id, String(c.label || c.id)); } });
     if (o.meta && typeof o.meta === 'object') S.meta = Object.assign({}, o.meta);
     if (o.alias && typeof o.alias === 'object') S.alias = Object.assign({}, o.alias);
-    GIDS.forEach(g => { const m = S.meta[g]; if (m && typeof m.label === 'string' && m.label.trim()) LABEL[g] = m.label.trim(); });
+    GIDS.forEach(g => { const m = S.meta[g]; if (m && typeof m.label === 'string' && m.label.trim() && (m.labelKeep === true || !isFormerLabel(g, m.label))) LABEL[g] = m.label.trim(); });
     const seen = new Set();
     const take = k => typeof k === 'string' && k && !seen.has(k) && (seen.add(k), true);
     if (o.order && typeof o.order === 'object') {
@@ -1071,7 +1095,7 @@
       const nm = prompt('新しいグループの名前', '');
       if (nm && nm.trim()) { closeEditor(true); const g = addGroup(nm.trim()); setTimeout(() => openEditor(g, HEAD[g]), 60); }
     } else if (act === 'del') {
-      if (confirm('「' + LABEL[editGid] + '」を削除します。中のチームスペースは Unsorted へ移ります。')) { const g = editGid; closeEditor(true); removeGroup(g); }
+      if (confirm('「' + LABEL[editGid] + '」を削除します。中のチームスペースは ' + LABEL[DEFAULT_GID] + ' へ移ります。')) { const g = editGid; closeEditor(true); removeGroup(g); }
     }
   }
   function closeEditor(keep) {
@@ -1084,7 +1108,8 @@
     } else {
       const base = (GROUPS.find(g => g.id === gid) || {}).label;
       const m = Object.assign({}, S.meta[gid] || {});
-      if (LABEL[gid] && LABEL[gid] !== base) m.label = LABEL[gid]; else delete m.label;
+      // v25.10: 名前を変えた時だけ名前の記録を書き直す（色・絵だけの変更や、触れずに閉じた時に、読まずに置いてある記録を消さない）
+      if (!editSnap || LABEL[gid] !== editSnap.label) { if (LABEL[gid] && LABEL[gid] !== base) { m.label = LABEL[gid]; if (isFormerLabel(gid, LABEL[gid])) m.labelKeep = true; else delete m.labelKeep; } else { delete m.label; delete m.labelKeep; } }
       if (Object.keys(m).length) S.meta[gid] = m; else delete S.meta[gid];
       const c = S.custom.find(x => x.id === gid);
       if (c) c.label = LABEL[gid];
@@ -1347,7 +1372,7 @@
       else if (a === 'open') toggleGroup(gid);
       else if (a === 'side') window.dispatchEvent(new CustomEvent('c16-side', { detail: { gid } }));
       else if (a === 'add') { const nm = prompt('新しいグループの名前', ''); if (nm && nm.trim()) { const g = addGroup(nm.trim()); setTimeout(() => openEditor(g, HEAD[g]), 60); } }
-      else if (a === 'del') { if (confirm('「' + LABEL[gid] + '」を消します（中のチームスペースは Unsorted へ）。よろしいですか？')) removeGroup(gid); }
+      else if (a === 'del') { if (confirm('「' + LABEL[gid] + '」を消します（中のチームスペースは ' + LABEL[DEFAULT_GID] + ' へ）。よろしいですか？')) removeGroup(gid); }
       else if (a === 'fold' || a === 'unfold') { GIDS.forEach(g => { if (a === 'fold') S.collapsed[g] = true; else delete S.collapsed[g]; }); save(); run(true); if (a === 'unfold') afterMove('open'); }
     };
     menuEl.setAttribute('data-on', '1');
@@ -1522,7 +1547,7 @@
     refresh() { lastSig = ''; run(); return status(); },
     recalibrate() { calPass = 0; calibrate(); return lastCal; },
     toggle: toggleGroup,
-    rename(gid, label) { if (!LABEL[gid]) return false; LABEL[gid] = String(label); const base = (GROUPS.find(g => g.id === gid) || {}).label; const m = Object.assign({}, S.meta[gid] || {}); if (LABEL[gid] !== base) m.label = LABEL[gid]; else delete m.label; S.meta[gid] = m; const c = S.custom.find(x => x.id === gid); if (c) c.label = LABEL[gid]; applyMetaDom(); save(); return LABEL[gid]; },
+    rename(gid, label) { if (!LABEL[gid]) return false; const prev = LABEL[gid]; LABEL[gid] = String(label); const base = (GROUPS.find(g => g.id === gid) || {}).label; const m = Object.assign({}, S.meta[gid] || {}); if (LABEL[gid] !== prev) { if (LABEL[gid] !== base) { m.label = LABEL[gid]; if (isFormerLabel(gid, LABEL[gid])) m.labelKeep = true; else delete m.labelKeep; } else { delete m.label; delete m.labelKeep; } } S.meta[gid] = m; const c = S.custom.find(x => x.id === gid); if (c) c.label = LABEL[gid]; applyMetaDom(); save(); return LABEL[gid]; },
     icon(gid, o) { if (!LABEL[gid]) return false; const m = Object.assign({}, S.meta[gid] || {}); if (o && o.icon !== undefined) { const u = o.mode === 'text' ? String(o.icon) : iconUrlOf(o.icon); if (u) { m.icon = u; m.mode = o.mode || 'mask'; } else { delete m.icon; delete m.mode; } } if (o && o.tint !== undefined) { if (o.tint) m.tint = o.tint; else delete m.tint; } S.meta[gid] = m; applyMetaDom(); save(); return m; },
     addGroup, removeGroup, edit(gid) { openEditor(gid, HEAD[gid]); },
     collapseAll(on) { GIDS.forEach(g => { if (on) S.collapsed[g] = true; else delete S.collapsed[g]; }); save(); run(true); if (!on) afterMove('open'); },
